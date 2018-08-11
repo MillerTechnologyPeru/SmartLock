@@ -5,31 +5,20 @@
 //  Created by Alsey Coleman Miller on 8/11/18.
 //
 
-public struct SmartLockBuildNumber: RawRepresentable {
+import Foundation
+
+public struct SmartLockVersion {
     
-    public let rawValue: UInt64
+    public var major: UInt8
     
-    public init(rawValue: UInt64) {
-        
-        self.rawValue = rawValue
-    }
+    public var minor: UInt8
+    
+    public var patch: UInt8
+    
+    
 }
 
-// MARK: - Current Version
-
-public extension SmartLockBuildNumber {
+public extension SmartLockVersion {
     
-    public static var current: SmartLockBuildNumber { return SmartLockBuildNumber(rawValue: GitCommits) }
+    public static let current = SmartLockVersion(major: 0, minor: 0, patch: 1)
 }
-
-// MARK: - Equatable
-
-extension SmartLockBuildNumber: Equatable {
-    
-    public static func == (lhs: SmartLockBuildNumber, rhs: SmartLockBuildNumber) -> Bool {
-        
-        return lhs.rawValue == rhs.rawValue
-    }
-}
-
-// MARK: - 

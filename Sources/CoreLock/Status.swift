@@ -17,21 +17,3 @@ public enum Status: UInt8 {
     /// Idle / Unlock Mode
     case unlock
 }
-
-// MARK: - DataConvertible
-
-public extension Status {
-    
-    public init?(data: Data) {
-        
-        guard data.count == 1
-            else { return nil }
-        
-        self.init(rawValue: data[0])
-    }
-    
-    public func toData() -> Data {
-        
-        return Data([rawValue])
-    }
-}
