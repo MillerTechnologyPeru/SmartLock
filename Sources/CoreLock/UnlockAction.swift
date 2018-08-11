@@ -10,10 +10,10 @@ import Bluetooth
 public enum UnlockAction: UInt8, BitMaskOption {
     
     /// Unlock immediately.
-    case immediate = 0b01
+    case `default` = 0b01
     
     /// Unlock when button is pressed.
     case button = 0b10
     
-    public static let all: Set<UnlockAction> = [.immediate, .button]
+    public static let all: Set<UnlockAction> = [.default, .button]
 }
