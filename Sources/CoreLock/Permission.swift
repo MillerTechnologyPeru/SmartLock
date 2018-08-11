@@ -8,7 +8,7 @@
 import Foundation
 
 /// A Key's permission level.
-public enum PermissionType: UInt8 {
+public enum PermissionType: UInt8, Codable {
     
     case owner
     case admin
@@ -73,7 +73,7 @@ public extension Permission {
         }
         
         /// Verify that the specified date is valid for this schedule.
-        public func valid(_ date: Date = Date()) -> Bool {
+        public func isValid(for date: Date = Date()) -> Bool {
             
             guard date < expiry else { return false }
             
@@ -124,7 +124,7 @@ public extension Permission.Schedule {
 
 public extension Permission.Schedule {
     
-    public struct Weekdays: Equatable {
+    public struct Weekdays {
         
         public var sunday: Bool
         public var monday: Bool
@@ -188,13 +188,67 @@ public extension Permission.Schedule {
     }
 }
 
-public func == (lhs: Permission.Schedule.Weekdays, rhs: Permission.Schedule.Weekdays) -> Bool {
+extension Permission.Schedule.Weekdays: Equatable {
     
-    return lhs.sunday == rhs.sunday
-        && lhs.monday == rhs.monday
-        && lhs.tuesday == rhs.tuesday
-        && lhs.wednesday == rhs.wednesday
-        && lhs.thursday == rhs.thursday
-        && lhs.friday == rhs.friday
-        && lhs.saturday == rhs.saturday
+    public static func == (lhs: Permission.Schedule.Weekdays, rhs: Permission.Schedule.Weekdays) -> Bool {
+        
+        return lhs.sunday == rhs.sunday
+            && lhs.monday == rhs.monday
+            && lhs.tuesday == rhs.tuesday
+            && lhs.wednesday == rhs.wednesday
+            && lhs.thursday == rhs.thursday
+            && lhs.friday == rhs.friday
+            && lhs.saturday == rhs.saturday
+    }
+}
+
+// MARK: - Codable
+
+extension Permission: Codable {
+    
+    public enum CodingKeys: String, CodingKey {
+        
+        case type
+        case schedule
+    }
+    
+    public init(from decoder: Decoder) throws {
+        
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        
+        let type = try container.decode(PermissionType.self, forKey: .type)
+        
+        switch type {
+        case .owner:
+            self = .owner
+        case .admin:
+            self = .admin
+        case .anytime:
+            self = .anytime
+        case .scheduled:
+            let schedule = try container.decode(Schedule.self, forKey: .schedule)
+            self = .scheduled(schedule)
+        }
+    }
+    
+    public func encode(to encoder: Encoder) throws {
+        
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        
+        try container.encode(type, forKey: .type)
+        
+        switch self {
+        case .owner,
+             .admin,
+             .anytime:
+            break
+        case .scheduled(schedule):
+            try container.encode(schedule, forKey: .schedule)
+        }
+    }
+}
+
+extension Permission.Schedule: Codable {
+    
+    
 }

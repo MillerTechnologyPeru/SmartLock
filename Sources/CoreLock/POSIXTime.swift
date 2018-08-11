@@ -12,7 +12,7 @@
     import Glibc
 #endif
 
-public extension timeval {
+internal extension timeval {
     
     static func timeOfDay() -> timeval {
         

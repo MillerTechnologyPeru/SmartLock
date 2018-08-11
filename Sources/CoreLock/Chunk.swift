@@ -7,6 +7,7 @@
 
 import Foundation
 
+/// Chunk of data to send over BLE.
 public struct Chunk {
     
     /// The minimum length of bytes in this PDU.
@@ -59,9 +60,6 @@ public struct Chunk {
     /// Prepare data to send in chunks that can be sent via notifications.
     public static func from(_ data: Data, maximumUpdateValueLength: Int) -> [Chunk] {
         
-        // If the attribue value is longer than (ATT_MTU-3) octets,
-        // then only the first (ATT_MTU-3) octets of this attribute value
-        // can be sent in a notification.
         let chunkSize = maximumUpdateValueLength - headerLength
         
         let chunkData: [Data] = stride(from: 0, to: data.count, by: chunkSize).map {

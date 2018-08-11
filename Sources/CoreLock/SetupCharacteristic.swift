@@ -28,3 +28,9 @@ public struct SetupRequest {
     /// Encrypted data
     public let encryptedData: Data
 }
+
+public enum SetupOpcode: UInt8 {
+    
+    case request = 0x01
+    case response = 0x02
+}
