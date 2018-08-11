@@ -18,23 +18,71 @@ public struct LockService {
     
     public static let uuid = BluetoothUUID(rawValue: "E47D83A9-1366-432A-A5C6-734BA62FAF7E")!
     
+    /// Used to determine identity, compatibility and supported features.
     public struct Information {
         
         public static let uuid = BluetoothUUID(rawValue: "6C728682-F57A-4255-BB4E-BFF58D1934CF")!
         
+        internal static let length = MemoryLayout<UInt128>.size
+            + MemoryLayout<UInt64>.size
+            + MemoryLayout<SmartLockVersion>.size
+            + MemoryLayout<Status.RawValue>.size
+            + MemoryLayout<UnlockAction.RawValue>.size
+        
+        public static let properties: BitMaskOptionSet<GATT.Characteristic.Property> = [.read]
+        
         /// Lock identifier
         public let identifier: UUID
         
-        public var status: Status
-        
+        /// Firmware build number.
         public let buildVersion: SmartLockBuildVersion
         
+        /// Firmware version.
         public let version: SmartLockVersion
-    }
-    
-    public struct Setup {
         
+        /// Device state
+        public var status: Status
         
+        /// Supported lock actions.
+        public let unlockActions: BitMaskOptionSet<UnlockAction>
+        
+        public init?(data: Data) {
+            
+            guard data.count == type(of: self).length
+                else { return nil }
+            
+            let identifier = UUID(UInt128(littleEndian: data[0 ..< 16].withUnsafeBytes { $0.pointee }))
+            
+            let buildVersion = UInt64(littleEndian: data[16 ..< 24].withUnsafeBytes { $0.pointee })
+            
+            let version = SmartLockVersion(major: data[24], minor: data[25], patch: data[26])
+            
+            guard let status = Status(rawValue: data[27])
+                else { return nil }
+            
+            let unlockActions = BitMaskOptionSet<UnlockAction>(rawValue: data[28])
+            
+            self.identifier = identifier
+            self.buildVersion = SmartLockBuildVersion(rawValue: buildVersion)
+            self.version = version
+            self.status = status
+            self.unlockActions = unlockActions
+        }
+        
+        public var data: Data {
+            
+            var data = Data(capacity: type(of: self).length)
+            
+            data += UInt128(uuid: identifier).littleEndian
+            data += buildVersion.rawValue.littleEndian
+            data.append(contentsOf: [version.major, version.minor, version.patch])
+            data += status.rawValue
+            data += unlockActions.rawValue
+            
+            assert(data.count == type(of: self).length)
+            
+            return data
+        }
     }
     
     /// Used to unlock door.
@@ -44,7 +92,7 @@ public struct LockService {
         
         public static let uuid = BluetoothUUID(rawValue: "265B3EC0-044D-11E6-90F2-09AB70D5A8C7")!
         
-        public static let length = MemoryLayout<UInt64>.size + Nonce.length + HMACSize + MemoryLayout<UInt128>.size
+        internal static let length = MemoryLayout<UInt64>.size + Nonce.length + HMACSize + MemoryLayout<UInt128>.size + MemoryLayout<UnlockAction.RawValue>.size
         
         public static let properties: BitMaskOptionSet<GATT.Characteristic.Property> = [.write]
         
@@ -57,15 +105,20 @@ public struct LockService {
         /// HMAC of key and nonce
         public let authentication: AuthenticationData
         
-        /// Identifier of key making request. 
+        /// Identifier of key making request.
         public let identifier: UUID
         
+        /// Unlock action.
+        public let action: UnlockAction
+        
         public init(identifier: UUID,
+                    action: UnlockAction,
                     date: Date = Date(),
                     nonce: Nonce = Nonce(),
                     key: KeyData) {
             
             self.identifier = identifier
+            self.action = action
             self.date = date
             self.nonce = nonce
             self.authentication = HMAC(key: key, message: nonce)
@@ -88,7 +141,11 @@ public struct LockService {
             
             let identifier = UUID(UInt128(littleEndian: data.suffix(from: 88).withUnsafeBytes { $0.pointee }))
             
+            guard let action = UnlockAction(rawValue: data[104])
+                else { return nil } // invalid value
+            
             self.identifier = identifier
+            self.action = action
             self.date = timestamp
             self.nonce = nonce
             self.authentication = authentication
@@ -102,6 +159,7 @@ public struct LockService {
             data += nonce.data
             data += authentication.data
             data += UInt128(uuid: identifier).littleEndian
+            data += action.rawValue
             
             assert(data.count == type(of: self).length)
             
