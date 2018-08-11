@@ -1,0 +1,30 @@
+{
+  "autoPin": true,
+  "pins": [
+    {
+      "package": "Bluetooth",
+      "reason": null,
+      "repositoryURL": "https://github.com/PureSwift/Bluetooth.git",
+      "version": "2.1.7"
+    },
+    {
+      "package": "BluetoothLinux",
+      "reason": null,
+      "repositoryURL": "https://github.com/PureSwift/BluetoothLinux.git",
+      "version": "3.1.2"
+    },
+    {
+      "package": "CryptoSwift",
+      "reason": null,
+      "repositoryURL": "https://github.com/krzyzanowskim/CryptoSwift",
+      "version": "0.7.1"
+    },
+    {
+      "package": "GATT",
+      "reason": null,
+      "repositoryURL": "https://github.com/PureSwift/GATT",
+      "version": "2.0.4"
+    }
+  ],
+  "version": 1
+}
