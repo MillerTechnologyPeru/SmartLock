@@ -39,7 +39,7 @@ final class CryptoTests: XCTestCase {
         
         let (encryptedData, iv) = encrypt(key: key.data, data: nonce.data)
         
-        let decryptedData = decrypt(key: key.data, iv: iv, data: encryptedData)
+        let decryptedData = try! decrypt(key: key.data, iv: iv, data: encryptedData)
         
         XCTAssert(nonce.data == decryptedData)
     }
@@ -54,23 +54,8 @@ final class CryptoTests: XCTestCase {
         
         let (encryptedData, iv) = encrypt(key: key.data, data: nonce.data)
         
-        let decryptedData = decrypt(key: key2.data, iv: iv, data: encryptedData)
+        let decryptedData = try! decrypt(key: key2.data, iv: iv, data: encryptedData)
         
         XCTAssert(nonce.data != decryptedData)
-    }
-    
-    func testEncryptKeyData() {
-        
-        let key = KeyData()
-        
-        let salt = KeyData()
-        
-        let (encryptedData, iv) = encrypt(key: salt.data, data: key.data)
-        
-        print("Encrypted key is \(encryptedData.count) bytes")
-        
-        let decryptedData = decrypt(key: salt.data, iv: iv, data: encryptedData)
-        
-        XCTAssert(decryptedData == key.data)
     }
 }

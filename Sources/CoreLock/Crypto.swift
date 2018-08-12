@@ -45,13 +45,13 @@ internal func encrypt(key: Data, data: Data) -> (encrypted: Data, iv: Initializa
 }
 
 /// Decrypt data
-internal func decrypt(key: Data, iv: InitializationVector, data: Data) -> Data {
+internal func decrypt(key: Data, iv: InitializationVector, data: Data) throws -> Data {
     
     assert(iv.data.count == IVSize)
     
-    let crypto = try! AES(key: key.bytes, iv: iv.data.bytes)
+    let crypto = try AES(key: key.bytes, iv: iv.data.bytes)
     
-    let byteValue = try! crypto.decrypt(data.bytes)
+    let byteValue = try crypto.decrypt(data.bytes)
     
     return Data(bytes: byteValue)
 }
