@@ -1,5 +1,5 @@
 //
-//  DataConvertible.swift
+//  UnsafeDataConvertible.swift
 //  CoreLock
 //
 //  Created by Alsey Coleman Miller on 8/11/18.
@@ -9,12 +9,12 @@ import Foundation
 import Bluetooth
 
 /// Internal Data casting protocol
-internal protocol DataConvertible {
+internal protocol UnsafeDataConvertible {
     static func + (lhs: Data, rhs: Self) -> Data
     static func += (lhs: inout Data, rhs: Self)
 }
 
-extension DataConvertible {
+extension UnsafeDataConvertible {
     public static func + (lhs: Data, rhs: Self) -> Data {
         var value = rhs
         let data = Data(buffer: UnsafeBufferPointer(start: &value, count: 1))
@@ -26,24 +26,24 @@ extension DataConvertible {
     }
 }
 
-extension UInt8  : DataConvertible { }
-extension UInt16 : DataConvertible { }
-extension UInt32 : DataConvertible { }
-extension UInt64 : DataConvertible { }
-extension UInt128 : DataConvertible { }
+extension UInt8  : UnsafeDataConvertible { }
+extension UInt16 : UnsafeDataConvertible { }
+extension UInt32 : UnsafeDataConvertible { }
+extension UInt64 : UnsafeDataConvertible { }
+extension UInt128 : UnsafeDataConvertible { }
 
-extension Int    : DataConvertible { }
-extension Float  : DataConvertible { }
-extension Double : DataConvertible { }
+extension Int    : UnsafeDataConvertible { }
+extension Float  : UnsafeDataConvertible { }
+extension Double : UnsafeDataConvertible { }
 
-extension String: DataConvertible {
+extension String: UnsafeDataConvertible {
     public static func + (lhs: Data, rhs: String) -> Data {
         guard let data = rhs.data(using: .utf8) else { return lhs }
         return lhs + data
     }
 }
 
-extension Data : DataConvertible {
+extension Data : UnsafeDataConvertible {
     public static func + (lhs: Data, rhs: Data) -> Data {
         var data = Data()
         data.append(lhs)

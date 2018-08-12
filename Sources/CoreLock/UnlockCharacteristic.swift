@@ -76,13 +76,3 @@ public struct UnlockCharacteristic: GATTProfileCharacteristic {
         return data
     }
 }
-
-internal struct RequestCharacteristic {
-    
-    enum Opcode: UInt8 {
-        
-        case request
-        case response
-        case error
-    }
-}
