@@ -41,5 +41,12 @@ final class GATTProfileTests: XCTestCase {
         XCTAssertEqual(decoded.authentication.data, authentication.data)
         XCTAssertEqual(decoded.identifier, characteristic.identifier)
         XCTAssertEqual(decoded.action, characteristic.action)
+        
+        XCTAssert(decoded.authentication.isAuthenticated(with: key.secret))
+    }
+    
+    func testSetup() {
+        
+        
     }
 }

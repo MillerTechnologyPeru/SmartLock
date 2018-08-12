@@ -27,9 +27,7 @@ final class CryptoTests: XCTestCase {
         let message = AuthenticationMessage(date: timestamp, nonce: nonce)
         
         let hmac = HMAC(key: key, message: message)
-        
-        print(hmac.data, Array(hmac.data))
-        
+                
         XCTAssert(hmac.data == HMAC(key: key, message: message).data, "Values must be consistent")
     }
     

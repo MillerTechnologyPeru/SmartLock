@@ -39,6 +39,11 @@ public struct Authentication {
         
         return message.data + signedData.data
     }
+    
+    public func isAuthenticated(with key: KeyData) -> Bool {
+        
+        return signedData.isAuthenticated(with: key, message: message)
+    }
 }
 
 /// HMAC Message
