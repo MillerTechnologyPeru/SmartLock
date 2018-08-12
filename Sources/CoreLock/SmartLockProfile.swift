@@ -17,7 +17,8 @@ public struct LockService: GATTProfileService {
     
     public static let characteristics: [GATTProfileCharacteristic.Type] = [
         InformationCharacteristic.self,
-        UnlockCharacteristic.self
+        UnlockCharacteristic.self,
+        SetupCharacteristic.self
     ]
 }
 

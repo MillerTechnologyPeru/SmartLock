@@ -8,7 +8,8 @@
 import Foundation
 import Bluetooth
 
-public struct SetupCharacteristic {
+/// Used for initial lock setup.
+public struct SetupCharacteristic: GATTProfileCharacteristic {
     
     public static let uuid = BluetoothUUID(rawValue: "129E401C-044D-11E6-8FA9-09AB70D5A8C7")!
     
@@ -16,10 +17,44 @@ public struct SetupCharacteristic {
     
     public static let properties: BitMaskOptionSet<GATT.Characteristic.Property> = [.write]
     
+    public let encryptedData: EncryptedData
     
+    public init(encryptedData: EncryptedData) {
+        
+        self.encryptedData = encryptedData
+    }
+    
+    public init(request: SetupRequest, sharedSecret: KeyData) throws {
+        
+        let encryptedData = try EncryptedData(encrypt: request.data, with: sharedSecret)
+        
+        self.init(encryptedData: encryptedData)
+    }
+    
+    public func decrypt(with sharedSecret: KeyData) throws -> SetupRequest {
+        
+        let data = try encryptedData.decrypt(with: sharedSecret)
+        
+        guard let value = SetupRequest(data: data)
+            else { throw GATTError.invalidData(data) }
+        
+        return value
+    }
+    
+    public init?(data: Data) {
+        
+        guard let encryptedData = EncryptedData(data: data)
+            else { return nil }
+        
+        self.encryptedData = encryptedData
+    }
+    
+    public var data: Data {
+        
+        return encryptedData.data
+    }
 }
 
-/// Used for initial lock setup.
 public struct SetupRequest {
     
     internal static let length = MemoryLayout<UInt128>.size + KeyData.length
@@ -29,6 +64,13 @@ public struct SetupRequest {
     
     /// Key secret
     public let secret: KeyData
+    
+    public init(identifier: UUID = UUID(),
+                secret: KeyData = KeyData()) {
+        
+        self.identifier = identifier
+        self.secret = secret
+    }
     
     public init?(data: Data) {
         

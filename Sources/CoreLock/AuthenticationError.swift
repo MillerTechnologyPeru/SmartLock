@@ -14,6 +14,9 @@ public enum SmartLockAuthenticationError: Error {
     
     /// Could not decrypt value.
     case decryptionError(Error)
+    
+    /// Could not encrypt value.
+    case encryptionError(Error)
 }
 
 internal typealias AuthenticationError = SmartLockAuthenticationError

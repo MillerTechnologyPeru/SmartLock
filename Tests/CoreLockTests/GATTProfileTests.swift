@@ -47,6 +47,20 @@ final class GATTProfileTests: XCTestCase {
     
     func testSetup() {
         
+        let deviceSharedSecret = KeyData()
         
+        let request = SetupRequest()
+        
+        let characteristic = try! SetupCharacteristic(request: request, sharedSecret: deviceSharedSecret)
+        
+        guard let decoded = SetupCharacteristic(data: characteristic.data)
+            else { XCTFail("Could not parse bytes"); return }
+        
+        XCTAssertEqual(decoded.encryptedData.data, characteristic.encryptedData.data)
+        
+        let decrypted = try! decoded.decrypt(with: deviceSharedSecret)
+        
+        XCTAssertEqual(request.identifier, decrypted.identifier)
+        XCTAssertEqual(request.secret, decrypted.secret)
     }
 }

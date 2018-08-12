@@ -37,7 +37,7 @@ final class CryptoTests: XCTestCase {
         
         let nonce = Nonce()
         
-        let (encryptedData, iv) = encrypt(key: key.data, data: nonce.data)
+        let (encryptedData, iv) = try! encrypt(key: key.data, data: nonce.data)
         
         let decryptedData = try! decrypt(key: key.data, iv: iv, data: encryptedData)
         
@@ -50,12 +50,19 @@ final class CryptoTests: XCTestCase {
         
         let key2 = KeyData()
         
+        XCTAssert(key != key2)
+        
         let nonce = Nonce()
         
-        let (encryptedData, iv) = encrypt(key: key.data, data: nonce.data)
+        let (encryptedData, iv) = try! encrypt(key: key.data, data: nonce.data)
         
         let decryptedData = try! decrypt(key: key2.data, iv: iv, data: encryptedData)
         
         XCTAssert(nonce.data != decryptedData)
+    }
+    
+    func testNonce() {
+        
+        (0 ... 100).forEach { _ in XCTAssertNotEqual(Nonce(), Nonce()) }
     }
 }

@@ -33,13 +33,13 @@ internal func HMAC(key: KeyData, message: AuthenticationMessage) -> Authenticati
 internal let IVSize = AES.blockSize
 
 /// Encrypt data
-internal func encrypt(key: Data, data: Data) -> (encrypted: Data, iv: InitializationVector) {
+internal func encrypt(key: Data, data: Data) throws -> (encrypted: Data, iv: InitializationVector) {
     
     let iv = InitializationVector()
     
-    let crypto = try! AES(key: key.bytes, iv: iv.data.bytes)
+    let crypto = try AES(key: key.bytes, iv: iv.data.bytes)
     
-    let byteValue = try! crypto.encrypt(data.bytes)
+    let byteValue = try crypto.encrypt(data.bytes)
     
     return (Data(bytes: byteValue), iv)
 }

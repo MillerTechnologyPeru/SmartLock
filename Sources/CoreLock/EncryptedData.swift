@@ -23,6 +23,20 @@ public struct EncryptedData {
 
 public extension EncryptedData {
     
+    public init(encrypt data: Data, with key: KeyData) throws {
+        
+        do {
+            
+            let (encryptedData, iv) = try CoreLock.encrypt(key: key.data, data: data)
+            
+            self.authentication = Authentication(key: key)
+            self.initializationVector = iv
+            self.encryptedData = encryptedData
+        }
+        
+        catch { throw AuthenticationError.encryptionError(error) }
+    }
+    
     public func decrypt(with key: KeyData) throws -> Data {
         
         guard authentication.isAuthenticated(with: key)
