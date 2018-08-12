@@ -38,6 +38,19 @@ public struct InformationCharacteristic: GATTProfileCharacteristic {
     /// Supported lock actions.
     public let unlockActions: BitMaskOptionSet<UnlockAction>
     
+    public init(identifier: UUID,
+                buildVersion: SmartLockBuildVersion = .current,
+                version: SmartLockVersion = .current,
+                status: Status,
+                unlockActions: BitMaskOptionSet<UnlockAction> = []) {
+        
+        self.identifier = identifier
+        self.buildVersion = buildVersion
+        self.version = version
+        self.status = status
+        self.unlockActions = unlockActions
+    }
+    
     public init?(data: Data) {
         
         guard data.count == type(of: self).length

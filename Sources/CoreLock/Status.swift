@@ -12,8 +12,8 @@ import Foundation
 public enum Status: UInt8 {
     
     /// Initial Status
-    case setup
+    case setup = 0x00
     
     /// Idle / Unlock Mode
-    case unlock
+    case unlock = 0x01
 }
