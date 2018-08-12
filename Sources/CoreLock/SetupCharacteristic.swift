@@ -10,23 +10,50 @@ import Bluetooth
 
 /// Used for initial lock setup.
 ///
-/// timestamp + nonce + HMAC(salt, nonce) + IV +
+/// timestamp + nonce + HMAC(secret, nonce) + IV
 public struct SetupRequest {
     
-    /// Timestamp of the request
-    public let date: Date
+    internal static let length = MemoryLayout<UInt128>.size + KeyData.length
     
-    /// Nonce
-    public let nonce: Nonce
+    /// Key identifier
+    public let identifier: UUID
     
-    /// HMAC of secret and nonce
-    public let authentication: AuthenticationData
+    /// Key secret
+    public let secret: KeyData
     
-    /// Crypto IV
-    public let initializationVector: InitializationVector
+    public init?(data: Data) {
+        
+        guard data.count == type(of: self).length
+            else { return nil }
+        
+        var offset = 0
+        
+        let identifier = UUID(UInt128(littleEndian: data[offset ..< offset + UUID.length].withUnsafeBytes { $0.pointee }))
+        
+        offset += UUID.length
+        
+        guard let secret = KeyData(data: Data(data[offset ..< offset + KeyData.length]))
+            else { assertionFailure(); return nil }
+        
+        offset += KeyData.length
+        
+        self.identifier = identifier
+        self.secret = secret
+        
+        assert(offset == type(of: self).length)
+    }
     
-    /// Encrypted data
-    public let encryptedData: Data
+    public var data: Data {
+        
+        var data = Data(capacity: type(of: self).length)
+        
+        data += UInt128(uuid: identifier).littleEndian
+        data += secret.data
+        
+        assert(data.count == type(of: self).length)
+        
+        return data
+    }
 }
 
 public struct SetupResponse {
