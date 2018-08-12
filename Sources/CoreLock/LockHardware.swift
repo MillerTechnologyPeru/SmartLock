@@ -13,14 +13,17 @@ import Foundation
     import Codable
 #endif
 
-/// Lock Configuration
+/// Lock Hardware declaration. 
 public struct LockHardware {
+    
+    /// Lock Model
+    public let model: LockModel
+    
+    /// Lock Hardare Revision
+    public let hardwareRevision: String
     
     /// Lock serial number
     public let serialNumber: String
-    
-    /// Lock Model
-    public var model: LockModel
 }
 
 // MARK: - Codable
@@ -29,23 +32,26 @@ extension LockHardware: Codable {
     
     public enum CodingKeys: String, CodingKey {
         
-        case serialNumber
         case model
+        case hardwareRevision
+        case serialNumber
     }
     
     public init(from decoder: Decoder) throws {
         
         let container = try decoder.container(keyedBy: CodingKeys.self)
         
-        self.serialNumber = try container.decode(String.self, forKey: .serialNumber)
         self.model = try container.decode(LockModel.self, forKey: .model)
+        self.hardwareRevision = try container.decode(String.self, forKey: .hardwareRevision)
+        self.serialNumber = try container.decode(String.self, forKey: .serialNumber)
     }
     
     public func encode(to encoder: Encoder) throws {
         
         var container = encoder.container(keyedBy: CodingKeys.self)
         
-        try container.encode(serialNumber, forKey: .serialNumber)
         try container.encode(model, forKey: .model)
+        try container.encode(hardwareRevision, forKey: .hardwareRevision)
+        try container.encode(serialNumber, forKey: .serialNumber)
     }
 }
