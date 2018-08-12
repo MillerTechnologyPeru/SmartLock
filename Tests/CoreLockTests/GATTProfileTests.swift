@@ -26,4 +26,18 @@ final class GATTProfileTests: XCTestCase {
         XCTAssertEqual(decoded.status, information.status)
         XCTAssertEqual(decoded.unlockActions, information.unlockActions)
     }
+    
+    func testUnlock() {
+        
+        let key = (identifier: UUID(), secret: KeyData())
+        
+        let authentication = Authentication(date: Date(), nonce: Nonce(), key: key.secret)
+        
+        let characteristic = UnlockCharacteristic(identifier: key.identifier, authentication: authentication)
+        
+        guard let decoded = UnlockCharacteristic(data: characteristic.data)
+            else { XCTFail("Could not parse bytes"); return }
+        
+        
+    }
 }

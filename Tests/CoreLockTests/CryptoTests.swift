@@ -30,7 +30,7 @@ final class CryptoTests: XCTestCase {
         
         print(hmac.data, Array(hmac.data))
         
-        XCTAssert(hmac == HMAC(key: key, message: message), "Values must be consistent")
+        XCTAssert(hmac.data == HMAC(key: key, message: message).data, "Values must be consistent")
     }
     
     func testEncrypt() {
