@@ -31,3 +31,13 @@ extension SmartLockBuildVersion: Equatable {
         return lhs.rawValue == rhs.rawValue
     }
 }
+
+// MARK: - CustomStringConvertible
+
+extension SmartLockBuildVersion: CustomStringConvertible {
+    
+    public var description: String {
+        
+        return rawValue.description
+    }
+}

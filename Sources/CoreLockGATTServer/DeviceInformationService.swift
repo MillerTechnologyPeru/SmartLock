@@ -8,6 +8,7 @@
 import Foundation
 import Bluetooth
 import GATT
+import CoreLock
 
 public final class GATTDeviceInformationServiceController <Peripheral: PeripheralProtocol> : GATTServiceController {
     
@@ -25,16 +26,12 @@ public final class GATTDeviceInformationServiceController <Peripheral: Periphera
         didSet { peripheral[characteristic: modelNumberHandle] = modelNumber.data }
     }
     
+    public let firmwareRevision = GATTFirmwareRevisionString(rawValue: "\(SmartLockBuildVersion.current)")
+    
+    public let softwareRevision = GATTSoftwareRevisionString(rawValue: "\(SmartLockVersion.current)")
+    
     public private(set) var serialNumber: GATTSerialNumberString = "" {
         didSet { peripheral[characteristic: serialNumberHandle] = serialNumber.data }
-    }
-    
-    public private(set) var firmwareRevision: GATTFirmwareRevisionString = "" {
-        didSet { peripheral[characteristic: firmwareRevisionHandle] = firmwareRevision.data }
-    }
-    
-    public private(set) var softwareRevision: GATTSoftwareRevisionString = "" {
-        didSet { peripheral[characteristic: softwareRevisionHandle] = softwareRevision.data }
     }
     
     public private(set) var hardwareRevision: GATTHardwareRevisionString = "" {

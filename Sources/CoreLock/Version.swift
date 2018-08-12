@@ -34,3 +34,13 @@ extension SmartLockVersion: Equatable {
             && lhs.patch == rhs.patch
     }
 }
+
+// MARK: - CustomStringConvertible
+
+extension SmartLockVersion: CustomStringConvertible {
+    
+    public var description: String {
+        
+        return "\(major).\(minor).\(patch)"
+    }
+}
