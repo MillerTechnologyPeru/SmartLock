@@ -31,7 +31,7 @@ final class GATTProfileTests: XCTestCase {
         
         let key = (identifier: UUID(), secret: KeyData())
         
-        let authentication = Authentication(date: Date(), nonce: Nonce(), key: key.secret)
+        let authentication = Authentication(key: key.secret)
         
         let characteristic = UnlockCharacteristic(identifier: key.identifier, authentication: authentication)
         

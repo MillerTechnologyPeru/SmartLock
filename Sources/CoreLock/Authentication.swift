@@ -15,12 +15,11 @@ public struct Authentication {
     
     public let signedData: AuthenticationData
     
-    public init(date: Date = Date(),
-                nonce: Nonce = Nonce(),
-                key: KeyData) {
+    public init(key: KeyData,
+                message: AuthenticationMessage = AuthenticationMessage()) {
         
-        self.message = AuthenticationMessage(date: date, nonce: nonce)
-        self.signedData = HMAC(key: key, message: AuthenticationMessage(date: date, nonce: nonce))
+        self.message = message
+        self.signedData = AuthenticationData(key: key, message: message)
     }
     
     public init?(data: Data) {
@@ -103,5 +102,15 @@ public struct AuthenticationData {
             else { return nil }
         
         self.data = data
+    }
+    
+    public init(key: KeyData, message: AuthenticationMessage) {
+        
+        self = HMAC(key: key, message: message)
+    }
+    
+    public func isAuthenticated(with key: KeyData, message: AuthenticationMessage) -> Bool {
+        
+        return data == AuthenticationData(key: key, message: message).data
     }
 }
