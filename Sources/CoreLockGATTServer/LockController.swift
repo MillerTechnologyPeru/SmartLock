@@ -97,8 +97,3 @@ private extension GATTServiceController {
         return characteristics.contains(characteristicUUID)
     }
 }
-
-public struct LockInformation {
-    
-    
-}

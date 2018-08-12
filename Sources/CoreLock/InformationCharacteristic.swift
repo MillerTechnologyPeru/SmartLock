@@ -26,16 +26,19 @@ public struct InformationCharacteristic: GATTProfileCharacteristic {
     /// Lock identifier
     public let identifier: UUID
     
-    /// Firmware build number.
+    /// Lock name
+    //public let name: String
+    
+    /// Firmware build number
     public let buildVersion: SmartLockBuildVersion
     
-    /// Firmware version.
+    /// Firmware version
     public let version: SmartLockVersion
     
     /// Device state
     public var status: Status
     
-    /// Supported lock actions.
+    /// Supported lock actions
     public let unlockActions: BitMaskOptionSet<UnlockAction>
     
     public init(identifier: UUID,

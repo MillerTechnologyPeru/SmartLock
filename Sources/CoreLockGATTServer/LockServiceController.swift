@@ -29,7 +29,7 @@ public final class LockServiceController <Peripheral: PeripheralProtocol> : GATT
     
     public let peripheral: Peripheral
     
-    public var information: InformationCharacteristic {
+    public private(set) var information: InformationCharacteristic {
         
         didSet { peripheral[characteristic: informationHandle] = information.data }
     }
@@ -53,14 +53,17 @@ public final class LockServiceController <Peripheral: PeripheralProtocol> : GATT
                                                     unlockActions: [])
         
         let characteristics = [
+            
             GATT.Characteristic(uuid: InformationCharacteristic.uuid,
                                 value: information.data,
                                 permissions: [.read],
                                 properties: InformationCharacteristic.properties),
+            
             GATT.Characteristic(uuid: SetupCharacteristic.uuid,
                                 value: Data(),
                                 permissions: [.write],
                                 properties: SetupCharacteristic.properties),
+            
             GATT.Characteristic(uuid: UnlockCharacteristic.uuid,
                                 value: Data(),
                                 permissions: [.write],
