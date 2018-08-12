@@ -14,20 +14,17 @@ public final class LockServiceController <Peripheral: PeripheralProtocol> : GATT
     
     public static var service: BluetoothUUID { return Service.uuid }
     
-    public var characteristics: Set<BluetoothUUID> {
-        
-        return Set([
-            InformationCharacteristic.uuid,
-            SetupCharacteristic.uuid,
-            UnlockCharacteristic.uuid
-            ])
-    }
+    public let characteristics: Set<BluetoothUUID>
     
     public typealias Service = LockService
         
     // MARK: - Properties
     
     public let peripheral: Peripheral
+    
+    public var authorization: LockAuthorizationDataSource = InMemoryLockAuthorization()
+    
+    public var unlockDelegate: LockUnlockDelegate = UnlockSimulator()
     
     public private(set) var information: InformationCharacteristic {
         
@@ -70,14 +67,18 @@ public final class LockServiceController <Peripheral: PeripheralProtocol> : GATT
                                 properties: UnlockCharacteristic.properties)
         ]
         
+        self.characteristics = Set(characteristics.map { $0.uuid })
+        
         let service = GATT.Service(uuid: Service.uuid,
                                    primary: Service.isPrimary,
                                    characteristics: characteristics)
         
         self.serviceHandle = try peripheral.add(service: service)
+        
         self.informationHandle = peripheral.characteristics(for: InformationCharacteristic.uuid)[0]
         self.setupHandle = peripheral.characteristics(for: SetupCharacteristic.uuid)[0]
         self.unlockHandle = peripheral.characteristics(for: UnlockCharacteristic.uuid)[0]
+        
         self.information = information
     }
     
@@ -95,11 +96,142 @@ public final class LockServiceController <Peripheral: PeripheralProtocol> : GATT
     
     public func willWrite(_ request: GATTWriteRequest<Peripheral.Central>) -> ATT.Error? {
         
-        return nil
+        switch request.handle {
+            
+        case setupHandle:
+            
+            return authorization.canSetup ? nil : .writeNotPermitted
+            
+        case unlockHandle:
+            
+            return authorization.canSetup ? .writeNotPermitted : nil
+         
+        default:
+            
+            return nil
+        }
     }
     
     public func didWrite(_ write: GATTWriteConfirmation<Peripheral.Central>) {
         
-        
+        switch write.handle {
+            
+        case setupHandle:
+            
+            assert(authorization.canSetup)
+            
+            // parse characteristic
+            guard let setup = SetupCharacteristic(data: write.value)
+                else { print("Could not parse \(SetupCharacteristic.self)"); return }
+            
+            // get key for shared device.
+            let sharedSecret = authorization.deviceSharedSecret
+            
+            do {
+                
+                // decrypt request
+                let setupRequest = try setup.decrypt(with: sharedSecret)
+                
+                // create owner key
+                try authorization.setup(setupRequest) // should not fail
+                
+            } catch { print("Setup error: \(error)") }
+            
+        case unlockHandle:
+            
+            assert(authorization.canSetup == false)
+            
+            // parse characteristic
+            guard let unlock = UnlockCharacteristic(data: write.value)
+                else { print("Could not parse \(UnlockCharacteristic.self)"); return }
+            
+            let keyIdentifier = unlock.identifier
+            
+            do {
+                
+                guard let (key, secret) = try authorization.key(for: keyIdentifier)
+                    else { print("Unknown key \(keyIdentifier)"); return }
+                
+                assert(key.identifier == keyIdentifier, "Invalid key")
+                
+                guard unlock.authentication.isAuthenticated(with: secret)
+                    else { print("Invalid key secret"); return }
+                
+                // unlock with the specified action
+                try unlockDelegate.unlock(unlock.action)
+                
+            } catch { print("Unlock error: \(error)")  }
+            
+        default:
+            break
+        }
     }
 }
+
+/// Lock Authorization delegate
+public protocol LockAuthorizationDataSource {
+    
+    var deviceSharedSecret: KeyData { get }
+    
+    var canSetup: Bool { get }
+    
+    func setup(_ request: SetupRequest) throws
+    
+    func key(for identifier: UUID) throws -> (key: Key, secret: KeyData)?
+}
+
+/// Lock unlock manager
+public protocol LockUnlockDelegate {
+    
+    func unlock(_ action: UnlockAction) throws
+}
+
+public struct UnlockSimulator: LockUnlockDelegate {
+    
+    public func unlock(_ action: UnlockAction) throws {
+        
+        print("Did unlock with action \(action)")
+    }
+}
+
+public final class InMemoryLockAuthorization: LockAuthorizationDataSource {
+    
+    public var deviceSharedSecret = KeyData()
+    
+    public private(set) var keys = [KeyEntry]()
+    
+    public var canSetup: Bool {
+        
+        return keys.isEmpty
+    }
+    
+    public func setup(_ request: SetupRequest) throws {
+        
+        assert(canSetup, "Already setup")
+        
+        let ownerKey = Key(identifier: request.identifier,
+                      name: "Owner",
+                      permission: .owner)
+        
+        keys.append(KeyEntry(key: ownerKey, secret: request.secret))
+    }
+    
+    public func key(for identifier: UUID) throws -> (key: Key, secret: KeyData)? {
+        
+        guard let keyEntry = keys.first(where: { $0.key.identifier == identifier })
+            else { return nil }
+        
+        return (keyEntry.key, keyEntry.secret)
+    }
+}
+
+public extension InMemoryLockAuthorization {
+    
+    public struct KeyEntry {
+        
+        public let key: Key
+        
+        public let secret: KeyData
+    }
+}
+
