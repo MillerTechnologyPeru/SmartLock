@@ -9,8 +9,6 @@ import Foundation
 import Bluetooth
 
 /// Used to unlock door.
-///
-/// timestamp + nonce + HMAC(key, nonce) + uuid (write-only)
 public struct UnlockCharacteristic: GATTProfileCharacteristic {
     
     public static let uuid = BluetoothUUID(rawValue: "265B3EC0-044D-11E6-90F2-09AB70D5A8C7")!
@@ -76,5 +74,15 @@ public struct UnlockCharacteristic: GATTProfileCharacteristic {
         assert(data.count == type(of: self).length)
         
         return data
+    }
+}
+
+internal struct RequestCharacteristic {
+    
+    enum Opcode: UInt8 {
+        
+        case request
+        case response
+        case error
     }
 }

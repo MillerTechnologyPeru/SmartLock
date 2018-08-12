@@ -8,9 +8,18 @@
 import Foundation
 import Bluetooth
 
+public struct SetupCharacteristic {
+    
+    public static let uuid = BluetoothUUID(rawValue: "129E401C-044D-11E6-8FA9-09AB70D5A8C7")!
+    
+    public static let service: GATTProfileService.Type = LockService.self
+    
+    public static let properties: BitMaskOptionSet<GATT.Characteristic.Property> = [.write]
+    
+    
+}
+
 /// Used for initial lock setup.
-///
-/// timestamp + nonce + HMAC(secret, nonce) + IV
 public struct SetupRequest {
     
     internal static let length = MemoryLayout<UInt128>.size + KeyData.length
@@ -54,15 +63,4 @@ public struct SetupRequest {
         
         return data
     }
-}
-
-public struct SetupResponse {
-    
-    let chunk: Chunk
-}
-
-public enum SetupOpcode: UInt8 {
-    
-    case request = 0x01
-    case response = 0x02
 }
