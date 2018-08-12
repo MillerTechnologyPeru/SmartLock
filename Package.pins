@@ -20,10 +20,16 @@
       "version": "3.1.2"
     },
     {
+      "package": "Codable",
+      "reason": null,
+      "repositoryURL": "https://github.com/PureSwift/Codable.git",
+      "version": "1.0.4"
+    },
+    {
       "package": "CryptoSwift",
       "reason": null,
       "repositoryURL": "https://github.com/krzyzanowskim/CryptoSwift",
-      "version": "0.7.1"
+      "version": "0.6.9"
     },
     {
       "package": "GATT",
