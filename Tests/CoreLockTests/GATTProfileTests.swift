@@ -38,6 +38,8 @@ final class GATTProfileTests: XCTestCase {
         guard let decoded = UnlockCharacteristic(data: characteristic.data)
             else { XCTFail("Could not parse bytes"); return }
         
-        
+        XCTAssertEqual(decoded.authentication.data, authentication.data)
+        XCTAssertEqual(decoded.identifier, characteristic.identifier)
+        XCTAssertEqual(decoded.action, characteristic.action)
     }
 }
