@@ -24,7 +24,32 @@ public struct LockHardware {
     
     /// Lock serial number
     public let serialNumber: String
+    
+    public init(model: LockModel,
+                hardwareRevision: String,
+                serialNumber: String) {
+        
+        self.model = model
+        self.hardwareRevision = hardwareRevision
+        self.serialNumber = serialNumber
+    }
 }
+
+// MARK: - Darwin
+
+#if os(macOS)
+    
+    public extension LockHardware {
+        
+        public static var mac: LockHardware {
+            
+            return LockHardware(model: .mac,
+                                hardwareRevision: UIDevice.current.modelIdentifier,
+                                serialNumber: UIDevice.current.serialNumber)
+        }
+    }
+    
+#endif
 
 // MARK: - Codable
 

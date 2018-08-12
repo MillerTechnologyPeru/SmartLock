@@ -24,6 +24,79 @@ public struct LockModel: RawRepresentable {
     }
 }
 
+// MARK: - Equatable
+
+extension LockModel: Equatable {
+    
+    public static func == (lhs: LockModel, rhs: LockModel) -> Bool {
+        
+        return lhs.rawValue == rhs.rawValue
+    }
+}
+
+// MARK: - Hashable
+
+extension LockModel: Hashable {
+    
+    public var hashValue: Int {
+        
+        return rawValue.hash
+    }
+}
+
+// MARK: - CustomStringConvertible
+
+extension LockModel: CustomStringConvertible {
+    
+    public var description: String {
+        
+        return rawValue
+    }
+}
+
+// MARK: - ExpressibleByStringLiteral
+
+extension LockModel: ExpressibleByStringLiteral {
+    
+    public init(stringLiteral value: String) {
+        
+        self.init(rawValue: value)
+    }
+    
+    public init(unicodeScalarLiteral value: String) {
+        
+        self.init(rawValue: value)
+    }
+    
+    public init(extendedGraphemeClusterLiteral value: String) {
+        
+        self.init(rawValue: value)
+    }
+}
+
+// MARK: - Models
+
+public extension LockModel {
+    
+    public static let orangePi: LockModel = "OrangePi"
+    
+    public static let raspberryPi: LockModel = "RaspberryPi"
+}
+
+// MARK: - Darwin
+
+#if os(macOS)
+    
+    public extension LockModel {
+        
+        public static var mac: LockModel {
+            
+            return LockModel(rawValue: UIDevice.current.model)
+        }
+    }
+    
+#endif
+
 // MARK: - Codable
 
 extension LockModel: Codable {

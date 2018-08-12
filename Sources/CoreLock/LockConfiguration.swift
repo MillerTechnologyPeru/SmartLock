@@ -21,6 +21,13 @@ public struct LockConfiguration {
     
     /// Lock name
     public var name: String
+    
+    public init(identifier: UUID = UUID(),
+                name: String = "") {
+        
+        self.identifier = identifier
+        self.name = name
+    }
 }
 
 // MARK: - Codable
