@@ -5,7 +5,7 @@
       "package": "Bluetooth",
       "reason": null,
       "repositoryURL": "https://github.com/PureSwift/Bluetooth.git",
-      "version": "2.1.7"
+      "version": "2.1.8"
     },
     {
       "package": "BluetoothDarwin",
@@ -23,7 +23,7 @@
       "package": "Codable",
       "reason": null,
       "repositoryURL": "https://github.com/PureSwift/Codable.git",
-      "version": "1.0.4"
+      "version": "1.0.5"
     },
     {
       "package": "CryptoSwift",
@@ -35,7 +35,7 @@
       "package": "GATT",
       "reason": null,
       "repositoryURL": "https://github.com/PureSwift/GATT",
-      "version": "2.0.4"
+      "version": "2.0.5"
     }
   ],
   "version": 1
