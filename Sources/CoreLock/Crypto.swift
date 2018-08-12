@@ -21,7 +21,7 @@ internal let HMACSize = 64
 
 /// Performs HMAC with the specified key and message.
 @inline(__always)
-internal func HMAC(key: KeyData, message: Nonce) -> AuthenticationData {
+internal func HMAC(key: KeyData, message: AuthenticationMessage) -> AuthenticationData {
     
     let hmac = try! CryptoSwift.HMAC(key: key.data.bytes, variant: .sha512).authenticate(message.data.bytes)
     

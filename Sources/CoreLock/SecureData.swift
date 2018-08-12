@@ -54,7 +54,7 @@ public struct KeyData: SecureData {
 /// Cryptographic nonce
 public struct Nonce: SecureData {
     
-    public static let length = 16
+    public static let length = 64
     
     public let data: Data
     
@@ -92,6 +92,7 @@ public struct InitializationVector: SecureData {
     }
 }
 
+/// HMAC data
 public struct AuthenticationData: SecureData {
     
     public static let length = HMACSize

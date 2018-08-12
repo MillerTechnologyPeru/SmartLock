@@ -50,7 +50,7 @@ public struct UnlockCharacteristic: GATTProfileCharacteristic {
         self.action = action
         self.date = date
         self.nonce = nonce
-        self.authentication = HMAC(key: key, message: nonce)
+        self.authentication = HMAC(key: key, message: AuthenticationMessage(date: date, nonce: nonce))
     }
     
     public init?(data: Data) {
