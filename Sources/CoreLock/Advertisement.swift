@@ -37,7 +37,7 @@ public extension BluetoothHostControllerInterface {
     /// LE Scan Response
     func setSmartLockScanResponse(commandTimeout: HCICommandTimeout = .default) throws {
         
-        let name: GAPShortLocalName = "Lock"
+        let name: GAPCompleteLocalName = "Lock"
         let serviceUUID: GAPIncompleteListOf128BitServiceClassUUIDs = [UUID(bluetooth: LockService.uuid)]
         
         let data = GAPDataEncoder.encode([name, serviceUUID])
