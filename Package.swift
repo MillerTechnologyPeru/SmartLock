@@ -8,6 +8,10 @@ let package = Package(
     targets: [
         Target(
             name: "lockd",
+            dependencies: [.Target(name: "CoreLockGATTServer")]
+        ),
+        Target(
+            name: "CoreLockGATTServer",
             dependencies: [.Target(name: "CoreLock")]
         ),
         Target(
@@ -20,3 +24,11 @@ let package = Package(
     ],
     exclude: ["Xcode", "iOS", "Android"]
 )
+
+#if os(macOS)
+let dependency: Package.Dependency = .Package(url: "https://github.com/PureSwift/BluetoothDarwin.git", majorVersion: 1)
+package.dependencies.append(dependency)
+#elseif os(Linux)
+let dependency: Package.Dependency = .Package(url: "https://github.com/PureSwift/BluetoothLinux.git", majorVersion: 3)
+package.dependencies.append(dependency)
+#endif
