@@ -89,13 +89,13 @@ public final class SmartLockManager <Central: CentralProtocol> {
         
         let timeout = Timeout(timeout: timeout)
         
-        return try central.device(for: peripheral, profile: LockGATTProfile.self, timeout: timeout) { [unowned self] (cache) in
+        return try central.device(for: peripheral, timeout: timeout) { [unowned self] (cache) in
             
             return try self.readInformation(cache: cache, timeout: timeout)
         }
     }
     
-    internal func readInformation(cache: [Characteristic<Peripheral>],
+    internal func readInformation(cache: GATTConnectionCache<Peripheral>,
                                   timeout: Timeout) throws -> InformationCharacteristic {
         
         return try central.read(InformationCharacteristic.self, for: cache, timeout: timeout)
@@ -113,7 +113,7 @@ public final class SmartLockManager <Central: CentralProtocol> {
         
         let timeout = Timeout(timeout: timeout)
         
-        return try central.device(for: peripheral, profile: LockGATTProfile.self, timeout: timeout) { [unowned self] (cache) in
+        return try central.device(for: peripheral, timeout: timeout) { [unowned self] (cache) in
             
             // write setup characteristic
             try self.central.write(characteristicValue, for: cache, timeout: timeout)
@@ -137,7 +137,7 @@ public final class SmartLockManager <Central: CentralProtocol> {
         
         let timeout = Timeout(timeout: timeout)
         
-        return try central.device(for: peripheral, profile: LockGATTProfile.self, timeout: timeout) { [unowned self] (cache) in
+        return try central.device(for: peripheral, timeout: timeout) { [unowned self] (cache) in
             
             // Write unlock data to characteristic
             try self.central.write(characteristicValue, for: cache, timeout: timeout)

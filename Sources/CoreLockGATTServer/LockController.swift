@@ -23,7 +23,9 @@ public final class LockController <Peripheral: PeripheralProtocol> {
     
     public let peripheral: Peripheral
     
-    public let lockServiceController: LockServiceController <Peripheral>
+    public let deviceInformationController: GATTDeviceInformationServiceController<Peripheral>
+    
+    public let lockServiceController: LockServiceController<Peripheral>
     
     // MARK: - Initialization
     
@@ -32,6 +34,7 @@ public final class LockController <Peripheral: PeripheralProtocol> {
         self.peripheral = peripheral
         
         // load services
+        self.deviceInformationController = try GATTDeviceInformationServiceController(peripheral: peripheral)
         self.lockServiceController = try LockServiceController(peripheral: peripheral)
         
         // set callbacks
@@ -48,6 +51,10 @@ public final class LockController <Peripheral: PeripheralProtocol> {
             
             return lockServiceController.willRead(request)
             
+        } else if deviceInformationController.supportsCharacteristic(request.uuid) {
+            
+            return deviceInformationController.willRead(request)
+            
         } else {
             
             return nil
@@ -60,6 +67,10 @@ public final class LockController <Peripheral: PeripheralProtocol> {
             
             return lockServiceController.willWrite(request)
             
+        } else if deviceInformationController.supportsCharacteristic(request.uuid) {
+            
+            return deviceInformationController.willWrite(request)
+            
         } else {
             
             return nil
@@ -71,6 +82,10 @@ public final class LockController <Peripheral: PeripheralProtocol> {
         if lockServiceController.supportsCharacteristic(confirmation.uuid) {
             
             lockServiceController.didWrite(confirmation)
+            
+        } else if deviceInformationController.supportsCharacteristic(confirmation.uuid) {
+            
+            deviceInformationController.didWrite(confirmation)
         }
     }
 }
@@ -79,6 +94,6 @@ private extension GATTServiceController {
     
     func supportsCharacteristic(_ characteristicUUID: BluetoothUUID) -> Bool {
         
-        return type(of: self).service.characteristics.contains(where: { $0.uuid == characteristicUUID })
+        return characteristics.contains(characteristicUUID)
     }
 }

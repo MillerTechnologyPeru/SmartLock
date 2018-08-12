@@ -12,8 +12,7 @@ import GATT
 public struct LockGATTProfile: GATTProfile {
     
     public static let services: [GATTProfileService.Type] = [
-        LockService.self,
-        DeviceInformationService.self
+        LockService.self
     ]
 }
 

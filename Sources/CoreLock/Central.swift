@@ -38,12 +38,12 @@ internal extension CentralProtocol {
         return try action(cache)
     }
     
-    func write <T: GATTProfileCharacteristic> (_ characteristic: T,
-                                               for cache: [Characteristic<Peripheral>],
+    func write <T: GATTCharacteristic> (_ characteristic: T,
+                                               for cache: GATTConnectionCache<Peripheral>,
                                                withResponse response: Bool = true,
                                                timeout: Timeout) throws {
         
-        guard let foundCharacteristic = cache.first(where: { $0.uuid == T.uuid })
+        guard let foundCharacteristic = cache.characteristics.first(where: { $0.uuid == T.uuid })
             else { throw CentralError.invalidAttribute(T.uuid) }
         
         try self.writeValue(characteristic.data,
@@ -52,11 +52,11 @@ internal extension CentralProtocol {
                                timeout: try timeout.timeRemaining())
     }
     
-    func read <T: GATTProfileCharacteristic> (_ characteristic: T.Type,
-                                                      for cache: [Characteristic<Peripheral>],
-                                                      timeout: Timeout) throws -> T {
+    func read <T: GATTCharacteristic> (_ characteristic: T.Type,
+                                        for cache: GATTConnectionCache<Peripheral>,
+                                        timeout: Timeout) throws -> T {
         
-        guard let foundCharacteristic = cache.first(where: { $0.uuid == T.uuid })
+        guard let foundCharacteristic = cache.characteristics.first(where: { $0.uuid == T.uuid })
             else { throw CentralError.invalidAttribute(T.uuid) }
         
         let data = try self.readValue(for: foundCharacteristic,
@@ -68,12 +68,12 @@ internal extension CentralProtocol {
         return value
     }
     
-    func notify <T: GATTProfileCharacteristic> (_ characteristic: T.Type,
-                                                for cache: [Characteristic<Peripheral>],
-                                                timeout: Timeout,
-                                                notification: ((ErrorValue<T>) -> ())?) throws {
+    func notify <T: GATTCharacteristic> (_ characteristic: T.Type,
+                                        for cache: GATTConnectionCache<Peripheral>,
+                                        timeout: Timeout,
+                                        notification: ((ErrorValue<T>) -> ())?) throws {
         
-        guard let foundCharacteristic = cache.first(where: { $0.uuid == T.uuid })
+        guard let foundCharacteristic = cache.characteristics.first(where: { $0.uuid == T.uuid })
             else { throw CentralError.invalidAttribute(T.uuid) }
         
         let dataNotification: ((Data) -> ())?
@@ -102,45 +102,6 @@ internal extension CentralProtocol {
         }
         
         try notify(dataNotification, for: foundCharacteristic, timeout: try timeout.timeRemaining())
-    }
-    
-    /// Verify a peripheral declares the GATT profile.
-    func profile(_ profile: GATTProfile.Type,
-                for peripheral: Peripheral,
-                timeout: Timeout) throws -> [Characteristic<Peripheral>] {
-        
-        // group characteristics by service
-        var characteristicsByService = [BluetoothUUID: [BluetoothUUID]]()
-        profile.services.forEach {
-            characteristicsByService[$0.uuid] = (characteristicsByService[$0.uuid] ?? []) + $0.characteristics.map { $0.uuid }
-        }
-        
-        var results = [Characteristic<Peripheral>]()
-        
-        // validate required characteristics
-        let foundServices = try discoverServices([], for: peripheral, timeout: try timeout.timeRemaining())
-        
-        for (serviceUUID, characteristics) in characteristicsByService {
-            
-            // validate service exists
-            guard let service = foundServices.first(where: { $0.uuid == serviceUUID })
-                else { throw SmartLockGATTError.serviceNotFound(serviceUUID) }
-            
-            // validate characteristic exists
-            let foundCharacteristics = try discoverCharacteristics([], for: service, timeout: try timeout.timeRemaining())
-            
-            for characteristicUUID in characteristics {
-                
-                guard let characteristic = foundCharacteristics.first(where: { $0.uuid == characteristicUUID })
-                    else { throw SmartLockGATTError.characteristicNotFound(characteristicUUID) }
-                
-                results.append(characteristic)
-            }
-        }
-        
-        assert(results.count == profile.characteristics.count)
-        
-        return results
     }
 }
 

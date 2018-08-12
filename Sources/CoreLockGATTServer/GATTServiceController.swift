@@ -8,13 +8,14 @@
 import Foundation
 import Bluetooth
 import GATT
-import CoreLock
 
 public protocol GATTServiceController: class {
     
     associatedtype Peripheral: PeripheralProtocol
     
-    static var service: GATTProfileService.Type { get }
+    static var service: BluetoothUUID { get }
+    
+    var characteristics: Set<BluetoothUUID> { get }
     
     var peripheral: Peripheral { get }
     

@@ -11,13 +11,15 @@ import GATT
 
 public final class GATTDeviceInformationServiceController <Peripheral: PeripheralProtocol> : GATTServiceController {
     
-    public typealias Service = LockService
+    public static var service: BluetoothUUID { return .deviceInformation }
     
-    public static var service: GATTProfileService.Type { return Service.self }
+    public let characteristics: Set<BluetoothUUID>
     
     // MARK: - Properties
     
     public let peripheral: Peripheral
+    
+    public let manufacturerName: GATTManufacturerNameString = "Miller Technology"
     
     public private(set) var modelNumber: GATTModelNumber = "" {
         didSet { peripheral[characteristic: modelNumberHandle] = modelNumber.data }
@@ -25,10 +27,6 @@ public final class GATTDeviceInformationServiceController <Peripheral: Periphera
     
     public private(set) var serialNumber: GATTSerialNumberString = "" {
         didSet { peripheral[characteristic: serialNumberHandle] = serialNumber.data }
-    }
-    
-    public private(set) var manufacturerName: GATTManufacturerNameString = "" {
-        didSet { peripheral[characteristic: manufacturerNameHandle] = manufacturerName.data }
     }
     
     public private(set) var firmwareRevision: GATTFirmwareRevisionString = "" {
@@ -71,6 +69,13 @@ public final class GATTDeviceInformationServiceController <Peripheral: Periphera
         #endif
         
         let characteristics = [
+            
+            GATT.Characteristic(uuid: type(of: manufacturerName).uuid,
+                                value: manufacturerName.data,
+                                permissions: [.read],
+                                properties: [.read],
+                                descriptors: descriptors),
+            
             GATT.Characteristic(uuid: type(of: modelNumber).uuid,
                                 value: modelNumber.data,
                                 permissions: [.read],
@@ -79,12 +84,6 @@ public final class GATTDeviceInformationServiceController <Peripheral: Periphera
             
             GATT.Characteristic(uuid: type(of: serialNumber).uuid,
                                 value: serialNumber.data,
-                                permissions: [.read],
-                                properties: [.read],
-                                descriptors: descriptors),
-            
-            GATT.Characteristic(uuid: type(of: manufacturerName).uuid,
-                                value: manufacturerName.data,
                                 permissions: [.read],
                                 properties: [.read],
                                 descriptors: descriptors),
@@ -108,11 +107,14 @@ public final class GATTDeviceInformationServiceController <Peripheral: Periphera
                                 descriptors: descriptors)
         ]
         
+        self.characteristics = Set(characteristics.map { $0.uuid })
+        
         let service = GATT.Service(uuid: serviceUUID,
                                    primary: true,
                                    characteristics: characteristics)
         
         self.serviceHandle = try peripheral.add(service: service)
+        
         self.modelNumberHandle = peripheral.characteristics(for: type(of: modelNumber).uuid)[0]
         self.serialNumberHandle = peripheral.characteristics(for: type(of: serialNumber).uuid)[0]
         self.manufacturerNameHandle = peripheral.characteristics(for: type(of: manufacturerName).uuid)[0]
@@ -128,5 +130,18 @@ public final class GATTDeviceInformationServiceController <Peripheral: Periphera
     
     // MARK: - Methods
     
+    public func willRead(_ request: GATTReadRequest<Peripheral.Central>) -> ATT.Error? {
+        
+        return nil
+    }
     
+    public func willWrite(_ request: GATTWriteRequest<Peripheral.Central>) -> ATT.Error? {
+        
+        return nil
+    }
+    
+    public func didWrite(_ request: GATTWriteConfirmation<Peripheral.Central>) {
+        
+        
+    }
 }

@@ -12,10 +12,19 @@ import CoreLock
 
 public final class LockServiceController <Peripheral: PeripheralProtocol> : GATTServiceController {
     
+    public static var service: BluetoothUUID { return Service.uuid }
+    
+    public var characteristics: Set<BluetoothUUID> {
+        
+        return Set([
+            InformationCharacteristic.uuid,
+            SetupCharacteristic.uuid,
+            UnlockCharacteristic.uuid
+            ])
+    }
+    
     public typealias Service = LockService
-    
-    public static var service: GATTProfileService.Type { return Service.self }
-    
+        
     // MARK: - Properties
     
     public let peripheral: Peripheral
