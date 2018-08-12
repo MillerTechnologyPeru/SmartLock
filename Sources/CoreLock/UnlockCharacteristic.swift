@@ -46,12 +46,12 @@ public struct UnlockCharacteristic: GATTProfileCharacteristic {
         
         var offset = 0
         
-        guard let authentication = Authentication(data: data[offset ..< offset + Authentication.length])
+        guard let authentication = Authentication(data: data.subdata(in: offset ..< offset + Authentication.length))
             else { assertionFailure("Could not initialize authentication"); return nil }
         
         offset += Authentication.length
         
-        let identifier = UUID(UInt128(littleEndian: data[offset ..< offset + UUID.length].withUnsafeBytes { $0.pointee }))
+        let identifier = UUID(UInt128(littleEndian: data.subdata(in: offset ..< offset + UUID.length).withUnsafeBytes { $0.pointee }))
         
         offset += UUID.length
         

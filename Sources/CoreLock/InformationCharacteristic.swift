@@ -56,9 +56,9 @@ public struct InformationCharacteristic: GATTProfileCharacteristic {
         guard data.count == type(of: self).length
             else { return nil }
         
-        let identifier = UUID(UInt128(littleEndian: data[0 ..< 16].withUnsafeBytes { $0.pointee }))
+        let identifier = UUID(UInt128(littleEndian: data.subdata(in: 0 ..< 16).withUnsafeBytes { $0.pointee }))
         
-        let buildVersion = UInt64(littleEndian: data[16 ..< 24].withUnsafeBytes { $0.pointee })
+        let buildVersion = UInt64(littleEndian: data.subdata(in: 16 ..< 24).withUnsafeBytes { $0.pointee })
         
         let version = SmartLockVersion(major: data[24], minor: data[25], patch: data[26])
         

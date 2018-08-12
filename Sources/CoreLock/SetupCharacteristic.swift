@@ -79,7 +79,7 @@ public struct SetupRequest {
         
         var offset = 0
         
-        let identifier = UUID(UInt128(littleEndian: data[offset ..< offset + UUID.length].withUnsafeBytes { $0.pointee }))
+        let identifier = UUID(UInt128(littleEndian: data.subdata(in: offset ..< offset + UUID.length).withUnsafeBytes { $0.pointee }))
         
         offset += UUID.length
         

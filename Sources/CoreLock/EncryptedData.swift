@@ -58,19 +58,19 @@ public extension EncryptedData {
         
         var offset = 0
         
-        guard let authentication = Authentication(data: data[offset ..< offset + Authentication.length])
+        guard let authentication = Authentication(data: data.subdata(in: offset ..< offset + Authentication.length))
             else { assertionFailure("Could not initialize authentication"); return nil }
         
         offset += Authentication.length
         
-        guard let iv = InitializationVector(data: data[offset ..< offset + InitializationVector.length])
+        guard let iv = InitializationVector(data: data.subdata(in: offset ..< offset + InitializationVector.length))
             else { assertionFailure("Could not initialize IV"); return nil }
         
         offset += InitializationVector.length
         
         self.authentication = authentication
         self.initializationVector = iv
-        self.encryptedData = data.suffix(from: offset)
+        self.encryptedData = Data(data.suffix(from: offset))
         
         assert(offset == type(of: self).minimumLength)
     }

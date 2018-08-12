@@ -7,6 +7,11 @@
 
 import Foundation
 
+#if swift(>=3.2)
+#elseif swift(>=3.0)
+    import Codable
+#endif
+
 /// A Key's permission level.
 public enum PermissionType: UInt8, Codable {
     
@@ -52,7 +57,7 @@ public extension Permission {
 public extension Permission {
     
     /// Specifies the time and dates a permission is valid.
-    public struct Schedule: Equatable {
+    public struct Schedule {
         
         /// The date this permission becomes invalid.
         public var expiry: Date
