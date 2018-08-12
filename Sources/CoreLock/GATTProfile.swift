@@ -34,7 +34,7 @@ public protocol GATTProfileService {
 }
 
 /// GATT Service Characteristic
-public protocol GATTProfileCharacteristic {
+public protocol GATTProfileCharacteristic: GATTCharacteristic {
     
     static var service: GATTProfileService.Type { get }
     

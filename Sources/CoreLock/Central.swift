@@ -13,9 +13,8 @@ internal extension CentralProtocol {
     
     /// Connects to the device, fetches the data, performs the action, and disconnects.
     func device <T> (for peripheral: Peripheral,
-                     profile: GATTProfile.Type,
                      timeout: Timeout,
-                     _ action: ([Characteristic<Peripheral>]) throws -> (T)) throws -> T {
+                     _ action: (GATTConnectionCache<Peripheral>) throws -> (T)) throws -> T {
         
         // connect first
         try connect(to: peripheral, timeout: try timeout.timeRemaining())
@@ -23,12 +22,20 @@ internal extension CentralProtocol {
         // disconnect
         defer { disconnect(peripheral: peripheral) }
         
-        let foundCharacteristics = try self.profile(profile,
-                                                    for: peripheral,
-                                                    timeout: timeout)
+        var cache = GATTConnectionCache <Peripheral> ()
+        
+        let foundServices = try discoverServices([], for: peripheral, timeout: try timeout.timeRemaining())
+        
+        for service in foundServices {
+            
+            // validate characteristic exists
+            let foundCharacteristics = try discoverCharacteristics([], for: service, timeout: try timeout.timeRemaining())
+            
+            cache.characteristics += foundCharacteristics
+        }
         
         // perform action
-        return try action(foundCharacteristics)
+        return try action(cache)
     }
     
     func write <T: GATTProfileCharacteristic> (_ characteristic: T,
@@ -144,6 +151,16 @@ internal enum ErrorValue <T> {
     
     case error(Error)
     case value(T)
+}
+
+internal struct GATTConnectionCache <Peripheral: Peer> {
+    
+    fileprivate init() {
+        
+        self.characteristics = []
+    }
+    
+    fileprivate(set) var characteristics: [Characteristic<Peripheral>]
 }
 
 // GATT timeout
