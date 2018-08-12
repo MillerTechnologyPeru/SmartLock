@@ -29,8 +29,22 @@ public extension BluetoothHostControllerInterface {
     /// LE Advertise with iBeacon
     func setSmartLockAdvertisingData(commandTimeout: HCICommandTimeout = .default) throws {
         
-        try self.iBeacon(.smartLock(rssi: -10), // FIXME: RSSI
-            flags: GAPFlags(flags: [.lowEnergyGeneralDiscoverableMode]),
-            interval: .min)
+        try iBeacon(.smartLock(rssi: -10), // FIXME: RSSI
+                    flags: GAPFlags(flags: [.lowEnergyGeneralDiscoverableMode]),
+                    interval: .min)
+    }
+    
+    /// LE Scan Response
+    func setSmartLockScanResponse(commandTimeout: HCICommandTimeout = .default) throws {
+        
+        let name: GAPShortLocalName = "Lock"
+        let serviceUUID: GAPIncompleteListOf128BitServiceClassUUIDs = [UUID(bluetooth: LockService.uuid)]
+        
+        let data = GAPDataEncoder.encode([name, serviceUUID])
+        
+        guard let scanResponseData = LowEnergyAdvertisingData(data: data)
+            else { fatalError("\(data) > 31 bytes") }
+        
+        try setLowEnergyScanResponse(scanResponseData, timeout: commandTimeout)
     }
 }

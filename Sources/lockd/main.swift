@@ -76,6 +76,7 @@ func run() throws {
     
     // configure custom advertising
     try hostController.setSmartLockAdvertisingData()
+    try hostController.setSmartLockScanResponse()
     
     // run main loop
     while true {
