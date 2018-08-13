@@ -8,6 +8,12 @@
       "version": "2.1.8"
     },
     {
+      "package": "BluetoothDarwin",
+      "reason": null,
+      "repositoryURL": "https://github.com/PureSwift/BluetoothDarwin.git",
+      "version": "1.0.3"
+    },
+    {
       "package": "BluetoothLinux",
       "reason": null,
       "repositoryURL": "https://github.com/PureSwift/BluetoothLinux.git",
