@@ -25,6 +25,7 @@
 		6E60F8A72121259F0054995D /* Store.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60F8A62121259F0054995D /* Store.swift */; };
 		6E60F8AD212127890054995D /* Log.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60F8AC212127890054995D /* Log.swift */; };
 		6E60F8F82121540D0054995D /* Defaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60F8F72121540C0054995D /* Defaults.swift */; };
+		6EA3D12D212180C100BC50D8 /* Observable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EA3D128212180C000BC50D8 /* Observable.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -115,6 +116,7 @@
 		6E60F8A62121259F0054995D /* Store.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Store.swift; sourceTree = "<group>"; };
 		6E60F8AC212127890054995D /* Log.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Log.swift; sourceTree = "<group>"; };
 		6E60F8F72121540C0054995D /* Defaults.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Defaults.swift; sourceTree = "<group>"; };
+		6EA3D128212180C000BC50D8 /* Observable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Observable.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -206,6 +208,7 @@
 			children = (
 				6E60004A212113DF00787DAA /* DeviceManager.swift */,
 				6E60F8A62121259F0054995D /* Store.swift */,
+				6EA3D128212180C000BC50D8 /* Observable.swift */,
 				6E60F8F72121540C0054995D /* Defaults.swift */,
 				6E60F8AC212127890054995D /* Log.swift */,
 			);
@@ -403,6 +406,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6EA3D12D212180C100BC50D8 /* Observable.swift in Sources */,
 				6E6000162121119400787DAA /* NearbyLocksViewController.swift in Sources */,
 				6E6000CD21211DB400787DAA /* ActivityIndicatorViewController.swift in Sources */,
 				6E60F8AD212127890054995D /* Log.swift in Sources */,

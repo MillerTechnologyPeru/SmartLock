@@ -28,7 +28,7 @@ final class NearbyLocksViewController: UITableViewController {
     
     private var items = [LockPeripheral]()
     
-    let scanDuration: TimeInterval = 4.0
+    let scanDuration: TimeInterval = 3.0
     
     #if os(iOS)
     
@@ -45,15 +45,35 @@ final class NearbyLocksViewController: UITableViewController {
     
     #endif
     
+    private var peripheralsObserver: Int?
+    private var locksObserver: Int?
+    
     // MARK: - Loading
+    
+    deinit {
+        
+        if let observer = peripheralsObserver {
+            
+            Store.shared.peripherals.remove(observer: observer)
+        }
+        
+        if let observer = locksObserver {
+            
+            Store.shared.locks.remove(observer: observer)
+        }
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        peripheralsObserver = Store.shared.peripherals.observe { [weak self] _ in mainQueue { self?.configureView() } }
+        locksObserver = Store.shared.locks.observe { [weak self] _ in mainQueue { self?.configureView() } }
+        
         configureView()
         
         // try to scan
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0, execute: { [weak self] in self?.scan() })
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0,
+                                      execute: { [weak self] in self?.scan() })
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -128,7 +148,7 @@ final class NearbyLocksViewController: UITableViewController {
     
     private func configureView() {
         
-        self.items = Array(Store.shared.peripherals.values)
+        self.items = Array(Store.shared.peripherals.value.values)
         
         tableView.reloadData()
     }

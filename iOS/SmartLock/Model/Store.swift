@@ -22,30 +22,32 @@ public final class Store {
         loadCache()
     }
     
+    public let scanning = Observable(false)
+    
     private let defaults = Defaults.shared
     
     private let keychain = Keychain()
     
     private let storageKey = DefaultsKey<[UUID: LockCache]>("locks")
 
-    public private(set) var locks = [UUID: LockCache]() {
+    public private(set) var locks = Observable([UUID: LockCache]()) {
         
         didSet { writeCache() }
     }
     
-    public private(set) var peripherals = [UUID: LockPeripheral]()
+    public private(set) var peripherals = Observable([UUID: LockPeripheral]())
     
     private func insert(_ information: InformationCharacteristic, for peripheral: LockManager.Peripheral) {
         
-        self.peripherals[information.identifier] = LockPeripheral(peripheral: peripheral, information: information)
+        self.peripherals.value[information.identifier] = LockPeripheral(peripheral: peripheral, information: information)
     }
     
     /// Key identifier for the specified
     public subscript (lock identifier: UUID) -> LockCache? {
         
-        get { return locks[identifier] }
+        get { return locks.value[identifier] }
         
-        set { locks[identifier] = newValue }
+        set { locks.value[identifier] = newValue }
     }
     
     public subscript (key identifier: UUID) -> KeyData? {
@@ -70,12 +72,12 @@ public final class Store {
     
     private func loadCache() {
         
-        locks = defaults.get(for: storageKey) ?? [:]
+        locks.value = defaults.get(for: storageKey) ?? [:]
     }
     
     private func writeCache() {
         
-        defaults.set(locks, for: storageKey)
+        defaults.set(locks.value, for: storageKey)
     }
 }
 
@@ -83,7 +85,7 @@ public extension Store {
     
     func scan(duration: TimeInterval) throws {
         
-        self.peripherals.removeAll()
+        self.peripherals.value.removeAll()
         
         var peripherals = Set<LockManager.Peripheral>()
         
