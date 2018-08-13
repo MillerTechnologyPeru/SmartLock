@@ -105,7 +105,7 @@ public final class SmartLockManager <Central: CentralProtocol> {
     public func setup(peripheral: Peripheral,
                       with request: SetupRequest,
                       sharedSecret: KeyData,
-                      timeout: TimeInterval = .gattDefaultTimeout) throws {
+                      timeout: TimeInterval = .gattDefaultTimeout) throws -> InformationCharacteristic {
         
         // encrypt owner key data
         let characteristicValue = try SetupCharacteristic(request: request,
@@ -123,6 +123,8 @@ public final class SmartLockManager <Central: CentralProtocol> {
             
             guard information.status == .unlock
                 else { throw GATTError.couldNotComplete }
+            
+            return information
         }
     }
     

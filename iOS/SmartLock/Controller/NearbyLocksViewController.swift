@@ -137,25 +137,23 @@ final class NearbyLocksViewController: UITableViewController {
         
         let lock = self[indexPath]
         
-        let lockIdentifier = lock.information.identifier
-        
         let title: String
         
         let isEnabled: Bool
         
-        if let lockCache = Store.shared[lock: lockIdentifier] {
+        if let lockCache = Store.shared[lock: lock.identifier] {
             
             title = lockCache.name
             isEnabled = true
             
         } else if lock.information.status == .setup {
             
-            title = "Setup \(lockIdentifier)"
+            title = "Setup \(lock.identifier)"
             isEnabled = true
             
         } else {
             
-            title = lockIdentifier.description
+            title = lock.identifier.description
             isEnabled = false
         }
         
@@ -181,7 +179,11 @@ final class NearbyLocksViewController: UITableViewController {
     
     private func unlock(_ lock: LockPeripheral) {
         
+        guard let lockCache = Store.shared[lock: lock.identifier],
+            let keyData = Store.shared[key: lockCache.key.identifier]
+            else { return }
         
+        performActivity({ try LockManager.shared.unlock(key: (lockCache.key.identifier, keyData), peripheral: lock.peripheral) })
     }
     
     private func setup(_ lock: LockPeripheral) {
@@ -215,7 +217,7 @@ final class NearbyLocksViewController: UITableViewController {
     
     private func setupLock(_ lock: LockPeripheral, sharedSecret: KeyData, name: String = "Lock") {
         
-        performActivity({ try Store.shared.setup(lock.peripheral, sharedSecret: sharedSecret, name: name) },
+        performActivity({ try Store.shared.setup(lock, sharedSecret: sharedSecret, name: name) },
                         completion: { (viewController, _) in viewController.configureView() })
     }
 }

@@ -35,6 +35,11 @@ public final class Store {
     
     public private(set) var peripherals = [UUID: LockPeripheral]()
     
+    private func insert(_ information: InformationCharacteristic, for peripheral: LockManager.Peripheral) {
+        
+        self.peripherals[information.identifier] = LockPeripheral(peripheral: peripheral, information: information)
+    }
+    
     /// Key identifier for the specified
     public subscript (lock identifier: UUID) -> LockCache? {
         
@@ -43,7 +48,7 @@ public final class Store {
         set { locks[identifier] = newValue }
     }
     
-    public subscript (secret identifier: UUID) -> KeyData? {
+    public subscript (key identifier: UUID) -> KeyData? {
         
         get {
             
@@ -92,20 +97,24 @@ public extension Store {
                 let information = try LockManager.shared.readInformation(for: peripheral)
                 
                 // store peripheral cache
-                self.peripherals[information.identifier] = LockPeripheral(peripheral: peripheral, information: information)
+                self.insert(information, for: peripheral)
                 
             } catch { log("Error: \(error)") }
         }
     }
     
     /// Setup a lock.
-    func setup(_ peripheral: LockManager.Peripheral, sharedSecret: KeyData, name: String) throws {
+    func setup(_ lock: LockPeripheral, sharedSecret: KeyData, name: String) throws {
         
-        let request = SetupRequest()
+        let keyIdentifier = UUID()
         
-        try LockManager.shared.setup(peripheral: peripheral,
-                                     with: request,
-                                     sharedSecret: sharedSecret)
+        let keySecret = KeyData()
+        
+        let request = SetupRequest(identifier: keyIdentifier, secret: keySecret)
+        
+        let information = try LockManager.shared.setup(peripheral: lock.peripheral,
+                                                       with: request,
+                                                       sharedSecret: sharedSecret)
         
         let newKey = Key(identifier: request.identifier,
                          name: "",
@@ -113,7 +122,12 @@ public extension Store {
         
         let lockCache = LockCache(key: newKey, name: name)
         
+        // store key
+        self[lock: lock.identifier] = lockCache
+        self[key: keyIdentifier] = keySecret
         
+        // update lock information
+        self.insert(information, for: lock.peripheral)
     }
 }
 
@@ -134,5 +148,10 @@ public struct LockPeripheral {
     
     public let peripheral: LockManager.Peripheral
     
-    public var information: InformationCharacteristic
+    public let information: InformationCharacteristic
+    
+    public var identifier: UUID {
+        
+        return information.identifier
+    }
 }

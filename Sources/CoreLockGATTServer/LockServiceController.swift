@@ -51,7 +51,7 @@ public final class LockServiceController <Peripheral: PeripheralProtocol> : GATT
         
         self.peripheral = peripheral
         
-        let information = InformationCharacteristic(identifier: UUID(),
+        let information = InformationCharacteristic(identifier: lockConfiguration.identifier,
                                                     buildVersion: .current,
                                                     version: .current,
                                                     status: .setup,
@@ -235,14 +235,6 @@ public final class InMemoryLockAuthorization: LockAuthorizationDataSource {
         
         let secretString = sharedSecret.data.base64EncodedString()
         print("Shared secret:", secretString)
-        
-        #if os(macOS)
-        
-        var urlComponents = URLComponents(string: "https://api.qrserver.com/v1/create-qr-code/")!
-        urlComponents.queryItems = [URLQueryItem(name: "data", value: secretString)]
-        
-        NSWorkspace.shared().open(urlComponents.url!)
-        #endif
     }
     
     public var sharedSecret: KeyData
