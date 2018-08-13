@@ -125,7 +125,7 @@ public final class LockServiceController <Peripheral: PeripheralProtocol> : GATT
                 else { print("Could not parse \(SetupCharacteristic.self)"); return }
             
             // get key for shared device.
-            let sharedSecret = authorization.deviceSharedSecret
+            let sharedSecret = authorization.sharedSecret
             
             do {
                 
@@ -134,6 +134,8 @@ public final class LockServiceController <Peripheral: PeripheralProtocol> : GATT
                 
                 // create owner key
                 try authorization.setup(setupRequest) // should not fail
+                
+                print("Lock setup completed")
                 
             } catch { print("Setup error: \(error)") }
             
@@ -160,6 +162,8 @@ public final class LockServiceController <Peripheral: PeripheralProtocol> : GATT
                 // unlock with the specified action
                 try unlockDelegate.unlock(unlock.action)
                 
+                print("Key \(key.identifier) unlocked with action \(unlock)")
+                
             } catch { print("Unlock error: \(error)")  }
             
         default:
@@ -171,7 +175,7 @@ public final class LockServiceController <Peripheral: PeripheralProtocol> : GATT
 /// Lock Authorization delegate
 public protocol LockAuthorizationDataSource {
     
-    var deviceSharedSecret: KeyData { get }
+    var sharedSecret: KeyData { get }
     
     var canSetup: Bool { get }
     
@@ -196,7 +200,14 @@ public struct UnlockSimulator: LockUnlockDelegate {
 
 public final class InMemoryLockAuthorization: LockAuthorizationDataSource {
     
-    public var deviceSharedSecret = KeyData()
+    public init(sharedSecret: KeyData = KeyData()) {
+        
+        self.sharedSecret = sharedSecret
+        
+        print("Shared secret:", sharedSecret.data.base64EncodedString())
+    }
+    
+    public var sharedSecret: KeyData
     
     public private(set) var keys = [KeyEntry]()
     
