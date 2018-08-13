@@ -22,7 +22,15 @@ public final class LockServiceController <Peripheral: PeripheralProtocol> : GATT
     
     public let peripheral: Peripheral
     
-    public var authorization: LockAuthorizationDataSource = InMemoryLockAuthorization()
+    public var lockConfiguration = LockConfiguration() {
+        
+        didSet { updateInformation() }
+    }
+    
+    public var authorization: LockAuthorizationDataSource = InMemoryLockAuthorization()  {
+        
+        didSet { updateInformation() }
+    }
     
     public var unlockDelegate: LockUnlockDelegate = UnlockSimulator()
     
@@ -47,7 +55,7 @@ public final class LockServiceController <Peripheral: PeripheralProtocol> : GATT
                                                     buildVersion: .current,
                                                     version: .current,
                                                     status: .setup,
-                                                    unlockActions: [])
+                                                    unlockActions: [.default])
         
         let characteristics = [
             
@@ -137,6 +145,8 @@ public final class LockServiceController <Peripheral: PeripheralProtocol> : GATT
                 
                 print("Lock setup completed")
                 
+                updateInformation()
+                
             } catch { print("Setup error: \(error)") }
             
         case unlockHandle:
@@ -170,6 +180,21 @@ public final class LockServiceController <Peripheral: PeripheralProtocol> : GATT
             break
         }
     }
+    
+    // MARK: - Private Methods
+    
+    private func updateInformation() {
+        
+        let status: LockStatus = authorization.canSetup ? .setup : .unlock
+        
+        let identifier = lockConfiguration.identifier
+        
+        self.information = InformationCharacteristic(identifier: identifier,
+                                                     buildVersion: .current,
+                                                     version: .current,
+                                                     status: status,
+                                                     unlockActions: [.default])
+    }
 }
 
 /// Lock Authorization delegate
@@ -198,13 +223,23 @@ public struct UnlockSimulator: LockUnlockDelegate {
     }
 }
 
+#if os(macOS)
+import AppKit
+#endif
+
 public final class InMemoryLockAuthorization: LockAuthorizationDataSource {
     
     public init(sharedSecret: KeyData = KeyData()) {
         
         self.sharedSecret = sharedSecret
         
-        print("Shared secret:", sharedSecret.data.base64EncodedString())
+        let secretString = sharedSecret.data.base64EncodedString()
+        
+        print("Shared secret:", secretString)
+        
+        #if os(macOS)
+        NSWorkspace.shared().open(URL(string: "https://duckduckgo.com/?q=qr+\(secretString.addingPercentEscapes(using: .utf8)!)")!)
+        #endif
     }
     
     public var sharedSecret: KeyData

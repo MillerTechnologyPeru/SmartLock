@@ -112,6 +112,8 @@ final class NearbyLocksViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
+        defer { tableView.deselectRow(at: indexPath, animated: true) }
+        
         let peripheral = self[indexPath]
         
         selectLock(peripheral)

@@ -9,7 +9,7 @@
 import Foundation
 
 /// Lock status
-public enum Status: UInt8 {
+public enum LockStatus: UInt8 {
     
     /// Initial Status
     case setup = 0x00

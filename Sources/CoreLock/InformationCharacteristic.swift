@@ -20,7 +20,7 @@ public struct InformationCharacteristic: GATTProfileCharacteristic {
     internal static let length = MemoryLayout<UInt128>.size
         + MemoryLayout<UInt64>.size
         + MemoryLayout<SmartLockVersion>.size
-        + MemoryLayout<Status.RawValue>.size
+        + MemoryLayout<LockStatus.RawValue>.size
         + MemoryLayout<UnlockAction.RawValue>.size
     
     /// Lock identifier
@@ -36,7 +36,7 @@ public struct InformationCharacteristic: GATTProfileCharacteristic {
     public let version: SmartLockVersion
     
     /// Device state
-    public var status: Status
+    public var status: LockStatus
     
     /// Supported lock actions
     public let unlockActions: BitMaskOptionSet<UnlockAction>
@@ -44,8 +44,8 @@ public struct InformationCharacteristic: GATTProfileCharacteristic {
     public init(identifier: UUID,
                 buildVersion: SmartLockBuildVersion = .current,
                 version: SmartLockVersion = .current,
-                status: Status,
-                unlockActions: BitMaskOptionSet<UnlockAction> = []) {
+                status: LockStatus,
+                unlockActions: BitMaskOptionSet<UnlockAction> = [.default]) {
         
         self.identifier = identifier
         self.buildVersion = buildVersion
@@ -65,7 +65,7 @@ public struct InformationCharacteristic: GATTProfileCharacteristic {
         
         let version = SmartLockVersion(major: data[24], minor: data[25], patch: data[26])
         
-        guard let status = Status(rawValue: data[27])
+        guard let status = LockStatus(rawValue: data[27])
             else { return nil }
         
         let unlockActions = BitMaskOptionSet<UnlockAction>(rawValue: data[28])

@@ -80,7 +80,7 @@ extension ActivityIndicatorViewController {
                     
                     // show error
                     
-                    NSLog("⚠️ Error: \(error)")
+                    log("⚠️ Error: \(error)")
                     
                     controller.showErrorAlert(error.localizedDescription)
                 }
