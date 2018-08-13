@@ -26,12 +26,9 @@ final class NearbyLocksViewController: UITableViewController {
     
     // MARK: - Properties
     
-    private var items = [LockPeripheral]() {
-        
-        didSet { configureView() }
-    }
+    private var items = [LockPeripheral]()
     
-    let scanDuration: TimeInterval = 2.0
+    let scanDuration: TimeInterval = 4.0
     
     #if os(iOS)
     

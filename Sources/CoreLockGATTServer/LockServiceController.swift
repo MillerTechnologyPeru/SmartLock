@@ -234,11 +234,14 @@ public final class InMemoryLockAuthorization: LockAuthorizationDataSource {
         self.sharedSecret = sharedSecret
         
         let secretString = sharedSecret.data.base64EncodedString()
-        
         print("Shared secret:", secretString)
         
         #if os(macOS)
-        NSWorkspace.shared().open(URL(string: "https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=\(secretString.addingPercentEscapes(using: .utf8)!)")!)
+        
+        var urlComponents = URLComponents(string: "https://api.qrserver.com/v1/create-qr-code/")!
+        urlComponents.queryItems = [URLQueryItem(name: "data", value: secretString)]
+        
+        NSWorkspace.shared().open(urlComponents.url!)
         #endif
     }
     

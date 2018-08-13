@@ -26,7 +26,7 @@
             </objects>
             <point key="canvasLocation" x="-581" y="64"/>
         </scene>
-        <!--Root View Controller-->
+        <!--Nearby-->
         <scene sceneID="Svq-pC-KoY">
             <objects>
                 <tableViewController id="LbE-LW-Jtk" sceneMemberID="viewController">
@@ -49,7 +49,7 @@
                             <outlet property="delegate" destination="LbE-LW-Jtk" id="NV7-hG-ePh"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="Root View Controller" id="B9E-Cr-lSQ"/>
+                    <navigationItem key="navigationItem" title="Nearby" id="B9E-Cr-lSQ"/>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="09F-1g-VDU" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
