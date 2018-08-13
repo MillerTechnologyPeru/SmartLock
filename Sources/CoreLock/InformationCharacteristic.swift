@@ -26,9 +26,6 @@ public struct InformationCharacteristic: GATTProfileCharacteristic {
     /// Lock identifier
     public let identifier: UUID
     
-    /// Lock name
-    //public let name: String
-    
     /// Firmware build number
     public let buildVersion: SmartLockBuildVersion
     

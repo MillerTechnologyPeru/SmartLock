@@ -11,7 +11,7 @@ import Bluetooth
 import GATT
 import CoreLock
 
-internal typealias LockManager = SmartLockManager<NativeCentral>
+public typealias LockManager = SmartLockManager<NativeCentral>
 
 internal extension SmartLockManager where Central == NativeCentral {
     
@@ -25,7 +25,7 @@ internal extension SmartLockManager where Central == NativeCentral {
 
 import DarwinGATT
 
-internal typealias NativeCentral = DarwinCentral
+public typealias NativeCentral = DarwinCentral
 
 private struct LockManagerCache {
     

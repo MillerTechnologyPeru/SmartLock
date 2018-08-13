@@ -28,10 +28,12 @@ public final class Store {
     
     private let storageKey = DefaultsKey<[UUID: LockCache]>("locks")
 
-    private var locks = [UUID: LockCache]() {
+    public private(set) var locks = [UUID: LockCache]() {
         
         didSet { writeCache() }
     }
+    
+    public private(set) var peripherals = [UUID: LockPeripheral]()
     
     /// Key identifier for the specified
     public subscript (lock identifier: UUID) -> LockCache? {
@@ -72,7 +74,50 @@ public final class Store {
     }
 }
 
-/// 
+public extension Store {
+    
+    func scan(duration: TimeInterval) throws {
+        
+        self.peripherals.removeAll()
+        
+        var peripherals = Set<LockManager.Peripheral>()
+        
+        try LockManager.shared.scan(duration: duration, filterDuplicates: false) { peripherals.insert($0) }
+        
+        for peripheral in peripherals {
+            
+            do {
+                
+                // read lock info, status and identifier
+                let information = try LockManager.shared.readInformation(for: peripheral)
+                
+                // store peripheral cache
+                self.peripherals[information.identifier] = LockPeripheral(peripheral: peripheral, information: information)
+                
+            } catch { log("Error: \(error)") }
+        }
+    }
+    
+    /// Setup a lock.
+    func setup(_ peripheral: LockManager.Peripheral, sharedSecret: KeyData, name: String) throws {
+        
+        let request = SetupRequest()
+        
+        try LockManager.shared.setup(peripheral: peripheral,
+                                     with: request,
+                                     sharedSecret: sharedSecret)
+        
+        let newKey = Key(identifier: request.identifier,
+                         name: "",
+                         permission: .owner)
+        
+        let lockCache = LockCache(key: newKey, name: name)
+        
+        
+    }
+}
+
+/// Lock Cache
 public struct LockCache: Codable {
     
     /// Stored key for lock.
@@ -82,4 +127,12 @@ public struct LockCache: Codable {
     
     /// User-friendly lock name
     public let name: String
+}
+
+/// Lock Peripheral
+public struct LockPeripheral {
+    
+    public let peripheral: LockManager.Peripheral
+    
+    public var information: InformationCharacteristic
 }

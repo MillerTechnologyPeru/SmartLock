@@ -105,7 +105,7 @@ public final class SmartLockManager <Central: CentralProtocol> {
     public func setup(peripheral: Peripheral,
                       with request: SetupRequest,
                       sharedSecret: KeyData,
-                      timeout: TimeInterval = .gattDefaultTimeout) throws -> InformationCharacteristic {
+                      timeout: TimeInterval = .gattDefaultTimeout) throws {
         
         // encrypt owner key data
         let characteristicValue = try SetupCharacteristic(request: request,
@@ -121,7 +121,8 @@ public final class SmartLockManager <Central: CentralProtocol> {
             // read information
             let information = try self.readInformation(cache: cache, timeout: timeout)
             
-            return information
+            guard information.status == .unlock
+                else { throw GATTError.couldNotComplete }
         }
     }
     
@@ -143,14 +144,4 @@ public final class SmartLockManager <Central: CentralProtocol> {
             try self.central.write(characteristicValue, for: cache, timeout: timeout)
         }
     }
-    
-    // MARK: - Private Methods
-    
-    
-}
-
-/// Lock Peripheral
-public struct LockPeripheral <Peripheral: Peer> {
-    
-    public let peripheral: Peripheral
 }

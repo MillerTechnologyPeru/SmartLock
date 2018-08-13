@@ -60,6 +60,7 @@
                     </tableView>
                     <navigationItem key="navigationItem" title="Nearby" id="M1l-Ek-cyO"/>
                     <refreshControl key="refreshControl" opaque="NO" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" id="Ed5-Va-SpE">
+                        <rect key="frame" x="0.0" y="0.0" width="1000" height="1000"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <connections>
                             <action selector="scan:" destination="MOV-Sf-cLz" eventType="valueChanged" id="PaH-kg-GJ3"/>
@@ -74,7 +75,7 @@
         <scene sceneID="y9k-u3-ueD">
             <objects>
                 <navigationController id="CQS-Vt-z0J" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Nearby" id="Hd4-3Y-odI"/>
+                    <tabBarItem key="tabBarItem" title="Nearby" image="Near" selectedImage="NearSelected" id="Hd4-3Y-odI"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="YPP-nG-LH2">
                         <rect key="frame" x="0.0" y="20" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -88,4 +89,8 @@
             <point key="canvasLocation" x="494" y="51"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="Near" width="25" height="25"/>
+        <image name="NearSelected" width="25" height="25"/>
+    </resources>
 </document>

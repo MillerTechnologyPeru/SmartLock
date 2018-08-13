@@ -26,7 +26,7 @@ final class NearbyLocksViewController: UITableViewController {
     
     // MARK: - Properties
     
-    private var items = [Peripheral]() {
+    private var items = [LockPeripheral]() {
         
         didSet { configureView() }
     }
@@ -59,6 +59,15 @@ final class NearbyLocksViewController: UITableViewController {
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0, execute: { [weak self] in self?.scan() })
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        if items.isEmpty {
+            
+            scan()
+        }
+    }
+    
     // MARK: - Actions
     
     @IBAction func scan(_ sender: Any? = nil) {
@@ -77,21 +86,8 @@ final class NearbyLocksViewController: UITableViewController {
         self.items.removeAll()
         
         // scan
-        performActivity({
-            
-            try LockManager.shared.scan(duration: scanDuration, filterDuplicates: false) { (peripheral) in
-                
-                mainQueue { [weak self] in
-                    
-                    guard let controller = self else { return }
-                    
-                    if controller.items.contains(peripheral) == false {
-                        
-                        controller.items.append(peripheral)
-                    }
-                }
-            }
-        })
+        performActivity({ try Store.shared.scan(duration: scanDuration) },
+                        completion: { (viewController, _) in viewController.configureView() })
     }
     
     // MARK: - UITableViewDataSource
@@ -121,72 +117,77 @@ final class NearbyLocksViewController: UITableViewController {
         
         defer { tableView.deselectRow(at: indexPath, animated: true) }
         
-        let peripheral = self[indexPath]
+        let item = self[indexPath]
         
-        selectLock(peripheral)
+        select(item)
     }
     
     // MARK: - Private Methods
     
-    private subscript (indexPath: IndexPath) -> Peripheral {
+    private subscript (indexPath: IndexPath) -> LockPeripheral {
         
         return items[indexPath.row]
     }
     
     private func configureView() {
         
+        self.items = Array(Store.shared.peripherals.values)
+        
         tableView.reloadData()
     }
     
     private func configure(cell: UITableViewCell, at indexPath: IndexPath) {
         
-        let item = self[indexPath]
+        let lock = self[indexPath]
         
-        cell.textLabel?.text = item.identifier.description
+        let lockIdentifier = lock.information.identifier
+        
+        let title: String
+        
+        let isEnabled: Bool
+        
+        if let lockCache = Store.shared[lock: lockIdentifier] {
+            
+            title = lockCache.name
+            isEnabled = true
+            
+        } else if lock.information.status == .setup {
+            
+            title = "Setup \(lockIdentifier)"
+            isEnabled = true
+            
+        } else {
+            
+            title = lockIdentifier.description
+            isEnabled = false
+        }
+        
+        cell.textLabel?.text = title
+        cell.selectionStyle = isEnabled ? .default : .none
     }
     
-    private func selectLock(_ peripheral: Peripheral) {
+    private func select(_ lock: LockPeripheral) {
         
-        performActivity({
+        log("Selected lock \(lock.information.identifier)")
+        
+        switch lock.information.status {
             
-            let information = try LockManager.shared.readInformation(for: peripheral)
+        case .setup:
             
-            log("Selected lock \(information)")
+            setup(lock)
             
-            // attempt to unlock if key is stored.
-            if let lockCache = Store.shared[lock: information.identifier] {
-                
-                
-                
-            } else {
-                
-                
-            }
+        case .unlock:
             
-            
-            
-            
-            
-            switch information.status {
-                
-            case .setup:
-                
-                mainQueue { [weak self] in self?.setupLock(peripheral) }
-                
-            case .unlock:
-                
-                break
-                //try LockManager.shared.unlock(key: (identifier: UUID, secret: KeyData), peripheral: peripheral)
-            }
-        })
+            unlock(lock)
+        }
     }
     
-    private func unlock(_ peripheral: Peripheral) {
+    private func unlock(_ lock: LockPeripheral) {
         
         
     }
     
-    private func setupLock(_ peripheral: Peripheral) {
+    private func setup(_ lock: LockPeripheral) {
         
         // scan QR code
         assert(QRCodeReader.isAvailable())
@@ -199,14 +200,14 @@ final class NearbyLocksViewController: UITableViewController {
             self.readerViewController.dismiss(animated: true, completion: {
                 
                 guard let data = Data(base64Encoded: result.value),
-                    let key = KeyData(data: data) else {
+                    let sharedSecret = KeyData(data: data) else {
                     
                     self.showErrorAlert("Invalid QR code")
                     return
                 }
                 
                 // perform BLE request
-                self.setupLock(peripheral, with: key)
+                self.setupLock(lock, sharedSecret: sharedSecret)
             })
         }
         
@@ -215,28 +216,10 @@ final class NearbyLocksViewController: UITableViewController {
         present(readerViewController, animated: true, completion: nil)
     }
     
-    private func setupLock(_ peripheral: Peripheral, with sharedSecret: KeyData) {
+    private func setupLock(_ lock: LockPeripheral, sharedSecret: KeyData, name: String = "Lock") {
         
-        performActivity({
-            
-            let request = SetupRequest()
-            
-            let information = try LockManager.shared.setup(peripheral: peripheral,
-                                                           with: request,
-                                                           sharedSecret: sharedSecret)
-            
-            // store new key
-            log("Setup with key \(request.identifier)")
-            
-            
-            
-            //Store.shared[lock: information.identifier] = LockCache(key: <#T##Key#>, name: <#T##String#>)
-            
-            mainQueue { [weak self] in
-                
-                
-            }
-        })
+        performActivity({ try Store.shared.setup(lock.peripheral, sharedSecret: sharedSecret, name: name) },
+                        completion: { (viewController, _) in viewController.configureView() })
     }
 }
 

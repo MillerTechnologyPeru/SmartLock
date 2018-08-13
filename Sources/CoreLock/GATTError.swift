@@ -11,21 +11,16 @@ import Bluetooth
 /// Smart Lock GATT Error
 public enum SmartLockGATTError: Error {
     
-    /// No service with UUID found.
-    case serviceNotFound(BluetoothUUID)
-    
-    /// No characteristic with UUID found.
-    case characteristicNotFound(BluetoothUUID)
-    
-    /// The characteristic's value could not be parsed. Invalid data.
-    case invalidCharacteristicValue(BluetoothUUID)
-    
     /// Invalid data.
     case invalidData(Data?)
+    
+    /// Could not complete GATT operation. 
+    case couldNotComplete
 }
 
 internal typealias GATTError = SmartLockGATTError
 
+/*
 // MARK: - CustomNSError
 
 #if os(macOS) || os(iOS) || os(watchOS) || os(tvOS)
@@ -88,3 +83,4 @@ extension SmartLockGATTError: CustomNSError {
 }
 
 #endif
+*/

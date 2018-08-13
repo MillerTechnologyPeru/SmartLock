@@ -24,7 +24,6 @@
 		6E6000D12121224D00787DAA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6E6000D02121224D00787DAA /* Assets.xcassets */; };
 		6E60F8A72121259F0054995D /* Store.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60F8A62121259F0054995D /* Store.swift */; };
 		6E60F8AD212127890054995D /* Log.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60F8AC212127890054995D /* Log.swift */; };
-		6E60F8AF212129D20054995D /* Setup.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6E60F8AE212129D20054995D /* Setup.storyboard */; };
 		6E60F8F82121540D0054995D /* Defaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60F8F72121540C0054995D /* Defaults.swift */; };
 /* End PBXBuildFile section */
 
@@ -115,7 +114,6 @@
 		6E6000D02121224D00787DAA /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Assets.xcassets; path = ../../../Lock/Xcode/Cerradura/Assets.xcassets; sourceTree = "<group>"; };
 		6E60F8A62121259F0054995D /* Store.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Store.swift; sourceTree = "<group>"; };
 		6E60F8AC212127890054995D /* Log.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Log.swift; sourceTree = "<group>"; };
-		6E60F8AE212129D20054995D /* Setup.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Setup.storyboard; sourceTree = "<group>"; };
 		6E60F8F72121540C0054995D /* Defaults.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Defaults.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -164,7 +162,6 @@
 				6E6000CB21211D0B00787DAA /* Async.swift */,
 				6E6000D02121224D00787DAA /* Assets.xcassets */,
 				6E6000172121119400787DAA /* Main.storyboard */,
-				6E60F8AE212129D20054995D /* Setup.storyboard */,
 				6E60001C2121119500787DAA /* LaunchScreen.storyboard */,
 				6E60001F2121119500787DAA /* Info.plist */,
 				6E6000BE21211C5F00787DAA /* Model */,
@@ -362,7 +359,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6E60F8AF212129D20054995D /* Setup.storyboard in Resources */,
 				6E60001E2121119500787DAA /* LaunchScreen.storyboard in Resources */,
 				6E6000D12121224D00787DAA /* Assets.xcassets in Resources */,
 				6E6000192121119400787DAA /* Main.storyboard in Resources */,
@@ -391,6 +387,7 @@
 				"$(SRCROOT)/../Carthage/Build/iOS/CryptoSwift.framework",
 				"$(SRCROOT)/../Carthage/Build/iOS/QRCodeReader.framework",
 				"$(SRCROOT)/../Carthage/Build/iOS/JGProgressHUD.framework",
+				"$(SRCROOT)/../Carthage/Build/iOS/KeychainAccess.framework",
 			);
 			name = Carthage;
 			outputPaths = (
@@ -521,6 +518,7 @@
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 4.0;
 			};
 			name = Debug;
 		};
@@ -574,6 +572,7 @@
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 4.0;
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
@@ -593,7 +592,6 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.coleman.SmartLock;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -613,7 +611,6 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.coleman.SmartLock;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
@@ -632,7 +629,6 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.coleman.SmartLockUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_TARGET_NAME = SmartLock;
 			};
@@ -652,7 +648,6 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.coleman.SmartLockUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_TARGET_NAME = SmartLock;
 			};
