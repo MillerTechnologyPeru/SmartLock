@@ -172,7 +172,7 @@ public final class LockServiceController <Peripheral: PeripheralProtocol> : GATT
                 // unlock with the specified action
                 try unlockDelegate.unlock(unlock.action)
                 
-                print("Key \(key.identifier) unlocked with action \(unlock)")
+                print("Key \(key.identifier) unlocked with action \(unlock.action)")
                 
             } catch { print("Unlock error: \(error)")  }
             
