@@ -27,3 +27,21 @@ public protocol GATTServiceController: class {
     
     func didWrite(_ request: GATTWriteConfirmation<Peripheral.Central>)
 }
+
+public extension GATTServiceController {
+    
+    public func willRead(_ request: GATTReadRequest<Peripheral.Central>) -> ATT.Error? {
+        
+        return nil
+    }
+    
+    public func willWrite(_ request: GATTWriteRequest<Peripheral.Central>) -> ATT.Error? {
+        
+        return nil
+    }
+    
+    public func didWrite(_ request: GATTWriteConfirmation<Peripheral.Central>) {
+        
+        
+    }
+}

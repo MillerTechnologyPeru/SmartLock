@@ -22,10 +22,17 @@ public final class LockServiceController <Peripheral: PeripheralProtocol> : GATT
     
     public let peripheral: Peripheral
     
+    public var hardware: LockHardware = .empty  {
+        
+        didSet { updateInformation() }
+    }
+    
     public var lockConfiguration = LockConfiguration() {
         
         didSet { updateInformation() }
     }
+    
+    // data source / delegate
     
     public var setupSecret: LockSetupSecretStore = InMemoryLockSetupSecret()
     
@@ -35,6 +42,8 @@ public final class LockServiceController <Peripheral: PeripheralProtocol> : GATT
     }
     
     public var unlockDelegate: LockUnlockDelegate = UnlockSimulator()
+    
+    // characteristics
     
     public private(set) var information: InformationCharacteristic {
         

@@ -20,15 +20,19 @@ public final class GATTDeviceInformationServiceController <Peripheral: Periphera
     
     public let peripheral: Peripheral
     
-    public let manufacturerName: GATTManufacturerNameString = "Miller Technology"
-    
-    public private(set) var modelNumber: GATTModelNumber = "" {
-        didSet { peripheral[characteristic: modelNumberHandle] = modelNumber.data }
+    public var hardware: LockHardware = .empty {
+        didSet { updateInformation() }
     }
+    
+    public let manufacturerName: GATTManufacturerNameString = "Miller Technology"
     
     public let firmwareRevision = GATTFirmwareRevisionString(rawValue: "\(SmartLockBuildVersion.current)")
     
     public let softwareRevision = GATTSoftwareRevisionString(rawValue: "\(SmartLockVersion.current)")
+    
+    public private(set) var modelNumber: GATTModelNumber = "" {
+        didSet { peripheral[characteristic: modelNumberHandle] = modelNumber.data }
+    }
     
     public private(set) var serialNumber: GATTSerialNumberString = "" {
         didSet { peripheral[characteristic: serialNumberHandle] = serialNumber.data }
@@ -59,11 +63,7 @@ public final class GATTDeviceInformationServiceController <Peripheral: Periphera
         let serviceUUID = type(of: self).service
         #endif
         
-        #if os(Linux)
-        let descriptors = [GATTClientCharacteristicConfiguration().descriptor]
-        #else
         let descriptors: [GATT.Descriptor] = []
-        #endif
         
         let characteristics = [
             
@@ -127,18 +127,10 @@ public final class GATTDeviceInformationServiceController <Peripheral: Periphera
     
     // MARK: - Methods
     
-    public func willRead(_ request: GATTReadRequest<Peripheral.Central>) -> ATT.Error? {
+    private func updateInformation() {
         
-        return nil
-    }
-    
-    public func willWrite(_ request: GATTWriteRequest<Peripheral.Central>) -> ATT.Error? {
-        
-        return nil
-    }
-    
-    public func didWrite(_ request: GATTWriteConfirmation<Peripheral.Central>) {
-        
-        
+        self.modelNumber = GATTModelNumber(rawValue: hardware.model.rawValue)
+        self.serialNumber = GATTSerialNumberString(rawValue: hardware.serialNumber)
+        self.hardwareRevision = GATTHardwareRevisionString(rawValue: hardware.hardwareRevision)
     }
 }

@@ -27,6 +27,15 @@ public final class LockController <Peripheral: PeripheralProtocol> {
     
     public let lockServiceController: LockServiceController<Peripheral>
     
+    // Lock hardware model
+    public var hardware: LockHardware = .empty {
+        
+        didSet {
+            self.lockServiceController.hardware = hardware
+            self.deviceInformationController.hardware = hardware
+        }
+    }
+    
     // MARK: - Initialization
     
     public init(peripheral: Peripheral) throws {

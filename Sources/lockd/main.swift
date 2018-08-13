@@ -59,7 +59,8 @@ func run() throws {
     let peripheral = DarwinPeripheral()
     #endif
     
-    print("Initialized \(type(of: peripheral)) with options: \(peripheral.options)")
+    print("Initialized \(type(of: peripheral)) with options:")
+    dump(peripheral.options)
     
     peripheral.log = peripheralLog
     
@@ -72,9 +73,24 @@ func run() throws {
     controller = try LockController(peripheral: peripheral)
     
     // setup controller
-    controller?.lockServiceController.setupSecret = try LockSetupSecretBase64File(createdAt: URL(fileURLWithPath: "/opt/colemancda/lockd/sharedSecret"))
+    #if os(macOS)
+        let hardware = LockHardware.mac
+    #elseif os(Linux)
+        //let hardware = LockHardware
+    #endif
     
-    controller?.lockServiceController.authorization = JSONArchiveAuthorizationStore(url: URL(fileURLWithPath: "/opt/colemancda/lockd/data.json"))
+    print("Running on hardware:")
+    dump(hardware)
+    
+    controller?.hardware = hardware
+    
+    controller?.lockServiceController.setupSecret = try LockSetupSecretBase64File(
+        createdAt: URL(fileURLWithPath: "/opt/colemancda/lockd/sharedSecret")
+    )
+    
+    controller?.lockServiceController.authorization = JSONArchiveAuthorizationStore(
+        url: URL(fileURLWithPath: "/opt/colemancda/lockd/data.json")
+    )
     
     // publish GATT server, enable advertising
     try peripheral.start()

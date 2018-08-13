@@ -13,7 +13,7 @@ import Foundation
     import Codable
 #endif
 
-/// Lock Hardware declaration. 
+/// Lock Hardware information. 
 public struct LockHardware {
     
     /// Lock Model
@@ -32,6 +32,15 @@ public struct LockHardware {
         self.model = model
         self.hardwareRevision = hardwareRevision
         self.serialNumber = serialNumber
+    }
+}
+
+public extension LockHardware {
+    
+    /// Empty / Null Lock Hardware information.
+    static var empty: LockHardware {
+        
+        return LockHardware(model: "", hardwareRevision: "", serialNumber: "")
     }
 }
 
