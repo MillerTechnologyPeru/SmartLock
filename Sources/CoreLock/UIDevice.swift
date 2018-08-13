@@ -14,6 +14,8 @@
 
 import Foundation
 
+#if os(macOS) || os(Linux)
+
 /// Use a `UIDevice` object to get information about the device such as assigned name, device model,
 /// and operating-system name and version. You also use the UIDevice instance to detect changes in
 /// the device’s characteristics, such as physical orientation.
@@ -420,4 +422,6 @@ public enum UIDeviceBatteryState: Int {
         }
     }
     
+#endif
+
 #endif

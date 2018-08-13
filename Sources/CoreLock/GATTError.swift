@@ -35,14 +35,14 @@ extension SmartLockGATTError: CustomNSError {
     public enum UserInfoKey: String {
         
         /// Bluetooth UUID value (for characteristic or service).
-        case uuid = "com.millertech.SmartLock.GATTError.BluetoothUUID"
+        case uuid = "com.colemancda.CoreLock.GATTError.BluetoothUUID"
         
         /// Data
-        case data = "com.millertech.SmartLock.GATTError.Data"
+        case data = "com.colemancda.CoreLock.GATTError.Data"
     }
     
     /// The domain of the error.
-    public static var errorDomain: String { return "com.millertech.SmartLock.GATTError" }
+    public static var errorDomain: String { return "com.colemancda.CoreLock.GATTError" }
     
     /// The error code within the given domain.
     //public var errorCode: Int
@@ -56,28 +56,28 @@ extension SmartLockGATTError: CustomNSError {
             
         case let .serviceNotFound(uuid):
             
-            let description = String(format: NSLocalizedString("No service with UUID %@ found.", comment: "com.millertech.SmartLock.GATTError.serviceNotFound"), uuid.description)
+            let description = String(format: NSLocalizedString("No service with UUID %@ found.", comment: "com.colemancda.CoreLock.GATTError.serviceNotFound"), uuid.description)
             
             userInfo[NSLocalizedDescriptionKey] = description
             userInfo[UserInfoKey.uuid.rawValue] = uuid
             
         case let .characteristicNotFound(uuid):
             
-            let description = String(format: NSLocalizedString("No characteristic with UUID %@ found.", comment: "com.millertech.SmartLock.GATTError.characteristicNotFound"), uuid.description)
+            let description = String(format: NSLocalizedString("No characteristic with UUID %@ found.", comment: "com.colemancda.CoreLock.GATTError.characteristicNotFound"), uuid.description)
             
             userInfo[NSLocalizedDescriptionKey] = description
             userInfo[UserInfoKey.uuid.rawValue] = uuid
             
         case let .invalidCharacteristicValue(uuid):
             
-            let description = String(format: NSLocalizedString("The value of characteristic %@ could not be parsed.", comment: "com.millertech.SmartLock.GATTError.invalidCharacteristicValue"), uuid.description)
+            let description = String(format: NSLocalizedString("The value of characteristic %@ could not be parsed.", comment: "com.colemancda.CoreLock.GATTError.invalidCharacteristicValue"), uuid.description)
             
             userInfo[NSLocalizedDescriptionKey] = description
             userInfo[UserInfoKey.uuid.rawValue] = uuid
             
         case let .invalidData(data):
             
-            let description = String(format: NSLocalizedString("Invalid data.", comment: "com.millertech.SmartLock.GATTError.invalidData"))
+            let description = String(format: NSLocalizedString("Invalid data.", comment: "com.colemancda.CoreLock.GATTError.invalidData"))
             
             userInfo[NSLocalizedDescriptionKey] = description
             userInfo[UserInfoKey.data.rawValue] = data

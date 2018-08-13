@@ -1,0 +1,1151 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 47;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		6E6000002121045400787DAA /* LockModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60FF7C2121041400787DAA /* LockModel.swift */; };
+		6E6000012121045400787DAA /* Status.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60FF7D2121041400787DAA /* Status.swift */; };
+		6E6000022121045400787DAA /* InformationCharacteristic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60FF7E2121041400787DAA /* InformationCharacteristic.swift */; };
+		6E6000032121045400787DAA /* Bool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60FF7F2121041400787DAA /* Bool.swift */; };
+		6E6000042121045400787DAA /* Chunk.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60FF802121041400787DAA /* Chunk.swift */; };
+		6E6000052121045400787DAA /* ResultCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60FF812121041400787DAA /* ResultCode.swift */; };
+		6E6000062121045400787DAA /* GATTError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60FF822121041400787DAA /* GATTError.swift */; };
+		6E60FF832121045300787DAA /* Permission.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60FF622121041400787DAA /* Permission.swift */; };
+		6E60FF842121045300787DAA /* SmartLockProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60FF632121041400787DAA /* SmartLockProfile.swift */; };
+		6E60FF852121045300787DAA /* BuildVersion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60FF642121041400787DAA /* BuildVersion.swift */; };
+		6E60FF862121045300787DAA /* LockHardware.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60FF652121041400787DAA /* LockHardware.swift */; };
+		6E60FF872121045300787DAA /* Advertisement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60FF662121041400787DAA /* Advertisement.swift */; };
+		6E60FF882121045300787DAA /* Authentication.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60FF672121041400787DAA /* Authentication.swift */; };
+		6E60FF892121045300787DAA /* AuthenticationError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60FF682121041400787DAA /* AuthenticationError.swift */; };
+		6E60FF8A2121045300787DAA /* POSIXTime.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60FF692121041400787DAA /* POSIXTime.swift */; };
+		6E60FF8B2121045300787DAA /* Central.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60FF6A2121041400787DAA /* Central.swift */; };
+		6E60FF8C2121045300787DAA /* SecureData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60FF6B2121041400787DAA /* SecureData.swift */; };
+		6E60FF8D2121045300787DAA /* UnlockCharacteristic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60FF6C2121041400787DAA /* UnlockCharacteristic.swift */; };
+		6E60FF8E2121045300787DAA /* SetupCharacteristic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60FF6D2121041400787DAA /* SetupCharacteristic.swift */; };
+		6E60FF8F2121045300787DAA /* Version.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60FF6E2121041400787DAA /* Version.swift */; };
+		6E60FF902121045300787DAA /* DeviceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60FF6F2121041400787DAA /* DeviceManager.swift */; };
+		6E60FF912121045300787DAA /* DateComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60FF702121041400787DAA /* DateComponents.swift */; };
+		6E60FF922121045300787DAA /* Crypto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60FF712121041400787DAA /* Crypto.swift */; };
+		6E60FF932121045300787DAA /* UnlockAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60FF722121041400787DAA /* UnlockAction.swift */; };
+		6E60FF942121045300787DAA /* LockState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60FF732121041400787DAA /* LockState.swift */; };
+		6E60FF952121045300787DAA /* GitCommits.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60FF742121041400787DAA /* GitCommits.swift */; };
+		6E60FF962121045300787DAA /* LockConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60FF752121041400787DAA /* LockConfiguration.swift */; };
+		6E60FF972121045300787DAA /* EncryptedData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60FF762121041400787DAA /* EncryptedData.swift */; };
+		6E60FF982121045300787DAA /* Integer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60FF772121041400787DAA /* Integer.swift */; };
+		6E60FF992121045300787DAA /* UIDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60FF782121041400787DAA /* UIDevice.swift */; };
+		6E60FF9A2121045300787DAA /* Key.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60FF792121041400787DAA /* Key.swift */; };
+		6E60FF9B2121045300787DAA /* UnsafeDataConvertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60FF7A2121041400787DAA /* UnsafeDataConvertible.swift */; };
+		6E60FF9C2121045300787DAA /* GATTProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60FF7B2121041400787DAA /* GATTProfile.swift */; };
+		6E60FF9D2121045300787DAA /* LockModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60FF7C2121041400787DAA /* LockModel.swift */; };
+		6E60FF9E2121045300787DAA /* Status.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60FF7D2121041400787DAA /* Status.swift */; };
+		6E60FF9F2121045300787DAA /* InformationCharacteristic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60FF7E2121041400787DAA /* InformationCharacteristic.swift */; };
+		6E60FFA02121045300787DAA /* Bool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60FF7F2121041400787DAA /* Bool.swift */; };
+		6E60FFA12121045300787DAA /* Chunk.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60FF802121041400787DAA /* Chunk.swift */; };
+		6E60FFA22121045300787DAA /* ResultCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60FF812121041400787DAA /* ResultCode.swift */; };
+		6E60FFA32121045300787DAA /* GATTError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60FF822121041400787DAA /* GATTError.swift */; };
+		6E60FFA42121045300787DAA /* Permission.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60FF622121041400787DAA /* Permission.swift */; };
+		6E60FFA52121045300787DAA /* SmartLockProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60FF632121041400787DAA /* SmartLockProfile.swift */; };
+		6E60FFA62121045300787DAA /* BuildVersion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60FF642121041400787DAA /* BuildVersion.swift */; };
+		6E60FFA72121045300787DAA /* LockHardware.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60FF652121041400787DAA /* LockHardware.swift */; };
+		6E60FFA82121045300787DAA /* Advertisement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60FF662121041400787DAA /* Advertisement.swift */; };
+		6E60FFA92121045300787DAA /* Authentication.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60FF672121041400787DAA /* Authentication.swift */; };
+		6E60FFAA2121045300787DAA /* AuthenticationError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60FF682121041400787DAA /* AuthenticationError.swift */; };
+		6E60FFAB2121045300787DAA /* POSIXTime.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60FF692121041400787DAA /* POSIXTime.swift */; };
+		6E60FFAC2121045300787DAA /* Central.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60FF6A2121041400787DAA /* Central.swift */; };
+		6E60FFAD2121045300787DAA /* SecureData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60FF6B2121041400787DAA /* SecureData.swift */; };
+		6E60FFAE2121045300787DAA /* UnlockCharacteristic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60FF6C2121041400787DAA /* UnlockCharacteristic.swift */; };
+		6E60FFAF2121045300787DAA /* SetupCharacteristic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60FF6D2121041400787DAA /* SetupCharacteristic.swift */; };
+		6E60FFB02121045300787DAA /* Version.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60FF6E2121041400787DAA /* Version.swift */; };
+		6E60FFB12121045300787DAA /* DeviceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60FF6F2121041400787DAA /* DeviceManager.swift */; };
+		6E60FFB22121045300787DAA /* DateComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60FF702121041400787DAA /* DateComponents.swift */; };
+		6E60FFB32121045300787DAA /* Crypto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60FF712121041400787DAA /* Crypto.swift */; };
+		6E60FFB42121045300787DAA /* UnlockAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60FF722121041400787DAA /* UnlockAction.swift */; };
+		6E60FFB52121045300787DAA /* LockState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60FF732121041400787DAA /* LockState.swift */; };
+		6E60FFB62121045300787DAA /* GitCommits.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60FF742121041400787DAA /* GitCommits.swift */; };
+		6E60FFB72121045300787DAA /* LockConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60FF752121041400787DAA /* LockConfiguration.swift */; };
+		6E60FFB82121045300787DAA /* EncryptedData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60FF762121041400787DAA /* EncryptedData.swift */; };
+		6E60FFB92121045300787DAA /* Integer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60FF772121041400787DAA /* Integer.swift */; };
+		6E60FFBA2121045300787DAA /* UIDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60FF782121041400787DAA /* UIDevice.swift */; };
+		6E60FFBB2121045300787DAA /* Key.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60FF792121041400787DAA /* Key.swift */; };
+		6E60FFBC2121045300787DAA /* UnsafeDataConvertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60FF7A2121041400787DAA /* UnsafeDataConvertible.swift */; };
+		6E60FFBD2121045300787DAA /* GATTProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60FF7B2121041400787DAA /* GATTProfile.swift */; };
+		6E60FFBE2121045300787DAA /* LockModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60FF7C2121041400787DAA /* LockModel.swift */; };
+		6E60FFBF2121045300787DAA /* Status.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60FF7D2121041400787DAA /* Status.swift */; };
+		6E60FFC02121045300787DAA /* InformationCharacteristic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60FF7E2121041400787DAA /* InformationCharacteristic.swift */; };
+		6E60FFC12121045300787DAA /* Bool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60FF7F2121041400787DAA /* Bool.swift */; };
+		6E60FFC22121045300787DAA /* Chunk.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60FF802121041400787DAA /* Chunk.swift */; };
+		6E60FFC32121045300787DAA /* ResultCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60FF812121041400787DAA /* ResultCode.swift */; };
+		6E60FFC42121045300787DAA /* GATTError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60FF822121041400787DAA /* GATTError.swift */; };
+		6E60FFC52121045400787DAA /* Permission.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60FF622121041400787DAA /* Permission.swift */; };
+		6E60FFC62121045400787DAA /* SmartLockProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60FF632121041400787DAA /* SmartLockProfile.swift */; };
+		6E60FFC72121045400787DAA /* BuildVersion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60FF642121041400787DAA /* BuildVersion.swift */; };
+		6E60FFC82121045400787DAA /* LockHardware.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60FF652121041400787DAA /* LockHardware.swift */; };
+		6E60FFC92121045400787DAA /* Advertisement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60FF662121041400787DAA /* Advertisement.swift */; };
+		6E60FFCA2121045400787DAA /* Authentication.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60FF672121041400787DAA /* Authentication.swift */; };
+		6E60FFCB2121045400787DAA /* AuthenticationError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60FF682121041400787DAA /* AuthenticationError.swift */; };
+		6E60FFCC2121045400787DAA /* POSIXTime.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60FF692121041400787DAA /* POSIXTime.swift */; };
+		6E60FFCD2121045400787DAA /* Central.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60FF6A2121041400787DAA /* Central.swift */; };
+		6E60FFCE2121045400787DAA /* SecureData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60FF6B2121041400787DAA /* SecureData.swift */; };
+		6E60FFCF2121045400787DAA /* UnlockCharacteristic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60FF6C2121041400787DAA /* UnlockCharacteristic.swift */; };
+		6E60FFD02121045400787DAA /* SetupCharacteristic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60FF6D2121041400787DAA /* SetupCharacteristic.swift */; };
+		6E60FFD12121045400787DAA /* Version.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60FF6E2121041400787DAA /* Version.swift */; };
+		6E60FFD22121045400787DAA /* DeviceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60FF6F2121041400787DAA /* DeviceManager.swift */; };
+		6E60FFD32121045400787DAA /* DateComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60FF702121041400787DAA /* DateComponents.swift */; };
+		6E60FFD42121045400787DAA /* Crypto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60FF712121041400787DAA /* Crypto.swift */; };
+		6E60FFD52121045400787DAA /* UnlockAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60FF722121041400787DAA /* UnlockAction.swift */; };
+		6E60FFD62121045400787DAA /* LockState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60FF732121041400787DAA /* LockState.swift */; };
+		6E60FFD72121045400787DAA /* GitCommits.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60FF742121041400787DAA /* GitCommits.swift */; };
+		6E60FFD82121045400787DAA /* LockConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60FF752121041400787DAA /* LockConfiguration.swift */; };
+		6E60FFD92121045400787DAA /* EncryptedData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60FF762121041400787DAA /* EncryptedData.swift */; };
+		6E60FFDA2121045400787DAA /* Integer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60FF772121041400787DAA /* Integer.swift */; };
+		6E60FFDB2121045400787DAA /* UIDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60FF782121041400787DAA /* UIDevice.swift */; };
+		6E60FFDC2121045400787DAA /* Key.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60FF792121041400787DAA /* Key.swift */; };
+		6E60FFDD2121045400787DAA /* UnsafeDataConvertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60FF7A2121041400787DAA /* UnsafeDataConvertible.swift */; };
+		6E60FFDE2121045400787DAA /* GATTProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60FF7B2121041400787DAA /* GATTProfile.swift */; };
+		6E60FFDF2121045400787DAA /* LockModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60FF7C2121041400787DAA /* LockModel.swift */; };
+		6E60FFE02121045400787DAA /* Status.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60FF7D2121041400787DAA /* Status.swift */; };
+		6E60FFE12121045400787DAA /* InformationCharacteristic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60FF7E2121041400787DAA /* InformationCharacteristic.swift */; };
+		6E60FFE22121045400787DAA /* Bool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60FF7F2121041400787DAA /* Bool.swift */; };
+		6E60FFE32121045400787DAA /* Chunk.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60FF802121041400787DAA /* Chunk.swift */; };
+		6E60FFE42121045400787DAA /* ResultCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60FF812121041400787DAA /* ResultCode.swift */; };
+		6E60FFE52121045400787DAA /* GATTError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60FF822121041400787DAA /* GATTError.swift */; };
+		6E60FFE62121045400787DAA /* Permission.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60FF622121041400787DAA /* Permission.swift */; };
+		6E60FFE72121045400787DAA /* SmartLockProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60FF632121041400787DAA /* SmartLockProfile.swift */; };
+		6E60FFE82121045400787DAA /* BuildVersion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60FF642121041400787DAA /* BuildVersion.swift */; };
+		6E60FFE92121045400787DAA /* LockHardware.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60FF652121041400787DAA /* LockHardware.swift */; };
+		6E60FFEA2121045400787DAA /* Advertisement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60FF662121041400787DAA /* Advertisement.swift */; };
+		6E60FFEB2121045400787DAA /* Authentication.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60FF672121041400787DAA /* Authentication.swift */; };
+		6E60FFEC2121045400787DAA /* AuthenticationError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60FF682121041400787DAA /* AuthenticationError.swift */; };
+		6E60FFED2121045400787DAA /* POSIXTime.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60FF692121041400787DAA /* POSIXTime.swift */; };
+		6E60FFEE2121045400787DAA /* Central.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60FF6A2121041400787DAA /* Central.swift */; };
+		6E60FFEF2121045400787DAA /* SecureData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60FF6B2121041400787DAA /* SecureData.swift */; };
+		6E60FFF02121045400787DAA /* UnlockCharacteristic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60FF6C2121041400787DAA /* UnlockCharacteristic.swift */; };
+		6E60FFF12121045400787DAA /* SetupCharacteristic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60FF6D2121041400787DAA /* SetupCharacteristic.swift */; };
+		6E60FFF22121045400787DAA /* Version.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60FF6E2121041400787DAA /* Version.swift */; };
+		6E60FFF32121045400787DAA /* DeviceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60FF6F2121041400787DAA /* DeviceManager.swift */; };
+		6E60FFF42121045400787DAA /* DateComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60FF702121041400787DAA /* DateComponents.swift */; };
+		6E60FFF52121045400787DAA /* Crypto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60FF712121041400787DAA /* Crypto.swift */; };
+		6E60FFF62121045400787DAA /* UnlockAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60FF722121041400787DAA /* UnlockAction.swift */; };
+		6E60FFF72121045400787DAA /* LockState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60FF732121041400787DAA /* LockState.swift */; };
+		6E60FFF82121045400787DAA /* GitCommits.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60FF742121041400787DAA /* GitCommits.swift */; };
+		6E60FFF92121045400787DAA /* LockConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60FF752121041400787DAA /* LockConfiguration.swift */; };
+		6E60FFFA2121045400787DAA /* EncryptedData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60FF762121041400787DAA /* EncryptedData.swift */; };
+		6E60FFFB2121045400787DAA /* Integer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60FF772121041400787DAA /* Integer.swift */; };
+		6E60FFFC2121045400787DAA /* UIDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60FF782121041400787DAA /* UIDevice.swift */; };
+		6E60FFFD2121045400787DAA /* Key.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60FF792121041400787DAA /* Key.swift */; };
+		6E60FFFE2121045400787DAA /* UnsafeDataConvertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60FF7A2121041400787DAA /* UnsafeDataConvertible.swift */; };
+		6E60FFFF2121045400787DAA /* GATTProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60FF7B2121041400787DAA /* GATTProfile.swift */; };
+		DD7502881C68FEDE006590AF /* CoreLock.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 52D6DA0F1BF000BD002C0205 /* CoreLock.framework */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		DD7502801C68FCFC006590AF /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 52D6D9731BEFF229002C0205 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 52D6DA0E1BF000BD002C0205;
+			remoteInfo = "SmartLock-macOS";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		52D6D97C1BEFF229002C0205 /* CoreLock.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = CoreLock.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		52D6D9E21BEFFF6E002C0205 /* CoreLock.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = CoreLock.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		52D6D9F01BEFFFBE002C0205 /* CoreLock.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = CoreLock.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		52D6DA0F1BF000BD002C0205 /* CoreLock.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = CoreLock.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		6E60FF532121041400787DAA /* CryptoTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CryptoTests.swift; sourceTree = "<group>"; };
+		6E60FF542121041400787DAA /* GATTProfileTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GATTProfileTests.swift; sourceTree = "<group>"; };
+		6E60FF552121041400787DAA /* LinuxMain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinuxMain.swift; sourceTree = "<group>"; };
+		6E60FF572121041400787DAA /* ServerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServerTests.swift; sourceTree = "<group>"; };
+		6E60FF5A2121041400787DAA /* LockServiceController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LockServiceController.swift; sourceTree = "<group>"; };
+		6E60FF5B2121041400787DAA /* Error.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Error.swift; sourceTree = "<group>"; };
+		6E60FF5C2121041400787DAA /* GATTServiceController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GATTServiceController.swift; sourceTree = "<group>"; };
+		6E60FF5D2121041400787DAA /* LockController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LockController.swift; sourceTree = "<group>"; };
+		6E60FF5E2121041400787DAA /* DeviceInformationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceInformationService.swift; sourceTree = "<group>"; };
+		6E60FF602121041400787DAA /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
+		6E60FF622121041400787DAA /* Permission.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Permission.swift; sourceTree = "<group>"; };
+		6E60FF632121041400787DAA /* SmartLockProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SmartLockProfile.swift; sourceTree = "<group>"; };
+		6E60FF642121041400787DAA /* BuildVersion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuildVersion.swift; sourceTree = "<group>"; };
+		6E60FF652121041400787DAA /* LockHardware.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LockHardware.swift; sourceTree = "<group>"; };
+		6E60FF662121041400787DAA /* Advertisement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Advertisement.swift; sourceTree = "<group>"; };
+		6E60FF672121041400787DAA /* Authentication.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Authentication.swift; sourceTree = "<group>"; };
+		6E60FF682121041400787DAA /* AuthenticationError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationError.swift; sourceTree = "<group>"; };
+		6E60FF692121041400787DAA /* POSIXTime.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = POSIXTime.swift; sourceTree = "<group>"; };
+		6E60FF6A2121041400787DAA /* Central.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Central.swift; sourceTree = "<group>"; };
+		6E60FF6B2121041400787DAA /* SecureData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecureData.swift; sourceTree = "<group>"; };
+		6E60FF6C2121041400787DAA /* UnlockCharacteristic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnlockCharacteristic.swift; sourceTree = "<group>"; };
+		6E60FF6D2121041400787DAA /* SetupCharacteristic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupCharacteristic.swift; sourceTree = "<group>"; };
+		6E60FF6E2121041400787DAA /* Version.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Version.swift; sourceTree = "<group>"; };
+		6E60FF6F2121041400787DAA /* DeviceManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceManager.swift; sourceTree = "<group>"; };
+		6E60FF702121041400787DAA /* DateComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateComponents.swift; sourceTree = "<group>"; };
+		6E60FF712121041400787DAA /* Crypto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Crypto.swift; sourceTree = "<group>"; };
+		6E60FF722121041400787DAA /* UnlockAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnlockAction.swift; sourceTree = "<group>"; };
+		6E60FF732121041400787DAA /* LockState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LockState.swift; sourceTree = "<group>"; };
+		6E60FF742121041400787DAA /* GitCommits.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GitCommits.swift; sourceTree = "<group>"; };
+		6E60FF752121041400787DAA /* LockConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LockConfiguration.swift; sourceTree = "<group>"; };
+		6E60FF762121041400787DAA /* EncryptedData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EncryptedData.swift; sourceTree = "<group>"; };
+		6E60FF772121041400787DAA /* Integer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Integer.swift; sourceTree = "<group>"; };
+		6E60FF782121041400787DAA /* UIDevice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIDevice.swift; sourceTree = "<group>"; };
+		6E60FF792121041400787DAA /* Key.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Key.swift; sourceTree = "<group>"; };
+		6E60FF7A2121041400787DAA /* UnsafeDataConvertible.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnsafeDataConvertible.swift; sourceTree = "<group>"; };
+		6E60FF7B2121041400787DAA /* GATTProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GATTProfile.swift; sourceTree = "<group>"; };
+		6E60FF7C2121041400787DAA /* LockModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LockModel.swift; sourceTree = "<group>"; };
+		6E60FF7D2121041400787DAA /* Status.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Status.swift; sourceTree = "<group>"; };
+		6E60FF7E2121041400787DAA /* InformationCharacteristic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InformationCharacteristic.swift; sourceTree = "<group>"; };
+		6E60FF7F2121041400787DAA /* Bool.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bool.swift; sourceTree = "<group>"; };
+		6E60FF802121041400787DAA /* Chunk.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Chunk.swift; sourceTree = "<group>"; };
+		6E60FF812121041400787DAA /* ResultCode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultCode.swift; sourceTree = "<group>"; };
+		6E60FF822121041400787DAA /* GATTError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GATTError.swift; sourceTree = "<group>"; };
+		AD2FAA261CD0B6D800659CF4 /* CoreLock.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = CoreLock.plist; sourceTree = "<group>"; };
+		AD2FAA281CD0B6E100659CF4 /* CoreLockTests.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = CoreLockTests.plist; sourceTree = "<group>"; };
+		DD75027A1C68FCFC006590AF /* CoreLockTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CoreLockTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		52D6D9781BEFF229002C0205 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		52D6D9DE1BEFFF6E002C0205 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		52D6D9EC1BEFFFBE002C0205 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		52D6DA0B1BF000BD002C0205 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DD7502771C68FCFC006590AF /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DD7502881C68FEDE006590AF /* CoreLock.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		52D6D9721BEFF229002C0205 = {
+			isa = PBXGroup;
+			children = (
+				6E60FF582121041400787DAA /* Sources */,
+				6E60FF512121041400787DAA /* Tests */,
+				52D6D99C1BEFF38C002C0205 /* Configs */,
+				52D6D97D1BEFF229002C0205 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		52D6D97D1BEFF229002C0205 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				52D6D97C1BEFF229002C0205 /* CoreLock.framework */,
+				52D6D9E21BEFFF6E002C0205 /* CoreLock.framework */,
+				52D6D9F01BEFFFBE002C0205 /* CoreLock.framework */,
+				52D6DA0F1BF000BD002C0205 /* CoreLock.framework */,
+				DD75027A1C68FCFC006590AF /* CoreLockTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		52D6D99C1BEFF38C002C0205 /* Configs */ = {
+			isa = PBXGroup;
+			children = (
+				DD7502721C68FC1B006590AF /* Frameworks */,
+				DD7502731C68FC20006590AF /* Tests */,
+			);
+			path = Configs;
+			sourceTree = "<group>";
+		};
+		6E60FF512121041400787DAA /* Tests */ = {
+			isa = PBXGroup;
+			children = (
+				6E60FF522121041400787DAA /* CoreLockTests */,
+				6E60FF552121041400787DAA /* LinuxMain.swift */,
+				6E60FF562121041400787DAA /* CoreLockGATTServerTests */,
+			);
+			name = Tests;
+			path = ../Tests;
+			sourceTree = "<group>";
+		};
+		6E60FF522121041400787DAA /* CoreLockTests */ = {
+			isa = PBXGroup;
+			children = (
+				6E60FF532121041400787DAA /* CryptoTests.swift */,
+				6E60FF542121041400787DAA /* GATTProfileTests.swift */,
+			);
+			path = CoreLockTests;
+			sourceTree = "<group>";
+		};
+		6E60FF562121041400787DAA /* CoreLockGATTServerTests */ = {
+			isa = PBXGroup;
+			children = (
+				6E60FF572121041400787DAA /* ServerTests.swift */,
+			);
+			path = CoreLockGATTServerTests;
+			sourceTree = "<group>";
+		};
+		6E60FF582121041400787DAA /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+				6E60FF592121041400787DAA /* CoreLockGATTServer */,
+				6E60FF5F2121041400787DAA /* lockd */,
+				6E60FF612121041400787DAA /* CoreLock */,
+			);
+			name = Sources;
+			path = ../Sources;
+			sourceTree = "<group>";
+		};
+		6E60FF592121041400787DAA /* CoreLockGATTServer */ = {
+			isa = PBXGroup;
+			children = (
+				6E60FF5A2121041400787DAA /* LockServiceController.swift */,
+				6E60FF5B2121041400787DAA /* Error.swift */,
+				6E60FF5C2121041400787DAA /* GATTServiceController.swift */,
+				6E60FF5D2121041400787DAA /* LockController.swift */,
+				6E60FF5E2121041400787DAA /* DeviceInformationService.swift */,
+			);
+			path = CoreLockGATTServer;
+			sourceTree = "<group>";
+		};
+		6E60FF5F2121041400787DAA /* lockd */ = {
+			isa = PBXGroup;
+			children = (
+				6E60FF602121041400787DAA /* main.swift */,
+			);
+			path = lockd;
+			sourceTree = "<group>";
+		};
+		6E60FF612121041400787DAA /* CoreLock */ = {
+			isa = PBXGroup;
+			children = (
+				6E60FF622121041400787DAA /* Permission.swift */,
+				6E60FF632121041400787DAA /* SmartLockProfile.swift */,
+				6E60FF642121041400787DAA /* BuildVersion.swift */,
+				6E60FF652121041400787DAA /* LockHardware.swift */,
+				6E60FF662121041400787DAA /* Advertisement.swift */,
+				6E60FF672121041400787DAA /* Authentication.swift */,
+				6E60FF682121041400787DAA /* AuthenticationError.swift */,
+				6E60FF692121041400787DAA /* POSIXTime.swift */,
+				6E60FF6A2121041400787DAA /* Central.swift */,
+				6E60FF6B2121041400787DAA /* SecureData.swift */,
+				6E60FF6C2121041400787DAA /* UnlockCharacteristic.swift */,
+				6E60FF6D2121041400787DAA /* SetupCharacteristic.swift */,
+				6E60FF6E2121041400787DAA /* Version.swift */,
+				6E60FF6F2121041400787DAA /* DeviceManager.swift */,
+				6E60FF702121041400787DAA /* DateComponents.swift */,
+				6E60FF712121041400787DAA /* Crypto.swift */,
+				6E60FF722121041400787DAA /* UnlockAction.swift */,
+				6E60FF732121041400787DAA /* LockState.swift */,
+				6E60FF742121041400787DAA /* GitCommits.swift */,
+				6E60FF752121041400787DAA /* LockConfiguration.swift */,
+				6E60FF762121041400787DAA /* EncryptedData.swift */,
+				6E60FF772121041400787DAA /* Integer.swift */,
+				6E60FF782121041400787DAA /* UIDevice.swift */,
+				6E60FF792121041400787DAA /* Key.swift */,
+				6E60FF7A2121041400787DAA /* UnsafeDataConvertible.swift */,
+				6E60FF7B2121041400787DAA /* GATTProfile.swift */,
+				6E60FF7C2121041400787DAA /* LockModel.swift */,
+				6E60FF7D2121041400787DAA /* Status.swift */,
+				6E60FF7E2121041400787DAA /* InformationCharacteristic.swift */,
+				6E60FF7F2121041400787DAA /* Bool.swift */,
+				6E60FF802121041400787DAA /* Chunk.swift */,
+				6E60FF812121041400787DAA /* ResultCode.swift */,
+				6E60FF822121041400787DAA /* GATTError.swift */,
+			);
+			path = CoreLock;
+			sourceTree = "<group>";
+		};
+		DD7502721C68FC1B006590AF /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				AD2FAA261CD0B6D800659CF4 /* CoreLock.plist */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		DD7502731C68FC20006590AF /* Tests */ = {
+			isa = PBXGroup;
+			children = (
+				AD2FAA281CD0B6E100659CF4 /* CoreLockTests.plist */,
+			);
+			name = Tests;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		52D6D9791BEFF229002C0205 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		52D6D9DF1BEFFF6E002C0205 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		52D6D9ED1BEFFFBE002C0205 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		52D6DA0C1BF000BD002C0205 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		52D6D97B1BEFF229002C0205 /* CoreLock-iOS */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 52D6D9901BEFF229002C0205 /* Build configuration list for PBXNativeTarget "CoreLock-iOS" */;
+			buildPhases = (
+				52D6D9771BEFF229002C0205 /* Sources */,
+				52D6D9781BEFF229002C0205 /* Frameworks */,
+				52D6D9791BEFF229002C0205 /* Headers */,
+				52D6D97A1BEFF229002C0205 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "CoreLock-iOS";
+			productName = SmartLock;
+			productReference = 52D6D97C1BEFF229002C0205 /* CoreLock.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		52D6D9E11BEFFF6E002C0205 /* CoreLock-watchOS */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 52D6D9E71BEFFF6E002C0205 /* Build configuration list for PBXNativeTarget "CoreLock-watchOS" */;
+			buildPhases = (
+				52D6D9DD1BEFFF6E002C0205 /* Sources */,
+				52D6D9DE1BEFFF6E002C0205 /* Frameworks */,
+				52D6D9DF1BEFFF6E002C0205 /* Headers */,
+				52D6D9E01BEFFF6E002C0205 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "CoreLock-watchOS";
+			productName = "SmartLock-watchOS";
+			productReference = 52D6D9E21BEFFF6E002C0205 /* CoreLock.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		52D6D9EF1BEFFFBE002C0205 /* CoreLock-tvOS */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 52D6DA011BEFFFBE002C0205 /* Build configuration list for PBXNativeTarget "CoreLock-tvOS" */;
+			buildPhases = (
+				52D6D9EB1BEFFFBE002C0205 /* Sources */,
+				52D6D9EC1BEFFFBE002C0205 /* Frameworks */,
+				52D6D9ED1BEFFFBE002C0205 /* Headers */,
+				52D6D9EE1BEFFFBE002C0205 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "CoreLock-tvOS";
+			productName = "SmartLock-tvOS";
+			productReference = 52D6D9F01BEFFFBE002C0205 /* CoreLock.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		52D6DA0E1BF000BD002C0205 /* CoreLock-macOS */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 52D6DA201BF000BD002C0205 /* Build configuration list for PBXNativeTarget "CoreLock-macOS" */;
+			buildPhases = (
+				52D6DA0A1BF000BD002C0205 /* Sources */,
+				52D6DA0B1BF000BD002C0205 /* Frameworks */,
+				52D6DA0C1BF000BD002C0205 /* Headers */,
+				52D6DA0D1BF000BD002C0205 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "CoreLock-macOS";
+			productName = "SmartLock-macOS";
+			productReference = 52D6DA0F1BF000BD002C0205 /* CoreLock.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		DD7502791C68FCFC006590AF /* CoreLockTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = DD7502821C68FCFC006590AF /* Build configuration list for PBXNativeTarget "CoreLockTests" */;
+			buildPhases = (
+				DD7502761C68FCFC006590AF /* Sources */,
+				DD7502771C68FCFC006590AF /* Frameworks */,
+				DD7502781C68FCFC006590AF /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				DD7502811C68FCFC006590AF /* PBXTargetDependency */,
+			);
+			name = CoreLockTests;
+			productName = "SmartLock-OS Tests";
+			productReference = DD75027A1C68FCFC006590AF /* CoreLockTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		52D6D9731BEFF229002C0205 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 0720;
+				LastUpgradeCheck = 0940;
+				ORGANIZATIONNAME = ColemanCDA;
+				TargetAttributes = {
+					52D6D97B1BEFF229002C0205 = {
+						CreatedOnToolsVersion = 7.1;
+						LastSwiftMigration = 0800;
+					};
+					52D6D9E11BEFFF6E002C0205 = {
+						CreatedOnToolsVersion = 7.1;
+						LastSwiftMigration = 0800;
+					};
+					52D6D9EF1BEFFFBE002C0205 = {
+						CreatedOnToolsVersion = 7.1;
+						LastSwiftMigration = 0800;
+					};
+					52D6DA0E1BF000BD002C0205 = {
+						CreatedOnToolsVersion = 7.1;
+						LastSwiftMigration = 0800;
+					};
+					DD7502791C68FCFC006590AF = {
+						CreatedOnToolsVersion = 7.2.1;
+						LastSwiftMigration = 0800;
+					};
+				};
+			};
+			buildConfigurationList = 52D6D9761BEFF229002C0205 /* Build configuration list for PBXProject "CoreLock" */;
+			compatibilityVersion = "Xcode 6.3";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 52D6D9721BEFF229002C0205;
+			productRefGroup = 52D6D97D1BEFF229002C0205 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				52D6D97B1BEFF229002C0205 /* CoreLock-iOS */,
+				52D6DA0E1BF000BD002C0205 /* CoreLock-macOS */,
+				52D6D9E11BEFFF6E002C0205 /* CoreLock-watchOS */,
+				52D6D9EF1BEFFFBE002C0205 /* CoreLock-tvOS */,
+				DD7502791C68FCFC006590AF /* CoreLockTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		52D6D97A1BEFF229002C0205 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		52D6D9E01BEFFF6E002C0205 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		52D6D9EE1BEFFFBE002C0205 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		52D6DA0D1BF000BD002C0205 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DD7502781C68FCFC006590AF /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		52D6D9771BEFF229002C0205 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6E60FF9D2121045300787DAA /* LockModel.swift in Sources */,
+				6E60FFA12121045300787DAA /* Chunk.swift in Sources */,
+				6E60FF9F2121045300787DAA /* InformationCharacteristic.swift in Sources */,
+				6E60FF972121045300787DAA /* EncryptedData.swift in Sources */,
+				6E60FF892121045300787DAA /* AuthenticationError.swift in Sources */,
+				6E60FFA22121045300787DAA /* ResultCode.swift in Sources */,
+				6E60FF862121045300787DAA /* LockHardware.swift in Sources */,
+				6E60FF942121045300787DAA /* LockState.swift in Sources */,
+				6E60FF952121045300787DAA /* GitCommits.swift in Sources */,
+				6E60FF9A2121045300787DAA /* Key.swift in Sources */,
+				6E60FF8D2121045300787DAA /* UnlockCharacteristic.swift in Sources */,
+				6E60FF932121045300787DAA /* UnlockAction.swift in Sources */,
+				6E60FF912121045300787DAA /* DateComponents.swift in Sources */,
+				6E60FF992121045300787DAA /* UIDevice.swift in Sources */,
+				6E60FFA32121045300787DAA /* GATTError.swift in Sources */,
+				6E60FF852121045300787DAA /* BuildVersion.swift in Sources */,
+				6E60FF872121045300787DAA /* Advertisement.swift in Sources */,
+				6E60FF8F2121045300787DAA /* Version.swift in Sources */,
+				6E60FF8A2121045300787DAA /* POSIXTime.swift in Sources */,
+				6E60FF962121045300787DAA /* LockConfiguration.swift in Sources */,
+				6E60FF922121045300787DAA /* Crypto.swift in Sources */,
+				6E60FF902121045300787DAA /* DeviceManager.swift in Sources */,
+				6E60FF8E2121045300787DAA /* SetupCharacteristic.swift in Sources */,
+				6E60FF842121045300787DAA /* SmartLockProfile.swift in Sources */,
+				6E60FF832121045300787DAA /* Permission.swift in Sources */,
+				6E60FF882121045300787DAA /* Authentication.swift in Sources */,
+				6E60FFA02121045300787DAA /* Bool.swift in Sources */,
+				6E60FF8C2121045300787DAA /* SecureData.swift in Sources */,
+				6E60FF9E2121045300787DAA /* Status.swift in Sources */,
+				6E60FF982121045300787DAA /* Integer.swift in Sources */,
+				6E60FF9C2121045300787DAA /* GATTProfile.swift in Sources */,
+				6E60FF8B2121045300787DAA /* Central.swift in Sources */,
+				6E60FF9B2121045300787DAA /* UnsafeDataConvertible.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		52D6D9DD1BEFFF6E002C0205 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6E60FFDF2121045400787DAA /* LockModel.swift in Sources */,
+				6E60FFE32121045400787DAA /* Chunk.swift in Sources */,
+				6E60FFE12121045400787DAA /* InformationCharacteristic.swift in Sources */,
+				6E60FFD92121045400787DAA /* EncryptedData.swift in Sources */,
+				6E60FFCB2121045400787DAA /* AuthenticationError.swift in Sources */,
+				6E60FFE42121045400787DAA /* ResultCode.swift in Sources */,
+				6E60FFC82121045400787DAA /* LockHardware.swift in Sources */,
+				6E60FFD62121045400787DAA /* LockState.swift in Sources */,
+				6E60FFD72121045400787DAA /* GitCommits.swift in Sources */,
+				6E60FFDC2121045400787DAA /* Key.swift in Sources */,
+				6E60FFCF2121045400787DAA /* UnlockCharacteristic.swift in Sources */,
+				6E60FFD52121045400787DAA /* UnlockAction.swift in Sources */,
+				6E60FFD32121045400787DAA /* DateComponents.swift in Sources */,
+				6E60FFDB2121045400787DAA /* UIDevice.swift in Sources */,
+				6E60FFE52121045400787DAA /* GATTError.swift in Sources */,
+				6E60FFC72121045400787DAA /* BuildVersion.swift in Sources */,
+				6E60FFC92121045400787DAA /* Advertisement.swift in Sources */,
+				6E60FFD12121045400787DAA /* Version.swift in Sources */,
+				6E60FFCC2121045400787DAA /* POSIXTime.swift in Sources */,
+				6E60FFD82121045400787DAA /* LockConfiguration.swift in Sources */,
+				6E60FFD42121045400787DAA /* Crypto.swift in Sources */,
+				6E60FFD22121045400787DAA /* DeviceManager.swift in Sources */,
+				6E60FFD02121045400787DAA /* SetupCharacteristic.swift in Sources */,
+				6E60FFC62121045400787DAA /* SmartLockProfile.swift in Sources */,
+				6E60FFC52121045400787DAA /* Permission.swift in Sources */,
+				6E60FFCA2121045400787DAA /* Authentication.swift in Sources */,
+				6E60FFE22121045400787DAA /* Bool.swift in Sources */,
+				6E60FFCE2121045400787DAA /* SecureData.swift in Sources */,
+				6E60FFE02121045400787DAA /* Status.swift in Sources */,
+				6E60FFDA2121045400787DAA /* Integer.swift in Sources */,
+				6E60FFDE2121045400787DAA /* GATTProfile.swift in Sources */,
+				6E60FFCD2121045400787DAA /* Central.swift in Sources */,
+				6E60FFDD2121045400787DAA /* UnsafeDataConvertible.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		52D6D9EB1BEFFFBE002C0205 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6E6000002121045400787DAA /* LockModel.swift in Sources */,
+				6E6000042121045400787DAA /* Chunk.swift in Sources */,
+				6E6000022121045400787DAA /* InformationCharacteristic.swift in Sources */,
+				6E60FFFA2121045400787DAA /* EncryptedData.swift in Sources */,
+				6E60FFEC2121045400787DAA /* AuthenticationError.swift in Sources */,
+				6E6000052121045400787DAA /* ResultCode.swift in Sources */,
+				6E60FFE92121045400787DAA /* LockHardware.swift in Sources */,
+				6E60FFF72121045400787DAA /* LockState.swift in Sources */,
+				6E60FFF82121045400787DAA /* GitCommits.swift in Sources */,
+				6E60FFFD2121045400787DAA /* Key.swift in Sources */,
+				6E60FFF02121045400787DAA /* UnlockCharacteristic.swift in Sources */,
+				6E60FFF62121045400787DAA /* UnlockAction.swift in Sources */,
+				6E60FFF42121045400787DAA /* DateComponents.swift in Sources */,
+				6E60FFFC2121045400787DAA /* UIDevice.swift in Sources */,
+				6E6000062121045400787DAA /* GATTError.swift in Sources */,
+				6E60FFE82121045400787DAA /* BuildVersion.swift in Sources */,
+				6E60FFEA2121045400787DAA /* Advertisement.swift in Sources */,
+				6E60FFF22121045400787DAA /* Version.swift in Sources */,
+				6E60FFED2121045400787DAA /* POSIXTime.swift in Sources */,
+				6E60FFF92121045400787DAA /* LockConfiguration.swift in Sources */,
+				6E60FFF52121045400787DAA /* Crypto.swift in Sources */,
+				6E60FFF32121045400787DAA /* DeviceManager.swift in Sources */,
+				6E60FFF12121045400787DAA /* SetupCharacteristic.swift in Sources */,
+				6E60FFE72121045400787DAA /* SmartLockProfile.swift in Sources */,
+				6E60FFE62121045400787DAA /* Permission.swift in Sources */,
+				6E60FFEB2121045400787DAA /* Authentication.swift in Sources */,
+				6E6000032121045400787DAA /* Bool.swift in Sources */,
+				6E60FFEF2121045400787DAA /* SecureData.swift in Sources */,
+				6E6000012121045400787DAA /* Status.swift in Sources */,
+				6E60FFFB2121045400787DAA /* Integer.swift in Sources */,
+				6E60FFFF2121045400787DAA /* GATTProfile.swift in Sources */,
+				6E60FFEE2121045400787DAA /* Central.swift in Sources */,
+				6E60FFFE2121045400787DAA /* UnsafeDataConvertible.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		52D6DA0A1BF000BD002C0205 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6E60FFBE2121045300787DAA /* LockModel.swift in Sources */,
+				6E60FFC22121045300787DAA /* Chunk.swift in Sources */,
+				6E60FFC02121045300787DAA /* InformationCharacteristic.swift in Sources */,
+				6E60FFB82121045300787DAA /* EncryptedData.swift in Sources */,
+				6E60FFAA2121045300787DAA /* AuthenticationError.swift in Sources */,
+				6E60FFC32121045300787DAA /* ResultCode.swift in Sources */,
+				6E60FFA72121045300787DAA /* LockHardware.swift in Sources */,
+				6E60FFB52121045300787DAA /* LockState.swift in Sources */,
+				6E60FFB62121045300787DAA /* GitCommits.swift in Sources */,
+				6E60FFBB2121045300787DAA /* Key.swift in Sources */,
+				6E60FFAE2121045300787DAA /* UnlockCharacteristic.swift in Sources */,
+				6E60FFB42121045300787DAA /* UnlockAction.swift in Sources */,
+				6E60FFB22121045300787DAA /* DateComponents.swift in Sources */,
+				6E60FFBA2121045300787DAA /* UIDevice.swift in Sources */,
+				6E60FFC42121045300787DAA /* GATTError.swift in Sources */,
+				6E60FFA62121045300787DAA /* BuildVersion.swift in Sources */,
+				6E60FFA82121045300787DAA /* Advertisement.swift in Sources */,
+				6E60FFB02121045300787DAA /* Version.swift in Sources */,
+				6E60FFAB2121045300787DAA /* POSIXTime.swift in Sources */,
+				6E60FFB72121045300787DAA /* LockConfiguration.swift in Sources */,
+				6E60FFB32121045300787DAA /* Crypto.swift in Sources */,
+				6E60FFB12121045300787DAA /* DeviceManager.swift in Sources */,
+				6E60FFAF2121045300787DAA /* SetupCharacteristic.swift in Sources */,
+				6E60FFA52121045300787DAA /* SmartLockProfile.swift in Sources */,
+				6E60FFA42121045300787DAA /* Permission.swift in Sources */,
+				6E60FFA92121045300787DAA /* Authentication.swift in Sources */,
+				6E60FFC12121045300787DAA /* Bool.swift in Sources */,
+				6E60FFAD2121045300787DAA /* SecureData.swift in Sources */,
+				6E60FFBF2121045300787DAA /* Status.swift in Sources */,
+				6E60FFB92121045300787DAA /* Integer.swift in Sources */,
+				6E60FFBD2121045300787DAA /* GATTProfile.swift in Sources */,
+				6E60FFAC2121045300787DAA /* Central.swift in Sources */,
+				6E60FFBC2121045300787DAA /* UnsafeDataConvertible.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DD7502761C68FCFC006590AF /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		DD7502811C68FCFC006590AF /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 52D6DA0E1BF000BD002C0205 /* CoreLock-macOS */;
+			targetProxy = DD7502801C68FCFC006590AF /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		52D6D98E1BEFF229002C0205 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_FILE = Configs/CoreLock.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
+				MACOSX_DEPLOYMENT_TARGET = 10.12;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.colemancda.CoreLock;
+				PRODUCT_NAME = CoreLock;
+				SDKROOT = iphoneos;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 3.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TVOS_DEPLOYMENT_TARGET = 9.0;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+				WATCHOS_DEPLOYMENT_TARGET = 3.0;
+			};
+			name = Debug;
+		};
+		52D6D98F1BEFF229002C0205 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_FILE = Configs/CoreLock.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
+				MACOSX_DEPLOYMENT_TARGET = 10.12;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_BUNDLE_IDENTIFIER = com.colemancda.CoreLock;
+				PRODUCT_NAME = CoreLock;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_VERSION = 3.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TVOS_DEPLOYMENT_TARGET = 9.0;
+				VALIDATE_PRODUCT = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+				WATCHOS_DEPLOYMENT_TARGET = 3.0;
+			};
+			name = Release;
+		};
+		52D6D9911BEFF229002C0205 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = NO;
+				CLANG_ENABLE_MODULES = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_SEARCH_PATHS = $SRCROOT/../Carthage/Build/iOS;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
+		};
+		52D6D9921BEFF229002C0205 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = NO;
+				CLANG_ENABLE_MODULES = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_SEARCH_PATHS = $SRCROOT/../Carthage/Build/iOS;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				SKIP_INSTALL = YES;
+			};
+			name = Release;
+		};
+		52D6D9E81BEFFF6E002C0205 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = NO;
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_SEARCH_PATHS = $SRCROOT/../Carthage/Build/watchOS;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = 4;
+			};
+			name = Debug;
+		};
+		52D6D9E91BEFFF6E002C0205 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = NO;
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_SEARCH_PATHS = $SRCROOT/../Carthage/Build/watchOS;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = 4;
+			};
+			name = Release;
+		};
+		52D6DA021BEFFFBE002C0205 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = NO;
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_SEARCH_PATHS = $SRCROOT/../Carthage/Build/tvOS;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				SDKROOT = appletvos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = 3;
+			};
+			name = Debug;
+		};
+		52D6DA031BEFFFBE002C0205 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = NO;
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_SEARCH_PATHS = $SRCROOT/../Carthage/Build/tvOS;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				SDKROOT = appletvos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = 3;
+			};
+			name = Release;
+		};
+		52D6DA211BF000BD002C0205 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = NO;
+				CODE_SIGN_IDENTITY = "-";
+				COMBINE_HIDPI_IMAGES = YES;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_SEARCH_PATHS = $SRCROOT/../Carthage/Build/Mac;
+				FRAMEWORK_VERSION = A;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
+		};
+		52D6DA221BF000BD002C0205 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = NO;
+				CODE_SIGN_IDENTITY = "-";
+				COMBINE_HIDPI_IMAGES = YES;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_SEARCH_PATHS = $SRCROOT/../Carthage/Build/Mac;
+				FRAMEWORK_VERSION = A;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+			};
+			name = Release;
+		};
+		DD7502831C68FCFC006590AF /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COMBINE_HIDPI_IMAGES = YES;
+				FRAMEWORK_SEARCH_PATHS = $SRCROOT/../Carthage/Build/Mac;
+				INFOPLIST_FILE = Configs/SmartLockTests.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks $FRAMEWORK_SEARCH_PATHS";
+				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.SmartLock.SmartLock-macOS-Tests";
+				PRODUCT_NAME = CoreLockTests;
+				SDKROOT = macosx;
+				SWIFT_VERSION = 4.0;
+			};
+			name = Debug;
+		};
+		DD7502841C68FCFC006590AF /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COMBINE_HIDPI_IMAGES = YES;
+				FRAMEWORK_SEARCH_PATHS = $SRCROOT/../Carthage/Build/Mac;
+				INFOPLIST_FILE = Configs/SmartLockTests.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks $FRAMEWORK_SEARCH_PATHS";
+				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.SmartLock.SmartLock-macOS-Tests";
+				PRODUCT_NAME = CoreLockTests;
+				SDKROOT = macosx;
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_VERSION = 4.0;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		52D6D9761BEFF229002C0205 /* Build configuration list for PBXProject "CoreLock" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				52D6D98E1BEFF229002C0205 /* Debug */,
+				52D6D98F1BEFF229002C0205 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		52D6D9901BEFF229002C0205 /* Build configuration list for PBXNativeTarget "CoreLock-iOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				52D6D9911BEFF229002C0205 /* Debug */,
+				52D6D9921BEFF229002C0205 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		52D6D9E71BEFFF6E002C0205 /* Build configuration list for PBXNativeTarget "CoreLock-watchOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				52D6D9E81BEFFF6E002C0205 /* Debug */,
+				52D6D9E91BEFFF6E002C0205 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		52D6DA011BEFFFBE002C0205 /* Build configuration list for PBXNativeTarget "CoreLock-tvOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				52D6DA021BEFFFBE002C0205 /* Debug */,
+				52D6DA031BEFFFBE002C0205 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		52D6DA201BF000BD002C0205 /* Build configuration list for PBXNativeTarget "CoreLock-macOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				52D6DA211BF000BD002C0205 /* Debug */,
+				52D6DA221BF000BD002C0205 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		DD7502821C68FCFC006590AF /* Build configuration list for PBXNativeTarget "CoreLockTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DD7502831C68FCFC006590AF /* Debug */,
+				DD7502841C68FCFC006590AF /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 52D6D9731BEFF229002C0205 /* Project object */;
+}
