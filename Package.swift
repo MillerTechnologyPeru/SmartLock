@@ -19,22 +19,24 @@ let package = Package(
         )
     ],
     dependencies: [
-        .Package(url: "https://github.com/PureSwift/GATT", majorVersion: 2),
-        .Package(url: "https://github.com/krzyzanowskim/CryptoSwift", majorVersion: 0, minor: 7),
+        .Package(url: "https://github.com/PureSwift/GATT", majorVersion: 2)
     ],
     exclude: ["Xcode", "iOS", "Android"]
 )
 
 #if os(macOS)
-let dependency: Package.Dependency = .Package(url: "https://github.com/PureSwift/BluetoothDarwin.git", majorVersion: 1)
-package.dependencies.append(dependency)
+package.dependencies.append(.Package(url: "https://github.com/PureSwift/BluetoothDarwin.git", majorVersion: 1))
 #elseif os(Linux)
-let dependency: Package.Dependency = .Package(url: "https://github.com/PureSwift/BluetoothLinux.git", majorVersion: 3)
-package.dependencies.append(dependency)
+package.dependencies.append(.Package(url: "https://github.com/PureSwift/BluetoothLinux.git", majorVersion: 3))
+#endif
+
+#if swift(>=3.2)
+package.dependencies.append(.Package(url: "https://github.com/krzyzanowskim/CryptoSwift", majorVersion: 0, minor: 7))
+#elseif swift(>=3.0)
+package.dependencies.append(.Package(url: "https://github.com/krzyzanowskim/CryptoSwift", majorVersion: 0, minor: 6))
 #endif
 
 #if swift(>=3.2)
 #elseif swift(>=3.0)
-let dependency: Package.Dependency = .Package(url: "https://github.com/PureSwift/Codable.git", majorVersion: 1)
-package.dependencies.append(dependency)
+package.dependencies.append(.Package(url: "https://github.com/PureSwift/Codable.git", majorVersion: 1))
 #endif
