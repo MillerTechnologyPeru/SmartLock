@@ -106,3 +106,15 @@ public struct SetupRequest {
         return data
     }
 }
+
+public extension Key {
+    
+    /// Initialize a new owner key from a setup request. 
+    init(setup: SetupRequest) {
+        
+        self.init(identifier: setup.identifier,
+                  name: "Owner",
+                  date: Date(),
+                  permission: .owner)
+    }
+}

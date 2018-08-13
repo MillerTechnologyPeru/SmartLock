@@ -71,6 +71,9 @@ func run() throws {
     // Intialize Smart Connect BLE Controller
     controller = try LockController(peripheral: peripheral)
     
+    // setup controller
+    
+    
     // publish GATT server, enable advertising
     try peripheral.start()
     

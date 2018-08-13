@@ -52,6 +52,22 @@ public extension Permission {
     }
 }
 
+extension Permission: Equatable {
+    
+    public static func == (lhs: Permission, rhs: Permission) -> Bool {
+        
+        switch (lhs, rhs) {
+            
+        case (.owner, .owner): return true
+        case (.admin, .admin): return true
+        case (.anytime, .anytime): return true
+        case let (.scheduled(lhsSchedule), .scheduled(rhsSchedule)): return lhsSchedule == rhsSchedule
+            
+        default: return false
+        }
+    }
+}
+
 // MARK: - Schedule
 
 public extension Permission {
@@ -99,12 +115,22 @@ public extension Permission {
     }
 }
 
+extension Permission.Schedule: Equatable {
+    
+    public static func == (lhs: Permission.Schedule, rhs: Permission.Schedule) -> Bool {
+        
+        return lhs.expiry == rhs.expiry
+            && lhs.interval == rhs.interval
+            && lhs.weekdays == rhs.weekdays
+    }
+}
+
 // MARK: - Schedule Interval
 
 public extension Permission.Schedule {
     
     /// The minute interval range the lock can be unlocked.
-    public struct Interval: RawRepresentable, Equatable {
+    public struct Interval: RawRepresentable {
         
         internal static let min: UInt16 = 0
         
@@ -127,6 +153,14 @@ public extension Permission.Schedule {
             
             self.rawValue = unsafe
         }
+    }
+}
+
+extension Permission.Schedule.Interval: Equatable {
+    
+    public static func == (lhs: Permission.Schedule.Interval, rhs: Permission.Schedule.Interval) -> Bool {
+        
+        return lhs.rawValue == rhs.rawValue
     }
 }
 

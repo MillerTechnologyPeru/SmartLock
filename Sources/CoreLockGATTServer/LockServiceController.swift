@@ -27,7 +27,9 @@ public final class LockServiceController <Peripheral: PeripheralProtocol> : GATT
         didSet { updateInformation() }
     }
     
-    public var authorization: LockAuthorizationDataSource = InMemoryLockAuthorization()  {
+    public var setupSecret: LockSetupSecretStore = InMemoryLockSetupSecret()
+    
+    public var authorization: LockAuthorizationStore = InMemoryLockAuthorization()  {
         
         didSet { updateInformation() }
     }
@@ -108,11 +110,11 @@ public final class LockServiceController <Peripheral: PeripheralProtocol> : GATT
             
         case setupHandle:
             
-            return authorization.canSetup ? nil : .writeNotPermitted
+            return authorization.isEmpty ? nil : .writeNotPermitted
             
         case unlockHandle:
             
-            return authorization.canSetup ? .writeNotPermitted : nil
+            return authorization.isEmpty ? .writeNotPermitted : nil
          
         default:
             
@@ -126,22 +128,32 @@ public final class LockServiceController <Peripheral: PeripheralProtocol> : GATT
             
         case setupHandle:
             
-            assert(authorization.canSetup)
+            assert(authorization.isEmpty, "Already setup")
             
             // parse characteristic
             guard let setup = SetupCharacteristic(data: write.value)
                 else { print("Could not parse \(SetupCharacteristic.self)"); return }
             
             // get key for shared device.
-            let sharedSecret = authorization.sharedSecret
+            let sharedSecret = setupSecret.sharedSecret
             
             do {
+                
+                // guard against replay attacks
+                let timestamp = setup.encryptedData.authentication.message.date
+                let now = Date()
+                guard timestamp < now, // cannot be used later for replay attacks
+                    timestamp > now - 5.0 // only valid for 5 seconds
+                    else { print("Authentication expired"); return }
                 
                 // decrypt request
                 let setupRequest = try setup.decrypt(with: sharedSecret)
                 
                 // create owner key
-                try authorization.setup(setupRequest) // should not fail
+                let ownerKey = Key(setup: setupRequest)
+                
+                // store first key
+                try authorization.add(ownerKey, secret: setupRequest.secret)
                 
                 print("Lock setup completed")
                 
@@ -151,7 +163,7 @@ public final class LockServiceController <Peripheral: PeripheralProtocol> : GATT
             
         case unlockHandle:
             
-            assert(authorization.canSetup == false)
+            assert(authorization.isEmpty == false)
             
             // parse characteristic
             guard let unlock = UnlockCharacteristic(data: write.value)
@@ -166,13 +178,28 @@ public final class LockServiceController <Peripheral: PeripheralProtocol> : GATT
                 
                 assert(key.identifier == keyIdentifier, "Invalid key")
                 
+                // validate HMAC
                 guard unlock.authentication.isAuthenticated(with: secret)
                     else { print("Invalid key secret"); return }
+                
+                // guard against replay attacks
+                let timestamp = unlock.authentication.message.date
+                let now = Date()
+                guard timestamp < now, // cannot be used later for replay attacks
+                    timestamp > now - 5.0 // only valid for 5 seconds
+                    else { print("Authentication expired"); return }
+                
+                // enforce schedule
+                if case let .scheduled(schedule) = key.permission {
+                    
+                    guard schedule.isValid()
+                        else { print("Cannot unlock during schedule"); return }
+                }
                 
                 // unlock with the specified action
                 try unlockDelegate.unlock(unlock.action)
                 
-                print("Key \(key.identifier) unlocked with action \(unlock.action)")
+                print("Key \(key.identifier) \(key.name) unlocked with action \(unlock.action)")
                 
             } catch { print("Unlock error: \(error)")  }
             
@@ -185,7 +212,7 @@ public final class LockServiceController <Peripheral: PeripheralProtocol> : GATT
     
     private func updateInformation() {
         
-        let status: LockStatus = authorization.canSetup ? .setup : .unlock
+        let status: LockStatus = authorization.isEmpty ? .setup : .unlock
         
         let identifier = lockConfiguration.identifier
         
@@ -197,14 +224,27 @@ public final class LockServiceController <Peripheral: PeripheralProtocol> : GATT
     }
 }
 
-/// Lock Authorization delegate
-public protocol LockAuthorizationDataSource {
+public protocol LockSetupSecretStore {
     
     var sharedSecret: KeyData { get }
+}
+
+public struct InMemoryLockSetupSecret: LockSetupSecretStore {
     
-    var canSetup: Bool { get }
+    public let sharedSecret: KeyData
     
-    func setup(_ request: SetupRequest) throws
+    public init(sharedSecret: KeyData = KeyData()) {
+        
+        self.sharedSecret = sharedSecret
+    }
+}
+
+/// Lock Authorization Store
+public protocol LockAuthorizationStore {
+    
+    var isEmpty: Bool { get }
+    
+    func add(_ key: Key, secret: KeyData) throws
     
     func key(for identifier: UUID) throws -> (key: Key, secret: KeyData)?
 }
@@ -219,42 +259,24 @@ public struct UnlockSimulator: LockUnlockDelegate {
     
     public func unlock(_ action: UnlockAction) throws {
         
-        print("Did unlock with action \(action)")
+        print("Simulate unlock with action \(action)")
     }
 }
 
-#if os(macOS)
-import AppKit
-#endif
-
-public final class InMemoryLockAuthorization: LockAuthorizationDataSource {
+public final class InMemoryLockAuthorization: LockAuthorizationStore {
     
-    public init(sharedSecret: KeyData = KeyData()) {
-        
-        self.sharedSecret = sharedSecret
-        
-        let secretString = sharedSecret.data.base64EncodedString()
-        print("Shared secret:", secretString)
-    }
+    public init() { }
     
-    public var sharedSecret: KeyData
+    private var keys = [KeyEntry]()
     
-    public private(set) var keys = [KeyEntry]()
-    
-    public var canSetup: Bool {
+    public var isEmpty: Bool {
         
         return keys.isEmpty
     }
     
-    public func setup(_ request: SetupRequest) throws {
+    public func add(_ key: Key, secret: KeyData) throws {
         
-        assert(canSetup, "Already setup")
-        
-        let ownerKey = Key(identifier: request.identifier,
-                      name: "Owner",
-                      permission: .owner)
-        
-        keys.append(KeyEntry(key: ownerKey, secret: request.secret))
+        keys.append(KeyEntry(key: key, secret: secret))
     }
     
     public func key(for identifier: UUID) throws -> (key: Key, secret: KeyData)? {
@@ -266,13 +288,13 @@ public final class InMemoryLockAuthorization: LockAuthorizationDataSource {
     }
 }
 
-public extension InMemoryLockAuthorization {
+private extension InMemoryLockAuthorization {
     
-    public struct KeyEntry {
+    struct KeyEntry {
         
-        public let key: Key
+        let key: Key
         
-        public let secret: KeyData
+        let secret: KeyData
     }
 }
 
