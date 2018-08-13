@@ -6,6 +6,7 @@
 //  Copyright © 2018 ColemanCDA. All rights reserved.
 //
 
+import Foundation
 import UIKit
 
 @UIApplicationMain
@@ -14,9 +15,8 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
-        // Override point for customization after application launch.
         
-        
+        LockManager.shared.log = { log("LockManager: " + $0) }
         
         return true
     }

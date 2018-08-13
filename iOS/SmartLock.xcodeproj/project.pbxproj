@@ -22,6 +22,8 @@
 		6E6000CC21211D0B00787DAA /* Async.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E6000CB21211D0B00787DAA /* Async.swift */; };
 		6E6000CD21211DB400787DAA /* ActivityIndicatorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E6000BF21211C7400787DAA /* ActivityIndicatorViewController.swift */; };
 		6E6000D12121224D00787DAA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6E6000D02121224D00787DAA /* Assets.xcassets */; };
+		6E60F8A72121259F0054995D /* Store.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60F8A62121259F0054995D /* Store.swift */; };
+		6E60F8AD212127890054995D /* Log.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60F8AC212127890054995D /* Log.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -109,6 +111,8 @@
 		6E6000C621211CD400787DAA /* PresentPopover.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PresentPopover.swift; sourceTree = "<group>"; };
 		6E6000CB21211D0B00787DAA /* Async.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Async.swift; sourceTree = "<group>"; };
 		6E6000D02121224D00787DAA /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Assets.xcassets; path = ../../../Lock/Xcode/Cerradura/Assets.xcassets; sourceTree = "<group>"; };
+		6E60F8A62121259F0054995D /* Store.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Store.swift; sourceTree = "<group>"; };
+		6E60F8AC212127890054995D /* Log.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Log.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -199,6 +203,8 @@
 			isa = PBXGroup;
 			children = (
 				6E60004A212113DF00787DAA /* DeviceManager.swift */,
+				6E60F8A62121259F0054995D /* Store.swift */,
+				6E60F8AC212127890054995D /* Log.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -393,9 +399,11 @@
 			files = (
 				6E6000162121119400787DAA /* NearbyLocksViewController.swift in Sources */,
 				6E6000CD21211DB400787DAA /* ActivityIndicatorViewController.swift in Sources */,
+				6E60F8AD212127890054995D /* Log.swift in Sources */,
 				6E6000C821211CD400787DAA /* AdaptiveNavigation.swift in Sources */,
 				6E6000C721211CD400787DAA /* ErrorAlert.swift in Sources */,
 				6E6000CA21211CD400787DAA /* PresentPopover.swift in Sources */,
+				6E60F8A72121259F0054995D /* Store.swift in Sources */,
 				6E6000CC21211D0B00787DAA /* Async.swift in Sources */,
 				6E60004B212113DF00787DAA /* DeviceManager.swift in Sources */,
 				6E6000142121119400787DAA /* AppDelegate.swift in Sources */,

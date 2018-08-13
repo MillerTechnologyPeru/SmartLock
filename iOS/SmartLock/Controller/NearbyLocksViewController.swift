@@ -36,12 +36,9 @@ final class NearbyLocksViewController: UITableViewController {
         super.viewDidLoad()
         
         configureView()
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
         
-        scan()
+        // try to scan
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0, execute: { [weak self] in self?.scan() })
     }
     
     // MARK: - Actions
@@ -49,6 +46,12 @@ final class NearbyLocksViewController: UITableViewController {
     @IBAction func scan(_ sender: Any? = nil) {
         
         self.refreshControl?.endRefreshing()
+        
+        /// ignore if off or not authorized
+        #if os(iOS)
+        guard LockManager.shared.central.state == .poweredOn
+            else { return } // cannot scan
+        #endif
         
         let scanDuration = self.scanDuration
         
@@ -84,6 +87,43 @@ final class NearbyLocksViewController: UITableViewController {
         configure(cell: cell, at: indexPath)
         
         return cell
+    }
+    
+    // MARK: - UITableViewDelegate
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
+        let peripheral = self[indexPath]
+        
+        performActivity({
+            
+            let information = try LockManager.shared.readInformation(for: peripheral)
+            
+            dump(information)
+            
+            switch information.status {
+                
+            case .setup:
+                
+                let request = SetupRequest()
+                
+                let deviceSharedSecret = KeyData()
+                
+                try LockManager.shared.setup(peripheral: peripheral,
+                                             with: request,
+                                             sharedSecret: deviceSharedSecret)
+                
+                // store new key
+                
+                log("Setup with ")
+                
+                fallthrough
+                
+            case .unlock:
+                
+                break
+            }
+        })
     }
     
     // MARK: - Private Methods
