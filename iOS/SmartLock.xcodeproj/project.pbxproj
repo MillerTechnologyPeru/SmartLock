@@ -386,6 +386,7 @@
 				"$(SRCROOT)/../Carthage/Build/iOS/GATT.framework",
 				"$(SRCROOT)/../Carthage/Build/iOS/DarwinGATT.framework",
 				"$(SRCROOT)/../Carthage/Build/iOS/CryptoSwift.framework",
+				"$(SRCROOT)/../Carthage/Build/iOS/QRCodeReader.framework",
 			);
 			name = Carthage;
 			outputPaths = (

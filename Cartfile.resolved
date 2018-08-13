@@ -1,3 +1,4 @@
 github "PureSwift/Bluetooth" "df35d3660ceb3741f0e34148df1642c6881b8fa4"
-github "PureSwift/GATT" "bdb0fb45786d0bce5860aaad7cf4748e08e6fc7c"
+github "PureSwift/GATT" "d0386d0cbb8bf73a1ce046a481fb79d10d7187e6"
 github "krzyzanowskim/CryptoSwift" "0.7.0"
+github "yannickl/QRCodeReader.swift" "8.2.0"

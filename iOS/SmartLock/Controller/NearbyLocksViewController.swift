@@ -15,6 +15,8 @@ import CoreLock
 import UIKit
 import CoreBluetooth
 import DarwinGATT
+import AVFoundation
+import QRCodeReader
 #endif
 
 final class NearbyLocksViewController: UITableViewController {
@@ -29,6 +31,15 @@ final class NearbyLocksViewController: UITableViewController {
     }
     
     let scanDuration: TimeInterval = 5.0
+    
+    lazy var readerViewController: QRCodeReaderViewController = {
+        
+        let builder = QRCodeReaderViewControllerBuilder {
+            $0.reader = QRCodeReader(metadataObjectTypes: [.qr], captureDevicePosition: .back)
+        }
+        
+        return QRCodeReaderViewController(builder: builder)
+    }()
     
     // MARK: - Loading
 
@@ -137,19 +148,7 @@ final class NearbyLocksViewController: UITableViewController {
                 
             case .setup:
                 
-                let request = SetupRequest()
-                
-                let deviceSharedSecret = KeyData()
-                
-                information = try LockManager.shared.setup(peripheral: peripheral,
-                                                           with: request,
-                                                           sharedSecret: deviceSharedSecret)
-                
-                // store new key
-                
-                log("Setup with key \(request.identifier)")
-                
-                fallthrough
+                mainQueue { [weak self] in self?.setupLock(peripheral) }
                 
             case .unlock:
                 
@@ -157,9 +156,52 @@ final class NearbyLocksViewController: UITableViewController {
             }
         })
     }
+    
+    private func setupLock(_ peripheral: Peripheral) {
+        
+        // scan QR code
+        assert(QRCodeReader.isAvailable())
+        
+        readerViewController.completionBlock = { [unowned self] (result: QRCodeReaderResult?) in
+            
+            // did not scan
+            guard let result = result else { return }
+            
+            self.readerViewController.dismiss(animated: true, completion: {
+                
+                guard let data = Data(base64Encoded: result.value),
+                    let key = KeyData(data: data) else {
+                    
+                    self.showErrorAlert("Invalid QR code")
+                    return
+                }
+                
+                // perform BLE request
+                self.setupLock(peripheral, with: key)
+            })
+        }
+        
+        // Presents the readerVC as modal form sheet
+        readerViewController.modalPresentationStyle = .formSheet
+        present(readerViewController, animated: true, completion: nil)
+    }
+    
+    private func setupLock(_ peripheral: Peripheral, with sharedSecret: KeyData) {
+        
+        performActivity({
+            
+            let request = SetupRequest()
+            
+            try LockManager.shared.setup(peripheral: peripheral,
+                                         with: request,
+                                         sharedSecret: sharedSecret)
+            
+            // store new key
+            log("Setup with key \(request.identifier)")
+        })
+    }
 }
 
 // MARK: - ActivityIndicatorViewController
 
 extension NearbyLocksViewController: ActivityIndicatorViewController { }
-
