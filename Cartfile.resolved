@@ -1,3 +1,3 @@
 github "PureSwift/Bluetooth" "df35d3660ceb3741f0e34148df1642c6881b8fa4"
-github "PureSwift/GATT" "2.0.5"
+github "PureSwift/GATT" "bdb0fb45786d0bce5860aaad7cf4748e08e6fc7c"
 github "krzyzanowskim/CryptoSwift" "0.7.0"
