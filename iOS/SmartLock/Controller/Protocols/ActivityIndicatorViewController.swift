@@ -8,7 +8,7 @@
 
 import Foundation
 import UIKit
-//import JGProgressHUD
+import JGProgressHUD
 
 protocol ActivityIndicatorViewController: class {
     
@@ -18,7 +18,7 @@ protocol ActivityIndicatorViewController: class {
     
     var navigationController: UINavigationController? { get }
     
-    //var progressHUD: JGProgressHUD { get }
+    var progressHUD: JGProgressHUD { get }
     
     func showProgressHUD()
     
@@ -32,14 +32,14 @@ extension ActivityIndicatorViewController {
         self.view.isUserInteractionEnabled = false
         self.view.endEditing(true)
         
-        //progressHUD.show(in: self.navigationController?.view ?? self.view)
+        progressHUD.show(in: self.navigationController?.view ?? self.view)
     }
     
     func dismissProgressHUD(animated: Bool = true) {
         
         self.view.isUserInteractionEnabled = true
         
-        //progressHUD.dismiss(animated: animated)
+        progressHUD.dismiss(animated: animated)
     }
 }
 

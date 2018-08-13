@@ -17,6 +17,7 @@ import CoreBluetooth
 import DarwinGATT
 import AVFoundation
 import QRCodeReader
+import JGProgressHUD
 #endif
 
 final class NearbyLocksViewController: UITableViewController {
@@ -30,9 +31,13 @@ final class NearbyLocksViewController: UITableViewController {
         didSet { configureView() }
     }
     
-    let scanDuration: TimeInterval = 5.0
+    let scanDuration: TimeInterval = 2.0
     
-    lazy var readerViewController: QRCodeReaderViewController = {
+    #if os(iOS)
+    
+    internal lazy var progressHUD: JGProgressHUD = JGProgressHUD(style: .dark)
+    
+    private lazy var readerViewController: QRCodeReaderViewController = {
         
         let builder = QRCodeReaderViewControllerBuilder {
             $0.reader = QRCodeReader(metadataObjectTypes: [.qr], captureDevicePosition: .back)
@@ -40,6 +45,8 @@ final class NearbyLocksViewController: UITableViewController {
         
         return QRCodeReaderViewController(builder: builder)
     }()
+    
+    #endif
     
     // MARK: - Loading
 
@@ -142,9 +149,23 @@ final class NearbyLocksViewController: UITableViewController {
         
         performActivity({
             
-            var information = try LockManager.shared.readInformation(for: peripheral)
+            let information = try LockManager.shared.readInformation(for: peripheral)
             
-            dump(information)
+            log("Selected lock \(information)")
+            
+            // attempt to unlock if key is stored.
+            if let lockCache = Store.shared[lock: information.identifier] {
+                
+                
+                
+            } else {
+                
+                
+            }
+            
+            
+            
+            
             
             switch information.status {
                 
@@ -155,8 +176,14 @@ final class NearbyLocksViewController: UITableViewController {
             case .unlock:
                 
                 break
+                //try LockManager.shared.unlock(key: (identifier: UUID, secret: KeyData), peripheral: peripheral)
             }
         })
+    }
+    
+    private func unlock(_ peripheral: Peripheral) {
+        
+        
     }
     
     private func setupLock(_ peripheral: Peripheral) {
@@ -194,12 +221,21 @@ final class NearbyLocksViewController: UITableViewController {
             
             let request = SetupRequest()
             
-            try LockManager.shared.setup(peripheral: peripheral,
-                                         with: request,
-                                         sharedSecret: sharedSecret)
+            let information = try LockManager.shared.setup(peripheral: peripheral,
+                                                           with: request,
+                                                           sharedSecret: sharedSecret)
             
             // store new key
             log("Setup with key \(request.identifier)")
+            
+            
+            
+            //Store.shared[lock: information.identifier] = LockCache(key: <#T##Key#>, name: <#T##String#>)
+            
+            mainQueue { [weak self] in
+                
+                
+            }
         })
     }
 }

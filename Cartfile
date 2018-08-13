@@ -1,3 +1,5 @@
 github "PureSwift/GATT" "master"
 github "krzyzanowskim/CryptoSwift" "0.7.0"
 github "yannickl/QRCodeReader.swift"
+github "JonasGessner/JGProgressHUD"
+github "kishikawakatsumi/KeychainAccess"

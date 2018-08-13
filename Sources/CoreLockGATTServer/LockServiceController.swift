@@ -238,7 +238,7 @@ public final class InMemoryLockAuthorization: LockAuthorizationDataSource {
         print("Shared secret:", secretString)
         
         #if os(macOS)
-        NSWorkspace.shared().open(URL(string: "https://duckduckgo.com/?q=qr+\(secretString.addingPercentEscapes(using: .utf8)!)")!)
+        NSWorkspace.shared().open(URL(string: "https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=\(secretString.addingPercentEscapes(using: .utf8)!)")!)
         #endif
     }
     
