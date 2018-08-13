@@ -72,7 +72,9 @@ func run() throws {
     controller = try LockController(peripheral: peripheral)
     
     // setup controller
+    controller?.lockServiceController.setupSecret = try LockSetupSecretBase64File(createdAt: URL(fileURLWithPath: "/opt/colemancda/lockd/sharedSecret"))
     
+    controller?.lockServiceController.authorization = JSONArchiveAuthorizationStore(url: URL(fileURLWithPath: "/opt/colemancda/lockd/data.json"))
     
     // publish GATT server, enable advertising
     try peripheral.start()

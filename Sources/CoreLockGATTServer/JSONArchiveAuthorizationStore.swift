@@ -1,44 +1,31 @@
 //
-//  Authorization.swift
-//  lockd
+//  JSONArchiveAuthorizationStore.swift
+//  SmartLock
 //
 //  Created by Alsey Coleman Miller on 8/13/18.
 //
+//
+
 
 import Foundation
 import CoreLock
-import CoreLockGATTServer
 
 #if swift(>=3.2)
 #elseif swift(>=3.0)
-import Codable
+    import Codable
 #endif
 
-final class JSONArchiveAuthorizationStore: LockAuthorizationStore {
+public final class JSONArchiveAuthorizationStore: LockAuthorizationStore {
     
-    
-    init(url: URL = URL(fileURLWithPath: "/opt/colemancda/lockd/data.json")) {
+    public init(url: URL) {
         
         self.url = url
         
-        let filename = url.path
-        
-        // try load existing data...
-        
-        let fileManager = FileManager.default
-        
-        guard fileManager.fileExists(atPath: filename) else {
-            
-            // no prevous data
-            guard fileManager.createFile(atPath: filename, contents: nil)
-                else { fatalError("Could not create Store at \(filename)") }
-            return
-        }
-        
+        // attempt to load previous value.
         loadData()
     }
     
-    let url: URL
+    public let url: URL
     
     private let jsonDecoder = JSONDecoder()
     private let jsonEncoder = JSONEncoder()
@@ -67,18 +54,18 @@ final class JSONArchiveAuthorizationStore: LockAuthorizationStore {
         self.database = database
     }
     
-    var isEmpty: Bool {
+    public var isEmpty: Bool {
         
         return database.keys.isEmpty
             && database.newKeys.isEmpty
     }
     
-    func add(_ key: Key, secret: KeyData) throws {
+    public func add(_ key: Key, secret: KeyData) throws {
         
         try write { $0.keys.append(Database.KeyEntry(key: key, secret: secret)) }
     }
     
-    func key(for identifier: UUID) throws -> (key: Key, secret: KeyData)? {
+    public func key(for identifier: UUID) throws -> (key: Key, secret: KeyData)? {
         
         guard let keyEntry = database.keys.first(where: { $0.key.identifier == identifier })
             else { return nil }
@@ -87,15 +74,15 @@ final class JSONArchiveAuthorizationStore: LockAuthorizationStore {
     }
 }
 
-extension JSONArchiveAuthorizationStore {
+private extension JSONArchiveAuthorizationStore {
     
-    public struct Database {
+    struct Database {
         
-        public var keys: [KeyEntry]
+        var keys: [KeyEntry]
         
-        public var newKeys: [NewKeyEntry]
+        var newKeys: [NewKeyEntry]
         
-        public init() {
+        init() {
             
             self.keys = []
             self.newKeys = []
@@ -105,19 +92,20 @@ extension JSONArchiveAuthorizationStore {
 
 extension JSONArchiveAuthorizationStore.Database {
     
-    public struct KeyEntry {
+    struct KeyEntry {
         
-        public let key: Key
+        let key: Key
         
-        public let secret: KeyData
+        let secret: KeyData
     }
     
-    public struct NewKeyEntry {
+    struct NewKeyEntry {
         
-        public let newKey: Key
+        /// New key
+        let newKey: Key
         
         /// Shared secret used for onboarding
-        public let sharedSecret: KeyData
+        let sharedSecret: KeyData
     }
 }
 
