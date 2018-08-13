@@ -13,10 +13,11 @@ import UIKit
 final class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
-
+    
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         
-        LockManager.shared.log = { log("LockManager: " + $0) }
+        // setup logging
+        LockManager.shared.log = { log("📱 LockManager: " + $0) }
         
         return true
     }

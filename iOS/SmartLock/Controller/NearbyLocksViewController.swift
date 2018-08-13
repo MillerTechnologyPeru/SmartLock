@@ -63,7 +63,15 @@ final class NearbyLocksViewController: UITableViewController {
             
             try LockManager.shared.scan(duration: scanDuration, filterDuplicates: false) { (peripheral) in
                 
-                mainQueue { [weak self] in self?.items.append(peripheral) }
+                mainQueue { [weak self] in
+                    
+                    guard let controller = self else { return }
+                    
+                    if controller.items.contains(peripheral) == false {
+                        
+                        controller.items.append(peripheral)
+                    }
+                }
             }
         })
     }
@@ -95,35 +103,7 @@ final class NearbyLocksViewController: UITableViewController {
         
         let peripheral = self[indexPath]
         
-        performActivity({
-            
-            let information = try LockManager.shared.readInformation(for: peripheral)
-            
-            dump(information)
-            
-            switch information.status {
-                
-            case .setup:
-                
-                let request = SetupRequest()
-                
-                let deviceSharedSecret = KeyData()
-                
-                try LockManager.shared.setup(peripheral: peripheral,
-                                             with: request,
-                                             sharedSecret: deviceSharedSecret)
-                
-                // store new key
-                
-                log("Setup with ")
-                
-                fallthrough
-                
-            case .unlock:
-                
-                break
-            }
-        })
+        selectLock(peripheral)
     }
     
     // MARK: - Private Methods
@@ -143,6 +123,39 @@ final class NearbyLocksViewController: UITableViewController {
         let item = self[indexPath]
         
         cell.textLabel?.text = item.identifier.description
+    }
+    
+    private func selectLock(_ peripheral: Peripheral) {
+        
+        performActivity({
+            
+            var information = try LockManager.shared.readInformation(for: peripheral)
+            
+            dump(information)
+            
+            switch information.status {
+                
+            case .setup:
+                
+                let request = SetupRequest()
+                
+                let deviceSharedSecret = KeyData()
+                
+                information = try LockManager.shared.setup(peripheral: peripheral,
+                                                           with: request,
+                                                           sharedSecret: deviceSharedSecret)
+                
+                // store new key
+                
+                log("Setup with key \(request.identifier)")
+                
+                fallthrough
+                
+            case .unlock:
+                
+                break
+            }
+        })
     }
 }
 

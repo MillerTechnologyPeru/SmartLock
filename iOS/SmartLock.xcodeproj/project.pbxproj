@@ -24,6 +24,7 @@
 		6E6000D12121224D00787DAA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6E6000D02121224D00787DAA /* Assets.xcassets */; };
 		6E60F8A72121259F0054995D /* Store.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60F8A62121259F0054995D /* Store.swift */; };
 		6E60F8AD212127890054995D /* Log.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60F8AC212127890054995D /* Log.swift */; };
+		6E60F8AF212129D20054995D /* Setup.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6E60F8AE212129D20054995D /* Setup.storyboard */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -113,6 +114,7 @@
 		6E6000D02121224D00787DAA /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Assets.xcassets; path = ../../../Lock/Xcode/Cerradura/Assets.xcassets; sourceTree = "<group>"; };
 		6E60F8A62121259F0054995D /* Store.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Store.swift; sourceTree = "<group>"; };
 		6E60F8AC212127890054995D /* Log.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Log.swift; sourceTree = "<group>"; };
+		6E60F8AE212129D20054995D /* Setup.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Setup.storyboard; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -160,6 +162,7 @@
 				6E6000CB21211D0B00787DAA /* Async.swift */,
 				6E6000D02121224D00787DAA /* Assets.xcassets */,
 				6E6000172121119400787DAA /* Main.storyboard */,
+				6E60F8AE212129D20054995D /* Setup.storyboard */,
 				6E60001C2121119500787DAA /* LaunchScreen.storyboard */,
 				6E60001F2121119500787DAA /* Info.plist */,
 				6E6000BE21211C5F00787DAA /* Model */,
@@ -356,6 +359,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6E60F8AF212129D20054995D /* Setup.storyboard in Resources */,
 				6E60001E2121119500787DAA /* LaunchScreen.storyboard in Resources */,
 				6E6000D12121224D00787DAA /* Assets.xcassets in Resources */,
 				6E6000192121119400787DAA /* Main.storyboard in Resources */,
