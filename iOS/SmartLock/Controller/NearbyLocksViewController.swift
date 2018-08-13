@@ -103,8 +103,7 @@ final class NearbyLocksViewController: UITableViewController {
         self.items.removeAll()
         
         // scan
-        performActivity({ try Store.shared.scan(duration: scanDuration) },
-                        completion: { (viewController, _) in viewController.configureView() })
+        performActivity({ try Store.shared.scan(duration: scanDuration) })
     }
     
     // MARK: - UITableViewDataSource
@@ -237,8 +236,7 @@ final class NearbyLocksViewController: UITableViewController {
     
     private func setupLock(_ lock: LockPeripheral, sharedSecret: KeyData, name: String = "Lock") {
         
-        performActivity({ try Store.shared.setup(lock, sharedSecret: sharedSecret, name: name) },
-                        completion: { (viewController, _) in viewController.configureView() })
+        performActivity({ try Store.shared.setup(lock, sharedSecret: sharedSecret, name: name) })
     }
 }
 
