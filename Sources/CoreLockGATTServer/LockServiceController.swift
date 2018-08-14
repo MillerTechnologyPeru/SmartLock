@@ -27,7 +27,7 @@ public final class LockServiceController <Peripheral: PeripheralProtocol> : GATT
         didSet { updateInformation() }
     }
     
-    public var lockConfiguration = LockConfiguration() {
+    public var configurationStore: LockConfigurationStore {
         
         didSet { updateInformation() }
     }
@@ -62,7 +62,9 @@ public final class LockServiceController <Peripheral: PeripheralProtocol> : GATT
         
         self.peripheral = peripheral
         
-        let information = InformationCharacteristic(identifier: lockConfiguration.identifier,
+        let configurationStore = InMemoryLockConfigurationStore()
+        
+        let information = InformationCharacteristic(identifier: configurationStore.configuration.identifier,
                                                     buildVersion: .current,
                                                     version: .current,
                                                     status: .setup,
@@ -99,6 +101,7 @@ public final class LockServiceController <Peripheral: PeripheralProtocol> : GATT
         self.unlockHandle = peripheral.characteristics(for: UnlockCharacteristic.uuid)[0]
         
         self.information = information
+        self.configurationStore = configurationStore
     }
     
     deinit {
@@ -223,7 +226,7 @@ public final class LockServiceController <Peripheral: PeripheralProtocol> : GATT
         
         let status: LockStatus = authorization.isEmpty ? .setup : .unlock
         
-        let identifier = lockConfiguration.identifier
+        let identifier = configurationStore.configuration.identifier
         
         self.information = InformationCharacteristic(identifier: identifier,
                                                      buildVersion: .current,
@@ -233,19 +236,16 @@ public final class LockServiceController <Peripheral: PeripheralProtocol> : GATT
     }
 }
 
+/// Lock Configuration Storage
+public protocol LockConfigurationStore {
+    
+    var configuration: LockConfiguration { get set }
+}
+
+/// Lock Setup Shared Secret Store
 public protocol LockSetupSecretStore {
     
     var sharedSecret: KeyData { get }
-}
-
-public struct InMemoryLockSetupSecret: LockSetupSecretStore {
-    
-    public let sharedSecret: KeyData
-    
-    public init(sharedSecret: KeyData = KeyData()) {
-        
-        self.sharedSecret = sharedSecret
-    }
 }
 
 /// Lock Authorization Store
@@ -264,11 +264,31 @@ public protocol LockUnlockDelegate {
     func unlock(_ action: UnlockAction) throws
 }
 
+public struct InMemoryLockConfigurationStore: LockConfigurationStore {
+    
+    public var configuration: LockConfiguration
+    
+    public init(configuration: LockConfiguration = LockConfiguration()) {
+        
+        self.configuration = configuration
+    }
+}
+
 public struct UnlockSimulator: LockUnlockDelegate {
     
     public func unlock(_ action: UnlockAction) throws {
         
         print("Simulate unlock with action \(action)")
+    }
+}
+
+public struct InMemoryLockSetupSecret: LockSetupSecretStore {
+    
+    public let sharedSecret: KeyData
+    
+    public init(sharedSecret: KeyData = KeyData()) {
+        
+        self.sharedSecret = sharedSecret
     }
 }
 

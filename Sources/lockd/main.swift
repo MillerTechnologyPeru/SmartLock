@@ -76,7 +76,7 @@ func run() throws {
     #if os(macOS)
         let hardware = LockHardware.mac
     #elseif os(Linux)
-        //let hardware = LockHardware
+        let hardware = LockHardware.empty
     #endif
     
     print("Running on hardware:")
