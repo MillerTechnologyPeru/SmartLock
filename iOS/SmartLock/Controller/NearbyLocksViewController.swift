@@ -26,7 +26,7 @@ final class NearbyLocksViewController: UITableViewController {
     
     // MARK: - Properties
     
-    private var items = [LockPeripheral]()
+    private var items = [LockPeripheral<NativeCentral>]()
     
     let scanDuration: TimeInterval = 3.0
     
@@ -46,6 +46,7 @@ final class NearbyLocksViewController: UITableViewController {
     #endif
     
     private var peripheralsObserver: Int?
+    private var informationObserver: Int?
     private var locksObserver: Int?
     
     // MARK: - Loading
@@ -55,6 +56,11 @@ final class NearbyLocksViewController: UITableViewController {
         if let observer = peripheralsObserver {
             
             Store.shared.peripherals.remove(observer: observer)
+        }
+        
+        if let observer = informationObserver {
+            
+            Store.shared.lockInformation.remove(observer: observer)
         }
         
         if let observer = locksObserver {
@@ -67,6 +73,7 @@ final class NearbyLocksViewController: UITableViewController {
         super.viewDidLoad()
         
         peripheralsObserver = Store.shared.peripherals.observe { [weak self] _ in mainQueue { self?.configureView() } }
+        informationObserver = Store.shared.lockInformation.observe { [weak self] _ in mainQueue { self?.configureView() } }
         locksObserver = Store.shared.locks.observe { [weak self] _ in mainQueue { self?.configureView() } }
         
         configureView()
@@ -122,7 +129,17 @@ final class NearbyLocksViewController: UITableViewController {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "PeripheralCell", for: indexPath)
         
+        // configure cell
         configure(cell: cell, at: indexPath)
+        
+        // read information
+        let lock = self[indexPath]
+        if Store.shared.lockInformation.value[lock.scanData.peripheral] == nil {
+            async {
+                do { try Store.shared.readInformation(lock) }
+                catch { log("Could not read information for lock \(lock.identifer)") }
+            }
+        }
         
         return cell
     }
@@ -140,7 +157,7 @@ final class NearbyLocksViewController: UITableViewController {
     
     // MARK: - Private Methods
     
-    private subscript (indexPath: IndexPath) -> LockPeripheral {
+    private subscript (indexPath: IndexPath) -> LockPeripheral<NativeCentral> {
         
         return items[indexPath.row]
     }
@@ -160,19 +177,20 @@ final class NearbyLocksViewController: UITableViewController {
         
         let isEnabled: Bool
         
-        if let lockCache = Store.shared[lock: lock.identifier] {
+        if let lockCache = Store.shared[lock: lock.identifer] {
             
             title = lockCache.name
             isEnabled = true
             
-        } else if lock.information.status == .setup {
+        } else if let information = Store.shared.lockInformation.value[lock.scanData.peripheral],
+            information.status == .setup {
             
-            title = "Setup \(lock.identifier)"
+            title = "Setup \(lock.identifer)"
             isEnabled = true
             
         } else {
             
-            title = lock.identifier.description
+            title = lock.identifer.description
             isEnabled = false
         }
         
@@ -180,32 +198,32 @@ final class NearbyLocksViewController: UITableViewController {
         cell.selectionStyle = isEnabled ? .default : .none
     }
     
-    private func select(_ lock: LockPeripheral) {
+    private func select(_ lock: LockPeripheral<NativeCentral>) {
         
-        log("Selected lock \(lock.information.identifier)")
+        log("Selected lock \(lock.identifer)")
         
-        switch lock.information.status {
-            
-        case .setup:
+        if let information = Store.shared.lockInformation.value[lock.scanData.peripheral],
+            information.status == .setup {
             
             setup(lock)
             
-        case .unlock:
+        } else {
             
             unlock(lock)
         }
     }
     
-    private func unlock(_ lock: LockPeripheral) {
+    private func unlock(_ lock: LockPeripheral<NativeCentral>) {
         
-        guard let lockCache = Store.shared[lock: lock.identifier],
+        guard let lockCache = Store.shared[lock: lock.identifer],
             let keyData = Store.shared[key: lockCache.key.identifier]
             else { return }
         
-        performActivity({ try LockManager.shared.unlock(key: (lockCache.key.identifier, keyData), peripheral: lock.peripheral) })
+        performActivity({ try LockManager.shared.unlock(key: (lockCache.key.identifier, keyData),
+                                                        peripheral: lock.scanData.peripheral) })
     }
     
-    private func setup(_ lock: LockPeripheral) {
+    private func setup(_ lock: LockPeripheral<NativeCentral>) {
         
         // scan QR code
         assert(QRCodeReader.isAvailable())
@@ -234,7 +252,7 @@ final class NearbyLocksViewController: UITableViewController {
         present(readerViewController, animated: true, completion: nil)
     }
     
-    private func setupLock(_ lock: LockPeripheral, sharedSecret: KeyData, name: String = "Lock") {
+    private func setupLock(_ lock: LockPeripheral<NativeCentral>, sharedSecret: KeyData, name: String = "Lock") {
         
         performActivity({ try Store.shared.setup(lock, sharedSecret: sharedSecret, name: name) })
     }

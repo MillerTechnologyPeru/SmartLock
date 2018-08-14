@@ -12,7 +12,6 @@
 		6E6000022121045400787DAA /* InformationCharacteristic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60FF7E2121041400787DAA /* InformationCharacteristic.swift */; };
 		6E6000032121045400787DAA /* Bool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60FF7F2121041400787DAA /* Bool.swift */; };
 		6E6000042121045400787DAA /* Chunk.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60FF802121041400787DAA /* Chunk.swift */; };
-		6E6000052121045400787DAA /* ResultCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60FF812121041400787DAA /* ResultCode.swift */; };
 		6E6000062121045400787DAA /* GATTError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60FF822121041400787DAA /* GATTError.swift */; };
 		6E60FF832121045300787DAA /* Permission.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60FF622121041400787DAA /* Permission.swift */; };
 		6E60FF842121045300787DAA /* SmartLockProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60FF632121041400787DAA /* SmartLockProfile.swift */; };
@@ -45,7 +44,6 @@
 		6E60FF9F2121045300787DAA /* InformationCharacteristic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60FF7E2121041400787DAA /* InformationCharacteristic.swift */; };
 		6E60FFA02121045300787DAA /* Bool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60FF7F2121041400787DAA /* Bool.swift */; };
 		6E60FFA12121045300787DAA /* Chunk.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60FF802121041400787DAA /* Chunk.swift */; };
-		6E60FFA22121045300787DAA /* ResultCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60FF812121041400787DAA /* ResultCode.swift */; };
 		6E60FFA32121045300787DAA /* GATTError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60FF822121041400787DAA /* GATTError.swift */; };
 		6E60FFA42121045300787DAA /* Permission.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60FF622121041400787DAA /* Permission.swift */; };
 		6E60FFA52121045300787DAA /* SmartLockProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60FF632121041400787DAA /* SmartLockProfile.swift */; };
@@ -78,7 +76,6 @@
 		6E60FFC02121045300787DAA /* InformationCharacteristic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60FF7E2121041400787DAA /* InformationCharacteristic.swift */; };
 		6E60FFC12121045300787DAA /* Bool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60FF7F2121041400787DAA /* Bool.swift */; };
 		6E60FFC22121045300787DAA /* Chunk.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60FF802121041400787DAA /* Chunk.swift */; };
-		6E60FFC32121045300787DAA /* ResultCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60FF812121041400787DAA /* ResultCode.swift */; };
 		6E60FFC42121045300787DAA /* GATTError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60FF822121041400787DAA /* GATTError.swift */; };
 		6E60FFC52121045400787DAA /* Permission.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60FF622121041400787DAA /* Permission.swift */; };
 		6E60FFC62121045400787DAA /* SmartLockProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60FF632121041400787DAA /* SmartLockProfile.swift */; };
@@ -111,7 +108,6 @@
 		6E60FFE12121045400787DAA /* InformationCharacteristic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60FF7E2121041400787DAA /* InformationCharacteristic.swift */; };
 		6E60FFE22121045400787DAA /* Bool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60FF7F2121041400787DAA /* Bool.swift */; };
 		6E60FFE32121045400787DAA /* Chunk.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60FF802121041400787DAA /* Chunk.swift */; };
-		6E60FFE42121045400787DAA /* ResultCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60FF812121041400787DAA /* ResultCode.swift */; };
 		6E60FFE52121045400787DAA /* GATTError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60FF822121041400787DAA /* GATTError.swift */; };
 		6E60FFE62121045400787DAA /* Permission.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60FF622121041400787DAA /* Permission.swift */; };
 		6E60FFE72121045400787DAA /* SmartLockProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60FF632121041400787DAA /* SmartLockProfile.swift */; };
@@ -198,7 +194,6 @@
 		6E60FF7E2121041400787DAA /* InformationCharacteristic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InformationCharacteristic.swift; sourceTree = "<group>"; };
 		6E60FF7F2121041400787DAA /* Bool.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bool.swift; sourceTree = "<group>"; };
 		6E60FF802121041400787DAA /* Chunk.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Chunk.swift; sourceTree = "<group>"; };
-		6E60FF812121041400787DAA /* ResultCode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultCode.swift; sourceTree = "<group>"; };
 		6E60FF822121041400787DAA /* GATTError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GATTError.swift; sourceTree = "<group>"; };
 		AD2FAA261CD0B6D800659CF4 /* CoreLock.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = CoreLock.plist; sourceTree = "<group>"; };
 		AD2FAA281CD0B6E100659CF4 /* CoreLockTests.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = CoreLockTests.plist; sourceTree = "<group>"; };
@@ -369,7 +364,6 @@
 				6E60FF7E2121041400787DAA /* InformationCharacteristic.swift */,
 				6E60FF7F2121041400787DAA /* Bool.swift */,
 				6E60FF802121041400787DAA /* Chunk.swift */,
-				6E60FF812121041400787DAA /* ResultCode.swift */,
 				6E60FF822121041400787DAA /* GATTError.swift */,
 			);
 			path = CoreLock;
@@ -616,7 +610,6 @@
 				6E60FF9F2121045300787DAA /* InformationCharacteristic.swift in Sources */,
 				6E60FF972121045300787DAA /* EncryptedData.swift in Sources */,
 				6E60FF892121045300787DAA /* AuthenticationError.swift in Sources */,
-				6E60FFA22121045300787DAA /* ResultCode.swift in Sources */,
 				6E60FF862121045300787DAA /* LockHardware.swift in Sources */,
 				6E60FF942121045300787DAA /* LockState.swift in Sources */,
 				6E60FF952121045300787DAA /* GitCommits.swift in Sources */,
@@ -656,7 +649,6 @@
 				6E60FFE12121045400787DAA /* InformationCharacteristic.swift in Sources */,
 				6E60FFD92121045400787DAA /* EncryptedData.swift in Sources */,
 				6E60FFCB2121045400787DAA /* AuthenticationError.swift in Sources */,
-				6E60FFE42121045400787DAA /* ResultCode.swift in Sources */,
 				6E60FFC82121045400787DAA /* LockHardware.swift in Sources */,
 				6E60FFD62121045400787DAA /* LockState.swift in Sources */,
 				6E60FFD72121045400787DAA /* GitCommits.swift in Sources */,
@@ -696,7 +688,6 @@
 				6E6000022121045400787DAA /* InformationCharacteristic.swift in Sources */,
 				6E60FFFA2121045400787DAA /* EncryptedData.swift in Sources */,
 				6E60FFEC2121045400787DAA /* AuthenticationError.swift in Sources */,
-				6E6000052121045400787DAA /* ResultCode.swift in Sources */,
 				6E60FFE92121045400787DAA /* LockHardware.swift in Sources */,
 				6E60FFF72121045400787DAA /* LockState.swift in Sources */,
 				6E60FFF82121045400787DAA /* GitCommits.swift in Sources */,
@@ -736,7 +727,6 @@
 				6E60FFC02121045300787DAA /* InformationCharacteristic.swift in Sources */,
 				6E60FFB82121045300787DAA /* EncryptedData.swift in Sources */,
 				6E60FFAA2121045300787DAA /* AuthenticationError.swift in Sources */,
-				6E60FFC32121045300787DAA /* ResultCode.swift in Sources */,
 				6E60FFA72121045300787DAA /* LockHardware.swift in Sources */,
 				6E60FFB52121045300787DAA /* LockState.swift in Sources */,
 				6E60FFB62121045300787DAA /* GitCommits.swift in Sources */,

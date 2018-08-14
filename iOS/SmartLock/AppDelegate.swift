@@ -17,7 +17,7 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         
         // print app info
-        log("Launching Cerradura v\(AppVersion) Build \(AppBuild)")
+        log("Launching SmartLock v\(AppVersion) Build \(AppBuild)")
         
         // setup logging
         LockManager.shared.log = { log("📱 LockManager: " + $0) }

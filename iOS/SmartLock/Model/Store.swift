@@ -7,7 +7,9 @@
 //
 
 import Foundation
+import Bluetooth
 import CoreLock
+import GATT
 
 #if os(iOS)
 import KeychainAccess
@@ -29,18 +31,16 @@ public final class Store {
     private let keychain = Keychain()
     
     private let storageKey = DefaultsKey<[UUID: LockCache]>("locks")
-
+    
+    // Stored keys
     public private(set) var locks = Observable([UUID: LockCache]()) {
         
         didSet { writeCache() }
     }
     
-    public private(set) var peripherals = Observable([UUID: LockPeripheral]())
-    
-    private func insert(_ information: InformationCharacteristic, for peripheral: LockManager.Peripheral) {
-        
-        self.peripherals.value[information.identifier] = LockPeripheral(peripheral: peripheral, information: information)
-    }
+    // BLE cache
+    public private(set) var peripherals = Observable([NativeCentral.Peripheral: LockPeripheral<NativeCentral>]())
+    public private(set) var lockInformation = Observable([NativeCentral.Peripheral: InformationCharacteristic]())
     
     /// Key identifier for the specified
     public subscript (lock identifier: UUID) -> LockCache? {
@@ -87,49 +87,40 @@ public extension Store {
         
         self.peripherals.value.removeAll()
         
-        var peripherals = Set<LockManager.Peripheral>()
-        
-        try LockManager.shared.scan(duration: duration, filterDuplicates: false) { peripherals.insert($0) }
-        
-        for peripheral in peripherals {
-            
-            do {
-                
-                // read lock info, status and identifier
-                let information = try LockManager.shared.readInformation(for: peripheral)
-                
-                // store peripheral cache
-                self.insert(information, for: peripheral)
-                
-            } catch { log("Error: \(error)") }
+        try LockManager.shared.scan(duration: duration, filterDuplicates: false) { [unowned self] in
+            self.peripherals.value[$0.scanData.peripheral] = $0
         }
     }
     
     /// Setup a lock.
-    func setup(_ lock: LockPeripheral, sharedSecret: KeyData, name: String) throws {
+    func setup(_ lock: LockPeripheral<NativeCentral>,
+               sharedSecret: KeyData,
+               name: String) throws {
         
-        let keyIdentifier = UUID()
+        let setupRequest = SetupRequest()
         
-        let keySecret = KeyData()
-        
-        let request = SetupRequest(identifier: keyIdentifier, secret: keySecret)
-        
-        let information = try LockManager.shared.setup(peripheral: lock.peripheral,
-                                                       with: request,
+        let information = try LockManager.shared.setup(peripheral: lock.scanData.peripheral,
+                                                       with: setupRequest,
                                                        sharedSecret: sharedSecret)
         
-        let newKey = Key(identifier: request.identifier,
-                         name: "",
-                         permission: .owner)
+        let ownerKey = Key(setup: setupRequest)
         
-        let lockCache = LockCache(key: newKey, name: name)
+        let lockCache = LockCache(key: ownerKey, name: name)
         
         // store key
-        self[lock: lock.identifier] = lockCache
-        self[key: keyIdentifier] = keySecret
+        self[lock: lock.identifer] = lockCache
+        self[key: ownerKey.identifier] = setupRequest.secret
         
         // update lock information
-        self.insert(information, for: lock.peripheral)
+        self.lockInformation.value[lock.scanData.peripheral] = information
+    }
+    
+    func readInformation(_ lock: LockPeripheral<NativeCentral>) throws {
+        
+        let information = try LockManager.shared.readInformation(for: lock.scanData.peripheral)
+        
+        // update lock information
+        self.lockInformation.value[lock.scanData.peripheral] = information
     }
 }
 
@@ -143,17 +134,4 @@ public struct LockCache: Codable {
     
     /// User-friendly lock name
     public let name: String
-}
-
-/// Lock Peripheral
-public struct LockPeripheral {
-    
-    public let peripheral: LockManager.Peripheral
-    
-    public let information: InformationCharacteristic
-    
-    public var identifier: UUID {
-        
-        return information.identifier
-    }
 }

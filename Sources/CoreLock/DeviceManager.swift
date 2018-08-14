@@ -43,13 +43,13 @@ public final class SmartLockManager <Central: CentralProtocol> {
     /// - Parameter event: Callback for a found device.
     public func scan(duration: TimeInterval,
                      filterDuplicates: Bool = true,
-                     event: ((Peripheral) -> ())? = nil) throws {
+                     event: @escaping ((LockPeripheral<Central>) -> ())) throws {
         
         let start = Date()
         
         let end = start + duration
         
-        try self.scan(filterDuplicates: filterDuplicates, event: event, scanMore: { Date() < end  })
+        try self.scan(filterDuplicates: filterDuplicates, scanMore: { Date() < end  }, event: event)
     }
     
     /// Scans for nearby devices.
@@ -59,29 +59,29 @@ public final class SmartLockManager <Central: CentralProtocol> {
     /// - Parameter scanMore: Callback for determining whether the manager
     /// should continue scanning for more devices.
     public func scan(filterDuplicates: Bool = true,
-                     event: ((Peripheral) -> ())? = nil,
-                     scanMore: () -> (Bool)) throws {
+                     scanMore: () -> (Bool),
+                     event: @escaping ((LockPeripheral<Central>) -> ())) throws {
         
         var foundPeripherals = Set<Peripheral>()
         
-        var foundLocks = Set<Peripheral>()
+        var foundLocks = [Peripheral: LockPeripheral<Central>]()
         
         try self.central.scan(filterDuplicates: filterDuplicates, shouldContinueScanning: scanMore) { (scanData) in
             
             foundPeripherals.insert(scanData.peripheral)
             
             // filter peripheral
-            guard scanData.advertisementData.serviceUUIDs.contains(LockService.uuid)
+            guard let lock = LockPeripheral<Central>(scanData)
                 else { return }
             
-            foundLocks.insert(scanData.peripheral)
+            foundLocks[scanData.peripheral] = lock
             
-            event?(scanData.peripheral)
+            event(lock)
         }
         
-        let foundDevicesCount = foundLocks.count
-        
-        if foundDevicesCount > 0 { self.log?("Found \(foundPeripherals.count) peripherals (\(foundLocks.count) Locks)") }
+        if foundPeripherals.isEmpty == false {
+            log?("Found \(foundPeripherals.count) peripherals (\(foundLocks.count) Locks)")
+        }
     }
     
     public func readInformation(for peripheral: Peripheral,
@@ -145,5 +145,37 @@ public final class SmartLockManager <Central: CentralProtocol> {
             // Write unlock data to characteristic
             try self.central.write(characteristicValue, for: cache, timeout: timeout)
         }
+    }
+}
+
+public struct LockPeripheral <Central: CentralProtocol> {
+    
+    /// Identifier of the lock
+    public var identifer: UUID {
+        
+        return beacon.uuid
+    }
+    
+    /// Advertised iBeacon
+    public let beacon: AppleBeacon
+    
+    /// Scan Data
+    public let scanData: ScanData<Central.Peripheral, Central.Advertisement>
+    
+    /// Initialize from scan data.
+    internal init?(_ scanData: ScanData<Central.Peripheral, Central.Advertisement>) {
+        
+        // filter peripheral
+        guard scanData.advertisementData.serviceUUIDs.contains(LockService.uuid)
+            else { return nil }
+        
+        // get UUID from iBeacon
+        guard let data = scanData.advertisementData.manufacturerData,
+            let manufacturerData = GAPManufacturerSpecificData(data: data),
+            let beacon = AppleBeacon(manufactererData: manufacturerData)
+            else { return nil }
+        
+        self.scanData = scanData
+        self.beacon = beacon
     }
 }
