@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
+        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell contentMode="scaleToFill" misplaced="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="LockTableViewCell" rowHeight="50" id="lyJ-26-041" customClass="LockTableViewCell" customModule="SmartLock" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="623" height="50"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="lyJ-26-041" id="ViR-ve-Wnx">
+                <rect key="frame" x="0.0" y="0.0" width="375" height="67.5"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Anytime" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xdG-uQ-Fad">
+                        <rect key="frame" x="67" y="42" width="292" height="17"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                        <color key="textColor" red="0.66666666669999997" green="0.66666666669999997" blue="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Lock Name" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HtH-Ax-ubI" userLabel="Lock Name Label">
+                        <rect key="frame" x="67" y="11" width="292" height="23"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="19"/>
+                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="permissionBadgeOwner" translatesAutoresizingMaskIntoConstraints="NO" id="ugV-rn-Ig8">
+                        <rect key="frame" x="8" y="8" width="51" height="51"/>
+                        <constraints>
+                            <constraint firstAttribute="width" secondItem="ugV-rn-Ig8" secondAttribute="height" multiplier="1:1" id="2o1-oe-qcz"/>
+                            <constraint firstAttribute="width" constant="51" id="x0A-Ae-LrP"/>
+                        </constraints>
+                    </imageView>
+                    <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" animating="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="VER-Zq-zSD">
+                        <rect key="frame" x="15" y="15" width="37" height="37"/>
+                        <color key="color" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    </activityIndicatorView>
+                </subviews>
+                <constraints>
+                    <constraint firstItem="VER-Zq-zSD" firstAttribute="centerY" secondItem="ugV-rn-Ig8" secondAttribute="centerY" id="4HY-yB-aBV"/>
+                    <constraint firstItem="HtH-Ax-ubI" firstAttribute="top" secondItem="ViR-ve-Wnx" secondAttribute="topMargin" id="B74-cr-8OJ"/>
+                    <constraint firstAttribute="trailingMargin" secondItem="HtH-Ax-ubI" secondAttribute="trailing" id="HxB-dj-YIF"/>
+                    <constraint firstItem="HtH-Ax-ubI" firstAttribute="leading" secondItem="xdG-uQ-Fad" secondAttribute="leading" id="NjE-YR-Fba"/>
+                    <constraint firstItem="ugV-rn-Ig8" firstAttribute="top" relation="greaterThanOrEqual" secondItem="ViR-ve-Wnx" secondAttribute="top" constant="8" id="WfO-VU-IXe"/>
+                    <constraint firstItem="ugV-rn-Ig8" firstAttribute="leading" secondItem="ViR-ve-Wnx" secondAttribute="leading" constant="8" id="Y5r-55-DCb"/>
+                    <constraint firstItem="VER-Zq-zSD" firstAttribute="centerX" secondItem="ugV-rn-Ig8" secondAttribute="centerX" id="aiS-d8-M8k"/>
+                    <constraint firstItem="xdG-uQ-Fad" firstAttribute="top" secondItem="HtH-Ax-ubI" secondAttribute="bottom" constant="8" id="bBA-1B-W9Z"/>
+                    <constraint firstItem="ugV-rn-Ig8" firstAttribute="centerY" secondItem="ViR-ve-Wnx" secondAttribute="centerY" id="bt3-DQ-WXV"/>
+                    <constraint firstItem="HtH-Ax-ubI" firstAttribute="leading" secondItem="ugV-rn-Ig8" secondAttribute="trailing" constant="8" id="gPS-zr-gXo"/>
+                    <constraint firstItem="HtH-Ax-ubI" firstAttribute="trailing" secondItem="xdG-uQ-Fad" secondAttribute="trailing" id="qN5-yL-5Bf"/>
+                    <constraint firstItem="ugV-rn-Ig8" firstAttribute="width" secondItem="ugV-rn-Ig8" secondAttribute="height" multiplier="1:1" id="r5B-XR-wWM"/>
+                    <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="xdG-uQ-Fad" secondAttribute="bottomMargin" id="slQ-jb-aR4"/>
+                </constraints>
+            </tableViewCellContentView>
+            <inset key="separatorInset" minX="67" minY="0.0" maxX="0.0" maxY="0.0"/>
+            <connections>
+                <outlet property="activityIndicatorView" destination="VER-Zq-zSD" id="JnQ-A2-yBx"/>
+                <outlet property="lockDetailLabel" destination="xdG-uQ-Fad" id="6I0-Ve-QjA"/>
+                <outlet property="lockImageView" destination="ugV-rn-Ig8" id="swc-gg-jLD"/>
+                <outlet property="lockTitleLabel" destination="HtH-Ax-ubI" id="0JH-DV-B90"/>
+            </connections>
+            <point key="canvasLocation" x="41" y="57"/>
+        </tableViewCell>
+    </objects>
+    <resources>
+        <image name="permissionBadgeOwner" width="51" height="51"/>
+    </resources>
+</document>

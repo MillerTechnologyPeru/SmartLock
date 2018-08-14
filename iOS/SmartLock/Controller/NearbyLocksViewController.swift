@@ -28,6 +28,8 @@ final class NearbyLocksViewController: UITableViewController {
     
     private var items = [LockPeripheral<NativeCentral>]()
     
+    private var loading = Set<Peripheral>()
+    
     let scanDuration: TimeInterval = 3.0
     
     #if os(iOS)
@@ -67,9 +69,16 @@ final class NearbyLocksViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        // register cell
+        tableView.register(LockTableViewCell.nib, forCellReuseIdentifier: LockTableViewCell.reuseIdentifier)
+        tableView.rowHeight = UITableViewAutomaticDimension
+        tableView.estimatedRowHeight = 60
+        
+        // observe model changes
         peripheralsObserver = Store.shared.peripherals.observe { [weak self] _ in mainQueue { self?.configureView() } }
         informationObserver = Store.shared.lockInformation.observe { [weak self] _ in mainQueue { self?.configureView() } }
         
+        // Update UI
         configureView()
         
         // try to scan
@@ -123,21 +132,14 @@ final class NearbyLocksViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        let cell = tableView.dequeueReusableCell(withIdentifier: "PeripheralCell", for: indexPath)
-        
-        // configure cell
-        configure(cell: cell, at: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: LockTableViewCell.reuseIdentifier, for: indexPath) as! LockTableViewCell
         
         // read information
         let lock = self[indexPath]
-        async {
-            
-            if Store.shared.lockInformation.value[lock.scanData.peripheral] == nil {
-                
-                do { try Store.shared.readInformation(lock) }
-                catch { log("Could not read information for peripheral \(lock.scanData.peripheral)") }
-            }
-        }
+        loadLockInformation(lock)
+        
+        // configure cell
+        configure(cell: cell, at: indexPath)
         
         return cell
     }
@@ -168,14 +170,45 @@ final class NearbyLocksViewController: UITableViewController {
         tableView.reloadData()
     }
     
-    private func configure(cell: UITableViewCell, at indexPath: IndexPath) {
+    private func configure(cell: LockTableViewCell, at indexPath: IndexPath) {
         
         let lock = self[indexPath]
+        let peripheral = lock.scanData.peripheral
         
         var title = lock.scanData.peripheral.description
+        var detail = "Unknown Lock"
         var isEnabled = false
+        var image: UIImage?
         
-        if let information = Store.shared.lockInformation.value[lock.scanData.peripheral] {
+        let isLoading = self.loading.contains(peripheral)
+        
+        if isLoading {
+            
+            detail = "Loading..."
+            
+            cell.activityIndicatorView.isHidden = false
+            
+            if cell.activityIndicatorView.isAnimating == false {
+                
+                cell.activityIndicatorView.startAnimating()
+            }
+            
+        } else {
+            
+            if cell.activityIndicatorView.isAnimating == false {
+                
+                cell.activityIndicatorView.stopAnimating()
+            }
+        }
+        
+        // hide image if loading
+        cell.lockImageView.isHidden = isLoading
+        
+        if let information = Store.shared.lockInformation.value[lock.scanData.peripheral],
+            isLoading == false {
+            
+            title = information.identifier.description
+            isEnabled = true
             
             switch information.status {
                 
@@ -184,18 +217,55 @@ final class NearbyLocksViewController: UITableViewController {
                 // known lock
                 if let lockCache = Store.shared[lock: information.identifier] {
                     
+                    let permission = lockCache.key.permission
+                    
+                    let permissionImage: UIImage
+                    
+                    let permissionText: String
+                    
+                    switch permission {
+                        
+                    case .owner:
+                        
+                        permissionImage = #imageLiteral(resourceName: "permissionBadgeOwner")
+                        
+                        permissionText = "Owner"
+                        
+                    case .admin:
+                        
+                        permissionImage = #imageLiteral(resourceName: "permissionBadgeAdmin")
+                        
+                        permissionText = "Admin"
+                        
+                    case .anytime:
+                        
+                        permissionImage = #imageLiteral(resourceName: "permissionBadgeAnytime")
+                        
+                        permissionText = "Anytime"
+                        
+                    case .scheduled:
+                        
+                        permissionImage = #imageLiteral(resourceName: "permissionBadgeScheduled")
+                        
+                        permissionText = "Scheduled" // FIXME: Localized Schedule text
+                    }
+                    
                     title = lockCache.name
-                    isEnabled = true
+                    detail = permissionText
+                    image = permissionImage
                 }
                 
             case .setup:
                 
-                title = "Setup \(information.identifier)"
-                isEnabled = true
+                detail = "Setup"
+                image = #imageLiteral(resourceName: "permissionBadgeOwner")
             }
         }
         
-        cell.textLabel?.text = title
+        cell.lockTitleLabel.text = title
+        cell.lockDetailLabel.text = detail
+        cell.lockImageView.image = image
+        
         cell.selectionStyle = isEnabled ? .default : .none
     }
     
@@ -211,6 +281,27 @@ final class NearbyLocksViewController: UITableViewController {
         } else {
             
             unlock(lock)
+        }
+    }
+    
+    private func loadLockInformation(_ lock: LockPeripheral<NativeCentral>) {
+        
+        let peripheral = lock.scanData.peripheral
+        
+        // read info if not loading and not cached
+        if Store.shared.lockInformation.value[peripheral] == nil,
+            loading.contains(peripheral) == false {
+            
+            loading.insert(peripheral)
+            
+            async {
+                
+                do { try Store.shared.readInformation(lock) }
+                catch { log("Could not read information for peripheral \(lock.scanData.peripheral)") }
+                
+                // no longer loading
+                mainQueue { [weak self] in self?.loading.remove(peripheral) }
+            }
         }
     }
     
