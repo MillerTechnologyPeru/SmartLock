@@ -110,7 +110,9 @@ final class NearbyLocksViewController: UITableViewController {
         self.items.removeAll()
         
         // scan
-        performActivity({ try Store.shared.scan(duration: scanDuration) })
+        performActivity({ try Store.shared.scan(duration: scanDuration) }) { (viewController, _) in
+            if viewController.items.isEmpty { viewController.scan() } // scan again
+        }
     }
     
     // MARK: - UITableViewDataSource
