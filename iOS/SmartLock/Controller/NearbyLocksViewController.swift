@@ -323,10 +323,10 @@ final class NearbyLocksViewController: UITableViewController {
         
         readerViewController.completionBlock = { [unowned self] (result: QRCodeReaderResult?) in
             
-            // did not scan
-            guard let result = result else { return }
-            
             self.readerViewController.dismiss(animated: true, completion: {
+                
+                // did not scan
+                guard let result = result else { return }
                 
                 guard let data = Data(base64Encoded: result.value),
                     let sharedSecret = KeyData(data: data) else {
