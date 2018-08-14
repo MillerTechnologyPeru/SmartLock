@@ -107,13 +107,13 @@ public final class SmartLockManager <Central: CentralProtocol> {
                       sharedSecret: KeyData,
                       timeout: TimeInterval = .gattDefaultTimeout) throws -> InformationCharacteristic {
         
-        // encrypt owner key data
-        let characteristicValue = try SetupCharacteristic(request: request,
-                                                          sharedSecret: sharedSecret)
-        
         let timeout = Timeout(timeout: timeout)
         
         return try central.device(for: peripheral, timeout: timeout) { [unowned self] (cache) in
+            
+            // encrypt owner key data
+            let characteristicValue = try SetupCharacteristic(request: request,
+                                                              sharedSecret: sharedSecret)
             
             // write setup characteristic
             try self.central.write(characteristicValue, for: cache, timeout: timeout)
@@ -134,13 +134,13 @@ public final class SmartLockManager <Central: CentralProtocol> {
                        peripheral: Peripheral,
                        timeout: TimeInterval = .gattDefaultTimeout) throws {
         
-        let characteristicValue = UnlockCharacteristic(identifier: key.identifier,
-                                                       action: action,
-                                                       authentication: Authentication(key: key.secret))
-        
         let timeout = Timeout(timeout: timeout)
         
         return try central.device(for: peripheral, timeout: timeout) { [unowned self] (cache) in
+            
+            let characteristicValue = UnlockCharacteristic(identifier: key.identifier,
+                                                           action: action,
+                                                           authentication: Authentication(key: key.secret))
             
             // Write unlock data to characteristic
             try self.central.write(characteristicValue, for: cache, timeout: timeout)
