@@ -88,12 +88,8 @@ public final class Defaults {
             let decoder = JSONDecoder()
             let decoded = try decoder.decode(ValueType.self, from: data)
             return decoded
-        } catch {
-            #if DEBUG
-                print(error)
-            #endif
-        }
-
+        } catch { log("⚠️ Could not decode: \(error)") }
+        
         return nil
         
     }
@@ -114,11 +110,7 @@ public final class Defaults {
             let encoded = try encoder.encode(value)
             userDefaults.set(encoded, forKey: key._key)
             userDefaults.synchronize()
-        } catch {
-            #if DEBUG
-                print(error)
-            #endif
-        }
+        } catch { log("⚠️ Could not encode: \(error)") }
     }
     
     /// Checks if the specified type is a Codable from the Swift standard library.
