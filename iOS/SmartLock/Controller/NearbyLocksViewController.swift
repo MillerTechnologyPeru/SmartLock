@@ -62,11 +62,6 @@ final class NearbyLocksViewController: UITableViewController {
             
             Store.shared.lockInformation.remove(observer: observer)
         }
-        
-        if let observer = locksObserver {
-            
-            Store.shared.locks.remove(observer: observer)
-        }
     }
 
     override func viewDidLoad() {
@@ -74,7 +69,6 @@ final class NearbyLocksViewController: UITableViewController {
         
         peripheralsObserver = Store.shared.peripherals.observe { [weak self] _ in mainQueue { self?.configureView() } }
         informationObserver = Store.shared.lockInformation.observe { [weak self] _ in mainQueue { self?.configureView() } }
-        locksObserver = Store.shared.locks.observe { [weak self] _ in mainQueue { self?.configureView() } }
         
         configureView()
         
@@ -136,10 +130,12 @@ final class NearbyLocksViewController: UITableViewController {
         
         // read information
         let lock = self[indexPath]
-        if Store.shared.lockInformation.value[lock.scanData.peripheral] == nil {
-            async {
+        async {
+            
+            if Store.shared.lockInformation.value[lock.scanData.peripheral] == nil {
+                
                 do { try Store.shared.readInformation(lock) }
-                catch { log("Could not read information for lock \(lock.identifer)") }
+                catch { log("Could not read information for peripheral \(lock.scanData.peripheral)") }
             }
         }
         
@@ -166,7 +162,8 @@ final class NearbyLocksViewController: UITableViewController {
     
     private func configureView() {
         
-        self.items = Array(Store.shared.peripherals.value.values)
+        // sort by signal
+        self.items = Store.shared.peripherals.value.values.sorted(by: { $0.scanData.rssi < $1.scanData.rssi })
         
         tableView.reloadData()
     }
@@ -175,25 +172,27 @@ final class NearbyLocksViewController: UITableViewController {
         
         let lock = self[indexPath]
         
-        let title: String
+        var title = lock.scanData.peripheral.description
+        var isEnabled = false
         
-        let isEnabled: Bool
-        
-        if let lockCache = Store.shared[lock: lock.identifer] {
+        if let information = Store.shared.lockInformation.value[lock.scanData.peripheral] {
             
-            title = lockCache.name
-            isEnabled = true
-            
-        } else if let information = Store.shared.lockInformation.value[lock.scanData.peripheral],
-            information.status == .setup {
-            
-            title = "Setup \(lock.identifer)"
-            isEnabled = true
-            
-        } else {
-            
-            title = lock.identifer.description
-            isEnabled = false
+            switch information.status {
+                
+            case .unlock:
+                
+                // known lock
+                if let lockCache = Store.shared[lock: information.identifier] {
+                    
+                    title = lockCache.name
+                    isEnabled = true
+                }
+                
+            case .setup:
+                
+                title = "Setup \(information.identifier)"
+                isEnabled = true
+            }
         }
         
         cell.textLabel?.text = title
@@ -202,7 +201,7 @@ final class NearbyLocksViewController: UITableViewController {
     
     private func select(_ lock: LockPeripheral<NativeCentral>) {
         
-        log("Selected lock \(lock.identifer)")
+        log("Selected peripheral \(lock.scanData.peripheral)")
         
         if let information = Store.shared.lockInformation.value[lock.scanData.peripheral],
             information.status == .setup {
@@ -217,7 +216,8 @@ final class NearbyLocksViewController: UITableViewController {
     
     private func unlock(_ lock: LockPeripheral<NativeCentral>) {
         
-        guard let lockCache = Store.shared[lock: lock.identifer],
+        guard let information = Store.shared.lockInformation.value[lock.scanData.peripheral],
+            let lockCache = Store.shared[lock: information.identifier],
             let keyData = Store.shared[key: lockCache.key.identifier]
             else { return }
         

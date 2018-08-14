@@ -33,7 +33,7 @@ public final class Store {
     private let storageKey = DefaultsKey<[UUID: LockCache]>("locks")
     
     // Stored keys
-    public private(set) var locks = Observable([UUID: LockCache]()) {
+    private var locks = [UUID: LockCache]() {
         
         didSet { writeCache() }
     }
@@ -45,9 +45,9 @@ public final class Store {
     /// Key identifier for the specified
     public subscript (lock identifier: UUID) -> LockCache? {
         
-        get { return locks.value[identifier] }
+        get { return locks[identifier] }
         
-        set { locks.value[identifier] = newValue }
+        set { locks[identifier] = newValue }
     }
     
     public subscript (key identifier: UUID) -> KeyData? {
@@ -72,12 +72,12 @@ public final class Store {
     
     private func loadCache() {
         
-        locks.value = defaults.get(for: storageKey) ?? [:]
+        locks = defaults.get(for: storageKey) ?? [:]
     }
     
     private func writeCache() {
         
-        defaults.set(locks.value, for: storageKey)
+        defaults.set(locks, for: storageKey)
     }
 }
 
@@ -108,7 +108,7 @@ public extension Store {
         let lockCache = LockCache(key: ownerKey, name: name)
         
         // store key
-        self[lock: lock.identifer] = lockCache
+        self[lock: information.identifier] = lockCache
         self[key: ownerKey.identifier] = setupRequest.secret
         
         // update lock information

@@ -146,15 +146,6 @@ public final class SmartLockManager <Central: CentralProtocol> {
 
 public struct LockPeripheral <Central: CentralProtocol> {
     
-    /// Identifier of the lock
-    public var identifer: UUID {
-        
-        return beacon.uuid
-    }
-    
-    /// Advertised iBeacon
-    public let beacon: AppleBeacon
-    
     /// Scan Data
     public let scanData: ScanData<Central.Peripheral, Central.Advertisement>
     
@@ -165,13 +156,6 @@ public struct LockPeripheral <Central: CentralProtocol> {
         guard scanData.advertisementData.serviceUUIDs.contains(LockService.uuid)
             else { return nil }
         
-        // get UUID from iBeacon
-        guard let data = scanData.advertisementData.manufacturerData,
-            let manufacturerData = GAPManufacturerSpecificData(data: data),
-            let beacon = AppleBeacon(manufactererData: manufacturerData)
-            else { return nil }
-        
         self.scanData = scanData
-        self.beacon = beacon
     }
 }
