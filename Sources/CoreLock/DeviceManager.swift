@@ -62,13 +62,9 @@ public final class SmartLockManager <Central: CentralProtocol> {
                      scanMore: () -> (Bool),
                      event: @escaping ((LockPeripheral<Central>) -> ())) throws {
         
-        var foundPeripherals = Set<Peripheral>()
-        
         var foundLocks = [Peripheral: LockPeripheral<Central>]()
         
         try self.central.scan(filterDuplicates: filterDuplicates, shouldContinueScanning: scanMore) { (scanData) in
-            
-            foundPeripherals.insert(scanData.peripheral)
             
             // filter peripheral
             guard let lock = LockPeripheral<Central>(scanData)
@@ -79,8 +75,8 @@ public final class SmartLockManager <Central: CentralProtocol> {
             event(lock)
         }
         
-        if foundPeripherals.isEmpty == false {
-            log?("Found \(foundPeripherals.count) peripherals (\(foundLocks.count) Locks)")
+        if foundLocks.isEmpty == false {
+            log?("Found \(foundLocks.count) Locks")
         }
     }
     

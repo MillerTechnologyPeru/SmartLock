@@ -69,8 +69,13 @@ func run() throws {
     while peripheral.state != .poweredOn { sleep(1) }
     #endif
     
-    // Intialize Smart Connect BLE Controller
-    controller = try LockController(peripheral: peripheral)
+    let configurationStore = try LockConfigurationFile(
+        url: URL(fileURLWithPath: "/opt/colemancda/lockd/config.json")
+    )
+    
+    let lockIdentifier = configurationStore.configuration.identifier
+    
+    print("🔒 Lock \(lockIdentifier)")
     
     // setup controller
     #if os(macOS)
@@ -82,11 +87,12 @@ func run() throws {
     print("Running on hardware:")
     dump(hardware)
     
+    // Intialize Smart Connect BLE Controller
+    controller = try LockController(peripheral: peripheral)
+    
     controller?.hardware = hardware
     
-    controller?.lockServiceController.configurationStore = try LockConfigurationFile(
-        url: URL(fileURLWithPath: "/opt/colemancda/lockd/config.json")
-    )
+    controller?.lockServiceController.configurationStore = configurationStore
     
     controller?.lockServiceController.authorization = AuthorizationStoreFile(
         url: URL(fileURLWithPath: "/opt/colemancda/lockd/data.json")
@@ -100,7 +106,7 @@ func run() throws {
     try peripheral.start()
     
     // configure custom advertising
-    try hostController.setSmartLockAdvertisingData()
+    try hostController.setSmartLockAdvertisingData(lock: lockIdentifier, rssi: 30) // FIXME: RSSI
     try hostController.setSmartLockScanResponse()
     
     // run main loop

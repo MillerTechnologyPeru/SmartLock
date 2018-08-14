@@ -27,9 +27,9 @@ public extension UUID {
 public extension BluetoothHostControllerInterface {
     
     /// LE Advertise with iBeacon
-    func setSmartLockAdvertisingData(commandTimeout: HCICommandTimeout = .default) throws {
+    func setSmartLockAdvertisingData(lock: UUID, rssi: Int8, commandTimeout: HCICommandTimeout = .default) throws {
         
-        try iBeacon(.smartLock(rssi: -10), // FIXME: RSSI
+        try iBeacon(AppleBeacon(uuid: lock, rssi: rssi),
                     flags: GAPFlags(flags: [.lowEnergyGeneralDiscoverableMode]),
                     interval: .min)
     }

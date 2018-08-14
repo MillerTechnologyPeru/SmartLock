@@ -7,14 +7,20 @@
 //
 
 import Foundation
+
+#if os(iOS)
 import UIKit
+import CoreBluetooth
+import CoreLocation
+#endif
 
 @UIApplicationMain
 final class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
     
-    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
+    func application(_ application: UIApplication,
+                     didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         
         // print app info
         log("Launching SmartLock v\(AppVersion) Build \(AppBuild)")
