@@ -239,7 +239,9 @@ public final class LockServiceController <Peripheral: PeripheralProtocol> : GATT
 /// Lock Configuration Storage
 public protocol LockConfigurationStore {
     
-    var configuration: LockConfiguration { get set }
+    var configuration: LockConfiguration { get }
+    
+    func update(_ configuration: LockConfiguration) throws
 }
 
 /// Lock Setup Shared Secret Store
@@ -264,11 +266,16 @@ public protocol LockUnlockDelegate {
     func unlock(_ action: UnlockAction) throws
 }
 
-public struct InMemoryLockConfigurationStore: LockConfigurationStore {
+public final class InMemoryLockConfigurationStore: LockConfigurationStore {
     
-    public var configuration: LockConfiguration
+    public private(set) var configuration: LockConfiguration
     
     public init(configuration: LockConfiguration = LockConfiguration()) {
+        
+        self.configuration = configuration
+    }
+    
+    public func update(_ configuration: LockConfiguration) throws {
         
         self.configuration = configuration
     }

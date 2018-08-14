@@ -84,12 +84,16 @@ func run() throws {
     
     controller?.hardware = hardware
     
-    controller?.lockServiceController.setupSecret = try LockSetupSecretBase64File(
-        createdAt: URL(fileURLWithPath: "/opt/colemancda/lockd/sharedSecret")
+    controller?.lockServiceController.configurationStore = try LockConfigurationFile(
+        url: URL(fileURLWithPath: "/opt/colemancda/lockd/config.json")
     )
     
-    controller?.lockServiceController.authorization = JSONArchiveAuthorizationStore(
+    controller?.lockServiceController.authorization = AuthorizationStoreFile(
         url: URL(fileURLWithPath: "/opt/colemancda/lockd/data.json")
+    )
+    
+    controller?.lockServiceController.setupSecret = try LockSetupSecretFile(
+        createdAt: URL(fileURLWithPath: "/opt/colemancda/lockd/sharedSecret")
     )
     
     // publish GATT server, enable advertising

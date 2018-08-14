@@ -1,5 +1,5 @@
 //
-//  JSONArchiveAuthorizationStore.swift
+//  AuthorizationStoreFile.swift
 //  SmartLock
 //
 //  Created by Alsey Coleman Miller on 8/13/18.
@@ -15,7 +15,7 @@ import CoreLock
     import Codable
 #endif
 
-public final class JSONArchiveAuthorizationStore: LockAuthorizationStore {
+public final class AuthorizationStoreFile: LockAuthorizationStore {
     
     public init(url: URL) {
         
@@ -74,7 +74,7 @@ public final class JSONArchiveAuthorizationStore: LockAuthorizationStore {
     }
 }
 
-private extension JSONArchiveAuthorizationStore {
+private extension AuthorizationStoreFile {
     
     struct Database {
         
@@ -90,7 +90,7 @@ private extension JSONArchiveAuthorizationStore {
     }
 }
 
-extension JSONArchiveAuthorizationStore.Database {
+extension AuthorizationStoreFile.Database {
     
     struct KeyEntry {
         
@@ -109,7 +109,7 @@ extension JSONArchiveAuthorizationStore.Database {
     }
 }
 
-extension JSONArchiveAuthorizationStore.Database: Codable {
+extension AuthorizationStoreFile.Database: Codable {
     
     internal enum CodingKeys: String, CodingKey {
         
@@ -134,7 +134,7 @@ extension JSONArchiveAuthorizationStore.Database: Codable {
     }
 }
 
-extension JSONArchiveAuthorizationStore.Database.KeyEntry: Codable {
+extension AuthorizationStoreFile.Database.KeyEntry: Codable {
     
     internal enum CodingKeys: String, CodingKey {
         
@@ -167,7 +167,7 @@ extension JSONArchiveAuthorizationStore.Database.KeyEntry: Codable {
     }
 }
 
-extension JSONArchiveAuthorizationStore.Database.NewKeyEntry: Codable {
+extension AuthorizationStoreFile.Database.NewKeyEntry: Codable {
     
     internal enum CodingKeys: String, CodingKey {
         
