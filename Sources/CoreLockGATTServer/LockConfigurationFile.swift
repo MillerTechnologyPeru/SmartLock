@@ -9,11 +9,6 @@
 import Foundation
 import CoreLock
 
-#if swift(>=3.2)
-#elseif swift(>=3.0)
-    import Codable
-#endif
-
 /// Stores the lock configuration in a JSON file.
 public final class LockConfigurationFile: LockConfigurationStore {
     

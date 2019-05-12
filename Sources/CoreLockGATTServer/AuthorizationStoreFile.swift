@@ -10,11 +10,6 @@
 import Foundation
 import CoreLock
 
-#if swift(>=3.2)
-#elseif swift(>=3.0)
-    import Codable
-#endif
-
 public final class AuthorizationStoreFile: LockAuthorizationStore {
     
     public init(url: URL) {

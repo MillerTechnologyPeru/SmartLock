@@ -7,11 +7,6 @@
 
 import Foundation
 
-#if swift(>=3.2)
-#elseif swift(>=3.0)
-    import Codable
-#endif
-
 /// A Key's permission level.
 public enum PermissionType: UInt8, Codable {
     

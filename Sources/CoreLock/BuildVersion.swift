@@ -22,14 +22,6 @@ public extension SmartLockBuildVersion {
     static var current: SmartLockBuildVersion { return SmartLockBuildVersion(rawValue: GitCommits) }
 }
 
-// MARK: - Equatable
-
-extension SmartLockBuildVersion: Equatable {
-    
-    public static func == (lhs: SmartLockBuildVersion, rhs: SmartLockBuildVersion) -> Bool {
-        
-        return lhs.rawValue == rhs.rawValue
-    }
 }
 
 // MARK: - CustomStringConvertible

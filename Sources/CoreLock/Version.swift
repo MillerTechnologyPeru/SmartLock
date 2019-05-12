@@ -23,16 +23,6 @@ public extension SmartLockVersion {
     static let current = SmartLockVersion(major: 0, minor: 0, patch: 1)
 }
 
-// MARK: - Equatable
-
-extension SmartLockVersion: Equatable {
-    
-    public static func == (lhs: SmartLockVersion, rhs: SmartLockVersion) -> Bool {
-        
-        return lhs.major == rhs.major
-            && lhs.minor == rhs.minor
-            && lhs.patch == rhs.patch
-    }
 }
 
 // MARK: - CustomStringConvertible
