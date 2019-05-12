@@ -26,9 +26,9 @@ public final class GATTDeviceInformationServiceController <Peripheral: Periphera
     
     public let manufacturerName: GATTManufacturerNameString = "Miller Technology"
     
-    public let firmwareRevision = GATTFirmwareRevisionString(rawValue: "\(SmartLockBuildVersion.current)")
+    public let firmwareRevision = GATTFirmwareRevisionString(rawValue: "\(LockBuildVersion.current)")
     
-    public let softwareRevision = GATTSoftwareRevisionString(rawValue: "\(SmartLockVersion.current)")
+    public let softwareRevision = GATTSoftwareRevisionString(rawValue: "\(LockVersion.current)")
     
     public private(set) var modelNumber: GATTModelNumber = "" {
         didSet { peripheral[characteristic: modelNumberHandle] = modelNumber.data }

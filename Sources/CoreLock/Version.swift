@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct SmartLockVersion {
+public struct LockVersion: Equatable, Hashable {
     
     public var major: UInt8
     
@@ -18,16 +18,14 @@ public struct SmartLockVersion {
 
 // MARK: - Current version
 
-public extension SmartLockVersion {
+public extension LockVersion {
     
-    static let current = SmartLockVersion(major: 0, minor: 0, patch: 1)
-}
-
+    static let current = LockVersion(major: 0, minor: 0, patch: 1)
 }
 
 // MARK: - CustomStringConvertible
 
-extension SmartLockVersion: CustomStringConvertible {
+extension LockVersion: CustomStringConvertible {
     
     public var description: String {
         

@@ -10,9 +10,9 @@ import Bluetooth
 
 public extension AppleBeacon {
     
-    static func smartLock(rssi: Int8) -> AppleBeacon {
+    static func lock(rssi: Int8) -> AppleBeacon {
         
-        return AppleBeacon(uuid: .smartLockBeacon,
+        return AppleBeacon(uuid: .lockBeacon,
                            major: 0,
                            minor: 0,
                            rssi: rssi)
@@ -21,7 +21,7 @@ public extension AppleBeacon {
 
 public extension UUID {
     
-    static var smartLockBeacon: UUID { return UUID(rawValue: "8BC4FB5E-AB9B-4F86-94C5-E2E37A62F0E6")! }
+    static var lockBeacon: UUID { return UUID(rawValue: "8BC4FB5E-AB9B-4F86-94C5-E2E37A62F0E6")! }
 }
 
 public extension BluetoothHostControllerInterface {

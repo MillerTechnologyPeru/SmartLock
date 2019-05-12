@@ -7,7 +7,7 @@
 
 import Foundation
 
-public enum SmartLockAuthenticationError: Error {
+public enum LockAuthenticationError: Error {
     
     /// Invalid authentication HMAC signature.
     case invalidAuthentication
@@ -19,4 +19,4 @@ public enum SmartLockAuthenticationError: Error {
     case encryptionError(Error)
 }
 
-internal typealias AuthenticationError = SmartLockAuthenticationError
+internal typealias AuthenticationError = LockAuthenticationError

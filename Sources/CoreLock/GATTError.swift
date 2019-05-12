@@ -9,7 +9,7 @@ import Foundation
 import Bluetooth
 
 /// Smart Lock GATT Error
-public enum SmartLockGATTError: Error {
+public enum LockGATTError: Error {
     
     /// Invalid data.
     case invalidData(Data?)
@@ -18,7 +18,7 @@ public enum SmartLockGATTError: Error {
     case couldNotComplete
 }
 
-internal typealias GATTError = SmartLockGATTError
+internal typealias GATTError = LockGATTError
 
 /*
 // MARK: - CustomNSError

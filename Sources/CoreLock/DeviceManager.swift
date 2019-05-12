@@ -10,7 +10,7 @@ import Bluetooth
 import GATT
 
 /// SmartLock GATT Central client.
-public final class SmartLockManager <Central: CentralProtocol> {
+public final class LockManager <Central: CentralProtocol> {
     
     public typealias Peripheral = Central.Peripheral
     

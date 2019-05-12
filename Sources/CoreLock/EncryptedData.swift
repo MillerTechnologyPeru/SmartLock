@@ -23,7 +23,7 @@ public struct EncryptedData {
 
 public extension EncryptedData {
     
-    public init(encrypt data: Data, with key: KeyData) throws {
+    init(encrypt data: Data, with key: KeyData) throws {
         
         do {
             
@@ -37,7 +37,7 @@ public extension EncryptedData {
         catch { throw AuthenticationError.encryptionError(error) }
     }
     
-    public func decrypt(with key: KeyData) throws -> Data {
+    func decrypt(with key: KeyData) throws -> Data {
         
         guard authentication.isAuthenticated(with: key)
             else { throw AuthenticationError.invalidAuthentication }
@@ -51,7 +51,7 @@ public extension EncryptedData {
 
 public extension EncryptedData {
     
-    public init?(data: Data) {
+    init?(data: Data) {
         
         guard data.count > type(of: self).minimumLength
             else { return nil }
@@ -75,7 +75,7 @@ public extension EncryptedData {
         assert(offset == type(of: self).minimumLength)
     }
     
-    public var data: Data {
+    var data: Data {
         
         return authentication.data + initializationVector.data + encryptedData
     }

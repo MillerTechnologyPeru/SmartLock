@@ -19,7 +19,7 @@ public struct InformationCharacteristic: GATTProfileCharacteristic {
     
     internal static let length = MemoryLayout<UInt128>.size
         + MemoryLayout<UInt64>.size
-        + MemoryLayout<SmartLockVersion>.size
+        + MemoryLayout<LockVersion>.size
         + MemoryLayout<LockStatus.RawValue>.size
         + MemoryLayout<UnlockAction.RawValue>.size
     
@@ -27,10 +27,10 @@ public struct InformationCharacteristic: GATTProfileCharacteristic {
     public let identifier: UUID
     
     /// Firmware build number
-    public let buildVersion: SmartLockBuildVersion
+    public let buildVersion: LockBuildVersion
     
     /// Firmware version
-    public let version: SmartLockVersion
+    public let version: LockVersion
     
     /// Device state
     public var status: LockStatus
@@ -39,8 +39,8 @@ public struct InformationCharacteristic: GATTProfileCharacteristic {
     public let unlockActions: BitMaskOptionSet<UnlockAction>
     
     public init(identifier: UUID,
-                buildVersion: SmartLockBuildVersion = .current,
-                version: SmartLockVersion = .current,
+                buildVersion: LockBuildVersion = .current,
+                version: LockVersion = .current,
                 status: LockStatus,
                 unlockActions: BitMaskOptionSet<UnlockAction> = [.default]) {
         
@@ -60,7 +60,7 @@ public struct InformationCharacteristic: GATTProfileCharacteristic {
         
         let buildVersion = UInt64(littleEndian: data.subdata(in: 16 ..< 24).withUnsafeBytes { $0.pointee })
         
-        let version = SmartLockVersion(major: data[24], minor: data[25], patch: data[26])
+        let version = LockVersion(major: data[24], minor: data[25], patch: data[26])
         
         guard let status = LockStatus(rawValue: data[27])
             else { return nil }
@@ -68,7 +68,7 @@ public struct InformationCharacteristic: GATTProfileCharacteristic {
         let unlockActions = BitMaskOptionSet<UnlockAction>(rawValue: data[28])
         
         self.identifier = identifier
-        self.buildVersion = SmartLockBuildVersion(rawValue: buildVersion)
+        self.buildVersion = LockBuildVersion(rawValue: buildVersion)
         self.version = version
         self.status = status
         self.unlockActions = unlockActions

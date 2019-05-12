@@ -30,17 +30,15 @@ public protocol GATTServiceController: class {
 
 public extension GATTServiceController {
     
-    public func willRead(_ request: GATTReadRequest<Peripheral.Central>) -> ATT.Error? {
-        
+    func willRead(_ request: GATTReadRequest<Peripheral.Central>) -> ATT.Error? {
         return nil
     }
     
-    public func willWrite(_ request: GATTWriteRequest<Peripheral.Central>) -> ATT.Error? {
-        
+    func willWrite(_ request: GATTWriteRequest<Peripheral.Central>) -> ATT.Error? {
         return nil
     }
     
-    public func didWrite(_ request: GATTWriteConfirmation<Peripheral.Central>) {
+    func didWrite(_ request: GATTWriteConfirmation<Peripheral.Central>) {
         
         
     }

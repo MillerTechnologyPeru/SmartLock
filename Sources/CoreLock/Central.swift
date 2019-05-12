@@ -90,7 +90,7 @@ internal extension CentralProtocol {
                     
                 } else {
                     
-                    response = .error(SmartLockGATTError.invalidData(data))
+                    response = .error(LockGATTError.invalidData(data))
                 }
                 
                 notification(response)

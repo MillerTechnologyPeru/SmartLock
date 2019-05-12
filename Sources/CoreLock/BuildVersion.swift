@@ -5,7 +5,7 @@
 //  Created by Alsey Coleman Miller on 8/11/18.
 //
 
-public struct SmartLockBuildVersion: RawRepresentable {
+public struct LockBuildVersion: RawRepresentable, Equatable, Hashable {
     
     public let rawValue: UInt64
     
@@ -17,16 +17,14 @@ public struct SmartLockBuildVersion: RawRepresentable {
 
 // MARK: - Current Version
 
-public extension SmartLockBuildVersion {
+public extension LockBuildVersion {
     
-    static var current: SmartLockBuildVersion { return SmartLockBuildVersion(rawValue: GitCommits) }
-}
-
+    static var current: LockBuildVersion { return LockBuildVersion(rawValue: GitCommits) }
 }
 
 // MARK: - CustomStringConvertible
 
-extension SmartLockBuildVersion: CustomStringConvertible {
+extension LockBuildVersion: CustomStringConvertible {
     
     public var description: String {
         

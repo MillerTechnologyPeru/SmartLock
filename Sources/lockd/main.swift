@@ -33,7 +33,7 @@ var controller: LockController<DarwinPeripheral>?
 func run() throws {
     
     guard let hostController = HostController.default
-        else { throw SmartLockGATTServerError.bluetoothUnavailible }
+        else { throw LockGATTServerError.bluetoothUnavailible }
     
     print("Bluetooth Controller: \(hostController.address)")
     
@@ -106,8 +106,8 @@ func run() throws {
     try peripheral.start()
     
     // configure custom advertising
-    try hostController.setSmartLockAdvertisingData(lock: lockIdentifier, rssi: 30) // FIXME: RSSI
-    try hostController.setSmartLockScanResponse()
+    try hostController.setLockAdvertisingData(lock: lockIdentifier, rssi: 30) // FIXME: RSSI
+    try hostController.setLockScanResponse()
     
     // run main loop
     while true {

@@ -24,7 +24,7 @@ public struct LockSetupSecretFile: LockSetupSecretStore {
 
 public extension LockSetupSecretFile {
     
-    public init(createdAt url: URL) throws {
+    init(createdAt url: URL) throws {
         
         if let file = LockSetupSecretFile(url: url) {
             
@@ -37,7 +37,7 @@ public extension LockSetupSecretFile {
         }
     }
     
-    public init?(url: URL) {
+    init?(url: URL) {
         
         guard let base64 = try? Data(contentsOf: url),
             let data = Data(base64Encoded: base64),
@@ -47,7 +47,7 @@ public extension LockSetupSecretFile {
         self.init(sharedSecret: sharedSecret)
     }
     
-    public func write(to url: URL) throws {
+    func write(to url: URL) throws {
         
         try sharedSecret.data
             .base64EncodedData()
