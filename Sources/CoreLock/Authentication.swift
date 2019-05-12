@@ -65,7 +65,7 @@ public struct AuthenticationMessage {
 
 public extension AuthenticationMessage {
     
-    public init?(data: Data) {
+    init?(data: Data) {
         
         guard data.count == type(of: self).length
             else { return nil }
@@ -81,7 +81,7 @@ public extension AuthenticationMessage {
         self.nonce = nonce
     }
     
-    public var data: Data {
+    var data: Data {
         
         var data = Data(capacity: type(of: self).length)
         

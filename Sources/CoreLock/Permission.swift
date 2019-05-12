@@ -40,7 +40,7 @@ public enum Permission {
 public extension Permission {
     
     /// Byte value of the permission type.
-    public var type: PermissionType {
+    var type: PermissionType {
         
         switch self {
             
@@ -73,7 +73,7 @@ extension Permission: Equatable {
 public extension Permission {
     
     /// Specifies the time and dates a permission is valid.
-    public struct Schedule {
+    struct Schedule {
         
         /// The date this permission becomes invalid.
         public var expiry: Date
@@ -130,7 +130,7 @@ extension Permission.Schedule: Equatable {
 public extension Permission.Schedule {
     
     /// The minute interval range the lock can be unlocked.
-    public struct Interval: RawRepresentable {
+    struct Interval: RawRepresentable {
         
         internal static let min: UInt16 = 0
         
@@ -168,7 +168,7 @@ extension Permission.Schedule.Interval: Equatable {
 
 public extension Permission.Schedule {
     
-    public struct Weekdays {
+    struct Weekdays {
         
         public var sunday: Bool
         public var monday: Bool

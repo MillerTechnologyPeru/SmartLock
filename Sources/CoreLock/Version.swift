@@ -20,7 +20,7 @@ public struct SmartLockVersion {
 
 public extension SmartLockVersion {
     
-    public static let current = SmartLockVersion(major: 0, minor: 0, patch: 1)
+    static let current = SmartLockVersion(major: 0, minor: 0, patch: 1)
 }
 
 // MARK: - Equatable

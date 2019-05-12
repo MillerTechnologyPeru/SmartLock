@@ -237,7 +237,7 @@ public enum UIDeviceBatteryState: Int {
                 
                 let cString = UnsafeMutablePointer<CChar>.allocate(capacity: size)
                 
-                defer { cString.deallocate(capacity: size) }
+                defer { cString.deallocate() }
                 
                 sysctlbyname(name, cString, &size, nil, 0)
                 
@@ -290,7 +290,7 @@ public enum UIDeviceBatteryState: Int {
                 
                 if let list = IOPSCopyPowerSourcesList(sourcesInfo).takeRetainedValue() as? [[String: Any]] {
                     
-                    return list.flatMap({ PowerSource(info: $0)})
+                    return list.compactMap { PowerSource(info: $0) }
                 }
                 
                 return []

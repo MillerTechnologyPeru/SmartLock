@@ -1,42 +1,71 @@
-// swift-tools-version:3.0
-// The swift-tools-version declares the minimum version of Swift required to build this package.
-
+// swift-tools-version:5.0
 import PackageDescription
+
+#if os(Linux)
+let nativeBluetooth: Target.Dependency = "BluetoothLinux"
+let nativeGATT: Target.Dependency = "GATT"
+#elseif os(macOS)
+let nativeBluetooth: Target.Dependency = "BluetoothDarwin"
+let nativeGATT: Target.Dependency = "DarwinGATT"
+#endif
 
 let package = Package(
     name: "SmartLock",
-    targets: [
-        Target(
+    products: [
+        .executable(
             name: "lockd",
-            dependencies: [.Target(name: "CoreLockGATTServer")]
+            targets: ["lockd"]
         ),
-        Target(
-            name: "CoreLockGATTServer",
-            dependencies: [.Target(name: "CoreLock")]
-        ),
-        Target(
-            name: "CoreLock"
+        .library(
+            name: "CoreLock",
+            targets: ["CoreLock"]
         )
     ],
     dependencies: [
-        .Package(url: "https://github.com/PureSwift/GATT", majorVersion: 2)
+        .package(
+            url: "https://github.com/PureSwift/GATT.git",
+            .branch("master")
+        ),
+        .package(
+            url: "https://github.com/PureSwift/BluetoothLinux.git",
+            .branch("master")
+        ),
+        .package(
+            url: "https://github.com/PureSwift/BluetoothDarwin.git",
+            .branch("master")
+        ),
+        .package(
+            url: "https://github.com/krzyzanowskim/CryptoSwift",
+            .branch("master")
+        ),
     ],
-    exclude: ["Xcode", "iOS", "Android"]
+    targets: [
+        .target(
+            name: "lockd",
+            dependencies: [
+                nativeBluetooth,
+                nativeGATT,
+                "CoreLockGATTServer"
+            ]
+        ),
+        .target(
+            name: "CoreLock",
+            dependencies: [
+                "GATT",
+                "CryptoSwift"
+            ]
+        ),
+        .target(
+            name: "CoreLockGATTServer",
+            dependencies: ["CoreLock"]
+        ),
+        .testTarget(
+            name: "CoreLockTests",
+            dependencies: ["CoreLock"]
+        ),
+        .testTarget(
+            name: "CoreLockGATTServerTests",
+            dependencies: ["CoreLockGATTServer"]
+        )
+    ]
 )
-
-#if os(macOS)
-package.dependencies.append(.Package(url: "https://github.com/PureSwift/BluetoothDarwin.git", majorVersion: 1))
-#elseif os(Linux)
-package.dependencies.append(.Package(url: "https://github.com/PureSwift/BluetoothLinux.git", majorVersion: 3))
-#endif
-
-#if swift(>=3.2)
-package.dependencies.append(.Package(url: "https://github.com/krzyzanowskim/CryptoSwift", majorVersion: 0, minor: 7))
-#elseif swift(>=3.0)
-package.dependencies.append(.Package(url: "https://github.com/krzyzanowskim/CryptoSwift", majorVersion: 0, minor: 6))
-#endif
-
-#if swift(>=3.2)
-#elseif swift(>=3.0)
-package.dependencies.append(.Package(url: "https://github.com/PureSwift/Codable.git", majorVersion: 1))
-#endif

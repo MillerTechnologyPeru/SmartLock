@@ -50,7 +50,7 @@ public extension LockHardware {
     
     public extension LockHardware {
         
-        public static var mac: LockHardware {
+        static var mac: LockHardware {
             
             return LockHardware(model: .mac,
                                 hardwareRevision: UIDevice.current.modelIdentifier,

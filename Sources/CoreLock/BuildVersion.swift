@@ -19,7 +19,7 @@ public struct SmartLockBuildVersion: RawRepresentable {
 
 public extension SmartLockBuildVersion {
     
-    public static var current: SmartLockBuildVersion { return SmartLockBuildVersion(rawValue: GitCommits) }
+    static var current: SmartLockBuildVersion { return SmartLockBuildVersion(rawValue: GitCommits) }
 }
 
 // MARK: - Equatable

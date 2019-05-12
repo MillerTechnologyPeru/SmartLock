@@ -14,7 +14,7 @@ internal func random(_ size: Int) -> Data {
     
     let bytes = AES.randomIV(size)
     
-    return Data(bytes: bytes)
+    return Data(bytes)
 }
 
 internal let HMACSize = 64
@@ -27,7 +27,7 @@ internal func HMAC(key: KeyData, message: AuthenticationMessage) -> Authenticati
     
     assert(hmac.count == HMACSize)
     
-    return AuthenticationData(data: Data(bytes: hmac))!
+    return AuthenticationData(data: Data(hmac))!
 }
 
 internal let IVSize = AES.blockSize
@@ -36,12 +36,9 @@ internal let IVSize = AES.blockSize
 internal func encrypt(key: Data, data: Data) throws -> (encrypted: Data, iv: InitializationVector) {
     
     let iv = InitializationVector()
-    
-    let crypto = try AES(key: key.bytes, iv: iv.data.bytes)
-    
-    let byteValue = try crypto.encrypt(data.bytes)
-    
-    return (Data(bytes: byteValue), iv)
+    let crypto = try AES(key: key, iv: iv)
+    let encryptedData = try crypto.encrypt(data.bytes)
+    return (Data(encryptedData), iv)
 }
 
 /// Decrypt data
@@ -49,9 +46,14 @@ internal func decrypt(key: Data, iv: InitializationVector, data: Data) throws ->
     
     assert(iv.data.count == IVSize)
     
-    let crypto = try AES(key: key.bytes, iv: iv.data.bytes)
-    
+    let crypto = try AES(key: key, iv: iv)
     let byteValue = try crypto.decrypt(data.bytes)
+    return Data(byteValue)
+}
+
+internal extension AES {
     
-    return Data(bytes: byteValue)
+    convenience init(key: Data, iv: InitializationVector) throws {
+        try self.init(key: Array(key), blockMode: CBC(iv: Array(iv.data)), padding: .pkcs7)
+    }
 }

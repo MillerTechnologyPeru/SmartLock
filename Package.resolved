@@ -1,0 +1,52 @@
+{
+  "object": {
+    "pins": [
+      {
+        "package": "Bluetooth",
+        "repositoryURL": "https://github.com/PureSwift/Bluetooth.git",
+        "state": {
+          "branch": "master",
+          "revision": "d42eeb2ceeaa9b0f9dc6393df6ab4fd40915c1f9",
+          "version": null
+        }
+      },
+      {
+        "package": "BluetoothDarwin",
+        "repositoryURL": "https://github.com/PureSwift/BluetoothDarwin.git",
+        "state": {
+          "branch": "master",
+          "revision": "e59c4e377509e227549aedf03027486c3f760bef",
+          "version": null
+        }
+      },
+      {
+        "package": "BluetoothLinux",
+        "repositoryURL": "https://github.com/PureSwift/BluetoothLinux.git",
+        "state": {
+          "branch": "master",
+          "revision": "8be972044ebf59ddc35ad890d4cd3e99f7803a5c",
+          "version": null
+        }
+      },
+      {
+        "package": "CryptoSwift",
+        "repositoryURL": "https://github.com/krzyzanowskim/CryptoSwift",
+        "state": {
+          "branch": "master",
+          "revision": "8757f2407eb9409ac62be09ff267f5aee79443e4",
+          "version": null
+        }
+      },
+      {
+        "package": "GATT",
+        "repositoryURL": "https://github.com/PureSwift/GATT.git",
+        "state": {
+          "branch": "master",
+          "revision": "e6ac711ce0ebafd30d8d8ba11b9015a9f1d0a5fb",
+          "version": null
+        }
+      }
+    ]
+  },
+  "version": 1
+}

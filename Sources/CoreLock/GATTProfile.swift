@@ -19,7 +19,7 @@ public extension GATTProfile {
     
     static var characteristics: [GATTProfileCharacteristic.Type] {
         
-        return services.reduce([]) { $0.0 + $0.1.characteristics }
+        return services.reduce([]) { $0 + $1.characteristics }
     }
 }
 

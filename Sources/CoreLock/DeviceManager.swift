@@ -29,12 +29,7 @@ public final class SmartLockManager <Central: CentralProtocol> {
     public let central: Central
     
     /// The log message handler.
-    public var log: ((String) -> ())? {
-        
-        get { return central.log }
-        
-        set { central.log = newValue }
-    }
+    public var log: ((String) -> ())?
     
     /// Scans for nearby devices.
     ///
@@ -42,14 +37,17 @@ public final class SmartLockManager <Central: CentralProtocol> {
     ///
     /// - Parameter event: Callback for a found device.
     public func scan(duration: TimeInterval,
-                     filterDuplicates: Bool = true,
+                     filterDuplicates: Bool = false,
                      event: @escaping ((LockPeripheral<Central>) -> ())) throws {
         
-        let start = Date()
-        
-        let end = start + duration
-        
-        try self.scan(filterDuplicates: filterDuplicates, scanMore: { Date() < end  }, event: event)
+        try central.scan(duration: duration, filterDuplicates: filterDuplicates) { (scanData) in
+            
+            // filter peripheral
+            guard let lock = LockPeripheral<Central>(scanData)
+                else { return }
+            
+            event(lock)
+        }
     }
     
     /// Scans for nearby devices.
@@ -58,25 +56,16 @@ public final class SmartLockManager <Central: CentralProtocol> {
     ///
     /// - Parameter scanMore: Callback for determining whether the manager
     /// should continue scanning for more devices.
-    public func scan(filterDuplicates: Bool = true,
-                     scanMore: () -> (Bool),
+    public func scan(filterDuplicates: Bool = false,
                      event: @escaping ((LockPeripheral<Central>) -> ())) throws {
         
-        var foundLocks = [Peripheral: LockPeripheral<Central>]()
-        
-        try self.central.scan(filterDuplicates: filterDuplicates, shouldContinueScanning: scanMore) { (scanData) in
+        try self.central.scan(filterDuplicates: filterDuplicates) { (scanData) in
             
             // filter peripheral
             guard let lock = LockPeripheral<Central>(scanData)
                 else { return }
             
-            foundLocks[scanData.peripheral] = lock
-            
             event(lock)
-        }
-        
-        if foundLocks.isEmpty == false {
-            log?("Found \(foundLocks.count) Locks")
         }
     }
     
@@ -153,7 +142,7 @@ public struct LockPeripheral <Central: CentralProtocol> {
     internal init?(_ scanData: ScanData<Central.Peripheral, Central.Advertisement>) {
         
         // filter peripheral
-        guard scanData.advertisementData.serviceUUIDs.contains(LockService.uuid)
+        guard let serviceUUIDs = scanData.advertisementData.serviceUUIDs, serviceUUIDs.contains(LockService.uuid)
             else { return nil }
         
         self.scanData = scanData

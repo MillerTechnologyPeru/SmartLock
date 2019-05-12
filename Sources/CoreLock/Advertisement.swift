@@ -27,24 +27,23 @@ public extension UUID {
 public extension BluetoothHostControllerInterface {
     
     /// LE Advertise with iBeacon
-    func setSmartLockAdvertisingData(lock: UUID, rssi: Int8, commandTimeout: HCICommandTimeout = .default) throws {
+    func setLockAdvertisingData(lock: UUID, rssi: Int8, commandTimeout: HCICommandTimeout = .default) throws {
         
-        try iBeacon(AppleBeacon(uuid: lock, rssi: rssi),
-                    flags: GAPFlags(flags: [.lowEnergyGeneralDiscoverableMode]),
-                    interval: .min)
+        let beacon = AppleBeacon(uuid: lock, rssi: rssi)
+        let flags: GAPFlags = [.lowEnergyGeneralDiscoverableMode, .notSupportedBREDR]
+        
+        try iBeacon(beacon, flags: flags, interval: .min)
     }
     
     /// LE Scan Response
-    func setSmartLockScanResponse(commandTimeout: HCICommandTimeout = .default) throws {
+    func setLockScanResponse(commandTimeout: HCICommandTimeout = .default) throws {
         
         let name: GAPCompleteLocalName = "Lock"
         let serviceUUID: GAPIncompleteListOf128BitServiceClassUUIDs = [UUID(bluetooth: LockService.uuid)]
         
-        let data = GAPDataEncoder.encode([name, serviceUUID])
+        let encoder = GAPDataEncoder()
+        let data = try encoder.encodeAdvertisingData(name, serviceUUID)
         
-        guard let scanResponseData = LowEnergyAdvertisingData(data: data)
-            else { fatalError("\(data) > 31 bytes") }
-        
-        try setLowEnergyScanResponse(scanResponseData, timeout: commandTimeout)
+        try setLowEnergyScanResponse(data, timeout: commandTimeout)
     }
 }
