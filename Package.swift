@@ -10,7 +10,7 @@ let nativeGATT: Target.Dependency = "DarwinGATT"
 #endif
 
 let package = Package(
-    name: "SmartLock",
+    name: "Lock",
     products: [
         .executable(
             name: "lockd",

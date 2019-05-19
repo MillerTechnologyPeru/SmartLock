@@ -64,4 +64,4 @@ fastlane/screenshots/**/*.png
 fastlane/test_output
 
 # SPM Generated
-SmartLock.xcodeproj/*
+/*.xcodeproj
