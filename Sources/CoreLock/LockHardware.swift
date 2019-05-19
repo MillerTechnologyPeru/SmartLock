@@ -9,7 +9,7 @@
 import Foundation
 
 /// Lock Hardware information. 
-public struct LockHardware {
+public struct LockHardware: Equatable, Hashable {
     
     /// Lock Model
     public let model: LockModel

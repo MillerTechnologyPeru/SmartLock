@@ -35,7 +35,9 @@ func run() throws {
     guard let hostController = HostController.default
         else { throw LockGATTServerError.bluetoothUnavailible }
     
-    print("Bluetooth Controller: \(hostController.address)")
+    let address = try hostController.readDeviceAddress()
+    
+    print("Bluetooth Controller: \(address)")
     
     func peripheralLog(_ message: String) {
         print("Peripheral:", message)
@@ -110,13 +112,7 @@ func run() throws {
     try hostController.setLockScanResponse()
     
     // run main loop
-    while true {
-        #if os(Linux)
-        CFRunLoopRunInMode(kCFRunLoopDefaultMode, 0.01, true)
-        #elseif os(macOS)
-        CFRunLoopRunInMode(.defaultMode, 0.01, true)
-        #endif
-    }
+    RunLoop.main.run()
 }
 
 func Error(_ text: String) -> Never {
@@ -125,5 +121,4 @@ func Error(_ text: String) -> Never {
 }
 
 do { try run() }
-    
 catch { Error("\(error)") }
