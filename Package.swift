@@ -23,6 +23,14 @@ let package = Package(
     ],
     dependencies: [
         .package(
+            url: "https://github.com/PureSwift/TLVCoding.git",
+            .branch("master")
+        ),
+        .package(
+            url: "https://github.com/krzyzanowskim/CryptoSwift",
+            .branch("master")
+        ),
+        .package(
             url: "https://github.com/PureSwift/GATT.git",
             .branch("master")
         ),
@@ -33,11 +41,7 @@ let package = Package(
         .package(
             url: "https://github.com/PureSwift/BluetoothDarwin.git",
             .branch("master")
-        ),
-        .package(
-            url: "https://github.com/krzyzanowskim/CryptoSwift",
-            .branch("master")
-        ),
+        )
     ],
     targets: [
         .target(
@@ -52,6 +56,7 @@ let package = Package(
             name: "CoreLock",
             dependencies: [
                 "GATT",
+                "TLVCoding",
                 "CryptoSwift"
             ]
         ),
