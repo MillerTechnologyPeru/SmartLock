@@ -5,7 +5,7 @@
 //  Created by Alsey Coleman Miller on 8/11/18.
 //
 
-public struct LockBuildVersion: RawRepresentable, Equatable, Hashable {
+public struct LockBuildVersion: RawRepresentable, Equatable, Hashable, Codable {
     
     public let rawValue: UInt64
     

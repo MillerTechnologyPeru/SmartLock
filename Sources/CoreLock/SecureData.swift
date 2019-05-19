@@ -9,7 +9,7 @@
 import Foundation
 
 /// Secure Data Protocol. 
-public protocol SecureData: Equatable {
+public protocol SecureData: Hashable {
     
     /// The data length. 
     static var length: Int { get }
@@ -24,9 +24,26 @@ public protocol SecureData: Equatable {
     init()
 }
 
-public func == <T: SecureData> (lhs: T, rhs: T) -> Bool {
+public extension SecureData where Self: Decodable {
     
-    return lhs.data == rhs.data
+    init(from decoder: Decoder) throws {
+        
+        let container = try decoder.singleValueContainer()
+        let data = try container.decode(Data.self)
+        guard let value = Self(data: data) else {
+            throw DecodingError.typeMismatch(AuthenticationData.self, DecodingError.Context(codingPath: decoder.codingPath, debugDescription: "Invalid number of bytes \(data.count) for \(String(reflecting: Self.self))"))
+        }
+        self = value
+    }
+}
+
+public extension SecureData where Self: Encodable {
+    
+    func encode(to encoder: Encoder) throws {
+        
+        var container = encoder.singleValueContainer()
+        try container.encode(data)
+    }
 }
 
 /// A lock's key used for unlocking and actions.
@@ -52,7 +69,7 @@ public struct KeyData: SecureData {
 }
 
 /// Cryptographic nonce
-public struct Nonce: SecureData {
+public struct Nonce: SecureData, Codable {
     
     public static let length = 16
     

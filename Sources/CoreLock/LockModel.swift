@@ -9,33 +9,13 @@
 import Foundation
 
 /// Lock Model
-public struct LockModel: RawRepresentable {
+public struct LockModel: RawRepresentable, Equatable, Hashable {
     
     public let rawValue: String
     
     public init(rawValue: String) {
         
         self.rawValue = rawValue
-    }
-}
-
-// MARK: - Equatable
-
-extension LockModel: Equatable {
-    
-    public static func == (lhs: LockModel, rhs: LockModel) -> Bool {
-        
-        return lhs.rawValue == rhs.rawValue
-    }
-}
-
-// MARK: - Hashable
-
-extension LockModel: Hashable {
-    
-    public var hashValue: Int {
-        
-        return rawValue.hash
     }
 }
 
@@ -89,16 +69,13 @@ extension LockModel: Codable {
     public init(from decoder: Decoder) throws {
         
         let container = try decoder.singleValueContainer()
-        
         let rawValue = try container.decode(String.self)
-        
         self.init(rawValue: rawValue)
     }
     
     public func encode(to encoder: Encoder) throws {
         
         var container = encoder.singleValueContainer()
-        
         try container.encode(rawValue)
     }
 }

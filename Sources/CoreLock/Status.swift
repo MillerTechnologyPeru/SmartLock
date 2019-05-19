@@ -6,10 +6,8 @@
 //  Copyright © 2016 ColemanCDA. All rights reserved.
 //
 
-import Foundation
-
 /// Lock status
-public enum LockStatus: UInt8 {
+public enum LockStatus: UInt8, Codable {
     
     /// Initial Status
     case setup = 0x00

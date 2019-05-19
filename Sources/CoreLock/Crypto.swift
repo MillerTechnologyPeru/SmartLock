@@ -8,6 +8,7 @@
 
 import Foundation
 import CryptoSwift
+import TLVCoding
 
 /// Generate random data with the specified size.
 internal func random(_ size: Int) -> Data {
@@ -23,7 +24,10 @@ internal let HMACSize = 64
 @inline(__always)
 internal func HMAC(key: KeyData, message: AuthenticationMessage) -> AuthenticationData {
     
-    let hmac = try! CryptoSwift.HMAC(key: key.data.bytes, variant: .sha512).authenticate(message.data.bytes)
+    let encoder = TLVEncoder.lock
+    let messageData = try! encoder.encode(message)
+    
+    let hmac = try! CryptoSwift.HMAC(key: key.data.bytes, variant: .sha512).authenticate(messageData.bytes)
     
     assert(hmac.count == HMACSize)
     

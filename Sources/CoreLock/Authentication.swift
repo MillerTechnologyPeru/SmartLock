@@ -7,10 +7,8 @@
 
 import Foundation
 
-public struct Authentication {
-    
-    internal static let length = AuthenticationMessage.length + AuthenticationData.length
-    
+public struct Authentication: Equatable, Codable {
+        
     public let message: AuthenticationMessage
     
     public let signedData: AuthenticationData
@@ -22,24 +20,6 @@ public struct Authentication {
         self.signedData = AuthenticationData(key: key, message: message)
     }
     
-    public init?(data: Data) {
-        
-        guard data.count == type(of: self).length
-            else { return nil }
-        
-        guard let message = AuthenticationMessage(data: Data(data[0 ..< AuthenticationMessage.length])),
-            let signedData = AuthenticationData(data: Data(data[AuthenticationMessage.length ..< type(of: self).length]))
-            else { assertionFailure("Could not initialize authentication data"); return nil }
-        
-        self.message = message
-        self.signedData = signedData
-    }
-    
-    public var data: Data {
-        
-        return message.data + signedData.data
-    }
-    
     public func isAuthenticated(with key: KeyData) -> Bool {
         
         return signedData.isAuthenticated(with: key, message: message)
@@ -47,9 +27,7 @@ public struct Authentication {
 }
 
 /// HMAC Message
-public struct AuthenticationMessage {
-    
-    internal static let length = MemoryLayout<UInt64>.size + Nonce.length
+public struct AuthenticationMessage: Equatable, Codable {
     
     public let date: Date
     
@@ -63,39 +41,8 @@ public struct AuthenticationMessage {
     }
 }
 
-public extension AuthenticationMessage {
-    
-    init?(data: Data) {
-        
-        guard data.count == type(of: self).length
-            else { return nil }
-        
-        let timeInterval = UInt64(littleEndian: UInt64(bytes: (data[0], data[1], data[2], data[3], data[4], data[5], data[6], data[7])))
-        
-        let timestamp = Date(timeIntervalSince1970: TimeInterval(bitPattern: timeInterval))
-        
-        guard let nonce = Nonce(data: Data(data[8 ..< 24]))
-            else { assertionFailure("Could not initialize nonce"); return nil }
-        
-        self.date = timestamp
-        self.nonce = nonce
-    }
-    
-    var data: Data {
-        
-        var data = Data(capacity: type(of: self).length)
-        
-        data += date.timeIntervalSince1970.bitPattern.littleEndian
-        data += nonce.data
-        
-        assert(data.count == type(of: self).length)
-        
-        return data
-    }
-}
-
 /// HMAC data
-public struct AuthenticationData {
+public struct AuthenticationData: Equatable {
     
     internal static let length = HMACSize
     
@@ -117,5 +64,24 @@ public struct AuthenticationData {
     public func isAuthenticated(with key: KeyData, message: AuthenticationMessage) -> Bool {
         
         return data == AuthenticationData(key: key, message: message).data
+    }
+}
+
+extension AuthenticationData: Codable {
+    
+    public init(from decoder: Decoder) throws {
+        
+        let container = try decoder.singleValueContainer()
+        let data = try container.decode(Data.self)
+        guard let value = AuthenticationData(data: data) else {
+            throw DecodingError.typeMismatch(AuthenticationData.self, DecodingError.Context(codingPath: decoder.codingPath, debugDescription: "Invalid number of bytes \(data.count) for \(String(reflecting: AuthenticationData.self))"))
+        }
+        self = value
+    }
+    
+    public func encode(to encoder: Encoder) throws {
+        
+        var container = encoder.singleValueContainer()
+        try container.encode(data)
     }
 }
