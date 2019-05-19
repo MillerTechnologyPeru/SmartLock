@@ -26,36 +26,36 @@ public struct SetupCharacteristic: TLVCharacteristic {
     
     public init(request: SetupRequest, sharedSecret: KeyData) throws {
         
-        let encoder = 
-        let encryptedData = try EncryptedData(encrypt: request.data, with: sharedSecret)
+        let requestData = try type(of: self).encoder.encode(request)
+        let encryptedData = try EncryptedData(encrypt: requestData, with: sharedSecret)
         self.init(encryptedData: encryptedData)
     }
     
     public func decrypt(with sharedSecret: KeyData) throws -> SetupRequest {
         
         let data = try encryptedData.decrypt(with: sharedSecret)
-        guard let value = SetupRequest(data: data)
+        guard let value = try? type(of: self).decoder.decode(SetupRequest.self, from: data)
             else { throw GATTError.invalidData(data) }
         return value
     }
+}
+
+// MARK: - Codable
+
+extension SetupCharacteristic: Codable {
     
-    public init?(data: Data) {
-        
-        guard let encryptedData = EncryptedData(data: data)
-            else { return nil }
-        
-        self.encryptedData = encryptedData
+    public init(from decoder: Decoder) throws {
+        self.encryptedData = try EncryptedData(from: decoder)
     }
     
-    public var data: Data {
-        
-        return encryptedData.data
+    public func encode(to encoder: Encoder) throws {
+        try self.encryptedData.encode(to: encoder)
     }
 }
 
-public struct SetupRequest {
-    
-    internal static let length = MemoryLayout<UInt128>.size + KeyData.length
+// MARK: - Supporting Types
+
+public struct SetupRequest: Equatable, Codable {
     
     /// Key identifier
     public let identifier: UUID

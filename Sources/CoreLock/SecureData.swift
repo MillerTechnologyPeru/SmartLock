@@ -47,7 +47,7 @@ public extension SecureData where Self: Encodable {
 }
 
 /// A lock's key used for unlocking and actions.
-public struct KeyData: SecureData {
+public struct KeyData: SecureData, Codable {
     
     public static let length = 256 / 8 // 32
     
@@ -89,7 +89,7 @@ public struct Nonce: SecureData, Codable {
     }
 }
 
-public struct InitializationVector: SecureData {
+public struct InitializationVector: SecureData, Codable {
     
     public static let length = IVSize
     

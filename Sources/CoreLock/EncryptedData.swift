@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct EncryptedData {
+public struct EncryptedData: Equatable, Codable {
     
     /// HMAC signature, signed by secret.
     public let authentication: Authentication
@@ -24,9 +24,7 @@ public extension EncryptedData {
     init(encrypt data: Data, with key: KeyData) throws {
         
         do {
-            
             let (encryptedData, iv) = try CoreLock.encrypt(key: key.data, data: data)
-            
             self.authentication = Authentication(key: key)
             self.initializationVector = iv
             self.encryptedData = encryptedData

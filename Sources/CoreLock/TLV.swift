@@ -30,7 +30,7 @@ internal extension TLVDecoder {
 
 // MARK: - TLVCharacteristic
 
-public protocol TLVCharacteristic: GATTProfileCharacteristic, Codable {
+public protocol TLVCharacteristic: GATTProfileCharacteristic {
     
     /// TLV Encoder used to encode values.
     static var encoder: TLVEncoder { get }
