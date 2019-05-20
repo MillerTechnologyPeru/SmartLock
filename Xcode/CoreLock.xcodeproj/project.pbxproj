@@ -37,7 +37,6 @@
 		6E60FF982121045300787DAA /* Integer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60FF772121041400787DAA /* Integer.swift */; };
 		6E60FF992121045300787DAA /* UIDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60FF782121041400787DAA /* UIDevice.swift */; };
 		6E60FF9A2121045300787DAA /* Key.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60FF792121041400787DAA /* Key.swift */; };
-		6E60FF9B2121045300787DAA /* UnsafeDataConvertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60FF7A2121041400787DAA /* UnsafeDataConvertible.swift */; };
 		6E60FF9C2121045300787DAA /* GATTProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60FF7B2121041400787DAA /* GATTProfile.swift */; };
 		6E60FF9D2121045300787DAA /* LockModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60FF7C2121041400787DAA /* LockModel.swift */; };
 		6E60FF9E2121045300787DAA /* Status.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60FF7D2121041400787DAA /* Status.swift */; };
@@ -69,7 +68,6 @@
 		6E60FFB92121045300787DAA /* Integer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60FF772121041400787DAA /* Integer.swift */; };
 		6E60FFBA2121045300787DAA /* UIDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60FF782121041400787DAA /* UIDevice.swift */; };
 		6E60FFBB2121045300787DAA /* Key.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60FF792121041400787DAA /* Key.swift */; };
-		6E60FFBC2121045300787DAA /* UnsafeDataConvertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60FF7A2121041400787DAA /* UnsafeDataConvertible.swift */; };
 		6E60FFBD2121045300787DAA /* GATTProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60FF7B2121041400787DAA /* GATTProfile.swift */; };
 		6E60FFBE2121045300787DAA /* LockModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60FF7C2121041400787DAA /* LockModel.swift */; };
 		6E60FFBF2121045300787DAA /* Status.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60FF7D2121041400787DAA /* Status.swift */; };
@@ -101,7 +99,6 @@
 		6E60FFDA2121045400787DAA /* Integer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60FF772121041400787DAA /* Integer.swift */; };
 		6E60FFDB2121045400787DAA /* UIDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60FF782121041400787DAA /* UIDevice.swift */; };
 		6E60FFDC2121045400787DAA /* Key.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60FF792121041400787DAA /* Key.swift */; };
-		6E60FFDD2121045400787DAA /* UnsafeDataConvertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60FF7A2121041400787DAA /* UnsafeDataConvertible.swift */; };
 		6E60FFDE2121045400787DAA /* GATTProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60FF7B2121041400787DAA /* GATTProfile.swift */; };
 		6E60FFDF2121045400787DAA /* LockModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60FF7C2121041400787DAA /* LockModel.swift */; };
 		6E60FFE02121045400787DAA /* Status.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60FF7D2121041400787DAA /* Status.swift */; };
@@ -133,8 +130,11 @@
 		6E60FFFB2121045400787DAA /* Integer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60FF772121041400787DAA /* Integer.swift */; };
 		6E60FFFC2121045400787DAA /* UIDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60FF782121041400787DAA /* UIDevice.swift */; };
 		6E60FFFD2121045400787DAA /* Key.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60FF792121041400787DAA /* Key.swift */; };
-		6E60FFFE2121045400787DAA /* UnsafeDataConvertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60FF7A2121041400787DAA /* UnsafeDataConvertible.swift */; };
 		6E60FFFF2121045400787DAA /* GATTProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60FF7B2121041400787DAA /* GATTProfile.swift */; };
+		6EC3548C2292822E00364B5F /* TLV.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EC3548B2292822D00364B5F /* TLV.swift */; };
+		6EC3548D2292822E00364B5F /* TLV.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EC3548B2292822D00364B5F /* TLV.swift */; };
+		6EC3548E2292822E00364B5F /* TLV.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EC3548B2292822D00364B5F /* TLV.swift */; };
+		6EC3548F2292822E00364B5F /* TLV.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EC3548B2292822D00364B5F /* TLV.swift */; };
 		DD7502881C68FEDE006590AF /* CoreLock.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 52D6DA0F1BF000BD002C0205 /* CoreLock.framework */; };
 /* End PBXBuildFile section */
 
@@ -187,7 +187,6 @@
 		6E60FF772121041400787DAA /* Integer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Integer.swift; sourceTree = "<group>"; };
 		6E60FF782121041400787DAA /* UIDevice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIDevice.swift; sourceTree = "<group>"; };
 		6E60FF792121041400787DAA /* Key.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Key.swift; sourceTree = "<group>"; };
-		6E60FF7A2121041400787DAA /* UnsafeDataConvertible.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnsafeDataConvertible.swift; sourceTree = "<group>"; };
 		6E60FF7B2121041400787DAA /* GATTProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GATTProfile.swift; sourceTree = "<group>"; };
 		6E60FF7C2121041400787DAA /* LockModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LockModel.swift; sourceTree = "<group>"; };
 		6E60FF7D2121041400787DAA /* Status.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Status.swift; sourceTree = "<group>"; };
@@ -195,6 +194,7 @@
 		6E60FF7F2121041400787DAA /* Bool.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bool.swift; sourceTree = "<group>"; };
 		6E60FF802121041400787DAA /* Chunk.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Chunk.swift; sourceTree = "<group>"; };
 		6E60FF822121041400787DAA /* GATTError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GATTError.swift; sourceTree = "<group>"; };
+		6EC3548B2292822D00364B5F /* TLV.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TLV.swift; sourceTree = "<group>"; };
 		AD2FAA261CD0B6D800659CF4 /* CoreLock.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = CoreLock.plist; sourceTree = "<group>"; };
 		AD2FAA281CD0B6E100659CF4 /* CoreLockTests.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = CoreLockTests.plist; sourceTree = "<group>"; };
 		DD75027A1C68FCFC006590AF /* CoreLockTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CoreLockTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -333,38 +333,38 @@
 		6E60FF612121041400787DAA /* CoreLock */ = {
 			isa = PBXGroup;
 			children = (
-				6E60FF622121041400787DAA /* Permission.swift */,
-				6E60FF632121041400787DAA /* SmartLockProfile.swift */,
-				6E60FF642121041400787DAA /* BuildVersion.swift */,
-				6E60FF652121041400787DAA /* LockHardware.swift */,
 				6E60FF662121041400787DAA /* Advertisement.swift */,
 				6E60FF672121041400787DAA /* Authentication.swift */,
 				6E60FF682121041400787DAA /* AuthenticationError.swift */,
-				6E60FF692121041400787DAA /* POSIXTime.swift */,
-				6E60FF6A2121041400787DAA /* Central.swift */,
-				6E60FF6B2121041400787DAA /* SecureData.swift */,
-				6E60FF6C2121041400787DAA /* UnlockCharacteristic.swift */,
-				6E60FF6D2121041400787DAA /* SetupCharacteristic.swift */,
-				6E60FF6E2121041400787DAA /* Version.swift */,
-				6E60FF6F2121041400787DAA /* DeviceManager.swift */,
-				6E60FF702121041400787DAA /* DateComponents.swift */,
-				6E60FF712121041400787DAA /* Crypto.swift */,
-				6E60FF722121041400787DAA /* UnlockAction.swift */,
-				6E60FF732121041400787DAA /* LockState.swift */,
-				6E60FF742121041400787DAA /* GitCommits.swift */,
-				6E60FF752121041400787DAA /* LockConfiguration.swift */,
-				6E60FF762121041400787DAA /* EncryptedData.swift */,
-				6E60FF772121041400787DAA /* Integer.swift */,
-				6E60FF782121041400787DAA /* UIDevice.swift */,
-				6E60FF792121041400787DAA /* Key.swift */,
-				6E60FF7A2121041400787DAA /* UnsafeDataConvertible.swift */,
-				6E60FF7B2121041400787DAA /* GATTProfile.swift */,
-				6E60FF7C2121041400787DAA /* LockModel.swift */,
-				6E60FF7D2121041400787DAA /* Status.swift */,
-				6E60FF7E2121041400787DAA /* InformationCharacteristic.swift */,
 				6E60FF7F2121041400787DAA /* Bool.swift */,
+				6E60FF642121041400787DAA /* BuildVersion.swift */,
+				6E60FF6A2121041400787DAA /* Central.swift */,
 				6E60FF802121041400787DAA /* Chunk.swift */,
+				6E60FF712121041400787DAA /* Crypto.swift */,
+				6E60FF702121041400787DAA /* DateComponents.swift */,
+				6E60FF6F2121041400787DAA /* DeviceManager.swift */,
+				6E60FF762121041400787DAA /* EncryptedData.swift */,
 				6E60FF822121041400787DAA /* GATTError.swift */,
+				6E60FF7B2121041400787DAA /* GATTProfile.swift */,
+				6E60FF742121041400787DAA /* GitCommits.swift */,
+				6E60FF7E2121041400787DAA /* InformationCharacteristic.swift */,
+				6E60FF772121041400787DAA /* Integer.swift */,
+				6E60FF792121041400787DAA /* Key.swift */,
+				6E60FF752121041400787DAA /* LockConfiguration.swift */,
+				6E60FF652121041400787DAA /* LockHardware.swift */,
+				6E60FF7C2121041400787DAA /* LockModel.swift */,
+				6E60FF732121041400787DAA /* LockState.swift */,
+				6E60FF622121041400787DAA /* Permission.swift */,
+				6E60FF692121041400787DAA /* POSIXTime.swift */,
+				6E60FF6B2121041400787DAA /* SecureData.swift */,
+				6E60FF6D2121041400787DAA /* SetupCharacteristic.swift */,
+				6E60FF632121041400787DAA /* SmartLockProfile.swift */,
+				6E60FF7D2121041400787DAA /* Status.swift */,
+				6EC3548B2292822D00364B5F /* TLV.swift */,
+				6E60FF782121041400787DAA /* UIDevice.swift */,
+				6E60FF722121041400787DAA /* UnlockAction.swift */,
+				6E60FF6C2121041400787DAA /* UnlockCharacteristic.swift */,
+				6E60FF6E2121041400787DAA /* Version.swift */,
 			);
 			path = CoreLock;
 			sourceTree = "<group>";
@@ -516,7 +516,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0720;
-				LastUpgradeCheck = 0940;
+				LastUpgradeCheck = 1020;
 				ORGANIZATIONNAME = ColemanCDA;
 				TargetAttributes = {
 					52D6D97B1BEFF229002C0205 = {
@@ -543,10 +543,11 @@
 			};
 			buildConfigurationList = 52D6D9761BEFF229002C0205 /* Build configuration list for PBXProject "CoreLock" */;
 			compatibilityVersion = "Xcode 6.3";
-			developmentRegion = English;
+			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
+				Base,
 			);
 			mainGroup = 52D6D9721BEFF229002C0205;
 			productRefGroup = 52D6D97D1BEFF229002C0205 /* Products */;
@@ -631,12 +632,12 @@
 				6E60FF832121045300787DAA /* Permission.swift in Sources */,
 				6E60FF882121045300787DAA /* Authentication.swift in Sources */,
 				6E60FFA02121045300787DAA /* Bool.swift in Sources */,
+				6EC3548C2292822E00364B5F /* TLV.swift in Sources */,
 				6E60FF8C2121045300787DAA /* SecureData.swift in Sources */,
 				6E60FF9E2121045300787DAA /* Status.swift in Sources */,
 				6E60FF982121045300787DAA /* Integer.swift in Sources */,
 				6E60FF9C2121045300787DAA /* GATTProfile.swift in Sources */,
 				6E60FF8B2121045300787DAA /* Central.swift in Sources */,
-				6E60FF9B2121045300787DAA /* UnsafeDataConvertible.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -670,12 +671,12 @@
 				6E60FFC52121045400787DAA /* Permission.swift in Sources */,
 				6E60FFCA2121045400787DAA /* Authentication.swift in Sources */,
 				6E60FFE22121045400787DAA /* Bool.swift in Sources */,
+				6EC3548E2292822E00364B5F /* TLV.swift in Sources */,
 				6E60FFCE2121045400787DAA /* SecureData.swift in Sources */,
 				6E60FFE02121045400787DAA /* Status.swift in Sources */,
 				6E60FFDA2121045400787DAA /* Integer.swift in Sources */,
 				6E60FFDE2121045400787DAA /* GATTProfile.swift in Sources */,
 				6E60FFCD2121045400787DAA /* Central.swift in Sources */,
-				6E60FFDD2121045400787DAA /* UnsafeDataConvertible.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -709,12 +710,12 @@
 				6E60FFE62121045400787DAA /* Permission.swift in Sources */,
 				6E60FFEB2121045400787DAA /* Authentication.swift in Sources */,
 				6E6000032121045400787DAA /* Bool.swift in Sources */,
+				6EC3548F2292822E00364B5F /* TLV.swift in Sources */,
 				6E60FFEF2121045400787DAA /* SecureData.swift in Sources */,
 				6E6000012121045400787DAA /* Status.swift in Sources */,
 				6E60FFFB2121045400787DAA /* Integer.swift in Sources */,
 				6E60FFFF2121045400787DAA /* GATTProfile.swift in Sources */,
 				6E60FFEE2121045400787DAA /* Central.swift in Sources */,
-				6E60FFFE2121045400787DAA /* UnsafeDataConvertible.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -748,12 +749,12 @@
 				6E60FFA42121045300787DAA /* Permission.swift in Sources */,
 				6E60FFA92121045300787DAA /* Authentication.swift in Sources */,
 				6E60FFC12121045300787DAA /* Bool.swift in Sources */,
+				6EC3548D2292822E00364B5F /* TLV.swift in Sources */,
 				6E60FFAD2121045300787DAA /* SecureData.swift in Sources */,
 				6E60FFBF2121045300787DAA /* Status.swift in Sources */,
 				6E60FFB92121045300787DAA /* Integer.swift in Sources */,
 				6E60FFBD2121045300787DAA /* GATTProfile.swift in Sources */,
 				6E60FFAC2121045300787DAA /* Central.swift in Sources */,
-				6E60FFBC2121045300787DAA /* UnsafeDataConvertible.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -779,6 +780,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
@@ -831,7 +833,7 @@
 				PRODUCT_NAME = CoreLock;
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 3.0;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TVOS_DEPLOYMENT_TARGET = 9.0;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -844,6 +846,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
@@ -889,7 +892,7 @@
 				PRODUCT_NAME = CoreLock;
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
-				SWIFT_VERSION = 3.0;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TVOS_DEPLOYMENT_TARGET = 9.0;
 				VALIDATE_PRODUCT = YES;
@@ -1056,7 +1059,6 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "com.SmartLock.SmartLock-macOS-Tests";
 				PRODUCT_NAME = CoreLockTests;
 				SDKROOT = macosx;
-				SWIFT_VERSION = 4.0;
 			};
 			name = Debug;
 		};
@@ -1074,7 +1076,6 @@
 				PRODUCT_NAME = CoreLockTests;
 				SDKROOT = macosx;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
-				SWIFT_VERSION = 4.0;
 			};
 			name = Release;
 		};
