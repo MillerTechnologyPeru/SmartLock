@@ -8,7 +8,7 @@
 import Foundation
 
 /// Exportable new key invitation.
-public struct NewKey {
+public struct NewKey: Codable, Equatable, Hashable {
     
     public let lock: UUID
     
@@ -21,16 +21,3 @@ public struct NewKey {
         self.key = key
     }
 }
-
-// MARK: - Equatable
-
-extension NewKey: Equatable {
-    
-    public static func == (lhs: NewKey, rhs: NewKey) -> Bool {
-        
-        return lhs.lock == rhs.lock
-            && lhs.key == rhs.key
-    }
-}
-
-

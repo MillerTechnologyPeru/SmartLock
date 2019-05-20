@@ -119,17 +119,11 @@ public final class LockServiceController <Peripheral: PeripheralProtocol> : GATT
     public func willWrite(_ request: GATTWriteRequest<Peripheral.Central>) -> ATT.Error? {
         
         switch request.handle {
-            
         case setupHandle:
-            
             return authorization.isEmpty ? nil : .writeNotPermitted
-            
         case unlockHandle:
-            
             return authorization.isEmpty ? .writeNotPermitted : nil
-         
         default:
-            
             return nil
         }
     }

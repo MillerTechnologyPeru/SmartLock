@@ -9,7 +9,7 @@
 import Foundation
 
 /// Lock Hardware information. 
-public struct LockHardware: Equatable, Hashable {
+public struct LockHardware: Codable, Equatable, Hashable {
     
     /// Lock Model
     public let model: LockModel
@@ -54,33 +54,3 @@ public extension LockHardware {
     }
     
 #endif
-
-// MARK: - Codable
-
-extension LockHardware: Codable {
-    
-    public enum CodingKeys: String, CodingKey {
-        
-        case model
-        case hardwareRevision
-        case serialNumber
-    }
-    
-    public init(from decoder: Decoder) throws {
-        
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        
-        self.model = try container.decode(LockModel.self, forKey: .model)
-        self.hardwareRevision = try container.decode(String.self, forKey: .hardwareRevision)
-        self.serialNumber = try container.decode(String.self, forKey: .serialNumber)
-    }
-    
-    public func encode(to encoder: Encoder) throws {
-        
-        var container = encoder.container(keyedBy: CodingKeys.self)
-        
-        try container.encode(model, forKey: .model)
-        try container.encode(hardwareRevision, forKey: .hardwareRevision)
-        try container.encode(serialNumber, forKey: .serialNumber)
-    }
-}
