@@ -12,6 +12,12 @@ import TLVCoding
 @testable import CoreLock
 
 final class GATTProfileTests: XCTestCase {
+    
+    static let allTests = [
+        ("testInformation", testInformation),
+        ("testUnlock", testUnlock),
+        ("testSetup", testSetup)
+    ]
 
     func testInformation() {
         

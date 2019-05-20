@@ -1,6 +1,7 @@
 import XCTest
-@testable import SmartLockTests
+@testable import CoreLockTests
 
 XCTMain([
-    testCase(SmartLockTests.allTests),
+    testCase(CryptoTests.allTests),
+    testCase(GATTProfileTests.allTests),
 ])

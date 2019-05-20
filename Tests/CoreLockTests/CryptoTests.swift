@@ -12,52 +12,40 @@ import XCTest
 
 final class CryptoTests: XCTestCase {
     
-    static var allTests = [
+    static let allTests = [
         ("testHMAC", testHMAC),
+        ("testEncrypt", testEncrypt),
+        ("testFailEncrypt", testFailEncrypt),
+        ("testNonce", testNonce)
         ]
     
     func testHMAC() {
         
         let key = KeyData()
-        
         let nonce = Nonce()
-        
         let timestamp = Date()
-        
         let message = AuthenticationMessage(date: timestamp, nonce: nonce)
-        
         let hmac = HMAC(key: key, message: message)
-                
         XCTAssert(hmac.data == HMAC(key: key, message: message).data, "Values must be consistent")
     }
     
     func testEncrypt() {
         
         let key = KeyData()
-        
         let nonce = Nonce()
-        
         let (encryptedData, iv) = try! encrypt(key: key.data, data: nonce.data)
-        
         let decryptedData = try! decrypt(key: key.data, iv: iv, data: encryptedData)
-        
         XCTAssert(nonce.data == decryptedData)
     }
     
     func testFailEncrypt() {
         
         let key = KeyData()
-        
         let key2 = KeyData()
-        
         XCTAssert(key != key2)
-        
         let nonce = Nonce()
-        
         let (encryptedData, iv) = try! encrypt(key: key.data, data: nonce.data)
-        
         let decryptedData = try! decrypt(key: key2.data, iv: iv, data: encryptedData)
-        
         XCTAssert(nonce.data != decryptedData)
     }
     
