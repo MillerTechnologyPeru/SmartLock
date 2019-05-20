@@ -6,18 +6,10 @@
 //
 
 import Foundation
+import TLVCoding
 
 /// A Key's permission level.
-public enum PermissionType: UInt8, Codable {
-    
-    case owner
-    case admin
-    case anytime
-    case scheduled
-}
-
-/// A Key's permission level.
-public enum Permission {
+public enum Permission: Equatable, Hashable {
     
     /// This key belongs to the owner of the lock and has unlimited rights.
     case owner
@@ -32,33 +24,25 @@ public enum Permission {
     case scheduled(Schedule)
 }
 
+/// A Key's permission level.
+public enum PermissionType: UInt8, Codable {
+    
+    case owner
+    case admin
+    case anytime
+    case scheduled
+}
+
 public extension Permission {
     
     /// Byte value of the permission type.
     var type: PermissionType {
         
         switch self {
-            
         case .owner:        return .owner
         case .admin:        return .admin
         case .anytime:      return .anytime
         case .scheduled(_): return .scheduled
-        }
-    }
-}
-
-extension Permission: Equatable {
-    
-    public static func == (lhs: Permission, rhs: Permission) -> Bool {
-        
-        switch (lhs, rhs) {
-            
-        case (.owner, .owner): return true
-        case (.admin, .admin): return true
-        case (.anytime, .anytime): return true
-        case let (.scheduled(lhsSchedule), .scheduled(rhsSchedule)): return lhsSchedule == rhsSchedule
-            
-        default: return false
         }
     }
 }
@@ -68,7 +52,7 @@ extension Permission: Equatable {
 public extension Permission {
     
     /// Specifies the time and dates a permission is valid.
-    struct Schedule {
+    struct Schedule: Codable, Equatable, Hashable {
         
         /// The date this permission becomes invalid.
         public var expiry: Date
@@ -79,9 +63,9 @@ public extension Permission {
         /// The days of the week the permission is valid
         public var weekdays: Weekdays
         
-        public init(expiry: Date,
+        public init(expiry: Date = .distantFuture,
                     interval: Interval = .anytime,
-                    weekdays: Weekdays) {
+                    weekdays: Weekdays = .all) {
             
             self.expiry = expiry
             self.interval = interval
@@ -110,22 +94,12 @@ public extension Permission {
     }
 }
 
-extension Permission.Schedule: Equatable {
-    
-    public static func == (lhs: Permission.Schedule, rhs: Permission.Schedule) -> Bool {
-        
-        return lhs.expiry == rhs.expiry
-            && lhs.interval == rhs.interval
-            && lhs.weekdays == rhs.weekdays
-    }
-}
-
 // MARK: - Schedule Interval
 
 public extension Permission.Schedule {
     
     /// The minute interval range the lock can be unlocked.
-    struct Interval: RawRepresentable {
+    struct Interval: RawRepresentable, Equatable, Hashable {
         
         internal static let min: UInt16 = 0
         
@@ -151,19 +125,11 @@ public extension Permission.Schedule {
     }
 }
 
-extension Permission.Schedule.Interval: Equatable {
-    
-    public static func == (lhs: Permission.Schedule.Interval, rhs: Permission.Schedule.Interval) -> Bool {
-        
-        return lhs.rawValue == rhs.rawValue
-    }
-}
-
 // MARK: - Schedule Weekdays
 
 public extension Permission.Schedule {
     
-    struct Weekdays {
+    struct Weekdays: Codable, Equatable, Hashable {
         
         public var sunday: Bool
         public var monday: Bool
@@ -190,12 +156,21 @@ public extension Permission.Schedule {
             self.saturday = saturday
         }
         
+        public static let all = Weekdays(
+            sunday: true,
+            monday: true,
+            tuesday: true,
+            wednesday: true,
+            thursday: true,
+            friday: true,
+            saturday: true
+        )
+        
         public subscript (weekday: Int) -> Bool {
             
             get {
                 
                 switch weekday {
-                    
                 case 1: return sunday
                 case 2: return monday
                 case 3: return tuesday
@@ -203,7 +178,6 @@ public extension Permission.Schedule {
                 case 5: return thursday
                 case 6: return friday
                 case 7: return saturday
-                    
                 default: fatalError("Invalid weekday \(weekday)")
                 }
             }
@@ -211,7 +185,6 @@ public extension Permission.Schedule {
             set {
                 
                 switch weekday {
-                    
                 case 1: sunday = newValue
                 case 2: monday = newValue
                 case 3: tuesday = newValue
@@ -219,25 +192,10 @@ public extension Permission.Schedule {
                 case 5: thursday = newValue
                 case 6: friday = newValue
                 case 7: saturday = newValue
-                
                 default: fatalError("Invalid weekday \(weekday)")
                 }
             }
         }
-    }
-}
-
-extension Permission.Schedule.Weekdays: Equatable {
-    
-    public static func == (lhs: Permission.Schedule.Weekdays, rhs: Permission.Schedule.Weekdays) -> Bool {
-        
-        return lhs.sunday == rhs.sunday
-            && lhs.monday == rhs.monday
-            && lhs.tuesday == rhs.tuesday
-            && lhs.wednesday == rhs.wednesday
-            && lhs.thursday == rhs.thursday
-            && lhs.friday == rhs.friday
-            && lhs.saturday == rhs.saturday
     }
 }
 
@@ -289,34 +247,6 @@ extension Permission: Codable {
     }
 }
 
-extension Permission.Schedule: Codable {
-    
-    public enum CodingKeys: String, CodingKey {
-        
-        case expiry
-        case interval
-        case weekdays
-    }
-    
-    public init(from decoder: Decoder) throws {
-        
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        
-        self.expiry = try container.decode(Date.self, forKey: .expiry)
-        self.interval = try container.decode(Interval.self, forKey: .interval)
-        self.weekdays = try container.decode(Weekdays.self, forKey: .weekdays)
-    }
-    
-    public func encode(to encoder: Encoder) throws {
-        
-        var container = encoder.container(keyedBy: CodingKeys.self)
-        
-        try container.encode(expiry, forKey: .expiry)
-        try container.encode(interval, forKey: .interval)
-        try container.encode(weekdays, forKey: .weekdays)
-    }
-}
-
 extension Permission.Schedule.Interval: Codable {
     
     public enum CodingKeys: String, CodingKey {
@@ -328,58 +258,56 @@ extension Permission.Schedule.Interval: Codable {
     public init(from decoder: Decoder) throws {
         
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        
         let min = try container.decode(UInt16.self, forKey: .min)
         let max = try container.decode(UInt16.self, forKey: .max)
-        
         self.init(rawValue: min ... max)! // FIXME: may crash
     }
     
     public func encode(to encoder: Encoder) throws {
         
         var container = encoder.container(keyedBy: CodingKeys.self)
-        
         try container.encode(rawValue.lowerBound, forKey: .min)
         try container.encode(rawValue.upperBound, forKey: .max)
     }
 }
 
-extension Permission.Schedule.Weekdays: Codable {
+extension Permission.Schedule.Weekdays: TLVCodable {
     
-    public enum CodingKeys: String, CodingKey {
+    internal static var length: Int { return 7 }
+    
+    public init?(tlvData data: Data) {
         
-        case sunday
-        case monday
-        case tuesday
-        case wednesday
-        case thursday
-        case friday
-        case saturday
+        guard data.count == type(of: self).length
+            else { return nil }
+        
+        guard let sunday = Bool(byteValue: data[0]),
+            let monday = Bool(byteValue: data[1]),
+            let tuesday = Bool(byteValue: data[2]),
+            let wednesday = Bool(byteValue: data[3]),
+            let thursday = Bool(byteValue: data[4]),
+            let friday = Bool(byteValue: data[5]),
+            let saturday = Bool(byteValue: data[6])
+            else { return nil }
+        
+        self.sunday = sunday
+        self.monday = monday
+        self.tuesday = tuesday
+        self.wednesday = wednesday
+        self.thursday = thursday
+        self.friday = friday
+        self.saturday = saturday
     }
     
-    public init(from decoder: Decoder) throws {
+    public var tlvData: Data {
         
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        
-        self.sunday = try container.decode(Bool.self, forKey: .sunday)
-        self.monday = try container.decode(Bool.self, forKey: .monday)
-        self.tuesday = try container.decode(Bool.self, forKey: .tuesday)
-        self.wednesday = try container.decode(Bool.self, forKey: .wednesday)
-        self.thursday = try container.decode(Bool.self, forKey: .thursday)
-        self.friday = try container.decode(Bool.self, forKey: .friday)
-        self.saturday = try container.decode(Bool.self, forKey: .saturday)
-    }
-    
-    public func encode(to encoder: Encoder) throws {
-        
-        var container = encoder.container(keyedBy: CodingKeys.self)
-        
-        try container.encode(sunday, forKey: .sunday)
-        try container.encode(monday, forKey: .monday)
-        try container.encode(tuesday, forKey: .tuesday)
-        try container.encode(wednesday, forKey: .wednesday)
-        try container.encode(thursday, forKey: .thursday)
-        try container.encode(friday, forKey: .friday)
-        try container.encode(saturday, forKey: .saturday)
+        return Data([
+            sunday.byteValue,
+            monday.byteValue,
+            tuesday.byteValue,
+            wednesday.byteValue,
+            thursday.byteValue,
+            friday.byteValue,
+            saturday.byteValue
+            ])
     }
 }
