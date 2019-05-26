@@ -11,11 +11,11 @@ import Bluetooth
 import GATT
 import CoreLock
 
-public typealias LockManager = SmartLockManager<NativeCentral>
+public typealias LockManager = CoreLock.LockManager<NativeCentral>
 
-internal extension SmartLockManager where Central == NativeCentral {
+internal extension LockManager where Central == NativeCentral {
     
-    static var shared: SmartLockManager {
+    static var shared: LockManager {
         
         return LockManagerCache.manager
     }

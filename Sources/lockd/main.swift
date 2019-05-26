@@ -49,7 +49,7 @@ func run() throws {
                                                        securityLevel: .low)
     let mtu = ATTMaximumTransmissionUnit(rawValue: 200)!
     let options = GATTPeripheralOptions(maximumTransmissionUnit: mtu,
-                                        maximumPreparedWrites: 100)
+                                        maximumPreparedWrites: 1000)
     let peripheral = LinuxPeripheral(controller: hostController, options: options)
     peripheral.newConnection = {
         let socket = try serverSocket.waitForConnection()

@@ -24,6 +24,8 @@ public extension UUID {
     static var lockBeacon: UUID { return UUID(rawValue: "8BC4FB5E-AB9B-4F86-94C5-E2E37A62F0E6")! }
 }
 
+#if os(macOS) || os(Linux)
+
 public extension BluetoothHostControllerInterface {
     
     /// LE Advertise with iBeacon
@@ -47,3 +49,5 @@ public extension BluetoothHostControllerInterface {
         try setLowEnergyScanResponse(data, timeout: commandTimeout)
     }
 }
+
+#endif

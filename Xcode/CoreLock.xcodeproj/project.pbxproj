@@ -131,6 +131,10 @@
 		6E60FFFC2121045400787DAA /* UIDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60FF782121041400787DAA /* UIDevice.swift */; };
 		6E60FFFD2121045400787DAA /* Key.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60FF792121041400787DAA /* Key.swift */; };
 		6E60FFFF2121045400787DAA /* GATTProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60FF7B2121041400787DAA /* GATTProfile.swift */; };
+		6E6BBB352299011500A1E869 /* BitMaskOption.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E6BBB342299011400A1E869 /* BitMaskOption.swift */; };
+		6E6BBB362299011500A1E869 /* BitMaskOption.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E6BBB342299011400A1E869 /* BitMaskOption.swift */; };
+		6E6BBB372299011500A1E869 /* BitMaskOption.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E6BBB342299011400A1E869 /* BitMaskOption.swift */; };
+		6E6BBB382299011500A1E869 /* BitMaskOption.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E6BBB342299011400A1E869 /* BitMaskOption.swift */; };
 		6EC3548C2292822E00364B5F /* TLV.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EC3548B2292822D00364B5F /* TLV.swift */; };
 		6EC3548D2292822E00364B5F /* TLV.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EC3548B2292822D00364B5F /* TLV.swift */; };
 		6EC3548E2292822E00364B5F /* TLV.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EC3548B2292822D00364B5F /* TLV.swift */; };
@@ -194,6 +198,7 @@
 		6E60FF7F2121041400787DAA /* Bool.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bool.swift; sourceTree = "<group>"; };
 		6E60FF802121041400787DAA /* Chunk.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Chunk.swift; sourceTree = "<group>"; };
 		6E60FF822121041400787DAA /* GATTError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GATTError.swift; sourceTree = "<group>"; };
+		6E6BBB342299011400A1E869 /* BitMaskOption.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BitMaskOption.swift; sourceTree = "<group>"; };
 		6EC3548B2292822D00364B5F /* TLV.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TLV.swift; sourceTree = "<group>"; };
 		AD2FAA261CD0B6D800659CF4 /* CoreLock.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = CoreLock.plist; sourceTree = "<group>"; };
 		AD2FAA281CD0B6E100659CF4 /* CoreLockTests.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = CoreLockTests.plist; sourceTree = "<group>"; };
@@ -338,6 +343,7 @@
 				6E60FF682121041400787DAA /* AuthenticationError.swift */,
 				6E60FF7F2121041400787DAA /* Bool.swift */,
 				6E60FF642121041400787DAA /* BuildVersion.swift */,
+				6E6BBB342299011400A1E869 /* BitMaskOption.swift */,
 				6E60FF6A2121041400787DAA /* Central.swift */,
 				6E60FF802121041400787DAA /* Chunk.swift */,
 				6E60FF712121041400787DAA /* Crypto.swift */,
@@ -620,6 +626,7 @@
 				6E60FF912121045300787DAA /* DateComponents.swift in Sources */,
 				6E60FF992121045300787DAA /* UIDevice.swift in Sources */,
 				6E60FFA32121045300787DAA /* GATTError.swift in Sources */,
+				6E6BBB352299011500A1E869 /* BitMaskOption.swift in Sources */,
 				6E60FF852121045300787DAA /* BuildVersion.swift in Sources */,
 				6E60FF872121045300787DAA /* Advertisement.swift in Sources */,
 				6E60FF8F2121045300787DAA /* Version.swift in Sources */,
@@ -659,6 +666,7 @@
 				6E60FFD32121045400787DAA /* DateComponents.swift in Sources */,
 				6E60FFDB2121045400787DAA /* UIDevice.swift in Sources */,
 				6E60FFE52121045400787DAA /* GATTError.swift in Sources */,
+				6E6BBB372299011500A1E869 /* BitMaskOption.swift in Sources */,
 				6E60FFC72121045400787DAA /* BuildVersion.swift in Sources */,
 				6E60FFC92121045400787DAA /* Advertisement.swift in Sources */,
 				6E60FFD12121045400787DAA /* Version.swift in Sources */,
@@ -698,6 +706,7 @@
 				6E60FFF42121045400787DAA /* DateComponents.swift in Sources */,
 				6E60FFFC2121045400787DAA /* UIDevice.swift in Sources */,
 				6E6000062121045400787DAA /* GATTError.swift in Sources */,
+				6E6BBB382299011500A1E869 /* BitMaskOption.swift in Sources */,
 				6E60FFE82121045400787DAA /* BuildVersion.swift in Sources */,
 				6E60FFEA2121045400787DAA /* Advertisement.swift in Sources */,
 				6E60FFF22121045400787DAA /* Version.swift in Sources */,
@@ -737,6 +746,7 @@
 				6E60FFB22121045300787DAA /* DateComponents.swift in Sources */,
 				6E60FFBA2121045300787DAA /* UIDevice.swift in Sources */,
 				6E60FFC42121045300787DAA /* GATTError.swift in Sources */,
+				6E6BBB362299011500A1E869 /* BitMaskOption.swift in Sources */,
 				6E60FFA62121045300787DAA /* BuildVersion.swift in Sources */,
 				6E60FFA82121045300787DAA /* Advertisement.swift in Sources */,
 				6E60FFB02121045300787DAA /* Version.swift in Sources */,
