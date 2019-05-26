@@ -1,7 +1,7 @@
 github "JonasGessner/JGProgressHUD" "v2.0.3"
 github "PureSwift/Bluetooth" "cd5d3fa8a243d405c024a907481a6179c46a9cd6"
 github "PureSwift/GATT" "e6ac711ce0ebafd30d8d8ba11b9015a9f1d0a5fb"
-github "PureSwift/TLVCoding" "da45f1d689f42dffa9fe35312621549adb3546a0"
+github "PureSwift/TLVCoding" "0ed6d126d0af476b348d96b45ce68814f9ad76d8"
 github "kishikawakatsumi/KeychainAccess" "v3.2.0"
 github "krzyzanowskim/CryptoSwift" "8559320dc5f5e4a7447e2ee146324986deb0ebc9"
 github "yannickl/QRCodeReader.swift" "10.1.0"

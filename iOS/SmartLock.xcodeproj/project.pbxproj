@@ -410,6 +410,7 @@
 				"$(SRCROOT)/../Carthage/Build/iOS/QRCodeReader.framework",
 				"$(SRCROOT)/../Carthage/Build/iOS/JGProgressHUD.framework",
 				"$(SRCROOT)/../Carthage/Build/iOS/KeychainAccess.framework",
+				"$(SRCROOT)/../Carthage/Build/iOS/TLVCoding.framework",
 			);
 			name = Carthage;
 			outputPaths = (
