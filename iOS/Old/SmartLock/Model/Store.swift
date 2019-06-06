@@ -7,46 +7,65 @@
 //
 
 import Foundation
+import Combine
+import SwiftUI
 import Bluetooth
 import CoreLock
 import GATT
-
-#if os(iOS)
 import KeychainAccess
-#endif
 
 public final class Store {
+    
+    // MARK: - Initialization
     
     public static let shared = Store()
     
     private init() {
-        
-        loadCache()
+        locks = defaults.get(for: locksStorageKey) ?? [:]
+        scanDuration = defaults.get(for: scanDurationStorageKey) ?? 10.0
     }
     
-    public let scanning = Observable(false)
+    // MARK: - Methods
+    
+    public let didChange = PassthroughSubject<Store, Never>()
     
     private let defaults = Defaults.shared
-    
     private let keychain = Keychain()
     
-    private let storageKey = DefaultsKey<[UUID: LockCache]>("locks")
-    
     // Stored keys
+    private let locksStorageKey = DefaultsKey<[UUID: LockCache]>("locks")
     private var locks = [UUID: LockCache]() {
-        
-        didSet { writeCache() }
+        didSet {
+            didChange.send(self)
+            defaults.set(locks, for: locksStorageKey)
+        }
+    }
+    
+    private let scanDurationStorageKey = DefaultsKey<TimeInterval>("scanDuration")
+    public var scanDuration: TimeInterval = 10.0 {
+        didSet {
+            didChange.send(self)
+            defaults.set(scanDuration, for: scanDurationStorageKey)
+        }
     }
     
     // BLE cache
-    public private(set) var peripherals = Observable([NativeCentral.Peripheral: LockPeripheral<NativeCentral>]())
-    public private(set) var lockInformation = Observable([NativeCentral.Peripheral: InformationCharacteristic]())
+    public private(set) var isScanning = false {
+        didSet { didChange.send(self) }
+    }
+    public private(set) var peripherals = [Peripheral: LockPeripheral]() {
+        didSet { didChange.send(self) }
+    }
+    public private(set) var lockInformation = [Peripheral: InformationCharacteristic]() {
+        didSet { didChange.send(self) }
+    }
+    
+    // MARK: - Subscript
     
     /// Key identifier for the specified
     public subscript (lock identifier: UUID) -> LockCache? {
         
         get { return locks[identifier] }
-        
         set { locks[identifier] = newValue }
     }
     
@@ -69,31 +88,26 @@ public final class Store {
             try! keychain.set(data, key: identifier.rawValue)
         }
     }
-    
-    private func loadCache() {
-        
-        locks = defaults.get(for: storageKey) ?? [:]
-    }
-    
-    private func writeCache() {
-        
-        defaults.set(locks, for: storageKey)
-    }
 }
+
+// MARK: - Device Methods
 
 public extension Store {
     
     func scan(duration: TimeInterval) throws {
         
-        self.peripherals.value.removeAll()
+        self.isScanning = true
+        defer { self.isScanning = false }
+        
+        self.peripherals.removeAll()
         
         try LockManager.shared.scan(duration: duration, filterDuplicates: false) { [unowned self] in
-            self.peripherals.value[$0.scanData.peripheral] = $0
+            self.peripherals[$0.scanData.peripheral] = $0
         }
     }
     
     /// Setup a lock.
-    func setup(_ lock: LockPeripheral<NativeCentral>,
+    func setup(_ lock: LockPeripheral,
                sharedSecret: KeyData,
                name: String) throws {
         
@@ -112,20 +126,22 @@ public extension Store {
         self[key: ownerKey.identifier] = setupRequest.secret
         
         // update lock information
-        self.lockInformation.value[lock.scanData.peripheral] = information
+        self.lockInformation[lock.scanData.peripheral] = information
     }
     
-    func readInformation(_ lock: LockPeripheral<NativeCentral>) throws {
+    func readInformation(_ lock: LockPeripheral) throws {
         
         let information = try LockManager.shared.readInformation(for: lock.scanData.peripheral)
         
         // update lock information
-        self.lockInformation.value[lock.scanData.peripheral] = information
+        self.lockInformation[lock.scanData.peripheral] = information
     }
 }
 
+// MARK: - Supporting Types
+
 /// Lock Cache
-public struct LockCache: Codable {
+public struct LockCache: Equatable, Codable {
     
     /// Stored key for lock.
     ///

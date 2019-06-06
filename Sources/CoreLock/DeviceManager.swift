@@ -133,7 +133,7 @@ public final class LockManager <Central: CentralProtocol> {
     }
 }
 
-public struct LockPeripheral <Central: CentralProtocol> {
+public struct LockPeripheral <Central: CentralProtocol>: Equatable {
     
     /// Scan Data
     public let scanData: ScanData<Central.Peripheral, Central.Advertisement>
