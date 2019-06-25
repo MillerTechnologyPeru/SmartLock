@@ -41,7 +41,7 @@ public final class LockServiceController <Peripheral: PeripheralProtocol> : GATT
         didSet { updateInformation() }
     }
     
-    public var unlockDelegate: LockUnlockDelegate = UnlockSimulator()
+    public var unlockDelegate: UnlockDelegate = UnlockSimulator()
     
     // characteristics
     
@@ -255,7 +255,7 @@ public protocol LockAuthorizationStore {
 }
 
 /// Lock unlock manager
-public protocol LockUnlockDelegate {
+public protocol UnlockDelegate {
     
     func unlock(_ action: UnlockAction) throws
 }
@@ -275,7 +275,7 @@ public final class InMemoryLockConfigurationStore: LockConfigurationStore {
     }
 }
 
-public struct UnlockSimulator: LockUnlockDelegate {
+public struct UnlockSimulator: UnlockDelegate {
     
     public func unlock(_ action: UnlockAction) throws {
         

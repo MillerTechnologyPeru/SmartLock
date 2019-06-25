@@ -30,6 +30,8 @@ var controller: LockController<LinuxPeripheral>?
 var controller: LockController<DarwinPeripheral>?
 #endif
 
+var gpio: LockGPIOController?
+
 func run() throws {
     
     guard let hostController = HostController.default
@@ -99,6 +101,12 @@ func run() throws {
     controller?.lockServiceController.setupSecret = try LockSetupSecretFile(
         createdAt: URL(fileURLWithPath: "/opt/colemancda/lockd/sharedSecret")
     )
+    
+    // load GPIO
+    if let gpioController = hardware.gpioController() {
+        controller?.lockServiceController.unlockDelegate = gpioController
+        gpio = gpioController
+    }
     
     // publish GATT server, enable advertising
     try peripheral.start()

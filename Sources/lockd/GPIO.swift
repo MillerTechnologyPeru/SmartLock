@@ -6,11 +6,36 @@
 //
 
 import Foundation
+import CoreLock
+import CoreLockGATTServer
 import SwiftyGPIO
 
-public protocol LockGPIOController: class {
+public protocol LockGPIOController: class, UnlockDelegate {
     
-    func activateLockRelay()
+    var isRelayOn: Bool { get set }
+}
+
+public extension LockGPIOController {
+    
+    func unlock(_ action: UnlockAction) throws {
+        
+        isRelayOn = true
+        sleep(1)
+        isRelayOn = false
+    }
+}
+
+public extension LockHardware {
+    
+    func gpioController() -> LockGPIOController? {
+        
+        switch model {
+        case LockModel.orangePiOne:
+            return OrangePiOneGPIO()
+        default:
+            return nil
+        }
+    }
 }
 
 public final class OrangePiOneGPIO: LockGPIOController {
@@ -22,8 +47,8 @@ public final class OrangePiOneGPIO: LockGPIOController {
         return gpio
     }()
     
-    public func activateLockRelay() {
-        
-        relayGPIO.value = 1
+    public var isRelayOn: Bool {
+        get { return relayGPIO.value != 0 }
+        set { relayGPIO.value = newValue ? 1 : 0 }
     }
 }
