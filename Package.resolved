@@ -33,7 +33,7 @@
         "repositoryURL": "https://github.com/krzyzanowskim/CryptoSwift",
         "state": {
           "branch": "master",
-          "revision": "46c194f3245942459df25d885fa34bb3422852c8",
+          "revision": "c91564cc14c5133cbb2e2009bf59cbd6fbb1bd80",
           "version": null
         }
       },
@@ -43,6 +43,15 @@
         "state": {
           "branch": "master",
           "revision": "22baa2a61263531a352c6e254bf3519be983aa26",
+          "version": null
+        }
+      },
+      {
+        "package": "SwiftyGPIO",
+        "repositoryURL": "https://github.com/uraimo/SwiftyGPIO.git",
+        "state": {
+          "branch": "master",
+          "revision": "257794542634bddf93dadbc94f92f8caf134f589",
           "version": null
         }
       },

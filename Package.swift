@@ -23,11 +23,15 @@ let package = Package(
     ],
     dependencies: [
         .package(
-            url: "https://github.com/PureSwift/TLVCoding.git",
+            url: "https://github.com/krzyzanowskim/CryptoSwift",
             .branch("master")
         ),
         .package(
-            url: "https://github.com/krzyzanowskim/CryptoSwift",
+            url: "https://github.com/uraimo/SwiftyGPIO.git",
+            .branch("master")
+        ),
+        .package(
+            url: "https://github.com/PureSwift/TLVCoding.git",
             .branch("master")
         ),
         .package(
@@ -49,7 +53,8 @@ let package = Package(
             dependencies: [
                 nativeBluetooth,
                 nativeGATT,
-                "CoreLockGATTServer"
+                "CoreLockGATTServer",
+                "SwiftyGPIO"
             ]
         ),
         .target(
