@@ -47,8 +47,7 @@ func run() throws {
     let serverSocket = try L2CAPSocket.lowEnergyServer(controllerAddress: hostController.address,
                                                        isRandom: false,
                                                        securityLevel: .low)
-    let mtu = ATTMaximumTransmissionUnit(rawValue: 200)!
-    let options = GATTPeripheralOptions(maximumTransmissionUnit: mtu,
+    let options = GATTPeripheralOptions(maximumTransmissionUnit: .max,
                                         maximumPreparedWrites: 1000)
     let peripheral = LinuxPeripheral(controller: hostController, options: options)
     peripheral.newConnection = {
@@ -93,13 +92,10 @@ func run() throws {
     controller = try LockController(peripheral: peripheral)
     
     controller?.hardware = hardware
-    
     controller?.lockServiceController.configurationStore = configurationStore
-    
     controller?.lockServiceController.authorization = AuthorizationStoreFile(
         url: URL(fileURLWithPath: "/opt/colemancda/lockd/data.json")
     )
-    
     controller?.lockServiceController.setupSecret = try LockSetupSecretFile(
         createdAt: URL(fileURLWithPath: "/opt/colemancda/lockd/sharedSecret")
     )
