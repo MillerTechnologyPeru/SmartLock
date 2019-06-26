@@ -81,6 +81,7 @@ func run() throws {
     print("🔒 Lock \(lockIdentifier)")
     
     // setup controller
+    //let hardware =
     #if os(macOS)
         let hardware = LockHardware.mac
     #elseif os(Linux)
@@ -100,7 +101,7 @@ func run() throws {
     )
     controller?.lockServiceController.setupSecret = try LockSetupSecretFile(
         createdAt: URL(fileURLWithPath: "/opt/colemancda/lockd/sharedSecret")
-    )
+    ).sharedSecret
     
     // load GPIO
     if let gpioController = hardware.gpioController() {
@@ -125,4 +126,7 @@ func Error(_ text: String) -> Never {
 }
 
 do { try run() }
-catch { Error("\(error)") }
+catch {
+    dump(error)
+    Error("\(error.localizedDescription)")
+}

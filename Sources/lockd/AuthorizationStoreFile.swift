@@ -9,6 +9,7 @@
 
 import Foundation
 import CoreLock
+import CoreLockGATTServer
 
 public final class AuthorizationStoreFile: LockAuthorizationStore {
     

@@ -8,6 +8,7 @@
 
 import Foundation
 import CoreLock
+import CoreLockGATTServer
 
 /// Stores the lock configuration in a JSON file.
 public final class LockConfigurationFile: LockConfigurationStore {

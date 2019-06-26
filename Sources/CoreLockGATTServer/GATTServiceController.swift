@@ -38,8 +38,5 @@ public extension GATTServiceController {
         return nil
     }
     
-    func didWrite(_ request: GATTWriteConfirmation<Peripheral.Central>) {
-        
-        
-    }
+    func didWrite(_ request: GATTWriteConfirmation<Peripheral.Central>) { }
 }

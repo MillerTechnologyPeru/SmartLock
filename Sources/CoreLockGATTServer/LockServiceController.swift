@@ -34,7 +34,7 @@ public final class LockServiceController <Peripheral: PeripheralProtocol> : GATT
     
     // data source / delegate
     
-    public var setupSecret: LockSetupSecretStore = InMemoryLockSetupSecret()
+    public var setupSecret: KeyData = KeyData()
     
     public var authorization: LockAuthorizationStore = InMemoryLockAuthorization()  {
         
@@ -141,7 +141,7 @@ public final class LockServiceController <Peripheral: PeripheralProtocol> : GATT
                 else { print("Could not parse \(SetupCharacteristic.self)"); return }
             
             // get key for shared device.
-            let sharedSecret = setupSecret.sharedSecret
+            let sharedSecret = setupSecret
             
             do {
                 

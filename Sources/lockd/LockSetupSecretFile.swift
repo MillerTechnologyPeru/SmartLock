@@ -10,7 +10,7 @@ import Foundation
 import CoreLock
 
 /// Stores secret in base64 file.
-public struct LockSetupSecretFile: LockSetupSecretStore {
+public struct LockSetupSecretFile {
     
     public let sharedSecret: KeyData
     
@@ -27,11 +27,8 @@ public extension LockSetupSecretFile {
     init(createdAt url: URL) throws {
         
         if let file = LockSetupSecretFile(url: url) {
-            
             self = file
-            
         } else {
-            
             self = LockSetupSecretFile()
             try write(to: url)
         }
