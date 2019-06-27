@@ -14,8 +14,13 @@ public struct LockConfiguration: Codable, Equatable, Hashable {
     /// Lock identifier UUID
     public let identifier: UUID
     
-    public init(identifier: UUID = UUID()) {
+    /// Lock name
+    public var name: String?
+    
+    public init(identifier: UUID = UUID(),
+                name: String? = nil) {
         
         self.identifier = identifier
+        self.name = name
     }
 }

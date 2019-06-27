@@ -96,7 +96,7 @@ func run() throws {
     
     controller?.hardware = hardware
     controller?.lockServiceController.configurationStore = configurationStore
-    controller?.lockServiceController.authorization = AuthorizationStoreFile(
+    controller?.lockServiceController.authorization = try AuthorizationStoreFile(
         url: URL(fileURLWithPath: "/opt/colemancda/lockd/data.json")
     )
     controller?.lockServiceController.setupSecret = try LockSetupSecretFile(

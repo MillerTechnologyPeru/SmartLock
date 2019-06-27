@@ -15,28 +15,38 @@ public final class AuthorizationStoreFile: LockAuthorizationStore {
     
     // MARK: - Properties
     
-    public let url: URL
+    private let file: JSONFile<Database>
     
-    private let jsonDecoder = JSONDecoder()
-    private let jsonEncoder = JSONEncoder()
-    
-    private var database = Database()
-    
-    public init(url: URL) {
-        
-        self.url = url
-        
-        // attempt to load previous value.
-        loadData()
+    private var database: Database {
+        return file.value
     }
     
-    // MARK: - Methods
+    public var url: URL {
+        return file.url
+    }
     
     public var isEmpty: Bool {
         
         return database.keys.isEmpty
             && database.newKeys.isEmpty
     }
+    
+    public var keysCount: Int {
+        return database.keys.count
+    }
+    
+    public var newKeysCount: Int {
+        return database.newKeys.count
+    }
+    
+    // MARK: - Initialization
+    
+    public init(url: URL) throws {
+        
+        self.file = try JSONFile(url: url, defaultValue: Database())
+    }
+    
+    // MARK: - Methods
     
     public func add(_ key: Key, secret: KeyData) throws {
         
@@ -51,26 +61,36 @@ public final class AuthorizationStoreFile: LockAuthorizationStore {
         return (keyEntry.key, keyEntry.secret)
     }
     
-    private func loadData() {
-        
-        guard let data = try? Data(contentsOf: url),
-            let database = try? jsonDecoder.decode(Database.self, from: data)
-            else { return }
-        
-        self.database = database
-    }
-    
     private func write(database changes: (inout Database) -> ()) throws {
         
         var database = self.database
-        
         changes(&database)
+        try file.write(database)
+    }
+    
+    /// Dump the database
+    public func dump() -> String {
         
-        let data = try jsonEncoder.encode(database)
-        
-        try data.write(to: url, options: .atomic)
-        
-        self.database = database
+        var string = ""
+        Swift.dump(database, to: &string)
+        return string
+    }
+}
+
+extension AuthorizationStoreFile: CustomStringConvertible {
+    
+    public var description: String {
+        return "<AuthorizationStoreFile: \(ObjectIdentifier(self)) url:\(url) keys:\(keysCount) newKeys:\(newKeysCount)>"
+    }
+}
+
+extension AuthorizationStoreFile: CustomDebugStringConvertible {
+    
+    public var debugDescription: String {
+        return """
+        \(url)
+        \(dump())
+        """
     }
 }
 
