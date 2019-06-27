@@ -9,7 +9,7 @@ import Foundation
 import Bluetooth
 
 /// Used to determine identity, compatibility and supported features.
-public struct InformationCharacteristic: TLVCharacteristic, Equatable, Codable {
+public struct LockInformationCharacteristic: TLVCharacteristic, Equatable, Codable {
     
     public static let uuid = BluetoothUUID(rawValue: "6C728682-F57A-4255-BB4E-BFF58D1934CF")!
     

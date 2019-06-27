@@ -45,7 +45,7 @@ public final class LockServiceController <Peripheral: PeripheralProtocol> : GATT
     
     // characteristics
     
-    public private(set) var information: InformationCharacteristic {
+    public private(set) var information: LockInformationCharacteristic {
         
         didSet { peripheral[characteristic: informationHandle] = information.data }
     }
@@ -64,7 +64,7 @@ public final class LockServiceController <Peripheral: PeripheralProtocol> : GATT
         
         let configurationStore = InMemoryLockConfigurationStore()
         
-        let information = InformationCharacteristic(identifier: configurationStore.configuration.identifier,
+        let information = LockInformationCharacteristic(identifier: configurationStore.configuration.identifier,
                                                     buildVersion: .current,
                                                     version: .current,
                                                     status: .setup,
@@ -72,10 +72,10 @@ public final class LockServiceController <Peripheral: PeripheralProtocol> : GATT
         
         let characteristics = [
             
-            GATT.Characteristic(uuid: InformationCharacteristic.uuid,
+            GATT.Characteristic(uuid: LockInformationCharacteristic.uuid,
                                 value: information.data,
                                 permissions: [.read],
-                                properties: InformationCharacteristic.properties),
+                                properties: LockInformationCharacteristic.properties),
             
             GATT.Characteristic(uuid: SetupCharacteristic.uuid,
                                 value: Data(),
@@ -96,7 +96,7 @@ public final class LockServiceController <Peripheral: PeripheralProtocol> : GATT
         
         self.serviceHandle = try peripheral.add(service: service)
         
-        self.informationHandle = peripheral.characteristics(for: InformationCharacteristic.uuid)[0]
+        self.informationHandle = peripheral.characteristics(for: LockInformationCharacteristic.uuid)[0]
         self.setupHandle = peripheral.characteristics(for: SetupCharacteristic.uuid)[0]
         self.unlockHandle = peripheral.characteristics(for: UnlockCharacteristic.uuid)[0]
         
@@ -222,7 +222,7 @@ public final class LockServiceController <Peripheral: PeripheralProtocol> : GATT
         
         let identifier = configurationStore.configuration.identifier
         
-        self.information = InformationCharacteristic(identifier: identifier,
+        self.information = LockInformationCharacteristic(identifier: identifier,
                                                      buildVersion: .current,
                                                      version: .current,
                                                      status: status,

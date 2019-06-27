@@ -23,7 +23,7 @@ public struct LockService: GATTProfileService {
     public static let isPrimary: Bool = true
     
     public static let characteristics: [GATTProfileCharacteristic.Type] = [
-        InformationCharacteristic.self,
+        LockInformationCharacteristic.self,
         UnlockCharacteristic.self,
         SetupCharacteristic.self
     ]

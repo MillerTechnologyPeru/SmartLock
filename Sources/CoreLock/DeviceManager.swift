@@ -70,7 +70,7 @@ public final class LockManager <Central: CentralProtocol> {
     }
     
     public func readInformation(for peripheral: Peripheral,
-                                timeout: TimeInterval = .gattDefaultTimeout) throws -> InformationCharacteristic {
+                                timeout: TimeInterval = .gattDefaultTimeout) throws -> LockInformationCharacteristic {
         
         let timeout = Timeout(timeout: timeout)
         
@@ -81,16 +81,16 @@ public final class LockManager <Central: CentralProtocol> {
     }
     
     internal func readInformation(cache: GATTConnectionCache<Peripheral>,
-                                  timeout: Timeout) throws -> InformationCharacteristic {
+                                  timeout: Timeout) throws -> LockInformationCharacteristic {
         
-        return try central.read(InformationCharacteristic.self, for: cache, timeout: timeout)
+        return try central.read(LockInformationCharacteristic.self, for: cache, timeout: timeout)
     }
     
     /// Setup a lock.
     public func setup(peripheral: Peripheral,
                       with request: SetupRequest,
                       sharedSecret: KeyData,
-                      timeout: TimeInterval = .gattDefaultTimeout) throws -> InformationCharacteristic {
+                      timeout: TimeInterval = .gattDefaultTimeout) throws -> LockInformationCharacteristic {
         
         let timeout = Timeout(timeout: timeout)
         
