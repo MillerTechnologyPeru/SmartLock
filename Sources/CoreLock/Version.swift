@@ -21,7 +21,7 @@ public struct LockVersion: Equatable, Hashable, Codable {
 
 public extension LockVersion {
     
-    static let current = LockVersion(major: 0, minor: 0, patch: 1)
+    static var current: LockVersion { return LockVersion(major: 0, minor: 0, patch: 1) }
 }
 
 // MARK: - CustomStringConvertible

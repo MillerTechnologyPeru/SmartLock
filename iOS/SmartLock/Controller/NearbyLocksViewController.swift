@@ -183,20 +183,13 @@ final class NearbyLocksViewController: UITableViewController {
         let isLoading = self.loading.contains(peripheral)
         
         if isLoading {
-            
             detail = "Loading..."
-            
             cell.activityIndicatorView.isHidden = false
-            
             if cell.activityIndicatorView.isAnimating == false {
-                
                 cell.activityIndicatorView.startAnimating()
             }
-            
         } else {
-            
             if cell.activityIndicatorView.isAnimating == false {
-                
                 cell.activityIndicatorView.stopAnimating()
             }
         }
@@ -218,35 +211,21 @@ final class NearbyLocksViewController: UITableViewController {
                 if let lockCache = Store.shared[lock: information.identifier] {
                     
                     let permission = lockCache.key.permission
-                    
                     let permissionImage: UIImage
-                    
                     let permissionText: String
                     
                     switch permission {
-                        
                     case .owner:
-                        
                         permissionImage = #imageLiteral(resourceName: "permissionBadgeOwner")
-                        
                         permissionText = "Owner"
-                        
                     case .admin:
-                        
                         permissionImage = #imageLiteral(resourceName: "permissionBadgeAdmin")
-                        
                         permissionText = "Admin"
-                        
                     case .anytime:
-                        
                         permissionImage = #imageLiteral(resourceName: "permissionBadgeAnytime")
-                        
                         permissionText = "Anytime"
-                        
                     case .scheduled:
-                        
                         permissionImage = #imageLiteral(resourceName: "permissionBadgeScheduled")
-                        
                         permissionText = "Scheduled" // FIXME: Localized Schedule text
                     }
                     
@@ -275,11 +254,8 @@ final class NearbyLocksViewController: UITableViewController {
         
         if let information = Store.shared.lockInformation.value[lock.scanData.peripheral],
             information.status == .setup {
-            
             setup(lock)
-            
         } else {
-            
             unlock(lock)
         }
     }

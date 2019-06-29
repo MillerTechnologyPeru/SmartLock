@@ -43,13 +43,6 @@ public final class LockServiceController <Peripheral: PeripheralProtocol> : GATT
     
     public var unlockDelegate: UnlockDelegate = UnlockSimulator()
     
-    // characteristics
-    
-    public private(set) var information: LockInformationCharacteristic {
-        
-        didSet { peripheral[characteristic: informationHandle] = information.data }
-    }
-    
     // handles
     internal let serviceHandle: UInt16
     internal let informationHandle: UInt16
@@ -64,16 +57,10 @@ public final class LockServiceController <Peripheral: PeripheralProtocol> : GATT
         
         let configurationStore = InMemoryLockConfigurationStore()
         
-        let information = LockInformationCharacteristic(identifier: configurationStore.configuration.identifier,
-                                                    buildVersion: .current,
-                                                    version: .current,
-                                                    status: .setup,
-                                                    unlockActions: [.default])
-        
         let characteristics = [
             
             GATT.Characteristic(uuid: LockInformationCharacteristic.uuid,
-                                value: information.data,
+                                value: Data(),
                                 permissions: [.read],
                                 properties: LockInformationCharacteristic.properties),
             
@@ -100,8 +87,9 @@ public final class LockServiceController <Peripheral: PeripheralProtocol> : GATT
         self.setupHandle = peripheral.characteristics(for: SetupCharacteristic.uuid)[0]
         self.unlockHandle = peripheral.characteristics(for: UnlockCharacteristic.uuid)[0]
         
-        self.information = information
         self.configurationStore = configurationStore
+        
+        updateInformation()
     }
     
     deinit {
@@ -222,11 +210,13 @@ public final class LockServiceController <Peripheral: PeripheralProtocol> : GATT
         
         let identifier = configurationStore.configuration.identifier
         
-        self.information = LockInformationCharacteristic(identifier: identifier,
-                                                     buildVersion: .current,
-                                                     version: .current,
-                                                     status: status,
-                                                     unlockActions: [.default])
+        let information = LockInformationCharacteristic(identifier: identifier,
+                                                        buildVersion: .current,
+                                                        version: .current,
+                                                        status: status,
+                                                        unlockActions: [.default])
+        
+        peripheral[characteristic: informationHandle] = information.data
     }
 }
 

@@ -47,7 +47,7 @@ public extension LockHardware {
         
         static var mac: LockHardware {
             
-            return LockHardware(model: .mac,
+            return LockHardware(model: .currentMac,
                                 hardwareRevision: UIDevice.current.modelIdentifier,
                                 serialNumber: UIDevice.current.serialNumber)
         }

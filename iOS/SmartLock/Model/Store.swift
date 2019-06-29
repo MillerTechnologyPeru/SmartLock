@@ -34,8 +34,10 @@ public final class Store {
     
     // Stored keys
     private var locks = [UUID: LockCache]() {
-        
-        didSet { writeCache() }
+        didSet {
+            guard locks != oldValue else { return }
+            writeCache()
+        }
     }
     
     // BLE cache
@@ -47,7 +49,6 @@ public final class Store {
     public subscript (lock identifier: UUID) -> LockCache? {
         
         get { return locks[identifier] }
-        
         set { locks[identifier] = newValue }
     }
     
@@ -126,7 +127,7 @@ public extension Store {
 }
 
 /// Lock Cache
-public struct LockCache: Codable {
+public struct LockCache: Codable, Equatable {
     
     /// Stored key for lock.
     ///

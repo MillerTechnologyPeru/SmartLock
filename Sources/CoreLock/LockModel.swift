@@ -54,7 +54,7 @@ public extension LockModel {
     
     public extension LockModel {
         
-        static var mac: LockModel {
+        static var currentMac: LockModel {
             
             return LockModel(rawValue: UIDevice.current.model)
         }
