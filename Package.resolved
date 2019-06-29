@@ -42,7 +42,7 @@
         "repositoryURL": "https://github.com/PureSwift/GATT.git",
         "state": {
           "branch": "master",
-          "revision": "22baa2a61263531a352c6e254bf3519be983aa26",
+          "revision": "f6dcce60af3ac9559856cc123c4f5245973f3653",
           "version": null
         }
       },
@@ -51,7 +51,7 @@
         "repositoryURL": "https://github.com/uraimo/SwiftyGPIO.git",
         "state": {
           "branch": "master",
-          "revision": "257794542634bddf93dadbc94f92f8caf134f589",
+          "revision": "8b8cde2eb7d8edbb770f6867d8a2c403d399a30c",
           "version": null
         }
       },
