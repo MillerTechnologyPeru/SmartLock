@@ -273,7 +273,7 @@ final class NearbyLocksViewController: UITableViewController {
             async {
                 
                 do { try Store.shared.readInformation(lock) }
-                catch { log("Could not read information for peripheral \(lock.scanData.peripheral)") }
+                catch { log("Could not read information for peripheral \(lock.scanData.peripheral): \(error)") }
                 
                 // no longer loading
                 mainQueue { [weak self] in self?.loading.remove(peripheral) }

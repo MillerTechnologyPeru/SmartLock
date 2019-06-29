@@ -228,12 +228,6 @@ public protocol LockConfigurationStore {
     func update(_ configuration: LockConfiguration) throws
 }
 
-/// Lock Setup Shared Secret Store
-public protocol LockSetupSecretStore {
-    
-    var sharedSecret: KeyData { get }
-}
-
 /// Lock Authorization Store
 public protocol LockAuthorizationStore {
     
