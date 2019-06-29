@@ -40,7 +40,8 @@ public final class Store {
     
     // BLE cache
     public private(set) var peripherals = Observable([NativeCentral.Peripheral: LockPeripheral<NativeCentral>]())
-    public private(set) var lockInformation = Observable([NativeCentral.Peripheral: InformationCharacteristic]())
+    
+    public private(set) var lockInformation = Observable([NativeCentral.Peripheral: LockInformationCharacteristic]())
     
     /// Key identifier for the specified
     public subscript (lock identifier: UUID) -> LockCache? {
