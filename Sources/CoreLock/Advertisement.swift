@@ -34,7 +34,7 @@ public extension BluetoothHostControllerInterface {
         let beacon = AppleBeacon(uuid: lock, rssi: rssi)
         let flags: GAPFlags = [.lowEnergyGeneralDiscoverableMode, .notSupportedBREDR]
         
-        try iBeacon(beacon, flags: flags, interval: .min)
+        try iBeacon(beacon, flags: flags, interval: .min, timeout: commandTimeout)
     }
     
     /// LE Scan Response

@@ -46,11 +46,15 @@ func run() throws {
     }
     
     #if os(Linux)
-    let serverSocket = try L2CAPSocket.lowEnergyServer(controllerAddress: hostController.address,
-                                                       isRandom: false,
-                                                       securityLevel: .low)
-    let options = GATTPeripheralOptions(maximumTransmissionUnit: .max,
-                                        maximumPreparedWrites: 1000)
+    let serverSocket = try L2CAPSocket.lowEnergyServer(
+        controllerAddress: address,
+        isRandom: false,
+        securityLevel: .low
+    )
+    let options = GATTPeripheralOptions(
+        maximumTransmissionUnit: .max,
+        maximumPreparedWrites: 1000
+    )
     let peripheral = LinuxPeripheral(controller: hostController, options: options)
     peripheral.newConnection = {
         let socket = try serverSocket.waitForConnection()
@@ -62,7 +66,7 @@ func run() throws {
     let peripheral = DarwinPeripheral()
     #endif
     
-    print("Initialized \(type(of: peripheral)) with options:")
+    print("Initialized \(String(reflecting: type(of: peripheral))) with options:")
     dump(peripheral.options)
     
     peripheral.log = peripheralLog
@@ -80,21 +84,9 @@ func run() throws {
     
     print("🔒 Lock \(lockIdentifier)")
     
-    // setup controller
-    //let hardware =
-    #if os(macOS)
-        let hardware = LockHardware.mac
-    #elseif os(Linux)
-        let hardware = LockHardware.empty
-    #endif
-    
-    print("Running on hardware:")
-    dump(hardware)
-    
     // Intialize Smart Connect BLE Controller
     controller = try LockController(peripheral: peripheral)
     
-    controller?.hardware = hardware
     controller?.lockServiceController.configurationStore = configurationStore
     controller?.lockServiceController.authorization = try AuthorizationStoreFile(
         url: URL(fileURLWithPath: "/opt/colemancda/lockd/data.json")
@@ -103,10 +95,20 @@ func run() throws {
         createdAt: URL(fileURLWithPath: "/opt/colemancda/lockd/sharedSecret")
     ).sharedSecret
     
-    // load GPIO
-    if let gpioController = hardware.gpioController() {
-        controller?.lockServiceController.unlockDelegate = gpioController
-        gpio = gpioController
+    // setup controller
+    if let hardware = try? JSONDecoder().decode(LockHardware.self, from: URL(fileURLWithPath: "/opt/colemancda/lockd/hardware.json")) {
+        
+        print("Running on hardware:")
+        dump(hardware)
+        
+        controller?.hardware = hardware
+        
+        // load GPIO
+        if let gpioController = hardware.gpioController() {
+            print("Loaded GPIO Controller: \(type(of: gpioController))")
+            controller?.lockServiceController.unlockDelegate = gpioController
+            gpio = gpioController
+        }
     }
     
     // publish GATT server, enable advertising
@@ -115,6 +117,7 @@ func run() throws {
     // configure custom advertising
     try hostController.setLockAdvertisingData(lock: lockIdentifier, rssi: 30) // FIXME: RSSI
     try hostController.setLockScanResponse()
+    try hostController.writeLocalName("Lock")
     
     // run main loop
     RunLoop.main.run()

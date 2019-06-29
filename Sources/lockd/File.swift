@@ -65,15 +65,6 @@ public final class JSONFile <T: Codable> {
     }
 }
 
-internal extension JSONDecoder {
-    
-    func decode <T: Decodable> (_ type: T.Type, from url: URL) throws -> T {
-        
-        let data = try Data(contentsOf: url)
-        return try self.decode(type, from: data)
-    }
-}
-
 internal extension FileManager {
     
     func createIntermediateDirectories(for url: URL) throws {
