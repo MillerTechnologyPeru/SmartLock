@@ -125,77 +125,22 @@ public final class LockServiceController <Peripheral: PeripheralProtocol> : GATT
             assert(authorization.isEmpty, "Already setup")
             
             // parse characteristic
-            guard let setup = SetupCharacteristic(data: write.value)
+            guard let characteristic = SetupCharacteristic(data: write.value)
                 else { print("Could not parse \(SetupCharacteristic.self)"); return }
             
-            // get key for shared device.
-            let sharedSecret = setupSecret
-            
-            do {
-                
-                // guard against replay attacks
-                let timestamp = setup.encryptedData.authentication.message.date
-                let now = Date()
-                guard timestamp < now, // cannot be used later for replay attacks
-                    timestamp > now - 5.0 // only valid for 5 seconds
-                    else { print("Authentication expired"); return }
-                
-                // decrypt request
-                let setupRequest = try setup.decrypt(with: sharedSecret)
-                
-                // create owner key
-                let ownerKey = Key(setup: setupRequest)
-                
-                // store first key
-                try authorization.add(ownerKey, secret: setupRequest.secret)
-                
-                print("Lock setup completed")
-                
-                updateInformation()
-                
-            } catch { print("Setup error: \(error)") }
+            setup(characteristic)
             
         case unlockHandle:
             
-            assert(authorization.isEmpty == false)
+            assert(authorization.isEmpty == false, "No keys")
             
             // parse characteristic
-            guard let unlock = UnlockCharacteristic(data: write.value)
+            guard let characteristic = UnlockCharacteristic(data: write.value)
                 else { print("Could not parse \(UnlockCharacteristic.self)"); return }
             
-            let keyIdentifier = unlock.identifier
+            unlock(characteristic)
             
-            do {
-                
-                guard let (key, secret) = try authorization.key(for: keyIdentifier)
-                    else { print("Unknown key \(keyIdentifier)"); return }
-                
-                assert(key.identifier == keyIdentifier, "Invalid key")
-                
-                // validate HMAC
-                guard unlock.authentication.isAuthenticated(with: secret)
-                    else { print("Invalid key secret"); return }
-                
-                // guard against replay attacks
-                let timestamp = unlock.authentication.message.date
-                let now = Date()
-                guard timestamp < now, // cannot be used later for replay attacks
-                    timestamp > now - 5.0 // only valid for 5 seconds
-                    else { print("Authentication expired"); return }
-                
-                // enforce schedule
-                if case let .scheduled(schedule) = key.permission {
-                    
-                    guard schedule.isValid()
-                        else { print("Cannot unlock during schedule"); return }
-                }
-                
-                // unlock with the specified action
-                try unlockDelegate.unlock(unlock.action)
-                
-                print("Key \(key.identifier) \(key.name) unlocked with action \(unlock.action)")
-                
-            } catch { print("Unlock error: \(error)")  }
+        
             
         default:
             break
@@ -218,6 +163,73 @@ public final class LockServiceController <Peripheral: PeripheralProtocol> : GATT
         
         peripheral[characteristic: informationHandle] = information.data
     }
+    
+    private func setup(_ setup: SetupCharacteristic) {
+        
+        // get key for shared device.
+        let sharedSecret = setupSecret
+        
+        do {
+            
+            // guard against replay attacks
+            let timestamp = setup.encryptedData.authentication.message.date
+            let now = Date()
+            guard timestamp < now, // cannot be used later for replay attacks
+                timestamp > now - 5.0 // only valid for 5 seconds
+                else { print("Authentication expired"); return }
+            
+            // decrypt request
+            let setupRequest = try setup.decrypt(with: sharedSecret)
+            
+            // create owner key
+            let ownerKey = Key(setup: setupRequest)
+            
+            // store first key
+            try authorization.add(ownerKey, secret: setupRequest.secret)
+            
+            print("Lock setup completed")
+            
+            updateInformation()
+            
+        } catch { print("Setup error: \(error)") }
+    }
+    
+    private func unlock(_ unlock: UnlockCharacteristic) {
+        
+        let keyIdentifier = unlock.identifier
+        
+        do {
+            
+            guard let (key, secret) = try authorization.key(for: keyIdentifier)
+                else { print("Unknown key \(keyIdentifier)"); return }
+            
+            assert(key.identifier == keyIdentifier, "Invalid key")
+            
+            // validate HMAC
+            guard unlock.authentication.isAuthenticated(with: secret)
+                else { print("Invalid key secret"); return }
+            
+            // guard against replay attacks
+            let timestamp = unlock.authentication.message.date
+            let now = Date()
+            guard timestamp < now, // cannot be used later for replay attacks
+                timestamp > now - 5.0 // only valid for 5 seconds
+                else { print("Authentication expired"); return }
+            
+            // enforce schedule
+            if case let .scheduled(schedule) = key.permission {
+                
+                guard schedule.isValid()
+                    else { print("Cannot unlock during schedule"); return }
+            }
+            
+            // unlock with the specified action
+            try unlockDelegate.unlock(unlock.action)
+            
+            print("Key \(key.identifier) \(key.name) unlocked with action \(unlock.action)")
+            
+        } catch { print("Unlock error: \(error)")  }
+    }
 }
 
 /// Lock Configuration Storage
@@ -236,6 +248,12 @@ public protocol LockAuthorizationStore {
     func add(_ key: Key, secret: KeyData) throws
     
     func key(for identifier: UUID) throws -> (key: Key, secret: KeyData)?
+    
+    func add(_ key: NewKey, secret: KeyData) throws
+    
+    func newKey(for identifier: UUID) throws -> (newKey: NewKey, secret: KeyData)?
+    
+    var list: KeysList { get }
 }
 
 /// Lock unlock manager
@@ -273,9 +291,11 @@ public final class InMemoryLockAuthorization: LockAuthorizationStore {
     
     private var keys = [KeyEntry]()
     
+    private var newKeys = [NewKeyEntry]()
+    
     public var isEmpty: Bool {
         
-        return keys.isEmpty
+        return keys.isEmpty && newKeys.isEmpty
     }
     
     public func add(_ key: Key, secret: KeyData) throws {
@@ -290,6 +310,27 @@ public final class InMemoryLockAuthorization: LockAuthorizationStore {
         
         return (keyEntry.key, keyEntry.secret)
     }
+    
+    public func add(_ key: NewKey, secret: KeyData) throws {
+        
+        newKeys.append(NewKeyEntry(newKey: key, secret: secret))
+    }
+    
+    public func newKey(for identifier: UUID) throws -> (newKey: NewKey, secret: KeyData)? {
+        
+        guard let keyEntry = newKeys.first(where: { $0.newKey.identifier == identifier })
+            else { return nil }
+        
+        return (keyEntry.newKey, keyEntry.secret)
+    }
+    
+    public var list: KeysList {
+        
+        return KeysList(
+            keys: keys.map { $0.key },
+            newKeys: newKeys.map { $0.newKey }
+        )
+    }
 }
 
 private extension InMemoryLockAuthorization {
@@ -300,5 +341,11 @@ private extension InMemoryLockAuthorization {
         
         let secret: KeyData
     }
+    
+    struct NewKeyEntry {
+        
+        let newKey: NewKey
+        
+        let secret: KeyData
+    }
 }
-

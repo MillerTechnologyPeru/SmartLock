@@ -61,36 +61,39 @@ public final class AuthorizationStoreFile: LockAuthorizationStore {
         return (keyEntry.key, keyEntry.secret)
     }
     
+    public func add(_ key: NewKey, secret: KeyData) throws {
+        
+        try write { $0.newKeys.append(Database.NewKeyEntry(newKey: key, secret: secret)) }
+    }
+    
+    public func newKey(for identifier: UUID) throws -> (newKey: NewKey, secret: KeyData)? {
+
+        guard let keyEntry = database.newKeys.first(where: { $0.newKey.identifier == identifier })
+            else { return nil }
+        
+        return (keyEntry.newKey, keyEntry.secret)
+    }
+    
+    public var list: KeysList {
+        
+        return KeysList(
+            keys: database.keys.map { $0.key },
+            newKeys: database.newKeys.map { $0.newKey }
+        )
+    }
+    
     private func write(database changes: (inout Database) -> ()) throws {
         
         var database = self.database
         changes(&database)
         try file.write(database)
     }
-    
-    /// Dump the database
-    public func dump() -> String {
-        
-        var string = ""
-        Swift.dump(database, to: &string)
-        return string
-    }
 }
 
 extension AuthorizationStoreFile: CustomStringConvertible {
     
     public var description: String {
-        return "<AuthorizationStoreFile: \(ObjectIdentifier(self)) url:\(url) keys:\(keysCount) newKeys:\(newKeysCount)>"
-    }
-}
-
-extension AuthorizationStoreFile: CustomDebugStringConvertible {
-    
-    public var debugDescription: String {
-        return """
-        \(url)
-        \(dump())
-        """
+        return "<AuthorizationStoreFile: \(ObjectIdentifier(self)) url:\(url) keys:\(database.keys.count) newKeys:\(database.newKeys.count)>"
     }
 }
 
@@ -122,13 +125,7 @@ extension AuthorizationStoreFile.Database {
     
     struct NewKeyEntry: Codable, Equatable {
         
-        /// Date
-        let date: Date
-        
-        /// New key
-        let newKey: Key
-        
-        /// Shared secret used for onboarding
-        let sharedSecret: KeyData
+        let newKey: NewKey
+        let secret: KeyData
     }
 }

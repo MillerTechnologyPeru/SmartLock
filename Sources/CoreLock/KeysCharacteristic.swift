@@ -84,40 +84,10 @@ public struct KeysList: Codable, Equatable {
     public let keys: [Key]
     
     public let newKeys: [NewKey]
-}
-
-public extension KeysList {
     
-    struct Key: Codable, Equatable {
+    public init(keys: [Key], newKeys: [NewKey]) {
         
-        /// The unique identifier of the key.
-        public let identifier: UUID
-        
-        /// The name of the key.
-        public let name: String
-        
-        /// Date key was created.
-        public let created: Date
-        
-        /// Key's permissions.
-        public let permission: Permission
-    }
-    
-    struct NewKey: Codable, Equatable {
-        
-        /// The unique identifier of the key.
-        public let identifier: UUID
-        
-        /// The name of the key.
-        public let name: String
-        
-        /// Date key was created.
-        public let created: Date
-        
-        /// Key's permissions.
-        public let permission: Permission
-        
-        /// Date new key invitation expires.
-        public let expiration: Date
+        self.keys = keys
+        self.newKeys = newKeys
     }
 }
