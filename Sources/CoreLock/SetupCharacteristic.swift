@@ -9,7 +9,7 @@ import Foundation
 import Bluetooth
 
 /// Used for initial lock setup.
-public struct SetupCharacteristic: TLVCharacteristic {
+public struct SetupCharacteristic: TLVCharacteristic, Equatable {
     
     public static let uuid = BluetoothUUID(rawValue: "129E401C-044D-11E6-8FA9-09AB70D5A8C7")!
     
@@ -19,16 +19,10 @@ public struct SetupCharacteristic: TLVCharacteristic {
     
     public let encryptedData: EncryptedData
     
-    public init(encryptedData: EncryptedData) {
-        
-        self.encryptedData = encryptedData
-    }
-    
     public init(request: SetupRequest, sharedSecret: KeyData) throws {
         
         let requestData = try type(of: self).encoder.encode(request)
-        let encryptedData = try EncryptedData(encrypt: requestData, with: sharedSecret)
-        self.init(encryptedData: encryptedData)
+        self.encryptedData = try EncryptedData(encrypt: requestData, with: sharedSecret)
     }
     
     public func decrypt(with sharedSecret: KeyData) throws -> SetupRequest {
@@ -78,7 +72,7 @@ public extension Key {
         
         self.init(identifier: setup.identifier,
                   name: "Owner",
-                  date: Date(),
+                  created: Date(),
                   permission: .owner)
     }
 }

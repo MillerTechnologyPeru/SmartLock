@@ -6,32 +6,44 @@
 //
 
 import Foundation
+import TLVCoding
 
 /// Chunk of data to send over BLE.
-public struct Chunk {
+public struct Chunk: Equatable {
     
     /// The minimum length of bytes in this PDU.
     internal static let headerLength = MemoryLayout<UInt8>.size + MemoryLayout<UInt32>.size
     
     /// The bytes in this chunk
-    public var isFirst: Bool
+    public let isFirst: Bool
     
     /// The total amount of bytes.
-    public var total: UInt32
+    public let total: UInt32
     
     /// The bytes in this chunk
-    public var bytes: Data
+    public let bytes: Data
+}
+
+public extension Chunk {
     
-    internal init(isFirst: Bool,
-                  total: UInt32,
-                  bytes: Data) {
+    /// Prepare data to send in chunks that can be sent via notifications.
+    static func from(_ data: Data, maximumUpdateValueLength: Int) -> [Chunk] {
         
-        self.isFirst = isFirst
-        self.total = total
-        self.bytes = bytes
+        let chunkSize = maximumUpdateValueLength - headerLength
+        
+        let totalBytes = UInt32(data.count)
+        
+        return stride(from: 0, to: data.count, by: chunkSize)
+            .lazy
+            .map { Data(data[$0 ..< min($0 + chunkSize, data.count)]) }
+            .enumerated()
+            .map { Chunk(isFirst: $0.offset == 0, total: totalBytes, bytes: $0.element) }
     }
+}
+
+public extension Chunk {
     
-    public init?(data: Data) {
+    init?(data: Data) {
         
         guard data.count >= type(of: self).headerLength
             else { return nil }
@@ -40,13 +52,11 @@ public struct Chunk {
             else { return nil }
         
         self.isFirst = isFirst
-        
         self.total = UInt32(littleEndian: UInt32(bytes: (data[1], data[2], data[3], data[4])))
-        
         self.bytes = Data(data.dropFirst(type(of: self).headerLength)) // excluding initial bytes
     }
     
-    public var data: Data {
+    var data: Data {
         
         let totalBytes = total.littleEndian.bytes
         
@@ -55,21 +65,5 @@ public struct Chunk {
                 totalBytes.1,
                 totalBytes.2,
                 totalBytes.3] + bytes
-    }
-    
-    /// Prepare data to send in chunks that can be sent via notifications.
-    public static func from(_ data: Data, maximumUpdateValueLength: Int) -> [Chunk] {
-        
-        let chunkSize = maximumUpdateValueLength - headerLength
-        
-        let chunkData: [Data] = stride(from: 0, to: data.count, by: chunkSize).map {
-            Data(data[$0 ..< min($0 + chunkSize, data.count)])
-        }
-        
-        let totalBytes = UInt32(data.count)
-        
-        return chunkData.enumerated().map {
-            Chunk(isFirst: $0.offset == 0, total: totalBytes, bytes: $0.element)
-        }
     }
 }

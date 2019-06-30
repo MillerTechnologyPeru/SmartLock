@@ -122,6 +122,9 @@ extension AuthorizationStoreFile.Database {
     
     struct NewKeyEntry: Codable, Equatable {
         
+        /// Date
+        let date: Date
+        
         /// New key
         let newKey: Key
         

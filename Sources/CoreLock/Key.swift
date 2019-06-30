@@ -17,19 +17,19 @@ public struct Key: Codable, Equatable, Hashable {
     public let name: String
     
     /// Date key was created.
-    public let date: Date
+    public let created: Date
     
     /// Key's permissions. 
     public let permission: Permission
     
     public init(identifier: UUID = UUID(),
                 name: String = "",
-                date: Date = Date(),
+                created: Date = Date(),
                 permission: Permission) {
         
         self.identifier = identifier
         self.name = name
-        self.date = date
+        self.created = created
         self.permission = permission
     }
 }
