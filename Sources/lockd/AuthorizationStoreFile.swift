@@ -74,6 +74,16 @@ public final class AuthorizationStoreFile: LockAuthorizationStore {
         return (keyEntry.newKey, keyEntry.secret)
     }
     
+    public func removeKey(_ identifier: UUID) throws {
+        
+        try write { $0.keys.removeAll(where: { $0.key.identifier == identifier }) }
+    }
+    
+    public func removeNewKey(_ identifier: UUID) throws {
+        
+        try write { $0.newKeys.removeAll(where: { $0.newKey.identifier == identifier }) }
+    }
+    
     public var list: KeysList {
         
         return KeysList(

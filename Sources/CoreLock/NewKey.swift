@@ -50,10 +50,14 @@ public extension NewKey {
         /// New Key to create.
         public let key: NewKey
         
-        public init(lock: UUID, key: NewKey) {
+        /// Temporary shared secret to accept the key invitation.
+        public let secret: KeyData
+        
+        public init(lock: UUID, key: NewKey, secret: KeyData) {
             
             self.lock = lock
             self.key = key
+            self.secret = secret
         }
     }
 }

@@ -195,6 +195,8 @@ public final class LockServiceController <Peripheral: PeripheralProtocol> : GATT
             guard let characteristic = ConfirmNewKeyCharacteristic(data: write.value)
                 else { print("Could not parse \(ConfirmNewKeyCharacteristic.self)"); return }
             
+            confirmNewKey(characteristic)
+            
         case keysRequestHandle:
             
             assert(authorization.isEmpty == false, "No keys")
@@ -202,6 +204,8 @@ public final class LockServiceController <Peripheral: PeripheralProtocol> : GATT
             // parse characteristic
             guard let characteristic = ListKeysCharacteristic(data: write.value)
                 else { print("Could not parse \(ListKeysCharacteristic.self)"); return }
+            
+            listKeysRequest(characteristic, maximumUpdateValueLength: write.maximumUpdateValueLength)
             
         case keysResponseHandle:
             
@@ -214,6 +218,8 @@ public final class LockServiceController <Peripheral: PeripheralProtocol> : GATT
             // parse characteristic
             guard let characteristic = RemoveKeyCharacteristic(data: write.value)
                 else { print("Could not parse \(RemoveKeyCharacteristic.self)"); return }
+            
+            removeKey(characteristic)
             
         default:
             break
@@ -239,6 +245,8 @@ public final class LockServiceController <Peripheral: PeripheralProtocol> : GATT
     
     private func setup(_ setup: SetupCharacteristic) {
         
+        assert(authorization.isEmpty)
+        
         // get key for shared device.
         let sharedSecret = setupSecret
         
@@ -259,6 +267,7 @@ public final class LockServiceController <Peripheral: PeripheralProtocol> : GATT
             
             // store first key
             try authorization.add(ownerKey, secret: setupRequest.secret)
+            assert(authorization.isEmpty == false)
             
             print("Lock setup completed")
             
@@ -326,15 +335,166 @@ public final class LockServiceController <Peripheral: PeripheralProtocol> : GATT
                 timestamp > now - 5.0 // only valid for 5 seconds
                 else { print("Authentication expired"); return }
             
+            // enforce permission
+            switch key.permission {
+            case .owner, .admin:
+                break
+            case .anytime, .scheduled:
+                print("Only lock owner and admins can create new keys")
+                return
+            }
+            
             // decrypt
             let request = try characteristic.decrypt(with: secret)
             let newKey = NewKey(request: request)
             
             try self.authorization.add(newKey, secret: request.secret)
             
-            print("Key \(keyIdentifier) created new key \(request.identifier)")
+            print("Key \(keyIdentifier) \(key.name) created new key \(request.identifier)")
             
         } catch { print("Create new key error: \(error)")  }
+    }
+    
+    private func confirmNewKey(_ characteristic: ConfirmNewKeyCharacteristic) {
+        
+        let newKeyIdentifier = characteristic.identifier
+        
+        do {
+            
+            guard let (newKey, secret) = try authorization.newKey(for: newKeyIdentifier)
+                else { print("Unknown key \(newKeyIdentifier)"); return }
+            
+            assert(newKey.identifier == newKeyIdentifier, "Invalid key")
+            
+            // validate HMAC
+            guard characteristic.encryptedData.authentication.isAuthenticated(with: secret)
+                else { print("Invalid key secret"); return }
+            
+            // guard against replay attacks
+            let timestamp = characteristic.encryptedData.authentication.message.date
+            let now = Date()
+            guard timestamp < now, // cannot be used later for replay attacks
+                timestamp > now - 5.0 // only valid for 5 seconds
+                else { print("Authentication expired"); return }
+            
+            // decrypt
+            let request = try characteristic.decrypt(with: secret)
+            let keySecret = request.secret
+            let key = Key(
+                identifier: newKey.identifier,
+                name: newKey.name,
+                created: newKey.created,
+                permission: newKey.permission
+            )
+            
+            try self.authorization.removeNewKey(newKeyIdentifier)
+            try self.authorization.add(key, secret: keySecret)
+            
+            print("Key \(newKeyIdentifier) \(key.name) confirmed with shared secret")
+            
+            assert(try! authorization.key(for: key.identifier) != nil, "Key not stored")
+            
+        } catch { print("Confirm new key error: \(error)")  }
+    }
+    
+    private func listKeysRequest(_ characteristic: ListKeysCharacteristic, maximumUpdateValueLength: Int) {
+        
+        let keyIdentifier = characteristic.identifier
+        
+        do {
+            
+            guard let (key, secret) = try authorization.key(for: keyIdentifier)
+                else { print("Unknown key \(keyIdentifier)"); return }
+            
+            assert(key.identifier == keyIdentifier, "Invalid key")
+            
+            // validate HMAC
+            guard characteristic.authentication.isAuthenticated(with: secret)
+                else { print("Invalid key secret"); return }
+            
+            // guard against replay attacks
+            let timestamp = characteristic.authentication.message.date
+            let now = Date()
+            guard timestamp < now, // cannot be used later for replay attacks
+                timestamp > now - 5.0 // only valid for 5 seconds
+                else { print("Authentication expired"); return }
+            
+            // enforce permission
+            switch key.permission {
+            case .owner, .admin:
+                break
+            case .anytime, .scheduled:
+                print("Only lock owner and admins can view list of keys")
+                return
+            }
+            
+            print("Key \(key.identifier) \(key.name) requested keys list")
+            
+            // send list via notifications
+            let list = authorization.list
+            let chunks = try KeysCharacteristic.from(
+                list,
+                sharedSecret: secret,
+                maximumUpdateValueLength: maximumUpdateValueLength
+            )
+            
+            // write to characteristic and issue notifications
+            chunks.forEach {
+                peripheral[characteristic: keysResponseHandle] = $0.data
+            }
+            
+            print("Key \(key.identifier) \(key.name) recieved keys list")
+            
+        } catch { print("Unlock error: \(error)")  }
+    }
+    
+    private func removeKey(_ characteristic: RemoveKeyCharacteristic) {
+        
+        let keyIdentifier = characteristic.identifier
+        
+        do {
+            
+            guard let (key, secret) = try authorization.key(for: keyIdentifier)
+                else { print("Unknown key \(keyIdentifier)"); return }
+            
+            assert(key.identifier == keyIdentifier, "Invalid key")
+            
+            // validate HMAC
+            guard characteristic.authentication.isAuthenticated(with: secret)
+                else { print("Invalid key secret"); return }
+            
+            // guard against replay attacks
+            let timestamp = characteristic.authentication.message.date
+            let now = Date()
+            guard timestamp < now, // cannot be used later for replay attacks
+                timestamp > now - 5.0 // only valid for 5 seconds
+                else { print("Authentication expired"); return }
+            
+            // enforce permission
+            switch key.permission {
+            case .owner, .admin:
+                break
+            case .anytime, .scheduled:
+                print("Only lock owner and admins can remove keys")
+                return
+            }
+            
+            switch characteristic.type {
+            case .key:
+                guard let (removeKey, _) = try authorization.key(for: characteristic.key)
+                    else { print("Key \(characteristic.key) does not exist"); return }
+                assert(removeKey.identifier == characteristic.key)
+                try authorization.removeKey(removeKey.identifier)
+            case .newKey:
+                guard let (removeKey, _) = try authorization.newKey(for: characteristic.key)
+                    else { print("New Key \(characteristic.key) does not exist"); return }
+                assert(removeKey.identifier == characteristic.key)
+                try authorization.removeNewKey(removeKey.identifier)
+            }
+            
+            print("Key \(key.identifier) \(key.name) removed \(characteristic.type) \(characteristic.key)")
+            
+        } catch { print("Unlock error: \(error)")  }
     }
 }
 
@@ -358,6 +518,10 @@ public protocol LockAuthorizationStore {
     func add(_ key: NewKey, secret: KeyData) throws
     
     func newKey(for identifier: UUID) throws -> (newKey: NewKey, secret: KeyData)?
+    
+    func removeKey(_ identifier: UUID) throws
+    
+    func removeNewKey(_ identifier: UUID) throws
     
     var list: KeysList { get }
 }
@@ -428,6 +592,16 @@ public final class InMemoryLockAuthorization: LockAuthorizationStore {
             else { return nil }
         
         return (keyEntry.newKey, keyEntry.secret)
+    }
+    
+    public func removeKey(_ identifier: UUID) throws {
+        
+        keys.removeAll(where: { $0.key.identifier == identifier })
+    }
+    
+    public func removeNewKey(_ identifier: UUID) throws {
+        
+        newKeys.removeAll(where: { $0.newKey.identifier == identifier })
     }
     
     public var list: KeysList {
