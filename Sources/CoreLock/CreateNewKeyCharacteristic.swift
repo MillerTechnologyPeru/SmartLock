@@ -58,3 +58,15 @@ public struct CreateNewKeyRequest: Equatable, Codable {
     /// Shared secret for encrypting the new key.
     public let secret: KeyData
 }
+
+public extension NewKey {
+    
+    init(request: CreateNewKeyRequest, created: Date = Date()) {
+        
+        self.identifier = request.identifier
+        self.name = request.name
+        self.permission = request.permission
+        self.expiration = request.expiration
+        self.created = created
+    }
+}

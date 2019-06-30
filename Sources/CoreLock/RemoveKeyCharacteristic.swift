@@ -23,15 +23,29 @@ public struct RemoveKeyCharacteristic: TLVCharacteristic, Codable, Equatable {
     /// Key to remove.
     public let key: UUID
     
+    /// Type of key
+    public let type: KeyType
+    
     /// HMAC of key and nonce, and HMAC message
     public let authentication: Authentication
     
     public init(identifier: UUID,
                 key: UUID,
+                type: KeyType,
                 authentication: Authentication) {
         
         self.identifier = identifier
         self.key = key
+        self.type = type
         self.authentication = authentication
+    }
+}
+
+public extension RemoveKeyCharacteristic {
+    
+    enum KeyType: UInt8, Codable {
+        
+        case key
+        case newKey
     }
 }

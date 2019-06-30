@@ -9,14 +9,14 @@ import Foundation
 import Bluetooth
 import GATT
 
-public struct LockGATTProfile: GATTProfile {
+public enum LockGATTProfile: GATTProfile {
     
     public static let services: [GATTProfileService.Type] = [
         LockService.self
     ]
 }
 
-public struct LockService: GATTProfileService {
+public enum LockService: GATTProfileService {
     
     public static let uuid = BluetoothUUID(rawValue: "E47D83A9-1366-432A-A5C6-734BA62FAF7E")!
     
@@ -25,6 +25,11 @@ public struct LockService: GATTProfileService {
     public static let characteristics: [GATTProfileCharacteristic.Type] = [
         LockInformationCharacteristic.self,
         UnlockCharacteristic.self,
-        SetupCharacteristic.self
+        SetupCharacteristic.self,
+        CreateNewKeyCharacteristic.self,
+        ConfirmNewKeyCharacteristic.self,
+        ListKeysCharacteristic.self,
+        KeysCharacteristic.self,
+        RemoveKeyCharacteristic.self
     ]
 }

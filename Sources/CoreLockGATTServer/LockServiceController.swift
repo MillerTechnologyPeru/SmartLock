@@ -48,6 +48,11 @@ public final class LockServiceController <Peripheral: PeripheralProtocol> : GATT
     internal let informationHandle: UInt16
     internal let setupHandle: UInt16
     internal let unlockHandle: UInt16
+    internal let createNewKeyHandle: UInt16
+    internal let confirmNewKeyHandle: UInt16
+    internal let keysRequestHandle: UInt16
+    internal let keysResponseHandle: UInt16
+    internal let removeKeyHandle: UInt16
     
     // MARK: - Initialization
     
@@ -72,7 +77,32 @@ public final class LockServiceController <Peripheral: PeripheralProtocol> : GATT
             GATT.Characteristic(uuid: UnlockCharacteristic.uuid,
                                 value: Data(),
                                 permissions: [.write],
-                                properties: UnlockCharacteristic.properties)
+                                properties: UnlockCharacteristic.properties),
+            
+            GATT.Characteristic(uuid: CreateNewKeyCharacteristic.uuid,
+                                value: Data(),
+                                permissions: [.write],
+                                properties: CreateNewKeyCharacteristic.properties),
+            
+            GATT.Characteristic(uuid: ConfirmNewKeyCharacteristic.uuid,
+                                value: Data(),
+                                permissions: [.write],
+                                properties: ConfirmNewKeyCharacteristic.properties),
+            
+            GATT.Characteristic(uuid: ListKeysCharacteristic.uuid,
+                                value: Data(),
+                                permissions: [.write],
+                                properties: ListKeysCharacteristic.properties),
+            
+            GATT.Characteristic(uuid: KeysCharacteristic.uuid,
+                                value: Data(),
+                                permissions: [],
+                                properties: KeysCharacteristic.properties),
+            
+            GATT.Characteristic(uuid: RemoveKeyCharacteristic.uuid,
+                                value: Data(),
+                                permissions: [.write],
+                                properties: RemoveKeyCharacteristic.properties),
         ]
         
         self.characteristics = Set(characteristics.map { $0.uuid })
@@ -86,6 +116,11 @@ public final class LockServiceController <Peripheral: PeripheralProtocol> : GATT
         self.informationHandle = peripheral.characteristics(for: LockInformationCharacteristic.uuid)[0]
         self.setupHandle = peripheral.characteristics(for: SetupCharacteristic.uuid)[0]
         self.unlockHandle = peripheral.characteristics(for: UnlockCharacteristic.uuid)[0]
+        self.createNewKeyHandle = peripheral.characteristics(for: CreateNewKeyCharacteristic.uuid)[0]
+        self.confirmNewKeyHandle = peripheral.characteristics(for: ConfirmNewKeyCharacteristic.uuid)[0]
+        self.keysRequestHandle = peripheral.characteristics(for: ListKeysCharacteristic.uuid)[0]
+        self.keysResponseHandle = peripheral.characteristics(for: KeysCharacteristic.uuid)[0]
+        self.removeKeyHandle = peripheral.characteristics(for: RemoveKeyCharacteristic.uuid)[0]
         
         self.configurationStore = configurationStore
         
@@ -111,6 +146,8 @@ public final class LockServiceController <Peripheral: PeripheralProtocol> : GATT
             return authorization.isEmpty ? nil : .writeNotPermitted
         case unlockHandle:
             return authorization.isEmpty ? .writeNotPermitted : nil
+        case createNewKeyHandle:
+            return authorization.isEmpty ? .writeNotPermitted : nil
         default:
             return nil
         }
@@ -122,7 +159,7 @@ public final class LockServiceController <Peripheral: PeripheralProtocol> : GATT
             
         case setupHandle:
             
-            assert(authorization.isEmpty, "Already setup")
+            precondition(authorization.isEmpty, "Already setup")
             
             // parse characteristic
             guard let characteristic = SetupCharacteristic(data: write.value)
@@ -140,7 +177,43 @@ public final class LockServiceController <Peripheral: PeripheralProtocol> : GATT
             
             unlock(characteristic)
             
-        
+        case createNewKeyHandle:
+            
+            assert(authorization.isEmpty == false, "No keys")
+            
+            // parse characteristic
+            guard let characteristic = CreateNewKeyCharacteristic(data: write.value)
+                else { print("Could not parse \(CreateNewKeyCharacteristic.self)"); return }
+            
+            createNewKey(characteristic)
+            
+        case confirmNewKeyHandle:
+            
+            assert(authorization.isEmpty == false, "No keys")
+            
+            // parse characteristic
+            guard let characteristic = ConfirmNewKeyCharacteristic(data: write.value)
+                else { print("Could not parse \(ConfirmNewKeyCharacteristic.self)"); return }
+            
+        case keysRequestHandle:
+            
+            assert(authorization.isEmpty == false, "No keys")
+            
+            // parse characteristic
+            guard let characteristic = ListKeysCharacteristic(data: write.value)
+                else { print("Could not parse \(ListKeysCharacteristic.self)"); return }
+            
+        case keysResponseHandle:
+            
+            assertionFailure("Not writable")
+            
+        case removeKeyHandle:
+            
+            assert(authorization.isEmpty == false, "No keys")
+            
+            // parse characteristic
+            guard let characteristic = RemoveKeyCharacteristic(data: write.value)
+                else { print("Could not parse \(RemoveKeyCharacteristic.self)"); return }
             
         default:
             break
@@ -229,6 +302,39 @@ public final class LockServiceController <Peripheral: PeripheralProtocol> : GATT
             print("Key \(key.identifier) \(key.name) unlocked with action \(unlock.action)")
             
         } catch { print("Unlock error: \(error)")  }
+    }
+    
+    private func createNewKey(_ characteristic: CreateNewKeyCharacteristic) {
+        
+        let keyIdentifier = characteristic.identifier
+        
+        do {
+            
+            guard let (key, secret) = try authorization.key(for: keyIdentifier)
+                else { print("Unknown key \(keyIdentifier)"); return }
+            
+            assert(key.identifier == keyIdentifier, "Invalid key")
+            
+            // validate HMAC
+            guard characteristic.encryptedData.authentication.isAuthenticated(with: secret)
+                else { print("Invalid key secret"); return }
+            
+            // guard against replay attacks
+            let timestamp = characteristic.encryptedData.authentication.message.date
+            let now = Date()
+            guard timestamp < now, // cannot be used later for replay attacks
+                timestamp > now - 5.0 // only valid for 5 seconds
+                else { print("Authentication expired"); return }
+            
+            // decrypt
+            let request = try characteristic.decrypt(with: secret)
+            let newKey = NewKey(request: request)
+            
+            try self.authorization.add(newKey, secret: request.secret)
+            
+            print("Key \(keyIdentifier) created new key \(request.identifier)")
+            
+        } catch { print("Create new key error: \(error)")  }
     }
 }
 
