@@ -267,16 +267,6 @@ public struct UnlockSimulator: UnlockDelegate {
     }
 }
 
-public struct InMemoryLockSetupSecret: LockSetupSecretStore {
-    
-    public let sharedSecret: KeyData
-    
-    public init(sharedSecret: KeyData = KeyData()) {
-        
-        self.sharedSecret = sharedSecret
-    }
-}
-
 public final class InMemoryLockAuthorization: LockAuthorizationStore {
     
     public init() { }
