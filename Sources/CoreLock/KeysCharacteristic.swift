@@ -7,6 +7,7 @@
 
 import Foundation
 import Bluetooth
+import TLVCoding
 
 /// Encrypted list of keys.
 public struct KeysCharacteristic: GATTProfileCharacteristic, Equatable {
@@ -17,7 +18,16 @@ public struct KeysCharacteristic: GATTProfileCharacteristic, Equatable {
     
     public static let properties: Bluetooth.BitMaskOptionSet<GATT.Characteristic.Property> = [.notify]
     
+    internal static let encoder = TLVEncoder()
+    
+    internal static let decoder = TLVDecoder()
+    
     public let chunk: Chunk
+    
+    internal init(chunk: Chunk) {
+        
+        self.chunk = chunk
+    }
     
     public init?(data: Data) {
         
@@ -30,6 +40,42 @@ public struct KeysCharacteristic: GATTProfileCharacteristic, Equatable {
     public var data: Data {
         
         return chunk.data
+    }
+}
+
+public extension KeysCharacteristic {
+    
+    static func from(chunks: [Chunk]) throws -> EncryptedData {
+        
+        let data = Data(chunks: chunks)
+        guard let value = try? decoder.decode(EncryptedData.self, from: data)
+            else { throw GATTError.invalidData(data) }
+        return value
+    }
+    
+    static func from(chunks: [Chunk], sharedSecret: KeyData) throws -> KeysList {
+        
+        let encryptedData = try from(chunks: chunks)
+        let data = try encryptedData.decrypt(with: sharedSecret)
+        guard let value = try? decoder.decode(KeysList.self, from: data)
+            else { throw GATTError.invalidData(data) }
+        return value
+    }
+    
+    static func from(_ value: EncryptedData, maximumUpdateValueLength: Int) throws -> [KeysCharacteristic] {
+        
+        let data = try encoder.encode(value)
+        let chunks = Chunk.from(data, maximumUpdateValueLength: maximumUpdateValueLength)
+        return chunks.map { KeysCharacteristic(chunk: $0) }
+    }
+    
+    static func from(_ value: KeysList,
+                     sharedSecret: KeyData,
+                     maximumUpdateValueLength: Int) throws -> [KeysCharacteristic] {
+        
+        let data = try encoder.encode(value)
+        let encryptedData = try EncryptedData(encrypt: data, with: sharedSecret)
+        return try from(encryptedData, maximumUpdateValueLength: maximumUpdateValueLength)
     }
 }
 

@@ -41,6 +41,30 @@ public extension Chunk {
     }
 }
 
+public extension Data {
+    
+    init(chunks: [Chunk]) {
+        
+        self = chunks.reduce(Data(), { $0 + $1.bytes })
+    }
+}
+
+public extension Array where Iterator.Element == Chunk {
+    
+    var length: Int {
+        
+        return reduce(0, { $0 + $1.bytes.count })
+    }
+    
+    var isComplete: Bool {
+        
+        guard let lastChunk = self.last
+            else { return false }
+        
+        return Int(lastChunk.total) == self.length
+    }
+}
+
 public extension Chunk {
     
     init?(data: Data) {
