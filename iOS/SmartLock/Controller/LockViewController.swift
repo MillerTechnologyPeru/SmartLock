@@ -35,6 +35,8 @@ final class LockViewController: UITableViewController {
         didSet { if self.isViewLoaded { self.configureView() } }
     }
     
+    private let progressHUD = JGProgressHUD(style: .dark)
+    
     // MARK: - Loading
     
     override func viewDidLoad() {
@@ -49,8 +51,14 @@ final class LockViewController: UITableViewController {
         configureView()
     }
     
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        
+        view.bringSubview(toFront: progressHUD)
+    }
+    
     // MARK: - Actions
-    /*
+    
     @IBAction func showActionMenu(_ sender: UIBarButtonItem) {
         
         let lockIdentifier = self.lockIdentifier!
@@ -86,8 +94,8 @@ final class LockViewController: UITableViewController {
                 guard let controller = self else { return }
                 
                 // try to scan if not in range
-                do { try LockManager.shared.scan() }
-                    
+                do { try Store.shared.scan(duration: 3) }
+                
                 catch {
                     
                     mainQueue {
@@ -109,7 +117,7 @@ final class LockViewController: UITableViewController {
             show()
         }
     }
-    */
+    
     @IBAction func unlock(_ sender: UIButton) {
         
         guard let lockIdentifier = self.lockIdentifier

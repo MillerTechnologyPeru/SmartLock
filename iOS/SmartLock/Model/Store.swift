@@ -69,6 +69,11 @@ public final class Store {
         }
     }
     
+    public subscript (peripheral identifier: UUID) -> NativeCentral.Peripheral? {
+        
+        return lockInformation.value.first(where: { $0.value.identifier == identifier })?.key
+    }
+    
     @discardableResult
     public func remove(_ lock: UUID) -> Bool {
         
@@ -149,7 +154,7 @@ public struct LockCache: Codable, Equatable {
     public let key: Key
     
     /// User-friendly lock name
-    public let name: String
+    public var name: String
     
     /// Lock information.
     public var information: Information
