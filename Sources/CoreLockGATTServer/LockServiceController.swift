@@ -97,7 +97,8 @@ public final class LockServiceController <Peripheral: PeripheralProtocol> : GATT
             GATT.Characteristic(uuid: KeysCharacteristic.uuid,
                                 value: Data(),
                                 permissions: [],
-                                properties: KeysCharacteristic.properties),
+                                properties: KeysCharacteristic.properties,
+                                descriptors: [GATTClientCharacteristicConfiguration().descriptor]),
             
             GATT.Characteristic(uuid: RemoveKeyCharacteristic.uuid,
                                 value: Data(),
