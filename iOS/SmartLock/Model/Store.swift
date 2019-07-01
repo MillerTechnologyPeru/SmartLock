@@ -101,8 +101,8 @@ public extension Store {
         
         let setupRequest = SetupRequest()
         
-        let information = try LockManager.shared.setup(peripheral: lock.scanData.peripheral,
-                                                       with: setupRequest,
+        let information = try LockManager.shared.setup(setupRequest,
+                                                       for: lock.scanData.peripheral,
                                                        sharedSecret: sharedSecret)
         
         let ownerKey = Key(setup: setupRequest)

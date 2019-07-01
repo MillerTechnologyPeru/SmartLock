@@ -283,6 +283,11 @@ public struct KeyCredentials: Equatable {
     public let identifier: UUID
     
     public let secret: KeyData
+    
+    public init(identifier: UUID, secret: KeyData) {
+        self.identifier = identifier
+        self.secret = secret
+    }
 }
 
 internal final class Semaphore {

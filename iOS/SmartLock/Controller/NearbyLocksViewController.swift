@@ -288,8 +288,15 @@ final class NearbyLocksViewController: UITableViewController {
             let keyData = Store.shared[key: lockCache.key.identifier]
             else { return }
         
-        performActivity({ try LockManager.shared.unlock(key: (lockCache.key.identifier, keyData),
-                                                        peripheral: lock.scanData.peripheral) })
+        let key = KeyCredentials(
+            identifier: lockCache.key.identifier,
+            secret: keyData
+        )
+        
+        performActivity({ try LockManager.shared.unlock(.default,
+                                                        for: lock.scanData.peripheral,
+                                                        with: key,
+                                                        timeout: .gattDefaultTimeout) })
     }
     
     private func setup(_ lock: LockPeripheral<NativeCentral>) {
