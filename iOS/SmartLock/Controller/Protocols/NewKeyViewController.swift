@@ -103,7 +103,6 @@ extension NewKeyViewController {
                     self.dismissProgressHUD()
                     
                     // show activity controller
-                    
                     let activityController = UIActivityViewController(activityItems: [URL(fileURLWithPath: filePath)], applicationActivities: nil)
                     
                     activityController.excludedActivityTypes = [.postToTwitter,

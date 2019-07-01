@@ -14,7 +14,7 @@
 				<string>eKeyDocument</string>
 			</array>
 			<key>CFBundleTypeName</key>
-			<string>eKey</string>
+			<string>eKey File</string>
 			<key>CFBundleTypeRole</key>
 			<string>Viewer</string>
 			<key>LSHandlerRank</key>
@@ -77,6 +77,17 @@
 			<array/>
 			<key>UTTypeIdentifier</key>
 			<string>com.colemancda.lock.ekey</string>
+			<key>UTTypeSize320IconFile</key>
+			<string>eKeyDocument</string>
+			<key>UTTypeSize64IconFile</key>
+			<string>eKeyDocument</string>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<string>ekey</string>
+				<key>public.mime-type</key>
+				<string>lock/x-ekey</string>
+			</dict>
 		</dict>
 	</array>
 </dict>
