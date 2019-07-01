@@ -27,7 +27,8 @@ final class NearbyLocksViewController: UITableViewController {
     
     private var items = [LockPeripheral<NativeCentral>]()
     
-    private var loading = Set<Peripheral>()
+    private var loadedInformation = Set<NativeCentral.Peripheral>()
+    private var loading = Set<NativeCentral.Peripheral>()
     
     let scanDuration: TimeInterval = 3.0
     
@@ -36,11 +37,9 @@ final class NearbyLocksViewController: UITableViewController {
     internal lazy var progressHUD: JGProgressHUD = JGProgressHUD(style: .dark)
     
     private lazy var readerViewController: QRCodeReaderViewController = {
-        
         let builder = QRCodeReaderViewControllerBuilder {
             $0.reader = QRCodeReader(metadataObjectTypes: [.qr], captureDevicePosition: .back)
         }
-        
         return QRCodeReaderViewController(builder: builder)
     }()
     
@@ -55,12 +54,9 @@ final class NearbyLocksViewController: UITableViewController {
     deinit {
         
         if let observer = peripheralsObserver {
-            
             Store.shared.peripherals.remove(observer: observer)
         }
-        
         if let observer = informationObserver {
-            
             Store.shared.lockInformation.remove(observer: observer)
         }
     }
@@ -74,8 +70,12 @@ final class NearbyLocksViewController: UITableViewController {
         tableView.estimatedRowHeight = 60
         
         // observe model changes
-        peripheralsObserver = Store.shared.peripherals.observe { [weak self] _ in mainQueue { self?.configureView() } }
-        informationObserver = Store.shared.lockInformation.observe { [weak self] _ in mainQueue { self?.configureView() } }
+        peripheralsObserver = Store.shared.peripherals.observe { [weak self] _ in
+            mainQueue { self?.configureView() }
+        }
+        informationObserver = Store.shared.lockInformation.observe { [weak self] _ in
+            mainQueue { self?.configureView() }
+        }
         
         // Update UI
         configureView()
@@ -89,7 +89,6 @@ final class NearbyLocksViewController: UITableViewController {
         super.viewWillAppear(animated)
         
         if items.isEmpty {
-            
             scan()
         }
     }
@@ -109,7 +108,8 @@ final class NearbyLocksViewController: UITableViewController {
         let scanDuration = self.scanDuration
         
         // reset table
-        self.items.removeAll()
+        self.items.removeAll(keepingCapacity: true)
+        self.loadedInformation.removeAll(keepingCapacity: true)
         
         // scan
         performActivity({ try Store.shared.scan(duration: scanDuration) }) { (viewController, _) in
@@ -179,25 +179,27 @@ final class NearbyLocksViewController: UITableViewController {
         var isEnabled = false
         var image: UIImage?
         
-        let isLoading = self.loading.contains(peripheral)
+        let isLoading = Store.shared.lockInformation.value[peripheral] == nil
         
         if isLoading {
             detail = "Loading..."
-            cell.activityIndicatorView.isHidden = false
+            if cell.activityIndicatorView.isHidden {
+                cell.activityIndicatorView.isHidden = false
+            }
             if cell.activityIndicatorView.isAnimating == false {
                 cell.activityIndicatorView.startAnimating()
             }
         } else {
-            if cell.activityIndicatorView.isAnimating == false {
+            if cell.activityIndicatorView.isAnimating {
                 cell.activityIndicatorView.stopAnimating()
+                cell.activityIndicatorView.isHidden = true
             }
         }
         
         // hide image if loading
         cell.lockImageView.isHidden = isLoading
         
-        if let information = Store.shared.lockInformation.value[lock.scanData.peripheral],
-            isLoading == false {
+        if let information = Store.shared.lockInformation.value[lock.scanData.peripheral] {
             
             title = information.identifier.description
             isEnabled = true
@@ -251,10 +253,13 @@ final class NearbyLocksViewController: UITableViewController {
         
         log("Selected peripheral \(lock.scanData.peripheral)")
         
-        if let information = Store.shared.lockInformation.value[lock.scanData.peripheral],
-            information.status == .setup {
+        guard let information = Store.shared.lockInformation.value[lock.scanData.peripheral]
+            else { return }
+        
+        switch information.status {
+        case .setup:
             setup(lock)
-        } else {
+        case .unlock:
             unlock(lock)
         }
     }
@@ -262,20 +267,19 @@ final class NearbyLocksViewController: UITableViewController {
     private func loadLockInformation(_ lock: LockPeripheral<NativeCentral>) {
         
         let peripheral = lock.scanData.peripheral
+        guard self.loadedInformation.contains(peripheral) == false,
+            self.loading.contains(peripheral) == false
+            else { return }
         
-        // read info if not loading and not cached
-        if Store.shared.lockInformation.value[peripheral] == nil,
-            loading.contains(peripheral) == false {
+        self.loading.insert(peripheral)
+        
+        async {
             
-            loading.insert(peripheral)
-            
-            async {
-                
-                do { try Store.shared.readInformation(lock) }
-                catch { log("Could not read information for peripheral \(lock.scanData.peripheral): \(error)") }
-                
-                // no longer loading
-                mainQueue { [weak self] in self?.loading.remove(peripheral) }
+            do { try Store.shared.readInformation(lock) }
+            catch { log("Could not read information for peripheral \(peripheral): \(error)") }
+            mainQueue {
+                self.loadedInformation.insert(peripheral)
+                self.loading.remove(peripheral)
             }
         }
     }
