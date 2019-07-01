@@ -109,7 +109,11 @@ final class KeysViewController: UITableViewController {
     
     private func didSelect(_ item: Item) {
         
+        let navigationController = UIStoryboard(name: "LockDetail", bundle: nil).instantiateInitialViewController() as! UINavigationController
         
+        let lockViewController = navigationController.topViewController as! LockViewController
+        lockViewController.lockIdentifier = item.identifier
+        self.show(lockViewController, sender: self)
     }
     
     // MARK: - UITableViewDataSource

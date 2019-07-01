@@ -116,7 +116,11 @@ public extension Store {
         
         let ownerKey = Key(setup: setupRequest)
         
-        let lockCache = LockCache(key: ownerKey, name: name)
+        let lockCache = LockCache(
+            key: ownerKey,
+            name: name,
+            information: .init(characteristic: information)
+        )
         
         // store key
         self[lock: information.identifier] = lockCache
@@ -130,8 +134,9 @@ public extension Store {
         
         let information = try LockManager.shared.readInformation(for: lock.scanData.peripheral)
         
-        // update lock information
+        // update lock information cache
         self.lockInformation.value[lock.scanData.peripheral] = information
+        self[lock: information.identifier]?.information = LockCache.Information(characteristic: information)
     }
 }
 
@@ -145,4 +150,36 @@ public struct LockCache: Codable, Equatable {
     
     /// User-friendly lock name
     public let name: String
+    
+    /// Lock information.
+    public var information: Information
+}
+
+public extension LockCache {
+    
+    struct Information: Codable, Equatable {
+        
+        /// Firmware build number
+        public var buildVersion: LockBuildVersion
+        
+        /// Firmware version
+        public var version: LockVersion
+        
+        /// Device state
+        public var status: LockStatus
+        
+        /// Supported lock actions
+        public var unlockActions: Set<UnlockAction>
+    }
+}
+
+internal extension LockCache.Information {
+    
+    init(characteristic: LockInformationCharacteristic) {
+        
+        self.buildVersion = characteristic.buildVersion
+        self.version = characteristic.version
+        self.status = characteristic.status
+        self.unlockActions = Set(characteristic.unlockActions)
+    }
 }
