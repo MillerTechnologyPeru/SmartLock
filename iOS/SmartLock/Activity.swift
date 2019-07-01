@@ -114,9 +114,9 @@ final class NewKeyActivity: UIActivity {
         
         let navigationController = UIStoryboard(name: "NewKey", bundle: nil).instantiateInitialViewController() as! UINavigationController
         
-        //let destinationViewController = navigationController.viewControllers.first! as! NewKeySelectPermissionViewController
-        //destinationViewController.lockIdentifier = item.identifier
-        //destinationViewController.completion = { self.activityDidFinish($0) }
+        let destinationViewController = navigationController.viewControllers.first! as! NewKeySelectPermissionViewController
+        destinationViewController.lockIdentifier = item.identifier
+        destinationViewController.completion = { self.activityDidFinish($0) }
         
         return navigationController
     }
@@ -170,10 +170,9 @@ final class ManageKeysActivity: UIActivity {
         
         let navigationController = UIStoryboard(name: "LockPermissions", bundle: nil).instantiateInitialViewController() as! UINavigationController
         
-        //let destinationViewController = navigationController.viewControllers.first! as! LockPermissionsViewController
-        
-        //destinationViewController.lockIdentifier = item.identifier
-        //destinationViewController.completion = { self.activityDidFinish(true) }
+        let destinationViewController = navigationController.viewControllers.first! as! LockPermissionsViewController
+        destinationViewController.lockIdentifier = item.identifier
+        destinationViewController.completion = { self.activityDidFinish(true) }
         
         return navigationController
     }

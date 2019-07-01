@@ -45,4 +45,8 @@ public struct ConfirmNewKeyRequest: Equatable, Codable {
     
     /// New key private key data.
     public let secret: KeyData
+    
+    public init(secret: KeyData) {
+        self.secret = secret
+    }
 }

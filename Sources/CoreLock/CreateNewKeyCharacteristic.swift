@@ -59,6 +59,18 @@ public struct CreateNewKeyRequest: Equatable, Codable {
     public let secret: KeyData
 }
 
+public extension CreateNewKeyRequest {
+    
+    init(key: NewKey, secret: KeyData) {
+        
+        self.identifier = key.identifier
+        self.name = key.name
+        self.permission = key.permission
+        self.expiration = key.expiration
+        self.secret = secret
+    }
+}
+
 public extension NewKey {
     
     init(request: CreateNewKeyRequest, created: Date = Date()) {
