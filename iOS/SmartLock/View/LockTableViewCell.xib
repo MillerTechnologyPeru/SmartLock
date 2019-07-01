@@ -18,26 +18,26 @@
                 <rect key="frame" x="0.0" y="0.0" width="320" height="83.5"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="Anytime" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xdG-uQ-Fad">
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Anytime" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xdG-uQ-Fad">
                         <rect key="frame" x="67" y="43" width="237" height="17"/>
                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                         <color key="textColor" red="0.66666666669999997" green="0.66666666669999997" blue="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="Lock Name" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HtH-Ax-ubI" userLabel="Lock Name Label">
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Lock Name" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HtH-Ax-ubI" userLabel="Lock Name Label">
                         <rect key="frame" x="67" y="12" width="237" height="23"/>
                         <fontDescription key="fontDescription" type="system" pointSize="19"/>
                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="permissionBadgeOwner" translatesAutoresizingMaskIntoConstraints="NO" id="ugV-rn-Ig8">
+                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="permissionBadgeOwner" translatesAutoresizingMaskIntoConstraints="NO" id="ugV-rn-Ig8">
                         <rect key="frame" x="8" y="8" width="51" height="51"/>
                         <constraints>
                             <constraint firstAttribute="width" secondItem="ugV-rn-Ig8" secondAttribute="height" multiplier="1:1" id="2o1-oe-qcz"/>
                             <constraint firstAttribute="width" constant="51" id="x0A-Ae-LrP"/>
                         </constraints>
                     </imageView>
-                    <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" animating="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="VER-Zq-zSD">
+                    <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="VER-Zq-zSD">
                         <rect key="frame" x="15" y="15" width="37" height="37"/>
                         <color key="color" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     </activityIndicatorView>
@@ -53,7 +53,7 @@
                     <constraint firstItem="HtH-Ax-ubI" firstAttribute="leading" secondItem="ugV-rn-Ig8" secondAttribute="trailing" constant="8" id="gPS-zr-gXo"/>
                     <constraint firstItem="HtH-Ax-ubI" firstAttribute="trailing" secondItem="xdG-uQ-Fad" secondAttribute="trailing" id="qN5-yL-5Bf"/>
                     <constraint firstItem="ugV-rn-Ig8" firstAttribute="width" secondItem="ugV-rn-Ig8" secondAttribute="height" multiplier="1:1" id="r5B-XR-wWM"/>
-                    <constraint firstAttribute="bottom" secondItem="xdG-uQ-Fad" secondAttribute="bottom" constant="12" id="uPf-o2-ykU"/>
+                    <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="xdG-uQ-Fad" secondAttribute="bottom" constant="12" id="uPf-o2-ykU"/>
                     <constraint firstItem="HtH-Ax-ubI" firstAttribute="top" secondItem="ViR-ve-Wnx" secondAttribute="top" constant="12" id="xRq-I6-c5O"/>
                 </constraints>
             </tableViewCellContentView>

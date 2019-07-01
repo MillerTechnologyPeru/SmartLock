@@ -152,6 +152,8 @@ final class LockPermissionsViewController: UITableViewController, ActivityIndica
         cell.lockTitleLabel.text = item.name
         cell.lockImageView.image = permissionImage
         cell.lockDetailLabel.text = permissionText
+        cell.activityIndicatorView.isHidden = true
+        cell.lockImageView?.isHidden = false
     }
     
     // MARK: - Suscripting
