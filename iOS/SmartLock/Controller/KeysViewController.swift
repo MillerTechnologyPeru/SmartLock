@@ -142,6 +142,39 @@ final class KeysViewController: UITableViewController {
         let item = self[indexPath]
         didSelect(item)
     }
+    
+    override func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
+        
+        var actions = [UITableViewRowAction]()
+        let item = self[indexPath]
+        
+        let delete = UITableViewRowAction(style: .destructive, title: "Delete") {
+            
+            assert($1 == indexPath)
+            
+            let alert = UIAlertController(title: NSLocalizedString("Confirmation", comment: "DeletionConfirmation"),
+                                          message: "Are you sure you want to delete this key?",
+                                          preferredStyle: UIAlertControllerStyle.alert)
+            
+            alert.addAction(UIAlertAction(title: NSLocalizedString("Cancel", comment: "Cancel"), style: .cancel, handler: { (UIAlertAction) in
+                
+                alert.dismiss(animated: true, completion: nil)
+            }))
+            
+            alert.addAction(UIAlertAction(title: NSLocalizedString("Delete", comment: "Delete"), style: .destructive, handler: { (UIAlertAction) in
+                
+                Store.shared.remove(item.identifier)
+                
+                alert.dismiss(animated: true, completion: nil)
+            }))
+            
+            self.present(alert, animated: true, completion: nil)
+        }
+        
+        actions.append(delete)
+        
+        return actions
+    }
 }
 
 // MARK: - Supporting Types

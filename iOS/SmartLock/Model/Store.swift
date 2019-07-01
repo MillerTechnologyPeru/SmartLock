@@ -69,6 +69,18 @@ public final class Store {
         }
     }
     
+    @discardableResult
+    public func remove(_ lock: UUID) -> Bool {
+        
+        guard let lockCache = self[lock: lock]
+            else { return false }
+        
+        self[lock: lock] = nil
+        self[key: lockCache.key.identifier] = nil
+        
+        return true
+    }
+    
     private func loadCache() {
         
         locks.value = defaults.get(for: storageKey) ?? [:]
