@@ -20,6 +20,7 @@
                     </tabBar>
                     <connections>
                         <segue destination="CQS-Vt-z0J" kind="relationship" relationship="viewControllers" id="8gA-ZG-Ll1"/>
+                        <segue destination="Rr6-5c-Ljc" kind="relationship" relationship="viewControllers" id="bsA-0r-AQu"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="N0p-Oe-Z5O" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -34,42 +35,58 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                        <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="PeripheralCell" textLabel="9Rt-FB-Twh" style="IBUITableViewCellStyleDefault" id="ztc-Hj-7gc">
-                                <rect key="frame" x="0.0" y="28" width="320" height="44"/>
-                                <autoresizingMask key="autoresizingMask"/>
-                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="ztc-Hj-7gc" id="cVu-h0-WE2">
-                                    <rect key="frame" x="0.0" y="0.0" width="320" height="43.5"/>
-                                    <autoresizingMask key="autoresizingMask"/>
-                                    <subviews>
-                                        <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" insetsLayoutMarginsFromSafeArea="NO" text="Peripheral" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="9Rt-FB-Twh">
-                                            <rect key="frame" x="16" y="0.0" width="288" height="43.5"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                            <nil key="textColor"/>
-                                            <nil key="highlightedColor"/>
-                                        </label>
-                                    </subviews>
-                                </tableViewCellContentView>
-                            </tableViewCell>
-                        </prototypes>
                         <connections>
                             <outlet property="dataSource" destination="MOV-Sf-cLz" id="XRd-B2-RGw"/>
                             <outlet property="delegate" destination="MOV-Sf-cLz" id="jv8-FX-ljU"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="Nearby" id="M1l-Ek-cyO"/>
-                    <refreshControl key="refreshControl" opaque="NO" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" id="Ed5-Va-SpE">
-                        <rect key="frame" x="0.0" y="0.0" width="1000" height="1000"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                        <connections>
-                            <action selector="scan:" destination="MOV-Sf-cLz" eventType="valueChanged" id="PaH-kg-GJ3"/>
-                        </connections>
-                    </refreshControl>
+                    <navigationItem key="navigationItem" title="Nearby" id="M1l-Ek-cyO">
+                        <barButtonItem key="rightBarButtonItem" systemItem="refresh" id="bGN-8K-v9i">
+                            <connections>
+                                <action selector="scan:" destination="MOV-Sf-cLz" id="qzf-Ry-Yto"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="k4H-Ck-Aai" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1444" y="51"/>
+        </scene>
+        <!--Keys-->
+        <scene sceneID="UdU-aF-wD0">
+            <objects>
+                <tableViewController id="JRc-fh-odg" customClass="KeysViewController" customModule="SmartLock" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="Ea6-1I-lQQ">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <connections>
+                            <outlet property="dataSource" destination="JRc-fh-odg" id="4t9-jw-766"/>
+                            <outlet property="delegate" destination="JRc-fh-odg" id="cyl-k4-fNM"/>
+                        </connections>
+                    </tableView>
+                    <navigationItem key="navigationItem" title="Keys" id="cv9-VF-XQV"/>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Ng6-2g-LNP" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1504" y="830"/>
+        </scene>
+        <!--Keys-->
+        <scene sceneID="yPj-tp-MW5">
+            <objects>
+                <navigationController id="Rr6-5c-Ljc" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="Keys" image="LockTabBarIcon" selectedImage="LockTabBarIconSelected" id="QiL-2R-Pns"/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="lVH-al-L4E">
+                        <rect key="frame" x="0.0" y="20" width="320" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="JRc-fh-odg" kind="relationship" relationship="rootViewController" id="jTQ-wT-gIe"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="ZHo-m8-qjt" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="493" y="830"/>
         </scene>
         <!--Nearby-->
         <scene sceneID="y9k-u3-ueD">
@@ -90,6 +107,8 @@
         </scene>
     </scenes>
     <resources>
+        <image name="LockTabBarIcon" width="25" height="25"/>
+        <image name="LockTabBarIconSelected" width="25" height="25"/>
         <image name="Near" width="25" height="25"/>
         <image name="NearSelected" width="25" height="25"/>
     </resources>

@@ -13,7 +13,6 @@ import CoreLock
     
 #if os(iOS)
 import UIKit
-import CoreBluetooth
 import DarwinGATT
 import AVFoundation
 import QRCodeReader

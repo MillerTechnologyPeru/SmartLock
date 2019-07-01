@@ -11,14 +11,7 @@ public final class Observable<Value> {
     // MARK: - Properties
     
     public internal(set) var value: Value {
-        
-        didSet {
-            
-            for observer in observers {
-                
-                observer.callback(value)
-            }
-        }
+        didSet { observers.forEach { $0.callback(value) } }
     }
     
     // MARK: - Private Properties

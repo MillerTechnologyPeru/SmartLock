@@ -26,19 +26,13 @@ public final class Store {
     
     public let scanning = Observable(false)
     
+    public let locks = Observable([UUID: LockCache]())
+    
     private let defaults = Defaults.shared
     
     private let keychain = Keychain()
     
     private let storageKey = DefaultsKey<[UUID: LockCache]>("locks")
-    
-    // Stored keys
-    private var locks = [UUID: LockCache]() {
-        didSet {
-            guard locks != oldValue else { return }
-            writeCache()
-        }
-    }
     
     // BLE cache
     public private(set) var peripherals = Observable([NativeCentral.Peripheral: LockPeripheral<NativeCentral>]())
@@ -48,8 +42,11 @@ public final class Store {
     /// Key identifier for the specified
     public subscript (lock identifier: UUID) -> LockCache? {
         
-        get { return locks[identifier] }
-        set { locks[identifier] = newValue }
+        get { return locks.value[identifier] }
+        set {
+            locks.value[identifier] = newValue
+            writeCache()
+        }
     }
     
     public subscript (key identifier: UUID) -> KeyData? {
@@ -74,12 +71,12 @@ public final class Store {
     
     private func loadCache() {
         
-        locks = defaults.get(for: storageKey) ?? [:]
+        locks.value = defaults.get(for: storageKey) ?? [:]
     }
     
     private func writeCache() {
         
-        defaults.set(locks, for: storageKey)
+        defaults.set(locks.value, for: storageKey)
     }
 }
 
