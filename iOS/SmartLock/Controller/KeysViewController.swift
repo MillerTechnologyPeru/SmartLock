@@ -45,8 +45,8 @@ final class KeysViewController: UITableViewController {
         tableView.estimatedRowHeight = 60
         
         // load data
-        locksObserver = Store.shared.locks.observe { [unowned self] in
-            self.reloadData($0)
+        locksObserver = Store.shared.locks.observe { locks in
+            mainQueue { [weak self] in self?.reloadData(locks) }
         }
         
         reloadData()
