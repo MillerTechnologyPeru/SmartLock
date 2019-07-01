@@ -114,14 +114,14 @@ public final class LockManager <Central: CentralProtocol> {
     }
     
     /// Unlock action.
-    public func unlock(key: (identifier: UUID, secret: KeyData),
+    public func unlock(peripheral: Peripheral,
+                       with key: KeyCredentials,
                        action: UnlockAction = .default,
-                       peripheral: Peripheral,
                        timeout: TimeInterval = .gattDefaultTimeout) throws {
         
         let timeout = Timeout(timeout: timeout)
         
-        return try central.device(for: peripheral, timeout: timeout) { [unowned self] (cache) in
+        try central.device(for: peripheral, timeout: timeout) { [unowned self] (cache) in
             
             let characteristicValue = UnlockCharacteristic(identifier: key.identifier,
                                                            action: action,
@@ -131,6 +131,49 @@ public final class LockManager <Central: CentralProtocol> {
             try self.central.write(characteristicValue, for: cache, timeout: timeout)
         }
     }
+    
+    /// Create new key.
+    public func createKey(peripheral: Peripheral,
+                          newKey: CreateNewKeyRequest,
+                          key: KeyCredentials,
+                          timeout: TimeInterval = .gattDefaultTimeout) throws {
+        
+        let timeout = Timeout(timeout: timeout)
+        
+        try central.device(for: peripheral, timeout: timeout) { [unowned self] (cache) in
+            
+            let characteristicValue = try CreateNewKeyCharacteristic(
+                request: newKey,
+                for: key.identifier,
+                sharedSecret: key.secret
+            )
+            
+            // Write data to characteristic
+            try self.central.write(characteristicValue, for: cache, timeout: timeout)
+        }
+    }
+    
+    /// Confirm new key.
+    public func confirmKey(peripheral: Peripheral,
+                           confirmation: ConfirmNewKeyRequest,
+                           key: KeyCredentials,
+                           timeout: TimeInterval = .gattDefaultTimeout) throws {
+        
+        let timeout = Timeout(timeout: timeout)
+        
+        try central.device(for: peripheral, timeout: timeout) { [unowned self] (cache) in
+            
+            let characteristicValue = try ConfirmNewKeyCharacteristic(
+                request: confirmation,
+                for: key.identifier,
+                sharedSecret: key.secret
+            )
+            
+            // Write data to characteristic
+            try self.central.write(characteristicValue, for: cache, timeout: timeout)
+        }
+    }
+    
 }
 
 public struct LockPeripheral <Central: CentralProtocol> {
@@ -147,4 +190,11 @@ public struct LockPeripheral <Central: CentralProtocol> {
         
         self.scanData = scanData
     }
+}
+
+public struct KeyCredentials: Equatable {
+    
+    public let identifier: UUID
+    
+    public let secret: KeyData
 }
