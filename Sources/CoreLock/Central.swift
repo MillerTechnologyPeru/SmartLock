@@ -22,7 +22,7 @@ internal extension CentralProtocol {
         // disconnect
         defer { disconnect(peripheral: peripheral) }
         
-        var cache = GATTConnectionCache <Peripheral> ()
+        var cache = GATTConnectionCache(peripheral: peripheral)
         
         let foundServices = try discoverServices([], for: peripheral, timeout: try timeout.timeRemaining())
         
@@ -116,12 +116,15 @@ internal enum ErrorValue <T> {
 
 internal struct GATTConnectionCache <Peripheral: Peer> {
     
-    fileprivate init() {
-        
-        self.characteristics = []
-    }
+    let peripheral: Peripheral
     
     fileprivate(set) var characteristics: [Characteristic<Peripheral>]
+    
+    fileprivate init(peripheral: Peripheral) {
+        
+        self.peripheral = peripheral
+        self.characteristics = []
+    }
 }
 
 // GATT timeout

@@ -45,7 +45,7 @@ public extension Data {
     
     init(chunks: [Chunk]) {
         
-        self = chunks.reduce(Data(), { $0 + $1.bytes })
+        self = chunks.reduce(into: Data(capacity: chunks.length), { $0.append($1.bytes) })
     }
 }
 

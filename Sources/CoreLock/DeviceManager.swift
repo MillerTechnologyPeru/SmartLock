@@ -69,6 +69,7 @@ public final class LockManager <Central: CentralProtocol> {
         }
     }
     
+    /// Read the lock's information characteristic.
     public func readInformation(for peripheral: Peripheral,
                                 timeout: TimeInterval = .gattDefaultTimeout) throws -> LockInformationCharacteristic {
         
@@ -87,8 +88,8 @@ public final class LockManager <Central: CentralProtocol> {
     }
     
     /// Setup a lock.
-    public func setup(peripheral: Peripheral,
-                      with request: SetupRequest,
+    public func setup(_ request: SetupRequest,
+                      for peripheral: Peripheral,
                       sharedSecret: KeyData,
                       timeout: TimeInterval = .gattDefaultTimeout) throws -> LockInformationCharacteristic {
         
@@ -114,9 +115,9 @@ public final class LockManager <Central: CentralProtocol> {
     }
     
     /// Unlock action.
-    public func unlock(peripheral: Peripheral,
+    public func unlock(_ action: UnlockAction = .default,
+                       for peripheral: Peripheral,
                        with key: KeyCredentials,
-                       action: UnlockAction = .default,
                        timeout: TimeInterval = .gattDefaultTimeout) throws {
         
         let timeout = Timeout(timeout: timeout)
@@ -133,9 +134,9 @@ public final class LockManager <Central: CentralProtocol> {
     }
     
     /// Create new key.
-    public func createKey(peripheral: Peripheral,
-                          newKey: CreateNewKeyRequest,
-                          key: KeyCredentials,
+    public func createKey(_ newKey: CreateNewKeyRequest,
+                          for peripheral: Peripheral,
+                          with key: KeyCredentials,
                           timeout: TimeInterval = .gattDefaultTimeout) throws {
         
         let timeout = Timeout(timeout: timeout)
@@ -154,9 +155,9 @@ public final class LockManager <Central: CentralProtocol> {
     }
     
     /// Confirm new key.
-    public func confirmKey(peripheral: Peripheral,
-                           confirmation: ConfirmNewKeyRequest,
-                           key: KeyCredentials,
+    public func confirmKey(_ confirmation: ConfirmNewKeyRequest,
+                           for peripheral: Peripheral,
+                           with key: KeyCredentials,
                            timeout: TimeInterval = .gattDefaultTimeout) throws {
         
         let timeout = Timeout(timeout: timeout)
@@ -174,7 +175,92 @@ public final class LockManager <Central: CentralProtocol> {
         }
     }
     
+    public func listKeys(for peripheral: Peripheral,
+                         with key: KeyCredentials,
+                         timeout: TimeInterval = .gattDefaultTimeout) throws -> KeysList {
+        
+        typealias Notification = KeysCharacteristic
+        
+        let timeout = Timeout(timeout: timeout)
+        
+        let chunks: [Chunk] = try central.device(for: peripheral, timeout: timeout) { [unowned self] (cache) in
+            
+            let semaphore = Semaphore(timeout: timeout.timeout)
+            
+            var chunks = [Chunk]()
+            chunks.reserveCapacity(2)
+            
+            // notify
+            try self.central.notify(Notification.self, for: cache, timeout: timeout) { (response) in
+                
+                switch response {
+                case let .error(error):
+                    semaphore.stopWaiting(error)
+                case let .value(value):
+                    let chunk = value.chunk
+                    self.log?("Received chunk \(chunks.count + 1) (\(chunk.bytes.count) bytes)")
+                    chunks.append(chunk)
+                    semaphore.stopWaiting()
+                }
+            }
+            
+            let characteristicValue = ListKeysCharacteristic(
+                identifier: key.identifier,
+                authentication: Authentication(key: key.secret)
+            )
+            
+            // Write data to characteristic
+            try self.central.write(characteristicValue, for: cache, timeout: timeout)
+            
+            // handle disconnect
+            self.central.didDisconnect = {
+                guard $0 == cache.peripheral else { return }
+                semaphore.stopWaiting(CentralError.disconnected)
+            }
+            
+            // wait for notifications
+            try semaphore.wait() // wait for first notification
+            while let lastChunk = chunks.last, chunks.length < lastChunk.total {
+                try semaphore.wait() // wait for more notifications
+            }
+            
+            // ignore disconnection
+            central.didDisconnect = nil
+            
+            // stop notifications
+            try self.central.notify(Notification.self, for: cache, timeout: Timeout(timeout: timeout.timeout), notification: nil)
+            
+            // parse after disconnecting
+            return chunks
+        }
+        
+        // parse data
+        return try KeysCharacteristic.from(chunks: chunks, secret: key.secret)
+    }
+    
+    /// Remove the specified key. 
+    public func removeKey(_ identifier: UUID,
+                          type: RemoveKeyCharacteristic.KeyType,
+                          for peripheral: Peripheral,
+                          with key: KeyCredentials,
+                          timeout: TimeInterval = .gattDefaultTimeout) throws {
+        
+        let timeout = Timeout(timeout: timeout)
+        
+        try central.device(for: peripheral, timeout: timeout) { [unowned self] (cache) in
+            
+            let characteristicValue = RemoveKeyCharacteristic(identifier: key.identifier,
+                                                              key: identifier,
+                                                              type: type,
+                                                              authentication: Authentication(key: key.secret))
+            
+            // Write unlock data to characteristic
+            try self.central.write(characteristicValue, for: cache, timeout: timeout)
+        }
+    }
 }
+
+// MARK: - Supporting Types
 
 public struct LockPeripheral <Central: CentralProtocol> {
     
@@ -197,4 +283,41 @@ public struct KeyCredentials: Equatable {
     public let identifier: UUID
     
     public let secret: KeyData
+}
+
+internal final class Semaphore {
+    
+    let semaphore: DispatchSemaphore
+    let timeout: TimeInterval
+    private(set) var error: Swift.Error?
+    
+    init(timeout: TimeInterval) {
+        
+        self.timeout = timeout
+        self.semaphore = DispatchSemaphore(value: 0)
+        self.error = nil
+    }
+    
+    func wait() throws {
+        
+        self.error = nil
+        let dispatchTime: DispatchTime = .now() + timeout
+        
+        let success = semaphore.wait(timeout: dispatchTime) == .success
+        
+        if let error = self.error {
+            throw error
+        }
+        
+        guard success else { throw CentralError.timeout }
+    }
+    
+    func stopWaiting(_ error: Swift.Error? = nil) {
+        
+        // store error
+        self.error = error
+        
+        // stop blocking
+        semaphore.signal()
+    }
 }

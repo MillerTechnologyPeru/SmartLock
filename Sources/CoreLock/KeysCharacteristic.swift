@@ -53,10 +53,10 @@ public extension KeysCharacteristic {
         return value
     }
     
-    static func from(chunks: [Chunk], sharedSecret: KeyData) throws -> KeysList {
+    static func from(chunks: [Chunk], secret: KeyData) throws -> KeysList {
         
         let encryptedData = try from(chunks: chunks)
-        let data = try encryptedData.decrypt(with: sharedSecret)
+        let data = try encryptedData.decrypt(with: secret)
         guard let value = try? decoder.decode(KeysList.self, from: data)
             else { throw GATTError.invalidData(data) }
         return value
