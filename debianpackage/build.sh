@@ -8,7 +8,6 @@ rm -rf .build
 swift build --configuration release
 
 # Package
-echo "Creating Debian package"
+echo "Copying Debian package files"
 cp -rf .build/armv7-unknown-linux-gnueabihf/release/lockd ./debianpackage/lockd/usr/bin/
 cd ./debianpackage
-./package.sh
