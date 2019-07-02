@@ -31,7 +31,7 @@ public extension SecureData where Self: Decodable {
         let container = try decoder.singleValueContainer()
         let data = try container.decode(Data.self)
         guard let value = Self(data: data) else {
-            throw DecodingError.typeMismatch(AuthenticationData.self, DecodingError.Context(codingPath: decoder.codingPath, debugDescription: "Invalid number of bytes \(data.count) for \(String(reflecting: Self.self))"))
+            throw DecodingError.typeMismatch(Self.self, DecodingError.Context(codingPath: decoder.codingPath, debugDescription: "Invalid number of bytes \(data.count) for \(String(reflecting: Self.self))"))
         }
         self = value
     }
