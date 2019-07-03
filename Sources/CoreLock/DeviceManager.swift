@@ -240,7 +240,7 @@ public final class LockManager <Central: CentralProtocol> {
     
     /// Remove the specified key. 
     public func removeKey(_ identifier: UUID,
-                          type: RemoveKeyCharacteristic.KeyType,
+                          type: KeyType = .key,
                           for peripheral: Peripheral,
                           with key: KeyCredentials,
                           timeout: TimeInterval = .gattDefaultTimeout) throws {

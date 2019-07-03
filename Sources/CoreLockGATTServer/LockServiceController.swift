@@ -446,7 +446,7 @@ public final class LockServiceController <Peripheral: PeripheralProtocol> : GATT
             
             print("Key \(key.identifier) \(key.name) recieved keys list")
             
-        } catch { print("Unlock error: \(error)")  }
+        } catch { print("List keys error: \(error)")  }
     }
     
     private func removeKey(_ characteristic: RemoveKeyCharacteristic) {
@@ -495,7 +495,7 @@ public final class LockServiceController <Peripheral: PeripheralProtocol> : GATT
             
             print("Key \(key.identifier) \(key.name) removed \(characteristic.type) \(characteristic.key)")
             
-        } catch { print("Unlock error: \(error)")  }
+        } catch { print("Remove key error: \(error)")  }
     }
 }
 

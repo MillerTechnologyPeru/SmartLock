@@ -329,7 +329,7 @@ extension LockPermissionsViewController {
             }
         }
         
-        var type: RemoveKeyCharacteristic.KeyType {
+        var type: KeyType {
             switch self {
             case .key: return .key
             case .newKey: return .newKey

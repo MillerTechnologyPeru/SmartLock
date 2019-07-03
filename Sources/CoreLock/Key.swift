@@ -33,3 +33,9 @@ public struct Key: Codable, Equatable, Hashable {
         self.permission = permission
     }
 }
+
+public enum KeyType: UInt8, Codable {
+    
+    case key
+    case newKey
+}

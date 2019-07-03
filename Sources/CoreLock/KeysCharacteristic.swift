@@ -57,9 +57,9 @@ public extension KeysCharacteristic {
         
         let encryptedData = try from(chunks: chunks)
         let data = try encryptedData.decrypt(with: secret)
-        guard let value = try? decoder.decode(KeysList.self, from: data)
+        guard let value = try? decoder.decode(KeysArray.self, from: data)
             else { throw GATTError.invalidData(data) }
-        return value
+        return KeysList(value)
     }
     
     static func from(_ value: EncryptedData, maximumUpdateValueLength: Int) throws -> [KeysCharacteristic] {
@@ -73,7 +73,8 @@ public extension KeysCharacteristic {
                      sharedSecret: KeyData,
                      maximumUpdateValueLength: Int) throws -> [KeysCharacteristic] {
         
-        let data = try encoder.encode(value)
+        let encodedValue = KeysArray(value)
+        let data = try encoder.encode(encodedValue)
         let encryptedData = try EncryptedData(encrypt: data, with: sharedSecret)
         return try from(encryptedData, maximumUpdateValueLength: maximumUpdateValueLength)
     }
@@ -89,5 +90,112 @@ public struct KeysList: Codable, Equatable {
         
         self.keys = keys
         self.newKeys = newKeys
+    }
+}
+
+internal extension KeysList {
+    
+    init(_ keysArray: KeysCharacteristic.KeysArray) {
+        
+        var keys = [Key]()
+        var newKeys = [NewKey]()
+        
+        keysArray.keys.forEach {
+            switch $0 {
+            case let .key(key):
+                keys.append(key)
+            case let .newKey(newKey):
+                newKeys.append(newKey)
+            }
+        }
+        
+        self.keys = keys
+        self.newKeys = newKeys
+    }
+}
+
+internal extension KeysCharacteristic.KeysArray {
+    
+    init(_ list: KeysList) {
+        
+        var keys = [Element]()
+        keys.reserveCapacity(list.keys.count + list.newKeys.count)
+        
+        list.keys.forEach { keys.append(.key($0)) }
+        list.newKeys.forEach { keys.append(.newKey($0)) }
+        
+        self.keys = keys
+    }
+}
+
+internal extension KeysCharacteristic {
+    
+    struct KeysArray {
+        
+        enum Element {
+            case key(Key)
+            case newKey(NewKey)
+        }
+        
+        public var keys: [Element]
+    }
+}
+
+extension KeysCharacteristic.KeysArray.Element: Codable {
+    
+    private enum CodingKeys: UInt8, TLVCodingKey, CaseIterable {
+        
+        case type = 0x00
+        case key = 0x01
+        
+        var stringValue: String {
+            switch self {
+            case .type: return "type"
+            case .key: return "key"
+            }
+        }
+    }
+    
+    public init(from decoder: Decoder) throws {
+        
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        let type = try container.decode(KeyType.self, forKey: .type)
+        switch type {
+        case .key:
+            let key = try container.decode(Key.self, forKey: .key)
+            self = .key(key)
+        case .newKey:
+            let newKey = try container.decode(NewKey.self, forKey: .key)
+            self = .newKey(newKey)
+        }
+    }
+    
+    public func encode(to encoder: Encoder) throws {
+        
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        switch self {
+        case let .key(key):
+            try container.encode(KeyType.key, forKey: .type)
+            try container.encode(key, forKey: .key)
+        case let .newKey(newKey):
+            try container.encode(KeyType.newKey, forKey: .type)
+            try container.encode(newKey, forKey: .key)
+        }
+    }
+}
+
+extension KeysCharacteristic.KeysArray: Codable {
+    
+    public init(from decoder: Decoder) throws {
+        
+        let container = try decoder.singleValueContainer()
+        let elements = try container.decode([Element].self)
+        self.keys = elements
+    }
+    
+    public func encode(to encoder: Encoder) throws {
+        
+        var container = encoder.singleValueContainer()
+        try container.encode(keys)
     }
 }

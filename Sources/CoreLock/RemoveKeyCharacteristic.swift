@@ -40,12 +40,3 @@ public struct RemoveKeyCharacteristic: TLVCharacteristic, Codable, Equatable {
         self.authentication = authentication
     }
 }
-
-public extension RemoveKeyCharacteristic {
-    
-    enum KeyType: UInt8, Codable {
-        
-        case key
-        case newKey
-    }
-}
