@@ -175,20 +175,40 @@ public final class LockManager <Central: CentralProtocol> {
         }
     }
     
+    /// Retreive a list of all keys on device.
     public func listKeys(for peripheral: Peripheral,
                          with key: KeyCredentials,
                          timeout: TimeInterval = .gattDefaultTimeout) throws -> KeysList {
+        
+        var keys = KeysList()
+        try listKeys(for: peripheral,
+                     with: key,
+                     notification: { (newValue, _) in keys = newValue },
+                     timeout: timeout)
+        return keys
+    }
+    
+    /// Retreive a list of all keys on device.
+    public func listKeys(for peripheral: Peripheral,
+                         with key: KeyCredentials,
+                         notification: (KeysList, Bool) -> (),
+                         timeout: TimeInterval = .gattDefaultTimeout) throws {
         
         typealias Notification = KeysCharacteristic
         
         let timeout = Timeout(timeout: timeout)
         
-        let chunks: [Chunk] = try central.device(for: peripheral, timeout: timeout) { [unowned self] (cache) in
+        try central.device(for: peripheral, timeout: timeout) { [unowned self] (cache) in
             
             let semaphore = Semaphore(timeout: timeout.timeout)
             
             var chunks = [Chunk]()
             chunks.reserveCapacity(2)
+            var lastKeyNotification: KeyListNotification?
+            var keysList = KeysList(
+                keys: .init(reserveCapacity: 2),
+                newKeys: .init(reserveCapacity: 1)
+            )
             
             // notify
             try self.central.notify(Notification.self, for: cache, timeout: timeout) { (response) in
@@ -220,22 +240,37 @@ public final class LockManager <Central: CentralProtocol> {
             
             // wait for notifications
             try semaphore.wait() // wait for first notification
-            while let lastChunk = chunks.last, chunks.length < lastChunk.total {
-                try semaphore.wait() // wait for more notifications
+            while let lastChunk = chunks.last {
+                if chunks.length < lastChunk.total {
+                    // keep on waiting for more chunks
+                    try semaphore.wait()
+                } else {
+                    let notificationValue = try KeysCharacteristic.from(chunks: chunks, secret: key.secret)
+                    chunks.removeAll(keepingCapacity: true)
+                    lastKeyNotification = notificationValue
+                    keysList.append(notificationValue.key)
+                    notification(keysList, notificationValue.isLast)
+                    if notificationValue.isLast {
+                        // finished loading keys
+                        assert(keysList.isEmpty == false)
+                        assert(lastKeyNotification != nil)
+                        assert(lastKeyNotification?.isLast ?? true, "Invalid last notification")
+                    } else {
+                        try semaphore.wait() // wait for more next key
+                    }
+                }
             }
+            
+            assert(keysList.isEmpty == false)
+            assert(lastKeyNotification != nil)
+            assert(lastKeyNotification?.isLast ?? true, "Invalid last notification")
             
             // ignore disconnection
             central.didDisconnect = nil
             
             // stop notifications
             try self.central.notify(Notification.self, for: cache, timeout: Timeout(timeout: timeout.timeout), notification: nil)
-            
-            // parse after disconnecting
-            return chunks
         }
-        
-        // parse data
-        return try KeysCharacteristic.from(chunks: chunks, secret: key.secret)
     }
     
     /// Remove the specified key. 

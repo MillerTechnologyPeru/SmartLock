@@ -258,7 +258,7 @@ public final class LockServiceController <Peripheral: PeripheralProtocol> : GATT
             let now = Date()
             guard timestamp < now, // cannot be used later for replay attacks
                 timestamp > now - 5.0 // only valid for 5 seconds
-                else { print("Authentication expired"); return }
+                else { print("Authentication expired \(timestamp) < \(now)"); return }
             
             // decrypt request
             let setupRequest = try setup.decrypt(with: sharedSecret)
@@ -297,7 +297,7 @@ public final class LockServiceController <Peripheral: PeripheralProtocol> : GATT
             let now = Date()
             guard timestamp < now, // cannot be used later for replay attacks
                 timestamp > now - 5.0 // only valid for 5 seconds
-                else { print("Authentication expired"); return }
+                else { print("Authentication expired \(timestamp) < \(now)"); return }
             
             // enforce schedule
             if case let .scheduled(schedule) = key.permission {
@@ -334,7 +334,7 @@ public final class LockServiceController <Peripheral: PeripheralProtocol> : GATT
             let now = Date()
             guard timestamp < now, // cannot be used later for replay attacks
                 timestamp > now - 5.0 // only valid for 5 seconds
-                else { print("Authentication expired"); return }
+                else { print("Authentication expired \(timestamp) < \(now)"); return }
             
             // enforce permission
             switch key.permission {
@@ -376,7 +376,7 @@ public final class LockServiceController <Peripheral: PeripheralProtocol> : GATT
             let now = Date()
             guard timestamp < now, // cannot be used later for replay attacks
                 timestamp > now - 5.0 // only valid for 5 seconds
-                else { print("Authentication expired"); return }
+                else { print("Authentication expired \(timestamp) < \(now)"); return }
             
             // decrypt
             let request = try characteristic.decrypt(with: secret)
@@ -418,7 +418,7 @@ public final class LockServiceController <Peripheral: PeripheralProtocol> : GATT
             let now = Date()
             guard timestamp < now, // cannot be used later for replay attacks
                 timestamp > now - 5.0 // only valid for 5 seconds
-                else { print("Authentication expired"); return }
+                else { print("Authentication expired \(timestamp) < \(now)"); return }
             
             // enforce permission
             switch key.permission {
@@ -433,15 +433,17 @@ public final class LockServiceController <Peripheral: PeripheralProtocol> : GATT
             
             // send list via notifications
             let list = authorization.list
-            let chunks = try KeysCharacteristic.from(
-                list,
-                sharedSecret: secret,
-                maximumUpdateValueLength: maximumUpdateValueLength
-            )
+            let notifications = KeyListNotification.from(list: list)
+            let notificationChunks = try notifications.map {
+                ($0, try KeysCharacteristic.from($0, sharedSecret: secret, maximumUpdateValueLength: maximumUpdateValueLength))
+            }
             
             // write to characteristic and issue notifications
-            chunks.forEach {
-                peripheral[characteristic: keysResponseHandle] = $0.data
+            for (notification, chunks) in notificationChunks {
+                for (index, chunk) in chunks.enumerated() {
+                    peripheral[characteristic: keysResponseHandle] = chunk.data
+                    print("Sent chunk \(index + 1) for \(notification.key.identifier) (\(chunk.data.count) bytes)")
+                }
             }
             
             print("Key \(key.identifier) \(key.name) recieved keys list")

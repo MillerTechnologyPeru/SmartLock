@@ -53,13 +53,13 @@ public extension KeysCharacteristic {
         return value
     }
     
-    static func from(chunks: [Chunk], secret: KeyData) throws -> KeysList {
+    static func from(chunks: [Chunk], secret: KeyData) throws -> KeyListNotification {
         
         let encryptedData = try from(chunks: chunks)
         let data = try encryptedData.decrypt(with: secret)
-        guard let value = try? decoder.decode(KeysArray.self, from: data)
+        guard let value = try? decoder.decode(KeyListNotification.self, from: data)
             else { throw GATTError.invalidData(data) }
-        return KeysList(value)
+        return value
     }
     
     static func from(_ value: EncryptedData, maximumUpdateValueLength: Int) throws -> [KeysCharacteristic] {
@@ -69,12 +69,11 @@ public extension KeysCharacteristic {
         return chunks.map { KeysCharacteristic(chunk: $0) }
     }
     
-    static func from(_ value: KeysList,
+    static func from(_ value: KeyListNotification,
                      sharedSecret: KeyData,
                      maximumUpdateValueLength: Int) throws -> [KeysCharacteristic] {
         
-        let encodedValue = KeysArray(value)
-        let data = try encoder.encode(encodedValue)
+        let data = try encoder.encode(value)
         let encryptedData = try EncryptedData(encrypt: data, with: sharedSecret)
         return try from(encryptedData, maximumUpdateValueLength: maximumUpdateValueLength)
     }
@@ -82,66 +81,87 @@ public extension KeysCharacteristic {
 
 public struct KeysList: Codable, Equatable {
     
-    public let keys: [Key]
+    public var keys: [Key]
     
-    public let newKeys: [NewKey]
+    public var newKeys: [NewKey]
     
-    public init(keys: [Key], newKeys: [NewKey]) {
+    public init(keys: [Key] = [], newKeys: [NewKey] = []) {
         
         self.keys = keys
         self.newKeys = newKeys
+    }
+}
+
+public extension KeysList {
+    
+    var count: Int {
+        return keys.count + newKeys.count
+    }
+    
+    var isEmpty: Bool {
+        return keys.isEmpty && newKeys.isEmpty
     }
 }
 
 internal extension KeysList {
     
-    init(_ keysArray: KeysCharacteristic.KeysArray) {
+    mutating func append(_ newValue: KeyListNotification.KeyValue) {
+        switch newValue {
+        case let .key(key):
+            keys.append(key)
+        case let .newKey(newKey):
+            newKeys.append(newKey)
+        }
+    }
+}
+
+public struct KeyListNotification: Codable, Equatable {
+    
+    public var key: KeyValue
+    
+    public var isLast: Bool
+}
+
+
+public extension KeyListNotification {
+    
+    static func from(list: KeysList) -> [KeyListNotification] {
         
-        var keys = [Key]()
-        var newKeys = [NewKey]()
+        guard list.isEmpty == false else { return [] }
         
-        keysArray.keys.forEach {
-            switch $0 {
+        var notifications = [KeyListNotification]()
+        notifications.reserveCapacity(list.count)
+        
+        list.keys.forEach { notifications.append(.init(key: .key($0), isLast: false)) }
+        list.newKeys.forEach { notifications.append(.init(key: .newKey($0), isLast: false)) }
+        
+        assert(notifications.count == list.count)
+        assert(notifications.isEmpty == false)
+        notifications[notifications.count - 1].isLast = true
+        
+        return notifications
+    }
+}
+
+public extension KeyListNotification {
+    
+    enum KeyValue: Equatable {
+        
+        case key(Key)
+        case newKey(NewKey)
+        
+        public var identifier: UUID {
+            switch self {
             case let .key(key):
-                keys.append(key)
+                return key.identifier
             case let .newKey(newKey):
-                newKeys.append(newKey)
+                return newKey.identifier
             }
         }
-        
-        self.keys = keys
-        self.newKeys = newKeys
     }
 }
 
-internal extension KeysCharacteristic.KeysArray {
-    
-    init(_ list: KeysList) {
-        
-        var keys = [Element]()
-        keys.reserveCapacity(list.keys.count + list.newKeys.count)
-        
-        list.keys.forEach { keys.append(.key($0)) }
-        list.newKeys.forEach { keys.append(.newKey($0)) }
-        
-        self.keys = keys
-    }
-}
-
-internal extension KeysCharacteristic {
-    
-    struct KeysArray {
-        
-        enum Element {
-            case key(Key)
-            case newKey(NewKey)
-        }
-        
-        public var keys: [Element]
-    }
-}
-
-extension KeysCharacteristic.KeysArray.Element: Codable {
+extension KeyListNotification.KeyValue: Codable {
     
     private enum CodingKeys: UInt8, TLVCodingKey, CaseIterable {
         
@@ -181,21 +201,5 @@ extension KeysCharacteristic.KeysArray.Element: Codable {
             try container.encode(KeyType.newKey, forKey: .type)
             try container.encode(newKey, forKey: .key)
         }
-    }
-}
-
-extension KeysCharacteristic.KeysArray: Codable {
-    
-    public init(from decoder: Decoder) throws {
-        
-        let container = try decoder.singleValueContainer()
-        let elements = try container.decode([Element].self)
-        self.keys = elements
-    }
-    
-    public func encode(to encoder: Encoder) throws {
-        
-        var container = encoder.singleValueContainer()
-        try container.encode(keys)
     }
 }
