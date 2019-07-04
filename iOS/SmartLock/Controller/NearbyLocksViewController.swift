@@ -76,6 +76,9 @@ final class NearbyLocksViewController: UITableViewController {
         informationObserver = Store.shared.lockInformation.observe { [weak self] _ in
             mainQueue { self?.configureView() }
         }
+        informationObserver = Store.shared.locks.observe { [weak self] _ in
+            mainQueue { self?.configureView() }
+        }
         
         // Update UI
         configureView()
@@ -174,35 +177,19 @@ final class NearbyLocksViewController: UITableViewController {
         let lock = self[indexPath]
         let peripheral = lock.scanData.peripheral
         
-        var title = lock.scanData.peripheral.description
-        var detail = "Unknown Lock"
-        var isEnabled = false
-        var image: UIImage?
+        let title: String
+        let detail: String
+        let image: UIImage?
+        let isEnabled: Bool
         
-        let isLoading = Store.shared.lockInformation.value[peripheral] == nil
-        
-        if isLoading {
-            detail = "Loading..."
-            if cell.activityIndicatorView.isHidden {
-                cell.activityIndicatorView.isHidden = false
-            }
-            if cell.activityIndicatorView.isAnimating == false {
-                cell.activityIndicatorView.startAnimating()
-            }
-        } else {
+        if let information = Store.shared.lockInformation.value[lock.scanData.peripheral] {
+            
+            isEnabled = true
+            
             if cell.activityIndicatorView.isAnimating {
                 cell.activityIndicatorView.stopAnimating()
                 cell.activityIndicatorView.isHidden = true
             }
-        }
-        
-        // hide image if loading
-        cell.lockImageView.isHidden = isLoading
-        
-        if let information = Store.shared.lockInformation.value[lock.scanData.peripheral] {
-            
-            title = information.identifier.description
-            isEnabled = true
             
             switch information.status {
                 
@@ -233,18 +220,39 @@ final class NearbyLocksViewController: UITableViewController {
                     title = lockCache.name
                     detail = permissionText
                     image = permissionImage
+                } else {
+                    title = "Lock"
+                    detail = information.identifier.description
+                    image = #imageLiteral(resourceName: "permissionBadgeAnytime")
                 }
                 
             case .setup:
                 
-                detail = "Setup"
+                title = "Setup"
+                detail = information.identifier.description
                 image = #imageLiteral(resourceName: "permissionBadgeOwner")
+            }
+        } else {
+            
+            isEnabled = false
+            title = "Loading..."
+            detail = ""
+            image = nil
+            
+            if cell.activityIndicatorView.isHidden {
+                cell.activityIndicatorView.isHidden = false
+            }
+            if cell.activityIndicatorView.isAnimating == false {
+                cell.activityIndicatorView.startAnimating()
             }
         }
         
         cell.lockTitleLabel.text = title
         cell.lockDetailLabel.text = detail
         cell.lockImageView.image = image
+        
+        // hide image if loading
+        cell.lockImageView.isHidden = image == nil
         
         cell.selectionStyle = isEnabled ? .default : .none
     }
