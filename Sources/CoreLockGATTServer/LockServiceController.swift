@@ -256,7 +256,7 @@ public final class LockServiceController <Peripheral: PeripheralProtocol> : GATT
             // guard against replay attacks
             let timestamp = setup.encryptedData.authentication.message.date
             let now = Date()
-            guard timestamp < now, // cannot be used later for replay attacks
+            guard timestamp <= now + 5, // cannot be used later for replay attacks
                 timestamp > now - 5.0 // only valid for 5 seconds
                 else { print("Authentication expired \(timestamp) < \(now)"); return }
             
@@ -295,7 +295,7 @@ public final class LockServiceController <Peripheral: PeripheralProtocol> : GATT
             // guard against replay attacks
             let timestamp = unlock.authentication.message.date
             let now = Date()
-            guard timestamp < now, // cannot be used later for replay attacks
+            guard timestamp <= now + 5, // cannot be used later for replay attacks
                 timestamp > now - 5.0 // only valid for 5 seconds
                 else { print("Authentication expired \(timestamp) < \(now)"); return }
             
@@ -332,7 +332,7 @@ public final class LockServiceController <Peripheral: PeripheralProtocol> : GATT
             // guard against replay attacks
             let timestamp = characteristic.encryptedData.authentication.message.date
             let now = Date()
-            guard timestamp < now, // cannot be used later for replay attacks
+            guard timestamp <= now + 5, // cannot be used later for replay attacks
                 timestamp > now - 5.0 // only valid for 5 seconds
                 else { print("Authentication expired \(timestamp) < \(now)"); return }
             
@@ -374,7 +374,7 @@ public final class LockServiceController <Peripheral: PeripheralProtocol> : GATT
             // guard against replay attacks
             let timestamp = characteristic.encryptedData.authentication.message.date
             let now = Date()
-            guard timestamp < now, // cannot be used later for replay attacks
+            guard timestamp <= now + 5, // cannot be used later for replay attacks
                 timestamp > now - 5.0 // only valid for 5 seconds
                 else { print("Authentication expired \(timestamp) < \(now)"); return }
             
@@ -416,7 +416,7 @@ public final class LockServiceController <Peripheral: PeripheralProtocol> : GATT
             // guard against replay attacks
             let timestamp = characteristic.authentication.message.date
             let now = Date()
-            guard timestamp < now, // cannot be used later for replay attacks
+            guard timestamp <= now + 5, // cannot be used later for replay attacks
                 timestamp > now - 5.0 // only valid for 5 seconds
                 else { print("Authentication expired \(timestamp) < \(now)"); return }
             
@@ -469,7 +469,7 @@ public final class LockServiceController <Peripheral: PeripheralProtocol> : GATT
             // guard against replay attacks
             let timestamp = characteristic.authentication.message.date
             let now = Date()
-            guard timestamp < now, // cannot be used later for replay attacks
+            guard timestamp <= now + 5, // cannot be used later for replay attacks
                 timestamp > now - 5.0 // only valid for 5 seconds
                 else { print("Authentication expired"); return }
             
