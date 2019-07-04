@@ -21,7 +21,7 @@ final class LockPermissionsViewController: UITableViewController, ActivityIndica
     
     var completion: (() -> ())?
     
-    private(set) var state: State = .fetching {
+    private(set) var list = KeysList() {
         didSet { configureView() }
     }
     
@@ -63,7 +63,7 @@ final class LockPermissionsViewController: UITableViewController, ActivityIndica
     
     @IBAction func reloadData(_ sender: AnyObject? = nil) {
         
-        self.state = .fetching
+        self.showProgressHUD()
         
         let lockIdentifier = self.lockIdentifier!
         
@@ -71,28 +71,33 @@ final class LockPermissionsViewController: UITableViewController, ActivityIndica
             let keyData = Store.shared[key: lockCache.key.identifier]
             else { fatalError() }
         
-        async {
+        async { [weak self] in
             let key = KeyCredentials(identifier: lockCache.key.identifier, secret: keyData)
             do {
                 guard let peripheral = Store.shared[peripheral: lockIdentifier]
                     else { throw CentralError.unknownPeripheral }
-                let keys = try LockManager.shared.listKeys(for: peripheral, with: key)
-                mainQueue { self.state = .keys(keys) }
+                try LockManager.shared.listKeys(for: peripheral, with: key, notification: { (list, isComplete) in
+                    mainQueue { self?.list = list }
+                })
+                mainQueue { self?.dismissProgressHUD() }
             }
-            catch { mainQueue { self.state = .error(error) }; return }
+            catch {
+                mainQueue {
+                    self?.showErrorAlert("\(error)",
+                        okHandler: { self?.tableView.reloadData() },
+                        retryHandler: { self?.reloadData() })
+                }
+                return
+            }
         }
     }
     
     @IBAction func newKey(_ sender: AnyObject? = nil) {
         
         let navigationController = UIStoryboard(name: "NewKey", bundle: nil).instantiateInitialViewController() as! UINavigationController
-        
         let destinationViewController = navigationController.viewControllers.first! as! NewKeySelectPermissionViewController
-        
         destinationViewController.lockIdentifier = lockIdentifier
-        
         destinationViewController.completion = { _ in mainQueue { self.reloadData() } }
-        
         self.present(navigationController, animated: true, completion: nil)
     }
     
@@ -106,26 +111,7 @@ final class LockPermissionsViewController: UITableViewController, ActivityIndica
     private func configureView() {
         
         refreshControl?.endRefreshing()
-        
-        switch self.state {
-            
-        case .keys:
-            
-            self.dismissProgressHUD(animated: true)
-            self.tableView.reloadData()
-            
-        case .fetching:
-            
-            self.showProgressHUD()
-            
-        case let .error(error):
-            
-            self.dismissProgressHUD(animated: false)
-            
-            showErrorAlert("\(error)",
-                okHandler: { self.tableView.reloadData() },
-                retryHandler: { self.reloadData() })
-        }
+        tableView.reloadData()
     }
     
     private func configure(cell: LockTableViewCell, at indexPath: IndexPath) {
@@ -160,9 +146,6 @@ final class LockPermissionsViewController: UITableViewController, ActivityIndica
     
     private subscript (section: Section) -> [Item] {
         
-        guard case let .keys(list) = self.state
-            else { assertionFailure("Invalid state: \(self.state)"); return [] }
-        
         switch section {
         case .keys: return list.keys.map { .key($0) }
         case .pending: return list.newKeys.map { .newKey($0) }
@@ -183,7 +166,6 @@ final class LockPermissionsViewController: UITableViewController, ActivityIndica
     
     override func numberOfSections(in tableView: UITableView) -> Int {
         
-        guard case .keys = self.state else { return 0 }
         return Section.count
     }
     
@@ -198,9 +180,7 @@ final class LockPermissionsViewController: UITableViewController, ActivityIndica
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: LockTableViewCell.reuseIdentifier, for: indexPath) as! LockTableViewCell
-        
         configure(cell: cell, at: indexPath)
-        
         return cell
     }
     
@@ -211,9 +191,7 @@ final class LockPermissionsViewController: UITableViewController, ActivityIndica
         let section = Section(rawValue: section)!
         
         switch section {
-            
         case .keys: return nil
-            
         case .pending: return self[section].isEmpty ? nil : "Pending Keys"
         }
     }
@@ -271,7 +249,12 @@ final class LockPermissionsViewController: UITableViewController, ActivityIndica
                         try LockManager.shared.removeKey(keyEntry.identifier, type: keyEntry.type, for: peripheral, with: key)
                         
                     }
-                    catch { mainQueue { self.state = .error(error) }; return }
+                    catch {
+                        mainQueue {
+                            self.tableView.reloadData()
+                        }
+                        return
+                    }
                     mainQueue { self.reloadData() }
                 }                
             }))
@@ -288,13 +271,6 @@ final class LockPermissionsViewController: UITableViewController, ActivityIndica
 // MARK: - Supporting Types
 
 extension LockPermissionsViewController {
-    
-    enum State {
-        
-        case fetching
-        case keys(KeysList)
-        case error(Error)
-    }
     
     enum Section: Int {
         
