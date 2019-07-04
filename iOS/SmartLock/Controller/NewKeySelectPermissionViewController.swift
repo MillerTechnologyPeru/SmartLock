@@ -106,9 +106,7 @@ final class NewKeySelectPermissionViewController: UITableViewController, NewKeyV
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: PermissionTypeTableViewCell.resuseIdentifier, for: indexPath) as! PermissionTypeTableViewCell
-        
         configure(cell: cell, at: indexPath)
-        
         return cell
     }
     
@@ -126,9 +124,13 @@ final class NewKeySelectPermissionViewController: UITableViewController, NewKeyV
         case .owner:
             fatalError("Cannot create owner keys")
         case .admin:
-            newKey(permission: .admin, sender: .view(cell.permissionImageView))
+            newKey(permission: .admin, sender: .view(cell.permissionImageView)) { [unowned self] _ in
+                self.completion?(true)
+            }
         case .anytime:
-            newKey(permission: .anytime, sender: .view(cell.permissionImageView))
+            newKey(permission: .anytime, sender: .view(cell.permissionImageView)) { [unowned self] _ in
+                self.completion?(true)
+            }
         case .scheduled:
             fatalError("Not implemented")
         }

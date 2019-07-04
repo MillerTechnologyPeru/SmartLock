@@ -241,10 +241,10 @@
 				6E6000152121119400787DAA /* NearbyLocksViewController.swift */,
 				6E05B6E622C9C159001218D9 /* KeysViewController.swift */,
 				6E05B6E422C9C11D001218D9 /* LockViewController.swift */,
+				6E05B6F322C9F206001218D9 /* LockPermissionsViewController.swift */,
 				6E05B6F122C9E766001218D9 /* NewKeySelectPermissionViewController.swift */,
 				6E05B6F622C9F209001218D9 /* NewKeyScheduleViewController.swift */,
 				6E05B6F522C9F209001218D9 /* NewKeyRecieveViewController.swift */,
-				6E05B6F322C9F206001218D9 /* LockPermissionsViewController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";

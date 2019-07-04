@@ -240,7 +240,7 @@ final class LockPermissionsViewController: UITableViewController, ActivityIndica
                 
                 self.showProgressHUD()
                 
-                async {
+                async { [weak self] in
                     
                     do {
                         guard let peripheral = Store.shared[peripheral: lockIdentifier]
@@ -251,11 +251,15 @@ final class LockPermissionsViewController: UITableViewController, ActivityIndica
                     }
                     catch {
                         mainQueue {
-                            self.tableView.reloadData()
+                            self?.showErrorAlert(error.localizedDescription)
+                            self?.dismissProgressHUD(animated: false)
                         }
                         return
                     }
-                    mainQueue { self.reloadData() }
+                    mainQueue {
+                        self?.list.remove(keyEntry.identifier, type: keyEntry.type)
+                        self?.dismissProgressHUD(animated: true)
+                    }
                 }                
             }))
             

@@ -28,7 +28,7 @@ protocol NewKeyViewController: ActivityIndicatorViewController {
 
 extension NewKeyViewController {
     
-    func newKey(permission: Permission, sender: PopoverPresentingView) {
+    func newKey(permission: Permission, sender: PopoverPresentingView, completion: @escaping (NewKey.Invitation) -> ()) {
         
         let lockIdentifier = self.lockIdentifier!
         
@@ -51,7 +51,9 @@ extension NewKeyViewController {
             self.showProgressHUD()
             
             // add new key to lock
-            async {
+            async { [weak self] in
+                
+                guard let self = self else { return }
                 
                 let newKey = NewKey(
                     identifier: newKeyIdentifier,
@@ -83,7 +85,6 @@ extension NewKeyViewController {
                 print("Created new key \(newKey.identifier) (\(newKey.permission.type))")
                 
                 // save invitation file
-                
                 let newKeyData = try! JSONEncoder().encode(newKeyInvitation)
                 
                 let filePath = try! FileManager.default
@@ -120,6 +121,7 @@ extension NewKeyViewController {
                     activityController.completionWithItemsHandler = { (activityType, completed, items, error) in
                         
                         self.dismiss(animated: true, completion: nil)
+                        completion(newKeyInvitation)
                     }
                     
                     self.present(activityController, animated: true, completion: nil, sender: sender)

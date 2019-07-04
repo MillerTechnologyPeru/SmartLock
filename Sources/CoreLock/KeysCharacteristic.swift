@@ -101,6 +101,16 @@ public extension KeysList {
     var isEmpty: Bool {
         return keys.isEmpty && newKeys.isEmpty
     }
+    
+    mutating func remove(_ identifier: UUID, type: KeyType = .key) {
+        
+        switch type {
+        case .key:
+            keys.removeAll(where: { $0.identifier == identifier })
+        case .newKey:
+            newKeys.removeAll(where: { $0.identifier == identifier })
+        }
+    }
 }
 
 internal extension KeysList {

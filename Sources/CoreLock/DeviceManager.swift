@@ -249,6 +249,7 @@ public final class LockManager <Central: CentralProtocol> {
                     chunks.removeAll(keepingCapacity: true)
                     lastKeyNotification = notificationValue
                     keysList.append(notificationValue.key)
+                    self.log?("Recieved key \(notificationValue.key.identifier)")
                     notification(keysList, notificationValue.isLast)
                     if notificationValue.isLast {
                         // finished loading keys
