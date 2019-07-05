@@ -230,10 +230,12 @@ public final class LockManager <Central: CentralProtocol> {
                         keysList.append(notificationValue.key)
                         self.log?("Recieved key \(notificationValue.key.identifier)")
                         notification(keysList, notificationValue.isLast)
+                        if notificationValue.isLast {
+                            semaphore.stopWaiting()
+                        }
                     } catch {
                         semaphore.stopWaiting(error)
                     }
-                    semaphore.stopWaiting()
                 }
             }
             
