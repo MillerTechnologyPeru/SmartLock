@@ -51,7 +51,7 @@
         "repositoryURL": "https://github.com/uraimo/SwiftyGPIO.git",
         "state": {
           "branch": "master",
-          "revision": "8b8cde2eb7d8edbb770f6867d8a2c403d399a30c",
+          "revision": "b49ec1de7e6829fdbb08af2ff63f1ec9dc4af4b1",
           "version": null
         }
       },
@@ -60,7 +60,7 @@
         "repositoryURL": "https://github.com/PureSwift/TLVCoding.git",
         "state": {
           "branch": "master",
-          "revision": "81d7ccf0c8fcbe6c32145713fcc47eb44063a9a3",
+          "revision": "129ad84d45d7a25e29a902dd58567ff2fed4fc14",
           "version": null
         }
       }
