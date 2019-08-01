@@ -21,10 +21,10 @@ final class GATTProfileTests: XCTestCase {
 
     func testInformation() {
         
-        let information = InformationCharacteristic(identifier: UUID(),
+        let information = LockInformationCharacteristic(identifier: UUID(),
                                                     status: .setup)
         
-        guard let decoded = InformationCharacteristic(data: information.data)
+        guard let decoded = LockInformationCharacteristic(data: information.data)
             else { XCTFail("Could not parse bytes"); return }
         
         XCTAssertEqual(information, decoded)
