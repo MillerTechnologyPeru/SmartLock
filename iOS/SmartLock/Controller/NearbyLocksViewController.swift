@@ -32,11 +32,14 @@ final class NearbyLocksViewController: UITableViewController {
     
     let scanDuration: TimeInterval = 3.0
     
-    #if os(iOS)
-    
     internal lazy var progressHUD: JGProgressHUD = JGProgressHUD(style: .dark)
     
-    #endif
+    @available(iOS 10.0, *)
+    private lazy var feedbackGenerator: UISelectionFeedbackGenerator = {
+        let feedbackGenerator = UISelectionFeedbackGenerator()
+        feedbackGenerator.prepare()
+        return feedbackGenerator
+    }()
     
     private var peripheralsObserver: Int?
     private var informationObserver: Int?
@@ -86,6 +89,10 @@ final class NearbyLocksViewController: UITableViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        
+        if #available(iOS 10.0, *) {
+            feedbackGenerator.prepare()
+        }
         
         if items.isEmpty {
             scan()
@@ -254,10 +261,14 @@ final class NearbyLocksViewController: UITableViewController {
     
     private func select(_ lock: LockPeripheral<NativeCentral>) {
         
-        log("Selected peripheral \(lock.scanData.peripheral)")
-        
         guard let information = Store.shared.lockInformation.value[lock.scanData.peripheral]
             else { return }
+        
+        log("Selected lock \(information.identifier)")
+        
+        if #available(iOS 10.0, *) {
+            feedbackGenerator.selectionChanged()
+        }
         
         switch information.status {
         case .setup:
@@ -291,7 +302,3 @@ final class NearbyLocksViewController: UITableViewController {
 // MARK: - ActivityIndicatorViewController
 
 extension NearbyLocksViewController: ActivityIndicatorViewController { }
-
-// MARK: - LockActivityHandling
-
-extension NearbyLocksViewController: LockActivityHandlingViewController { }

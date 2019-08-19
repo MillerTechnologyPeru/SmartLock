@@ -72,7 +72,7 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(_ application: UIApplication, continue userActivity: NSUserActivity, restorationHandler: @escaping ([Any]?) -> Void) -> Bool {
         
-        print("Continue activity \(userActivity.activityType)\n\(userActivity.userInfo?.description ?? "")")
+        print("Continue activity \(userActivity.activityType)\n\((userActivity.userInfo as NSDictionary?)?.description ?? "")")
         
         switch userActivity.activityType {
         //case CSSearchableItemActionType:

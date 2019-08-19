@@ -37,6 +37,13 @@ final class LockViewController: UITableViewController {
     
     private let progressHUD = JGProgressHUD(style: .dark)
     
+    @available(iOS 10.0, *)
+    private lazy var feedbackGenerator: UIImpactFeedbackGenerator = {
+        let feedbackGenerator = UIImpactFeedbackGenerator(style: .heavy)
+        feedbackGenerator.prepare()
+        return feedbackGenerator
+    }()
+    
     // MARK: - Loading
     
     override func viewDidLoad() {
@@ -49,6 +56,14 @@ final class LockViewController: UITableViewController {
         tableView.tableFooterView = UIView()
         
         configureView()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        if #available(iOS 10.0, *) {
+            feedbackGenerator.prepare()
+        }
     }
     
     override func viewDidLayoutSubviews() {
@@ -119,6 +134,10 @@ final class LockViewController: UITableViewController {
     }
     
     @IBAction func unlock(_ sender: UIButton) {
+        
+        if #available(iOS 10.0, *) {
+            feedbackGenerator.impactOccurred()
+        }
      
         unlock()
     }
@@ -128,9 +147,10 @@ final class LockViewController: UITableViewController {
         guard let lockIdentifier = self.lockIdentifier
             else { assertionFailure(); return }
         
-        print("Unlocking \(lockIdentifier)")
+        print("Unlock \(lockIdentifier)")
         
         self.userActivity = NSUserActivity(.action(.unlock(lockIdentifier)))
+        self.userActivity?.becomeCurrent()
         
         guard let lockCache = Store.shared[lock: lockIdentifier]
             else { assertionFailure("No stored cache for lock"); return }
