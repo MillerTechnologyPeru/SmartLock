@@ -13,8 +13,11 @@ import UIKit
 final class TabBarController: UITabBarController {
     
     private func select <T: UIViewController> (_ viewController: T.Type, _ block: (T) -> ()) {
+        loadViewIfNeeded()
         for (index, child) in (viewControllers ?? []).enumerated() {
-            guard let viewController = child as? T
+            guard let navigationController = child as? UINavigationController
+                else { assertionFailure(); continue }
+            guard let viewController = navigationController.viewControllers.first as? T
                 else { continue }
             selectedIndex = index
             block(viewController)
