@@ -119,13 +119,17 @@ final class LockViewController: UITableViewController {
     }
     
     @IBAction func unlock(_ sender: UIButton) {
+     
+        unlock()
+    }
+    
+    internal func unlock() {
         
         guard let lockIdentifier = self.lockIdentifier
             else { assertionFailure(); return }
         
         print("Unlocking \(lockIdentifier)")
         
-        let oldActivity = self.userActivity
         self.userActivity = NSUserActivity(.action(.unlock(lockIdentifier)))
         
         guard let lockCache = Store.shared[lock: lockIdentifier]
@@ -139,14 +143,14 @@ final class LockViewController: UITableViewController {
         
         let key = KeyCredentials(identifier: lockCache.key.identifier, secret: keyData)
         
-        sender.isEnabled = false
+        unlockButton.isEnabled = false
         
         async { [weak self] in
             
             guard let controller = self else { return }
             
             // enable action button
-            defer { mainQueue { sender.isEnabled = true } }
+            defer { mainQueue { controller.unlockButton.isEnabled = true } }
             
             do {
                 try LockManager.shared.unlock(.default,
@@ -158,8 +162,6 @@ final class LockViewController: UITableViewController {
             catch { mainQueue { controller.showErrorAlert("\(error)") }; return }
             
             print("Successfully unlocked lock \"\(controller.lockIdentifier!)\"")
-            
-            mainQueue { controller.userActivity = oldActivity }
         }
     }
     

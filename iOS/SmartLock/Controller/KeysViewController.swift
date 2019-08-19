@@ -115,13 +115,15 @@ final class KeysViewController: UITableViewController {
         select(lock: item.identifier)
     }
     
-    internal func select(lock identifier: UUID) {
+    @discardableResult
+    private func select(lock identifier: UUID) -> LockViewController {
         
         let navigationController = UIStoryboard(name: "LockDetail", bundle: nil).instantiateInitialViewController() as! UINavigationController
         
         let lockViewController = navigationController.topViewController as! LockViewController
         lockViewController.lockIdentifier = identifier
         self.show(lockViewController, sender: self)
+        return lockViewController
     }
     
     // MARK: - UITableViewDataSource
@@ -200,13 +202,24 @@ extension KeysViewController: LockActivityHandlingViewController {
             select(lock: identifier)
         case .newKey,
              .setup:
-            AppDelegate.shared.open(url: url)
+            AppDelegate.shared.handle(url: url)
         }
     }
     
     func handle(activity: AppActivity) {
         
-        
+        switch activity {
+        case .screen(.keys):
+            return
+        case .screen(.nearbyLocks):
+            AppDelegate.shared.handle(activity: activity)
+        case let .view(.lock(identifier)):
+            select(lock: identifier)
+        case let .action(.unlock(identifier)):
+            select(lock: identifier).unlock()
+        case .action(.shareKey):
+            AppDelegate.shared.handle(activity: activity)
+        }
     }
 }
 

@@ -69,6 +69,47 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
         
         return open(url: url)
     }
+    
+    func application(_ application: UIApplication, continue userActivity: NSUserActivity, restorationHandler: @escaping ([Any]?) -> Void) -> Bool {
+        
+        print("Continue activity \(userActivity.activityType)\n\(userActivity.userInfo?.description ?? "")")
+        
+        switch userActivity.activityType {
+        //case CSSearchableItemActionType:
+        //    return false
+        case NSUserActivityTypeBrowsingWeb:
+            return false
+        case AppActivityType.screen.rawValue:
+            guard let screenString = userActivity.userInfo?[AppActivity.UserInfo.screen] as? String,
+                let screen = AppActivity.Screen(rawValue: screenString)
+                else { return false }
+            self.handle(activity: .screen(screen))
+        case AppActivityType.view.rawValue:
+            if let lock = userActivity.userInfo?[AppActivity.UserInfo.lock] as? UUID {
+                self.handle(activity: .view(.lock(lock)))
+            } else {
+                return false
+            }
+        case AppActivityType.action.rawValue:
+            guard let actionString = userActivity.userInfo?[AppActivity.UserInfo.action] as? String,
+                let action = AppActivity.ActionType(rawValue: actionString)
+                else { return false }
+            switch action {
+            case .unlock:
+                guard let lock = userActivity.userInfo?[AppActivity.UserInfo.lock] as? UUID
+                    else { return false }
+                self.handle(activity: .action(.unlock(lock)))
+            case .shareKey:
+                guard let lock = userActivity.userInfo?[AppActivity.UserInfo.lock] as? UUID
+                    else { return false }
+                self.handle(activity: .action(.shareKey(lock)))
+            }
+        default:
+            return false
+        }
+        
+        return true
+    }
 }
 
 extension AppDelegate {
@@ -122,6 +163,7 @@ extension AppDelegate: LockActivityHandling {
     }
     
     func handle(activity: AppActivity) {
-        fatalError()
+        
+        tabBarController.handle(activity: activity)
     }
 }

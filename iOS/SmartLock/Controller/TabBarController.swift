@@ -12,7 +12,7 @@ import UIKit
 
 final class TabBarController: UITabBarController {
     
-    private func select <T: UIViewController> (_ viewController: T.Type, _ block: (T) -> ()) {
+    private func select <T: UIViewController> (_ viewController: T.Type, _ block: ((T) -> ())? = nil) {
         loadViewIfNeeded()
         for (index, child) in (viewControllers ?? []).enumerated() {
             guard let navigationController = child as? UINavigationController
@@ -20,7 +20,8 @@ final class TabBarController: UITabBarController {
             guard let viewController = navigationController.viewControllers.first as? T
                 else { continue }
             selectedIndex = index
-            block(viewController)
+            navigationController.popToRootViewController(animated: false)
+            block?(viewController)
             return
         }
         assertionFailure("Did not transition")
@@ -32,21 +33,45 @@ final class TabBarController: UITabBarController {
 extension TabBarController: LockActivityHandlingViewController {
     
     func handle(activity: AppActivity) {
-        fatalError()
+        
+        switch activity {
+        case .screen(.nearbyLocks):
+            // show nearby locks
+            select(NearbyLocksViewController.self)
+        case .screen(.keys):
+            // show keys
+            select(KeysViewController.self)
+        case .view(.lock):
+            // forward
+            select(KeysViewController.self) {
+                $0.handle(activity: activity)
+            }
+        case .action(.unlock):
+            // forward
+            select(KeysViewController.self) {
+                $0.handle(activity: activity)
+            }
+        case let .action(.shareKey(identifier)):
+            // show modal form
+            shareKey(lock: identifier)
+        }
     }
     
     func handle(url: LockURL) {
         
         switch url {
         case let .setup(lock: identifier, secret: secret):
+            // setup in background
             select(NearbyLocksViewController.self) {
                 $0.setup(lock: identifier, secret: secret)
             }
-        case let .unlock(lock: identifier):
+        case .unlock:
+            // dont actually unlock, show UI
             select(KeysViewController.self) {
-                $0.select(lock: identifier)
+                $0.handle(url: url)
             }
         case let .newKey(invitation):
+            // show modal form
             open(newKey: invitation)
         }
     }

@@ -56,6 +56,12 @@
 	<true/>
 	<key>NSCameraUsageDescription</key>
 	<string>Your camera is needed to setup your smart lock.</string>
+	<key>NUserActivityTypes</key>
+	<array>
+		<string>com.colemancda.lock.activity.action</string>
+		<string>com.colemancda.lock.activity.view</string>
+		<string>com.colemancda.lock.activity.screen</string>
+	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>

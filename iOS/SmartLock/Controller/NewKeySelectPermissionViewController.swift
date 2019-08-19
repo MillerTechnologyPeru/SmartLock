@@ -140,6 +140,19 @@ final class NewKeySelectPermissionViewController: UITableViewController, NewKeyV
     }
 }
 
+extension UIViewController {
+    
+    func shareKey(lock identifier: UUID) {
+        
+        let navigationController = UIStoryboard(name: "NewKey", bundle: nil).instantiateInitialViewController() as! UINavigationController
+        
+        let destinationViewController = navigationController.viewControllers.first! as! NewKeySelectPermissionViewController
+        destinationViewController.lockIdentifier = identifier
+        destinationViewController.completion = { _ in navigationController.dismiss(animated: true, completion: nil) }
+        self.present(navigationController, animated: true, completion: nil)
+    }
+}
+
 // MARK: - Supporting Types
 
 final class PermissionTypeTableViewCell: UITableViewCell {
