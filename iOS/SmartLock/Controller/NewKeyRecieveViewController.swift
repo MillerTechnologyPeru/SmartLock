@@ -152,3 +152,24 @@ final class NewKeyRecieveViewController: UITableViewController, ActivityIndicato
         self.permissionLabel.text = permissionText
     }
 }
+
+extension UIViewController {
+    
+    @discardableResult
+    func open(newKey: NewKey.Invitation) -> Bool {
+        
+        // only one key per lock
+        guard Store.shared[lock: newKey.lock] == nil else {
+            self.showErrorAlert("You already have a key for lock \(newKey.lock).")
+            return false
+        }
+        
+        // show NewKeyReceiveVC
+        let navigationController = UIStoryboard(name: "NewKeyInvitation", bundle: nil).instantiateInitialViewController() as! UINavigationController
+        let newKeyVC = navigationController.topViewController as! NewKeyRecieveViewController
+        newKeyVC.newKey = newKey
+        present(navigationController, animated: true, completion: nil)
+        
+        return true
+    }
+}

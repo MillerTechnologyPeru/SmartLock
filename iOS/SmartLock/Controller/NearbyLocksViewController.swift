@@ -36,13 +36,6 @@ final class NearbyLocksViewController: UITableViewController {
     
     internal lazy var progressHUD: JGProgressHUD = JGProgressHUD(style: .dark)
     
-    private lazy var readerViewController: QRCodeReaderViewController = {
-        let builder = QRCodeReaderViewControllerBuilder {
-            $0.reader = QRCodeReader(metadataObjectTypes: [.qr], captureDevicePosition: .back)
-        }
-        return QRCodeReaderViewController(builder: builder)
-    }()
-    
     #endif
     
     private var peripheralsObserver: Int?
@@ -175,7 +168,6 @@ final class NearbyLocksViewController: UITableViewController {
     private func configure(cell: LockTableViewCell, at indexPath: IndexPath) {
         
         let lock = self[indexPath]
-        let peripheral = lock.scanData.peripheral
         
         let title: String
         let detail: String
@@ -266,9 +258,9 @@ final class NearbyLocksViewController: UITableViewController {
         
         switch information.status {
         case .setup:
-            setup(lock)
+            setup(lock: lock)
         case .unlock:
-            unlock(lock)
+            unlock(lock: lock)
         }
     }
     
@@ -291,60 +283,12 @@ final class NearbyLocksViewController: UITableViewController {
             }
         }
     }
-    
-    private func unlock(_ lock: LockPeripheral<NativeCentral>) {
-        
-        guard let information = Store.shared.lockInformation.value[lock.scanData.peripheral],
-            let lockCache = Store.shared[lock: information.identifier],
-            let keyData = Store.shared[key: lockCache.key.identifier]
-            else { return }
-        
-        let key = KeyCredentials(
-            identifier: lockCache.key.identifier,
-            secret: keyData
-        )
-        
-        performActivity({ try LockManager.shared.unlock(.default,
-                                                        for: lock.scanData.peripheral,
-                                                        with: key,
-                                                        timeout: .gattDefaultTimeout) })
-    }
-    
-    private func setup(_ lock: LockPeripheral<NativeCentral>) {
-        
-        // scan QR code
-        assert(QRCodeReader.isAvailable())
-        
-        readerViewController.completionBlock = { [unowned self] (result: QRCodeReaderResult?) in
-            
-            self.readerViewController.dismiss(animated: true, completion: {
-                
-                // did not scan
-                guard let result = result else { return }
-                
-                guard let data = Data(base64Encoded: result.value),
-                    let sharedSecret = KeyData(data: data) else {
-                    
-                    self.showErrorAlert("Invalid QR code")
-                    return
-                }
-                
-                // perform BLE request
-                self.setupLock(lock, sharedSecret: sharedSecret)
-            })
-        }
-        
-        // Presents the readerVC as modal form sheet
-        readerViewController.modalPresentationStyle = .formSheet
-        present(readerViewController, animated: true, completion: nil)
-    }
-    
-    private func setupLock(_ lock: LockPeripheral<NativeCentral>, sharedSecret: KeyData, name: String = "Lock") {
-        
-        performActivity({ try Store.shared.setup(lock, sharedSecret: sharedSecret, name: name) })
-    }
 }
 
 // MARK: - ActivityIndicatorViewController
 
 extension NearbyLocksViewController: ActivityIndicatorViewController { }
+
+// MARK: - LockActivityHandling
+
+extension NearbyLocksViewController: LockActivityHandlingViewController { }

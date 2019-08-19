@@ -107,12 +107,17 @@ final class KeysViewController: UITableViewController {
         cell.lockImageView.isHidden = false
     }
     
-    private func didSelect(_ item: Item) {
+    private func select(_ item: Item) {
+        
+        select(item.identifier)
+    }
+    
+    internal func select(lock identifier: UUID) {
         
         let navigationController = UIStoryboard(name: "LockDetail", bundle: nil).instantiateInitialViewController() as! UINavigationController
         
         let lockViewController = navigationController.topViewController as! LockViewController
-        lockViewController.lockIdentifier = item.identifier
+        lockViewController.lockIdentifier = identifier
         self.show(lockViewController, sender: self)
     }
     
@@ -144,7 +149,7 @@ final class KeysViewController: UITableViewController {
         
         defer { tableView.deselectRow(at: indexPath, animated: true) }
         let item = self[indexPath]
-        didSelect(item)
+        select(item)
     }
     
     override func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
@@ -178,6 +183,22 @@ final class KeysViewController: UITableViewController {
         actions.append(delete)
         
         return actions
+    }
+}
+
+// MARK: - LockActivityHandling
+
+extension KeysViewController: LockActivityHandlingViewController {
+    
+    func handle(url: LockURL) {
+        
+        switch url {
+        case let .unlock(lock: identifier):
+            select(lock: identifier)
+        case .newKey,
+             .setup:
+            break
+        }
     }
 }
 

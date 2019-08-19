@@ -28,11 +28,13 @@ public final class Store {
     
     public let locks = Observable([UUID: LockCache]())
     
-    private let defaults = Defaults.shared
+    private let defaults: Defaults = Defaults.shared
     
     private let keychain = Keychain()
     
     private let storageKey = DefaultsKey<[UUID: LockCache]>("locks")
+    
+    public let lockManager: LockManager = .shared
     
     // BLE cache
     public private(set) var peripherals = Observable([NativeCentral.Peripheral: LockPeripheral<NativeCentral>]())
@@ -99,11 +101,39 @@ public final class Store {
 
 public extension Store {
     
+    func device(for identifier: UUID,
+                scanDuration: TimeInterval) throws -> LockPeripheral<NativeCentral>? {
+        
+        assert(Thread.isMainThread == false)
+        
+        if let lock = device(for: identifier) {
+            return lock
+        } else {
+            try self.scan(duration: scanDuration)
+            self.peripherals.value.values.forEach {
+                do { try self.readInformation($0) }
+                catch {  } // ignore
+            }
+            return device(for: identifier)
+        }
+    }
+    
+    func device(for identifier: UUID) -> LockPeripheral<NativeCentral>? {
+        
+        guard let peripheral = self[peripheral: identifier],
+            let lock = self.peripherals.value[peripheral]
+            else { return nil }
+        
+        return lock
+    }
+    
     func scan(duration: TimeInterval) throws {
+        
+        assert(Thread.isMainThread == false)
         
         self.peripherals.value.removeAll()
         
-        try LockManager.shared.scan(duration: duration, filterDuplicates: false) { [unowned self] in
+        try lockManager.scan(duration: duration, filterDuplicates: false) { [unowned self] in
             self.peripherals.value[$0.scanData.peripheral] = $0
         }
     }
@@ -113,11 +143,13 @@ public extension Store {
                sharedSecret: KeyData,
                name: String) throws {
         
+        assert(Thread.isMainThread == false)
+        
         let setupRequest = SetupRequest()
         
-        let information = try LockManager.shared.setup(setupRequest,
-                                                       for: lock.scanData.peripheral,
-                                                       sharedSecret: sharedSecret)
+        let information = try lockManager.setup(setupRequest,
+                                                for: lock.scanData.peripheral,
+                                                sharedSecret: sharedSecret)
         
         let ownerKey = Key(setup: setupRequest)
         
@@ -137,11 +169,34 @@ public extension Store {
     
     func readInformation(_ lock: LockPeripheral<NativeCentral>) throws {
         
-        let information = try LockManager.shared.readInformation(for: lock.scanData.peripheral)
+        assert(Thread.isMainThread == false)
+        
+        let information = try lockManager.readInformation(for: lock.scanData.peripheral)
         
         // update lock information cache
         self.lockInformation.value[lock.scanData.peripheral] = information
         self[lock: information.identifier]?.information = LockCache.Information(characteristic: information)
+    }
+    
+    @discardableResult
+    func unlock(_ lock: LockPeripheral<NativeCentral>, action: UnlockAction = .default) throws -> Bool {
+        
+        // get lock key
+        guard let information = self.lockInformation.value[lock.scanData.peripheral],
+            let lockCache = self[lock: information.identifier],
+            let keyData = self[key: lockCache.key.identifier]
+            else { return false }
+        
+        let key = KeyCredentials(
+            identifier: lockCache.key.identifier,
+            secret: keyData
+        )
+        
+        try lockManager.unlock(action,
+                               for: lock.scanData.peripheral,
+                               with: key)
+        
+        return true
     }
 }
 

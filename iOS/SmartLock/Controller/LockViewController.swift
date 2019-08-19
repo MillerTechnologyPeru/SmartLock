@@ -202,3 +202,23 @@ final class LockViewController: UITableViewController {
         self.permissionLabel.text = permissionText
     }
 }
+
+extension UIViewController {
+    
+    @discardableResult
+    func view(lock identifier: UUID) -> Bool {
+        
+        guard Store.shared[lock: identifier] != nil else {
+            self.showErrorAlert("No key for lock \(identifier).")
+            return false
+        }
+        
+        let navigationController = UIStoryboard(name: "LockDetail", bundle: nil).instantiateInitialViewController() as! UINavigationController
+        
+        let lockViewController = navigationController.topViewController as! LockViewController
+        lockViewController.lockIdentifier = identifier
+        show(lockViewController, sender: self)
+        
+        return true
+    }
+}

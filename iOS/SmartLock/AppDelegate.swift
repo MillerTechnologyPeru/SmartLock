@@ -7,18 +7,20 @@
 //
 
 import Foundation
-import Bluetooth
-import GATT
-import CoreLock
-
-#if os(iOS)
 import UIKit
 import CoreBluetooth
 import CoreLocation
-#endif
+import Bluetooth
+import GATT
+import CoreLock
+import JGProgressHUD
 
 @UIApplicationMain
 final class AppDelegate: UIResponder, UIApplicationDelegate {
+    
+    static var shared: AppDelegate {
+        return UIApplication.shared.delegate as! AppDelegate
+    }
 
     var window: UIWindow?
     
@@ -32,9 +34,9 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
         LockManager.shared.log = { log("📱 LockManager: " + $0) }
         
         // handle url
-        if let url = launchOptions?[UIApplicationLaunchOptionsKey.url] as? URL {
+        if let url = launchOptions?[.url] as? URL {
             
-            guard openURL(url)
+            guard open(url: url)
                 else { return false }
         }
         
@@ -65,44 +67,47 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, handleOpen url: URL) -> Bool {
         
-        return openURL(url)
+        return open(url: url)
     }
 }
 
-private extension AppDelegate {
+extension AppDelegate {
     
-    func openURL(_ url: URL) -> Bool {
+    var tabBarController: TabBarController {
+        guard let tabBarController = window?.rootViewController as? TabBarController
+            else { fatalError() }
+        return tabBarController
+    }
+}
+
+// MARK: - URL Handling
+
+internal extension AppDelegate {
+    
+    func open(url: URL) -> Bool {
         
         if url.isFileURL {
-            
-            // parse eKey file
-            guard let data = try? Data(contentsOf: url),
-                let newKey = try? JSONDecoder().decode(NewKey.Invitation.self, from: data)
-                else { return false }
-            
-            // only one key per lock
-            guard Store.shared[lock: newKey.lock] == nil else {
-                self.window!.rootViewController?.showErrorAlert("You already have a key for lock \(newKey.lock).")
-                return false
-            }
-            
-            // show NewKeyReceiveVC
-            let navigationController = UIStoryboard(name: "NewKeyInvitation", bundle: nil).instantiateInitialViewController() as! UINavigationController
-            
-            let newKeyVC = navigationController.topViewController as! NewKeyRecieveViewController
-            
-            newKeyVC.newKey = newKey
-            
-            self.window!.rootViewController?.present(navigationController, animated: true, completion: nil)
-            
+            return open(file: url)
+        } else if let lockURL = LockURL(rawValue: url) {
+            open(url: lockURL)
             return true
-            
         } else {
-            
-            // handle custom URL
-            
             return false
         }
     }
+    
+    func open(file url: URL) -> Bool {
+        
+        // parse eKey file
+        guard let data = try? Data(contentsOf: url),
+            let newKey = try? JSONDecoder().decode(NewKey.Invitation.self, from: data)
+            else { return false }
+        
+        return tabBarController.open(newKey: newKey)
+    }
+    
+    func open(url: LockURL) {
+        
+        tabBarController.handle(url: url)
+    }
 }
-
