@@ -31,6 +31,10 @@ final class TabBarController: UITabBarController {
 
 extension TabBarController: LockActivityHandlingViewController {
     
+    func handle(activity: AppActivity) {
+        fatalError()
+    }
+    
     func handle(url: LockURL) {
         
         switch url {

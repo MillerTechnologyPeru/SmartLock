@@ -14,6 +14,8 @@ import QRCodeReader
 protocol LockActivityHandling {
     
     func handle(url: LockURL)
+    
+    func handle(activity: AppActivity)
 }
 
 // MARK: - View Controller
@@ -32,6 +34,11 @@ extension LockActivityHandlingViewController where Self: UIViewController, Self:
         case let .newKey(invitation):
             self.open(newKey: invitation)
         }
+    }
+    
+    func handle(activity: AppActivity) {
+        
+        
     }
 }
 
@@ -97,6 +104,10 @@ extension ActivityIndicatorViewController where Self: UIViewController {
     
     func unlock(lock identifier: UUID, action: UnlockAction = .default,  scanDuration: TimeInterval = 2.0) {
         
+        let oldActivity = self.userActivity
+        self.userActivity = NSUserActivity(.action(.unlock(identifier)))
+        self.userActivity?.becomeCurrent()
+        
         performActivity(showProgressHUD: true, { () -> String? in
             guard let lockPeripheral = try Store.shared.device(for: identifier, scanDuration: scanDuration)
                 else { return "Could not find lock" }
@@ -105,11 +116,24 @@ extension ActivityIndicatorViewController where Self: UIViewController {
             if let errorMessage = errorMessage {
                 viewController.showErrorAlert(errorMessage)
             }
+            viewController.userActivity?.resignCurrent()
+            viewController.userActivity = oldActivity
         })
     }
     
     func unlock(lock: LockPeripheral<NativeCentral>, action: UnlockAction = .default) {
         
-        performActivity({ try Store.shared.unlock(lock, action: action) })
+        let oldActivity = self.userActivity
+        if let lockInformation = Store.shared.lockInformation.value[lock.scanData.peripheral] {
+            self.userActivity = NSUserActivity(.action(.unlock(lockInformation.identifier)))
+            self.userActivity?.becomeCurrent()
+        }
+        
+        performActivity({
+            try Store.shared.unlock(lock, action: action)
+        }, completion: { (viewController, _) in
+            self.userActivity?.resignCurrent()
+            self.userActivity = oldActivity
+        })
     }
 }

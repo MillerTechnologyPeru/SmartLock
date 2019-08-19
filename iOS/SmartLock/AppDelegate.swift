@@ -111,3 +111,17 @@ internal extension AppDelegate {
         tabBarController.handle(url: url)
     }
 }
+
+// MARK: - LockActivityHandling
+
+extension AppDelegate: LockActivityHandling {
+    
+    func handle(url: LockURL) {
+        
+        tabBarController.handle(url: url)
+    }
+    
+    func handle(activity: AppActivity) {
+        fatalError()
+    }
+}

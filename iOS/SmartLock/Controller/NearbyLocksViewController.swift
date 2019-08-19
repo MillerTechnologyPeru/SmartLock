@@ -57,6 +57,9 @@ final class NearbyLocksViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        // activity
+        self.userActivity = .init(.screen(.nearbyLocks))
+        
         // register cell
         tableView.register(LockTableViewCell.nib, forCellReuseIdentifier: LockTableViewCell.reuseIdentifier)
         tableView.rowHeight = UITableViewAutomaticDimension

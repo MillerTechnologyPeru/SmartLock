@@ -41,6 +41,9 @@ final class LockPermissionsViewController: UITableViewController, ActivityIndica
         
         assert(lockIdentifier != nil, "No lock set")
         
+        // set user activity
+        userActivity = NSUserActivity(.action(.shareKey(lockIdentifier)))
+        
         // setup table view
         tableView.rowHeight = UITableViewAutomaticDimension
         tableView.estimatedRowHeight = 60

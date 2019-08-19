@@ -125,6 +125,9 @@ final class LockViewController: UITableViewController {
         
         print("Unlocking \(lockIdentifier)")
         
+        let oldActivity = self.userActivity
+        self.userActivity = NSUserActivity(.action(.unlock(lockIdentifier)))
+        
         guard let lockCache = Store.shared[lock: lockIdentifier]
             else { assertionFailure("No stored cache for lock"); return }
         
@@ -155,6 +158,8 @@ final class LockViewController: UITableViewController {
             catch { mainQueue { controller.showErrorAlert("\(error)") }; return }
             
             print("Successfully unlocked lock \"\(controller.lockIdentifier!)\"")
+            
+            mainQueue { controller.userActivity = oldActivity }
         }
     }
     
@@ -165,6 +170,9 @@ final class LockViewController: UITableViewController {
         // Lock has been deleted
         guard let lockCache = Store.shared[lock: lockIdentifier]
             else { assertionFailure("Invalid lock \(lockIdentifier!)"); return }
+        
+        // activity
+        self.userActivity = .init(.view(.lock(lockIdentifier)))
         
         // set lock name
         self.navigationItem.title = lockCache.name

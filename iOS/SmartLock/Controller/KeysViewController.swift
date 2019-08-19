@@ -39,6 +39,9 @@ final class KeysViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        // activity
+        self.userActivity = .init(.screen(.keys))
+        
         // setup table view
         tableView.register(LockTableViewCell.nib, forCellReuseIdentifier: LockTableViewCell.reuseIdentifier)
         tableView.rowHeight = UITableViewAutomaticDimension
@@ -109,7 +112,7 @@ final class KeysViewController: UITableViewController {
     
     private func select(_ item: Item) {
         
-        select(item.identifier)
+        select(lock: item.identifier)
     }
     
     internal func select(lock identifier: UUID) {
@@ -197,8 +200,13 @@ extension KeysViewController: LockActivityHandlingViewController {
             select(lock: identifier)
         case .newKey,
              .setup:
-            break
+            AppDelegate.shared.open(url: url)
         }
+    }
+    
+    func handle(activity: AppActivity) {
+        
+        
     }
 }
 

@@ -44,6 +44,7 @@
 		6EAADFB821229CC00074CEDF /* LockTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EAADFB621229CBF0074CEDF /* LockTableViewCell.swift */; };
 		6EC041282309D6CB00357585 /* ActivityHandling.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EC041272309D6CB00357585 /* ActivityHandling.swift */; };
 		6EC0412E230A226400357585 /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EC0412D230A226300357585 /* TabBarController.swift */; };
+		6EC04130230A494E00357585 /* UserActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EC0412F230A494E00357585 /* UserActivity.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -153,6 +154,7 @@
 		6EAADFB621229CBF0074CEDF /* LockTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LockTableViewCell.swift; sourceTree = "<group>"; };
 		6EC041272309D6CB00357585 /* ActivityHandling.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityHandling.swift; sourceTree = "<group>"; };
 		6EC0412D230A226300357585 /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
+		6EC0412F230A494E00357585 /* UserActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserActivity.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -200,6 +202,8 @@
 				6E6000CB21211D0B00787DAA /* Async.swift */,
 				6EAADF8B2122664A0074CEDF /* AppVersion.swift */,
 				6EC041272309D6CB00357585 /* ActivityHandling.swift */,
+				6E05B6EC22C9E42C001218D9 /* Activity.swift */,
+				6EC0412F230A494E00357585 /* UserActivity.swift */,
 				6E6000D02121224D00787DAA /* Assets.xcassets */,
 				6E6000172121119400787DAA /* Main.storyboard */,
 				6E05B6E222C9C0EF001218D9 /* LockDetail.storyboard */,
@@ -209,7 +213,6 @@
 				6E60001C2121119500787DAA /* LaunchScreen.storyboard */,
 				6E60001F2121119500787DAA /* Info.plist */,
 				6E05B6DC22C9BF85001218D9 /* eKeyDocument.pdf */,
-				6E05B6EC22C9E42C001218D9 /* Activity.swift */,
 				6EAADFB021229CB10074CEDF /* View */,
 				6E6000BE21211C5F00787DAA /* Model */,
 				6E6000BD21211C5100787DAA /* Controller */,
@@ -243,8 +246,8 @@
 			children = (
 				6E6000C221211CC200787DAA /* Extensions */,
 				6E6000C121211CB900787DAA /* Protocols */,
-				6E6000152121119400787DAA /* NearbyLocksViewController.swift */,
 				6EC0412D230A226300357585 /* TabBarController.swift */,
+				6E6000152121119400787DAA /* NearbyLocksViewController.swift */,
 				6E05B6E622C9C159001218D9 /* KeysViewController.swift */,
 				6E05B6E422C9C11D001218D9 /* LockViewController.swift */,
 				6E05B6F322C9F206001218D9 /* LockPermissionsViewController.swift */,
@@ -499,6 +502,7 @@
 				6E60F8AD212127890054995D /* Log.swift in Sources */,
 				6EAADF8C2122664A0074CEDF /* AppVersion.swift in Sources */,
 				6E6000C821211CD400787DAA /* AdaptiveNavigation.swift in Sources */,
+				6EC04130230A494E00357585 /* UserActivity.swift in Sources */,
 				6E6000C721211CD400787DAA /* ErrorAlert.swift in Sources */,
 				6E6000CA21211CD400787DAA /* PresentPopover.swift in Sources */,
 				6E05B6F822C9F20A001218D9 /* LockPermissionsViewController.swift in Sources */,

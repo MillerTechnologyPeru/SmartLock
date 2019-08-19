@@ -29,6 +29,9 @@ final class NewKeySelectPermissionViewController: UITableViewController, NewKeyV
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        // set user activity
+        userActivity = NSUserActivity(.action(.shareKey(lockIdentifier)))
+        
         // setup table view
         self.tableView.estimatedRowHeight = 100
         self.tableView.rowHeight = UITableViewAutomaticDimension
