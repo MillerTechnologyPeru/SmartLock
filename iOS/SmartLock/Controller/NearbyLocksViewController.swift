@@ -35,8 +35,15 @@ final class NearbyLocksViewController: UITableViewController {
     internal lazy var progressHUD: JGProgressHUD = JGProgressHUD(style: .dark)
     
     @available(iOS 10.0, *)
-    private lazy var feedbackGenerator: UISelectionFeedbackGenerator = {
+    private lazy var selectionFeedbackGenerator: UISelectionFeedbackGenerator = {
         let feedbackGenerator = UISelectionFeedbackGenerator()
+        feedbackGenerator.prepare()
+        return feedbackGenerator
+    }()
+    
+    @available(iOS 10.0, *)
+    private lazy var impactFeedbackGenerator: UIImpactFeedbackGenerator = {
+        let feedbackGenerator = UIImpactFeedbackGenerator(style: .medium)
         feedbackGenerator.prepare()
         return feedbackGenerator
     }()
@@ -61,7 +68,7 @@ final class NearbyLocksViewController: UITableViewController {
         super.viewDidLoad()
         
         // activity
-        self.userActivity = .init(.screen(.nearbyLocks))
+        userActivity = .init(.screen(.nearbyLocks))
         
         // register cell
         tableView.register(LockTableViewCell.nib, forCellReuseIdentifier: LockTableViewCell.reuseIdentifier)
@@ -91,12 +98,18 @@ final class NearbyLocksViewController: UITableViewController {
         super.viewWillAppear(animated)
         
         if #available(iOS 10.0, *) {
-            feedbackGenerator.prepare()
+            selectionFeedbackGenerator.prepare()
+            impactFeedbackGenerator.prepare()
         }
         
         if items.isEmpty {
             scan()
         }
+    }
+    
+    override func updateUserActivityState(_ activity: NSUserActivity) {
+        
+        activity.addUserInfoEntries(from: NSUserActivity(.screen(.nearbyLocks)).userInfo ?? [:])
     }
     
     // MARK: - Actions
@@ -110,6 +123,10 @@ final class NearbyLocksViewController: UITableViewController {
         guard LockManager.shared.central.state == .poweredOn
             else { return } // cannot scan
         #endif
+        
+        if #available(iOS 10.0, *) {
+            impactFeedbackGenerator.impactOccurred()
+        }
         
         let scanDuration = self.scanDuration
         
@@ -154,9 +171,7 @@ final class NearbyLocksViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
         defer { tableView.deselectRow(at: indexPath, animated: true) }
-        
         let item = self[indexPath]
-        
         select(item)
     }
     
@@ -267,7 +282,7 @@ final class NearbyLocksViewController: UITableViewController {
         log("Selected lock \(information.identifier)")
         
         if #available(iOS 10.0, *) {
-            feedbackGenerator.selectionChanged()
+            selectionFeedbackGenerator.selectionChanged()
         }
         
         switch information.status {
