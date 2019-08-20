@@ -72,6 +72,20 @@ final class LockViewController: UITableViewController {
         view.bringSubview(toFront: progressHUD)
     }
     
+    override func updateUserActivityState(_ activity: NSUserActivity) {
+        
+        switch activity.activityType {
+        case AppActivityType.view.rawValue:
+            activity.addUserInfoEntries(from: NSUserActivity(.view(.lock(lockIdentifier))).userInfo ?? [:])
+        case AppActivityType.action.rawValue:
+            activity.addUserInfoEntries(from: NSUserActivity(.action(.unlock(lockIdentifier))).userInfo ?? [:])
+        default:
+            break
+        }
+        
+        super.updateUserActivityState(activity)
+    }
+    
     // MARK: - Actions
     
     @IBAction func showActionMenu(_ sender: UIBarButtonItem) {
@@ -149,9 +163,6 @@ final class LockViewController: UITableViewController {
         
         print("Unlock \(lockIdentifier)")
         
-        self.userActivity = NSUserActivity(.action(.unlock(lockIdentifier)))
-        self.userActivity?.becomeCurrent()
-        
         guard let lockCache = Store.shared[lock: lockIdentifier]
             else { assertionFailure("No stored cache for lock"); return }
         
@@ -160,6 +171,10 @@ final class LockViewController: UITableViewController {
         
         guard let (peripheral, characteristic) = Store.shared.lockInformation.value.first(where: { $0.value.identifier == lockIdentifier })
             else { showErrorAlert("Lock not in area. Please rescan for nearby locks."); return }
+        
+        self.userActivity?.resignCurrent()
+        self.userActivity = NSUserActivity(.action(.unlock(lockIdentifier)))
+        self.userActivity?.becomeCurrent()
         
         let key = KeyCredentials(identifier: lockCache.key.identifier, secret: keyData)
         
@@ -194,7 +209,7 @@ final class LockViewController: UITableViewController {
             else { assertionFailure("Invalid lock \(lockIdentifier!)"); return }
         
         // activity
-        self.userActivity = .init(.view(.lock(lockIdentifier)))
+        self.userActivity = NSUserActivity(.view(.lock(lockIdentifier)))
         
         // set lock name
         self.navigationItem.title = lockCache.name

@@ -21,7 +21,7 @@ enum AppActivityType: String {
     case screen = "com.colemancda.lock.activity.screen"
 }
 
-enum AppActivity {
+enum AppActivity: Equatable, Hashable {
     
     case screen(Screen)
     case view(ViewData)
@@ -30,12 +30,12 @@ enum AppActivity {
 
 extension AppActivity {
     
-    enum ViewData {
+    enum ViewData: Equatable, Hashable {
         
         case lock(UUID)
     }
     
-    enum Action {
+    enum Action: Equatable, Hashable {
         
         case shareKey(UUID)
         case unlock(UUID)
@@ -110,7 +110,7 @@ extension NSUserActivity {
             } else {
                 self.title = "Share Key"
             }
-            self.isEligibleForSearch = false
+            self.isEligibleForSearch = true
             self.isEligibleForHandoff = true
             if #available(iOS 12.0, *) {
                 self.isEligibleForPrediction = true
@@ -125,12 +125,16 @@ extension NSUserActivity {
             } else {
                 self.title = "Unlock \(lockIdentifier)"
             }
-            self.isEligibleForSearch = false
-            self.isEligibleForHandoff = true
+            self.isEligibleForSearch = true
+            self.isEligibleForHandoff = false
             if #available(iOS 12.0, *) {
                 self.isEligibleForPrediction = true
             }
         }
+        if #available(iOS 12.0, *) {
+            self.persistentIdentifier = "\(activity)"
+        }
+        self.needsSave = true
     }
     
     convenience init(activityType: AppActivityType, userInfo: [AppActivity.UserInfo: NSObject]) {
@@ -142,5 +146,6 @@ extension NSUserActivity {
         }
         self.userInfo = data
         self.requiredUserInfoKeys = Set(userInfo.keys.lazy.map { $0.rawValue })
+        self.needsSave = true
     }
 }
