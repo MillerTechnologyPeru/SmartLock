@@ -69,7 +69,7 @@ final class NearbyLocksViewController: UITableViewController {
         
         // register cell
         tableView.register(LockTableViewCell.nib, forCellReuseIdentifier: LockTableViewCell.reuseIdentifier)
-        tableView.rowHeight = UITableViewAutomaticDimension
+        tableView.rowHeight = UITableView.automaticDimension
         tableView.estimatedRowHeight = 60
         
         // observe model changes

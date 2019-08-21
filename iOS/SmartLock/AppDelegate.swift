@@ -14,6 +14,7 @@ import Bluetooth
 import GATT
 import CoreLock
 import JGProgressHUD
+import UserNotifications
 
 @UIApplicationMain
 final class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -25,7 +26,7 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
     
     func application(_ application: UIApplication,
-                     didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
+                     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         
         // print app info
         log("📱 Launching SmartLock v\(AppVersion) Build \(AppBuild)")
@@ -36,6 +37,12 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
         
         // request permissions
         BeaconController.shared.requestAuthorization()
+        
+        if #available(iOS 10.0, *) {
+            UNUserNotificationCenter.current().requestAuthorization(options: [.alert]) { (didAuthorize, error) in
+                log("Notifications Authorization: \(didAuthorize) \(error?.localizedDescription ?? "")")
+            }
+        }
         
         // handle url
         if let url = launchOptions?[.url] as? URL {
@@ -73,7 +80,7 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
         return open(url: url)
     }
     
-    func application(_ application: UIApplication, continue userActivity: NSUserActivity, restorationHandler: @escaping ([Any]?) -> Void) -> Bool {
+    private func application(_ application: UIApplication, continue userActivity: NSUserActivity, restorationHandler: @escaping ([Any]?) -> Void) -> Bool {
         
         log("Continue activity \(userActivity.activityType)")
         if #available(iOS 12.0, *),

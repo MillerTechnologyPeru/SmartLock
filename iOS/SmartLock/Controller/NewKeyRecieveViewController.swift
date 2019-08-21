@@ -46,7 +46,7 @@ final class NewKeyRecieveViewController: UITableViewController, ActivityIndicato
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
-        view.bringSubview(toFront: progressHUD)
+        view.bringSubviewToFront(progressHUD)
     }
     
     // MARK: - Actions

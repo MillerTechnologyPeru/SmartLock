@@ -7,7 +7,10 @@
 //
 
 import Foundation
+import UIKit
 import Intents
+import CoreSpotlight
+import MobileCoreServices
 
 /// `NSUserActivity` type
 public enum AppActivityType: String {
@@ -47,6 +50,16 @@ public extension AppActivity {
         case nearbyLocks
         case keys
     }
+}
+
+public protocol AppActivityData {
+    
+    static var activityDataType: AppActivity.DataType { get }
+}
+
+extension LockCache: AppActivityData {
+    
+    public static var activityDataType: AppActivity.DataType { return .lock }
 }
 
 public extension AppActivity {
@@ -159,7 +172,7 @@ extension AppActivity.Action: RawRepresentable {
     }
 }
 
-extension AppActivity {
+public extension AppActivity {
     
     enum UserInfo: String {
         
@@ -189,16 +202,21 @@ extension NSUserActivity {
             self.init(activityType: .screen, userInfo: [
                 .screen: screen.rawValue as NSString
                 ])
+            let attributes = CSSearchableItemAttributeSet(itemContentType: screen.rawValue)
             switch screen {
             case .nearbyLocks:
                 self.title = "Nearby Locks"
+                attributes.contentDescription = "Show nearby locks."
+                attributes.thumbnailData = UIImage(named: "Near")?.pngData()
             case .keys:
                 self.title = "Keys"
+                attributes.contentDescription = "Display stored keys."
+                attributes.thumbnailData = UIImage(named: "LockTabBarIcon")?.pngData()
             }
             self.isEligibleForSearch = false
             self.isEligibleForHandoff = true
             if #available(iOS 12.0, *) {
-                self.isEligibleForPrediction = false
+                self.isEligibleForPrediction = true
             }
         case let .view(.lock(lockIdentifier)):
             self.init(activityType: .view, userInfo: [
@@ -206,26 +224,30 @@ extension NSUserActivity {
                 ])
             if let lockCache = Store.shared[lock: lockIdentifier] {
                 self.title = lockCache.name
+                self.contentAttributeSet = SearchableLock(identifier: lockIdentifier, cache: lockCache).searchableAttributeSet()
             } else {
                 self.title = "Lock \(lockIdentifier)"
             }
             self.isEligibleForSearch = true
             self.isEligibleForHandoff = true
             if #available(iOS 12.0, *) {
-                self.isEligibleForPrediction = false
+                self.isEligibleForPrediction = true
             }
         case let .action(.shareKey(lockIdentifier)):
             self.init(activityType: .action, userInfo: [
                 .action: AppActivity.ActionType.shareKey.rawValue as NSString,
                 .lock: lockIdentifier.uuidString as NSString
                 ])
+            let attributes = CSSearchableItemAttributeSet(itemContentType: kUTTypeText as String)
             if let lockCache = Store.shared[lock: lockIdentifier] {
                 self.title = "Share Key for \(lockCache.name)"
             } else {
-                self.title = "Share Key"
+                self.title = "Share Key for \(lockIdentifier)"
             }
+            attributes.thumbnailData = UIImage(named: "activityNewKey")?.pngData()
+            self.contentAttributeSet = attributes
             self.isEligibleForSearch = true
-            self.isEligibleForHandoff = true
+            self.isEligibleForHandoff = false
             if #available(iOS 12.0, *) {
                 self.isEligibleForPrediction = true
             }
@@ -240,7 +262,7 @@ extension NSUserActivity {
                 self.title = "Unlock \(lockIdentifier)"
             }
             self.isEligibleForSearch = true
-            self.isEligibleForHandoff = true
+            self.isEligibleForHandoff = false
             if #available(iOS 12.0, *) {
                 self.isEligibleForPrediction = true
                 self.suggestedInvocationPhrase = "Unlock my door"

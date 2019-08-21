@@ -21,12 +21,12 @@ public final class BeaconController {
     
     private lazy var locationManager: CLLocationManager = {
         let locationManager = CLLocationManager()
-        locationManager.delegate = locationManagerDelegate
+        locationManager.delegate = delegate
         locationManager.allowsBackgroundLocationUpdates = true
         return locationManager
     }()
     
-    private lazy var locationManagerDelegate = LocationManagerDelegate(self)
+    private lazy var delegate = Delegate(self)
     
     public private(set) var locks = [UUID: CLBeaconRegion]()
     
@@ -39,6 +39,7 @@ public final class BeaconController {
         let region = CLBeaconRegion(proximityUUID: identifier, major: 0, minor: 0, identifier: identifier.uuidString)
         region.notifyOnEntry = true
         region.notifyEntryStateOnDisplay = true
+        region.notifyOnExit = true
         locks[identifier] = region
         
         switch CLLocationManager.authorizationStatus() {
@@ -48,7 +49,9 @@ public final class BeaconController {
         case .denied,
              .notDetermined,
              .restricted:
-            return
+            break
+        @unknown default:
+            break
         }
     }
     
@@ -68,6 +71,8 @@ public final class BeaconController {
              .notDetermined,
              .restricted:
             break
+        @unknown default:
+            break
         }
         
         return true
@@ -76,7 +81,8 @@ public final class BeaconController {
 
 private extension BeaconController {
     
-    @objc final class LocationManagerDelegate: NSObject, CLLocationManagerDelegate {
+    @objc(BeaconControllerDelegate)
+    final class Delegate: NSObject, CLLocationManagerDelegate {
         
         init(_ beaconController: BeaconController) {
             self.beaconController = beaconController
@@ -103,6 +109,8 @@ private extension BeaconController {
                  .notDetermined,
                  .restricted:
                 break
+            @unknown default:
+                return
             }
         }
         
@@ -124,7 +132,6 @@ private extension BeaconController {
             log("Entered region \(region.identifier)")
             
             if let beaconRegion = region as? CLBeaconRegion {
-                
                 manager.startRangingBeacons(in: beaconRegion)
             }
         }
@@ -147,7 +154,11 @@ private extension BeaconController {
                     manager.startRangingBeacons(in: beaconRegion)
                 case .outside,
                      .unknown:
-                    break
+                    if let lock = beaconController?.locks.first(where: { $0.value == region })?.key {
+                        if #available(iOS 10.0, *) {
+                            UserNotificationCenter.shared.removeUnlockNotification(for: lock)
+                        }
+                    }
                 }
             }
         }
@@ -163,7 +174,7 @@ private extension BeaconController {
             // is lock iBeacon, make sure the lock is scanned for BLE operations
             if let lock = beaconController.locks.first(where: { $0.value == region })?.key {
                 
-                assert(beacons.count == 1, "Should only be one lock iBeacon")
+                assert(beacons.count <= 1, "Should only be one lock iBeacon")
                 manager.stopRangingBeacons(in: region)
                 
                 async { [weak self] in
@@ -174,6 +185,11 @@ private extension BeaconController {
                             self.log("Could not find lock \(lock)")
                             manager.requestState(for: region)
                             return
+                        }
+                        if #available(iOS 10, *),
+                            let lockCache = Store.shared[lock: lock] {
+                            // show unlock notification
+                            UserNotificationCenter.shared.postUnlockNotification(for: lock, name: lockCache.name)
                         }
                     } catch {
                         self.log("Error: \(error)")
@@ -201,6 +217,8 @@ private extension CLAuthorizationStatus {
         case .denied: return "Denied"
         case .authorizedWhenInUse: return "Authorized When in use"
         case .authorizedAlways: return "Always Authorized"
+        @unknown default:
+            return "Status \(rawValue)"
         }
     }
 }

@@ -16,11 +16,11 @@ public extension UIViewController {
                         okHandler: (() -> ())? = nil,
                         retryHandler: (()-> ())? = nil) {
         
-        let alert = UIAlertController(title: NSLocalizedString("ErrorAlertError", comment: "Error"),
+        let alert = UIAlertController(title: NSLocalizedString("Error", comment: "Error"),
             message: localizedText,
             preferredStyle: .alert)
         
-        alert.addAction(UIAlertAction(title: NSLocalizedString("ErrorAlertOK", comment: "OK"), style: UIAlertActionStyle.`default`, handler: { (UIAlertAction) in
+        alert.addAction(UIAlertAction(title: NSLocalizedString("Ok", comment: "OK"), style: UIAlertAction.Style.`default`, handler: { (UIAlertAction) in
             
             okHandler?()
             
@@ -29,11 +29,11 @@ public extension UIViewController {
         
         // optionally add retry button
         
-        if retryHandler != nil {
+        if let retryHandler = retryHandler {
             
-            alert.addAction(UIAlertAction(title: NSLocalizedString("ErrorAlertRetry", comment: "Retry"), style: UIAlertActionStyle.`default`, handler: { (UIAlertAction) in
+            alert.addAction(UIAlertAction(title: NSLocalizedString("Retry", comment: "Retry"), style: UIAlertAction.Style.`default`, handler: { (UIAlertAction) in
                 
-                retryHandler!()
+                retryHandler()
                 
                 alert.presentingViewController?.dismiss(animated: true, completion: nil)
             }))

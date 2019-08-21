@@ -45,7 +45,7 @@ final class LockPermissionsViewController: UITableViewController, ActivityIndica
         userActivity = NSUserActivity(.action(.shareKey(lockIdentifier)))
         
         // setup table view
-        tableView.rowHeight = UITableViewAutomaticDimension
+        tableView.rowHeight = UITableView.automaticDimension
         tableView.estimatedRowHeight = 60
         tableView.register(LockTableViewCell.nib, forCellReuseIdentifier: LockTableViewCell.reuseIdentifier)
     }
@@ -59,7 +59,7 @@ final class LockPermissionsViewController: UITableViewController, ActivityIndica
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
-        view.bringSubview(toFront: progressHUD)
+        view.bringSubviewToFront(progressHUD)
     }
     
     // MARK: - Actions
@@ -230,7 +230,7 @@ final class LockPermissionsViewController: UITableViewController, ActivityIndica
             
             let alert = UIAlertController(title: NSLocalizedString("Confirmation", comment: "DeletionConfirmation"),
                                           message: "Are you sure you want to delete this key?",
-                                          preferredStyle: UIAlertControllerStyle.alert)
+                                          preferredStyle: UIAlertController.Style.alert)
             
             alert.addAction(UIAlertAction(title: NSLocalizedString("Cancel", comment: "Cancel"), style: .cancel, handler: { (UIAlertAction) in
                 

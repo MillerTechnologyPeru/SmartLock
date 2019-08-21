@@ -13,12 +13,12 @@ import JGProgressHUD
 
 struct LockActivityItem {
     
-    static let excludedActivityTypes: [UIActivityType] = [.print,
-                                                          .assignToContact,
-                                                          .airDrop,
-                                                          .copyToPasteboard,
-                                                          .saveToCameraRoll,
-                                                          .postToFlickr]
+    static let excludedActivityTypes: [UIActivity.ActivityType] = [.print,
+                                                                   .assignToContact,
+                                                                   .airDrop,
+                                                                   .copyToPasteboard,
+                                                                   .saveToCameraRoll,
+                                                                   .postToFlickr]
     
     let identifier: UUID
     
@@ -61,19 +61,19 @@ enum LockActivity: String {
     case update = "com.colemancda.lock.activity.update"
     case homeKitEnable = "com.colemancda.lock.activity.homeKitEnable"
     
-    var activityType: UIActivityType {
-        return UIActivityType(rawValue: self.rawValue)
+    var activityType: UIActivity.ActivityType {
+        return UIActivity.ActivityType(rawValue: self.rawValue)
     }
 }
 
 /// Activity for sharing a key.
 final class NewKeyActivity: UIActivity {
     
-    override class var activityCategory: UIActivityCategory { return .action }
+    override class var activityCategory: UIActivity.Category { return .action }
     
     private var item: LockActivityItem!
     
-    override var activityType: UIActivityType? {
+    override var activityType: UIActivity.ActivityType? {
         
         return LockActivity.newKey.activityType
     }
@@ -125,11 +125,11 @@ final class NewKeyActivity: UIActivity {
 /// Activity for managing keys of a lock.
 final class ManageKeysActivity: UIActivity {
     
-    override class var activityCategory: UIActivityCategory { return .action }
+    override class var activityCategory: UIActivity.Category { return .action }
     
     private var item: LockActivityItem!
     
-    override var activityType: UIActivityType? {
+    override var activityType: UIActivity.ActivityType? {
         
         return LockActivity.manageKeys.activityType
     }
@@ -181,11 +181,11 @@ final class ManageKeysActivity: UIActivity {
 /// Activity for deleting the lock locally.
 final class DeleteLockActivity: UIActivity {
     
-    override class var activityCategory: UIActivityCategory { return .action }
+    override class var activityCategory: UIActivity.Category { return .action }
     
     private var item: LockActivityItem!
     
-    override var activityType: UIActivityType? {
+    override var activityType: UIActivity.ActivityType? {
         
         return LockActivity.delete.activityType
     }
@@ -214,7 +214,7 @@ final class DeleteLockActivity: UIActivity {
         
         let alert = UIAlertController(title: NSLocalizedString("Confirmation", comment: "DeletionConfirmation"),
                                       message: "Are you sure you want to delete this key?",
-                                      preferredStyle: UIAlertControllerStyle.alert)
+                                      preferredStyle: UIAlertController.Style.alert)
         
         alert.addAction(UIAlertAction(title: NSLocalizedString("Cancel", comment: "Cancel"), style: .cancel, handler: { (UIAlertAction) in
             
@@ -235,11 +235,11 @@ final class DeleteLockActivity: UIActivity {
 /// Activity for renaming a lock.
 final class RenameActivity: UIActivity {
     
-    override class var activityCategory: UIActivityCategory { return .action }
+    override class var activityCategory: UIActivity.Category { return .action }
     
     private var item: LockActivityItem!
     
-    override var activityType: UIActivityType? {
+    override var activityType: UIActivity.ActivityType? {
         
         return LockActivity.rename.activityType
     }
@@ -292,11 +292,11 @@ final class RenameActivity: UIActivity {
 /// Activity for enabling HomeKit.
 final class HomeKitEnableActivity: UIActivity {
     
-    override class var activityCategory: UIActivityCategory { return .action }
+    override class var activityCategory: UIActivity.Category { return .action }
     
     private var item: LockActivityItem!
     
-    override var activityType: UIActivityType? {
+    override var activityType: UIActivity.ActivityType? {
         
         return LockActivity.homeKitEnable.activityType
     }
@@ -380,11 +380,11 @@ final class HomeKitEnableActivity: UIActivity {
 
 final class UpdateActivity: UIActivity {
     
-    override class var activityCategory: UIActivityCategory { return .action }
+    override class var activityCategory: UIActivity.Category { return .action }
     
     private var item: LockActivityItem!
     
-    override var activityType: UIActivityType? {
+    override var activityType: UIActivity.ActivityType? {
         
         return LockActivity.homeKitEnable.activityType
     }

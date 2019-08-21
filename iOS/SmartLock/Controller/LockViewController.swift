@@ -52,7 +52,7 @@ final class LockViewController: UITableViewController {
         guard lockIdentifier != nil
             else { fatalError("Lock identifer not set") }
         
-        tableView.rowHeight = UITableViewAutomaticDimension
+        tableView.rowHeight = UITableView.automaticDimension
         tableView.estimatedRowHeight = 44
         tableView.tableFooterView = UIView()
         
@@ -77,7 +77,7 @@ final class LockViewController: UITableViewController {
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
-        view.bringSubview(toFront: progressHUD)
+        view.bringSubviewToFront(progressHUD)
     }
     
     // MARK: - Actions

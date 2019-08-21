@@ -20,7 +20,6 @@ public final class Store {
     private init() {
         
         locks.observe { [unowned self] _ in self.lockCacheChanged() }
-        
         loadCache()
     }
     
@@ -37,6 +36,8 @@ public final class Store {
     public let lockManager: LockManager = .shared
     
     public let beaconController: BeaconController = .shared
+    
+    public let spotlight: SpotlightController = .shared
     
     // BLE cache
     public private(set) var peripherals = Observable([NativeCentral.Peripheral: LockPeripheral<NativeCentral>]())
@@ -103,6 +104,7 @@ public final class Store {
     private func lockCacheChanged() {
         
         monitorBeacons()
+        updateSpotlight()
     }
     
     private func monitorBeacons() {
@@ -120,6 +122,11 @@ public final class Store {
                 self.beaconController.monitor(lock: lock)
             }
         }
+    }
+    
+    private func updateSpotlight() {
+        
+        spotlight.update(locks: locks.value)
     }
 }
 

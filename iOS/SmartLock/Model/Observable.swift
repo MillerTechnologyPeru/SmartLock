@@ -6,12 +6,15 @@
 //  Copyright © 2016 ColemanCDA. All rights reserved.
 //
 
-public final class Observable<Value> {
+public final class Observable <Value: Equatable> {
     
     // MARK: - Properties
     
     public internal(set) var value: Value {
-        didSet { observers.forEach { $0.callback(value) } }
+        didSet {
+            guard oldValue != value else { return }
+            observers.forEach { $0.callback(value) }
+        }
     }
     
     // MARK: - Private Properties
@@ -49,7 +52,7 @@ public final class Observable<Value> {
     @discardableResult
     public func remove(observer: Int) -> Bool {
         
-        guard let index = observers.index(where: { $0.identifier == observer })
+        guard let index = observers.firstIndex(where: { $0.identifier == observer })
             else { return false }
         
         observers.remove(at: index)

@@ -339,7 +339,7 @@ public extension LockManager where Central == DarwinCentral {
 
 // MARK: - Supporting Types
 
-public struct LockPeripheral <Central: CentralProtocol> {
+public struct LockPeripheral <Central: CentralProtocol>: Equatable {
     
     /// Scan Data
     public let scanData: ScanData<Central.Peripheral, Central.Advertisement>

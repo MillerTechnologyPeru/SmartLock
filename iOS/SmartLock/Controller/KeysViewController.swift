@@ -41,7 +41,7 @@ final class KeysViewController: UITableViewController {
         
         // setup table view
         tableView.register(LockTableViewCell.nib, forCellReuseIdentifier: LockTableViewCell.reuseIdentifier)
-        tableView.rowHeight = UITableViewAutomaticDimension
+        tableView.rowHeight = UITableView.automaticDimension
         tableView.estimatedRowHeight = 60
         
         // load data
@@ -178,7 +178,7 @@ final class KeysViewController: UITableViewController {
             
             let alert = UIAlertController(title: NSLocalizedString("Confirmation", comment: "DeletionConfirmation"),
                                           message: "Are you sure you want to delete this key?",
-                                          preferredStyle: UIAlertControllerStyle.alert)
+                                          preferredStyle: UIAlertController.Style.alert)
             
             alert.addAction(UIAlertAction(title: NSLocalizedString("Cancel", comment: "Cancel"), style: .cancel, handler: { (UIAlertAction) in
                 
