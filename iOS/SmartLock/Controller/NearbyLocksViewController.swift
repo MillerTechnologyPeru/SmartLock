@@ -98,10 +98,6 @@ final class NearbyLocksViewController: UITableViewController {
             selectionFeedbackGenerator.prepare()
             impactFeedbackGenerator.prepare()
         }
-        
-        if items.isEmpty {
-            scan()
-        }
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -110,28 +106,6 @@ final class NearbyLocksViewController: UITableViewController {
         userActivity = NSUserActivity(.screen(.nearbyLocks))
         userActivity?.becomeCurrent()
     }
-    /*
-    override func updateUserActivityState(_ activity: NSUserActivity) {
-        
-        //activity.addUserInfoEntries(from: ["title": "test", "content": "\(Date())"])
-        
-        switch activity.activityType {
-        case AppActivityType.screen.rawValue:
-            activity.addUserInfoEntries(from: NSUserActivity(.screen(.nearbyLocks)).userInfo ?? [:])
-        case AppActivityType.action.rawValue:
-            guard let lock = lastUnlocked
-                else { assertionFailure("Did not unlock recently"); return }
-            activity.addUserInfoEntries(from: [
-                AppActivity.UserInfo.action.rawValue: AppActivity.ActionType.unlock.rawValue,
-                AppActivity.UserInfo.lock.rawValue: lock
-                ]
-            )
-        default:
-            break
-        }
-        
-        super.updateUserActivityState(activity)
-    }*/
     
     // MARK: - Actions
     
@@ -149,6 +123,9 @@ final class NearbyLocksViewController: UITableViewController {
             impactFeedbackGenerator.impactOccurred()
         }
         
+        userActivity = NSUserActivity(.screen(.nearbyLocks))
+        userActivity?.becomeCurrent()
+        
         let scanDuration = self.scanDuration
         
         // reset table
@@ -156,9 +133,7 @@ final class NearbyLocksViewController: UITableViewController {
         self.loadedInformation.removeAll(keepingCapacity: true)
         
         // scan
-        performActivity({ try Store.shared.scan(duration: scanDuration) }) { (viewController, _) in
-            if viewController.items.isEmpty { viewController.scan() } // scan again
-        }
+        performActivity({ try Store.shared.scan(duration: scanDuration) })
     }
     
     // MARK: - UITableViewDataSource
