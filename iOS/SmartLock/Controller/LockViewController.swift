@@ -164,7 +164,7 @@ final class LockViewController: UITableViewController {
         
         loadViewIfNeeded()
         
-        print("Unlock \(lockIdentifier)")
+        log("Unlock \(lockIdentifier)")
         
         guard let lockCache = Store.shared[lock: lockIdentifier]
             else { assertionFailure("No stored cache for lock"); return }
@@ -197,7 +197,7 @@ final class LockViewController: UITableViewController {
             
             catch { mainQueue { controller.showErrorAlert("\(error)") }; return }
             
-            print("Successfully unlocked lock \"\(controller.lockIdentifier!)\"")
+            log("Successfully unlocked lock \"\(controller.lockIdentifier!)\"")
         }
     }
     

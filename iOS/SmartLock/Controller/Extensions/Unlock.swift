@@ -12,7 +12,9 @@ import CoreLock
 
 extension ActivityIndicatorViewController where Self: UIViewController {
     
-    func unlock(lock identifier: UUID, action: UnlockAction = .default,  scanDuration: TimeInterval = 2.0) {
+    func unlock(lock identifier: UUID, action: UnlockAction = .default, scanDuration: TimeInterval = 2.0) {
+        
+        log("Unlock \(identifier)")
         
         performActivity({ () -> String? in
             guard let lockPeripheral = try Store.shared.device(for: identifier, scanDuration: scanDuration)
@@ -21,6 +23,8 @@ extension ActivityIndicatorViewController where Self: UIViewController {
         }, completion: { (viewController, errorMessage) in
             if let errorMessage = errorMessage {
                 viewController.showErrorAlert(errorMessage)
+            } else {
+                log("Successfully unlocked lock \"\(identifier)\"")
             }
         })
     }

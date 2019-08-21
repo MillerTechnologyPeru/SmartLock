@@ -46,7 +46,7 @@ extension NewKeyViewController {
             
             let parentKey = KeyCredentials(identifier: lockCache.key.identifier, secret: parentKeyData)
             
-            print("Setting up new key for lock \(lockIdentifier)")
+            log("Setting up new key for lock \(lockIdentifier)")
             
             self.showProgressHUD()
             
@@ -82,7 +82,7 @@ extension NewKeyViewController {
                     return
                 }
                 
-                print("Created new key \(newKey.identifier) (\(newKey.permission.type))")
+                log("Created new key \(newKey.identifier) (\(newKey.permission.type))")
                 
                 // save invitation file
                 let newKeyData = try! JSONEncoder().encode(newKeyInvitation)

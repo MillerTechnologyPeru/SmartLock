@@ -75,12 +75,12 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(_ application: UIApplication, continue userActivity: NSUserActivity, restorationHandler: @escaping ([Any]?) -> Void) -> Bool {
         
-        print("Continue activity \(userActivity.activityType)")
+        log("Continue activity \(userActivity.activityType)")
         if #available(iOS 12.0, *),
             let persistentIdentifier = userActivity.persistentIdentifier {
-            print("\(persistentIdentifier)")
+            log("\(persistentIdentifier)")
         }
-        print("\((userActivity.userInfo as NSDictionary?)?.description ?? "")")
+        log("\((userActivity.userInfo as NSDictionary?)?.description ?? "")")
         var userInfo = [AppActivity.UserInfo: Any](minimumCapacity: userActivity.userInfo?.count ?? 0)
         for (key, value) in userActivity.userInfo ?? [:] {
             guard let key = key as? String,
