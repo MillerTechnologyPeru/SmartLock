@@ -213,10 +213,12 @@ extension NSUserActivity {
                 attributes.contentDescription = "Display stored keys."
                 attributes.thumbnailData = UIImage(named: "LockTabBarIcon")?.pngData()
             }
+            self.contentAttributeSet = attributes
             self.isEligibleForSearch = false
             self.isEligibleForHandoff = true
             if #available(iOS 12.0, *) {
                 self.isEligibleForPrediction = true
+                self.isEligibleForPublicIndexing = true // show in Siri Shortcuts gallery
             }
         case let .view(.lock(lockIdentifier)):
             self.init(activityType: .view, userInfo: [
@@ -228,7 +230,7 @@ extension NSUserActivity {
             } else {
                 self.title = "Lock \(lockIdentifier)"
             }
-            self.isEligibleForSearch = true
+            self.isEligibleForSearch = false // use Spotlight instead
             self.isEligibleForHandoff = true
             if #available(iOS 12.0, *) {
                 self.isEligibleForPrediction = true
@@ -246,7 +248,7 @@ extension NSUserActivity {
             }
             attributes.thumbnailData = UIImage(named: "activityNewKey")?.pngData()
             self.contentAttributeSet = attributes
-            self.isEligibleForSearch = true
+            self.isEligibleForSearch = false
             self.isEligibleForHandoff = false
             if #available(iOS 12.0, *) {
                 self.isEligibleForPrediction = true
@@ -261,7 +263,7 @@ extension NSUserActivity {
             } else {
                 self.title = "Unlock \(lockIdentifier)"
             }
-            self.isEligibleForSearch = true
+            self.isEligibleForSearch = false
             self.isEligibleForHandoff = false
             if #available(iOS 12.0, *) {
                 self.isEligibleForPrediction = true
@@ -281,7 +283,7 @@ extension NSUserActivity {
         }
     }
     
-    convenience init(activityType: AppActivityType, userInfo: [AppActivity.UserInfo: NSObject]) {
+    private convenience init(activityType: AppActivityType, userInfo: [AppActivity.UserInfo: NSObject]) {
         
         self.init(activityType: activityType.rawValue)
         var data = [String: Any](minimumCapacity: userInfo.count)

@@ -91,7 +91,8 @@ public final class Store {
         return true
     }
     
-    private func loadCache() {
+    // Forceably load cache.
+    public func loadCache() {
         
         locks.value = defaults.get(for: storageKey) ?? [:]
     }

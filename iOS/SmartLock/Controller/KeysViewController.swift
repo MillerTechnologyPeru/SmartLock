@@ -120,7 +120,12 @@ final class KeysViewController: UITableViewController {
     }
     
     @discardableResult
-    private func select(lock identifier: UUID, animated: Bool = true) -> LockViewController {
+    private func select(lock identifier: UUID, animated: Bool = true) -> LockViewController? {
+        
+        guard Store.shared[lock: identifier] != nil else {
+            showErrorAlert("Invalid lock \(identifier)")
+            return nil
+        }
         
         let navigationController = UIStoryboard(name: "LockDetail", bundle: nil).instantiateInitialViewController() as! UINavigationController
         
@@ -209,7 +214,7 @@ extension KeysViewController: LockActivityHandlingViewController {
         
         switch url {
         case let .unlock(lock: identifier):
-            select(lock: identifier)
+            select(lock: identifier, animated: false)
         case .newKey,
              .setup:
             AppDelegate.shared.handle(url: url)
@@ -226,7 +231,7 @@ extension KeysViewController: LockActivityHandlingViewController {
         case let .view(.lock(identifier)):
             select(lock: identifier, animated: false)
         case let .action(.unlock(identifier)):
-            select(lock: identifier, animated: false).unlock()
+            select(lock: identifier, animated: false)?.unlock()
         case .action(.shareKey):
             AppDelegate.shared.handle(activity: activity)
         }

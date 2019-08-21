@@ -10,11 +10,12 @@ import Foundation
 import UIKit
 import CoreBluetooth
 import CoreLocation
+import UserNotifications
+import CoreSpotlight
 import Bluetooth
 import GATT
 import CoreLock
 import JGProgressHUD
-import UserNotifications
 
 @UIApplicationMain
 final class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -69,6 +70,9 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func applicationDidBecomeActive(_ application: UIApplication) {
         // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
+        
+        // update cache if modified by extension
+        Store.shared.loadCache()
     }
 
     func applicationWillTerminate(_ application: UIApplication) {
@@ -80,7 +84,11 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
         return open(url: url)
     }
     
-    private func application(_ application: UIApplication, continue userActivity: NSUserActivity, restorationHandler: @escaping ([Any]?) -> Void) -> Bool {
+    func application(_ application: UIApplication, willContinueUserActivityWithType userActivityType: String) -> Bool {
+        return true
+    }
+    
+    func application(_ application: UIApplication, continue userActivity: NSUserActivity, restorationHandler: @escaping ([UIUserActivityRestoring]?) -> Void) -> Bool {
         
         log("Continue activity \(userActivity.activityType)")
         if #available(iOS 12.0, *),
@@ -97,8 +105,12 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
         }
         
         switch userActivity.activityType {
-        //case CSSearchableItemActionType:
-        //    return false
+        case CSSearchableItemActionType:
+            guard let activityIdentifier = userActivity.userInfo?[CSSearchableItemActivityIdentifier] as? String,
+                let activity = AppActivity.ViewData(rawValue: activityIdentifier)
+                else { return false }
+            self.handle(activity: .view(activity))
+            return false
         case NSUserActivityTypeBrowsingWeb:
             return false
         case AppActivityType.screen.rawValue:

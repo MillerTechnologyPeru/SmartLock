@@ -52,7 +52,11 @@ extension SearchableLock: CoreSpotlightSearchable {
     public static var searchDomain: String { return "com.colemancda.Lock.LockCache" }
     
     public var searchIdentifier: String {
-        return identifier.uuidString
+        return appActivity.rawValue
+    }
+    
+    public var appActivity: AppActivity.ViewData {
+        return .lock(identifier)
     }
     
     public func searchableAttributeSet() -> CSSearchableItemAttributeSet {
