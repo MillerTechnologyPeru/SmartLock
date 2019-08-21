@@ -224,7 +224,7 @@ extension KeysViewController: LockActivityHandlingViewController {
         case .screen(.nearbyLocks):
             AppDelegate.shared.handle(activity: activity)
         case let .view(.lock(identifier)):
-            select(lock: identifier)
+            select(lock: identifier, animated: false)
         case let .action(.unlock(identifier)):
             select(lock: identifier, animated: false).unlock()
         case .action(.shareKey):
