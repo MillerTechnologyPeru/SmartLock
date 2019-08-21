@@ -1,6 +1,6 @@
 github "JonasGessner/JGProgressHUD" "v2.0.4"
 github "PureSwift/Bluetooth" "cd5d3fa8a243d405c024a907481a6179c46a9cd6"
-github "PureSwift/GATT" "be6e989e4c5d21b82a895d93c7507e485429262a"
+github "PureSwift/GATT" "ec10636de5b3cbe83b6687da469074ec766343d5"
 github "PureSwift/TLVCoding" "129ad84d45d7a25e29a902dd58567ff2fed4fc14"
 github "kishikawakatsumi/KeychainAccess" "v3.2.0"
 github "krzyzanowskim/CryptoSwift" "0d1095dcded97315d25e3e69f4700cfb8bf2608b"
