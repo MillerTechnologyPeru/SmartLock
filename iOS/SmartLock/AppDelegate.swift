@@ -81,6 +81,13 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
             print("\(persistentIdentifier)")
         }
         print("\((userActivity.userInfo as NSDictionary?)?.description ?? "")")
+        var userInfo = [AppActivity.UserInfo: Any](minimumCapacity: userActivity.userInfo?.count ?? 0)
+        for (key, value) in userActivity.userInfo ?? [:] {
+            guard let key = key as? String,
+                let userInfoKey = AppActivity.UserInfo(rawValue: key)
+                else { continue }
+            userInfo[userInfoKey] = value
+        }
         
         switch userActivity.activityType {
         //case CSSearchableItemActionType:
@@ -88,27 +95,27 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
         case NSUserActivityTypeBrowsingWeb:
             return false
         case AppActivityType.screen.rawValue:
-            guard let screenString = userActivity.userInfo?[AppActivity.UserInfo.screen] as? String,
+            guard let screenString = userInfo[.screen] as? String,
                 let screen = AppActivity.Screen(rawValue: screenString)
                 else { return false }
             self.handle(activity: .screen(screen))
         case AppActivityType.view.rawValue:
-            if let lock = userActivity.userInfo?[AppActivity.UserInfo.lock] as? UUID {
+            if let lock = userInfo[.lock] as? UUID {
                 self.handle(activity: .view(.lock(lock)))
             } else {
                 return false
             }
         case AppActivityType.action.rawValue:
-            guard let actionString = userActivity.userInfo?[AppActivity.UserInfo.action] as? String,
+            guard let actionString = userInfo[.action] as? String,
                 let action = AppActivity.ActionType(rawValue: actionString)
                 else { return false }
             switch action {
             case .unlock:
-                guard let lock = userActivity.userInfo?[AppActivity.UserInfo.lock] as? UUID
+                guard let lock = userInfo[.lock] as? UUID
                     else { return false }
                 self.handle(activity: .action(.unlock(lock)))
             case .shareKey:
-                guard let lock = userActivity.userInfo?[AppActivity.UserInfo.lock] as? UUID
+                guard let lock = userInfo[.lock] as? UUID
                     else { return false }
                 self.handle(activity: .action(.shareKey(lock)))
             }
