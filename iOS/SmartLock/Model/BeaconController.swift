@@ -36,6 +36,7 @@ public final class BeaconController {
     public func monitor(lock identifier: UUID) {
         
         let region = CLBeaconRegion(proximityUUID: identifier, major: 0, minor: 0, identifier: identifier.uuidString)
+        region.notifyOnEntry = true
         region.notifyEntryStateOnDisplay = true
         lockBeacons[identifier] = region
         
@@ -140,7 +141,13 @@ private extension BeaconController {
             
             if let beaconRegion = region as? CLBeaconRegion {
                 
-                manager.startRangingBeacons(in: beaconRegion)
+                switch state {
+                case .inside:
+                    manager.startRangingBeacons(in: beaconRegion)
+                case .outside,
+                     .unknown:
+                    break
+                }
             }
         }
         
@@ -149,7 +156,7 @@ private extension BeaconController {
             
             log("Found beacons \(beacons as NSArray) for region \(region.proximityUUID)")
             
-            
+            manager.stopRangingBeacons(in: region)
         }
         
         @objc
@@ -182,9 +189,4 @@ private extension CLRegionState {
         case .unknown: return "unknown"
         }
     }
-}
-
-extension BeaconController {
-    
-    
 }
