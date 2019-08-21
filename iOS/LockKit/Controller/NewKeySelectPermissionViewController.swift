@@ -12,21 +12,21 @@ import CoreLock
 import Foundation
 import JGProgressHUD
 
-final class NewKeySelectPermissionViewController: UITableViewController, NewKeyViewController {
+public final class NewKeySelectPermissionViewController: UITableViewController, NewKeyViewController {
     
     // MARK: - Properties
     
-    var completion: ((Bool) -> ())?
+    public var completion: ((Bool) -> ())?
     
-    var lockIdentifier: UUID!
+    public var lockIdentifier: UUID!
     
-    let progressHUD = JGProgressHUD(style: .dark)
+    public let progressHUD = JGProgressHUD(style: .dark)
     
     private let permissionTypes: [PermissionType] = [.admin, .anytime /*, .scheduled */ ]
     
     // MARK: - Loading
     
-    override func viewDidLoad() {
+    public override func viewDidLoad() {
         super.viewDidLoad()
         
         // set user activity
@@ -37,7 +37,7 @@ final class NewKeySelectPermissionViewController: UITableViewController, NewKeyV
         self.tableView.rowHeight = UITableView.automaticDimension
     }
     
-    override func viewDidLayoutSubviews() {
+    public override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
         view.bringSubviewToFront(progressHUD)
@@ -96,17 +96,17 @@ final class NewKeySelectPermissionViewController: UITableViewController, NewKeyV
     
     // MARK: - UITableViewDataSource
     
-    override func numberOfSections(in tableView: UITableView) -> Int {
+    public override func numberOfSections(in tableView: UITableView) -> Int {
         
         return 1
     }
     
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection: Int) -> Int {
+    public override func tableView(_ tableView: UITableView, numberOfRowsInSection: Int) -> Int {
         
         return permissionTypes.count
     }
     
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    public override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: PermissionTypeTableViewCell.resuseIdentifier, for: indexPath) as! PermissionTypeTableViewCell
         configure(cell: cell, at: indexPath)
@@ -115,7 +115,7 @@ final class NewKeySelectPermissionViewController: UITableViewController, NewKeyV
     
     // MARK: - UITableViewDelegate
     
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    public override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
         tableView.deselectRow(at: indexPath, animated: true)
         
@@ -140,7 +140,7 @@ final class NewKeySelectPermissionViewController: UITableViewController, NewKeyV
     }
 }
 
-extension UIViewController {
+public extension UIViewController {
     
     func shareKey(lock identifier: UUID) {
         
@@ -155,7 +155,7 @@ extension UIViewController {
 
 // MARK: - Supporting Types
 
-final class PermissionTypeTableViewCell: UITableViewCell {
+public final class PermissionTypeTableViewCell: UITableViewCell {
     
     static let resuseIdentifier = "PermissionTypeTableViewCell"
     

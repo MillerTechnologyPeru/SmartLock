@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 import JGProgressHUD
 
-protocol ActivityIndicatorViewController: class {
+public protocol ActivityIndicatorViewController: class {
     
     var view: UIView! { get }
     
@@ -25,7 +25,7 @@ protocol ActivityIndicatorViewController: class {
     func dismissProgressHUD(animated: Bool)
 }
 
-extension ActivityIndicatorViewController {
+public extension ActivityIndicatorViewController {
     
     func showProgressHUD() {
         
@@ -43,7 +43,7 @@ extension ActivityIndicatorViewController {
     }
 }
 
-extension ActivityIndicatorViewController {
+public extension ActivityIndicatorViewController {
     
     func performActivity <T> (showProgressHUD: Bool = true,
                               _ asyncOperation: @escaping () throws -> T,

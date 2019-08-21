@@ -10,14 +10,14 @@ import Foundation
 import Bluetooth
 import GATT
 import CoreLock
-    
-#if os(iOS)
+import LockKit
+
 import UIKit
+import CoreBluetooth
 import DarwinGATT
 import AVFoundation
 import QRCodeReader
 import JGProgressHUD
-#endif
 
 final class NearbyLocksViewController: UITableViewController {
     

@@ -7,15 +7,13 @@
 //
 
 import Foundation
+import UIKit
 import Bluetooth
+import DarwinGATT
 import GATT
 import CoreLock
-
-#if os(iOS)
-import UIKit
-import DarwinGATT
+import LockKit
 import JGProgressHUD
-#endif
 
 final class KeysViewController: UITableViewController {
     
@@ -120,7 +118,7 @@ final class KeysViewController: UITableViewController {
     }
     
     @discardableResult
-    private func select(lock identifier: UUID, animated: Bool = true) -> LockViewController? {
+    internal func select(lock identifier: UUID, animated: Bool = true) -> LockViewController? {
         
         guard Store.shared[lock: identifier] != nil else {
             showErrorAlert("Invalid lock \(identifier)")
@@ -203,38 +201,6 @@ final class KeysViewController: UITableViewController {
         actions.append(delete)
         
         return actions
-    }
-}
-
-// MARK: - LockActivityHandling
-
-extension KeysViewController: LockActivityHandlingViewController {
-    
-    func handle(url: LockURL) {
-        
-        switch url {
-        case let .unlock(lock: identifier):
-            select(lock: identifier, animated: false)
-        case .newKey,
-             .setup:
-            AppDelegate.shared.handle(url: url)
-        }
-    }
-    
-    func handle(activity: AppActivity) {
-        
-        switch activity {
-        case .screen(.keys):
-            return
-        case .screen(.nearbyLocks):
-            AppDelegate.shared.handle(activity: activity)
-        case let .view(.lock(identifier)):
-            select(lock: identifier, animated: false)
-        case let .action(.unlock(identifier)):
-            select(lock: identifier, animated: false)?.unlock()
-        case .action(.shareKey):
-            AppDelegate.shared.handle(activity: activity)
-        }
     }
 }
 

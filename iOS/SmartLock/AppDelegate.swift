@@ -15,6 +15,7 @@ import CoreSpotlight
 import Bluetooth
 import GATT
 import CoreLock
+import LockKit
 import JGProgressHUD
 
 @UIApplicationMain

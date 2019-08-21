@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 
-extension UIViewController {
+public extension UIViewController {
     
     func present(_ viewController: UIViewController,
                  animated: Bool = true,
@@ -36,7 +36,7 @@ extension UIViewController {
 
 // MARK: - Supporting Types
 
-enum PopoverPresentingView {
+public enum PopoverPresentingView {
     
     case view(UIView)
     case barButtonItem(UIBarButtonItem)

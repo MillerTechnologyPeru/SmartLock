@@ -7,8 +7,9 @@
 //
 
 import Foundation
-import CoreLock
 import UIKit
+import CoreLock
+import LockKit
 
 final class TabBarController: UITabBarController {
     

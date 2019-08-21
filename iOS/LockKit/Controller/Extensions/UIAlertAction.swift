@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 
-extension UIAlertController {
+public extension UIAlertController {
     
     enum DefaultAction {
         

@@ -11,7 +11,7 @@ import UIKit
 import Foundation
 import CoreLock
 
-protocol NewKeyViewController: ActivityIndicatorViewController {
+public protocol NewKeyViewController: ActivityIndicatorViewController {
     
     var lockIdentifier: UUID! { get }
     
@@ -26,7 +26,7 @@ protocol NewKeyViewController: ActivityIndicatorViewController {
     func showErrorAlert(_ localizedText: String, okHandler: (() -> ())?, retryHandler: (()-> ())?)
 }
 
-extension NewKeyViewController {
+public extension NewKeyViewController {
     
     func newKey(permission: Permission, sender: PopoverPresentingView, completion: @escaping (NewKey.Invitation) -> ()) {
         

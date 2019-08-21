@@ -18,7 +18,7 @@ import DarwinGATT
 import JGProgressHUD
 #endif
 
-final class LockViewController: UITableViewController {
+public final class LockViewController: UITableViewController {
     
     // MARK: - IB Outlets
     
@@ -30,8 +30,7 @@ final class LockViewController: UITableViewController {
     
     // MARK: - Properties
     
-    var lockIdentifier: UUID! {
-        
+    public var lockIdentifier: UUID! {
         didSet { if self.isViewLoaded { self.configureView() } }
     }
     
@@ -46,7 +45,7 @@ final class LockViewController: UITableViewController {
     
     // MARK: - Loading
     
-    override func viewDidLoad() {
+    public override func viewDidLoad() {
         super.viewDidLoad()
         
         guard lockIdentifier != nil
@@ -59,7 +58,7 @@ final class LockViewController: UITableViewController {
         configureView()
     }
     
-    override func viewWillAppear(_ animated: Bool) {
+    public override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
         if #available(iOS 10.0, *) {
@@ -67,14 +66,14 @@ final class LockViewController: UITableViewController {
         }
     }
     
-    override func viewDidAppear(_ animated: Bool) {
+    public override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
         userActivity = NSUserActivity(.view(.lock(lockIdentifier)))
         userActivity?.becomeCurrent()
     }
     
-    override func viewDidLayoutSubviews() {
+    public override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
         view.bringSubviewToFront(progressHUD)
@@ -150,14 +149,10 @@ final class LockViewController: UITableViewController {
     
     @IBAction func unlock(_ sender: UIButton) {
         
-        if #available(iOS 10.0, *) {
-            feedbackGenerator.impactOccurred()
-        }
-     
         unlock()
     }
     
-    internal func unlock() {
+    public func unlock() {
         
         guard let lockIdentifier = self.lockIdentifier
             else { assertionFailure(); return }
@@ -175,6 +170,10 @@ final class LockViewController: UITableViewController {
         self.userActivity?.resignCurrent()
         self.userActivity = NSUserActivity(.action(.unlock(lockIdentifier)))
         self.userActivity?.becomeCurrent()
+        
+        if #available(iOS 10.0, *) {
+            feedbackGenerator.impactOccurred()
+        }
         
         let key = KeyCredentials(identifier: lockCache.key.identifier, secret: keyData)
         
@@ -248,6 +247,8 @@ final class LockViewController: UITableViewController {
         self.permissionLabel.text = permissionText
     }
 }
+
+// MARK: - Extensions
 
 extension UIViewController {
     

@@ -13,19 +13,19 @@ import GATT
 import CoreLock
 import JGProgressHUD
 
-final class LockPermissionsViewController: UITableViewController, ActivityIndicatorViewController {
+public final class LockPermissionsViewController: UITableViewController, ActivityIndicatorViewController {
     
     // MARK: - Properties
     
-    var lockIdentifier: UUID!
+    public var lockIdentifier: UUID!
     
-    var completion: (() -> ())?
+    public var completion: (() -> ())?
     
     private(set) var list = KeysList() {
         didSet { configureView() }
     }
     
-    let progressHUD = JGProgressHUD(style: .dark)
+    public let progressHUD = JGProgressHUD(style: .dark)
     
     private static let dateFormatter: DateFormatter = {
         let dateFormatter = DateFormatter()
@@ -36,7 +36,7 @@ final class LockPermissionsViewController: UITableViewController, ActivityIndica
     
     // MARK: - Loading
     
-    override func viewDidLoad() {
+    public override func viewDidLoad() {
         super.viewDidLoad()
         
         assert(lockIdentifier != nil, "No lock set")
@@ -50,13 +50,13 @@ final class LockPermissionsViewController: UITableViewController, ActivityIndica
         tableView.register(LockTableViewCell.nib, forCellReuseIdentifier: LockTableViewCell.reuseIdentifier)
     }
     
-    override func viewWillAppear(_ animated: Bool) {
+    public override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
         self.reloadData()
     }
     
-    override func viewDidLayoutSubviews() {
+    public override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
         view.bringSubviewToFront(progressHUD)
@@ -167,12 +167,12 @@ final class LockPermissionsViewController: UITableViewController, ActivityIndica
     
     // MARK: - UITableViewDataSource
     
-    override func numberOfSections(in tableView: UITableView) -> Int {
+    public override func numberOfSections(in tableView: UITableView) -> Int {
         
         return Section.count
     }
     
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection sectionIndex: Int) -> Int {
+    public override func tableView(_ tableView: UITableView, numberOfRowsInSection sectionIndex: Int) -> Int {
         
         guard let section = Section(rawValue: sectionIndex)
             else { fatalError("Invalid section \(sectionIndex)") }
@@ -180,7 +180,7 @@ final class LockPermissionsViewController: UITableViewController, ActivityIndica
         return self[section].count
     }
     
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    public override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: LockTableViewCell.reuseIdentifier, for: indexPath) as! LockTableViewCell
         configure(cell: cell, at: indexPath)
@@ -189,7 +189,7 @@ final class LockPermissionsViewController: UITableViewController, ActivityIndica
     
     // MARK: - UITableViewDelegate
     
-    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+    public override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         
         let section = Section(rawValue: section)!
         
@@ -199,7 +199,7 @@ final class LockPermissionsViewController: UITableViewController, ActivityIndica
         }
     }
     
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    public override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
         tableView.deselectRow(at: indexPath, animated: true)
         
@@ -210,7 +210,7 @@ final class LockPermissionsViewController: UITableViewController, ActivityIndica
         // present key detail VC
     }
     
-    override func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
+    public override func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
         
         var actions = [UITableViewRowAction]()
         

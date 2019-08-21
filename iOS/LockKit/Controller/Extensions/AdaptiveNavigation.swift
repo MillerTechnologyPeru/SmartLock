@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 
-internal extension UIViewController {
+public extension UIViewController {
     
     func showAdaptiveDetail(_ viewController: UIViewController, sender: Any? = nil) {
         

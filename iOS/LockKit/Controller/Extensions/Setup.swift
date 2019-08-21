@@ -11,7 +11,7 @@ import UIKit
 import CoreLock
 import QRCodeReader
 
-extension ActivityIndicatorViewController where Self: UIViewController {
+public extension ActivityIndicatorViewController where Self: UIViewController {
     
     func setup(lock: LockPeripheral<NativeCentral>) {
         

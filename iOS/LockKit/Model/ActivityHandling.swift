@@ -8,9 +8,8 @@
 
 import Foundation
 import CoreLock
-import UIKit
 
-protocol LockActivityHandling {
+public protocol LockActivityHandling {
     
     func handle(url: LockURL)
     
@@ -19,4 +18,4 @@ protocol LockActivityHandling {
 
 // MARK: - View Controller
 
-protocol LockActivityHandlingViewController: class, LockActivityHandling { }
+public protocol LockActivityHandlingViewController: class, LockActivityHandling { }

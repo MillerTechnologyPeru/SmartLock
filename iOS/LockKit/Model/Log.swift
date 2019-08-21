@@ -8,11 +8,7 @@
 
 import Foundation
 
-internal func log(_ text: String) {
+public func log(_ text: String) {
     
-    #if os(iOS)
-    print(text)
-    #elseif os(Android)
     NSLog(text)
-    #endif
 }

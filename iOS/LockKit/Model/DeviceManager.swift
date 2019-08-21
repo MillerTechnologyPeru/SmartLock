@@ -13,7 +13,7 @@ import CoreLock
 
 public typealias LockManager = CoreLock.LockManager<NativeCentral>
 
-internal extension LockManager where Central == NativeCentral {
+public extension LockManager where Central == NativeCentral {
     
     static var shared: LockManager {
         
@@ -21,8 +21,9 @@ internal extension LockManager where Central == NativeCentral {
     }
 }
 
-#if os(iOS)
+#if canImport(CoreBluetooth) && canImport(DarwinGATT)
 
+import CoreBluetooth
 import DarwinGATT
 
 public typealias NativeCentral = DarwinCentral

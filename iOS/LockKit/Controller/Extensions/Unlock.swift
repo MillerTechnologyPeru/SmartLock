@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 import CoreLock
 
-extension ActivityIndicatorViewController where Self: UIViewController {
+public extension ActivityIndicatorViewController where Self: UIViewController {
     
     func unlock(lock identifier: UUID, action: UnlockAction = .default, scanDuration: TimeInterval = 2.0) {
         

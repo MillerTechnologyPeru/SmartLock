@@ -13,27 +13,25 @@ import GATT
 import CoreLock
 import JGProgressHUD
 
-final class NewKeyRecieveViewController: UITableViewController, ActivityIndicatorViewController {
+public final class NewKeyRecieveViewController: UITableViewController, ActivityIndicatorViewController {
     
     // MARK: - IB Outlets
     
     @IBOutlet weak var permissionImageView: UIImageView!
-    
     @IBOutlet weak var permissionLabel: UILabel!
-    
     @IBOutlet weak var lockLabel: UILabel!
     
     // MARK: - Properties
     
-    var newKey: NewKey.Invitation!
+    public var newKey: NewKey.Invitation!
     
     // MARK: - Private Properties
     
-    let progressHUD = JGProgressHUD(style: .dark)
+    public let progressHUD = JGProgressHUD(style: .dark)
     
     // MARK: - Loading
     
-    override func viewDidLoad() {
+    public override func viewDidLoad() {
         super.viewDidLoad()
         
         assert(newKey != nil)
@@ -43,7 +41,7 @@ final class NewKeyRecieveViewController: UITableViewController, ActivityIndicato
         configureView()
     }
     
-    override func viewDidLayoutSubviews() {
+    public override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
         view.bringSubviewToFront(progressHUD)
@@ -153,7 +151,7 @@ final class NewKeyRecieveViewController: UITableViewController, ActivityIndicato
     }
 }
 
-extension UIViewController {
+public extension UIViewController {
     
     @discardableResult
     func open(newKey: NewKey.Invitation) -> Bool {

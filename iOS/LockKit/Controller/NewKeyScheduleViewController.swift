@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 
-final class NewKeyScheduleViewController: UITableViewController {
+public final class NewKeyScheduleViewController: UITableViewController {
     
     
 }

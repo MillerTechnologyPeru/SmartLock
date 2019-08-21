@@ -193,7 +193,7 @@ public extension AppActivity {
     }
 }
 
-extension NSUserActivity {
+public extension NSUserActivity {
     
     convenience init(_ activity: AppActivity) {
         
