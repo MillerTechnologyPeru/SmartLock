@@ -108,7 +108,7 @@ public final class Store {
     private func monitorBeacons() {
         
         // remove old beacons
-        for lock in self.beaconController.lockBeacons.keys {
+        for lock in self.beaconController.locks.keys {
             if self.locks.value.keys.contains(lock) == false {
                 self.beaconController.stopMonitoring(lock: lock)
             }
@@ -116,7 +116,7 @@ public final class Store {
         
         // add new beacons
         for lock in self.locks.value.keys {
-            if self.beaconController.lockBeacons.keys.contains(lock) == false {
+            if self.beaconController.locks.keys.contains(lock) == false {
                 self.beaconController.monitor(lock: lock)
             }
         }

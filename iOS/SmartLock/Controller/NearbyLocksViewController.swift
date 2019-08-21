@@ -302,7 +302,6 @@ final class NearbyLocksViewController: UITableViewController {
         self.loading.insert(peripheral)
         
         async {
-            
             do { try Store.shared.readInformation(lock) }
             catch { log("Could not read information for peripheral \(peripheral): \(error)") }
             mainQueue {

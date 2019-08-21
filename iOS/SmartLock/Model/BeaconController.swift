@@ -28,7 +28,7 @@ public final class BeaconController {
     
     private lazy var locationManagerDelegate = LocationManagerDelegate(self)
     
-    public private(set) var lockBeacons = [UUID: CLBeaconRegion]()
+    public private(set) var locks = [UUID: CLBeaconRegion]()
     
     public func requestAuthorization() {
         locationManager.requestAlwaysAuthorization()
@@ -39,7 +39,7 @@ public final class BeaconController {
         let region = CLBeaconRegion(proximityUUID: identifier, major: 0, minor: 0, identifier: identifier.uuidString)
         region.notifyOnEntry = true
         region.notifyEntryStateOnDisplay = true
-        lockBeacons[identifier] = region
+        locks[identifier] = region
         
         switch CLLocationManager.authorizationStatus() {
         case .authorizedAlways,
@@ -55,10 +55,10 @@ public final class BeaconController {
     @discardableResult
     public func stopMonitoring(lock identifier: UUID) -> Bool {
         
-        guard let region = lockBeacons[identifier]
+        guard let region = locks[identifier]
             else { return false }
         
-        lockBeacons[identifier] = nil
+        locks[identifier] = nil
         
         switch CLLocationManager.authorizationStatus() {
         case .authorizedAlways,
@@ -96,8 +96,8 @@ private extension BeaconController {
             switch status {
             case .authorizedAlways,
                  .authorizedWhenInUse:
-                beaconController?.lockBeacons.values.forEach {
-                    beaconController?.locationManager.startMonitoring(for: $0)
+                beaconController?.locks.values.forEach {
+                    manager.startMonitoring(for: $0)
                 }
             case .denied,
                  .notDetermined,
@@ -109,7 +109,7 @@ private extension BeaconController {
         @objc
         public func locationManager(_ manager: CLLocationManager, didStartMonitoringFor region: CLRegion) {
             
-            log("Started monitoring for \(region)")
+            log("Started monitoring for \(region.identifier)")
         }
         
         @objc
@@ -121,7 +121,7 @@ private extension BeaconController {
         @objc
         public func locationManager(_ manager: CLLocationManager, didEnterRegion region: CLRegion) {
             
-            log("Entered region \(region)")
+            log("Entered region \(region.identifier)")
             
             if let beaconRegion = region as? CLBeaconRegion {
                 
@@ -132,13 +132,13 @@ private extension BeaconController {
         @objc
         public func locationManager(_ manager: CLLocationManager, didExitRegion region: CLRegion) {
             
-            log("Exited iBeacon region \(region)")
+            log("Exited iBeacon region \(region.identifier)")
         }
         
         @objc
         public func locationManager(_ manager: CLLocationManager, didDetermineState state: CLRegionState, for region: CLRegion) {
             
-            log("Determined state \(state.debugDescription) for region \(region)")
+            log("Determined state \(state.debugDescription) for region \(region.identifier)")
             
             if let beaconRegion = region as? CLBeaconRegion {
                 
@@ -155,21 +155,32 @@ private extension BeaconController {
         @objc
         public func locationManager(_ manager: CLLocationManager, didRangeBeacons beacons: [CLBeacon], in region: CLBeaconRegion) {
             
-            log("Found beacons \(beacons as NSArray) for region \(region.proximityUUID)")
+            log("Found \(beacons.count) beacons for region \(region.identifier)")
             
-            manager.stopRangingBeacons(in: region)
+            guard let beaconController = self.beaconController
+                else { assertionFailure(); return }
             
-            async { [weak self] in
-                guard let self = self else { return }
-                do {
-                    self.log("Will scan for lock \(region.proximityUUID)")
-                    if try Store.shared.device(for: region.proximityUUID, scanDuration: 1) == nil {
-                        self.log("Could not find lock \(region.proximityUUID)")
-                        manager.requestState(for: region)
+            // is lock iBeacon, make sure the lock is scanned for BLE operations
+            if let lock = beaconController.locks.first(where: { $0.value == region })?.key {
+                
+                assert(beacons.count == 1, "Should only be one lock iBeacon")
+                manager.stopRangingBeacons(in: region)
+                
+                async { [weak self] in
+                    guard let self = self else { return }
+                    do {
+                        self.log("Found beacon for lock \(lock)")
+                        guard let _ = try Store.shared.device(for: lock, scanDuration: 1) else {
+                            self.log("Could not find lock \(lock)")
+                            manager.requestState(for: region)
+                            return
+                        }
+                    } catch {
+                        self.log("Error: \(error)")
                     }
-                } catch {
-                    self.log("Error: \(error)")
                 }
+            } else {
+                manager.stopRangingBeacons(in: region)
             }
         }
         
