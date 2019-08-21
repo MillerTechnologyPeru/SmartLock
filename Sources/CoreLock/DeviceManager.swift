@@ -292,6 +292,51 @@ public final class LockManager <Central: CentralProtocol> {
     }
 }
 
+#if canImport(DarwinGATT)
+import DarwinGATT
+
+public extension LockManager where Central == DarwinCentral {
+    
+    /// Scans for nearby devices.
+    ///
+    /// - Parameter duration: The duration of the scan.
+    ///
+    /// - Parameter event: Callback for a found device.
+    func scanLocks(filterDuplicates: Bool = false,
+                               event: @escaping (LockPeripheral<Central>) -> ()) throws {
+        
+        try central.scan(filterDuplicates: filterDuplicates, with: [LockService.uuid]) { (scanData) in
+            
+            // filter peripheral
+            guard let lock = LockPeripheral<Central>(scanData)
+                else { return }
+            
+            event(lock)
+        }
+    }
+    
+    /// Scans for peripherals that are advertising services for the specified time interval.
+    func scanLocks(duration: TimeInterval,
+                   filterDuplicates: Bool = false,
+                   event: @escaping (LockPeripheral<Central>) -> ()) throws {
+        
+        var didThrow = false
+        DispatchQueue.global().asyncAfter(deadline: .now() + duration) { [weak self] in
+            if didThrow == false {
+                self?.central.stopScan()
+            }
+        }
+        
+        do { try scanLocks(filterDuplicates: filterDuplicates, event: event) }
+        catch {
+            didThrow = true
+            throw error
+        }
+    }
+}
+
+#endif
+
 // MARK: - Supporting Types
 
 public struct LockPeripheral <Central: CentralProtocol> {

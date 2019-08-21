@@ -159,23 +159,17 @@ private extension BeaconController {
             
             manager.stopRangingBeacons(in: region)
             
-            switch UIApplication.shared.applicationState {
-            case .active,
-                 .inactive:
-                async { [weak self] in
-                    guard let self = self else { return }
-                    do {
-                        self.log("Will scan for lock \(region.proximityUUID)")
-                        if try Store.shared.device(for: region.proximityUUID, scanDuration: 1) == nil {
-                            self.log("Could not find lock \(region.proximityUUID)")
-                            manager.requestState(for: region)
-                        }
-                    } catch {
-                        self.log("Error: \(error)")
+            async { [weak self] in
+                guard let self = self else { return }
+                do {
+                    self.log("Will scan for lock \(region.proximityUUID)")
+                    if try Store.shared.device(for: region.proximityUUID, scanDuration: 1) == nil {
+                        self.log("Could not find lock \(region.proximityUUID)")
+                        manager.requestState(for: region)
                     }
+                } catch {
+                    self.log("Error: \(error)")
                 }
-            case .background:
-                break
             }
         }
         

@@ -10,10 +10,8 @@ import Foundation
 import Bluetooth
 import CoreLock
 import GATT
-
-#if os(iOS)
+import DarwinGATT
 import KeychainAccess
-#endif
 
 public final class Store {
     
@@ -159,7 +157,7 @@ public extension Store {
         
         self.peripherals.value.removeAll()
         
-        try lockManager.scan(duration: duration, filterDuplicates: false) { [unowned self] in
+        try lockManager.scanLocks(duration: duration, filterDuplicates: false) { [unowned self] in
             self.peripherals.value[$0.scanData.peripheral] = $0
         }
     }
