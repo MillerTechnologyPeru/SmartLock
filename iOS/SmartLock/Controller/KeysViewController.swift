@@ -120,13 +120,19 @@ final class KeysViewController: UITableViewController {
     }
     
     @discardableResult
-    private func select(lock identifier: UUID) -> LockViewController {
+    private func select(lock identifier: UUID, animated: Bool = true) -> LockViewController {
         
         let navigationController = UIStoryboard(name: "LockDetail", bundle: nil).instantiateInitialViewController() as! UINavigationController
         
         let lockViewController = navigationController.topViewController as! LockViewController
         lockViewController.lockIdentifier = identifier
-        self.show(lockViewController, sender: self)
+        if animated {
+            self.show(lockViewController, sender: self)
+        } else if let navigationController = self.navigationController {
+            navigationController.pushViewController(lockViewController, animated: false)
+        } else {
+            assertionFailure()
+        }
         return lockViewController
     }
     
@@ -220,7 +226,7 @@ extension KeysViewController: LockActivityHandlingViewController {
         case let .view(.lock(identifier)):
             select(lock: identifier)
         case let .action(.unlock(identifier)):
-            select(lock: identifier).unlock()
+            select(lock: identifier, animated: false).unlock()
         case .action(.shareKey):
             AppDelegate.shared.handle(activity: activity)
         }
