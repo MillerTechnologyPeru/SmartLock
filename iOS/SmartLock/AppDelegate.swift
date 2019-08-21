@@ -28,14 +28,17 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
                      didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         
         // print app info
-        log("Launching SmartLock v\(AppVersion) Build \(AppBuild)")
+        log("📱 Launching SmartLock v\(AppVersion) Build \(AppBuild)")
         
         // setup logging
-        LockManager.shared.log = { log("📱 LockManager: " + $0) }
+        LockManager.shared.log = { log("🔒 LockManager: " + $0) }
+        BeaconController.shared.log = { log("📶 BeaconController: " + $0) }
+        
+        // request permissions
+        BeaconController.shared.requestAuthorization()
         
         // handle url
         if let url = launchOptions?[.url] as? URL {
-            
             guard open(url: url)
                 else { return false }
         }
@@ -72,7 +75,12 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(_ application: UIApplication, continue userActivity: NSUserActivity, restorationHandler: @escaping ([Any]?) -> Void) -> Bool {
         
-        print("Continue activity \(userActivity.activityType)\n\((userActivity.userInfo as NSDictionary?)?.description ?? "")")
+        print("Continue activity \(userActivity.activityType)")
+        if #available(iOS 12.0, *),
+            let persistentIdentifier = userActivity.persistentIdentifier {
+            print("\(persistentIdentifier)")
+        }
+        print("\((userActivity.userInfo as NSDictionary?)?.description ?? "")")
         
         switch userActivity.activityType {
         //case CSSearchableItemActionType:

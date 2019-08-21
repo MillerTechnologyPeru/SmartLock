@@ -21,6 +21,8 @@ public final class Store {
     
     private init() {
         
+        locks.observe { [unowned self] _ in self.lockCacheChanged() }
+        
         loadCache()
     }
     
@@ -35,6 +37,8 @@ public final class Store {
     private let storageKey = DefaultsKey<[UUID: LockCache]>("locks")
     
     public let lockManager: LockManager = .shared
+    
+    public let beaconController: BeaconController = .shared
     
     // BLE cache
     public private(set) var peripherals = Observable([NativeCentral.Peripheral: LockPeripheral<NativeCentral>]())
@@ -96,6 +100,28 @@ public final class Store {
     private func writeCache() {
         
         defaults.set(locks.value, for: storageKey)
+    }
+    
+    private func lockCacheChanged() {
+        
+        monitorBeacons()
+    }
+    
+    private func monitorBeacons() {
+        
+        // remove old beacons
+        for lock in self.beaconController.lockBeacons.keys {
+            if self.locks.value.keys.contains(lock) == false {
+                self.beaconController.stopMonitoring(lock: lock)
+            }
+        }
+        
+        // add new beacons
+        for lock in self.locks.value.keys {
+            if self.beaconController.lockBeacons.keys.contains(lock) == false {
+                self.beaconController.monitor(lock: lock)
+            }
+        }
     }
 }
 

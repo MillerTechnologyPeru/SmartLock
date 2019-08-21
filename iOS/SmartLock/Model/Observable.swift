@@ -29,6 +29,7 @@ public final class Observable<Value> {
     
     // MARK: - Methods
     
+    @discardableResult
     public func observe(_ observer: @escaping (Value) -> ()) -> Int {
         
         let identifier = nextID

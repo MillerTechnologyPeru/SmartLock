@@ -54,13 +54,23 @@
 	<string>1</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSBluetoothPeripheralUsageDescription</key>
+	<string>Bluetooth is needed to connect to your smart lock.</string>
 	<key>NSCameraUsageDescription</key>
 	<string>Your camera is needed to setup your smart lock.</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>Your location is needed to find nearby smart locks.</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Your location is needed to find nearby smart locks.</string>
 	<key>NSUserActivityTypes</key>
 	<array>
 		<string>com.colemancda.lock.activity.action</string>
 		<string>com.colemancda.lock.activity.view</string>
 		<string>com.colemancda.lock.activity.screen</string>
+	</array>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>location</string>
 	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>

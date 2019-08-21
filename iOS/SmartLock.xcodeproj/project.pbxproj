@@ -38,6 +38,7 @@
 		6E60F8A72121259F0054995D /* Store.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60F8A62121259F0054995D /* Store.swift */; };
 		6E60F8AD212127890054995D /* Log.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60F8AC212127890054995D /* Log.swift */; };
 		6E60F8F82121540D0054995D /* Defaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60F8F72121540C0054995D /* Defaults.swift */; };
+		6E81B294230CCE3D00783BC5 /* BeaconController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E81B293230CCE3D00783BC5 /* BeaconController.swift */; };
 		6EA3D12D212180C100BC50D8 /* Observable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EA3D128212180C000BC50D8 /* Observable.swift */; };
 		6EAADF8C2122664A0074CEDF /* AppVersion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EAADF8B2122664A0074CEDF /* AppVersion.swift */; };
 		6EAADFB721229CC00074CEDF /* LockTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6EAADFB521229CBF0074CEDF /* LockTableViewCell.xib */; };
@@ -150,6 +151,7 @@
 		6E60F8A62121259F0054995D /* Store.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Store.swift; sourceTree = "<group>"; };
 		6E60F8AC212127890054995D /* Log.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Log.swift; sourceTree = "<group>"; };
 		6E60F8F72121540C0054995D /* Defaults.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Defaults.swift; sourceTree = "<group>"; };
+		6E81B293230CCE3D00783BC5 /* BeaconController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BeaconController.swift; sourceTree = "<group>"; };
 		6EA3D128212180C000BC50D8 /* Observable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Observable.swift; sourceTree = "<group>"; };
 		6EAADF8B2122664A0074CEDF /* AppVersion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppVersion.swift; sourceTree = "<group>"; };
 		6EAADFB521229CBF0074CEDF /* LockTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LockTableViewCell.xib; sourceTree = "<group>"; };
@@ -205,9 +207,6 @@
 				6E6000132121119400787DAA /* AppDelegate.swift */,
 				6E6000CB21211D0B00787DAA /* Async.swift */,
 				6EAADF8B2122664A0074CEDF /* AppVersion.swift */,
-				6EC041272309D6CB00357585 /* ActivityHandling.swift */,
-				6E05B6EC22C9E42C001218D9 /* Activity.swift */,
-				6EC0412F230A494E00357585 /* UserActivity.swift */,
 				6E6000D02121224D00787DAA /* Assets.xcassets */,
 				6E6000172121119400787DAA /* Main.storyboard */,
 				6E05B6E222C9C0EF001218D9 /* LockDetail.storyboard */,
@@ -265,6 +264,10 @@
 		6E6000BE21211C5F00787DAA /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				6EC041272309D6CB00357585 /* ActivityHandling.swift */,
+				6E05B6EC22C9E42C001218D9 /* Activity.swift */,
+				6EC0412F230A494E00357585 /* UserActivity.swift */,
+				6E81B293230CCE3D00783BC5 /* BeaconController.swift */,
 				6E60004A212113DF00787DAA /* DeviceManager.swift */,
 				6E60F8A62121259F0054995D /* Store.swift */,
 				6EA3D128212180C000BC50D8 /* Observable.swift */,
@@ -359,6 +362,11 @@
 				TargetAttributes = {
 					6E60000F2121119400787DAA = {
 						CreatedOnToolsVersion = 9.4.1;
+						SystemCapabilities = {
+							com.apple.BackgroundModes = {
+								enabled = 1;
+							};
+						};
 					};
 					6E6000232121119500787DAA = {
 						CreatedOnToolsVersion = 9.4.1;
@@ -525,6 +533,7 @@
 				6EC041282309D6CB00357585 /* ActivityHandling.swift in Sources */,
 				6E60F8F82121540D0054995D /* Defaults.swift in Sources */,
 				6E6000142121119400787DAA /* AppDelegate.swift in Sources */,
+				6E81B294230CCE3D00783BC5 /* BeaconController.swift in Sources */,
 				6EAADFB821229CC00074CEDF /* LockTableViewCell.swift in Sources */,
 				6E6000C921211CD400787DAA /* UIAlertAction.swift in Sources */,
 			);
