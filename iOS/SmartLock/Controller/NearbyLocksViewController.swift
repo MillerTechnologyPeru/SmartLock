@@ -67,9 +67,6 @@ final class NearbyLocksViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // activity
-        userActivity = NSUserActivity(.screen(.nearbyLocks))
-        
         // register cell
         tableView.register(LockTableViewCell.nib, forCellReuseIdentifier: LockTableViewCell.reuseIdentifier)
         tableView.rowHeight = UITableViewAutomaticDimension
@@ -110,13 +107,31 @@ final class NearbyLocksViewController: UITableViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
+        userActivity = NSUserActivity(.screen(.nearbyLocks))
         userActivity?.becomeCurrent()
     }
-    
+    /*
     override func updateUserActivityState(_ activity: NSUserActivity) {
         
-        activity.addUserInfoEntries(from: NSUserActivity(.screen(.nearbyLocks)).userInfo ?? [:])
-    }
+        //activity.addUserInfoEntries(from: ["title": "test", "content": "\(Date())"])
+        
+        switch activity.activityType {
+        case AppActivityType.screen.rawValue:
+            activity.addUserInfoEntries(from: NSUserActivity(.screen(.nearbyLocks)).userInfo ?? [:])
+        case AppActivityType.action.rawValue:
+            guard let lock = lastUnlocked
+                else { assertionFailure("Did not unlock recently"); return }
+            activity.addUserInfoEntries(from: [
+                AppActivity.UserInfo.action.rawValue: AppActivity.ActionType.unlock.rawValue,
+                AppActivity.UserInfo.lock.rawValue: lock
+                ]
+            )
+        default:
+            break
+        }
+        
+        super.updateUserActivityState(activity)
+    }*/
     
     // MARK: - Actions
     
@@ -295,6 +310,9 @@ final class NearbyLocksViewController: UITableViewController {
         case .setup:
             setup(lock: lock)
         case .unlock:
+            userActivity?.resignCurrent()
+            userActivity = NSUserActivity(.action(.unlock(information.identifier)))
+            userActivity?.becomeCurrent()
             unlock(lock: lock)
         }
     }

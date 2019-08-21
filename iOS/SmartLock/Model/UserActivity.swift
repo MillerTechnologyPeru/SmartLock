@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import Intents
 
 /// `NSUserActivity` type
 public enum AppActivityType: String {
@@ -201,7 +202,7 @@ extension NSUserActivity {
             }
         case let .view(.lock(lockIdentifier)):
             self.init(activityType: .view, userInfo: [
-                .lock: lockIdentifier as NSUUID
+                .lock: lockIdentifier.uuidString as NSString
                 ])
             if let lockCache = Store.shared[lock: lockIdentifier] {
                 self.title = lockCache.name
@@ -216,7 +217,7 @@ extension NSUserActivity {
         case let .action(.shareKey(lockIdentifier)):
             self.init(activityType: .action, userInfo: [
                 .action: AppActivity.ActionType.shareKey.rawValue as NSString,
-                .lock: lockIdentifier as NSUUID
+                .lock: lockIdentifier.uuidString as NSString
                 ])
             if let lockCache = Store.shared[lock: lockIdentifier] {
                 self.title = "Share Key for \(lockCache.name)"
@@ -231,7 +232,7 @@ extension NSUserActivity {
         case let .action(.unlock(lockIdentifier)):
             self.init(activityType: .action, userInfo: [
                 .action: AppActivity.ActionType.unlock.rawValue as NSString,
-                .lock: lockIdentifier as NSUUID
+                .lock: lockIdentifier.uuidString as NSString
                 ])
             if let lockCache = Store.shared[lock: lockIdentifier] {
                 self.title = "Unlock \(lockCache.name)"
@@ -239,9 +240,11 @@ extension NSUserActivity {
                 self.title = "Unlock \(lockIdentifier)"
             }
             self.isEligibleForSearch = true
-            self.isEligibleForHandoff = false
+            self.isEligibleForHandoff = true
             if #available(iOS 12.0, *) {
                 self.isEligibleForPrediction = true
+                self.suggestedInvocationPhrase = "Unlock my door"
+                //self.interaction = INInteraction(intent: INIntent, response: nil)
             }
         }
         if #available(iOS 12.0, *) {
@@ -254,7 +257,6 @@ extension NSUserActivity {
                 self.persistentIdentifier = view.rawValue
             }
         }
-        self.needsSave = true
     }
     
     convenience init(activityType: AppActivityType, userInfo: [AppActivity.UserInfo: NSObject]) {
@@ -266,6 +268,5 @@ extension NSUserActivity {
         }
         self.userInfo = data
         self.requiredUserInfoKeys = Set(userInfo.keys.lazy.map { $0.rawValue })
-        self.needsSave = true
     }
 }

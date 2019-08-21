@@ -49,7 +49,8 @@ final class LockViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        guard lockIdentifier != nil else { fatalError("Lock identifer not set") }
+        guard lockIdentifier != nil
+            else { fatalError("Lock identifer not set") }
         
         tableView.rowHeight = UITableViewAutomaticDimension
         tableView.estimatedRowHeight = 44
@@ -66,24 +67,17 @@ final class LockViewController: UITableViewController {
         }
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        userActivity = NSUserActivity(.view(.lock(lockIdentifier)))
+        userActivity?.becomeCurrent()
+    }
+    
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
         view.bringSubview(toFront: progressHUD)
-    }
-    
-    override func updateUserActivityState(_ activity: NSUserActivity) {
-        
-        switch activity.activityType {
-        case AppActivityType.view.rawValue:
-            activity.addUserInfoEntries(from: NSUserActivity(.view(.lock(lockIdentifier))).userInfo ?? [:])
-        case AppActivityType.action.rawValue:
-            activity.addUserInfoEntries(from: NSUserActivity(.action(.unlock(lockIdentifier))).userInfo ?? [:])
-        default:
-            break
-        }
-        
-        super.updateUserActivityState(activity)
     }
     
     // MARK: - Actions
@@ -100,7 +94,14 @@ final class LockViewController: UITableViewController {
         
         func show() {
             
-            let activities = [NewKeyActivity(), ManageKeysActivity(), HomeKitEnableActivity(), RenameActivity(), UpdateActivity(), DeleteLockActivity()]
+            let activities = [
+                NewKeyActivity(),
+                ManageKeysActivity(),
+                HomeKitEnableActivity(),
+                RenameActivity(),
+                UpdateActivity(),
+                DeleteLockActivity()
+            ]
             
             let lockItem = LockActivityItem(identifier: lockIdentifier)
             
@@ -161,6 +162,8 @@ final class LockViewController: UITableViewController {
         guard let lockIdentifier = self.lockIdentifier
             else { assertionFailure(); return }
         
+        loadViewIfNeeded()
+        
         print("Unlock \(lockIdentifier)")
         
         guard let lockCache = Store.shared[lock: lockIdentifier]
@@ -168,9 +171,6 @@ final class LockViewController: UITableViewController {
         
         guard let keyData = Store.shared[key: lockCache.key.identifier]
             else { assertionFailure("No stored key for lock"); return }
-        
-        guard let (peripheral, characteristic) = Store.shared.lockInformation.value.first(where: { $0.value.identifier == lockIdentifier })
-            else { showErrorAlert("Lock not in area. Please rescan for nearby locks."); return }
         
         self.userActivity?.resignCurrent()
         self.userActivity = NSUserActivity(.action(.unlock(lockIdentifier)))
@@ -188,10 +188,11 @@ final class LockViewController: UITableViewController {
             defer { mainQueue { controller.unlockButton.isEnabled = true } }
             
             do {
-                try LockManager.shared.unlock(.default,
-                                              for: peripheral,
-                                              with: key,
-                                              timeout: .gattDefaultTimeout)
+                guard let peripheral = try Store.shared.device(for: lockIdentifier, scanDuration: 1.0) else {
+                    mainQueue { controller.showErrorAlert("Lock not nearby.") }
+                    return
+                }
+                try Store.shared.unlock(peripheral)
             }
             
             catch { mainQueue { controller.showErrorAlert("\(error)") }; return }

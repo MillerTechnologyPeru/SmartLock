@@ -39,9 +39,6 @@ final class KeysViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // activity
-        self.userActivity = NSUserActivity(.screen(.keys))
-        
         // setup table view
         tableView.register(LockTableViewCell.nib, forCellReuseIdentifier: LockTableViewCell.reuseIdentifier)
         tableView.rowHeight = UITableViewAutomaticDimension
@@ -58,6 +55,7 @@ final class KeysViewController: UITableViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
+        userActivity = NSUserActivity(.screen(.keys))
         userActivity?.becomeCurrent()
     }
     

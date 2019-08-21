@@ -100,7 +100,8 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
                 else { return false }
             self.handle(activity: .screen(screen))
         case AppActivityType.view.rawValue:
-            if let lock = userInfo[.lock] as? UUID {
+            if let lockString = userInfo[.lock] as? String,
+                let lock = UUID(uuidString: lockString) {
                 self.handle(activity: .view(.lock(lock)))
             } else {
                 return false
@@ -111,11 +112,13 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
                 else { return false }
             switch action {
             case .unlock:
-                guard let lock = userInfo[.lock] as? UUID
+                guard let lockString = userInfo[.lock] as? String,
+                    let lock = UUID(uuidString: lockString)
                     else { return false }
                 self.handle(activity: .action(.unlock(lock)))
             case .shareKey:
-                guard let lock = userInfo[.lock] as? UUID
+                guard let lockString = userInfo[.lock] as? String,
+                    let lock = UUID(uuidString: lockString)
                     else { return false }
                 self.handle(activity: .action(.shareKey(lock)))
             }
