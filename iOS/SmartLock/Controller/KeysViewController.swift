@@ -40,7 +40,7 @@ final class KeysViewController: UITableViewController {
         super.viewDidLoad()
         
         // activity
-        self.userActivity = .init(.screen(.keys))
+        self.userActivity = NSUserActivity(.screen(.keys))
         
         // setup table view
         tableView.register(LockTableViewCell.nib, forCellReuseIdentifier: LockTableViewCell.reuseIdentifier)
@@ -53,6 +53,12 @@ final class KeysViewController: UITableViewController {
         }
         
         reloadData()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        userActivity?.becomeCurrent()
     }
     
     // MARK: - Methods

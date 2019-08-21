@@ -68,7 +68,7 @@ final class NearbyLocksViewController: UITableViewController {
         super.viewDidLoad()
         
         // activity
-        userActivity = .init(.screen(.nearbyLocks))
+        userActivity = NSUserActivity(.screen(.nearbyLocks))
         
         // register cell
         tableView.register(LockTableViewCell.nib, forCellReuseIdentifier: LockTableViewCell.reuseIdentifier)
@@ -105,6 +105,12 @@ final class NearbyLocksViewController: UITableViewController {
         if items.isEmpty {
             scan()
         }
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        userActivity?.becomeCurrent()
     }
     
     override func updateUserActivityState(_ activity: NSUserActivity) {
