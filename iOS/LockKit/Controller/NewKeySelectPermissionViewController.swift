@@ -54,44 +54,28 @@ public final class NewKeySelectPermissionViewController: UITableViewController, 
     
     // MARK: - Methods
     
+    private func description(for permissionType: PermissionType) -> String {
+        
+        switch permissionType {
+        case .admin:
+            return "Admin keys have unlimited access, and can create new keys."
+        case .anytime:
+            return "Anytime keys have unlimited access, but cannot create new keys."
+        case .scheduled:
+            return "Scheduled keys have limited access during specified hours, and expire at a certain date. New keys cannot be created from this key"
+        case .owner:
+            assertionFailure("Cannot create owner keys")
+            return "Owner keys are created at setup."
+        }
+    }
+    
     private func configure(cell: PermissionTypeTableViewCell, at indexPath: IndexPath) {
         
         let permissionType = permissionTypes[indexPath.row]
         
-        let permissionImage: UIImage
-        
-        let permissionTypeName: String
-        
-        let permissionText: String
-        
-        switch permissionType {
-            
-        case .admin:
-            
-            permissionImage = UIImage(named: "permissionBadgeAdmin")!
-            permissionTypeName = "Admin"
-            permissionText = "Admin keys have unlimited access, and can create new keys."
-            
-        case .anytime:
-            
-            permissionImage = UIImage(named: "permissionBadgeAnytime")!
-            permissionTypeName = "Anytime"
-            permissionText = "Anytime keys have unlimited access, but cannot create new keys."
-            
-        case .scheduled:
-            
-            permissionImage = UIImage(named: "permissionBadgeScheduled")!
-            permissionTypeName = "Scheduled"
-            permissionText = "Scheduled keys have limited access during specified hours, and expire at a certain date. New keys cannot be created from this key"
-            
-        case .owner:
-            
-            fatalError("Cannot create owner keys")
-        }
-        
-        cell.permissionImageView.image = permissionImage
-        cell.permissionTypeLabel.text = permissionTypeName
-        cell.permissionDescriptionLabel.text = permissionText
+        cell.permissionImageView.image = UIImage(permissionType: permissionType)
+        cell.permissionTypeLabel.text = permissionType.localizedText
+        cell.permissionDescriptionLabel.text = description(for: permissionType)
     }
     
     // MARK: - UITableViewDataSource
@@ -144,7 +128,7 @@ public extension UIViewController {
     
     func shareKey(lock identifier: UUID) {
         
-        let navigationController = UIStoryboard(name: "NewKey", bundle: nil).instantiateInitialViewController() as! UINavigationController
+        let navigationController = UIStoryboard(name: "NewKey", bundle: .lockKit).instantiateInitialViewController() as! UINavigationController
         
         let destinationViewController = navigationController.viewControllers.first! as! NewKeySelectPermissionViewController
         destinationViewController.lockIdentifier = identifier

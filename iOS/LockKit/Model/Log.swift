@@ -10,5 +10,8 @@ import Foundation
 
 public func log(_ text: String) {
     
-    NSLog(text)
+    // only print for debug builds
+    #if DEBUG
+    print(text)
+    #endif
 }

@@ -207,11 +207,11 @@ public extension NSUserActivity {
             case .nearbyLocks:
                 self.title = "Nearby Locks"
                 attributes.contentDescription = "Show nearby locks."
-                attributes.thumbnailData = UIImage(named: "Near")?.pngData()
+                attributes.thumbnailData = UIImage.lockKit("activityNear")?.pngData()
             case .keys:
                 self.title = "Keys"
                 attributes.contentDescription = "Display stored keys."
-                attributes.thumbnailData = UIImage(named: "LockTabBarIcon")?.pngData()
+                attributes.thumbnailData = UIImage.lockKit("activityLock")?.pngData()
             }
             self.contentAttributeSet = attributes
             self.isEligibleForSearch = false
@@ -246,7 +246,7 @@ public extension NSUserActivity {
             } else {
                 self.title = "Share Key for \(lockIdentifier)"
             }
-            attributes.thumbnailData = UIImage(named: "activityNewKey")?.pngData()
+            attributes.thumbnailData = UIImage.lockKit("activityNewKey")?.pngData()
             self.contentAttributeSet = attributes
             self.isEligibleForSearch = false
             self.isEligibleForHandoff = false

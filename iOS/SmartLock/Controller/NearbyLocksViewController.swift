@@ -212,38 +212,20 @@ final class NearbyLocksViewController: UITableViewController {
                 if let lockCache = Store.shared[lock: information.identifier] {
                     
                     let permission = lockCache.key.permission
-                    let permissionImage: UIImage
-                    let permissionText: String
-                    
-                    switch permission {
-                    case .owner:
-                        permissionImage = #imageLiteral(resourceName: "permissionBadgeOwner")
-                        permissionText = "Owner"
-                    case .admin:
-                        permissionImage = #imageLiteral(resourceName: "permissionBadgeAdmin")
-                        permissionText = "Admin"
-                    case .anytime:
-                        permissionImage = #imageLiteral(resourceName: "permissionBadgeAnytime")
-                        permissionText = "Anytime"
-                    case .scheduled:
-                        permissionImage = #imageLiteral(resourceName: "permissionBadgeScheduled")
-                        permissionText = "Scheduled" // FIXME: Localized Schedule text
-                    }
-                    
                     title = lockCache.name
-                    detail = permissionText
-                    image = permissionImage
+                    detail = permission.localizedText
+                    image = UIImage(permission: permission)
                 } else {
                     title = "Lock"
                     detail = information.identifier.description
-                    image = #imageLiteral(resourceName: "permissionBadgeAnytime")
+                    image = UIImage(permission: .anytime)
                 }
                 
             case .setup:
                 
                 title = "Setup"
                 detail = information.identifier.description
-                image = #imageLiteral(resourceName: "permissionBadgeOwner")
+                image = UIImage(permission: .owner)
             }
         } else {
             

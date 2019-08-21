@@ -97,7 +97,7 @@ public final class LockPermissionsViewController: UITableViewController, Activit
     
     @IBAction func newKey(_ sender: AnyObject? = nil) {
         
-        let navigationController = UIStoryboard(name: "NewKey", bundle: nil).instantiateInitialViewController() as! UINavigationController
+        let navigationController = UIStoryboard(name: "NewKey", bundle: .lockKit).instantiateInitialViewController() as! UINavigationController
         let destinationViewController = navigationController.viewControllers.first! as! NewKeySelectPermissionViewController
         destinationViewController.lockIdentifier = lockIdentifier
         destinationViewController.completion = { _ in mainQueue { self.reloadData() } }
@@ -120,27 +120,10 @@ public final class LockPermissionsViewController: UITableViewController, Activit
     private func configure(cell: LockTableViewCell, at indexPath: IndexPath) {
         
         let item = self[indexPath]
-        let permissionImage: UIImage
-        let permissionText: String
-        
-        switch item.permission {
-        case .owner:
-            permissionImage = #imageLiteral(resourceName: "permissionBadgeOwner")
-            permissionText = "Owner"
-        case .admin:
-            permissionImage = #imageLiteral(resourceName: "permissionBadgeAdmin")
-            permissionText = "Admin"
-        case .anytime:
-            permissionImage = #imageLiteral(resourceName: "permissionBadgeAnytime")
-            permissionText = "Anytime"
-        case .scheduled:
-            permissionImage = #imageLiteral(resourceName: "permissionBadgeScheduled")
-            permissionText = "Scheduled" // FIXME: Localized Schedule text
-        }
         
         cell.lockTitleLabel.text = item.name
-        cell.lockImageView.image = permissionImage
-        cell.lockDetailLabel.text = permissionText
+        cell.lockImageView.image = UIImage(permission: item.permission)
+        cell.lockDetailLabel.text = item.permission.localizedText
         cell.activityIndicatorView.isHidden = true
         cell.lockImageView?.isHidden = false
     }

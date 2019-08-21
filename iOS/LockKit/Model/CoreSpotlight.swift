@@ -63,22 +63,8 @@ extension SearchableLock: CoreSpotlightSearchable {
         
         let attributeSet = CSSearchableItemAttributeSet(itemContentType: Swift.type(of: self).itemContentType)
         
-        let permissionImage: UIImage
-        let permissionText: String
-        switch cache.key.permission {
-        case .owner:
-            permissionImage = #imageLiteral(resourceName: "permissionBadgeOwner")
-            permissionText = "Owner"
-        case .admin:
-            permissionImage = #imageLiteral(resourceName: "permissionBadgeAdmin")
-            permissionText = "Admin"
-        case .anytime:
-            permissionImage = #imageLiteral(resourceName: "permissionBadgeAnytime")
-            permissionText = "Anytime"
-        case .scheduled:
-            permissionImage = #imageLiteral(resourceName: "permissionBadgeScheduled")
-            permissionText = "Scheduled" // FIXME
-        }
+        let permissionImage = UIImage(permission: cache.key.permission)
+        let permissionText = cache.key.permission.localizedText
         
         attributeSet.displayName = cache.name
         attributeSet.contentDescription = permissionText

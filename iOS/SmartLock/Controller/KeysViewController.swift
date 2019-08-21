@@ -86,28 +86,11 @@ final class KeysViewController: UITableViewController {
     private func configure(cell: LockTableViewCell, at indexPath: IndexPath) {
         
         let item = self[indexPath]
-        
-        let permissionImage: UIImage
-        let permissionText: String
-        
-        switch item.cache.key.permission {
-        case .owner:
-            permissionImage = #imageLiteral(resourceName: "permissionBadgeOwner")
-            permissionText = "Owner"
-        case .admin:
-            permissionImage = #imageLiteral(resourceName: "permissionBadgeAdmin")
-            permissionText = "Admin"
-        case .anytime:
-            permissionImage = #imageLiteral(resourceName: "permissionBadgeAnytime")
-            permissionText = "Anytime"
-        case .scheduled:
-            permissionImage = #imageLiteral(resourceName: "permissionBadgeScheduled")
-            permissionText = "Scheduled" // FIXME: Localized Schedule text
-        }
+        let permission = item.cache.key.permission
         
         cell.lockTitleLabel.text = item.cache.name
-        cell.lockDetailLabel.text = permissionText
-        cell.lockImageView.image = permissionImage
+        cell.lockDetailLabel.text = permission.localizedText
+        cell.lockImageView.image = UIImage(permission: permission)
         cell.activityIndicatorView.isHidden = true
         cell.lockImageView.isHidden = false
     }
@@ -125,7 +108,7 @@ final class KeysViewController: UITableViewController {
             return nil
         }
         
-        let navigationController = UIStoryboard(name: "LockDetail", bundle: nil).instantiateInitialViewController() as! UINavigationController
+        let navigationController = UIStoryboard(name: "LockDetail", bundle: .lockKit).instantiateInitialViewController() as! UINavigationController
         
         let lockViewController = navigationController.topViewController as! LockViewController
         lockViewController.lockIdentifier = identifier

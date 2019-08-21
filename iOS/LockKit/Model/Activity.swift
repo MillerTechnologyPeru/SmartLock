@@ -43,12 +43,7 @@ public struct LockActivityItem {
         guard let lockCache = Store.shared[lock: identifier]
             else { fatalError("Lock not in cache") }
         
-        switch lockCache.key.permission {
-        case .owner: return #imageLiteral(resourceName: "permissionBadgeOwner")
-        case .admin: return #imageLiteral(resourceName: "permissionBadgeAdmin")
-        case .anytime: return #imageLiteral(resourceName: "permissionBadgeAnytime")
-        case .scheduled: return #imageLiteral(resourceName: "permissionBadgeScheduled")
-        }
+        return UIImage(permission: lockCache.key.permission)
     }
 }
 
@@ -75,18 +70,15 @@ public final class NewKeyActivity: UIActivity {
     private var item: LockActivityItem!
     
     public override var activityType: UIActivity.ActivityType? {
-        
         return LockActivity.newKey.activityType
     }
     
     public override var activityTitle: String? {
-        
         return "Share Key"
     }
     
     public override var activityImage: UIImage? {
-        
-        return #imageLiteral(resourceName: "activityNewKey")
+        return UIImage.lockKit("activityNewKey")
     }
     
     public override func canPerform(withActivityItems activityItems: [Any]) -> Bool {
@@ -113,7 +105,7 @@ public final class NewKeyActivity: UIActivity {
     
     public override var activityViewController: UIViewController? {
         
-        let navigationController = UIStoryboard(name: "NewKey", bundle: nil).instantiateInitialViewController() as! UINavigationController
+        let navigationController = UIStoryboard(name: "NewKey", bundle: .lockKit).instantiateInitialViewController() as! UINavigationController
         
         let destinationViewController = navigationController.viewControllers.first! as! NewKeySelectPermissionViewController
         destinationViewController.lockIdentifier = item.identifier
@@ -141,8 +133,7 @@ public final class ManageKeysActivity: UIActivity {
     }
     
     public override var activityImage: UIImage? {
-        
-        return #imageLiteral(resourceName: "activityManageKeys")
+        return UIImage.lockKit("activityManageKeys")
     }
     
     public override func canPerform(withActivityItems activityItems: [Any]) -> Bool {
@@ -169,7 +160,7 @@ public final class ManageKeysActivity: UIActivity {
     
     public override var activityViewController: UIViewController? {
         
-        let navigationController = UIStoryboard(name: "LockPermissions", bundle: nil).instantiateInitialViewController() as! UINavigationController
+        let navigationController = UIStoryboard(name: "LockPermissions", bundle: .lockKit).instantiateInitialViewController() as! UINavigationController
         
         let destinationViewController = navigationController.viewControllers.first! as! LockPermissionsViewController
         destinationViewController.lockIdentifier = item.identifier
@@ -191,13 +182,11 @@ public final class DeleteLockActivity: UIActivity {
     }
     
     public override var activityTitle: String? {
-        
         return "Delete"
     }
     
     public override var activityImage: UIImage? {
-        
-        return #imageLiteral(resourceName: "activityDelete")
+        return UIImage.lockKit("activityDelete")
     }
     
     public override func canPerform(withActivityItems activityItems: [Any]) -> Bool {
@@ -251,7 +240,7 @@ public final class RenameActivity: UIActivity {
     
     public override var activityImage: UIImage? {
         
-        return #imageLiteral(resourceName: "activityRename")
+        return UIImage.lockKit("activityRename")
     }
     
     public override func canPerform(withActivityItems activityItems: [Any]) -> Bool {
@@ -308,7 +297,7 @@ public final class HomeKitEnableActivity: UIActivity {
     
     public override var activityImage: UIImage? {
         
-        return #imageLiteral(resourceName: "activityHomeKit")
+        return UIImage.lockKit("activityHomeKit")
     }
     
     public override func canPerform(withActivityItems activityItems: [Any]) -> Bool {
@@ -393,7 +382,7 @@ public final class UpdateActivity: UIActivity {
     }
     
     public override var activityImage: UIImage? {
-        return #imageLiteral(resourceName: "activityUpdate")
+        return UIImage.lockKit("activityUpdate")
     }
     
     public override func canPerform(withActivityItems activityItems: [Any]) -> Bool {

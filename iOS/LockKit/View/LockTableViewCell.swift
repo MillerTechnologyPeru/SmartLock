@@ -15,7 +15,7 @@ public final class LockTableViewCell: UITableViewCell {
     
     public static let reuseIdentifier = "LockTableViewCell"
     
-    public static let nib = UINib(nibName: "LockTableViewCell", bundle: nil)
+    public static let nib = UINib(nibName: "LockTableViewCell", bundle: .lockKit)
     
     // MARK: - IB Outlets
     

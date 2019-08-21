@@ -126,28 +126,10 @@ public final class NewKeyRecieveViewController: UITableViewController, ActivityI
     private func configureView() {
         
         self.navigationItem.title = newKey.key.name
+        let permission = newKey.key.permission
         self.lockLabel.text = newKey.lock.rawValue
-        
-        let permissionImage: UIImage
-        let permissionText: String
-        
-        switch newKey.key.permission {
-        case .owner:
-            permissionImage = #imageLiteral(resourceName: "permissionBadgeOwner")
-            permissionText = "Owner"
-        case .admin:
-            permissionImage = #imageLiteral(resourceName: "permissionBadgeAdmin")
-            permissionText = "Admin"
-        case .anytime:
-            permissionImage = #imageLiteral(resourceName: "permissionBadgeAnytime")
-            permissionText = "Anytime"
-        case .scheduled:
-            permissionImage = #imageLiteral(resourceName: "permissionBadgeScheduled")
-            permissionText = "Scheduled" // FIXME: Localized Schedule text
-        }
-        
-        self.permissionImageView.image = permissionImage
-        self.permissionLabel.text = permissionText
+        self.permissionImageView.image = UIImage(permission: permission)
+        self.permissionLabel.text = permission.localizedText
     }
 }
 
@@ -163,7 +145,7 @@ public extension UIViewController {
         }
         
         // show NewKeyReceiveVC
-        let navigationController = UIStoryboard(name: "NewKeyInvitation", bundle: nil).instantiateInitialViewController() as! UINavigationController
+        let navigationController = UIStoryboard(name: "NewKeyInvitation", bundle: .lockKit).instantiateInitialViewController() as! UINavigationController
         let newKeyVC = navigationController.topViewController as! NewKeyRecieveViewController
         newKeyVC.newKey = newKey
         present(navigationController, animated: true, completion: nil)

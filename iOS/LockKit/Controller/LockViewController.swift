@@ -225,26 +225,7 @@ public final class LockViewController: UITableViewController {
         self.lockIdentifierLabel.text = lockIdentifier!.uuidString
         self.keyIdentifierLabel.text = lockCache.key.identifier.uuidString
         self.versionLabel.text = lockCache.information.version.description
-        
-        let permissionImage: UIImage
-        let permissionText: String
-        
-        switch lockCache.key.permission {
-        case .owner:
-            permissionImage = #imageLiteral(resourceName: "permissionBadgeOwner")
-            permissionText = "Owner"
-        case .admin:
-            permissionImage = #imageLiteral(resourceName: "permissionBadgeAdmin")
-            permissionText = "Admin"
-        case .anytime:
-            permissionImage = #imageLiteral(resourceName: "permissionBadgeAnytime")
-            permissionText = "Anytime"
-        case .scheduled:
-            permissionImage = #imageLiteral(resourceName: "permissionBadgeScheduled")
-            permissionText = "Scheduled" // FIXME: Localized Schedule text
-        }
-        
-        self.permissionLabel.text = permissionText
+        self.permissionLabel.text = lockCache.key.permission.localizedText
     }
 }
 
@@ -260,7 +241,7 @@ extension UIViewController {
             return false
         }
         
-        let navigationController = UIStoryboard(name: "LockDetail", bundle: nil).instantiateInitialViewController() as! UINavigationController
+        let navigationController = UIStoryboard(name: "LockDetail", bundle: .lockKit).instantiateInitialViewController() as! UINavigationController
         
         let lockViewController = navigationController.topViewController as! LockViewController
         lockViewController.lockIdentifier = identifier
