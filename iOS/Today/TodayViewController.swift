@@ -30,6 +30,13 @@ final class TodayViewController: UIViewController, NCWidgetProviding {
     private var informationObserver: Int?
     private var locksObserver: Int?
     
+    @available(iOS 10.0, *)
+    private lazy var selectionFeedbackGenerator: UISelectionFeedbackGenerator = {
+        let feedbackGenerator = UISelectionFeedbackGenerator()
+        feedbackGenerator.prepare()
+        return feedbackGenerator
+    }()
+    
     // MARK: - Loading
     
     deinit {
@@ -78,9 +85,21 @@ final class TodayViewController: UIViewController, NCWidgetProviding {
         
         // scan for locks
         if Store.shared.lockInformation.value.isEmpty {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) { [weak self] in
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
                 self?.reloadData()
             }
+        }
+        
+        if #available(iOS 10.0, *) {
+            selectionFeedbackGenerator.prepare()
+        }
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        if #available(iOS 10.0, *) {
+            selectionFeedbackGenerator.prepare()
         }
     }
     
@@ -88,7 +107,11 @@ final class TodayViewController: UIViewController, NCWidgetProviding {
         
     func widgetPerformUpdate(completionHandler: (@escaping (NCUpdateResult) -> Void)) {
         
-        log("☀️ Update Widget")
+        log("☀️ Update Widget Data")
+        
+        if #available(iOS 10.0, *) {
+            selectionFeedbackGenerator.prepare()
+        }
         
         // Perform any setup necessary in order to update the view.
         
@@ -132,23 +155,27 @@ final class TodayViewController: UIViewController, NCWidgetProviding {
                     .flatMap { (identifier: information.identifier, cache: $0) }
         }
         
+        let oldItems = self.items
         if locks.isEmpty {
-            self.items = [.noNearbyLocks]
+            items = [.noNearbyLocks]
         } else {
-            self.items = locks.map { .lock($0.identifier, $0.cache) }
+            items = locks.map { .lock($0.identifier, $0.cache) }
         }
         
         // reload table view
-        self.tableView.reloadData()
+        if oldItems != items {
+            tableView.reloadData()
+        }
     }
     
     private func reloadData(_ completion: ((Bool) -> ())? = nil) {
         
-        log("☀️ Refresh widget data")
+        // scan beacons
+        BeaconController.shared.scanBeacons()
         
         // scan for devices
-        async { //[weak self] in
-            //guard let self = self else { return }
+        async {
+            log("Scanning...")
             do { try Store.shared.scan(duration: 1.0) }
             catch {
                 log("⚠️ Could not scan: \(error)")
@@ -181,6 +208,30 @@ final class TodayViewController: UIViewController, NCWidgetProviding {
             cell.selectionStyle = .default
         }
     }
+    
+    private func select(_ item: Item) {
+        
+        if #available(iOSApplicationExtension 10.0, *) {
+            selectionFeedbackGenerator.selectionChanged()
+        }
+        
+        switch item {
+        case .noNearbyLocks:
+            reloadData()
+        case let .lock(identifier, cache):
+            // unlock
+            async {
+                log("Unlock \(cache.name) \(identifier)")
+                do {
+                    guard let peripheral = Store.shared.device(for: identifier)
+                        else { assertionFailure("Peripheral not found"); return }
+                    try Store.shared.unlock(peripheral)
+                } catch {
+                    log("⚠️ Could not unlock: \(error)")
+                }
+            }
+        }
+    }
 }
 
 // MARK: - UITableViewDataSource
@@ -200,6 +251,18 @@ extension TodayViewController: UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: LockTableViewCell.reuseIdentifier, for: indexPath) as! LockTableViewCell
         configure(cell: cell, at: indexPath)
         return cell
+    }
+}
+
+// MARK: - UITableViewDelegate
+
+extension TodayViewController: UITableViewDelegate {
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
+        defer { tableView.deselectRow(at: indexPath, animated: true) }
+        let item = self[indexPath]
+        select(item)
     }
 }
 
