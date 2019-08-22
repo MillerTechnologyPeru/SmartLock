@@ -103,7 +103,7 @@ final class MessagesViewController: MSMessagesAppViewController {
         switch presentationStyle {
         case .compact:
             // dismiss modal UI
-            presentedViewController?.dismiss(animated: true, completion: nil)
+            self.dismiss(animated: true, completion: nil)
         case .expanded:
             break
         case .transcript:
@@ -157,7 +157,39 @@ final class MessagesViewController: MSMessagesAppViewController {
         log("Selected \(item.cache.name) \(item.identifier)")
         
         requestPresentationStyle(.expanded)
-        shareKey(lock: item.identifier)
+        shareKey(lock: item.identifier) { [unowned self] in
+            self.dismiss(animated: true, completion: nil)
+            self.requestPresentationStyle(.compact)
+            guard let invitation = $0?.invitation else {
+                return
+            }
+            self.insertMessage(for: invitation)
+        }
+    }
+    
+    private func insertMessage(for invitation: NewKey.Invitation) {
+        
+        guard let conversation = activeConversation else { fatalError("Expected a conversation") }
+        
+        let lockURL = LockURL.newKey(invitation)
+        
+        let layout = MSMessageTemplateLayout()
+        layout.imageTitle = "Accept \(invitation.key.permission.type.localizedText) lock key"
+        layout.image = UIImage(permission: invitation.key.permission)
+        layout.caption = invitation.key.permission.localizedText
+        
+        let message = MSMessage(session: activeConversation?.selectedMessage?.session ?? MSSession())
+        message.url = lockURL.rawValue
+        message.layout = layout
+        
+        // Add the message to the conversation.
+        conversation.insert(message) { error in
+            if let error = error {
+                log("⚠️ Could not insert message: " + error.localizedDescription)
+            }
+        }
+        
+        self.dismiss()
     }
 }
 
