@@ -68,6 +68,11 @@
 		6E994AFA230E5A2B0076DC1B /* Intents.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = 6E994AF7230E571F0076DC1B /* Intents.intentdefinition */; settings = {ATTRIBUTES = (no_codegen, ); }; };
 		6E994AFB230E5A2B0076DC1B /* Intents.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = 6E994AF7230E571F0076DC1B /* Intents.intentdefinition */; settings = {ATTRIBUTES = (no_codegen, ); }; };
 		6E994AFD230E657A0076DC1B /* Intent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E994AFC230E657A0076DC1B /* Intent.swift */; };
+		6E994B0B230E89440076DC1B /* Messages.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6E994B0A230E89440076DC1B /* Messages.framework */; };
+		6E994B0E230E89460076DC1B /* MessagesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E994B0D230E89460076DC1B /* MessagesViewController.swift */; };
+		6E994B11230E89460076DC1B /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6E994B0F230E89460076DC1B /* MainInterface.storyboard */; };
+		6E994B13230E89490076DC1B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6E994B12230E89490076DC1B /* Assets.xcassets */; };
+		6E994B17230E89490076DC1B /* Message.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 6E994B09230E89440076DC1B /* Message.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		6EAADF8C2122664A0074CEDF /* AppVersion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EAADF8B2122664A0074CEDF /* AppVersion.swift */; };
 		6EC0412E230A226400357585 /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EC0412D230A226300357585 /* TabBarController.swift */; };
 /* End PBXBuildFile section */
@@ -171,6 +176,20 @@
 			remoteGlobalIDString = 6E994A83230DFB6C0076DC1B;
 			remoteInfo = LockKit;
 		};
+		6E994B15230E89490076DC1B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6E6000082121119400787DAA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 6E994B08230E89440076DC1B;
+			remoteInfo = Message;
+		};
+		6E994B20230E8D090076DC1B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6E6000082121119400787DAA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 6E994A83230DFB6C0076DC1B;
+			remoteInfo = LockKit;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -192,6 +211,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
+				6E994B17230E89490076DC1B /* Message.appex in Embed App Extensions */,
 				6E994AEF230E56DD0076DC1B /* Intent.appex in Embed App Extensions */,
 				6E994AEC230E56DD0076DC1B /* IntentUI.appex in Embed App Extensions */,
 			);
@@ -261,6 +281,13 @@
 		6E994AF9230E57860076DC1B /* SmartLock.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SmartLock.entitlements; sourceTree = "<group>"; };
 		6E994AFC230E657A0076DC1B /* Intent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Intent.swift; sourceTree = "<group>"; };
 		6E994AFE230E6DCD0076DC1B /* Intent.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Intent.entitlements; sourceTree = "<group>"; };
+		6E994B09230E89440076DC1B /* Message.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = Message.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		6E994B0A230E89440076DC1B /* Messages.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Messages.framework; path = System/Library/Frameworks/Messages.framework; sourceTree = SDKROOT; };
+		6E994B0D230E89460076DC1B /* MessagesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessagesViewController.swift; sourceTree = "<group>"; };
+		6E994B10230E89460076DC1B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MainInterface.storyboard; sourceTree = "<group>"; };
+		6E994B12230E89490076DC1B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		6E994B14230E89490076DC1B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		6E994B1F230E8CD90076DC1B /* Message.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Message.entitlements; sourceTree = "<group>"; };
 		6EA3D128212180C000BC50D8 /* Observable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Observable.swift; sourceTree = "<group>"; };
 		6EAADF8B2122664A0074CEDF /* AppVersion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppVersion.swift; sourceTree = "<group>"; };
 		6EAADFB521229CBF0074CEDF /* LockTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LockTableViewCell.xib; sourceTree = "<group>"; };
@@ -319,6 +346,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		6E994B06230E89440076DC1B /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6E994B0B230E89440076DC1B /* Messages.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -332,6 +367,7 @@
 				6E994A92230DFB6D0076DC1B /* LockKitTests */,
 				6E994AD7230E56DD0076DC1B /* Intent */,
 				6E994AE3230E56DD0076DC1B /* IntentUI */,
+				6E994B0C230E89440076DC1B /* Message */,
 				6E994AE0230E56DD0076DC1B /* Frameworks */,
 				6E6000112121119400787DAA /* Products */,
 			);
@@ -346,6 +382,7 @@
 				6E994A8C230DFB6D0076DC1B /* LockKitTests.xctest */,
 				6E994AD6230E56DD0076DC1B /* Intent.appex */,
 				6E994ADF230E56DD0076DC1B /* IntentUI.appex */,
+				6E994B09230E89440076DC1B /* Message.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -513,6 +550,7 @@
 			isa = PBXGroup;
 			children = (
 				6E994AE1230E56DD0076DC1B /* IntentsUI.framework */,
+				6E994B0A230E89440076DC1B /* Messages.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -525,6 +563,18 @@
 				6E994AE9230E56DD0076DC1B /* Info.plist */,
 			);
 			path = IntentUI;
+			sourceTree = "<group>";
+		};
+		6E994B0C230E89440076DC1B /* Message */ = {
+			isa = PBXGroup;
+			children = (
+				6E994B1F230E8CD90076DC1B /* Message.entitlements */,
+				6E994B0D230E89460076DC1B /* MessagesViewController.swift */,
+				6E994B0F230E89460076DC1B /* MainInterface.storyboard */,
+				6E994B12230E89490076DC1B /* Assets.xcassets */,
+				6E994B14230E89490076DC1B /* Info.plist */,
+			);
+			path = Message;
 			sourceTree = "<group>";
 		};
 		6EAADFB021229CB10074CEDF /* View */ = {
@@ -569,6 +619,7 @@
 				6E994A98230DFB6D0076DC1B /* PBXTargetDependency */,
 				6E994AEB230E56DD0076DC1B /* PBXTargetDependency */,
 				6E994AEE230E56DD0076DC1B /* PBXTargetDependency */,
+				6E994B16230E89490076DC1B /* PBXTargetDependency */,
 			);
 			name = SmartLock;
 			productName = SmartLock;
@@ -667,6 +718,24 @@
 			productReference = 6E994ADF230E56DD0076DC1B /* IntentUI.appex */;
 			productType = "com.apple.product-type.app-extension";
 		};
+		6E994B08230E89440076DC1B /* Message */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 6E994B1E230E89490076DC1B /* Build configuration list for PBXNativeTarget "Message" */;
+			buildPhases = (
+				6E994B05230E89440076DC1B /* Sources */,
+				6E994B06230E89440076DC1B /* Frameworks */,
+				6E994B07230E89440076DC1B /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				6E994B21230E8D090076DC1B /* PBXTargetDependency */,
+			);
+			name = Message;
+			productName = Message;
+			productReference = 6E994B09230E89440076DC1B /* Message.appex */;
+			productType = "com.apple.product-type.app-extension.messages";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -719,6 +788,17 @@
 					6E994ADE230E56DD0076DC1B = {
 						CreatedOnToolsVersion = 10.3;
 					};
+					6E994B08230E89440076DC1B = {
+						CreatedOnToolsVersion = 10.3;
+						SystemCapabilities = {
+							com.apple.ApplicationGroups.iOS = {
+								enabled = 1;
+							};
+							com.apple.Keychain = {
+								enabled = 1;
+							};
+						};
+					};
 				};
 			};
 			buildConfigurationList = 6E60000B2121119400787DAA /* Build configuration list for PBXProject "SmartLock" */;
@@ -746,6 +826,7 @@
 				6E994A8B230DFB6D0076DC1B /* LockKitTests */,
 				6E994AD5230E56DD0076DC1B /* Intent */,
 				6E994ADE230E56DD0076DC1B /* IntentUI */,
+				6E994B08230E89440076DC1B /* Message */,
 			);
 		};
 /* End PBXProject section */
@@ -839,6 +920,15 @@
 			buildActionMask = 2147483647;
 			files = (
 				6E994AE8230E56DD0076DC1B /* MainInterface.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6E994B07230E89440076DC1B /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6E994B13230E89490076DC1B /* Assets.xcassets in Resources */,
+				6E994B11230E89460076DC1B /* MainInterface.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -969,6 +1059,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		6E994B05230E89440076DC1B /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6E994B0E230E89460076DC1B /* MessagesViewController.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -1017,6 +1115,16 @@
 			target = 6E994A83230DFB6C0076DC1B /* LockKit */;
 			targetProxy = 6E994B01230E6E040076DC1B /* PBXContainerItemProxy */;
 		};
+		6E994B16230E89490076DC1B /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 6E994B08230E89440076DC1B /* Message */;
+			targetProxy = 6E994B15230E89490076DC1B /* PBXContainerItemProxy */;
+		};
+		6E994B21230E8D090076DC1B /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 6E994A83230DFB6C0076DC1B /* LockKit */;
+			targetProxy = 6E994B20230E8D090076DC1B /* PBXContainerItemProxy */;
+		};
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
@@ -1040,6 +1148,14 @@
 			isa = PBXVariantGroup;
 			children = (
 				6E994AE7230E56DD0076DC1B /* Base */,
+			);
+			name = MainInterface.storyboard;
+			sourceTree = "<group>";
+		};
+		6E994B0F230E89460076DC1B /* MainInterface.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				6E994B10230E89460076DC1B /* Base */,
 			);
 			name = MainInterface.storyboard;
 			sourceTree = "<group>";
@@ -1433,6 +1549,53 @@
 			};
 			name = Release;
 		};
+		6E994B18230E89490076DC1B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = "iMessage App Icon";
+				CODE_SIGN_ENTITLEMENTS = Message/Message.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 4W79SG34MW;
+				INFOPLIST_FILE = Message/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.colemancda.Lock.Message;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		6E994B19230E89490076DC1B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = "iMessage App Icon";
+				CODE_SIGN_ENTITLEMENTS = Message/Message.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 4W79SG34MW;
+				INFOPLIST_FILE = Message/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.colemancda.Lock.Message;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -1495,6 +1658,15 @@
 			buildConfigurations = (
 				6E994AF4230E56DD0076DC1B /* Debug */,
 				6E994AF5230E56DD0076DC1B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		6E994B1E230E89490076DC1B /* Build configuration list for PBXNativeTarget "Message" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6E994B18230E89490076DC1B /* Debug */,
+				6E994B19230E89490076DC1B /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
