@@ -8,16 +8,18 @@
 
 import Foundation
 import UserNotifications
+import MobileCoreServices
 
 @available(iOS 10.0, *)
 public final class UserNotificationCenter {
     
     // MARK: - Initialization
     
-    static let shared = UserNotificationCenter()
+    public static let shared = UserNotificationCenter()
     
     private init(notificationCenter: UNUserNotificationCenter = .current()) {
         self.notificationCenter = notificationCenter
+        self.notificationCenter.delegate = delegate
     }
     
     // MARK: - Properties
@@ -26,30 +28,57 @@ public final class UserNotificationCenter {
     
     private let notificationCenter: UNUserNotificationCenter
     
+    private lazy var delegate = Delegate(self)
+    
+    public var handleActivity: ((AppActivity) -> ())?
+    
     // MARK: - Methods
     
-    public func postUnlockNotification(for lock: UUID, name: String, delay: TimeInterval = 0.1) {
+    public func requestAuthorization() {
+        
+        notificationCenter.requestAuthorization(options: [.alert]) { [weak self] (didAuthorize, error) in
+            self?.log?("Authorization: \(didAuthorize) \(error?.localizedDescription ?? "")")
+        }
+    }
+    
+    public func postUnlockNotification(for lock: UUID, cache: LockCache, delay: TimeInterval = 0.1) {
         
         let action = AppActivity.Action.unlock(lock)
         
         // Create Notification content
         let notificationContent = UNMutableNotificationContent()
-        notificationContent.title = name
+        notificationContent.title = cache.name
         notificationContent.subtitle = "Tap to unlock"
+        
+        if let imageURL = AssetExtractor.shared.url(for: cache.key.permission.type.imageName, in: .lockKit),
+            let attachment = try? UNNotificationAttachment(
+                identifier: String(reflecting: cache.key.permission.type),
+                url: imageURL,
+                options: [UNNotificationAttachmentOptionsTypeHintKey: kUTTypePNG as String]) {
+            
+            notificationContent.attachments = [attachment]
+        }
         
         // Create Notification trigger
         let trigger = UNTimeIntervalNotificationTrigger(timeInterval: delay, repeats: false)
         
         // Create a notification request with the above components
-        let request = UNNotificationRequest(identifier: action.rawValue, content: notificationContent, trigger: trigger)
+        let request = UNNotificationRequest(
+            identifier: action.rawValue,
+            content: notificationContent,
+            trigger: trigger
+        )
         
         // Add this notification to the UserNotificationCenter
         notificationCenter.add(request) { [weak self] error in
-           self?.log?("Notified: \(error?.localizedDescription ?? "")")
+           self?.log?("Notified "
+            + notificationContent.title + " - " + notificationContent.subtitle
+            + " " + "\(error?.localizedDescription ?? "")")
         }
     }
     
     public func removeUnlockNotification(for lock: UUID) {
+        
         removeUnlockNotification(for: [lock])
     }
     
@@ -72,6 +101,25 @@ private extension UserNotificationCenter {
     @objc(UserNotificationCenterDelegate)
     final class Delegate: NSObject, UNUserNotificationCenterDelegate {
         
+        private weak var notificationCenter: UserNotificationCenter?
         
+        fileprivate init(_ notificationCenter: UserNotificationCenter) {
+            self.notificationCenter = notificationCenter
+        }
+        
+        func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
+            
+            let identifier = response.notification.request.identifier
+            
+            notificationCenter?.log?("Recieved response \(response.actionIdentifier) for \(identifier)")
+            
+            if let action = AppActivity.Action(rawValue: identifier) {
+                notificationCenter?.handleActivity?(.action(action))
+            } else {
+                assertionFailure()
+            }
+            
+            completionHandler()
+        }
     }
 }
