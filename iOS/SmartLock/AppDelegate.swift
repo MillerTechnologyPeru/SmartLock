@@ -34,7 +34,7 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
         log("📱 Launching SmartLock v\(AppVersion) Build \(AppBuild)")
         
         // setup logging
-        LockManager.shared.log = { log("🔒 \(LockManager.self): " + $0) }
+        LockManager.shared.log = { log("🔒 LockManager: " + $0) }
         BeaconController.shared.log = { log("📶 \(BeaconController.self): " + $0) }
         SpotlightController.shared.log = { log("🔦 \(SpotlightController.self): " + $0) }
         if #available(iOS 10.0, *) {
