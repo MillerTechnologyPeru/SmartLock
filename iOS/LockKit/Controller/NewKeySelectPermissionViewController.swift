@@ -16,7 +16,7 @@ public final class NewKeySelectPermissionViewController: UITableViewController, 
     
     // MARK: - Properties
     
-    public var completion: ((Bool) -> ())?
+    public var completion: (((invitation: NewKey.Invitation, sender: PopoverPresentingView)?) -> ())?
     
     public var lockIdentifier: UUID!
     
@@ -49,7 +49,7 @@ public final class NewKeySelectPermissionViewController: UITableViewController, 
         
         let completion = self.completion // for ARC
         
-        self.dismiss(animated: true) { completion?(false) }
+        self.dismiss(animated: true) { completion?(nil) }
     }
     
     // MARK: - Methods
@@ -111,12 +111,13 @@ public final class NewKeySelectPermissionViewController: UITableViewController, 
         case .owner:
             fatalError("Cannot create owner keys")
         case .admin:
-            newKey(permission: .admin, sender: .view(cell.permissionImageView)) { [unowned self] _ in
-                self.completion?(true)
+            // sender: .view(cell.permissionImageView)
+            newKey(permission: .admin) { [weak self] in
+                self?.completion?(($0, .view(cell.permissionImageView)))
             }
         case .anytime:
-            newKey(permission: .anytime, sender: .view(cell.permissionImageView)) { [unowned self] _ in
-                self.completion?(true)
+            newKey(permission: .anytime) { [weak self] in
+                self?.completion?(($0, .view(cell.permissionImageView)))
             }
         case .scheduled:
             fatalError("Not implemented")
@@ -126,14 +127,28 @@ public final class NewKeySelectPermissionViewController: UITableViewController, 
 
 public extension UIViewController {
     
-    func shareKey(lock identifier: UUID) {
+    func shareKey(lock identifier: UUID, completion: @escaping (((invitation: NewKey.Invitation, sender: PopoverPresentingView)?) -> ())) {
         
         let navigationController = UIStoryboard(name: "NewKey", bundle: .lockKit).instantiateInitialViewController() as! UINavigationController
         
         let destinationViewController = navigationController.viewControllers.first! as! NewKeySelectPermissionViewController
         destinationViewController.lockIdentifier = identifier
-        destinationViewController.completion = { _ in navigationController.dismiss(animated: true, completion: nil) }
+        destinationViewController.completion = completion
         self.present(navigationController, animated: true, completion: nil)
+    }
+    
+    func shareKey(lock identifier: UUID) {
+        
+        self.shareKey(lock: identifier) { [unowned self] in
+            guard let (invitation, sender) = $0 else {
+                self.dismiss(animated: true, completion: nil)
+                return
+            }
+            // show share sheet
+            self.share(invitation: invitation, sender: sender) {
+                self.dismiss(animated: true, completion: nil)
+            }
+        }
     }
 }
 
