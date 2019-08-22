@@ -77,6 +77,14 @@ public final class BeaconController {
         
         return true
     }
+    
+    public func scanBeacons() {
+        
+        for region in locks.values {
+            locationManager.requestState(for: region) // callback will initiate scanning
+            locationManager.startRangingBeacons(in: region)
+        }
+    }
 }
 
 private extension BeaconController {

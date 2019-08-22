@@ -75,6 +75,9 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
         // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
         
         log("📱 Did enter background")
+        
+        // update beacon status
+        BeaconController.shared.scanBeacons()
     }
 
     func applicationWillEnterForeground(_ application: UIApplication) {
