@@ -63,6 +63,9 @@ final class NearbyLocksViewController: UITableViewController {
         if let observer = informationObserver {
             Store.shared.lockInformation.remove(observer: observer)
         }
+        if let observer = locksObserver {
+            Store.shared.locks.remove(observer: observer)
+        }
     }
 
     override func viewDidLoad() {
@@ -80,7 +83,7 @@ final class NearbyLocksViewController: UITableViewController {
         informationObserver = Store.shared.lockInformation.observe { [weak self] _ in
             mainQueue { self?.configureView() }
         }
-        informationObserver = Store.shared.locks.observe { [weak self] _ in
+        locksObserver = Store.shared.locks.observe { [weak self] _ in
             mainQueue { self?.configureView() }
         }
         
