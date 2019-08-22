@@ -17,8 +17,6 @@
 		<dict>
 			<key>INIntentCategory</key>
 			<string>generic</string>
-			<key>INIntentDefaultImageName</key>
-			<string>eKeyDocument</string>
 			<key>INIntentDescription</key>
 			<string>Unlock the specified lock</string>
 			<key>INIntentDescriptionID</key>
@@ -116,7 +114,7 @@
 				</array>
 			</dict>
 			<key>INIntentRestrictions</key>
-			<integer>0</integer>
+			<integer>1</integer>
 			<key>INIntentTitle</key>
 			<string>Unlock</string>
 			<key>INIntentTitleID</key>
@@ -124,7 +122,7 @@
 			<key>INIntentType</key>
 			<string>Custom</string>
 			<key>INIntentUserConfirmationRequired</key>
-			<true/>
+			<false/>
 			<key>INIntentVerb</key>
 			<string>Do</string>
 		</dict>

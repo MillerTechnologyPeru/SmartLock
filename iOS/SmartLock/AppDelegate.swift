@@ -42,6 +42,7 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
         }
         
         // request permissions
+        BeaconController.shared.allowsBackgroundLocationUpdates = true
         BeaconController.shared.requestAuthorization()
         if #available(iOS 10.0, *) {
             UserNotificationCenter.shared.requestAuthorization()
@@ -59,9 +60,6 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
             guard open(url: url)
                 else { return false }
         }
-        
-        // FIXME: REMOVE!
-        Store.shared[key: UUID()] = KeyData()
         
         return true
     }

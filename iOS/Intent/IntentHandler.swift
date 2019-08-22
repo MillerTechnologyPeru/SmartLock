@@ -26,9 +26,21 @@ import LockKit
 
 final class IntentHandler: INExtension, INSendMessageIntentHandling, INSearchForMessagesIntentHandling, INSetMessageAttributeIntentHandling {
     
+    static let didLaunch: Void = {
+        // print app info
+        log("📱 Launching Intent")
+    }()
+    
     override func handler(for intent: INIntent) -> Any {
         // This is the default implementation.  If you want different objects to handle different intents,
         // you can override this and return the handler you want for that particular intent.
+        
+        DispatchQueue.main.sync {
+            
+            let _  = IntentHandler.didLaunch
+            LockManager.shared.log = { log("🔒 \(LockManager.self): " + $0) }
+            BeaconController.shared.log = { log("📶 \(BeaconController.self): " + $0) }
+        }
         
         return UnlockIntentHandler()
     }
@@ -135,50 +147,56 @@ final class UnlockIntentHandler: NSObject, UnlockIntentHandling {
     
     func confirm(intent: UnlockIntent, completion: @escaping (UnlockIntentResponse) -> Void) {
         
-        guard let identifierString = intent.lock?.identifier,
-            let lockIdentifier = UUID(uuidString: identifierString),
-            let _ = Store.shared[lock: lockIdentifier] else {
-                completion(.failure(failureReason: "Invalid lock."))
-                return
+        mainQueue {
+            
+            guard let identifierString = intent.lock?.identifier,
+                let lockIdentifier = UUID(uuidString: identifierString),
+                let _ = Store.shared[lock: lockIdentifier] else {
+                    completion(.failure(failureReason: "Invalid lock."))
+                    return
+            }
+            
+            completion(.init(code: .ready, userActivity: NSUserActivity(.action(.unlock(lockIdentifier)))))
         }
-        
-        completion(.init(code: .ready, userActivity: NSUserActivity(.action(.unlock(lockIdentifier)))))
     }
     
     func handle(intent: UnlockIntent, completion: @escaping (UnlockIntentResponse) -> Void) {
         
-        guard let identifierString = intent.lock?.identifier,
-            let lockIdentifier = UUID(uuidString: identifierString),
-            let lockCache = Store.shared[lock: lockIdentifier] else {
-                completion(.failure(failureReason: "Invalid lock."))
-                return
-        }
-        
-        // validate schedule
-        if case let .scheduled(schedule) = lockCache.key.permission {
-            guard schedule.isValid() else {
-                completion(.failure(failureReason: "Can only use key during schedule."))
-                return
-            }
-        }
-        
-        async {
-            do {
-                guard let peripheral = try Store.shared.device(for: lockIdentifier, scanDuration: 3.0) else {
-                    completion(.failure(failureReason: "Lock not in range. "))
-                    return
-                }
-                
-                guard try Store.shared.unlock(peripheral) else {
+        mainQueue {
+            
+            guard let identifierString = intent.lock?.identifier,
+                let lockIdentifier = UUID(uuidString: identifierString),
+                let lockCache = Store.shared[lock: lockIdentifier] else {
                     completion(.failure(failureReason: "Invalid lock."))
                     return
-                }
-                
-                completion(.success(lock: lockCache.name))
             }
-            catch {
-                completion(.failure(failureReason: error.localizedDescription))
-                return
+            
+            // validate schedule
+            if case let .scheduled(schedule) = lockCache.key.permission {
+                guard schedule.isValid() else {
+                    completion(.failure(failureReason: "Can only use key during schedule."))
+                    return
+                }
+            }
+            
+            async {
+                do {
+                    guard let peripheral = try Store.shared.device(for: lockIdentifier, scanDuration: 1.0) else {
+                        completion(.failure(failureReason: "Lock not in range. "))
+                        return
+                    }
+                    
+                    guard try Store.shared.unlock(peripheral) else {
+                        completion(.failure(failureReason: "Invalid lock."))
+                        return
+                    }
+                    
+                    completion(.success(lock: lockCache.name))
+                }
+                catch {
+                    completion(.failure(failureReason: error.localizedDescription))
+                    return
+                }
             }
         }
     }

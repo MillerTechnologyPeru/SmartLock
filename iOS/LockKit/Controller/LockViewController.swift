@@ -11,6 +11,7 @@ import UIKit
 import Bluetooth
 import GATT
 import CoreLock
+import Intents
 
 #if os(iOS)
 import UIKit
@@ -170,6 +171,16 @@ public final class LockViewController: UITableViewController {
         self.userActivity?.resignCurrent()
         self.userActivity = NSUserActivity(.action(.unlock(lockIdentifier)))
         self.userActivity?.becomeCurrent()
+        
+        if #available(iOS 12, *) {
+            let intent = UnlockIntent(lock: lockIdentifier, name: lockCache.name)
+            let interaction = INInteraction(intent: intent, response: nil)
+            interaction.donate { error in
+                if let error = error {
+                    log("Donating intent failed with error \(error)")
+                }
+            }
+        }
         
         if #available(iOS 10.0, *) {
             feedbackGenerator.impactOccurred()
