@@ -73,6 +73,10 @@
 		6E994B11230E89460076DC1B /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6E994B0F230E89460076DC1B /* MainInterface.storyboard */; };
 		6E994B13230E89490076DC1B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6E994B12230E89490076DC1B /* Assets.xcassets */; };
 		6E994B17230E89490076DC1B /* Message.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 6E994B09230E89440076DC1B /* Message.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		6E994B2A230EF6DA0076DC1B /* NotificationCenter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6E994B29230EF6DA0076DC1B /* NotificationCenter.framework */; };
+		6E994B2D230EF6DB0076DC1B /* TodayViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E994B2C230EF6DB0076DC1B /* TodayViewController.swift */; };
+		6E994B30230EF6DB0076DC1B /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6E994B2E230EF6DB0076DC1B /* MainInterface.storyboard */; };
+		6E994B34230EF6DB0076DC1B /* Today.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 6E994B28230EF6DA0076DC1B /* Today.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		6EAADF8C2122664A0074CEDF /* AppVersion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EAADF8B2122664A0074CEDF /* AppVersion.swift */; };
 		6EC0412E230A226400357585 /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EC0412D230A226300357585 /* TabBarController.swift */; };
 /* End PBXBuildFile section */
@@ -190,6 +194,20 @@
 			remoteGlobalIDString = 6E994A83230DFB6C0076DC1B;
 			remoteInfo = LockKit;
 		};
+		6E994B32230EF6DB0076DC1B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6E6000082121119400787DAA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 6E994B27230EF6DA0076DC1B;
+			remoteInfo = Today;
+		};
+		6E994B3D230EF7E80076DC1B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6E6000082121119400787DAA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 6E994A83230DFB6C0076DC1B;
+			remoteInfo = LockKit;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -211,6 +229,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
+				6E994B34230EF6DB0076DC1B /* Today.appex in Embed App Extensions */,
 				6E994B17230E89490076DC1B /* Message.appex in Embed App Extensions */,
 				6E994AEF230E56DD0076DC1B /* Intent.appex in Embed App Extensions */,
 				6E994AEC230E56DD0076DC1B /* IntentUI.appex in Embed App Extensions */,
@@ -288,6 +307,12 @@
 		6E994B12230E89490076DC1B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		6E994B14230E89490076DC1B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6E994B1F230E8CD90076DC1B /* Message.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Message.entitlements; sourceTree = "<group>"; };
+		6E994B28230EF6DA0076DC1B /* Today.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = Today.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		6E994B29230EF6DA0076DC1B /* NotificationCenter.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = NotificationCenter.framework; path = System/Library/Frameworks/NotificationCenter.framework; sourceTree = SDKROOT; };
+		6E994B2C230EF6DB0076DC1B /* TodayViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodayViewController.swift; sourceTree = "<group>"; };
+		6E994B2F230EF6DB0076DC1B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MainInterface.storyboard; sourceTree = "<group>"; };
+		6E994B31230EF6DB0076DC1B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		6E994B3C230EF6E80076DC1B /* Today.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Today.entitlements; sourceTree = "<group>"; };
 		6EA3D128212180C000BC50D8 /* Observable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Observable.swift; sourceTree = "<group>"; };
 		6EAADF8B2122664A0074CEDF /* AppVersion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppVersion.swift; sourceTree = "<group>"; };
 		6EAADFB521229CBF0074CEDF /* LockTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LockTableViewCell.xib; sourceTree = "<group>"; };
@@ -354,6 +379,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		6E994B25230EF6DA0076DC1B /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6E994B2A230EF6DA0076DC1B /* NotificationCenter.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -368,6 +401,7 @@
 				6E994AD7230E56DD0076DC1B /* Intent */,
 				6E994AE3230E56DD0076DC1B /* IntentUI */,
 				6E994B0C230E89440076DC1B /* Message */,
+				6E994B2B230EF6DA0076DC1B /* Today */,
 				6E994AE0230E56DD0076DC1B /* Frameworks */,
 				6E6000112121119400787DAA /* Products */,
 			);
@@ -383,6 +417,7 @@
 				6E994AD6230E56DD0076DC1B /* Intent.appex */,
 				6E994ADF230E56DD0076DC1B /* IntentUI.appex */,
 				6E994B09230E89440076DC1B /* Message.appex */,
+				6E994B28230EF6DA0076DC1B /* Today.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -551,6 +586,7 @@
 			children = (
 				6E994AE1230E56DD0076DC1B /* IntentsUI.framework */,
 				6E994B0A230E89440076DC1B /* Messages.framework */,
+				6E994B29230EF6DA0076DC1B /* NotificationCenter.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -575,6 +611,17 @@
 				6E994B14230E89490076DC1B /* Info.plist */,
 			);
 			path = Message;
+			sourceTree = "<group>";
+		};
+		6E994B2B230EF6DA0076DC1B /* Today */ = {
+			isa = PBXGroup;
+			children = (
+				6E994B3C230EF6E80076DC1B /* Today.entitlements */,
+				6E994B2C230EF6DB0076DC1B /* TodayViewController.swift */,
+				6E994B2E230EF6DB0076DC1B /* MainInterface.storyboard */,
+				6E994B31230EF6DB0076DC1B /* Info.plist */,
+			);
+			path = Today;
 			sourceTree = "<group>";
 		};
 		6EAADFB021229CB10074CEDF /* View */ = {
@@ -620,6 +667,7 @@
 				6E994AEB230E56DD0076DC1B /* PBXTargetDependency */,
 				6E994AEE230E56DD0076DC1B /* PBXTargetDependency */,
 				6E994B16230E89490076DC1B /* PBXTargetDependency */,
+				6E994B33230EF6DB0076DC1B /* PBXTargetDependency */,
 			);
 			name = SmartLock;
 			productName = SmartLock;
@@ -736,6 +784,24 @@
 			productReference = 6E994B09230E89440076DC1B /* Message.appex */;
 			productType = "com.apple.product-type.app-extension.messages";
 		};
+		6E994B27230EF6DA0076DC1B /* Today */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 6E994B3B230EF6DB0076DC1B /* Build configuration list for PBXNativeTarget "Today" */;
+			buildPhases = (
+				6E994B24230EF6DA0076DC1B /* Sources */,
+				6E994B25230EF6DA0076DC1B /* Frameworks */,
+				6E994B26230EF6DA0076DC1B /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				6E994B3E230EF7E80076DC1B /* PBXTargetDependency */,
+			);
+			name = Today;
+			productName = Today;
+			productReference = 6E994B28230EF6DA0076DC1B /* Today.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -799,6 +865,17 @@
 							};
 						};
 					};
+					6E994B27230EF6DA0076DC1B = {
+						CreatedOnToolsVersion = 10.3;
+						SystemCapabilities = {
+							com.apple.ApplicationGroups.iOS = {
+								enabled = 1;
+							};
+							com.apple.Keychain = {
+								enabled = 1;
+							};
+						};
+					};
 				};
 			};
 			buildConfigurationList = 6E60000B2121119400787DAA /* Build configuration list for PBXProject "SmartLock" */;
@@ -827,6 +904,7 @@
 				6E994AD5230E56DD0076DC1B /* Intent */,
 				6E994ADE230E56DD0076DC1B /* IntentUI */,
 				6E994B08230E89440076DC1B /* Message */,
+				6E994B27230EF6DA0076DC1B /* Today */,
 			);
 		};
 /* End PBXProject section */
@@ -929,6 +1007,14 @@
 			files = (
 				6E994B13230E89490076DC1B /* Assets.xcassets in Resources */,
 				6E994B11230E89460076DC1B /* MainInterface.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6E994B26230EF6DA0076DC1B /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6E994B30230EF6DB0076DC1B /* MainInterface.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1067,6 +1153,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		6E994B24230EF6DA0076DC1B /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6E994B2D230EF6DB0076DC1B /* TodayViewController.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -1125,6 +1219,16 @@
 			target = 6E994A83230DFB6C0076DC1B /* LockKit */;
 			targetProxy = 6E994B20230E8D090076DC1B /* PBXContainerItemProxy */;
 		};
+		6E994B33230EF6DB0076DC1B /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 6E994B27230EF6DA0076DC1B /* Today */;
+			targetProxy = 6E994B32230EF6DB0076DC1B /* PBXContainerItemProxy */;
+		};
+		6E994B3E230EF7E80076DC1B /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 6E994A83230DFB6C0076DC1B /* LockKit */;
+			targetProxy = 6E994B3D230EF7E80076DC1B /* PBXContainerItemProxy */;
+		};
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
@@ -1156,6 +1260,14 @@
 			isa = PBXVariantGroup;
 			children = (
 				6E994B10230E89460076DC1B /* Base */,
+			);
+			name = MainInterface.storyboard;
+			sourceTree = "<group>";
+		};
+		6E994B2E230EF6DB0076DC1B /* MainInterface.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				6E994B2F230EF6DB0076DC1B /* Base */,
 			);
 			name = MainInterface.storyboard;
 			sourceTree = "<group>";
@@ -1557,7 +1669,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 4W79SG34MW;
 				INFOPLIST_FILE = Message/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1581,7 +1693,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 4W79SG34MW;
 				INFOPLIST_FILE = Message/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1589,6 +1701,51 @@
 				);
 				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.colemancda.Lock.Message;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		6E994B35230EF6DB0076DC1B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = Today/Today.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 4W79SG34MW;
+				INFOPLIST_FILE = Today/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.colemancda.Lock.Today;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		6E994B36230EF6DB0076DC1B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = Today/Today.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 4W79SG34MW;
+				INFOPLIST_FILE = Today/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.colemancda.Lock.Today;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 5.0;
@@ -1667,6 +1824,15 @@
 			buildConfigurations = (
 				6E994B18230E89490076DC1B /* Debug */,
 				6E994B19230E89490076DC1B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		6E994B3B230EF6DB0076DC1B /* Build configuration list for PBXNativeTarget "Today" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6E994B35230EF6DB0076DC1B /* Debug */,
+				6E994B36230EF6DB0076DC1B /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
