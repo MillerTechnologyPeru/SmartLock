@@ -64,7 +64,7 @@ final class MessagesViewController: MSMessagesAppViewController {
             
             let urlComponents = URLComponents(url: messageURL, resolvingAgainstBaseURL: false)
             
-            if let urlString = urlComponents?.queryItems?.first(where: { $0.name == "url" })?.value,
+            if let urlString = urlComponents?.queryItems?.first(where: { $0.name == "url" })?.value?.removingPercentEncoding,
                 let url = URL(string: urlString),
                 let lockURL = LockURL(rawValue: url) {
                 
@@ -196,20 +196,20 @@ final class MessagesViewController: MSMessagesAppViewController {
         
         let layout = MSMessageTemplateLayout()
         layout.image = UIImage(permission: invitation.key.permission)
-        layout.caption = "Accept \(invitation.key.permission.type.localizedText) lock key"
+        layout.caption = "Shared \(invitation.key.permission.type.localizedText) lock key"
         
         let message = MSMessage(session: activeConversation?.selectedMessage?.session ?? MSSession())
         message.url = components.url!
         message.layout = layout
         
         // Add the message to the conversation.
-        conversation.insert(message) { error in
+        conversation.insert(message) { [weak self] error in
             if let error = error {
                 log("⚠️ Could not insert message: " + error.localizedDescription)
+            } else {
+                self?.dismiss()
             }
         }
-        
-        self.dismiss()
     }
 }
 

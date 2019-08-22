@@ -34,14 +34,14 @@ internal extension LockURL {
         
         case setup
         case unlock
-        case newKey
+        case newKey = "newkey"
         
         var componentsCount: Int {
             switch self {
             case .setup:
                 return 3
             case .unlock:
-                return 3
+                return 2
             case .newKey:
                 return 2
             }
