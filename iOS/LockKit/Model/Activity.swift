@@ -89,14 +89,7 @@ public final class NewKeyActivity: UIActivity {
             Store.shared[peripheral: lockItem.identifier] != nil // Lock must be reachable
             else { return false }
         
-        switch lockCache.key.permission {
-        case .owner,
-             .admin:
-            return true
-        case .anytime,
-             .scheduled:
-            return false
-        }
+        return lockCache.key.permission.canShareKeys
     }
     
     public override func prepare(withActivityItems activityItems: [Any]) {
@@ -110,7 +103,16 @@ public final class NewKeyActivity: UIActivity {
         
         let destinationViewController = navigationController.viewControllers.first! as! NewKeySelectPermissionViewController
         destinationViewController.lockIdentifier = item.identifier
-        destinationViewController.completion = { self.activityDidFinish($0) }
+        destinationViewController.completion = { [unowned self] in
+            guard let (invitation, sender) = $0 else {
+                self.activityDidFinish(false)
+                return
+            }
+            // show share sheet
+            destinationViewController.share(invitation: invitation, sender: sender) { [unowned self] in
+                self.activityDidFinish(true)
+            }
+        }
         
         return navigationController
     }

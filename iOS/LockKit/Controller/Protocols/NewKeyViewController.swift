@@ -28,9 +28,11 @@ public protocol NewKeyViewController: ActivityIndicatorViewController {
 
 public extension NewKeyViewController {
     
-    func newKey(permission: Permission, sender: PopoverPresentingView, completion: @escaping (NewKey.Invitation) -> ()) {
+    func newKey(permission: Permission,
+                completion: @escaping (NewKey.Invitation) -> ()) {
         
-        let lockIdentifier = self.lockIdentifier!
+        guard let lockIdentifier = self.lockIdentifier
+            else { assertionFailure(); return }
         
         // request name
         requestNewKeyName { (newKeyName) in
@@ -40,9 +42,6 @@ public extension NewKeyViewController {
             guard let lockCache = Store.shared[lock: lockIdentifier],
                 let parentKeyData = Store.shared[key: lockCache.key.identifier]
                 else { self.newKeyError("The key for the specified lock has been deleted from the database."); return }
-            
-            guard let peripheral = Store.shared[peripheral: lockIdentifier]
-                else { self.newKeyError("Please scan for the device first."); return }
             
             let parentKey = KeyCredentials(identifier: lockCache.key.identifier, secret: parentKeyData)
             
@@ -69,8 +68,15 @@ public extension NewKeyViewController {
                 )
                 
                 do {
+                    guard let peripheral = try Store.shared.device(for: lockIdentifier, scanDuration: 2.0) else {
+                        mainQueue {
+                            self.dismissProgressHUD(animated: false)
+                            self.newKeyError("Lock is not in range.")
+                        }
+                        return
+                    }
                     try LockManager.shared.createKey(.init(key: newKey, secret: newKeySharedSecret),
-                                                     for: peripheral,
+                                                     for: peripheral.scanData.peripheral,
                                                      with: parentKey)
                 }
                     
@@ -84,48 +90,7 @@ public extension NewKeyViewController {
                 
                 log("Created new key \(newKey.identifier) (\(newKey.permission.type))")
                 
-                // save invitation file
-                let newKeyData = try! JSONEncoder().encode(newKeyInvitation)
-                
-                let filePath = try! FileManager.default
-                    .url(for: .cachesDirectory,
-                         in: .userDomainMask,
-                         appropriateFor: nil,
-                         create: true)
-                    .appendingPathComponent("newKey-\(newKey.identifier).ekey")
-                    .path
-                
-                guard FileManager.default.createFile(atPath: filePath, contents: newKeyData, attributes: nil)
-                    else { fatalError("Could not write \(filePath) to disk") }
-                
-                // share new key
-                mainQueue {
-                    
-                    self.dismissProgressHUD()
-                    
-                    // show activity controller
-                    let activityController = UIActivityViewController(activityItems: [URL(fileURLWithPath: filePath)], applicationActivities: nil)
-                    
-                    activityController.excludedActivityTypes = [.postToTwitter,
-                                                                .postToFacebook,
-                                                                .postToWeibo,
-                                                                .print,
-                                                                .copyToPasteboard,
-                                                                .assignToContact,
-                                                                .saveToCameraRoll,
-                                                                .addToReadingList,
-                                                                .postToFlickr,
-                                                                .postToVimeo,
-                                                                .postToTencentWeibo]
-                    
-                    activityController.completionWithItemsHandler = { (activityType, completed, items, error) in
-                        
-                        self.dismiss(animated: true, completion: nil)
-                        completion(newKeyInvitation)
-                    }
-                    
-                    self.present(activityController, animated: true, completion: nil, sender: sender)
-                }
+                mainQueue { completion(newKeyInvitation) }
             }
         }
     }
@@ -159,5 +124,61 @@ public extension NewKeyViewController {
     private func newKeyError(_ error: String) {
         
         self.showErrorAlert(error, okHandler: { self.dismiss(animated: true, completion: nil) }, retryHandler: nil)
+    }
+}
+
+public extension UIViewController {
+    
+    /// Share invitation via action sheet
+    func share(invitation: NewKey.Invitation,
+               sender: PopoverPresentingView,
+               completion: @escaping () -> ()) {
+        
+        async {
+            
+            // save invitation file
+            let newKeyData = try! JSONEncoder().encode(invitation)
+            
+            let filePath = try! FileManager.default
+                .url(for: .cachesDirectory,
+                     in: .userDomainMask,
+                     appropriateFor: nil,
+                     create: true)
+                .appendingPathComponent("newKey-\(invitation.key.identifier).ekey")
+                .path
+            
+            guard FileManager.default.createFile(atPath: filePath, contents: newKeyData, attributes: nil)
+                else { assertionFailure("Could not write \(filePath) to disk"); return }
+            
+            // share new key
+            mainQueue {
+                
+                // show activity controller
+                let activityController = UIActivityViewController(
+                    activityItems: [URL(fileURLWithPath: filePath)],
+                    applicationActivities: nil
+                )
+                
+                activityController.excludedActivityTypes = [.postToTwitter,
+                                                            .postToFacebook,
+                                                            .postToWeibo,
+                                                            .print,
+                                                            .copyToPasteboard,
+                                                            .assignToContact,
+                                                            .saveToCameraRoll,
+                                                            .addToReadingList,
+                                                            .postToFlickr,
+                                                            .postToVimeo,
+                                                            .postToTencentWeibo]
+                
+                activityController.completionWithItemsHandler = { (activityType, completed, items, error) in
+                    
+                    self.dismiss(animated: true, completion: nil)
+                    completion()
+                }
+                
+                self.present(activityController, animated: true, completion: nil, sender: sender)
+            }
+        }
     }
 }

@@ -68,7 +68,7 @@ final class KeysViewController: UITableViewController {
         self.items = locks
             .lazy
             .map { Item(identifier: $0.key, cache: $0.value) }
-            .sorted(by: { $0.identifier.description < $1.identifier.description })
+            .sorted(by: { $0.cache.key.created < $1.cache.key.created })
     }
     
     private func configureView() {
