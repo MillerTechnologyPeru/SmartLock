@@ -27,9 +27,9 @@ public final class Store {
     
     public let locks = Observable([UUID: LockCache]())
     
-    private let defaults: Defaults = Defaults.shared
+    private let defaults: Defaults = Defaults(userDefaults: UserDefaults(suiteName: "group.com.colemancda.Lock")!)
     
-    private let keychain = Keychain()
+    private let keychain = Keychain(service: "com.colemancda.Lock", accessGroup: "4W79SG34MW.com.colemancda.Lock")
     
     private let storageKey = DefaultsKey<[UUID: LockCache]>("locks")
     
@@ -67,10 +67,14 @@ public final class Store {
         
         set {
             
-            guard let data = newValue?.data
-                else { try! keychain.remove(identifier.rawValue); return }
-            
-            try! keychain.set(data, key: identifier.rawValue)
+            do {
+                guard let data = newValue?.data
+                    else { try keychain.remove(identifier.rawValue); return }
+                try keychain.set(data, key: identifier.rawValue)
+            } catch {
+                dump(error)
+                fatalError("Unable store value in keychain: \(error)")
+            }
         }
     }
     

@@ -56,6 +56,7 @@ public enum LockActivity: String {
     case rename = "com.colemancda.lock.activity.rename"
     case update = "com.colemancda.lock.activity.update"
     case homeKitEnable = "com.colemancda.lock.activity.homeKitEnable"
+    case donateUnlockIntent = "com.colemancda.lock.activity.donateUnlockIntent"
     
     var activityType: UIActivity.ActivityType {
         return UIActivity.ActivityType(rawValue: self.rawValue)
@@ -453,3 +454,56 @@ public final class UpdateActivity: UIActivity {
         return alert
     }
 }
+
+#if canImport(IntentsUI)
+import IntentsUI
+
+@available(iOS 12, iOSApplicationExtension 12, *)
+public final class DonateUnlockIntentActivity: UIActivity {
+    
+    public override class var activityCategory: UIActivity.Category { return .action }
+    
+    private var item: LockActivityItem!
+    
+    public override var activityType: UIActivity.ActivityType? {
+        return LockActivity.donateUnlockIntent.activityType
+    }
+    
+    public  override var activityTitle: String? {
+        return "Add to Siri"
+    }
+    
+    public override var activityImage: UIImage? {
+        return UIImage(lockKit: "activityUpdate")
+    }
+    
+    public override func canPerform(withActivityItems activityItems: [Any]) -> Bool {
+        
+        guard let lockItem = activityItems.first as? LockActivityItem,
+            let _ = Store.shared[lock: lockItem.identifier]
+            else { return false }
+        
+        return true
+    }
+    
+    public override func prepare(withActivityItems activityItems: [Any]) {
+        
+        self.item = activityItems.first as? LockActivityItem
+    }
+    
+    public override var activityViewController: UIViewController? {
+        
+        guard let lockItem = self.item
+            else { fatalError() }
+        
+        guard let lockCache = Store.shared[lock: lockItem.identifier]
+            else { assertionFailure("Invalid lock"); return nil }
+        
+        let intent = UnlockIntent(lock: lockItem.identifier, name: lockCache.name)
+        let shortcut = INShortcut.intent(intent)
+        let viewController = INUIAddVoiceShortcutViewController(shortcut: shortcut)
+        return viewController
+    }
+}
+
+#endif

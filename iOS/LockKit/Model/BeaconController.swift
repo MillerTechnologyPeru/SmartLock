@@ -22,13 +22,17 @@ public final class BeaconController {
     private lazy var locationManager: CLLocationManager = {
         let locationManager = CLLocationManager()
         locationManager.delegate = delegate
-        locationManager.allowsBackgroundLocationUpdates = true
         return locationManager
     }()
     
     private lazy var delegate = Delegate(self)
     
     public private(set) var locks = [UUID: CLBeaconRegion]()
+    
+    public var allowsBackgroundLocationUpdates: Bool {
+        get { return locationManager.allowsBackgroundLocationUpdates }
+        set { locationManager.allowsBackgroundLocationUpdates = newValue }
+    }
     
     public func requestAuthorization() {
         locationManager.requestAlwaysAuthorization()
