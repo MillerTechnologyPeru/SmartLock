@@ -13,25 +13,28 @@ import CoreLock
 public extension UIImage {
     
     convenience init(permission: Permission) {
-        
         self.init(permissionType: permission.type)
     }
     
     convenience init(permissionType: PermissionType) {
+        self.init(named: permissionType.imageName, in: .lockKit, compatibleWith: nil)!
+    }
+}
+
+public extension PermissionType {
+    
+    var imageName: String {
         
-        let imageName: String
-        switch permissionType {
+        switch self {
         case .owner:
-            imageName = "permissionBadgeOwner"
+            return "permissionBadgeOwner"
         case .admin:
-            imageName = "permissionBadgeAdmin"
+            return "permissionBadgeAdmin"
         case .anytime:
-            imageName = "permissionBadgeAnytime"
+            return "permissionBadgeAnytime"
         case .scheduled:
-            imageName = "permissionBadgeScheduled"
+            return "permissionBadgeScheduled"
         }
-        
-        self.init(named: imageName, in: .lockKit, compatibleWith: nil)!
     }
 }
 
@@ -68,6 +71,7 @@ public extension Permission {
 public extension Permission.Schedule {
     
     var localizedText: String {
+        
         // FIXME: Localized schedule
         return NSLocalizedString("Scheduled", comment: "Permission.Scheduled")
     }

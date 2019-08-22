@@ -78,7 +78,7 @@ public final class NewKeyActivity: UIActivity {
     }
     
     public override var activityImage: UIImage? {
-        return UIImage.lockKit("activityNewKey")
+        return UIImage(lockKit: "activityNewKey")
     }
     
     public override func canPerform(withActivityItems activityItems: [Any]) -> Bool {
@@ -133,7 +133,7 @@ public final class ManageKeysActivity: UIActivity {
     }
     
     public override var activityImage: UIImage? {
-        return UIImage.lockKit("activityManageKeys")
+        return UIImage(lockKit: "activityManageKeys")
     }
     
     public override func canPerform(withActivityItems activityItems: [Any]) -> Bool {
@@ -186,7 +186,7 @@ public final class DeleteLockActivity: UIActivity {
     }
     
     public override var activityImage: UIImage? {
-        return UIImage.lockKit("activityDelete")
+        return UIImage(lockKit: "activityDelete")
     }
     
     public override func canPerform(withActivityItems activityItems: [Any]) -> Bool {
@@ -240,7 +240,7 @@ public final class RenameActivity: UIActivity {
     
     public override var activityImage: UIImage? {
         
-        return UIImage.lockKit("activityRename")
+        return UIImage(lockKit: "activityRename")
     }
     
     public override func canPerform(withActivityItems activityItems: [Any]) -> Bool {
@@ -297,7 +297,7 @@ public final class HomeKitEnableActivity: UIActivity {
     
     public override var activityImage: UIImage? {
         
-        return UIImage.lockKit("activityHomeKit")
+        return UIImage(lockKit: "activityHomeKit")
     }
     
     public override func canPerform(withActivityItems activityItems: [Any]) -> Bool {
@@ -382,7 +382,7 @@ public final class UpdateActivity: UIActivity {
     }
     
     public override var activityImage: UIImage? {
-        return UIImage.lockKit("activityUpdate")
+        return UIImage(lockKit: "activityUpdate")
     }
     
     public override func canPerform(withActivityItems activityItems: [Any]) -> Bool {

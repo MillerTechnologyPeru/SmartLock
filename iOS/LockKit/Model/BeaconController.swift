@@ -189,7 +189,7 @@ private extension BeaconController {
                         if #available(iOS 10, *),
                             let lockCache = Store.shared[lock: lock] {
                             // show unlock notification
-                            UserNotificationCenter.shared.postUnlockNotification(for: lock, name: lockCache.name)
+                            UserNotificationCenter.shared.postUnlockNotification(for: lock, cache: lockCache)
                         }
                     } catch {
                         self.log("Error: \(error)")

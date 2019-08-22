@@ -87,8 +87,10 @@ final class NearbyLocksViewController: UITableViewController {
         configureView()
         
         // try to scan
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0,
-                                      execute: { [weak self] in self?.scan() })
+        if UIApplication.shared.applicationState != .background {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0,
+                                          execute: { [weak self] in self?.scan() })
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -109,7 +111,18 @@ final class NearbyLocksViewController: UITableViewController {
     
     // MARK: - Actions
     
-    @IBAction func scan(_ sender: Any? = nil) {
+    @IBAction func scan(_ sender: NSObject) {
+        
+        if #available(iOS 10.0, *) {
+            impactFeedbackGenerator.impactOccurred()
+        }
+        
+        scan()
+    }
+    
+    // MARK: - Methods
+    
+    private func scan() {
         
         self.refreshControl?.endRefreshing()
         
@@ -118,10 +131,6 @@ final class NearbyLocksViewController: UITableViewController {
         guard LockManager.shared.central.state == .poweredOn
             else { return } // cannot scan
         #endif
-        
-        if #available(iOS 10.0, *) {
-            impactFeedbackGenerator.impactOccurred()
-        }
         
         userActivity = NSUserActivity(.screen(.nearbyLocks))
         userActivity?.becomeCurrent()

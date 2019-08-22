@@ -34,15 +34,22 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
         log("📱 Launching SmartLock v\(AppVersion) Build \(AppBuild)")
         
         // setup logging
-        LockManager.shared.log = { log("🔒 LockManager: " + $0) }
-        BeaconController.shared.log = { log("📶 BeaconController: " + $0) }
+        LockManager.shared.log = { log("🔒 \(LockManager.self): " + $0) }
+        BeaconController.shared.log = { log("📶 \(BeaconController.self): " + $0) }
+        if #available(iOS 10.0, *) {
+            UserNotificationCenter.shared.log = { log("📨 \(UserNotificationCenter.self): " + $0) }
+        }
         
         // request permissions
         BeaconController.shared.requestAuthorization()
-        
         if #available(iOS 10.0, *) {
-            UNUserNotificationCenter.current().requestAuthorization(options: [.alert]) { (didAuthorize, error) in
-                log("Notifications Authorization: \(didAuthorize) \(error?.localizedDescription ?? "")")
+            UserNotificationCenter.shared.requestAuthorization()
+        }
+        
+        // handle notifications
+        if #available(iOS 10.0, *) {
+            UserNotificationCenter.shared.handleActivity = { [unowned self] (activity) in
+                mainQueue { self.handle(activity: activity) }
             }
         }
         
@@ -79,13 +86,14 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationWillTerminate(_ application: UIApplication) {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     }
-
+    
     func application(_ application: UIApplication, handleOpen url: URL) -> Bool {
         
         return open(url: url)
     }
     
     func application(_ application: UIApplication, willContinueUserActivityWithType userActivityType: String) -> Bool {
+        
         return true
     }
     

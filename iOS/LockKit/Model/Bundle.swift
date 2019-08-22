@@ -10,7 +10,11 @@ import Foundation
 
 public extension Bundle {
     
+    /// LockKit Bundle
     static var lockKit: Bundle {
-        return Bundle(for: Store.self)
+        struct Cache {
+            static let bundle = Bundle(for: Store.self)
+        }
+        return Cache.bundle
     }
 }
