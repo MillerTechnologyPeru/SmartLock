@@ -64,9 +64,10 @@
 	<string>Your location is needed to find nearby smart locks.</string>
 	<key>NSUserActivityTypes</key>
 	<array>
+		<string>UnlockIntent</string>
 		<string>com.colemancda.lock.activity.action</string>
-		<string>com.colemancda.lock.activity.view</string>
 		<string>com.colemancda.lock.activity.screen</string>
+		<string>com.colemancda.lock.activity.view</string>
 	</array>
 	<key>UIBackgroundModes</key>
 	<array>
