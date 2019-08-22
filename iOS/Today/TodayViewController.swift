@@ -20,7 +20,7 @@ final class TodayViewController: UIViewController, NCWidgetProviding {
     
     // MARK: - IB Outlets
     
-    @IBOutlet private(set) weak var stackView: UIStackView!
+    @IBOutlet private(set) weak var tableView: UITableView!
     
     // MARK: - Properties
     
@@ -50,6 +50,11 @@ final class TodayViewController: UIViewController, NCWidgetProviding {
         
         log("☀️ Loaded \(TodayViewController.self)")
         
+        // register cell
+        tableView.register(LockTableViewCell.nib, forCellReuseIdentifier: LockTableViewCell.reuseIdentifier)
+        tableView.rowHeight = UITableView.automaticDimension
+        tableView.estimatedRowHeight = 60
+        
         // Set Logging
         LockManager.shared.log = { log("🔒 \(LockManager.self): " + $0) }
         BeaconController.shared.log = { log("📶 \(BeaconController.self): " + $0) }
@@ -68,11 +73,15 @@ final class TodayViewController: UIViewController, NCWidgetProviding {
             mainQueue { self?.configureView() }
         }
         
-        // scan for locks
-        reloadData()
-        
         // update UI
         configureView()
+        
+        // scan for locks
+        if Store.shared.lockInformation.value.isEmpty {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) { [weak self] in
+                self?.reloadData()
+            }
+        }
     }
     
     // MARK: - NCWidgetProviding
@@ -104,17 +113,13 @@ final class TodayViewController: UIViewController, NCWidgetProviding {
     
     // MARK: - Methods
     
-    private subscript (index: Int) -> Item {
+    private subscript (indexPath: IndexPath) -> Item {
         
         @inline(__always)
-        get { return items[index] }
+        get { return items[indexPath.row] }
     }
     
     private func configureView() {
-        
-        stackView.arrangedSubviews.forEach {
-            stackView.removeArrangedSubview($0)
-        }
         
         let locks = Store.shared.peripherals.value.values
             .lazy
@@ -133,13 +138,8 @@ final class TodayViewController: UIViewController, NCWidgetProviding {
             self.items = locks.map { .lock($0.identifier, $0.cache) }
         }
         
-        // load views
-        for item in items {
-            
-            let view = LockTableViewCell.nib.instantiate(withOwner: nil, options: nil).first as! LockTableViewCell
-            configure(cell: view, with: item)
-            stackView.addArrangedSubview(view)
-        }
+        // reload table view
+        self.tableView.reloadData()
     }
     
     private func reloadData(_ completion: ((Bool) -> ())? = nil) {
@@ -147,7 +147,7 @@ final class TodayViewController: UIViewController, NCWidgetProviding {
         log("☀️ Refresh widget data")
         
         // scan for devices
-        async { [weak self] in
+        async { //[weak self] in
             //guard let self = self else { return }
             do { try Store.shared.scan(duration: 1.0) }
             catch {
@@ -159,7 +159,9 @@ final class TodayViewController: UIViewController, NCWidgetProviding {
         }
     }
     
-    private func configure(cell: LockTableViewCell, with item: Item) {
+    private func configure(cell: LockTableViewCell, at indexPath: IndexPath) {
+        
+        let item = self[indexPath]
         
         switch item {
         case .noNearbyLocks:
@@ -168,6 +170,7 @@ final class TodayViewController: UIViewController, NCWidgetProviding {
             cell.lockImageView.image = nil
             cell.activityIndicatorView.isHidden = true
             cell.lockImageView.isHidden = true
+            cell.selectionStyle = .none
         case let .lock(_, cache):
             let permission = cache.key.permission
             cell.lockTitleLabel.text = cache.name
@@ -175,13 +178,36 @@ final class TodayViewController: UIViewController, NCWidgetProviding {
             cell.lockImageView.image = UIImage(permission: permission)
             cell.activityIndicatorView.isHidden = true
             cell.lockImageView.isHidden = false
+            cell.selectionStyle = .default
         }
     }
 }
 
+// MARK: - UITableViewDataSource
+
+extension TodayViewController: UITableViewDataSource {
+    
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return 1
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return items.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
+        let cell = tableView.dequeueReusableCell(withIdentifier: LockTableViewCell.reuseIdentifier, for: indexPath) as! LockTableViewCell
+        configure(cell: cell, at: indexPath)
+        return cell
+    }
+}
+
+// MARK: - Supporting Types
+
 extension TodayViewController {
     
-    enum Item {
+    enum Item: Equatable {
         
         case noNearbyLocks
         case lock(UUID, LockCache)

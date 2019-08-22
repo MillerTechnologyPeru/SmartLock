@@ -15,33 +15,31 @@
             <objects>
                 <viewController id="M4Y-Lb-cyx" customClass="TodayViewController" customModule="Today" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" simulatedAppContext="notificationCenter" id="S3S-Oj-5AN">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="37"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="120"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="N8Z-0O-Fks">
-                                <rect key="frame" x="0.0" y="44" width="304" height="20.5"/>
-                                <subviews>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XZt-5c-hcg">
-                                        <rect key="frame" x="0.0" y="0.0" width="304" height="20.5"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                        <nil key="textColor"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                </subviews>
-                            </stackView>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="UjI-VI-vmh">
+                                <rect key="frame" x="0.0" y="44" width="320" height="42"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <connections>
+                                    <outlet property="dataSource" destination="M4Y-Lb-cyx" id="NZy-uI-is8"/>
+                                    <outlet property="delegate" destination="M4Y-Lb-cyx" id="Ijj-ny-PJO"/>
+                                </connections>
+                            </tableView>
                         </subviews>
                         <constraints>
-                            <constraint firstItem="N8Z-0O-Fks" firstAttribute="leading" secondItem="ssy-KU-ocm" secondAttribute="leading" id="UT2-lB-hP8"/>
-                            <constraint firstItem="N8Z-0O-Fks" firstAttribute="top" secondItem="S3S-Oj-5AN" secondAttribute="topMargin" id="UuA-Cb-fT4"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="N8Z-0O-Fks" secondAttribute="trailing" id="xSf-VE-SXB"/>
+                            <constraint firstAttribute="bottomMargin" secondItem="UjI-VI-vmh" secondAttribute="bottom" id="HJL-et-M55"/>
+                            <constraint firstItem="ssy-KU-ocm" firstAttribute="trailing" secondItem="UjI-VI-vmh" secondAttribute="trailing" id="HpF-v1-Qyn"/>
+                            <constraint firstItem="UjI-VI-vmh" firstAttribute="top" secondItem="S3S-Oj-5AN" secondAttribute="topMargin" id="UcW-g7-53I"/>
+                            <constraint firstItem="UjI-VI-vmh" firstAttribute="leading" secondItem="ssy-KU-ocm" secondAttribute="leading" id="XTu-En-do2"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="ssy-KU-ocm"/>
                     </view>
                     <extendedEdge key="edgesForExtendedLayout"/>
                     <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
-                    <size key="freeformSize" width="320" height="37"/>
+                    <size key="freeformSize" width="320" height="120"/>
                     <connections>
-                        <outlet property="stackView" destination="N8Z-0O-Fks" id="Bzw-tm-LKI"/>
+                        <outlet property="tableView" destination="UjI-VI-vmh" id="Cum-hE-fd0"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="vXp-U4-Rya" userLabel="First Responder" sceneMemberID="firstResponder"/>

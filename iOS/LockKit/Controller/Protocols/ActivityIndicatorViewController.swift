@@ -79,9 +79,7 @@ public extension ActivityIndicatorViewController {
                     if showProgressHUD { controller.dismissProgressHUD(animated: false) }
                     
                     // show error
-                    
                     log("⚠️ Error: \(error)")
-                    
                     controller.showErrorAlert(error.localizedDescription)
                 }
             }
