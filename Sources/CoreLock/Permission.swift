@@ -47,6 +47,21 @@ public extension Permission {
     }
 }
 
+public extension Permission {
+    
+    /// Whether the permission allows for sharing keys.
+    var canShareKeys: Bool {
+        switch self {
+        case .owner,
+             .admin:
+            return true
+        case .anytime,
+             .scheduled:
+            return false
+        }
+    }
+}
+
 // MARK: - Schedule
 
 public extension Permission {

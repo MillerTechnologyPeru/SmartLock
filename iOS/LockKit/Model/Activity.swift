@@ -89,14 +89,7 @@ public final class NewKeyActivity: UIActivity {
             Store.shared[peripheral: lockItem.identifier] != nil // Lock must be reachable
             else { return false }
         
-        switch lockCache.key.permission {
-        case .owner,
-             .admin:
-            return true
-        case .anytime,
-             .scheduled:
-            return false
-        }
+        return lockCache.key.permission.canShareKeys
     }
     
     public override func prepare(withActivityItems activityItems: [Any]) {
