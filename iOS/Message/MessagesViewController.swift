@@ -98,14 +98,26 @@ final class MessagesViewController: MSMessagesAppViewController {
         // Called before the extension transitions to a new presentation style.
     
         // Use this method to prepare for the change in presentation style.
-        log("✉️ Will transition to \(presentationStyle.rawValue)")
+        log("✉️ Will transition to \(presentationStyle.debugDescription)")
+        
+        switch presentationStyle {
+        case .compact:
+            // dismiss modal UI
+            presentedViewController?.dismiss(animated: true, completion: nil)
+        case .expanded:
+            break
+        case .transcript:
+            break
+        @unknown default:
+            break
+        }
     }
     
     override func didTransition(to presentationStyle: MSMessagesAppPresentationStyle) {
         // Called after the extension transitions to a new presentation style.
     
         // Use this method to finalize any behaviors associated with the change in presentation style.
-        log("✉️ Did transition to \(presentationStyle.rawValue)")
+        log("✉️ Did transition to \(presentationStyle.debugDescription)")
     }
     
     // MARK: - Methods
@@ -142,8 +154,9 @@ final class MessagesViewController: MSMessagesAppViewController {
     
     private func select(_ item: Item) {
         
-        log("")
+        log("Selected \(item.cache.name) \(item.identifier)")
         
+        requestPresentationStyle(.expanded)
         shareKey(lock: item.identifier)
     }
 }
@@ -188,5 +201,23 @@ extension MessagesViewController {
         
         let identifier: UUID
         let cache: LockCache
+    }
+}
+
+extension MSMessagesAppPresentationStyle {
+    
+    var debugDescription: String {
+        
+        switch self {
+        case .compact:
+            return "compact"
+        case .expanded:
+            return "expanded"
+        case .transcript:
+            return "transcript"
+        @unknown default:
+            assertionFailure("Unknown state \(rawValue)")
+            return "Style \(rawValue)"
+        }
     }
 }
