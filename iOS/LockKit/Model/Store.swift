@@ -27,9 +27,9 @@ public final class Store {
     
     public let locks = Observable([UUID: LockCache]())
     
-    private let defaults: Defaults = Defaults(userDefaults: UserDefaults(suiteName: "group.com.colemancda.Lock")!)
+    private let defaults: Defaults = Defaults(userDefaults: UserDefaults(suiteName: .lock)!)
     
-    private let keychain = Keychain(service: "com.colemancda.Lock", accessGroup: "4W79SG34MW.com.colemancda.Lock")
+    private let keychain = Keychain(service: .lock, accessGroup: .lock)
     
     private let storageKey = DefaultsKey<[UUID: LockCache]>("locks")
     

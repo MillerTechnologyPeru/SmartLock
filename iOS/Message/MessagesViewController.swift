@@ -38,7 +38,7 @@ final class MessagesViewController: MSMessagesAppViewController {
         log("✉️ Loaded \(MessagesViewController.self)")
         
         // setup loading
-        LockManager.shared.log = { log("🔒 \(LockManager.self): " + $0) }
+        LockManager.shared.log = { log("🔒 LockManager: " + $0) }
         BeaconController.shared.log = { log("📶 \(BeaconController.self): " + $0) }
         
         // setup table view
@@ -299,7 +299,7 @@ extension Log {
     static var message: Log {
         struct Cache {
             static let log: Log = {
-                do { return try Log.Store.caches.create(date: Date(), bundle: .init(for: MessagesViewController.self)) }
+                do { return try Log.Store.lockAppGroup.create(date: Date(), bundle: .init(for: MessagesViewController.self)) }
                 catch { assertionFailure("Could not create log file: \(error)"); return .appCache }
             }()
         }

@@ -51,7 +51,7 @@ extension Log {
     static var intentUI: Log {
         struct Cache {
             static let log: Log = {
-                do { return try Log.Store.caches.create(date: Date(), bundle: .init(for: IntentViewController.self)) }
+                do { return try Log.Store.lockAppGroup.create(date: Date(), bundle: .init(for: IntentViewController.self)) }
                 catch { assertionFailure("Could not create log file: \(error)"); return .appCache }
             }()
         }

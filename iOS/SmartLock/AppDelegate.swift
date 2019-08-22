@@ -30,6 +30,9 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication,
                      didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         
+        // Create logging file
+        Log.shared = .mainApp
+        
         // print app info
         log("📱 Launching SmartLock v\(AppVersion) Build \(AppBuild)")
         

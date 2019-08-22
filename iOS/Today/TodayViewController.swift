@@ -66,7 +66,7 @@ final class TodayViewController: UIViewController, NCWidgetProviding {
         tableView.estimatedRowHeight = 60
         
         // Set Logging
-        LockManager.shared.log = { log("🔒 \(LockManager.self): " + $0) }
+        LockManager.shared.log = { log("🔒 LockManager: " + $0) }
         BeaconController.shared.log = { log("📶 \(BeaconController.self): " + $0) }
         
         // scan beacons
@@ -304,7 +304,7 @@ extension Log {
     static var today: Log {
         struct Cache {
             static let log: Log = {
-                do { return try Log.Store.caches.create(date: Date(), bundle: .init(for: TodayViewController.self)) }
+                do { return try Log.Store.lockAppGroup.create(date: Date(), bundle: .init(for: TodayViewController.self)) }
                 catch { assertionFailure("Could not create log file: \(error)"); return .appCache }
             }()
         }

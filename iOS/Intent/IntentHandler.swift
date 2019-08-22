@@ -40,7 +40,7 @@ final class IntentHandler: INExtension, INSendMessageIntentHandling, INSearchFor
         DispatchQueue.main.sync {
             
             let _  = IntentHandler.didLaunch
-            LockManager.shared.log = { log("🔒 \(LockManager.self): " + $0) }
+            LockManager.shared.log = { log("🔒 LockManager: " + $0) }
             BeaconController.shared.log = { log("📶 \(BeaconController.self): " + $0) }
         }
         
@@ -211,7 +211,7 @@ extension Log {
     static var intent: Log {
         struct Cache {
             static let log: Log = {
-                do { return try Log.Store.caches.create(date: Date(), bundle: .init(for: IntentHandler.self)) }
+                do { return try Log.Store.lockAppGroup.create(date: Date(), bundle: .init(for: IntentHandler.self)) }
                 catch { assertionFailure("Could not create log file: \(error)"); return .appCache }
             }()
         }

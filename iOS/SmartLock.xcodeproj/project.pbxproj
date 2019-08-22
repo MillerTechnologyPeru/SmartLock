@@ -15,6 +15,11 @@
 		6E6000292121119500787DAA /* SmartLockUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E6000282121119500787DAA /* SmartLockUITests.swift */; };
 		6E60005F2121165600787DAA /* CoreLock.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6E6000562121164B00787DAA /* CoreLock.framework */; };
 		6E6000602121165600787DAA /* CoreLock.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 6E6000562121164B00787DAA /* CoreLock.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		6E806B8C230F4F2800C6FF78 /* Preferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E806B8B230F4F2800C6FF78 /* Preferences.swift */; };
+		6E806B94230F4F4700C6FF78 /* Keychain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E806B93230F4F4700C6FF78 /* Keychain.swift */; };
+		6E806B96230F4F7300C6FF78 /* AppGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E806B95230F4F7300C6FF78 /* AppGroup.swift */; };
+		6E806B98230F520400C6FF78 /* FileManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E806B97230F520400C6FF78 /* FileManager.swift */; };
+		6E806B9A230F56B000C6FF78 /* Log.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E806B99230F56B000C6FF78 /* Log.swift */; };
 		6E994A8D230DFB6D0076DC1B /* LockKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6E994A84230DFB6C0076DC1B /* LockKit.framework */; };
 		6E994A94230DFB6D0076DC1B /* LockKitTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E994A93230DFB6D0076DC1B /* LockKitTests.swift */; };
 		6E994A96230DFB6D0076DC1B /* LockKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 6E994A86230DFB6C0076DC1B /* LockKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -275,6 +280,11 @@
 		6E60F8A62121259F0054995D /* Store.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Store.swift; sourceTree = "<group>"; };
 		6E60F8AC212127890054995D /* Log.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Log.swift; sourceTree = "<group>"; };
 		6E60F8F72121540C0054995D /* Defaults.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Defaults.swift; sourceTree = "<group>"; };
+		6E806B8B230F4F2800C6FF78 /* Preferences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Preferences.swift; sourceTree = "<group>"; };
+		6E806B93230F4F4700C6FF78 /* Keychain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Keychain.swift; sourceTree = "<group>"; };
+		6E806B95230F4F7300C6FF78 /* AppGroup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppGroup.swift; sourceTree = "<group>"; };
+		6E806B97230F520400C6FF78 /* FileManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileManager.swift; sourceTree = "<group>"; };
+		6E806B99230F56B000C6FF78 /* Log.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Log.swift; sourceTree = "<group>"; };
 		6E81B293230CCE3D00783BC5 /* BeaconController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BeaconController.swift; sourceTree = "<group>"; };
 		6E994A79230DE1700076DC1B /* CoreSpotlight.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreSpotlight.swift; sourceTree = "<group>"; };
 		6E994A84230DFB6C0076DC1B /* LockKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = LockKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -428,6 +438,7 @@
 				6E994AF9230E57860076DC1B /* SmartLock.entitlements */,
 				6E6000132121119400787DAA /* AppDelegate.swift */,
 				6EAADF8B2122664A0074CEDF /* AppVersion.swift */,
+				6E806B99230F56B000C6FF78 /* Log.swift */,
 				6E994AA2230DFC180076DC1B /* Assets.xcassets */,
 				6E60001C2121119500787DAA /* LaunchScreen.storyboard */,
 				6E6000172121119400787DAA /* Main.storyboard */,
@@ -491,6 +502,10 @@
 				6EC0412F230A494E00357585 /* UserActivity.swift */,
 				6E0F602F230DD05400B013AB /* UserNotification.swift */,
 				6E994AFC230E657A0076DC1B /* Intent.swift */,
+				6E806B8B230F4F2800C6FF78 /* Preferences.swift */,
+				6E806B93230F4F4700C6FF78 /* Keychain.swift */,
+				6E806B95230F4F7300C6FF78 /* AppGroup.swift */,
+				6E806B97230F520400C6FF78 /* FileManager.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -1070,6 +1085,7 @@
 				6E05B6E722C9C159001218D9 /* KeysViewController.swift in Sources */,
 				6EC0412E230A226400357585 /* TabBarController.swift in Sources */,
 				6E6000142121119400787DAA /* AppDelegate.swift in Sources */,
+				6E806B9A230F56B000C6FF78 /* Log.swift in Sources */,
 				6E994AC8230E011E0076DC1B /* NearbyLocksViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1091,9 +1107,12 @@
 				6E994AC5230DFDC60076DC1B /* NewKeyRecieveViewController.swift in Sources */,
 				6E994AC1230DFDC60076DC1B /* LockViewController.swift in Sources */,
 				6E994ABB230DFDB60076DC1B /* AdaptiveNavigation.swift in Sources */,
+				6E806B94230F4F4700C6FF78 /* Keychain.swift in Sources */,
 				6E994AB2230DFDB10076DC1B /* DeviceManager.swift in Sources */,
 				6E994ABC230DFDB60076DC1B /* ErrorAlert.swift in Sources */,
 				6E994AC0230DFDBE0076DC1B /* ActivityIndicatorViewController.swift in Sources */,
+				6E806B96230F4F7300C6FF78 /* AppGroup.swift in Sources */,
+				6E806B98230F520400C6FF78 /* FileManager.swift in Sources */,
 				6E994AB8230DFDB10076DC1B /* Log.swift in Sources */,
 				6E994ABD230DFDB60076DC1B /* PresentPopover.swift in Sources */,
 				6E994AC2230DFDC60076DC1B /* LockPermissionsViewController.swift in Sources */,
@@ -1116,6 +1135,7 @@
 				6E994AB7230DFDB10076DC1B /* Defaults.swift in Sources */,
 				6E994AB0230DFDB10076DC1B /* UserActivity.swift in Sources */,
 				6E994ABA230DFDB60076DC1B /* Setup.swift in Sources */,
+				6E806B8C230F4F2800C6FF78 /* Preferences.swift in Sources */,
 				6E994AB3230DFDB10076DC1B /* UserNotification.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

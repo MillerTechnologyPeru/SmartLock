@@ -26,7 +26,7 @@ public extension Log {
         set { custom = newValue }
     }
     
-    static let appCache: Log = try! Log.Store.caches.create(date: Date(), bundle: .main)
+    static let appCache: Log = try! Log.Store.lockAppGroup.create(date: Date(), bundle: .main)
 }
 
 private var custom: Log?
@@ -50,6 +50,10 @@ public struct Log {
         
         assert(Log(url: url) != nil, "Invalid url \(url)")
         self.url = url
+    }
+    
+    public var fileName: String {
+        return url.lastPathComponent
     }
     
     public func load() throws -> String {
@@ -85,11 +89,16 @@ private extension Data {
 
 public extension Log.Store {
     
+    private static let subfolder = "logs"
+    
     /// Logs in cache directory
-    static let caches: Log.Store = Log.Store(directory: .cachesDirectory, subfolder: "logs")!
+    static let caches: Log.Store = Log.Store(directory: .cachesDirectory, subfolder: subfolder)!
     
     /// Logs in documents directory.
-    static let documents: Log.Store = Log.Store(directory: .documentDirectory, subfolder: "logs")!
+    static let documents: Log.Store = Log.Store(directory: .documentDirectory, subfolder: subfolder)!
+    
+    /// Logs in Lock App Group.
+    static let lockAppGroup: Log.Store = Log.Store(appGroup: .lock, subfolder: subfolder)!
 }
 
 public extension Log {
@@ -108,27 +117,35 @@ public extension Log {
             try! self.load()
         }
         
+        internal convenience init?(appGroup: AppGroup, subfolder: String? = nil) {
+            
+            guard let appGroupURL = FileManager.default.containerURL(for: appGroup)
+                else { return nil }
+            
+            self.init(directory: appGroupURL, subfolder: subfolder)
+        }
+        
         internal convenience init?(directory: FileManager.SearchPathDirectory, subfolder: String? = nil) {
             
             guard let path = NSSearchPathForDirectoriesInDomains(directory, .userDomainMask, true).first
                 else { return nil }
             
-            var url = URL(fileURLWithPath: path)
+            let url = URL(fileURLWithPath: path)
+            self.init(directory: url, subfolder: subfolder)
+        }
+        
+        internal convenience init?(directory url: URL, subfolder: String? = nil) {
+            
+            var url = url
             
             if let subfolder = subfolder {
-                
                 url.appendPathComponent(subfolder)
-                
                 var isDirectory: ObjCBool = false
-                
                 FileManager.default.fileExists(atPath: url.path, isDirectory: &isDirectory)
-                
                 if isDirectory.boolValue == false {
-                    
                     do { try FileManager.default.createDirectory(at: url,
                                                                  withIntermediateDirectories: true,
                                                                  attributes: nil) }
-                        
                     catch { return nil }
                 }
             }
