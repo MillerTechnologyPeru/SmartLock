@@ -168,7 +168,7 @@ private extension BeaconController {
                      .unknown:
                     if let lock = beaconController?.locks.first(where: { $0.value == region })?.key {
                         if #available(iOS 10.0, *) {
-                            UserNotificationCenter.shared.removeUnlockNotification(for: lock)
+                            //UserNotificationCenter.shared.removeUnlockNotification(for: lock)
                         }
                     }
                 }
@@ -201,7 +201,7 @@ private extension BeaconController {
                         if #available(iOS 10, *),
                             let lockCache = Store.shared[lock: lock] {
                             // show unlock notification
-                            UserNotificationCenter.shared.postUnlockNotification(for: lock, cache: lockCache)
+                            //UserNotificationCenter.shared.postUnlockNotification(for: lock, cache: lockCache)
                         }
                     } catch {
                         self.log("Error: \(error)")
