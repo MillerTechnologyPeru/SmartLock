@@ -31,6 +31,9 @@ final class MessagesViewController: MSMessagesAppViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        // configure logging
+        Log.shared = .message
+        
         // print app info
         log("✉️ Loaded \(MessagesViewController.self)")
         
@@ -286,5 +289,20 @@ extension MSMessagesAppPresentationStyle {
             assertionFailure("Unknown state \(rawValue)")
             return "Style \(rawValue)"
         }
+    }
+}
+
+// MARK: - Logging
+
+extension Log {
+    
+    static var message: Log {
+        struct Cache {
+            static let log: Log = {
+                do { return try Log.Store.caches.create(date: Date(), bundle: .init(for: MessagesViewController.self)) }
+                catch { assertionFailure("Could not create log file: \(error)"); return .appCache }
+            }()
+        }
+        return Cache.log
     }
 }

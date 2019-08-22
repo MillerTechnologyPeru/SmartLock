@@ -6,7 +6,12 @@
 //  Copyright © 2019 ColemanCDA. All rights reserved.
 //
 
+import Foundation
+import UIKit
 import IntentsUI
+import CoreBluetooth
+import CoreLock
+import LockKit
 
 // As an example, this extension's Info.plist has been configured to handle interactions for INSendMessageIntent.
 // You will want to replace this or add other intents as appropriate.
@@ -15,11 +20,14 @@ import IntentsUI
 // You can test this example integration by saying things to Siri like:
 // "Send a message using <myApp>"
 
-class IntentViewController: UIViewController, INUIHostedViewControlling {
+final class IntentViewController: UIViewController, INUIHostedViewControlling {
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
+        
+        // configure logging
+        Log.shared = .intentUI
     }
         
     // MARK: - INUIHostedViewControlling
@@ -34,4 +42,19 @@ class IntentViewController: UIViewController, INUIHostedViewControlling {
         return self.extensionContext!.hostedViewMaximumAllowedSize
     }
     
+}
+
+// MARK: - Logging
+
+extension Log {
+    
+    static var intentUI: Log {
+        struct Cache {
+            static let log: Log = {
+                do { return try Log.Store.caches.create(date: Date(), bundle: .init(for: IntentViewController.self)) }
+                catch { assertionFailure("Could not create log file: \(error)"); return .appCache }
+            }()
+        }
+        return Cache.log
+    }
 }

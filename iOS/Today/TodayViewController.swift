@@ -55,6 +55,9 @@ final class TodayViewController: UIViewController, NCWidgetProviding {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        // configure logging
+        Log.shared = .today
+        
         log("☀️ Loaded \(TodayViewController.self)")
         
         // register cell
@@ -291,5 +294,20 @@ extension NCWidgetDisplayMode {
             assertionFailure()
             return "Display Mode \(rawValue)"
         }
+    }
+}
+
+// MARK: - Logging
+
+extension Log {
+    
+    static var today: Log {
+        struct Cache {
+            static let log: Log = {
+                do { return try Log.Store.caches.create(date: Date(), bundle: .init(for: TodayViewController.self)) }
+                catch { assertionFailure("Could not create log file: \(error)"); return .appCache }
+            }()
+        }
+        return Cache.log
     }
 }

@@ -27,6 +27,8 @@ import LockKit
 final class IntentHandler: INExtension, INSendMessageIntentHandling, INSearchForMessagesIntentHandling, INSetMessageAttributeIntentHandling {
     
     static let didLaunch: Void = {
+        // configure logging
+        Log.shared = .intent
         // print app info
         log("📱 Launching Intent")
     }()
@@ -199,5 +201,20 @@ final class UnlockIntentHandler: NSObject, UnlockIntentHandling {
                 }
             }
         }
+    }
+}
+
+// MARK: - Logging
+
+extension Log {
+    
+    static var intent: Log {
+        struct Cache {
+            static let log: Log = {
+                do { return try Log.Store.caches.create(date: Date(), bundle: .init(for: IntentHandler.self)) }
+                catch { assertionFailure("Could not create log file: \(error)"); return .appCache }
+            }()
+        }
+        return Cache.log
     }
 }
