@@ -40,6 +40,8 @@ public final class LockManager <Central: CentralProtocol> {
                      filterDuplicates: Bool = false,
                      event: @escaping ((LockPeripheral<Central>) -> ())) throws {
         
+        log?("Scanning for \(String(format: "%.2f", duration))s")
+        
         try central.scan(duration: duration, filterDuplicates: filterDuplicates) { (scanData) in
             
             // filter peripheral
@@ -59,6 +61,8 @@ public final class LockManager <Central: CentralProtocol> {
     public func scan(filterDuplicates: Bool = false,
                      event: @escaping ((LockPeripheral<Central>) -> ())) throws {
         
+        log?("Scanning...")
+        
         try self.central.scan(filterDuplicates: filterDuplicates) { (scanData) in
             
             // filter peripheral
@@ -72,6 +76,8 @@ public final class LockManager <Central: CentralProtocol> {
     /// Read the lock's information characteristic.
     public func readInformation(for peripheral: Peripheral,
                                 timeout: TimeInterval = .gattDefaultTimeout) throws -> LockInformationCharacteristic {
+        
+        log?("Read information for \(peripheral)")
         
         let timeout = Timeout(timeout: timeout)
         
@@ -92,6 +98,8 @@ public final class LockManager <Central: CentralProtocol> {
                       for peripheral: Peripheral,
                       sharedSecret: KeyData,
                       timeout: TimeInterval = .gattDefaultTimeout) throws -> LockInformationCharacteristic {
+        
+        log?("Setup \(peripheral)")
         
         let timeout = Timeout(timeout: timeout)
         
@@ -120,6 +128,8 @@ public final class LockManager <Central: CentralProtocol> {
                        with key: KeyCredentials,
                        timeout: TimeInterval = .gattDefaultTimeout) throws {
         
+        log?("Unlock \(peripheral) with action \(action)")
+        
         let timeout = Timeout(timeout: timeout)
         
         try central.device(for: peripheral, timeout: timeout) { [unowned self] (cache) in
@@ -138,6 +148,8 @@ public final class LockManager <Central: CentralProtocol> {
                           for peripheral: Peripheral,
                           with key: KeyCredentials,
                           timeout: TimeInterval = .gattDefaultTimeout) throws {
+        
+        log?("Create \(newKey.permission.type) key \"\(newKey.name)\" \(newKey.identifier)")
         
         let timeout = Timeout(timeout: timeout)
         
@@ -159,6 +171,8 @@ public final class LockManager <Central: CentralProtocol> {
                            for peripheral: Peripheral,
                            with key: KeyCredentials,
                            timeout: TimeInterval = .gattDefaultTimeout) throws {
+        
+        log?("Confirm key \(key.identifier)")
         
         let timeout = Timeout(timeout: timeout)
         
@@ -193,6 +207,8 @@ public final class LockManager <Central: CentralProtocol> {
                          with key: KeyCredentials,
                          notification: @escaping (KeysList, Bool) -> (),
                          timeout: TimeInterval = .gattDefaultTimeout) throws {
+        
+        log?("List keys for \(peripheral)")
         
         typealias Notification = KeysCharacteristic
         
@@ -277,6 +293,8 @@ public final class LockManager <Central: CentralProtocol> {
                           with key: KeyCredentials,
                           timeout: TimeInterval = .gattDefaultTimeout) throws {
         
+        log?("Remove \(type) \(identifier)")
+        
         let timeout = Timeout(timeout: timeout)
         
         try central.device(for: peripheral, timeout: timeout) { [unowned self] (cache) in
@@ -305,6 +323,8 @@ public extension LockManager where Central == DarwinCentral {
     func scanLocks(filterDuplicates: Bool = false,
                                event: @escaping (LockPeripheral<Central>) -> ()) throws {
         
+        log?("Scanning...")
+        
         try central.scan(filterDuplicates: filterDuplicates, with: [LockService.uuid]) { (scanData) in
             
             // filter peripheral
@@ -319,6 +339,8 @@ public extension LockManager where Central == DarwinCentral {
     func scanLocks(duration: TimeInterval,
                    filterDuplicates: Bool = false,
                    event: @escaping (LockPeripheral<Central>) -> ()) throws {
+        
+        log?("Scanning for \(String(format: "%.2f", duration))s")
         
         var didThrow = false
         DispatchQueue.global().asyncAfter(deadline: .now() + duration) { [weak self] in
