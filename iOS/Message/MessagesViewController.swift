@@ -55,6 +55,23 @@ final class MessagesViewController: MSMessagesAppViewController {
         
         log("✉️ Will become active")
         
+        if let selectedMessage = conversation.selectedMessage {
+            
+            log("✉️ Selected message \(selectedMessage.url?.absoluteString ?? selectedMessage.description)")
+            
+            guard let messageURL = selectedMessage.url
+                else { assertionFailure("No URL encoded in message"); return }
+            
+            let urlComponents = URLComponents(url: messageURL, resolvingAgainstBaseURL: false)
+            
+            if let urlString = urlComponents?.queryItems?.first(where: { $0.name == "url" })?.value,
+                let url = URL(string: urlString),
+                let lockURL = LockURL(rawValue: url) {
+                
+                self.handle(url: lockURL)
+            }
+        }
+        
         // Use this method to configure the extension and restore previously stored state.
         configureView()
     }
@@ -172,14 +189,17 @@ final class MessagesViewController: MSMessagesAppViewController {
         guard let conversation = activeConversation else { fatalError("Expected a conversation") }
         
         let lockURL = LockURL.newKey(invitation)
+        var components = URLComponents()
+        components.queryItems = [
+            URLQueryItem(name: "url", value: lockURL.rawValue.absoluteString)
+        ]
         
         let layout = MSMessageTemplateLayout()
-        layout.imageTitle = "Accept \(invitation.key.permission.type.localizedText) lock key"
         layout.image = UIImage(permission: invitation.key.permission)
-        layout.caption = invitation.key.permission.localizedText
+        layout.caption = "Accept \(invitation.key.permission.type.localizedText) lock key"
         
         let message = MSMessage(session: activeConversation?.selectedMessage?.session ?? MSSession())
-        message.url = lockURL.rawValue
+        message.url = components.url!
         message.layout = layout
         
         // Add the message to the conversation.
@@ -222,6 +242,21 @@ extension MessagesViewController: UITableViewDelegate {
         defer { tableView.deselectRow(at: indexPath, animated: true) }
         let item = self[indexPath]
         select(item)
+    }
+}
+
+// MARK: - LockActivityHandlingViewController
+
+extension MessagesViewController: LockActivityHandlingViewController {
+    
+    func handle(url: LockURL) {
+        
+        /// open Lock app
+        extensionContext?.open(url.rawValue, completionHandler: nil)
+    }
+    
+    func handle(activity: AppActivity) {
+        assertionFailure()
     }
 }
 
