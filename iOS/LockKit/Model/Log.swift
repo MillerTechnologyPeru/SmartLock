@@ -21,10 +21,15 @@ public func log(_ text: String) {
 
 public extension Log {
     
-    static var shared: Log = .appCache
+    static var shared: Log {
+        get { return custom ?? appCache }
+        set { custom = newValue }
+    }
     
-    static let appCache: Log = try! Store.caches.create(date: Date(), bundle: .main)
+    static let appCache: Log = try! Log.Store.caches.create(date: Date(), bundle: .main)
 }
+
+private var custom: Log?
 
 public struct Log {
     
@@ -44,7 +49,6 @@ public struct Log {
     fileprivate init(unsafe url: URL) {
         
         assert(Log(url: url) != nil, "Invalid url \(url)")
-        
         self.url = url
     }
     
@@ -56,9 +60,7 @@ public struct Log {
     public func log(_ text: String) throws {
         
         let newLine = "\n" + text
-        
         let data = Data(newLine.utf8)
-        
         try data.append(fileURL: url)
     }
 }
@@ -81,27 +83,32 @@ private extension Data {
 
 // MARK: - Log Store
 
+public extension Log.Store {
+    
+    /// Logs in cache directory
+    static let caches: Log.Store = Log.Store(directory: .cachesDirectory, subfolder: "logs")!
+    
+    /// Logs in documents directory.
+    static let documents: Log.Store = Log.Store(directory: .documentDirectory, subfolder: "logs")!
+}
+
 public extension Log {
     
     final class Store {
         
         public typealias Item = Log
         
-        public static let caches: Log.Store = Store(directory: .cachesDirectory, subfolder: "logs")!
-        
-        public static let documents: Log.Store = Store(directory: .documentDirectory, subfolder: "logs")!
-        
         public let folder: URL
         
         public private(set) var items = [Item]()
         
-        private init(folder: URL) {
+        internal init(folder: URL) {
             
             self.folder = folder
             try! self.load()
         }
         
-        private convenience init?(directory: FileManager.SearchPathDirectory, subfolder: String? = nil) {
+        internal convenience init?(directory: FileManager.SearchPathDirectory, subfolder: String? = nil) {
             
             guard let path = NSSearchPathForDirectoriesInDomains(directory, .userDomainMask, true).first
                 else { return nil }
