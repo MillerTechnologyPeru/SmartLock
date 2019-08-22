@@ -16,6 +16,7 @@ import UIKit
 import CoreBluetooth
 import DarwinGATT
 import AVFoundation
+import Intents
 import QRCodeReader
 import JGProgressHUD
 
@@ -87,7 +88,7 @@ final class NearbyLocksViewController: UITableViewController {
         configureView()
         
         // try to scan
-        if UIApplication.shared.applicationState != .background {
+        if Store.shared.locks.value.isEmpty == true {
             DispatchQueue.main.asyncAfter(deadline: .now() + 1.0,
                                           execute: { [weak self] in self?.scan() })
         }
@@ -266,7 +267,9 @@ final class NearbyLocksViewController: UITableViewController {
         guard let information = Store.shared.lockInformation.value[lock.scanData.peripheral]
             else { return }
         
-        log("Selected lock \(information.identifier)")
+        let identifier = information.identifier
+        
+        log("Selected lock \(identifier)")
         
         if #available(iOS 10.0, *) {
             selectionFeedbackGenerator.selectionChanged()
@@ -276,9 +279,20 @@ final class NearbyLocksViewController: UITableViewController {
         case .setup:
             setup(lock: lock)
         case .unlock:
-            userActivity?.resignCurrent()
-            userActivity = NSUserActivity(.action(.unlock(information.identifier)))
-            userActivity?.becomeCurrent()
+            if let lockCache = Store.shared[lock: identifier] {
+                userActivity?.resignCurrent()
+                userActivity = NSUserActivity(.action(.unlock(identifier)))
+                userActivity?.becomeCurrent()
+                if #available(iOS 12, *) {
+                    let intent = UnlockIntent(lock: identifier, name: lockCache.name)
+                    let interaction = INInteraction(intent: intent, response: nil)
+                    interaction.donate { error in
+                        if let error = error {
+                            log("Donating intent failed with error \(error)")
+                        }
+                    }
+                }
+            }
             unlock(lock: lock)
         }
     }

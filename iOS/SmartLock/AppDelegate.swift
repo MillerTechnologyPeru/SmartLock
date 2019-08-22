@@ -60,6 +60,9 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
                 else { return false }
         }
         
+        // FIXME: REMOVE!
+        Store.shared[key: UUID()] = KeyData()
+        
         return true
     }
 

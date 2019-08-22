@@ -129,33 +129,35 @@ final class IntentHandler: INExtension, INSendMessageIntentHandling, INSearchFor
     }
 }
 
-final class UnlockIntentHandler: NSObject, UnlockIntentIntentHandling {
+// MARK: - UnlockIntentHandler
+
+final class UnlockIntentHandler: NSObject, UnlockIntentHandling {
     
-    func confirm(intent: UnlockIntentIntent, completion: @escaping (UnlockIntentIntentResponse) -> Void) {
+    func confirm(intent: UnlockIntent, completion: @escaping (UnlockIntentResponse) -> Void) {
         
         guard let identifierString = intent.lock?.identifier,
             let lockIdentifier = UUID(uuidString: identifierString),
             let _ = Store.shared[lock: lockIdentifier] else {
-                completion(UnlockIntentIntentResponse.failure(failureReason: "Invalid lock."))
+                completion(.failure(failureReason: "Invalid lock."))
                 return
         }
         
-        completion(UnlockIntentIntentResponse(code: .ready, userActivity: NSUserActivity(.action(.unlock(lockIdentifier)))))
+        completion(.init(code: .ready, userActivity: NSUserActivity(.action(.unlock(lockIdentifier)))))
     }
     
-    func handle(intent: UnlockIntentIntent, completion: @escaping (UnlockIntentIntentResponse) -> Void) {
+    func handle(intent: UnlockIntent, completion: @escaping (UnlockIntentResponse) -> Void) {
         
         guard let identifierString = intent.lock?.identifier,
             let lockIdentifier = UUID(uuidString: identifierString),
             let lockCache = Store.shared[lock: lockIdentifier] else {
-                completion(UnlockIntentIntentResponse.failure(failureReason: "Invalid lock."))
+                completion(.failure(failureReason: "Invalid lock."))
                 return
         }
         
         // validate schedule
         if case let .scheduled(schedule) = lockCache.key.permission {
             guard schedule.isValid() else {
-                completion(UnlockIntentIntentResponse.failure(failureReason: "Can only use key during schedule."))
+                completion(.failure(failureReason: "Can only use key during schedule."))
                 return
             }
         }
@@ -163,19 +165,19 @@ final class UnlockIntentHandler: NSObject, UnlockIntentIntentHandling {
         async {
             do {
                 guard let peripheral = try Store.shared.device(for: lockIdentifier, scanDuration: 3.0) else {
-                    completion(UnlockIntentIntentResponse.failure(failureReason: "Lock not in range. "))
+                    completion(.failure(failureReason: "Lock not in range. "))
                     return
                 }
                 
                 guard try Store.shared.unlock(peripheral) else {
-                    completion(UnlockIntentIntentResponse.failure(failureReason: "Invalid lock."))
+                    completion(.failure(failureReason: "Invalid lock."))
                     return
                 }
                 
-                completion(UnlockIntentIntentResponse.success(lock: lockCache.name))
+                completion(.success(lock: lockCache.name))
             }
             catch {
-                completion(UnlockIntentIntentResponse.failure(failureReason: error.localizedDescription))
+                completion(.failure(failureReason: error.localizedDescription))
                 return
             }
         }

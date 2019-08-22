@@ -259,7 +259,7 @@ public extension NSUserActivity {
                 .lock: lockIdentifier.uuidString as NSString
                 ])
             if let lockCache = Store.shared[lock: lockIdentifier] {
-                self.title = "Unlock \(lockCache.name)"
+                self.title = "Unlock \"\(lockCache.name)\""
             } else {
                 self.title = "Unlock \(lockIdentifier)"
             }
@@ -268,7 +268,6 @@ public extension NSUserActivity {
             if #available(iOS 12.0, *) {
                 self.isEligibleForPrediction = true
                 self.suggestedInvocationPhrase = "Unlock my door"
-                //self.interaction = INInteraction(intent: INIntent, response: nil)
             }
         }
         if #available(iOS 12.0, *) {

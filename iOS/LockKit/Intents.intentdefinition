@@ -18,7 +18,7 @@
 			<key>INIntentCategory</key>
 			<string>generic</string>
 			<key>INIntentDefaultImageName</key>
-			<string>permissionBadgeAnytime</string>
+			<string>eKeyDocument</string>
 			<key>INIntentDescription</key>
 			<string>Unlock the specified lock</string>
 			<key>INIntentDescriptionID</key>

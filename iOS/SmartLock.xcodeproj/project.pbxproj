@@ -67,6 +67,7 @@
 		6E994AF8230E571F0076DC1B /* Intents.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = 6E994AF7230E571F0076DC1B /* Intents.intentdefinition */; };
 		6E994AFA230E5A2B0076DC1B /* Intents.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = 6E994AF7230E571F0076DC1B /* Intents.intentdefinition */; settings = {ATTRIBUTES = (no_codegen, ); }; };
 		6E994AFB230E5A2B0076DC1B /* Intents.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = 6E994AF7230E571F0076DC1B /* Intents.intentdefinition */; settings = {ATTRIBUTES = (no_codegen, ); }; };
+		6E994AFD230E657A0076DC1B /* Intent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E994AFC230E657A0076DC1B /* Intent.swift */; };
 		6EAADF8C2122664A0074CEDF /* AppVersion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EAADF8B2122664A0074CEDF /* AppVersion.swift */; };
 		6EC0412E230A226400357585 /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EC0412D230A226300357585 /* TabBarController.swift */; };
 /* End PBXBuildFile section */
@@ -156,6 +157,20 @@
 			remoteGlobalIDString = 6E994AD5230E56DD0076DC1B;
 			remoteInfo = Intent;
 		};
+		6E994AFF230E6DFE0076DC1B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6E6000082121119400787DAA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 6E994A83230DFB6C0076DC1B;
+			remoteInfo = LockKit;
+		};
+		6E994B01230E6E040076DC1B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6E6000082121119400787DAA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 6E994A83230DFB6C0076DC1B;
+			remoteInfo = LockKit;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -244,6 +259,8 @@
 		6E994AE9230E56DD0076DC1B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6E994AF7230E571F0076DC1B /* Intents.intentdefinition */ = {isa = PBXFileReference; lastKnownFileType = file.intentdefinition; path = Intents.intentdefinition; sourceTree = "<group>"; };
 		6E994AF9230E57860076DC1B /* SmartLock.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SmartLock.entitlements; sourceTree = "<group>"; };
+		6E994AFC230E657A0076DC1B /* Intent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Intent.swift; sourceTree = "<group>"; };
+		6E994AFE230E6DCD0076DC1B /* Intent.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Intent.entitlements; sourceTree = "<group>"; };
 		6EA3D128212180C000BC50D8 /* Observable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Observable.swift; sourceTree = "<group>"; };
 		6EAADF8B2122664A0074CEDF /* AppVersion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppVersion.swift; sourceTree = "<group>"; };
 		6EAADFB521229CBF0074CEDF /* LockTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LockTableViewCell.xib; sourceTree = "<group>"; };
@@ -401,6 +418,7 @@
 				6E60F8A62121259F0054995D /* Store.swift */,
 				6EC0412F230A494E00357585 /* UserActivity.swift */,
 				6E0F602F230DD05400B013AB /* UserNotification.swift */,
+				6E994AFC230E657A0076DC1B /* Intent.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -484,6 +502,7 @@
 		6E994AD7230E56DD0076DC1B /* Intent */ = {
 			isa = PBXGroup;
 			children = (
+				6E994AFE230E6DCD0076DC1B /* Intent.entitlements */,
 				6E994AD8230E56DD0076DC1B /* IntentHandler.swift */,
 				6E994ADA230E56DD0076DC1B /* Info.plist */,
 			);
@@ -623,6 +642,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				6E994B00230E6DFE0076DC1B /* PBXTargetDependency */,
 			);
 			name = Intent;
 			productName = Intent;
@@ -640,6 +660,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				6E994B02230E6E040076DC1B /* PBXTargetDependency */,
 			);
 			name = IntentUI;
 			productName = IntentUI;
@@ -686,6 +707,14 @@
 					};
 					6E994AD5230E56DD0076DC1B = {
 						CreatedOnToolsVersion = 10.3;
+						SystemCapabilities = {
+							com.apple.ApplicationGroups.iOS = {
+								enabled = 1;
+							};
+							com.apple.Keychain = {
+								enabled = 1;
+							};
+						};
 					};
 					6E994ADE230E56DD0076DC1B = {
 						CreatedOnToolsVersion = 10.3;
@@ -881,6 +910,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6E994AFD230E657A0076DC1B /* Intent.swift in Sources */,
 				6E994AB6230DFDB10076DC1B /* Observable.swift in Sources */,
 				6E994AC5230DFDC60076DC1B /* NewKeyRecieveViewController.swift in Sources */,
 				6E994AC1230DFDC60076DC1B /* LockViewController.swift in Sources */,
@@ -976,6 +1006,16 @@
 			isa = PBXTargetDependency;
 			target = 6E994AD5230E56DD0076DC1B /* Intent */;
 			targetProxy = 6E994AED230E56DD0076DC1B /* PBXContainerItemProxy */;
+		};
+		6E994B00230E6DFE0076DC1B /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 6E994A83230DFB6C0076DC1B /* LockKit */;
+			targetProxy = 6E994AFF230E6DFE0076DC1B /* PBXContainerItemProxy */;
+		};
+		6E994B02230E6E040076DC1B /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 6E994A83230DFB6C0076DC1B /* LockKit */;
+			targetProxy = 6E994B01230E6E040076DC1B /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -1133,6 +1173,7 @@
 				CODE_SIGN_ENTITLEMENTS = SmartLock/SmartLock.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 4W79SG34MW;
+				ENTITLEMENTS_REQUIRED = YES;
 				INFOPLIST_FILE = SmartLock/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1152,6 +1193,7 @@
 				CODE_SIGN_ENTITLEMENTS = SmartLock/SmartLock.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 4W79SG34MW;
+				ENTITLEMENTS_REQUIRED = YES;
 				INFOPLIST_FILE = SmartLock/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1309,7 +1351,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 4W79SG34MW;
 				INFOPLIST_FILE = IntentUI/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1331,7 +1373,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 4W79SG34MW;
 				INFOPLIST_FILE = IntentUI/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1349,10 +1391,11 @@
 		6E994AF4230E56DD0076DC1B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = Intent/Intent.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 4W79SG34MW;
 				INFOPLIST_FILE = Intent/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1371,10 +1414,11 @@
 		6E994AF5230E56DD0076DC1B /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = Intent/Intent.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 4W79SG34MW;
 				INFOPLIST_FILE = Intent/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
