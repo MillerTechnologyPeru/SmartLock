@@ -14,10 +14,14 @@ final class LogViewController: UITableViewController {
     // MARK: - Properties
     
     private var log: Log = .shared {
+        didSet { reloadData() }
+    }
+    
+    private var items = [String]() {
         didSet { configureView() }
     }
     
-    private var items = [String]()
+    private var textCache: String = ""
     
     private lazy var nameDateFormatter: DateFormatter = {
         let dateFormatter = DateFormatter()
@@ -25,6 +29,8 @@ final class LogViewController: UITableViewController {
         dateFormatter.timeStyle = .short
         return dateFormatter
     }()
+    
+    private var timer: Timer?
     
     // MARK: - Loading
     
@@ -34,6 +40,10 @@ final class LogViewController: UITableViewController {
         return viewController
     }
     
+    deinit {
+        timer?.invalidate()
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -41,8 +51,15 @@ final class LogViewController: UITableViewController {
         tableView.rowHeight = UITableView.automaticDimension
         tableView.estimatedRowHeight = 44
         
+        // update logs
+        if #available(iOS 10, iOSApplicationExtension 10.0, *) {
+            timer = Timer.scheduledTimer(withTimeInterval: 2.0, repeats: true) { [weak self] _ in
+                self?.reloadData()
+            }
+        }
+        
         // load log
-        configureView()
+        reloadData()
     }
     
     // MARK: - Actions
@@ -69,15 +86,33 @@ final class LogViewController: UITableViewController {
             title = log.url.lastPathComponent.replacingOccurrences(of: "." + Log.fileExtension, with: "")
         }
         self.navigationItem.title = title
-        
-        let text = try! log.load()
-        
-        // parse into lines
-        self.items = text.components(separatedBy: "\n").filter { $0.isEmpty == false }
-        
-        tableView.reloadData()
+        self.tableView.reloadData()
     }
     
+    private func reloadData() {
+        
+        async { [weak self] in
+            guard let self = self else { return }
+            var text: String = ""
+            do { text = try self.log.load() }
+            catch { assertionFailure("Unable to load log: \(error)"); return }
+            // reload if different
+            guard text != self.textCache
+                else { return }
+            self.textCache = text
+            // parse into lines
+            let items: [String] = text
+                .components(separatedBy: "\n")
+                .lazy
+                .filter { $0.isEmpty == false }
+                .lazy
+                .reversed()
+            mainQueue {
+                // update UI
+                self.items = items
+            }
+        }
+    }
 
     private func configure(cell: UITableViewCell, with item: String) {
         
