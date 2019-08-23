@@ -15,14 +15,16 @@ public final class LogViewController: UITableViewController {
     // MARK: - Properties
     
     public var log: Log = .shared {
-        didSet { reloadData() }
+        didSet { logChanged() }
     }
     
-    private var items = [String]() {
+    public var logDateFormatter: DateFormatter = LogViewController.logDateFormatter {
+        didSet { logChanged() }
+    }
+    
+    private var items = [Item]() {
         didSet { configureTableView() }
     }
-    
-    private var textCache: String?
     
     private lazy var nameDateFormatter: DateFormatter = {
         let dateFormatter = DateFormatter()
@@ -33,7 +35,7 @@ public final class LogViewController: UITableViewController {
     
     private var timer: Timer?
     
-    private lazy var queue = DispatchQueue(label: "com.colemancda.Lock.Logs")
+    private lazy var queue = DispatchQueue(for: LogViewController.self, in: .app, qualityOfService: .userInteractive, isConcurrent: false)
     
     // MARK: - Loading
     
@@ -62,7 +64,7 @@ public final class LogViewController: UITableViewController {
         }
         
         // load log
-        reloadData()
+        logChanged()
     }
     
     // MARK: - Actions
@@ -76,11 +78,13 @@ public final class LogViewController: UITableViewController {
     }
     
     // MARK: - Private Methods
-    private subscript (indexPath: IndexPath) -> String {
+    private subscript (indexPath: IndexPath) -> Item {
         get { return items[indexPath.row] }
     }
     
     private func configureView() {
+        
+        loadViewIfNeeded()
         
         let title: String
         if let metadata = log.metadata {
@@ -96,6 +100,13 @@ public final class LogViewController: UITableViewController {
         self.tableView.reloadData()
     }
     
+    private func logChanged() {
+        loadViewIfNeeded()
+        items.removeAll(keepingCapacity: true)
+        configureView()
+        reloadData()
+    }
+    
     private func reloadData() {
         
         queue.async { [weak self] in
@@ -103,35 +114,49 @@ public final class LogViewController: UITableViewController {
             var text: String = ""
             do { text = try self.log.load() }
             catch { assertionFailure("Unable to load log: \(error)"); return }
-            // reload if different
-            let previouslyLoaded = self.textCache != nil
-            guard text != self.textCache
-                else { return }
-            self.textCache = text
             // parse into lines
-            let items: [String] = text
+            let newItems: [Item] = text
                 .components(separatedBy: "\n")
                 .filter { $0.isEmpty == false }
+                .map { self.log(for: $0) }
             // update table view
             mainQueue { [weak self] in
                 guard let self = self else { return }
                 // update UI
-                self.items = items
+                guard self.items != newItems else { return }
+                let oldCount = self.items.count
+                let newCount = newItems.count
+                self.items = newItems
                 // scroll to bottom if logs are being updated in real time.
-                let lastIndexPath = IndexPath(row: items.count - 1, section: 0)
-                if previouslyLoaded {
-                    self.tableView.scrollToRow(at: lastIndexPath,
-                                               at: .bottom,
-                                               animated: true)
+                let lastIndexPath = IndexPath(row: self.items.count - 1, section: 0)
+                if oldCount != newCount, oldCount > 1 {
+                    self.tableView.scrollToRow(at: lastIndexPath, at: .bottom, animated: true)
                 }
             }
         }
     }
-
-    private func configure(cell: UITableViewCell, at indexPath: IndexPath) {
+    
+    private func configure(cell: LogTableViewCell, at indexPath: IndexPath) {
         
         let item = self[indexPath]
-        cell.textLabel?.text = item
+        
+        let dateText = item.date.flatMap({ logDateFormatter.string(from: $0) })
+        cell.contentLabel.text = item.text
+        cell.dateLabel.text = dateText
+        cell.dateLabel.isHidden = dateText == nil
+    }
+    
+    private func log(for string: String) -> Item {
+        // FIXME: Optimize date parsing
+        let components = string.components(separatedBy: " ")
+        guard components.count >= 2 else {
+            return Item(text: string, date: nil)
+        }
+        let dateString = components[0] + " " + components[1]
+        guard let date = Log.dateFormatter.date(from: dateString) else {
+            return Item(text: string, date: nil)
+        }
+        return Item(text: string.replacingOccurrences(of: dateString, with: ""), date: date)
     }
     
     // MARK: - UITableViewDataSource
@@ -150,4 +175,31 @@ public final class LogViewController: UITableViewController {
         configure(cell: cell, at: indexPath)
         return cell
     }
+}
+
+private extension LogViewController {
+    
+    static let logDateFormatter: DateFormatter = {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "HH:mm:ss.SSS"
+        dateFormatter.locale = .autoupdatingCurrent
+        dateFormatter.timeZone = .autoupdatingCurrent
+        return dateFormatter
+    }()
+}
+
+// MARK: - Supporting Types
+
+private extension LogViewController {
+    
+    struct Item: Equatable, Hashable {
+        let text: String
+        let date: Date?
+    }
+}
+
+public final class LogTableViewCell: UITableViewCell {
+    
+    @IBOutlet private(set) weak var dateLabel: UILabel!
+    @IBOutlet private(set) weak var contentLabel: UILabel!
 }

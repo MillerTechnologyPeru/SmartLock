@@ -9,6 +9,8 @@
 import Foundation
 import UIKit
 import CoreLock
+import LockKit
+import Intents
 
 public extension ActivityIndicatorViewController where Self: UIViewController {
     
@@ -31,8 +33,30 @@ public extension ActivityIndicatorViewController where Self: UIViewController {
     
     func unlock(lock: LockPeripheral<NativeCentral>, action: UnlockAction = .default) {
                 
-        performActivity({
-            try Store.shared.unlock(lock, action: action)
-        })
+        performActivity({ try Store.shared.unlock(lock, action: action) })
+    }
+}
+
+public extension UIViewController {
+    
+    /// Donate Siri Shortcut to unlock the specified lock.
+    ///
+    /// - Note: Prior to iOS 12 this method sets the current user activity.
+    func donateUnlockIntent(for lock: UUID) {
+        
+        if #available(iOS 12, iOSApplicationExtension 12.0, *),
+            let lockCache = Store.shared[lock: lock] {
+            let intent = UnlockIntent(lock: lock, name: lockCache.name)
+            let interaction = INInteraction(intent: intent, response: nil)
+            interaction.donate { error in
+                if let error = error {
+                    log("⚠️ Donating intent failed with error \(error)")
+                }
+            }
+        } else {
+            self.userActivity?.resignCurrent()
+            self.userActivity = NSUserActivity(.action(.unlock(lock)))
+            self.userActivity?.becomeCurrent()
+        }
     }
 }

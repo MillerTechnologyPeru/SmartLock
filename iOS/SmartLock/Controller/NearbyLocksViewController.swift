@@ -90,7 +90,7 @@ final class NearbyLocksViewController: UITableViewController {
         // Update UI
         configureView()
         
-        // try to scan
+        // scan if none is setup
         if Store.shared.locks.value.isEmpty == true {
             DispatchQueue.main.asyncAfter(deadline: .now() + 1.0,
                                           execute: { [weak self] in self?.scan() })
@@ -282,21 +282,12 @@ final class NearbyLocksViewController: UITableViewController {
         case .setup:
             setup(lock: lock)
         case .unlock:
-            if let lockCache = Store.shared[lock: identifier] {
-                userActivity?.resignCurrent()
-                userActivity = NSUserActivity(.action(.unlock(identifier)))
-                userActivity?.becomeCurrent()
-                if #available(iOS 12, *) {
-                    let intent = UnlockIntent(lock: identifier, name: lockCache.name)
-                    let interaction = INInteraction(intent: intent, response: nil)
-                    interaction.donate { error in
-                        if let error = error {
-                            log("Donating intent failed with error \(error)")
-                        }
-                    }
-                }
+            if let _ = Store.shared[lock: identifier] {
+                donateUnlockIntent(for: identifier)
+                unlock(lock: lock)
+            } else {
+                showErrorAlert("No key for lock.")
             }
-            unlock(lock: lock)
         }
     }
     

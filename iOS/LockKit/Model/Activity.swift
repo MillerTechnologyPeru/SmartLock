@@ -35,7 +35,7 @@ public struct LockActivityItem {
         guard let lockCache = Store.shared[lock: identifier]
             else { fatalError("Lock not in cache") }
         
-        return "I unlocked my door \"\(lockCache.name)\" with Cerradura"
+        return "I unlocked my door \"\(lockCache.name)\""
     }
     
     public var image: UIImage {
@@ -460,7 +460,6 @@ public final class UpdateActivity: UIActivity {
 #if canImport(IntentsUI)
 import IntentsUI
 
-@available(iOS 12, iOSApplicationExtension 12, *)
 public final class DonateUnlockIntentActivity: UIActivity {
     
     public override class var activityCategory: UIActivity.Category { return .action }
@@ -481,6 +480,9 @@ public final class DonateUnlockIntentActivity: UIActivity {
     
     public override func canPerform(withActivityItems activityItems: [Any]) -> Bool {
         
+        guard #available(iOS 12, *)
+            else { return false }
+        
         guard let lockItem = activityItems.first as? LockActivityItem,
             let _ = Store.shared[lock: lockItem.identifier]
             else { return false }
@@ -494,6 +496,9 @@ public final class DonateUnlockIntentActivity: UIActivity {
     }
     
     public override var activityViewController: UIViewController? {
+        
+        guard #available(iOS 12, *)
+            else { return nil }
         
         guard let lockItem = self.item
             else { fatalError() }

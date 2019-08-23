@@ -10,26 +10,45 @@ import Foundation
 
 public func log(_ text: String) {
     
-    // only print for debug builds
-    #if DEBUG
-    print(text)
-    #endif
+    let date = Date()
     
-    do { try Log.shared.log(text) }
-    catch { assertionFailure("Could not write log: \(error)"); return }
+    Log.queue.async {
+        
+        // only print for debug builds
+        #if DEBUG
+        print(text)
+        #endif
+        
+        let dateString = Log.dateFormatter.string(from: date)
+        
+        do { try Log.shared.log(dateString + " " + text) }
+        catch { assertionFailure("Could not write log: \(error)"); return }
+    }
+}
+
+fileprivate extension Log {
+    
+    static var custom: Log?
+    static let queue = DispatchQueue(for: Log.self, in: .app, qualityOfService: .default, isConcurrent: false)
 }
 
 public extension Log {
     
     static var shared: Log {
-        get { return custom ?? appCache }
-        set { custom = newValue }
+        get { return Log.custom ?? appCache }
+        set { Log.custom = newValue }
     }
     
-    static let appCache: Log = try! Log.Store.lockAppGroup.create(date: Date(), bundle: .main)
+    static let appCache: Log = try! Log.Store.caches.create(date: Date(), bundle: .main)
+    
+    static var dateFormatter: DateFormatter = {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "YYYY-MM-dd HH:mm:ss.SSS"
+        dateFormatter.locale = Locale(identifier: "en_US_POSIX")
+        dateFormatter.timeZone = nil
+        return dateFormatter
+    }()
 }
-
-private var custom: Log?
 
 public struct Log {
     

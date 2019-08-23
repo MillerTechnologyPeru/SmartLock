@@ -14,17 +14,13 @@ public extension UIView {
     /// Configure the application's UI appearance
     static func configureLockAppearance() {
         
-        #if os(iOS)
-        
         if #available(iOS 11.0, *) {
             UINavigationBar.appearance().prefersLargeTitles = true
             UINavigationBar.appearance().largeTitleTextAttributes = [.foregroundColor: UIColor.white]
         }
-        
         UINavigationBar.appearance().tintColor = .white
         UINavigationBar.appearance().titleTextAttributes = [.foregroundColor: UIColor.white]
         UINavigationBar.appearance().barTintColor = StyleKit.wirelessBlue
-        
-        #endif
+        UITabBar.appearance().tintColor = StyleKit.wirelessBlue
     }
 }

@@ -11,13 +11,7 @@ import UIKit
 import Bluetooth
 import GATT
 import CoreLock
-import Intents
-
-#if os(iOS)
-import UIKit
-import DarwinGATT
 import JGProgressHUD
-#endif
 
 public final class LockViewController: UITableViewController {
     
@@ -45,6 +39,13 @@ public final class LockViewController: UITableViewController {
     }()
     
     // MARK: - Loading
+    
+    public static func fromStoryboard(with lock: UUID) -> LockViewController {
+        guard let viewController = R.storyboard.lockDetail.lockViewController()
+            else { fatalError("Could not initialize \(self)") }
+        viewController.lockIdentifier = lock
+        return viewController
+    }
     
     public override func viewDidLoad() {
         super.viewDidLoad()
@@ -100,7 +101,8 @@ public final class LockViewController: UITableViewController {
                 HomeKitEnableActivity(),
                 RenameActivity(),
                 UpdateActivity(),
-                DeleteLockActivity()
+                DeleteLockActivity(),
+                DonateUnlockIntentActivity()
             ]
             
             let lockItem = LockActivityItem(identifier: lockIdentifier)
@@ -168,19 +170,7 @@ public final class LockViewController: UITableViewController {
         guard let keyData = Store.shared[key: lockCache.key.identifier]
             else { assertionFailure("No stored key for lock"); return }
         
-        self.userActivity?.resignCurrent()
-        self.userActivity = NSUserActivity(.action(.unlock(lockIdentifier)))
-        self.userActivity?.becomeCurrent()
-        
-        if #available(iOS 12, *) {
-            let intent = UnlockIntent(lock: lockIdentifier, name: lockCache.name)
-            let interaction = INInteraction(intent: intent, response: nil)
-            interaction.donate { error in
-                if let error = error {
-                    log("Donating intent failed with error \(error)")
-                }
-            }
-        }
+        donateUnlockIntent(for: lockIdentifier)
         
         if #available(iOS 10.0, *) {
             feedbackGenerator.impactOccurred()

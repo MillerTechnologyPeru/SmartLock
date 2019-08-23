@@ -198,7 +198,7 @@ private extension BeaconController {
                             manager.requestState(for: region)
                             return
                         }
-                        if #available(iOS 10, *),
+                        if #available(iOS 10, iOSApplicationExtension 10.0, *),
                             let lockCache = Store.shared[lock: lock] {
                             // show unlock notification
                             //UserNotificationCenter.shared.postUnlockNotification(for: lock, cache: lockCache)

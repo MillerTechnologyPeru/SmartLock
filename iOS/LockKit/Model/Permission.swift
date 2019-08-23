@@ -27,13 +27,13 @@ public extension PermissionType {
         
         switch self {
         case .owner:
-            return "permissionBadgeOwner"
+            return R.image.permissionBadgeOwner.name
         case .admin:
-            return "permissionBadgeAdmin"
+            return R.image.permissionBadgeAdmin.name
         case .anytime:
-            return "permissionBadgeAnytime"
+            return R.image.permissionBadgeAnytime.name
         case .scheduled:
-            return "permissionBadgeScheduled"
+            return R.image.permissionBadgeScheduled.name
         }
     }
 }
