@@ -22,7 +22,7 @@ public final class LogViewController: UITableViewController {
         didSet { configureTableView() }
     }
     
-    private var textCache: String = ""
+    private var textCache: String?
     
     private lazy var nameDateFormatter: DateFormatter = {
         let dateFormatter = DateFormatter()
@@ -104,6 +104,7 @@ public final class LogViewController: UITableViewController {
             do { text = try self.log.load() }
             catch { assertionFailure("Unable to load log: \(error)"); return }
             // reload if different
+            let previouslyLoaded = self.textCache != nil
             guard text != self.textCache
                 else { return }
             self.textCache = text
@@ -111,9 +112,18 @@ public final class LogViewController: UITableViewController {
             let items: [String] = text
                 .components(separatedBy: "\n")
                 .filter { $0.isEmpty == false }
-            mainQueue {
+            // update table view
+            mainQueue { [weak self] in
+                guard let self = self else { return }
                 // update UI
                 self.items = items
+                // scroll to bottom if logs are being updated in real time.
+                let lastIndexPath = IndexPath(row: items.count - 1, section: 0)
+                if previouslyLoaded {
+                    self.tableView.scrollToRow(at: lastIndexPath,
+                                               at: .bottom,
+                                               animated: true)
+                }
             }
         }
     }
