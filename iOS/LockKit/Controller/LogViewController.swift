@@ -9,11 +9,12 @@
 import Foundation
 import UIKit
 
-final class LogViewController: UITableViewController {
+/// Log View Controller
+public final class LogViewController: UITableViewController {
     
     // MARK: - Properties
     
-    private var log: Log = .shared {
+    public var log: Log = .shared {
         didSet { reloadData() }
     }
     
@@ -32,6 +33,8 @@ final class LogViewController: UITableViewController {
     
     private var timer: Timer?
     
+    private lazy var queue = DispatchQueue(label: "com.colemancda.Lock.Logs")
+    
     // MARK: - Loading
     
     public static func fromStoryboard(with log: Log = .shared) -> LogViewController {
@@ -44,7 +47,7 @@ final class LogViewController: UITableViewController {
         timer?.invalidate()
     }
     
-    override func viewDidLoad() {
+    public override func viewDidLoad() {
         super.viewDidLoad()
         
         // configure table view
@@ -95,7 +98,7 @@ final class LogViewController: UITableViewController {
     
     private func reloadData() {
         
-        async { [weak self] in
+        queue.async { [weak self] in
             guard let self = self else { return }
             var text: String = ""
             do { text = try self.log.load() }
@@ -107,10 +110,7 @@ final class LogViewController: UITableViewController {
             // parse into lines
             let items: [String] = text
                 .components(separatedBy: "\n")
-                .lazy
                 .filter { $0.isEmpty == false }
-                .lazy
-                .reversed()
             mainQueue {
                 // update UI
                 self.items = items
@@ -118,31 +118,26 @@ final class LogViewController: UITableViewController {
         }
     }
 
-    private func configure(cell: UITableViewCell, with item: String) {
+    private func configure(cell: UITableViewCell, at indexPath: IndexPath) {
         
+        let item = self[indexPath]
         cell.textLabel?.text = item
     }
     
     // MARK: - UITableViewDataSource
     
-    override func numberOfSections(in tableView: UITableView) -> Int {
-        
+    public override func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
     
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        
+    public override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return items.count
     }
     
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    public override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: R.reuseIdentifier.logEntryTableViewCell, for: indexPath)!
-        
-        let item = self[indexPath]
-        
-        configure(cell: cell, with: item)
-        
+        configure(cell: cell, at: indexPath)
         return cell
     }
 }
