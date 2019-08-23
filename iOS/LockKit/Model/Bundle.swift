@@ -18,3 +18,17 @@ public extension Bundle {
         return Cache.bundle
     }
 }
+
+public extension Bundle {
+    
+    enum Lock: String {
+        
+        case app = "com.colemancda.Lock"
+        case coreLock = "com.colemancda.CoreLock"
+        case lockKit = "com.colemancda.LockKit"
+        case intent = "com.colemancda.Lock.Intent"
+        case intentUI = "com.colemancda.Lock.IntentUI"
+        case message = "com.colemancda.Lock.Message"
+        case today = "com.colemancda.Lock.Today"
+    }
+}

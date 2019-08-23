@@ -12,10 +12,6 @@ import LockKit
 
 final class SettingsViewController: UITableViewController {
     
-    // MARK: - IB Outlets
-    
-    @IBOutlet private(set) weak var versionLabel: UILabel!
-    
     // MARK: - Properties
     
     private var data = [Section]()
@@ -50,25 +46,23 @@ final class SettingsViewController: UITableViewController {
     // MARK: - Private Methods
     
     private subscript (indexPath: IndexPath) -> Item {
-        
-        get { return data[indexPath.section].items[indexPath.row] }
+        return data[indexPath.section].items[indexPath.row]
     }
     
     private func configureView() {
         
-        // set app version
-        versionLabel.text = "v\(AppVersion) (\(AppBuild))"
-        
         // update table view items
         data = [
             Section(header: nil,
-                    footer: nil,
+                    footer: version,
                     items: [
                         Item(icon: .report,
                              title: "Report",
+                             accessory: .none,
                              action: { $0.show(LogsViewController.fromStoryboard(), sender: $1) /* $0.report($1.titleLabel) */ }),
                         Item(icon: .logs,
                              title: "Logs",
+                             accessory: .disclosureIndicator,
                              action: { $0.show(LogsViewController.fromStoryboard(), sender: $1) })
                 ])
         ]
@@ -76,32 +70,29 @@ final class SettingsViewController: UITableViewController {
         tableView.reloadData()
     }
     
-    private func configure(cell: SettingsTableViewCell, with item: Item) {
+    private func configure(cell: SettingsTableViewCell, at indexPath: IndexPath) {
+        
+        let item = self[indexPath]
         
         cell.iconView.icon = item.icon
         cell.titleLabel.text = item.title
+        cell.accessoryType = item.accessory
     }
     
     // MARK: - UITableViewDataSource
     
     override func numberOfSections(in tableView: UITableView) -> Int {
-        
         return data.count
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        
         return data[section].items.count
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        let cell = tableView.dequeueReusableCell(withIdentifier: SettingsTableViewCell.reuseIdentifier, for: indexPath) as! SettingsTableViewCell
-        
-        let item = self[indexPath]
-        
-        configure(cell: cell, with: item)
-        
+        let cell = tableView.dequeueReusableCell(withIdentifier: R.reuseIdentifier.settingsTableViewCell, for: indexPath)!
+        configure(cell: cell, at: indexPath)
         return cell
     }
     
@@ -122,14 +113,12 @@ final class SettingsViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, titleForHeaderInSection sectionIndex: Int) -> String? {
         
         let section = data[sectionIndex]
-        
         return section.header
     }
     
     override func tableView(_ tableView: UITableView, titleForFooterInSection sectionIndex: Int) -> String? {
         
         let section = data[sectionIndex]
-        
         return section.footer
     }
 }
@@ -141,9 +130,7 @@ private extension SettingsViewController {
     struct Section {
         
         let header: String?
-        
         let footer: String?
-        
         let items: [Item]
     }
     
@@ -152,20 +139,13 @@ private extension SettingsViewController {
         typealias Icon = SettingsIconView.Icon
         
         let icon: Icon
-        
         let title: String
-        
+        let accessory: UITableViewCell.AccessoryType
         let action: (SettingsViewController, SettingsTableViewCell) -> ()
     }
 }
 
 final class SettingsTableViewCell: UITableViewCell {
-    
-    // MARK: - Class Properties
-    
-    public static let reuseIdentifier = "SettingsTableViewCell"
-    
-    // MARK: - IB Outlets
     
     @IBOutlet private(set) weak var titleLabel: UILabel!
     @IBOutlet private(set) weak var iconView: SettingsIconView!

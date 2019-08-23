@@ -13,15 +13,13 @@ final class LogViewController: UITableViewController {
     
     // MARK: - Properties
     
-    var log: Log! {
-        
+    private var log: Log = .shared {
         didSet { configureView() }
     }
     
     private var items = [String]()
     
     private lazy var nameDateFormatter: DateFormatter = {
-        
         let dateFormatter = DateFormatter()
         dateFormatter.dateStyle = .short
         dateFormatter.timeStyle = .short
@@ -29,6 +27,12 @@ final class LogViewController: UITableViewController {
     }()
     
     // MARK: - Loading
+    
+    public static func fromStoryboard(with log: Log = .shared) -> LogViewController {
+        let viewController = R.storyboard.logs.logViewController()!
+        viewController.log = log
+        return viewController
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -57,10 +61,14 @@ final class LogViewController: UITableViewController {
     }
     
     private func configureView() {
-        guard let log = self.log
-            else { assertionFailure(); return }
         
-        self.navigationItem.title = name(for: log)
+        let title: String
+        if let metadata = log.metadata {
+            title = metadata.bundle.symbol + " " + nameDateFormatter.string(from: metadata.created)
+        } else {
+            title = log.url.lastPathComponent.replacingOccurrences(of: "." + Log.fileExtension, with: "")
+        }
+        self.navigationItem.title = title
         
         let text = try! log.load()
         
@@ -74,20 +82,6 @@ final class LogViewController: UITableViewController {
     private func configure(cell: UITableViewCell, with item: String) {
         
         cell.textLabel?.text = item
-    }
-    
-    private func name(for log: Log) -> String {
-        
-        var name = log.url.lastPathComponent.replacingOccurrences(of: "." + Log.fileExtension, with: "")
-        
-        if let timeInterval = Int(name) {
-            
-            let date = Date(timeIntervalSince1970: TimeInterval(timeInterval))
-            
-            name = nameDateFormatter.string(from: date)
-        }
-        
-        return name
     }
     
     // MARK: - UITableViewDataSource

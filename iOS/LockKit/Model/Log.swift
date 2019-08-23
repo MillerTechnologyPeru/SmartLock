@@ -155,13 +155,21 @@ public extension Log {
         
         public func load() throws {
             
-            let files = try FileManager.default.contentsOfDirectory(at: folder,
-                                                                    includingPropertiesForKeys: nil,
-                                                                    options: .skipsSubdirectoryDescendants)
+            let files = try FileManager.default.contentsOfDirectory(
+                at: folder,
+                includingPropertiesForKeys: [.contentModificationDateKey],
+                options: .skipsSubdirectoryDescendants)
             
-            self.items = files
+            let sorted = files
+                .lazy
+                .map { (url: $0, date: (try? $0.resourceValues(forKeys: [.contentModificationDateKey]))?.contentModificationDate ?? Date.distantPast) }
+                .lazy
+                .sorted(by: { $0.date > $1.date })
+                .lazy
+                .map { $0.url }
+            
+            self.items = sorted
                 .compactMap { Item(url: $0) }
-                .sorted(by: { $0.url.lastPathComponent > $1.url.lastPathComponent })
         }
         
         private func item(named name: String) -> Item {
@@ -185,5 +193,44 @@ public extension Log {
             let name = "\(bundle.bundleIdentifier ?? bundle.bundleURL.lastPathComponent) \(Int(date.timeIntervalSince1970))"
             return try create(name)
         }
+        
+        @discardableResult
+        public func create(metadata: Metadata) throws -> Log {
+            return try create(metadata.description)
+        }
+    }
+}
+
+public extension Log {
+    
+    struct Metadata {
+        
+        public let bundle: Bundle.Lock
+        public let created: Date
+    }
+}
+
+extension Log.Metadata: CustomStringConvertible {
+    
+    public var description: String {
+        return "\(bundle.rawValue) \(Int(created.timeIntervalSince1970))"
+    }
+}
+
+public extension Log {
+    
+    var metadata: Metadata? {
+        
+        let name = url.lastPathComponent.replacingOccurrences(of: "." + Log.fileExtension, with: "")
+        let components = name.components(separatedBy: " ")
+        guard components.count == 2,
+            let bundleIdentifier = components.first,
+            let bundle = Bundle.Lock(rawValue: bundleIdentifier),
+            let timeInterval = Int(components[1])
+            else { return nil }
+        
+        let date = Date(timeIntervalSince1970: TimeInterval(timeInterval))
+        let metadata = Metadata(bundle: bundle, created: date)
+        return metadata
     }
 }

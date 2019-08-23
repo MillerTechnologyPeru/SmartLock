@@ -135,7 +135,7 @@
                             <rect key="frame" x="0.0" y="117.5" width="320" height="57"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <subviews>
-                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="v1.0.0 (100)" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4vr-9X-xIR">
+                                <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="v1.0.0 (100)" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4vr-9X-xIR">
                                     <rect key="frame" x="16" y="16" width="89" height="21"/>
                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                     <nil key="textColor"/>
@@ -157,7 +157,7 @@
                                     <rect key="frame" x="0.0" y="0.0" width="320" height="43.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="SqU-Je-THt" customClass="SettingsIconView" customModule="ClimateConfig" customModuleProvider="target">
+                                        <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="SqU-Je-THt" customClass="SettingsIconView" customModule="SmartLock" customModuleProvider="target">
                                             <rect key="frame" x="16" y="7" width="30" height="30"/>
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             <constraints>
@@ -199,9 +199,6 @@
                     <navigationItem key="navigationItem" title="Settings" id="j2U-MR-tja">
                         <barButtonItem key="backBarButtonItem" title=" " id="T2l-7G-vlG"/>
                     </navigationItem>
-                    <connections>
-                        <outlet property="versionLabel" destination="4vr-9X-xIR" id="zOU-Ra-WQe"/>
-                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="hXw-W5-r8Q" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

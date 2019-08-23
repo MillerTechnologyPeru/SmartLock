@@ -13,13 +13,15 @@ public final class LogsViewController: UITableViewController {
     
     // MARK: - Properties
     
-    var items = [Log]() {
+    private(set) var items = [Log]() {
         didSet { configureView() }
     }
     
-    private lazy var store: Log.Store = .lockAppGroup
+    public var store: Log.Store = .lockAppGroup {
+        didSet { reloadData() }
+    }
     
-    private lazy var nameDateFormatter: DateFormatter = {
+    private lazy var dateFormatter: DateFormatter = {
         let dateFormatter = DateFormatter()
         dateFormatter.dateStyle = .long
         dateFormatter.timeStyle = .short
@@ -49,69 +51,63 @@ public final class LogsViewController: UITableViewController {
         reloadData()
     }
     
-    // MARK: - Private Methods
+    public override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        reloadData()
+    }
+    
+    // MARK: - Methods
+    
     private subscript (indexPath: IndexPath) -> Log {
         get { return items[indexPath.row] }
     }
     
     private func reloadData() {
         
-        try! store.load()
-        self.items = store.items.sorted(by: { $0.url.lastPathComponent > $1.url.lastPathComponent })
+        do { try store.load() }
+        catch { assertionFailure("Could not load logs: \(error)"); return }
+        self.items = store.items
     }
     
     private func configureView() {
         
+        loadViewIfNeeded()
         tableView.reloadData()
     }
     
-
-    private func configure(cell: UITableViewCell, with item: Log) {
+    private func configure(cell: UITableViewCell, at indexPath: IndexPath) {
         
-        let name = self.name(for: item)
-        
-        cell.textLabel?.text = name
-    }
-    
-    private func name(for log: Log) -> String {
-        
-        var name = log.url.lastPathComponent.replacingOccurrences(of: "." + Log.fileExtension, with: "")
-        
-        if let timeInterval = Int(name) {
-            
-            let date = Date(timeIntervalSince1970: TimeInterval(timeInterval))
-            
-            name = nameDateFormatter.string(from: date)
+        let log = self[indexPath]
+        if let metadata = log.metadata {
+            cell.textLabel?.text = metadata.bundle.symbol + " " + metadata.bundle.localizedText
+            cell.detailTextLabel?.text = dateFormatter.string(from: metadata.created)
+        } else {
+            cell.textLabel?.text = log.url.lastPathComponent.replacingOccurrences(of: "." + Log.fileExtension, with: "")
+            cell.detailTextLabel?.text = nil
         }
-        
-        return name
     }
     
     private func select(_ item: Log) {
         
-        let viewController = R.storyboard.logs.logViewController()!
-        viewController.log = item
+        let viewController = LogViewController.fromStoryboard(with: item)
         show(viewController, sender: self)
     }
     
     // MARK: - UITableViewDataSource
     
     public override func numberOfSections(in tableView: UITableView) -> Int {
-        
         return 1
     }
     
     public override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        
         return items.count
     }
     
     public override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: R.reuseIdentifier.logTableViewCell, for: indexPath)!
-        
-        let item = self[indexPath]
-        configure(cell: cell, with: item)
+        configure(cell: cell, at: indexPath)
         return cell
     }
     
@@ -138,7 +134,7 @@ extension LogsViewController: UITableViewDragDelegate {
         guard let itemProvider = NSItemProvider(contentsOf: document.url)
             else { return [] }
         
-        itemProvider.suggestedName = name(for: document)
+        itemProvider.suggestedName = document.url.lastPathComponent
         
         let dragItem = UIDragItem(itemProvider: itemProvider)
         dragItem.localObject = document
@@ -153,5 +149,47 @@ extension LogsViewController: UITableViewDragDelegate {
     public func tableView(_ tableView: UITableView, itemsForAddingTo session: UIDragSession, at indexPath: IndexPath, point: CGPoint) -> [UIDragItem] {
         
         return dragItems(for: indexPath)
+    }
+}
+
+// MARK: - Supporting Types
+
+internal extension Bundle.Lock {
+    
+    var symbol: String {
+        switch self {
+        case .app:
+            return "📱"
+        case .coreLock,
+             .lockKit:
+            return "🔒"
+        case .intent,
+             .intentUI:
+            return "🎙"
+        case .message:
+            return "✉️"
+        case .today:
+            return "☀️"
+        }
+    }
+    
+    var localizedText: String {
+        
+        switch self {
+        case .app:
+            return "Application"
+        case .coreLock:
+            return "CoreLock"
+        case .lockKit:
+            return "LockKit"
+        case .intent:
+            return "Siri Intent"
+        case .intentUI:
+            return "Siri Intent UI"
+        case .message:
+            return "Message Extension"
+        case .today:
+            return "Today Extension"
+        }
     }
 }
