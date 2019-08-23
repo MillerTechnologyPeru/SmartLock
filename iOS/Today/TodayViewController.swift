@@ -58,6 +58,9 @@ final class TodayViewController: UIViewController, NCWidgetProviding {
         // configure logging
         Log.shared = .today
         
+        // set global appearance
+        UIView.configureLockAppearance()
+        
         log("☀️ Loaded \(TodayViewController.self)")
         
         // register cell

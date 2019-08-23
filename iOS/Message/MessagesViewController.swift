@@ -34,6 +34,9 @@ final class MessagesViewController: MSMessagesAppViewController {
         // configure logging
         Log.shared = .message
         
+        // set global appearance
+        UIView.configureLockAppearance()
+        
         // print app info
         log("✉️ Loaded \(MessagesViewController.self)")
         

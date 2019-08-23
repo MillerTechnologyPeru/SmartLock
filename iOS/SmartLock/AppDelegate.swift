@@ -36,6 +36,9 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
         // print app info
         log("📱 Launching SmartLock v\(AppVersion) Build \(AppBuild)")
         
+        // set global appearance
+        UIView.configureLockAppearance()
+        
         // setup logging
         LockManager.shared.log = { log("🔒 LockManager: " + $0) }
         BeaconController.shared.log = { log("📶 \(BeaconController.self): " + $0) }
