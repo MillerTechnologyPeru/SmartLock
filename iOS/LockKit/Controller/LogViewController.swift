@@ -18,7 +18,7 @@ final class LogViewController: UITableViewController {
     }
     
     private var items = [String]() {
-        didSet { configureView() }
+        didSet { configureTableView() }
     }
     
     private var textCache: String = ""
@@ -86,6 +86,10 @@ final class LogViewController: UITableViewController {
             title = log.url.lastPathComponent.replacingOccurrences(of: "." + Log.fileExtension, with: "")
         }
         self.navigationItem.title = title
+        self.configureTableView()
+    }
+    
+    private func configureTableView() {
         self.tableView.reloadData()
     }
     
