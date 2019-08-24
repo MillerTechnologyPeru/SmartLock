@@ -77,8 +77,8 @@
             <objects>
                 <navigationController id="u5v-kl-BN6" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="Settings" image="SettingsTabBarIcon" selectedImage="SettingsTabBarIconSelected" id="Dbb-gU-Nja"/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="BlQ-ow-oir">
-                        <rect key="frame" x="0.0" y="20" width="320" height="44"/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" largeTitles="YES" id="BlQ-ow-oir">
+                        <rect key="frame" x="0.0" y="20" width="320" height="91"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <connections>
@@ -94,8 +94,8 @@
             <objects>
                 <navigationController id="Rr6-5c-Ljc" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="Keys" image="LockTabBarIcon" selectedImage="LockTabBarIconSelected" id="QiL-2R-Pns"/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="lVH-al-L4E">
-                        <rect key="frame" x="0.0" y="20" width="320" height="44"/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" largeTitles="YES" id="lVH-al-L4E">
+                        <rect key="frame" x="0.0" y="20" width="320" height="91"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <connections>
@@ -111,8 +111,8 @@
             <objects>
                 <navigationController id="CQS-Vt-z0J" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="Nearby" image="NearTabBarIcon" selectedImage="NearTabBarIconSelected" id="Hd4-3Y-odI"/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="YPP-nG-LH2">
-                        <rect key="frame" x="0.0" y="20" width="320" height="44"/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" largeTitles="YES" id="YPP-nG-LH2">
+                        <rect key="frame" x="0.0" y="20" width="320" height="91"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <connections>

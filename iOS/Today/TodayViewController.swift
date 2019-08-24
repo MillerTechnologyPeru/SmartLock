@@ -200,17 +200,16 @@ final class TodayViewController: UIViewController, NCWidgetProviding {
         case .noNearbyLocks:
             cell.lockTitleLabel.text = "No Nearby Locks"
             cell.lockDetailLabel.text = nil
-            cell.lockImageView.image = nil
             cell.activityIndicatorView.isHidden = true
-            cell.lockImageView.isHidden = true
+            cell.permissionView.isHidden = true
             cell.selectionStyle = .none
         case let .lock(_, cache):
             let permission = cache.key.permission
             cell.lockTitleLabel.text = cache.name
             cell.lockDetailLabel.text = permission.localizedText
-            cell.lockImageView.image = UIImage(permission: permission)
+            cell.permissionView.permission = permission.type
             cell.activityIndicatorView.isHidden = true
-            cell.lockImageView.isHidden = false
+            cell.permissionView.isHidden = false
             cell.selectionStyle = .default
         }
     }

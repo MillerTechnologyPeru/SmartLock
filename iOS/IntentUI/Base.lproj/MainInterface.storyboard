@@ -4,7 +4,6 @@
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
-        <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -24,13 +23,14 @@
                                     <stackView opaque="NO" contentMode="scaleToFill" alignment="center" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="31B-Ul-w4l">
                                         <rect key="frame" x="0.0" y="0.0" width="154.5" height="51"/>
                                         <subviews>
-                                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="permissionBadgeOwner" translatesAutoresizingMaskIntoConstraints="NO" id="QoN-Jv-JMb">
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="6WS-Fd-gUl" customClass="PermissionIconView" customModule="LockKit">
                                                 <rect key="frame" x="0.0" y="0.0" width="51" height="51"/>
+                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <constraints>
-                                                    <constraint firstAttribute="width" constant="51" id="75z-zl-x1h"/>
-                                                    <constraint firstAttribute="width" secondItem="QoN-Jv-JMb" secondAttribute="height" multiplier="1:1" id="VrJ-li-WZS"/>
+                                                    <constraint firstAttribute="width" secondItem="6WS-Fd-gUl" secondAttribute="height" id="MAb-Zo-HlL"/>
+                                                    <constraint firstAttribute="height" constant="51" id="lLv-al-6gE"/>
                                                 </constraints>
-                                            </imageView>
+                                            </view>
                                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="eae-RY-PqA">
                                                 <rect key="frame" x="59" y="1.5" width="95.5" height="48"/>
                                                 <subviews>
@@ -49,10 +49,6 @@
                                                 </subviews>
                                             </stackView>
                                         </subviews>
-                                        <constraints>
-                                            <constraint firstItem="QoN-Jv-JMb" firstAttribute="width" secondItem="QoN-Jv-JMb" secondAttribute="height" multiplier="1:1" id="Meu-DC-Umf"/>
-                                            <constraint firstItem="QoN-Jv-JMb" firstAttribute="width" secondItem="QoN-Jv-JMb" secondAttribute="height" multiplier="1:1" id="hIw-2J-ii0"/>
-                                        </constraints>
                                     </stackView>
                                     <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" animating="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="mzc-UA-rLg">
                                         <rect key="frame" x="267" y="0.0" width="37" height="51"/>
@@ -74,8 +70,8 @@
                     <connections>
                         <outlet property="activityViewController" destination="mzc-UA-rLg" id="XK6-3U-JW6"/>
                         <outlet property="lockDetailLabel" destination="7mg-hs-RtN" id="yid-Of-Gx0"/>
-                        <outlet property="lockImageView" destination="QoN-Jv-JMb" id="NhD-VK-eIT"/>
                         <outlet property="lockTitleLabel" destination="Irj-aN-5ZD" id="9gb-1v-ObH"/>
+                        <outlet property="permissionView" destination="6WS-Fd-gUl" id="rRs-aY-eXu"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="X47-rx-isc" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -83,7 +79,4 @@
             <point key="canvasLocation" x="47.826086956521742" y="20.758928571428569"/>
         </scene>
     </scenes>
-    <resources>
-        <image name="permissionBadgeOwner" width="51" height="51"/>
-    </resources>
 </document>

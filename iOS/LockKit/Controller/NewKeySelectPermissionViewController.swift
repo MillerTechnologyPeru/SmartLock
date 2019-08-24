@@ -73,7 +73,7 @@ public final class NewKeySelectPermissionViewController: UITableViewController, 
         
         let permissionType = permissionTypes[indexPath.row]
         
-        cell.permissionImageView.image = UIImage(permissionType: permissionType)
+        cell.permissionView.permission = permissionType
         cell.permissionTypeLabel.text = permissionType.localizedText
         cell.permissionDescriptionLabel.text = description(for: permissionType)
     }
@@ -81,18 +81,17 @@ public final class NewKeySelectPermissionViewController: UITableViewController, 
     // MARK: - UITableViewDataSource
     
     public override func numberOfSections(in tableView: UITableView) -> Int {
-        
         return 1
     }
     
     public override func tableView(_ tableView: UITableView, numberOfRowsInSection: Int) -> Int {
-        
         return permissionTypes.count
     }
     
     public override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        let cell = tableView.dequeueReusableCell(withIdentifier: PermissionTypeTableViewCell.resuseIdentifier, for: indexPath) as! PermissionTypeTableViewCell
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: R.reuseIdentifier.permissionTypeTableViewCell, for: indexPath)
+            else { fatalError() }
         configure(cell: cell, at: indexPath)
         return cell
     }
@@ -113,11 +112,11 @@ public final class NewKeySelectPermissionViewController: UITableViewController, 
         case .admin:
             // sender: .view(cell.permissionImageView)
             newKey(permission: .admin) { [weak self] in
-                self?.completion?(($0, .view(cell.permissionImageView)))
+                self?.completion?(($0, .view(cell.permissionView)))
             }
         case .anytime:
             newKey(permission: .anytime) { [weak self] in
-                self?.completion?(($0, .view(cell.permissionImageView)))
+                self?.completion?(($0, .view(cell.permissionView)))
             }
         case .scheduled:
             fatalError("Not implemented")
@@ -154,13 +153,9 @@ public extension UIViewController {
 
 // MARK: - Supporting Types
 
-public final class PermissionTypeTableViewCell: UITableViewCell {
+final class PermissionTypeTableViewCell: UITableViewCell {
     
-    static let resuseIdentifier = "PermissionTypeTableViewCell"
-    
-    @IBOutlet weak var permissionImageView: UIImageView!
-    
-    @IBOutlet weak var permissionTypeLabel: UILabel!
-    
-    @IBOutlet weak var permissionDescriptionLabel: UILabel!
+    @IBOutlet private(set) weak var permissionView: PermissionIconView!
+    @IBOutlet private(set) weak var permissionTypeLabel: UILabel!
+    @IBOutlet private(set) weak var permissionDescriptionLabel: UILabel!
 }

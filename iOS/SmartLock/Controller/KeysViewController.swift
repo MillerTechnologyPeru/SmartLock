@@ -90,9 +90,9 @@ final class KeysViewController: UITableViewController {
         
         cell.lockTitleLabel.text = item.cache.name
         cell.lockDetailLabel.text = permission.localizedText
-        cell.lockImageView.image = UIImage(permission: permission)
+        cell.permissionView.permission = permission.type
         cell.activityIndicatorView.isHidden = true
-        cell.lockImageView.isHidden = false
+        cell.permissionView.isHidden = false
     }
     
     private func select(_ item: Item) {

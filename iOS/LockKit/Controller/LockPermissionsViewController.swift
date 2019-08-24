@@ -122,10 +122,10 @@ public final class LockPermissionsViewController: UITableViewController, Activit
         let item = self[indexPath]
         
         cell.lockTitleLabel.text = item.name
-        cell.lockImageView.image = UIImage(permission: item.permission)
+        cell.permissionView.permission = item.permission.type
         cell.lockDetailLabel.text = item.permission.localizedText
         cell.activityIndicatorView.isHidden = true
-        cell.lockImageView?.isHidden = false
+        cell.permissionView.isHidden = false
     }
     
     // MARK: - Suscripting

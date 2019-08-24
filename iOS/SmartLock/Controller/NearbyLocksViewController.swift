@@ -204,7 +204,7 @@ final class NearbyLocksViewController: UITableViewController {
         
         let title: String
         let detail: String
-        let image: UIImage?
+        let permission: PermissionType?
         let isEnabled: Bool
         
         if let information = Store.shared.lockInformation.value[lock.scanData.peripheral] {
@@ -223,28 +223,27 @@ final class NearbyLocksViewController: UITableViewController {
                 // known lock
                 if let lockCache = Store.shared[lock: information.identifier] {
                     
-                    let permission = lockCache.key.permission
+                    permission = lockCache.key.permission.type
                     title = lockCache.name
-                    detail = permission.localizedText
-                    image = UIImage(permission: permission)
+                    detail = lockCache.key.permission.localizedText
                 } else {
                     title = "Lock"
                     detail = information.identifier.description
-                    image = UIImage(permission: .anytime)
+                    permission = .anytime
                 }
                 
             case .setup:
                 
                 title = "Setup"
                 detail = information.identifier.description
-                image = UIImage(permission: .owner)
+                permission = .owner
             }
         } else {
             
             isEnabled = false
             title = "Loading..."
             detail = ""
-            image = nil
+            permission = nil
             
             if cell.activityIndicatorView.isHidden {
                 cell.activityIndicatorView.isHidden = false
@@ -256,10 +255,12 @@ final class NearbyLocksViewController: UITableViewController {
         
         cell.lockTitleLabel.text = title
         cell.lockDetailLabel.text = detail
-        cell.lockImageView.image = image
+        if let permission = permission {
+            cell.permissionView.permission = permission
+        }
         
         // hide image if loading
-        cell.lockImageView.isHidden = image == nil
+        cell.permissionView.isHidden = permission == nil
         
         cell.selectionStyle = isEnabled ? .default : .none
     }

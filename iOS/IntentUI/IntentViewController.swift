@@ -13,18 +13,12 @@ import CoreBluetooth
 import CoreLock
 import LockKit
 
-// As an example, this extension's Info.plist has been configured to handle interactions for INSendMessageIntent.
-// You will want to replace this or add other intents as appropriate.
-// The intents whose interactions you wish to handle must be declared in the extension's Info.plist.
-
-// You can test this example integration by saying things to Siri like:
-// "Send a message using <myApp>"
-
+/// Siri Intent View Controller
 final class IntentViewController: UIViewController, INUIHostedViewControlling {
     
     // MARK: - IB Outlets
     
-    @IBOutlet private(set) weak var lockImageView: UIImageView!
+    @IBOutlet private(set) weak var permissionView: PermissionIconView!
     @IBOutlet private(set) weak var lockTitleLabel: UILabel!
     @IBOutlet private(set) weak var lockDetailLabel: UILabel!
     @IBOutlet private(set) weak var activityViewController: UIActivityIndicatorView!
@@ -89,9 +83,9 @@ final class IntentViewController: UIViewController, INUIHostedViewControlling {
     func configureView(for lock: LockCache, inProgress: Bool = false) -> CGSize {
         
         let width = self.extensionContext?.hostedViewMaximumAllowedSize.width ?? 320
-        let desiredSize = CGSize(width: width, height: 76)
+        let desiredSize = CGSize(width: width, height: 67)
         
-        self.lockImageView.image = UIImage(permission: lock.key.permission)
+        self.permissionView.permission = lock.key.permission.type
         self.lockTitleLabel.text = lock.name
         self.lockDetailLabel.text = lock.key.permission.localizedText
         self.activityViewController.isHidden = inProgress == false
@@ -102,6 +96,7 @@ final class IntentViewController: UIViewController, INUIHostedViewControlling {
         } else {
             self.activityViewController.stopAnimating()
         }
+        self.activityViewController.isHidden = inProgress == false
         
         return desiredSize
     }
