@@ -53,15 +53,19 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
         
         // setup logging
         LockManager.shared.log = { log("🔒 LockManager: " + $0) }
+        #if !targetEnvironment(macCatalyst)
         BeaconController.shared.log = { log("📶 \(BeaconController.self): " + $0) }
+        #endif
         SpotlightController.shared.log = { log("🔦 \(SpotlightController.self): " + $0) }
         if #available(iOS 10.0, *) {
             UserNotificationCenter.shared.log = { log("📨 \(UserNotificationCenter.self): " + $0) }
         }
         
+        #if !targetEnvironment(macCatalyst)
         // request permissions
         BeaconController.shared.allowsBackgroundLocationUpdates = true
         BeaconController.shared.requestAuthorization()
+        #endif
         if #available(iOS 10.0, *) {
             UserNotificationCenter.shared.requestAuthorization()
         }
@@ -95,8 +99,10 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
         
         log("📱 Did enter background")
         
+        #if !targetEnvironment(macCatalyst)
         // update beacon status
         BeaconController.shared.scanBeacons()
+        #endif
     }
 
     func applicationWillEnterForeground(_ application: UIApplication) {

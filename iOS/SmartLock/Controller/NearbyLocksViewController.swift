@@ -102,8 +102,10 @@ final class NearbyLocksViewController: UITableViewController {
             impactFeedbackGenerator.prepare()
         }
         
+        #if !targetEnvironment(macCatalyst)
         // Update beacon status
         BeaconController.shared.scanBeacons()
+        #endif
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -139,8 +141,10 @@ final class NearbyLocksViewController: UITableViewController {
         userActivity = NSUserActivity(.screen(.nearbyLocks))
         userActivity?.becomeCurrent()
         
+        #if !targetEnvironment(macCatalyst)
         // refresh iBeacons in background
         BeaconController.shared.scanBeacons()
+        #endif
         
         let scanDuration = self.scanDuration
         
@@ -280,7 +284,11 @@ final class NearbyLocksViewController: UITableViewController {
         
         switch information.status {
         case .setup:
+            #if targetEnvironment(macCatalyst)
+            showErrorAlert("Cannot setup Lock on macOS.")
+            #else
             setup(lock: lock)
+            #endif
         case .unlock:
             if let _ = Store.shared[lock: identifier] {
                 donateUnlockIntent(for: identifier)

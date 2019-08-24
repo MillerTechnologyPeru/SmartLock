@@ -15,7 +15,9 @@ public extension UIView {
     static func configureLockAppearance() {
         
         if #available(iOS 11.0, *) {
-            //UINavigationBar.appearance().prefersLargeTitles = false
+            #if targetEnvironment(macCatalyst)
+            UINavigationBar.appearance().prefersLargeTitles = false
+            #endif
             UINavigationBar.appearance().largeTitleTextAttributes = [.foregroundColor: UIColor.white]
         }
         UINavigationBar.appearance().tintColor = .white

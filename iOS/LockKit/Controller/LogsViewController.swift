@@ -160,6 +160,8 @@ internal extension Bundle.Lock {
         switch self {
         case .app:
             return "📱"
+        case .macApp:
+            return "💻"
         case .coreLock,
              .lockKit:
             return "🔒"
@@ -177,6 +179,8 @@ internal extension Bundle.Lock {
         
         switch self {
         case .app:
+            return "Application"
+        case .macApp:
             return "Application"
         case .coreLock:
             return "CoreLock"

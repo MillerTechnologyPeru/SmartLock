@@ -193,6 +193,7 @@ public final class LockPermissionsViewController: UITableViewController, Activit
         // present key detail VC
     }
     
+    #if !targetEnvironment(macCatalyst)
     public override func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
         
         var actions = [UITableViewRowAction]()
@@ -256,6 +257,7 @@ public final class LockPermissionsViewController: UITableViewController, Activit
         
         return actions
     }
+    #endif
 }
 
 // MARK: - Supporting Types

@@ -9,7 +9,6 @@
 import Foundation
 import UIKit
 import CoreLock
-import LockKit
 import Intents
 
 public extension ActivityIndicatorViewController where Self: UIViewController {

@@ -24,6 +24,7 @@ public extension Bundle {
     enum Lock: String {
         
         case app = "com.colemancda.Lock"
+        case macApp = "maccatalyst.com.colemancda.Lock"
         case coreLock = "com.colemancda.CoreLock"
         case lockKit = "com.colemancda.LockKit"
         case intent = "com.colemancda.Lock.Intent"

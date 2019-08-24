@@ -476,6 +476,9 @@ public final class AddVoiceShortcutActivity: UIActivity {
     
     public override func canPerform(withActivityItems activityItems: [Any]) -> Bool {
         
+        #if targetEnvironment(macCatalyst)
+        return false
+        #else
         guard #available(iOS 12, *)
             else { return false }
         
@@ -484,6 +487,7 @@ public final class AddVoiceShortcutActivity: UIActivity {
             else { return false }
         
         return true
+        #endif
     }
     
     public override func prepare(withActivityItems activityItems: [Any]) {
@@ -493,6 +497,9 @@ public final class AddVoiceShortcutActivity: UIActivity {
     
     public override var activityViewController: UIViewController? {
         
+        #if targetEnvironment(macCatalyst)
+        return nil
+        #else
         guard #available(iOS 12, *)
             else { return nil }
         
@@ -508,6 +515,7 @@ public final class AddVoiceShortcutActivity: UIActivity {
         viewController.modalPresentationStyle = .formSheet
         viewController.delegate = self
         return viewController
+        #endif
     }
 }
 

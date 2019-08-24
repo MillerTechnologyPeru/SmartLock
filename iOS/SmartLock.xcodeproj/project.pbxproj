@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -13,8 +13,6 @@
 		6E6000192121119400787DAA /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6E6000172121119400787DAA /* Main.storyboard */; };
 		6E60001E2121119500787DAA /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6E60001C2121119500787DAA /* LaunchScreen.storyboard */; };
 		6E6000292121119500787DAA /* SmartLockUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E6000282121119500787DAA /* SmartLockUITests.swift */; };
-		6E60005F2121165600787DAA /* CoreLock.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6E6000562121164B00787DAA /* CoreLock.framework */; };
-		6E6000602121165600787DAA /* CoreLock.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 6E6000562121164B00787DAA /* CoreLock.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		6E806B8C230F4F2800C6FF78 /* Preferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E806B8B230F4F2800C6FF78 /* Preferences.swift */; };
 		6E806B94230F4F4700C6FF78 /* Keychain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E806B93230F4F4700C6FF78 /* Keychain.swift */; };
 		6E806B96230F4F7300C6FF78 /* AppGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E806B95230F4F7300C6FF78 /* AppGroup.swift */; };
@@ -34,8 +32,6 @@
 		6E994A8D230DFB6D0076DC1B /* LockKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6E994A84230DFB6C0076DC1B /* LockKit.framework */; };
 		6E994A94230DFB6D0076DC1B /* LockKitTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E994A93230DFB6D0076DC1B /* LockKitTests.swift */; };
 		6E994A96230DFB6D0076DC1B /* LockKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 6E994A86230DFB6C0076DC1B /* LockKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		6E994A99230DFB6D0076DC1B /* LockKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6E994A84230DFB6C0076DC1B /* LockKit.framework */; };
-		6E994A9A230DFB6D0076DC1B /* LockKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 6E994A84230DFB6C0076DC1B /* LockKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		6E994AA3230DFC180076DC1B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6E994AA2230DFC180076DC1B /* Assets.xcassets */; };
 		6E994AA4230DFC770076DC1B /* LockDetail.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6E05B6E222C9C0EF001218D9 /* LockDetail.storyboard */; };
 		6E994AA5230DFC770076DC1B /* LockPermissions.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6E05B70122CA0047001218D9 /* LockPermissions.storyboard */; };
@@ -78,8 +74,8 @@
 		6E994AE2230E56DD0076DC1B /* IntentsUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6E994AE1230E56DD0076DC1B /* IntentsUI.framework */; };
 		6E994AE5230E56DD0076DC1B /* IntentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E994AE4230E56DD0076DC1B /* IntentViewController.swift */; };
 		6E994AE8230E56DD0076DC1B /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6E994AE6230E56DD0076DC1B /* MainInterface.storyboard */; };
-		6E994AEC230E56DD0076DC1B /* IntentUI.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 6E994ADF230E56DD0076DC1B /* IntentUI.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
-		6E994AEF230E56DD0076DC1B /* Intent.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 6E994AD6230E56DD0076DC1B /* Intent.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		6E994AEC230E56DD0076DC1B /* IntentUI.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 6E994ADF230E56DD0076DC1B /* IntentUI.appex */; platformFilter = ios; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		6E994AEF230E56DD0076DC1B /* Intent.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 6E994AD6230E56DD0076DC1B /* Intent.appex */; platformFilter = ios; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		6E994AF8230E571F0076DC1B /* Intents.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = 6E994AF7230E571F0076DC1B /* Intents.intentdefinition */; };
 		6E994AFA230E5A2B0076DC1B /* Intents.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = 6E994AF7230E571F0076DC1B /* Intents.intentdefinition */; settings = {ATTRIBUTES = (no_codegen, ); }; };
 		6E994AFB230E5A2B0076DC1B /* Intents.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = 6E994AF7230E571F0076DC1B /* Intents.intentdefinition */; settings = {ATTRIBUTES = (no_codegen, ); }; };
@@ -88,11 +84,24 @@
 		6E994B0E230E89460076DC1B /* MessagesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E994B0D230E89460076DC1B /* MessagesViewController.swift */; };
 		6E994B11230E89460076DC1B /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6E994B0F230E89460076DC1B /* MainInterface.storyboard */; };
 		6E994B13230E89490076DC1B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6E994B12230E89490076DC1B /* Assets.xcassets */; };
-		6E994B17230E89490076DC1B /* Message.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 6E994B09230E89440076DC1B /* Message.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		6E994B17230E89490076DC1B /* Message.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 6E994B09230E89440076DC1B /* Message.appex */; platformFilter = ios; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		6E994B2A230EF6DA0076DC1B /* NotificationCenter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6E994B29230EF6DA0076DC1B /* NotificationCenter.framework */; };
 		6E994B2D230EF6DB0076DC1B /* TodayViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E994B2C230EF6DB0076DC1B /* TodayViewController.swift */; };
 		6E994B30230EF6DB0076DC1B /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6E994B2E230EF6DB0076DC1B /* MainInterface.storyboard */; };
-		6E994B34230EF6DB0076DC1B /* Today.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 6E994B28230EF6DA0076DC1B /* Today.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		6E994B34230EF6DB0076DC1B /* Today.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 6E994B28230EF6DA0076DC1B /* Today.appex */; platformFilter = ios; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		6E9C953823113C51007C18FE /* JGProgressHUD.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6E68E5DB231139070099E30A /* JGProgressHUD.framework */; };
+		6E9C953923113C51007C18FE /* JGProgressHUD.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 6E68E5DB231139070099E30A /* JGProgressHUD.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		6E9C953C23113C51007C18FE /* QRCodeReader.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6E68E5F62311392A0099E30A /* QRCodeReader.framework */; platformFilter = ios; };
+		6E9C953D23113C51007C18FE /* QRCodeReader.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 6E68E5F62311392A0099E30A /* QRCodeReader.framework */; platformFilter = ios; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		6E9C953E23113C51007C18FE /* Rswift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6E68E5FF231139310099E30A /* Rswift.framework */; };
+		6E9C953F23113C51007C18FE /* Rswift.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 6E68E5FF231139310099E30A /* Rswift.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		6E9C95C523113F54007C18FE /* KeychainAccess.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6E9C95C423113F48007C18FE /* KeychainAccess.framework */; };
+		6E9C95C623113F54007C18FE /* KeychainAccess.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 6E9C95C423113F48007C18FE /* KeychainAccess.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		6E9C95FC23114D07007C18FE /* CoreLock.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6E6000562121164B00787DAA /* CoreLock.framework */; };
+		6E9C95FD23114D07007C18FE /* CoreLock.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 6E6000562121164B00787DAA /* CoreLock.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		6E9C95FE23114D60007C18FE /* LockKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6E994A84230DFB6C0076DC1B /* LockKit.framework */; };
+		6E9C95FF23114D60007C18FE /* LockKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 6E994A84230DFB6C0076DC1B /* LockKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		6E9C960623115463007C18FE /* QRCodeReader.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6E68E5F62311392A0099E30A /* QRCodeReader.framework */; platformFilter = ios; };
 		6EAADF8C2122664A0074CEDF /* AppVersion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EAADF8B2122664A0074CEDF /* AppVersion.swift */; };
 		6EC0412E230A226400357585 /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EC0412D230A226300357585 /* TabBarController.swift */; };
 /* End PBXBuildFile section */
@@ -140,6 +149,272 @@
 			remoteGlobalIDString = DD75027A1C68FCFC006590AF;
 			remoteInfo = CoreLockTests;
 		};
+		6E68E59B231138EF0099E30A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6E68E593231138EF0099E30A /* Bluetooth.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 6EE84DB71CAF5C7C00A40C4D;
+			remoteInfo = "Bluetooth-macOS";
+		};
+		6E68E59D231138EF0099E30A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6E68E593231138EF0099E30A /* Bluetooth.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 6EF45FBD1CC6D04D001F7A39;
+			remoteInfo = "Bluetooth-iOS";
+		};
+		6E68E59F231138EF0099E30A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6E68E593231138EF0099E30A /* Bluetooth.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 6EB2EA1D1CD5A8A7000CF975;
+			remoteInfo = "Bluetooth-watchOS";
+		};
+		6E68E5A1231138EF0099E30A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6E68E593231138EF0099E30A /* Bluetooth.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 6E49B26520532D45002EA5DC;
+			remoteInfo = "Bluetooth-tvOS";
+		};
+		6E68E5A3231138EF0099E30A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6E68E593231138EF0099E30A /* Bluetooth.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 6EE84DC11CAF5C7C00A40C4D;
+			remoteInfo = BluetoothTests;
+		};
+		6E68E5B1231138F80099E30A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6E68E5A5231138F80099E30A /* GATT.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 6EE84D841CAF419D00A40C4D;
+			remoteInfo = "GATT-macOS";
+		};
+		6E68E5B3231138F80099E30A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6E68E5A5231138F80099E30A /* GATT.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 6EF45FCF1CC6D355001F7A39;
+			remoteInfo = "GATT-iOS";
+		};
+		6E68E5B5231138F80099E30A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6E68E5A5231138F80099E30A /* GATT.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 6EE9103A1FDE5C17007AD3EA;
+			remoteInfo = "GATT-watchOS";
+		};
+		6E68E5B7231138F80099E30A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6E68E5A5231138F80099E30A /* GATT.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 6E49B23A20532A94002EA5DC;
+			remoteInfo = "GATT-tvOS";
+		};
+		6E68E5B9231138F80099E30A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6E68E5A5231138F80099E30A /* GATT.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 6E0FC45A20F873B1009269B4;
+			remoteInfo = GATTTests;
+		};
+		6E68E5BB231138F80099E30A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6E68E5A5231138F80099E30A /* GATT.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 6EA5D1562107DE66009998FD;
+			remoteInfo = "DarwinGATT-macOS";
+		};
+		6E68E5BD231138F80099E30A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6E68E5A5231138F80099E30A /* GATT.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 6EA5D16D2107DE6A009998FD;
+			remoteInfo = "DarwinGATT-iOS";
+		};
+		6E68E5BF231138F80099E30A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6E68E5A5231138F80099E30A /* GATT.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 6EA5D1842107DE6D009998FD;
+			remoteInfo = "DarwinGATT-watchOS";
+		};
+		6E68E5C1231138F80099E30A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6E68E5A5231138F80099E30A /* GATT.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 6EA5D19B2107DE70009998FD;
+			remoteInfo = "DarwinGATT-tvOS";
+		};
+		6E68E5CB231139010099E30A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6E68E5C3231139010099E30A /* CryptoSwift.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 754BE45519693E190098E6F3;
+			remoteInfo = CryptoSwift;
+		};
+		6E68E5CD231139010099E30A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6E68E5C3231139010099E30A /* CryptoSwift.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 75211F92207249D8004E41F8;
+			remoteInfo = "CryptoSwift-TestHostApp";
+		};
+		6E68E5CF231139010099E30A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6E68E5C3231139010099E30A /* CryptoSwift.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 754BE46019693E190098E6F3;
+			remoteInfo = Tests;
+		};
+		6E68E5D1231139010099E30A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6E68E5C3231139010099E30A /* CryptoSwift.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 7595C14A2072E48C00EA1A5F;
+			remoteInfo = "TestsPerformance-Mac";
+		};
+		6E68E5D3231139010099E30A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6E68E5C3231139010099E30A /* CryptoSwift.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 7564F0602072EAEB00CA5A96;
+			remoteInfo = "TestsPerformance-iOS";
+		};
+		6E68E5DA231139070099E30A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6E68E5D5231139060099E30A /* JGProgressHUD.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 6BF7DC5A1AEFCFD9000A0AE0;
+			remoteInfo = "JGProgressHUD-iOS";
+		};
+		6E68E5DC231139070099E30A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6E68E5D5231139060099E30A /* JGProgressHUD.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 6BABF9A31F7A6133005E783F;
+			remoteInfo = "JGProgressHUD-tvOS";
+		};
+		6E68E5E52311391C0099E30A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6E68E5DF2311391C0099E30A /* KeychainAccess.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 140F195C1A49D79400B0016A;
+			remoteInfo = KeychainAccess;
+		};
+		6E68E5E72311391C0099E30A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6E68E5DF2311391C0099E30A /* KeychainAccess.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 140F19671A49D79500B0016A;
+			remoteInfo = KeychainAccessTests;
+		};
+		6E68E5E92311391C0099E30A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6E68E5DF2311391C0099E30A /* KeychainAccess.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 14A630151D3293C700809B3F;
+			remoteInfo = TestHost;
+		};
+		6E68E5F12311392A0099E30A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6E68E5EB2311392A0099E30A /* QRCodeReader.swift.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = CE412E8919D9A1E4000F294E;
+			remoteInfo = QRCodeReader.swift;
+		};
+		6E68E5F32311392A0099E30A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6E68E5EB2311392A0099E30A /* QRCodeReader.swift.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = CE412E9E19D9A1E4000F294E;
+			remoteInfo = QRCodeReader.swiftTests;
+		};
+		6E68E5F52311392A0099E30A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6E68E5EB2311392A0099E30A /* QRCodeReader.swift.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = CE8FFED61BAB4E7F00D43F38;
+			remoteInfo = QRCodeReader;
+		};
+		6E68E5FE231139310099E30A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6E68E5F7231139310099E30A /* R.swift.Library.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = D592464E1C117A55007F94C7;
+			remoteInfo = "Rswift-iOS";
+		};
+		6E68E600231139310099E30A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6E68E5F7231139310099E30A /* R.swift.Library.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = D59246581C117A55007F94C7;
+			remoteInfo = "RswiftTests-iOS";
+		};
+		6E68E602231139310099E30A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6E68E5F7231139310099E30A /* R.swift.Library.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 806E69921C42BD9C00DE3A8B;
+			remoteInfo = "Rswift-tvOS";
+		};
+		6E68E604231139310099E30A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6E68E5F7231139310099E30A /* R.swift.Library.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 806E699B1C42BD9C00DE3A8B;
+			remoteInfo = "RswiftTests-tvOS";
+		};
+		6E68E610231139370099E30A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6E68E606231139360099E30A /* TLVCoding.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 52D6D97C1BEFF229002C0205;
+			remoteInfo = "TLVCoding-iOS";
+		};
+		6E68E612231139370099E30A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6E68E606231139360099E30A /* TLVCoding.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 52D6DA0F1BF000BD002C0205;
+			remoteInfo = "TLVCoding-macOS";
+		};
+		6E68E614231139370099E30A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6E68E606231139360099E30A /* TLVCoding.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 52D6D9E21BEFFF6E002C0205;
+			remoteInfo = "TLVCoding-watchOS";
+		};
+		6E68E616231139370099E30A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6E68E606231139360099E30A /* TLVCoding.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 52D6D9F01BEFFFBE002C0205;
+			remoteInfo = "TLVCoding-tvOS";
+		};
+		6E68E618231139370099E30A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6E68E606231139360099E30A /* TLVCoding.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 52D6D9861BEFF229002C0205;
+			remoteInfo = "TLVCoding-iOS Tests";
+		};
+		6E68E61A231139370099E30A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6E68E606231139360099E30A /* TLVCoding.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = DD75027A1C68FCFC006590AF;
+			remoteInfo = "TLVCoding-macOS Tests";
+		};
+		6E68E61C231139370099E30A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6E68E606231139360099E30A /* TLVCoding.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = DD75028D1C690C7A006590AF;
+			remoteInfo = "TLVCoding-tvOS Tests";
+		};
 		6E994A8E230DFB6D0076DC1B /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 6E6000082121119400787DAA /* Project object */;
@@ -153,13 +428,6 @@
 			proxyType = 1;
 			remoteGlobalIDString = 6E60000F2121119400787DAA;
 			remoteInfo = SmartLock;
-		};
-		6E994A97230DFB6D0076DC1B /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 6E6000082121119400787DAA /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 6E994A83230DFB6C0076DC1B;
-			remoteInfo = LockKit;
 		};
 		6E994AC6230DFE270076DC1B /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -224,6 +492,55 @@
 			remoteGlobalIDString = 6E994A83230DFB6C0076DC1B;
 			remoteInfo = LockKit;
 		};
+		6E9C95AC23113D78007C18FE /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6E68E5C3231139010099E30A /* CryptoSwift.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 6E9C95A923113D31007C18FE;
+			remoteInfo = "CryptoSwift iOS";
+		};
+		6E9C95C323113F48007C18FE /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6E68E5DF2311391C0099E30A /* KeychainAccess.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 6E9C95C023113F08007C18FE;
+			remoteInfo = "KeychainAccess iOS";
+		};
+		6E9C95F823114AF2007C18FE /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6E68E5F7231139310099E30A /* R.swift.Library.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = D592464D1C117A55007F94C7;
+			remoteInfo = "Rswift-iOS";
+		};
+		6E9C95FA23114AF2007C18FE /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6E68E5DF2311391C0099E30A /* KeychainAccess.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 6E9C95B623113F08007C18FE;
+			remoteInfo = "KeychainAccess iOS";
+		};
+		6E9C960023114D60007C18FE /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6E6000082121119400787DAA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 6E994A83230DFB6C0076DC1B;
+			remoteInfo = LockKit;
+		};
+		6E9C960223114DA7007C18FE /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6E68E5D5231139060099E30A /* JGProgressHUD.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 6BF7DC591AEFCFD9000A0AE0;
+			remoteInfo = "JGProgressHUD-iOS";
+		};
+		6E9C96072311548B007C18FE /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6E68E5EB2311392A0099E30A /* QRCodeReader.swift.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = CE8FFED51BAB4E7F00D43F38;
+			remoteInfo = QRCodeReader;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -233,8 +550,12 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				6E994A9A230DFB6D0076DC1B /* LockKit.framework in Embed Frameworks */,
-				6E6000602121165600787DAA /* CoreLock.framework in Embed Frameworks */,
+				6E9C95C623113F54007C18FE /* KeychainAccess.framework in Embed Frameworks */,
+				6E9C95FD23114D07007C18FE /* CoreLock.framework in Embed Frameworks */,
+				6E9C953F23113C51007C18FE /* Rswift.framework in Embed Frameworks */,
+				6E9C953923113C51007C18FE /* JGProgressHUD.framework in Embed Frameworks */,
+				6E9C95FF23114D60007C18FE /* LockKit.framework in Embed Frameworks */,
+				6E9C953D23113C51007C18FE /* QRCodeReader.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -291,6 +612,14 @@
 		6E60F8A62121259F0054995D /* Store.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Store.swift; sourceTree = "<group>"; };
 		6E60F8AC212127890054995D /* Log.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Log.swift; sourceTree = "<group>"; };
 		6E60F8F72121540C0054995D /* Defaults.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Defaults.swift; sourceTree = "<group>"; };
+		6E68E593231138EF0099E30A /* Bluetooth.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Bluetooth.xcodeproj; path = ../Carthage/Checkouts/Bluetooth/Xcode/Bluetooth.xcodeproj; sourceTree = "<group>"; };
+		6E68E5A5231138F80099E30A /* GATT.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = GATT.xcodeproj; path = ../Carthage/Checkouts/GATT/Xcode/GATT.xcodeproj; sourceTree = "<group>"; };
+		6E68E5C3231139010099E30A /* CryptoSwift.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = CryptoSwift.xcodeproj; path = ../Carthage/Checkouts/CryptoSwift/CryptoSwift.xcodeproj; sourceTree = "<group>"; };
+		6E68E5D5231139060099E30A /* JGProgressHUD.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = JGProgressHUD.xcodeproj; path = ../Carthage/Checkouts/JGProgressHUD/JGProgressHUD.xcodeproj; sourceTree = "<group>"; };
+		6E68E5DF2311391C0099E30A /* KeychainAccess.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = KeychainAccess.xcodeproj; path = ../Carthage/Checkouts/KeychainAccess/Lib/KeychainAccess.xcodeproj; sourceTree = "<group>"; };
+		6E68E5EB2311392A0099E30A /* QRCodeReader.swift.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = QRCodeReader.swift.xcodeproj; path = ../Carthage/Checkouts/QRCodeReader.swift/Example/QRCodeReader.swift.xcodeproj; sourceTree = "<group>"; };
+		6E68E5F7231139310099E30A /* R.swift.Library.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = R.swift.Library.xcodeproj; path = ../Carthage/Checkouts/R.swift.Library/R.swift.Library.xcodeproj; sourceTree = "<group>"; };
+		6E68E606231139360099E30A /* TLVCoding.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = TLVCoding.xcodeproj; path = ../Carthage/Checkouts/TLVCoding/Xcode/TLVCoding.xcodeproj; sourceTree = "<group>"; };
 		6E806B8B230F4F2800C6FF78 /* Preferences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Preferences.swift; sourceTree = "<group>"; };
 		6E806B93230F4F4700C6FF78 /* Keychain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Keychain.swift; sourceTree = "<group>"; };
 		6E806B95230F4F7300C6FF78 /* AppGroup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppGroup.swift; sourceTree = "<group>"; };
@@ -362,8 +691,13 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6E994A99230DFB6D0076DC1B /* LockKit.framework in Frameworks */,
-				6E60005F2121165600787DAA /* CoreLock.framework in Frameworks */,
+				6E9C95C523113F54007C18FE /* KeychainAccess.framework in Frameworks */,
+				6E9C95FC23114D07007C18FE /* CoreLock.framework in Frameworks */,
+				6E9C953E23113C51007C18FE /* Rswift.framework in Frameworks */,
+				6E9C953823113C51007C18FE /* JGProgressHUD.framework in Frameworks */,
+				6E9C95FE23114D60007C18FE /* LockKit.framework in Frameworks */,
+				6E9C960623115463007C18FE /* QRCodeReader.framework in Frameworks */,
+				6E9C953C23113C51007C18FE /* QRCodeReader.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -426,7 +760,7 @@
 		6E6000072121119400787DAA = {
 			isa = PBXGroup;
 			children = (
-				6E60004D2121164B00787DAA /* CoreLock.xcodeproj */,
+				6E68E592231138C80099E30A /* Dependencies */,
 				6E6000122121119400787DAA /* SmartLock */,
 				6E6000272121119500787DAA /* SmartLockUITests */,
 				6E994A85230DFB6C0076DC1B /* LockKit */,
@@ -557,6 +891,118 @@
 				6E6000C521211CD400787DAA /* UIAlertAction.swift */,
 			);
 			path = Extensions;
+			sourceTree = "<group>";
+		};
+		6E68E592231138C80099E30A /* Dependencies */ = {
+			isa = PBXGroup;
+			children = (
+				6E68E5C3231139010099E30A /* CryptoSwift.xcodeproj */,
+				6E68E5A5231138F80099E30A /* GATT.xcodeproj */,
+				6E68E593231138EF0099E30A /* Bluetooth.xcodeproj */,
+				6E60004D2121164B00787DAA /* CoreLock.xcodeproj */,
+				6E68E606231139360099E30A /* TLVCoding.xcodeproj */,
+				6E68E5F7231139310099E30A /* R.swift.Library.xcodeproj */,
+				6E68E5EB2311392A0099E30A /* QRCodeReader.swift.xcodeproj */,
+				6E68E5DF2311391C0099E30A /* KeychainAccess.xcodeproj */,
+				6E68E5D5231139060099E30A /* JGProgressHUD.xcodeproj */,
+			);
+			name = Dependencies;
+			sourceTree = "<group>";
+		};
+		6E68E594231138EF0099E30A /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				6E68E59C231138EF0099E30A /* Bluetooth.framework */,
+				6E68E59E231138EF0099E30A /* Bluetooth.framework */,
+				6E68E5A0231138EF0099E30A /* Bluetooth.framework */,
+				6E68E5A2231138EF0099E30A /* Bluetooth.framework */,
+				6E68E5A4231138EF0099E30A /* BluetoothTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		6E68E5A6231138F80099E30A /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				6E68E5B2231138F80099E30A /* GATT.framework */,
+				6E68E5B4231138F80099E30A /* GATT.framework */,
+				6E68E5B6231138F80099E30A /* GATT.framework */,
+				6E68E5B8231138F80099E30A /* GATT.framework */,
+				6E68E5BA231138F80099E30A /* GATTTests.xctest */,
+				6E68E5BC231138F80099E30A /* DarwinGATT.framework */,
+				6E68E5BE231138F80099E30A /* DarwinGATT.framework */,
+				6E68E5C0231138F80099E30A /* DarwinGATT.framework */,
+				6E68E5C2231138F80099E30A /* DarwinGATT.framework */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		6E68E5C4231139010099E30A /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				6E68E5CC231139010099E30A /* CryptoSwift.framework */,
+				6E68E5CE231139010099E30A /* CryptoSwift-TestHostApp.app */,
+				6E68E5D0231139010099E30A /* Tests.xctest */,
+				6E68E5D2231139010099E30A /* TestsPerformance-Mac.xctest */,
+				6E68E5D4231139010099E30A /* TestsPerformance-iOS.xctest */,
+				6E9C95AD23113D78007C18FE /* CryptoSwift.framework */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		6E68E5D6231139060099E30A /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				6E68E5DB231139070099E30A /* JGProgressHUD.framework */,
+				6E68E5DD231139070099E30A /* JGProgressHUD.framework */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		6E68E5E02311391C0099E30A /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				6E68E5E62311391C0099E30A /* KeychainAccess.framework */,
+				6E68E5E82311391C0099E30A /* KeychainAccessTests.xctest */,
+				6E68E5EA2311391C0099E30A /* TestHost.app */,
+				6E9C95C423113F48007C18FE /* KeychainAccess.framework */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		6E68E5EC2311392A0099E30A /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				6E68E5F22311392A0099E30A /* QRCodeReader.swift.app */,
+				6E68E5F42311392A0099E30A /* QRCodeReader.swiftTests.xctest */,
+				6E68E5F62311392A0099E30A /* QRCodeReader.framework */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		6E68E5F8231139310099E30A /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				6E68E5FF231139310099E30A /* Rswift.framework */,
+				6E68E601231139310099E30A /* RswiftTests-iOS.xctest */,
+				6E68E603231139310099E30A /* Rswift.framework */,
+				6E68E605231139310099E30A /* RswiftTests-tvOS.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		6E68E607231139360099E30A /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				6E68E611231139370099E30A /* TLVCoding.framework */,
+				6E68E613231139370099E30A /* TLVCoding.framework */,
+				6E68E615231139370099E30A /* TLVCoding.framework */,
+				6E68E617231139370099E30A /* TLVCoding.framework */,
+				6E68E619231139370099E30A /* TLVCodingTests.xctest */,
+				6E68E61B231139370099E30A /* TLVCodingTests.xctest */,
+				6E68E61D231139370099E30A /* TLVCodingTests.xctest */,
+			);
+			name = Products;
 			sourceTree = "<group>";
 		};
 		6E806BA7230F654600C6FF78 /* View */ = {
@@ -707,18 +1153,17 @@
 				6E60000D2121119400787DAA /* Frameworks */,
 				6E60000E2121119400787DAA /* Resources */,
 				6E6000492121134700787DAA /* Embed Frameworks */,
-				6E6000D22121229E00787DAA /* Carthage */,
 				6EA3D1782121BD1800BC50D8 /* Increment Build */,
 				6E994AF6230E56DD0076DC1B /* Embed App Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				6E994A98230DFB6D0076DC1B /* PBXTargetDependency */,
 				6E994AEB230E56DD0076DC1B /* PBXTargetDependency */,
 				6E994AEE230E56DD0076DC1B /* PBXTargetDependency */,
 				6E994B16230E89490076DC1B /* PBXTargetDependency */,
 				6E994B33230EF6DB0076DC1B /* PBXTargetDependency */,
+				6E9C960123114D60007C18FE /* PBXTargetDependency */,
 			);
 			name = SmartLock;
 			productName = SmartLock;
@@ -756,6 +1201,10 @@
 			buildRules = (
 			);
 			dependencies = (
+				6E9C96082311548B007C18FE /* PBXTargetDependency */,
+				6E9C960323114DA7007C18FE /* PBXTargetDependency */,
+				6E9C95F923114AF2007C18FE /* PBXTargetDependency */,
+				6E9C95FB23114AF2007C18FE /* PBXTargetDependency */,
 				6E994AC7230DFE270076DC1B /* PBXTargetDependency */,
 			);
 			name = LockKit;
@@ -951,8 +1400,40 @@
 			projectDirPath = "";
 			projectReferences = (
 				{
+					ProductGroup = 6E68E594231138EF0099E30A /* Products */;
+					ProjectRef = 6E68E593231138EF0099E30A /* Bluetooth.xcodeproj */;
+				},
+				{
 					ProductGroup = 6E60004E2121164B00787DAA /* Products */;
 					ProjectRef = 6E60004D2121164B00787DAA /* CoreLock.xcodeproj */;
+				},
+				{
+					ProductGroup = 6E68E5C4231139010099E30A /* Products */;
+					ProjectRef = 6E68E5C3231139010099E30A /* CryptoSwift.xcodeproj */;
+				},
+				{
+					ProductGroup = 6E68E5A6231138F80099E30A /* Products */;
+					ProjectRef = 6E68E5A5231138F80099E30A /* GATT.xcodeproj */;
+				},
+				{
+					ProductGroup = 6E68E5D6231139060099E30A /* Products */;
+					ProjectRef = 6E68E5D5231139060099E30A /* JGProgressHUD.xcodeproj */;
+				},
+				{
+					ProductGroup = 6E68E5E02311391C0099E30A /* Products */;
+					ProjectRef = 6E68E5DF2311391C0099E30A /* KeychainAccess.xcodeproj */;
+				},
+				{
+					ProductGroup = 6E68E5EC2311392A0099E30A /* Products */;
+					ProjectRef = 6E68E5EB2311392A0099E30A /* QRCodeReader.swift.xcodeproj */;
+				},
+				{
+					ProductGroup = 6E68E5F8231139310099E30A /* Products */;
+					ProjectRef = 6E68E5F7231139310099E30A /* R.swift.Library.xcodeproj */;
+				},
+				{
+					ProductGroup = 6E68E607231139360099E30A /* Products */;
+					ProjectRef = 6E68E606231139360099E30A /* TLVCoding.xcodeproj */;
 				},
 			);
 			projectRoot = "";
@@ -1003,6 +1484,286 @@
 			fileType = wrapper.cfbundle;
 			path = CoreLockTests.xctest;
 			remoteRef = 6E60005D2121164B00787DAA /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		6E68E59C231138EF0099E30A /* Bluetooth.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = Bluetooth.framework;
+			remoteRef = 6E68E59B231138EF0099E30A /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		6E68E59E231138EF0099E30A /* Bluetooth.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = Bluetooth.framework;
+			remoteRef = 6E68E59D231138EF0099E30A /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		6E68E5A0231138EF0099E30A /* Bluetooth.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = Bluetooth.framework;
+			remoteRef = 6E68E59F231138EF0099E30A /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		6E68E5A2231138EF0099E30A /* Bluetooth.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = Bluetooth.framework;
+			remoteRef = 6E68E5A1231138EF0099E30A /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		6E68E5A4231138EF0099E30A /* BluetoothTests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = BluetoothTests.xctest;
+			remoteRef = 6E68E5A3231138EF0099E30A /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		6E68E5B2231138F80099E30A /* GATT.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = GATT.framework;
+			remoteRef = 6E68E5B1231138F80099E30A /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		6E68E5B4231138F80099E30A /* GATT.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = GATT.framework;
+			remoteRef = 6E68E5B3231138F80099E30A /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		6E68E5B6231138F80099E30A /* GATT.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = GATT.framework;
+			remoteRef = 6E68E5B5231138F80099E30A /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		6E68E5B8231138F80099E30A /* GATT.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = GATT.framework;
+			remoteRef = 6E68E5B7231138F80099E30A /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		6E68E5BA231138F80099E30A /* GATTTests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = GATTTests.xctest;
+			remoteRef = 6E68E5B9231138F80099E30A /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		6E68E5BC231138F80099E30A /* DarwinGATT.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = DarwinGATT.framework;
+			remoteRef = 6E68E5BB231138F80099E30A /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		6E68E5BE231138F80099E30A /* DarwinGATT.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = DarwinGATT.framework;
+			remoteRef = 6E68E5BD231138F80099E30A /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		6E68E5C0231138F80099E30A /* DarwinGATT.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = DarwinGATT.framework;
+			remoteRef = 6E68E5BF231138F80099E30A /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		6E68E5C2231138F80099E30A /* DarwinGATT.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = DarwinGATT.framework;
+			remoteRef = 6E68E5C1231138F80099E30A /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		6E68E5CC231139010099E30A /* CryptoSwift.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = CryptoSwift.framework;
+			remoteRef = 6E68E5CB231139010099E30A /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		6E68E5CE231139010099E30A /* CryptoSwift-TestHostApp.app */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.application;
+			path = "CryptoSwift-TestHostApp.app";
+			remoteRef = 6E68E5CD231139010099E30A /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		6E68E5D0231139010099E30A /* Tests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = Tests.xctest;
+			remoteRef = 6E68E5CF231139010099E30A /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		6E68E5D2231139010099E30A /* TestsPerformance-Mac.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = "TestsPerformance-Mac.xctest";
+			remoteRef = 6E68E5D1231139010099E30A /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		6E68E5D4231139010099E30A /* TestsPerformance-iOS.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = "TestsPerformance-iOS.xctest";
+			remoteRef = 6E68E5D3231139010099E30A /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		6E68E5DB231139070099E30A /* JGProgressHUD.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = JGProgressHUD.framework;
+			remoteRef = 6E68E5DA231139070099E30A /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		6E68E5DD231139070099E30A /* JGProgressHUD.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = JGProgressHUD.framework;
+			remoteRef = 6E68E5DC231139070099E30A /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		6E68E5E62311391C0099E30A /* KeychainAccess.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = KeychainAccess.framework;
+			remoteRef = 6E68E5E52311391C0099E30A /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		6E68E5E82311391C0099E30A /* KeychainAccessTests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = KeychainAccessTests.xctest;
+			remoteRef = 6E68E5E72311391C0099E30A /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		6E68E5EA2311391C0099E30A /* TestHost.app */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.application;
+			path = TestHost.app;
+			remoteRef = 6E68E5E92311391C0099E30A /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		6E68E5F22311392A0099E30A /* QRCodeReader.swift.app */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.application;
+			path = QRCodeReader.swift.app;
+			remoteRef = 6E68E5F12311392A0099E30A /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		6E68E5F42311392A0099E30A /* QRCodeReader.swiftTests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = QRCodeReader.swiftTests.xctest;
+			remoteRef = 6E68E5F32311392A0099E30A /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		6E68E5F62311392A0099E30A /* QRCodeReader.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = QRCodeReader.framework;
+			remoteRef = 6E68E5F52311392A0099E30A /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		6E68E5FF231139310099E30A /* Rswift.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = Rswift.framework;
+			remoteRef = 6E68E5FE231139310099E30A /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		6E68E601231139310099E30A /* RswiftTests-iOS.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = "RswiftTests-iOS.xctest";
+			remoteRef = 6E68E600231139310099E30A /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		6E68E603231139310099E30A /* Rswift.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = Rswift.framework;
+			remoteRef = 6E68E602231139310099E30A /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		6E68E605231139310099E30A /* RswiftTests-tvOS.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = "RswiftTests-tvOS.xctest";
+			remoteRef = 6E68E604231139310099E30A /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		6E68E611231139370099E30A /* TLVCoding.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = TLVCoding.framework;
+			remoteRef = 6E68E610231139370099E30A /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		6E68E613231139370099E30A /* TLVCoding.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = TLVCoding.framework;
+			remoteRef = 6E68E612231139370099E30A /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		6E68E615231139370099E30A /* TLVCoding.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = TLVCoding.framework;
+			remoteRef = 6E68E614231139370099E30A /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		6E68E617231139370099E30A /* TLVCoding.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = TLVCoding.framework;
+			remoteRef = 6E68E616231139370099E30A /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		6E68E619231139370099E30A /* TLVCodingTests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = TLVCodingTests.xctest;
+			remoteRef = 6E68E618231139370099E30A /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		6E68E61B231139370099E30A /* TLVCodingTests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = TLVCodingTests.xctest;
+			remoteRef = 6E68E61A231139370099E30A /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		6E68E61D231139370099E30A /* TLVCodingTests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = TLVCodingTests.xctest;
+			remoteRef = 6E68E61C231139370099E30A /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		6E9C95AD23113D78007C18FE /* CryptoSwift.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = CryptoSwift.framework;
+			remoteRef = 6E9C95AC23113D78007C18FE /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		6E9C95C423113F48007C18FE /* KeychainAccess.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = KeychainAccess.framework;
+			remoteRef = 6E9C95C323113F48007C18FE /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */
@@ -1082,29 +1843,6 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		6E6000D22121229E00787DAA /* Carthage */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"$(SRCROOT)/../Carthage/Build/iOS/Bluetooth.framework",
-				"$(SRCROOT)/../Carthage/Build/iOS/GATT.framework",
-				"$(SRCROOT)/../Carthage/Build/iOS/DarwinGATT.framework",
-				"$(SRCROOT)/../Carthage/Build/iOS/CryptoSwift.framework",
-				"$(SRCROOT)/../Carthage/Build/iOS/QRCodeReader.framework",
-				"$(SRCROOT)/../Carthage/Build/iOS/JGProgressHUD.framework",
-				"$(SRCROOT)/../Carthage/Build/iOS/KeychainAccess.framework",
-				"$(SRCROOT)/../Carthage/Build/iOS/TLVCoding.framework",
-				"$(SRCROOT)/../Carthage/Build/iOS/Rswift.framework",
-			);
-			name = Carthage;
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "/usr/local/bin/carthage copy-frameworks\n";
-		};
 		6E806BAC230F68BB00C6FF78 /* R.swift */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -1296,11 +2034,6 @@
 			target = 6E60000F2121119400787DAA /* SmartLock */;
 			targetProxy = 6E994A90230DFB6D0076DC1B /* PBXContainerItemProxy */;
 		};
-		6E994A98230DFB6D0076DC1B /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 6E994A83230DFB6C0076DC1B /* LockKit */;
-			targetProxy = 6E994A97230DFB6D0076DC1B /* PBXContainerItemProxy */;
-		};
 		6E994AC7230DFE270076DC1B /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = "CoreLock-iOS";
@@ -1308,11 +2041,13 @@
 		};
 		6E994AEB230E56DD0076DC1B /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
+			platformFilter = ios;
 			target = 6E994ADE230E56DD0076DC1B /* IntentUI */;
 			targetProxy = 6E994AEA230E56DD0076DC1B /* PBXContainerItemProxy */;
 		};
 		6E994AEE230E56DD0076DC1B /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
+			platformFilter = ios;
 			target = 6E994AD5230E56DD0076DC1B /* Intent */;
 			targetProxy = 6E994AED230E56DD0076DC1B /* PBXContainerItemProxy */;
 		};
@@ -1328,6 +2063,7 @@
 		};
 		6E994B16230E89490076DC1B /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
+			platformFilter = ios;
 			target = 6E994B08230E89440076DC1B /* Message */;
 			targetProxy = 6E994B15230E89490076DC1B /* PBXContainerItemProxy */;
 		};
@@ -1338,6 +2074,7 @@
 		};
 		6E994B33230EF6DB0076DC1B /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
+			platformFilter = ios;
 			target = 6E994B27230EF6DA0076DC1B /* Today */;
 			targetProxy = 6E994B32230EF6DB0076DC1B /* PBXContainerItemProxy */;
 		};
@@ -1345,6 +2082,32 @@
 			isa = PBXTargetDependency;
 			target = 6E994A83230DFB6C0076DC1B /* LockKit */;
 			targetProxy = 6E994B3D230EF7E80076DC1B /* PBXContainerItemProxy */;
+		};
+		6E9C95F923114AF2007C18FE /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "Rswift-iOS";
+			targetProxy = 6E9C95F823114AF2007C18FE /* PBXContainerItemProxy */;
+		};
+		6E9C95FB23114AF2007C18FE /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "KeychainAccess iOS";
+			targetProxy = 6E9C95FA23114AF2007C18FE /* PBXContainerItemProxy */;
+		};
+		6E9C960123114D60007C18FE /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 6E994A83230DFB6C0076DC1B /* LockKit */;
+			targetProxy = 6E9C960023114D60007C18FE /* PBXContainerItemProxy */;
+		};
+		6E9C960323114DA7007C18FE /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "JGProgressHUD-iOS";
+			targetProxy = 6E9C960223114DA7007C18FE /* PBXContainerItemProxy */;
+		};
+		6E9C96082311548B007C18FE /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = QRCodeReader;
+			platformFilter = ios;
+			targetProxy = 6E9C96072311548B007C18FE /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -1516,7 +2279,10 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = SmartLock/SmartLock.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
+				DERIVE_MACCATALYST_PRODUCT_BUNDLE_IDENTIFIER = YES;
 				DEVELOPMENT_TEAM = 4W79SG34MW;
 				ENTITLEMENTS_REQUIRED = YES;
 				INFOPLIST_FILE = SmartLock/Info.plist;
@@ -1526,6 +2292,9 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.colemancda.Lock;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
+				SUPPORTS_MACCATALYST = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -1536,7 +2305,10 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = SmartLock/SmartLock.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
+				DERIVE_MACCATALYST_PRODUCT_BUNDLE_IDENTIFIER = YES;
 				DEVELOPMENT_TEAM = 4W79SG34MW;
 				ENTITLEMENTS_REQUIRED = YES;
 				INFOPLIST_FILE = SmartLock/Info.plist;
@@ -1546,6 +2318,9 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.colemancda.Lock;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
+				SUPPORTS_MACCATALYST = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
@@ -1596,6 +2371,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
+				DERIVE_MACCATALYST_PRODUCT_BUNDLE_IDENTIFIER = NO;
 				DEVELOPMENT_TEAM = 4W79SG34MW;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
@@ -1612,6 +2388,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.colemancda.LockKit;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
+				SUPPORTS_MACCATALYST = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
@@ -1626,6 +2403,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
+				DERIVE_MACCATALYST_PRODUCT_BUNDLE_IDENTIFIER = NO;
 				DEVELOPMENT_TEAM = 4W79SG34MW;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
@@ -1641,6 +2419,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.colemancda.LockKit;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
+				SUPPORTS_MACCATALYST = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
@@ -1708,6 +2487,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.colemancda.Lock.IntentUI;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SUPPORTS_MACCATALYST = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -1730,6 +2510,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.colemancda.Lock.IntentUI;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SUPPORTS_MACCATALYST = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -1753,6 +2534,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.colemancda.Lock.Intent;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SUPPORTS_MACCATALYST = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -1775,6 +2557,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.colemancda.Lock.Intent;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SUPPORTS_MACCATALYST = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -1799,6 +2582,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.colemancda.Lock.Message;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SUPPORTS_MACCATALYST = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -1822,6 +2606,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.colemancda.Lock.Message;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SUPPORTS_MACCATALYST = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -1845,6 +2630,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.colemancda.Lock.Today;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SUPPORTS_MACCATALYST = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -1867,6 +2653,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.colemancda.Lock.Today;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SUPPORTS_MACCATALYST = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};

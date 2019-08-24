@@ -9,6 +9,8 @@
 import Foundation
 import UIKit
 import CoreLock
+
+#if canImport(QRCodeReader)
 import QRCodeReader
 
 public extension ActivityIndicatorViewController where Self: UIViewController {
@@ -51,6 +53,10 @@ public extension ActivityIndicatorViewController where Self: UIViewController {
         readerViewController.modalPresentationStyle = .formSheet
         present(readerViewController, animated: true, completion: nil)
     }
+}
+#endif
+
+public extension ActivityIndicatorViewController where Self: UIViewController {
     
     func setup(lock identifier: UUID, secret: KeyData, name: String = "Lock", scanDuration: TimeInterval = 2.0) {
         

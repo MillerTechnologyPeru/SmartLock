@@ -11,6 +11,7 @@ import CoreLock
 import CoreLocation
 import UIKit
 
+#if !targetEnvironment(macCatalyst)
 /// iBeacon Controller
 public final class BeaconController {
     
@@ -252,3 +253,5 @@ private extension CLRegionState {
         }
     }
 }
+
+#endif

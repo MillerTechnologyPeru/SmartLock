@@ -216,10 +216,12 @@ public extension NSUserActivity {
             self.contentAttributeSet = attributes
             self.isEligibleForSearch = false
             self.isEligibleForHandoff = true
+            #if !targetEnvironment(macCatalyst)
             if #available(iOS 12.0, *) {
                 self.isEligibleForPrediction = true
                 self.isEligibleForPublicIndexing = true // show in Siri Shortcuts gallery
             }
+            #endif
         case let .view(.lock(lockIdentifier)):
             self.init(activityType: .view, userInfo: [
                 .lock: lockIdentifier.uuidString as NSString
@@ -232,9 +234,11 @@ public extension NSUserActivity {
             }
             self.isEligibleForSearch = false // use Spotlight instead
             self.isEligibleForHandoff = true
+            #if !targetEnvironment(macCatalyst)
             if #available(iOS 12.0, *) {
                 self.isEligibleForPrediction = true
             }
+            #endif
         case let .action(.shareKey(lockIdentifier)):
             self.init(activityType: .action, userInfo: [
                 .action: AppActivity.ActionType.shareKey.rawValue as NSString,
@@ -250,9 +254,11 @@ public extension NSUserActivity {
             self.contentAttributeSet = attributes
             self.isEligibleForSearch = false
             self.isEligibleForHandoff = false
+            #if !targetEnvironment(macCatalyst)
             if #available(iOS 12.0, *) {
                 self.isEligibleForPrediction = true
             }
+            #endif
         case let .action(.unlock(lockIdentifier)):
             self.init(activityType: .action, userInfo: [
                 .action: AppActivity.ActionType.unlock.rawValue as NSString,
@@ -265,10 +271,12 @@ public extension NSUserActivity {
             }
             self.isEligibleForSearch = false
             self.isEligibleForHandoff = false
+            #if !targetEnvironment(macCatalyst)
             if #available(iOS 12.0, *) {
                 self.isEligibleForPrediction = true
                 self.suggestedInvocationPhrase = "Unlock my door"
             }
+            #endif
         }
         if #available(iOS 12.0, *) {
             switch activity {
