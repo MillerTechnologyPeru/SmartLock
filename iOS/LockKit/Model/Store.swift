@@ -7,6 +7,8 @@
 //
 
 import Foundation
+import CoreBluetooth
+import CoreLocation
 import Bluetooth
 import CoreLock
 import GATT
@@ -19,6 +21,9 @@ public final class Store {
     
     private init() {
         
+        beaconController.foundLock = { [unowned self] (lock, beacon) in
+            self.lockBeaconFound(lock: lock, beacon: beacon)
+        }
         locks.observe { [unowned self] _ in self.lockCacheChanged() }
         loadCache()
     }
@@ -132,6 +137,21 @@ public final class Store {
     private func updateSpotlight() {
         
         spotlight.update(locks: locks.value)
+    }
+    
+    private func lockBeaconFound(lock: UUID, beacon: CLBeacon) {
+        
+        async {
+            do {
+                guard let _ = try Store.shared.device(for: lock, scanDuration: 1.0) else {
+                    log("⚠️ Could not find lock \(lock) for beacon \(beacon)")
+                    self.beaconController.scanBeacon(for: lock)
+                    return
+                }
+            } catch {
+                log("⚠️ Could not scan: \(error)")
+            }
+        }
     }
 }
 

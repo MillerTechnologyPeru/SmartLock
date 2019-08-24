@@ -11,11 +11,16 @@ import CoreLock
 import CoreLocation
 import UIKit
 
+/// iBeacon Controller
 public final class BeaconController {
+    
+    // MARK: - Initialiation
     
     public static let shared = BeaconController()
     
     private init() { }
+    
+    // MARK: - Properties
     
     public var log: ((String) -> ())?
     
@@ -34,6 +39,10 @@ public final class BeaconController {
         set { locationManager.allowsBackgroundLocationUpdates = newValue }
     }
     
+    public var foundLock: ((UUID, CLBeacon) -> ())?
+    
+    // MARK: - Methods
+    
     public func requestAuthorization() {
         locationManager.requestAlwaysAuthorization()
     }
@@ -46,17 +55,8 @@ public final class BeaconController {
         region.notifyOnExit = true
         locks[identifier] = region
         
-        switch CLLocationManager.authorizationStatus() {
-        case .authorizedAlways,
-             .authorizedWhenInUse:
-            locationManager.startMonitoring(for: region)
-        case .denied,
-             .notDetermined,
-             .restricted:
-            break
-        @unknown default:
-            break
-        }
+        // initiate monitoring and scanning
+        scanBeacons(in: region)
     }
     
     @discardableResult
@@ -68,9 +68,11 @@ public final class BeaconController {
         locks[identifier] = nil
         
         switch CLLocationManager.authorizationStatus() {
-        case .authorizedAlways,
-             .authorizedWhenInUse:
+        case .authorizedAlways:
             locationManager.stopMonitoring(for: region)
+            locationManager.stopRangingBeacons(in: region)
+        case .authorizedWhenInUse:
+            locationManager.stopRangingBeacons(in: region)
         case .denied,
              .notDetermined,
              .restricted:
@@ -83,9 +85,38 @@ public final class BeaconController {
     }
     
     public func scanBeacons() {
+        locks.values.forEach { scanBeacons(in: $0) }
+    }
+    
+    @discardableResult
+    public func scanBeacon(for lock: UUID) -> Bool {
+        guard let region = locks[lock]
+            else { return false }
+        scanBeacons(in: region)
+        return true
+    }
+    
+    private func scanBeacons(in region: CLBeaconRegion) {
         
-        for region in locks.values {
-            locationManager.requestState(for: region) // callback will initiate scanning
+        switch CLLocationManager.authorizationStatus() {
+        case .authorizedAlways:
+            if locationManager.monitoredRegions.contains(region) == false {
+                locationManager.startMonitoring(for: region)
+            }
+            if locationManager.rangedRegions.contains(region) == false {
+                locationManager.startRangingBeacons(in: region)
+            }
+        case .authorizedWhenInUse:
+            if locationManager.rangedRegions.contains(region) == false {
+                locationManager.startRangingBeacons(in: region)
+            }
+        case .denied,
+             .notDetermined,
+             .restricted:
+            break
+        @unknown default:
+            // try just in case, ignore erros
+            locationManager.startMonitoring(for: region)
             locationManager.startRangingBeacons(in: region)
         }
     }
@@ -111,19 +142,7 @@ private extension BeaconController {
             
             log("Changed authorization (\(status.debugDescription))")
             
-            switch status {
-            case .authorizedAlways,
-                 .authorizedWhenInUse:
-                beaconController?.locks.values.forEach {
-                    manager.startMonitoring(for: $0)
-                }
-            case .denied,
-                 .notDetermined,
-                 .restricted:
-                break
-            @unknown default:
-                return
-            }
+            beaconController?.scanBeacons()
         }
         
         @objc
@@ -166,10 +185,9 @@ private extension BeaconController {
                     manager.startRangingBeacons(in: beaconRegion)
                 case .outside,
                      .unknown:
+                    manager.stopRangingBeacons(in: beaconRegion)
                     if let lock = beaconController?.locks.first(where: { $0.value == region })?.key {
-                        if #available(iOS 10.0, *) {
-                            //UserNotificationCenter.shared.removeUnlockNotification(for: lock)
-                        }
+                        
                     }
                 }
             }
@@ -189,23 +207,12 @@ private extension BeaconController {
                 assert(beacons.count <= 1, "Should only be one lock iBeacon")
                 manager.stopRangingBeacons(in: region)
                 
-                async { [weak self] in
-                    guard let self = self else { return }
-                    do {
-                        self.log("Found beacon for lock \(lock)")
-                        guard let _ = try Store.shared.device(for: lock, scanDuration: 1) else {
-                            self.log("Could not find lock \(lock)")
-                            manager.requestState(for: region)
-                            return
-                        }
-                        if #available(iOS 10, iOSApplicationExtension 10.0, *),
-                            let lockCache = Store.shared[lock: lock] {
-                            // show unlock notification
-                            //UserNotificationCenter.shared.postUnlockNotification(for: lock, cache: lockCache)
-                        }
-                    } catch {
-                        self.log("Error: \(error)")
-                    }
+                guard let beacon = beacons.first
+                    else { return }
+                
+                async {
+                    beaconController.log?("Found beacon for lock \(lock)")
+                    beaconController.foundLock?(lock, beacon)
                 }
             } else {
                 manager.stopRangingBeacons(in: region)

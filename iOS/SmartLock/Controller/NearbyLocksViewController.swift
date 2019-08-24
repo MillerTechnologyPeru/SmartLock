@@ -104,6 +104,9 @@ final class NearbyLocksViewController: UITableViewController {
             selectionFeedbackGenerator.prepare()
             impactFeedbackGenerator.prepare()
         }
+        
+        // Update beacon status
+        BeaconController.shared.scanBeacons()
     }
     
     override func viewDidAppear(_ animated: Bool) {
