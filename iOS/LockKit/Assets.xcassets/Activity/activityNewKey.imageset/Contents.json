@@ -10,6 +10,7 @@
     "author" : "xcode"
   },
   "properties" : {
-    "compression-type" : "lossless"
+    "compression-type" : "lossless",
+    "preserves-vector-representation" : true
   }
 }

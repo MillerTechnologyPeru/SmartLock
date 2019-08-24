@@ -56,7 +56,7 @@ public enum LockActivity: String {
     case rename = "com.colemancda.lock.activity.rename"
     case update = "com.colemancda.lock.activity.update"
     case homeKitEnable = "com.colemancda.lock.activity.homeKitEnable"
-    case donateUnlockIntent = "com.colemancda.lock.activity.donateUnlockIntent"
+    case addVoiceShortcut = "com.colemancda.lock.activity.addVoiceShortcut"
     
     var activityType: UIActivity.ActivityType {
         return UIActivity.ActivityType(rawValue: self.rawValue)
@@ -79,7 +79,7 @@ public final class NewKeyActivity: UIActivity {
     }
     
     public override var activityImage: UIImage? {
-        return UIImage(lockKit: "activityNewKey")
+        return R.image.activityNewKey()
     }
     
     public override func canPerform(withActivityItems activityItems: [Any]) -> Bool {
@@ -126,17 +126,15 @@ public final class ManageKeysActivity: UIActivity {
     private var item: LockActivityItem!
     
     public override var activityType: UIActivity.ActivityType? {
-        
         return LockActivity.manageKeys.activityType
     }
     
     public override var activityTitle: String? {
-        
         return "Manage"
     }
     
     public override var activityImage: UIImage? {
-        return UIImage(lockKit: "activityManageKeys")
+        return R.image.activityManageKeys()
     }
     
     public override func canPerform(withActivityItems activityItems: [Any]) -> Bool {
@@ -189,7 +187,7 @@ public final class DeleteLockActivity: UIActivity {
     }
     
     public override var activityImage: UIImage? {
-        return UIImage(lockKit: "activityDelete")
+        return R.image.activityDelete()
     }
     
     public override func canPerform(withActivityItems activityItems: [Any]) -> Bool {
@@ -232,27 +230,22 @@ public final class RenameActivity: UIActivity {
     private var item: LockActivityItem!
     
     public override var activityType: UIActivity.ActivityType? {
-        
         return LockActivity.rename.activityType
     }
     
     public override var activityTitle: String? {
-        
         return "Rename"
     }
     
     public override var activityImage: UIImage? {
-        
-        return UIImage(lockKit: "activityRename")
+        return R.image.activityRename()
     }
     
     public override func canPerform(withActivityItems activityItems: [Any]) -> Bool {
-        
         return activityItems.first as? LockActivityItem != nil
     }
     
     public override func prepare(withActivityItems activityItems: [Any]) {
-        
         self.item = activityItems.first as? LockActivityItem
     }
     
@@ -289,18 +282,15 @@ public final class HomeKitEnableActivity: UIActivity {
     private var item: LockActivityItem!
     
     public override var activityType: UIActivity.ActivityType? {
-        
         return LockActivity.homeKitEnable.activityType
     }
     
     public override var activityTitle: String? {
-        
         return "Home Mode"
     }
     
     public override var activityImage: UIImage? {
-        
-        return UIImage(lockKit: "activityHomeKit")
+        return R.image.activityHomeKit()
     }
     
     public override func canPerform(withActivityItems activityItems: [Any]) -> Bool {
@@ -385,7 +375,7 @@ public final class UpdateActivity: UIActivity {
     }
     
     public override var activityImage: UIImage? {
-        return UIImage(lockKit: "activityUpdate")
+        return R.image.activityUpdate()
     }
     
     public override func canPerform(withActivityItems activityItems: [Any]) -> Bool {
@@ -460,14 +450,14 @@ public final class UpdateActivity: UIActivity {
 #if canImport(IntentsUI)
 import IntentsUI
 
-public final class DonateUnlockIntentActivity: UIActivity {
+public final class AddVoiceShortcutActivity: UIActivity {
     
     public override class var activityCategory: UIActivity.Category { return .action }
     
     private var item: LockActivityItem!
     
     public override var activityType: UIActivity.ActivityType? {
-        return LockActivity.donateUnlockIntent.activityType
+        return LockActivity.addVoiceShortcut.activityType
     }
     
     public  override var activityTitle: String? {
@@ -475,7 +465,7 @@ public final class DonateUnlockIntentActivity: UIActivity {
     }
     
     public override var activityImage: UIImage? {
-        return UIImage(lockKit: "activityUpdate")
+        return R.image.activitySiri()
     }
     
     public override func canPerform(withActivityItems activityItems: [Any]) -> Bool {
@@ -509,8 +499,26 @@ public final class DonateUnlockIntentActivity: UIActivity {
         let intent = UnlockIntent(lock: lockItem.identifier, name: lockCache.name)
         let shortcut = INShortcut.intent(intent)
         let viewController = INUIAddVoiceShortcutViewController(shortcut: shortcut)
+        viewController.modalPresentationStyle = .formSheet
+        viewController.delegate = self
         return viewController
     }
 }
+
+// MARK: - INUIAddVoiceShortcutViewControllerDelegate
+
+@available(iOS 12, *)
+extension AddVoiceShortcutActivity: INUIAddVoiceShortcutViewControllerDelegate {
+    
+    public func addVoiceShortcutViewController(_ controller: INUIAddVoiceShortcutViewController, didFinishWith voiceShortcut: INVoiceShortcut?, error: Error?) {
+        
+        controller.dismiss(animated: true, completion: nil)
+    }
+    
+    public func addVoiceShortcutViewControllerDidCancel(_ controller: INUIAddVoiceShortcutViewController) {
+        controller.dismiss(animated: true, completion: nil)
+    }
+}
+
 
 #endif

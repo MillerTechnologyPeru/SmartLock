@@ -96,7 +96,6 @@ final class IntentViewController: UIViewController, INUIHostedViewControlling {
         } else {
             self.activityViewController.stopAnimating()
         }
-        self.activityViewController.isHidden = inProgress == false
         
         return desiredSize
     }

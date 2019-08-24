@@ -102,7 +102,7 @@ public final class LockViewController: UITableViewController {
                 RenameActivity(),
                 UpdateActivity(),
                 DeleteLockActivity(),
-                DonateUnlockIntentActivity()
+                AddVoiceShortcutActivity()
             ]
             
             let lockItem = LockActivityItem(identifier: lockIdentifier)
