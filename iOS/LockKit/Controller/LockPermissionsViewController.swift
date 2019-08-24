@@ -25,7 +25,7 @@ public final class LockPermissionsViewController: UITableViewController, Activit
         didSet { configureView() }
     }
     
-    public let progressHUD = JGProgressHUD(style: .dark)
+    public lazy var progressHUD: JGProgressHUD = .currentStyle(for: self)
     
     private static let dateFormatter: DateFormatter = {
         let dateFormatter = DateFormatter()

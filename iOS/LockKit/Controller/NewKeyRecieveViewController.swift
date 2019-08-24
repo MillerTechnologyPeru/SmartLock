@@ -27,7 +27,7 @@ public final class NewKeyRecieveViewController: UITableViewController, ActivityI
     
     // MARK: - Private Properties
     
-    public let progressHUD = JGProgressHUD(style: .dark)
+    public lazy var progressHUD: JGProgressHUD = .currentStyle(for: self)
     
     // MARK: - Loading
     

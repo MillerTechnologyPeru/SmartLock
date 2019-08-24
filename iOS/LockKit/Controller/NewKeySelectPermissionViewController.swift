@@ -20,7 +20,7 @@ public final class NewKeySelectPermissionViewController: UITableViewController, 
     
     public var lockIdentifier: UUID!
     
-    public let progressHUD = JGProgressHUD(style: .dark)
+    public lazy var progressHUD: JGProgressHUD = .currentStyle(for: self)
     
     private let permissionTypes: [PermissionType] = [.admin, .anytime /*, .scheduled */ ]
     

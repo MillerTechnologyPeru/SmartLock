@@ -17,7 +17,6 @@ import CoreBluetooth
 import DarwinGATT
 import AVFoundation
 import Intents
-import QRCodeReader
 import JGProgressHUD
 
 final class NearbyLocksViewController: UITableViewController {
@@ -30,7 +29,7 @@ final class NearbyLocksViewController: UITableViewController {
     
     let scanDuration: TimeInterval = 3.0
     
-    internal lazy var progressHUD: JGProgressHUD = JGProgressHUD(style: .dark)
+    internal lazy var progressHUD: JGProgressHUD = JGProgressHUD.currentStyle(for: self)
     
     @available(iOS 10.0, *)
     private lazy var selectionFeedbackGenerator: UISelectionFeedbackGenerator = {

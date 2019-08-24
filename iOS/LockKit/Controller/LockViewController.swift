@@ -29,7 +29,7 @@ public final class LockViewController: UITableViewController {
         didSet { if self.isViewLoaded { self.configureView() } }
     }
     
-    private let progressHUD = JGProgressHUD(style: .dark)
+    public lazy var progressHUD: JGProgressHUD = .currentStyle(for: self)
     
     @available(iOS 10.0, *)
     private lazy var feedbackGenerator: UIImpactFeedbackGenerator = {
