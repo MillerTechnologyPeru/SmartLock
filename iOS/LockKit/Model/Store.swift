@@ -155,6 +155,8 @@ public final class Store {
     }
 }
 
+// MARK: - Lock Bluetooth Operations
+
 public extension Store {
     
     func device(for identifier: UUID,
@@ -166,11 +168,14 @@ public extension Store {
             return lock
         } else {
             try self.scan(duration: scanDuration)
-            self.peripherals.value.values.forEach {
-                do { try self.readInformation($0) }
-                catch {  } // ignore
+            for peripheral in peripherals.value.values {
+                do { try self.readInformation(peripheral) }
+                catch { log("⚠️ Could not read information : \(error)"); continue } // ignore
+                if let foundDevice = device(for: identifier) {
+                    return foundDevice
+                }
             }
-            return device(for: identifier)
+            return nil
         }
     }
     
@@ -189,7 +194,7 @@ public extension Store {
         
         self.peripherals.value.removeAll()
         
-        try lockManager.scanLocks(duration: duration, filterDuplicates: false) { [unowned self] in
+        try lockManager.scanLocks(duration: duration, filterDuplicates: true) { [unowned self] in
             self.peripherals.value[$0.scanData.peripheral] = $0
         }
     }

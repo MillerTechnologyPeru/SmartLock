@@ -28,9 +28,6 @@ final class NearbyLocksViewController: UITableViewController {
     
     private var items = [LockPeripheral<NativeCentral>]()
     
-    private var loadedInformation = Set<NativeCentral.Peripheral>()
-    private var loading = Set<NativeCentral.Peripheral>()
-    
     let scanDuration: TimeInterval = 3.0
     
     internal lazy var progressHUD: JGProgressHUD = JGProgressHUD(style: .dark)
@@ -142,14 +139,22 @@ final class NearbyLocksViewController: UITableViewController {
         userActivity = NSUserActivity(.screen(.nearbyLocks))
         userActivity?.becomeCurrent()
         
+        // refresh iBeacons in background
+        BeaconController.shared.scanBeacons()
+        
         let scanDuration = self.scanDuration
         
         // reset table
         self.items.removeAll(keepingCapacity: true)
-        self.loadedInformation.removeAll(keepingCapacity: true)
         
         // scan
-        performActivity({ try Store.shared.scan(duration: scanDuration) })
+        performActivity({
+            try Store.shared.scan(duration: scanDuration)
+            for peripheral in Store.shared.peripherals.value.values {
+                do { try Store.shared.readInformation(peripheral) }
+                catch { log("⚠️ Could not read information for peripheral \(peripheral.scanData.peripheral)") }
+            }
+        })
     }
     
     // MARK: - UITableViewDataSource
@@ -166,14 +171,7 @@ final class NearbyLocksViewController: UITableViewController {
         
         guard let cell = tableView.dequeueReusableCell(LockTableViewCell.self, for: indexPath)
             else { fatalError("Could not dequeue reusable cell \(LockTableViewCell.self)") }
-        
-        // read information
-        let lock = self[indexPath]
-        loadLockInformation(lock)
-        
-        // configure cell
         configure(cell: cell, at: indexPath)
-        
         return cell
     }
     
@@ -189,15 +187,14 @@ final class NearbyLocksViewController: UITableViewController {
     // MARK: - Private Methods
     
     private subscript (indexPath: IndexPath) -> LockPeripheral<NativeCentral> {
-        
         return items[indexPath.row]
     }
     
     private func configureView() {
         
         // sort by signal
-        self.items = Store.shared.peripherals.value.values.sorted(by: { $0.scanData.rssi < $1.scanData.rssi })
-        
+        self.items = Store.shared.peripherals.value.values
+            .sorted(by: { $0.scanData.rssi < $1.scanData.rssi })
         tableView.reloadData()
     }
     
@@ -290,25 +287,6 @@ final class NearbyLocksViewController: UITableViewController {
                 unlock(lock: lock)
             } else {
                 showErrorAlert("No key for lock.")
-            }
-        }
-    }
-    
-    private func loadLockInformation(_ lock: LockPeripheral<NativeCentral>) {
-        
-        let peripheral = lock.scanData.peripheral
-        guard self.loadedInformation.contains(peripheral) == false,
-            self.loading.contains(peripheral) == false
-            else { return }
-        
-        self.loading.insert(peripheral)
-        
-        async {
-            do { try Store.shared.readInformation(lock) }
-            catch { log("Could not read information for peripheral \(peripheral): \(error)") }
-            mainQueue {
-                self.loadedInformation.insert(peripheral)
-                self.loading.remove(peripheral)
             }
         }
     }
