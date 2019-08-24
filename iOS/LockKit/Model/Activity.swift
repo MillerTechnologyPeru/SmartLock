@@ -19,7 +19,13 @@ public struct LockActivityItem {
         .airDrop,
         .copyToPasteboard,
         .saveToCameraRoll,
-        .postToFlickr]
+        .postToFlickr,
+        .postToVimeo,
+        .addToReadingList,
+        .assignToContact,
+        .postToTencentWeibo,
+        .postToWeibo,
+        .openInIBooks]
     
     public let identifier: UUID
     
