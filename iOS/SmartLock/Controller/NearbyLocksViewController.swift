@@ -72,7 +72,7 @@ final class NearbyLocksViewController: UITableViewController {
         super.viewDidLoad()
         
         // register cell
-        tableView.register(LockTableViewCell.nib, forCellReuseIdentifier: LockTableViewCell.reuseIdentifier)
+        tableView.register(LockTableViewCell.self)
         tableView.rowHeight = UITableView.automaticDimension
         tableView.estimatedRowHeight = 60
         
@@ -152,18 +152,17 @@ final class NearbyLocksViewController: UITableViewController {
     // MARK: - UITableViewDataSource
     
     override func numberOfSections(in tableView: UITableView) -> Int {
-        
         return 1
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        
         return items.count
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        let cell = tableView.dequeueReusableCell(withIdentifier: LockTableViewCell.reuseIdentifier, for: indexPath) as! LockTableViewCell
+        guard let cell = tableView.dequeueReusableCell(LockTableViewCell.self, for: indexPath)
+            else { fatalError("Could not dequeue reusable cell \(LockTableViewCell.self)") }
         
         // read information
         let lock = self[indexPath]

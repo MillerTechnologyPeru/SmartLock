@@ -47,7 +47,7 @@ public final class LockPermissionsViewController: UITableViewController, Activit
         // setup table view
         tableView.rowHeight = UITableView.automaticDimension
         tableView.estimatedRowHeight = 60
-        tableView.register(LockTableViewCell.nib, forCellReuseIdentifier: LockTableViewCell.reuseIdentifier)
+        tableView.register(R.nib.lockTableViewCell)
     }
     
     public override func viewWillAppear(_ animated: Bool) {
@@ -165,7 +165,7 @@ public final class LockPermissionsViewController: UITableViewController, Activit
     
     public override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        let cell = tableView.dequeueReusableCell(withIdentifier: LockTableViewCell.reuseIdentifier, for: indexPath) as! LockTableViewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: R.reuseIdentifier.lockTableViewCell, for: indexPath)!
         configure(cell: cell, at: indexPath)
         return cell
     }

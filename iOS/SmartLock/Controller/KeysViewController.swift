@@ -38,7 +38,7 @@ final class KeysViewController: UITableViewController {
         super.viewDidLoad()
         
         // setup table view
-        tableView.register(LockTableViewCell.nib, forCellReuseIdentifier: LockTableViewCell.reuseIdentifier)
+        tableView.register(LockTableViewCell.self)
         tableView.rowHeight = UITableView.automaticDimension
         tableView.estimatedRowHeight = 60
         
@@ -125,22 +125,18 @@ final class KeysViewController: UITableViewController {
     // MARK: - UITableViewDataSource
     
     override func numberOfSections(in tableView: UITableView) -> Int {
-        
         return 1
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        
         return items.count
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        let cell = tableView.dequeueReusableCell(withIdentifier: LockTableViewCell.reuseIdentifier, for: indexPath) as! LockTableViewCell
-        
-        // configure cell
+        guard let cell = tableView.dequeueReusableCell(LockTableViewCell.self, for: indexPath)
+            else { fatalError("Could not dequeue reusable cell \(LockTableViewCell.self)") }
         configure(cell: cell, at: indexPath)
-        
         return cell
     }
     

@@ -45,7 +45,7 @@ final class MessagesViewController: MSMessagesAppViewController {
         BeaconController.shared.log = { log("📶 \(BeaconController.self): " + $0) }
         
         // setup table view
-        tableView.register(LockTableViewCell.nib, forCellReuseIdentifier: LockTableViewCell.reuseIdentifier)
+        tableView.register(LockTableViewCell.self)
         tableView.rowHeight = UITableView.automaticDimension
         tableView.estimatedRowHeight = 60
         
@@ -233,7 +233,7 @@ extension MessagesViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        let cell = tableView.dequeueReusableCell(withIdentifier: LockTableViewCell.reuseIdentifier, for: indexPath) as! LockTableViewCell
+        let cell = tableView.dequeueReusableCell(LockTableViewCell.self, for: indexPath)!
         configure(cell: cell, at: indexPath)
         return cell
     }

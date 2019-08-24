@@ -30,7 +30,7 @@ final class IntentHandler: INExtension, INSendMessageIntentHandling, INSearchFor
         // configure logging
         Log.shared = .intent
         // print app info
-        log("📱 Launching Intent")
+        log("🎙 Launching Intent")
     }()
     
     override func handler(for intent: INIntent) -> Any {
@@ -51,6 +51,7 @@ final class IntentHandler: INExtension, INSendMessageIntentHandling, INSearchFor
     
     // Implement resolution methods to provide additional information about your intent (optional).
     func resolveRecipients(for intent: INSendMessageIntent, with completion: @escaping ([INSendMessageRecipientResolutionResult]) -> Void) {
+        
         if let recipients = intent.recipients {
             
             // If no recipients were provided we'll need to prompt for a value.
@@ -163,6 +164,8 @@ final class UnlockIntentHandler: NSObject, UnlockIntentHandling {
     }
     
     func handle(intent: UnlockIntent, completion: @escaping (UnlockIntentResponse) -> Void) {
+        
+        assert(Thread.isMainThread == false, "Not main thread")
         
         mainQueue {
             

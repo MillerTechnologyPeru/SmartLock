@@ -22,26 +22,103 @@ import LockKit
 
 final class IntentViewController: UIViewController, INUIHostedViewControlling {
     
+    // MARK: - IB Outlets
+    
+    @IBOutlet private(set) weak var lockImageView: UIImageView!
+    @IBOutlet private(set) weak var lockTitleLabel: UILabel!
+    @IBOutlet private(set) weak var lockDetailLabel: UILabel!
+    @IBOutlet private(set) weak var activityViewController: UIActivityIndicatorView!
+    
+    // MARK: - Loading
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         
-        // configure logging
-        Log.shared = .intentUI
+        let _ = IntentViewController.didLaunch
+        
+        log("🎙 Loaded \(IntentViewController.self)")
     }
         
     // MARK: - INUIHostedViewControlling
     
     // Prepare your view controller for the interaction to handle.
-    func configureView(for parameters: Set<INParameter>, of interaction: INInteraction, interactiveBehavior: INUIInteractiveBehavior, context: INUIHostedViewContext, completion: @escaping (Bool, Set<INParameter>, CGSize) -> Void) {
+    func configureView(for parameters: Set<INParameter>,
+                       of interaction: INInteraction,
+                       interactiveBehavior: INUIInteractiveBehavior,
+                       context: INUIHostedViewContext,
+                       completion: @escaping (Bool, Set<INParameter>, CGSize) -> Void) {
+        
+        assert(isViewLoaded)
+        
+        guard let intent = interaction.intent as? UnlockIntent,
+            let lockIdentifierString = intent.lock?.identifier,
+            let lockIdentifier = UUID(uuidString: lockIdentifierString),
+            let lockCache = Store.shared[lock: lockIdentifier] else {
+            completion(false, [], .zero)
+            return
+        }
+        
+        log("🎙 Show UI for lock \(lockCache.name) \(lockCache.key.permission.type) \(lockIdentifier)")
+        
+        let desiredSize: CGSize
+        
+        switch interaction.intentHandlingStatus {
+        case .ready:
+            desiredSize = configureView(for: lockCache)
+        case .inProgress:
+            desiredSize = configureView(for: lockCache, inProgress: true)
+        case .success:
+            desiredSize = configureView(for: lockCache)
+        case .failure:
+            desiredSize = .zero
+        case .deferredToApplication:
+            desiredSize = .zero
+        case .userConfirmationRequired:
+            desiredSize = .zero
+        case .unspecified:
+            desiredSize = configureView(for: lockCache)
+        @unknown default:
+            desiredSize = configureView(for: lockCache)
+        }
+        
         // Do configuration here, including preparing views and calculating a desired size for presentation.
-        completion(true, parameters, self.desiredSize)
+        completion(desiredSize != .zero, parameters, desiredSize)
     }
     
-    var desiredSize: CGSize {
-        return self.extensionContext!.hostedViewMaximumAllowedSize
+    func configureView(for lock: LockCache, inProgress: Bool = false) -> CGSize {
+        
+        let width = self.extensionContext?.hostedViewMaximumAllowedSize.width ?? 320
+        let desiredSize = CGSize(width: width, height: 76)
+        
+        self.lockImageView.image = UIImage(permission: lock.key.permission)
+        self.lockTitleLabel.text = lock.name
+        self.lockDetailLabel.text = lock.key.permission.localizedText
+        self.activityViewController.isHidden = inProgress == false
+        if inProgress, self.activityViewController.isAnimating == false {
+            if self.activityViewController.isAnimating == false {
+                self.activityViewController.startAnimating()
+            }
+        } else {
+            self.activityViewController.stopAnimating()
+        }
+        
+        return desiredSize
     }
+}
+
+private extension IntentViewController {
     
+    static let didLaunch: Void = {
+        
+        // configure logging
+        Log.shared = .intentUI
+        
+        // setup Logging
+        log("🎙 Launching Intent UI")
+        LockManager.shared.log = { log("🔒 LockManager: " + $0) }
+        BeaconController.shared.log = { log("📶 \(BeaconController.self): " + $0) }
+    }()
 }
 
 // MARK: - Logging

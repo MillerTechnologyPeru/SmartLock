@@ -41,6 +41,16 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
         // set global appearance
         UIView.configureLockAppearance()
         
+        #if DEBUG
+        do {
+            try R.validate()
+            try RLockKit.validate()
+        } catch {
+            dump(error)
+            assertionFailure("Could not validate R.swift \(error)")
+        }
+        #endif
+        
         // setup logging
         LockManager.shared.log = { log("🔒 LockManager: " + $0) }
         BeaconController.shared.log = { log("📶 \(BeaconController.self): " + $0) }

@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13122.16" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="ObA-dk-sSI">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="ObA-dk-sSI">
+    <device id="retina6_1" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13104.12"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -9,18 +13,77 @@
         <!--Intent View Controller-->
         <scene sceneID="7MM-of-jgj">
             <objects>
-                <viewController id="ObA-dk-sSI" customClass="IntentViewController" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="ObA-dk-sSI" customClass="IntentViewController" customModule="IntentUI" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="zMn-AG-sqS">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="150"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <subviews>
+                            <stackView opaque="NO" contentMode="scaleToFill" distribution="equalSpacing" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="vxQ-0m-cAy">
+                                <rect key="frame" x="8" y="52" width="304" height="51"/>
+                                <subviews>
+                                    <stackView opaque="NO" contentMode="scaleToFill" alignment="center" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="31B-Ul-w4l">
+                                        <rect key="frame" x="0.0" y="0.0" width="154.5" height="51"/>
+                                        <subviews>
+                                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="permissionBadgeOwner" translatesAutoresizingMaskIntoConstraints="NO" id="QoN-Jv-JMb">
+                                                <rect key="frame" x="0.0" y="0.0" width="51" height="51"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" constant="51" id="75z-zl-x1h"/>
+                                                    <constraint firstAttribute="width" secondItem="QoN-Jv-JMb" secondAttribute="height" multiplier="1:1" id="VrJ-li-WZS"/>
+                                                </constraints>
+                                            </imageView>
+                                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="eae-RY-PqA">
+                                                <rect key="frame" x="59" y="1.5" width="95.5" height="48"/>
+                                                <subviews>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Lock Name" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Irj-aN-5ZD" userLabel="Lock Name Label">
+                                                        <rect key="frame" x="0.0" y="0.0" width="95.5" height="23"/>
+                                                        <fontDescription key="fontDescription" type="system" pointSize="19"/>
+                                                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                        <nil key="highlightedColor"/>
+                                                    </label>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Anytime" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7mg-hs-RtN">
+                                                        <rect key="frame" x="0.0" y="31" width="95.5" height="17"/>
+                                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                        <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        <nil key="highlightedColor"/>
+                                                    </label>
+                                                </subviews>
+                                            </stackView>
+                                        </subviews>
+                                        <constraints>
+                                            <constraint firstItem="QoN-Jv-JMb" firstAttribute="width" secondItem="QoN-Jv-JMb" secondAttribute="height" multiplier="1:1" id="Meu-DC-Umf"/>
+                                            <constraint firstItem="QoN-Jv-JMb" firstAttribute="width" secondItem="QoN-Jv-JMb" secondAttribute="height" multiplier="1:1" id="hIw-2J-ii0"/>
+                                        </constraints>
+                                    </stackView>
+                                    <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" animating="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="mzc-UA-rLg">
+                                        <rect key="frame" x="267" y="0.0" width="37" height="51"/>
+                                    </activityIndicatorView>
+                                </subviews>
+                            </stackView>
+                        </subviews>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="vxQ-0m-cAy" firstAttribute="leading" secondItem="4PN-XC-lEE" secondAttribute="leading" constant="8" id="RX7-zd-L2H"/>
+                            <constraint firstItem="vxQ-0m-cAy" firstAttribute="top" secondItem="4PN-XC-lEE" secondAttribute="top" constant="8" id="S2d-nO-XdD"/>
+                            <constraint firstItem="4PN-XC-lEE" firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="vxQ-0m-cAy" secondAttribute="bottom" constant="8" id="WsG-eA-x7V"/>
+                            <constraint firstItem="4PN-XC-lEE" firstAttribute="trailing" secondItem="vxQ-0m-cAy" secondAttribute="trailing" constant="8" id="Zg1-aD-QME"/>
+                        </constraints>
                         <viewLayoutGuide key="safeArea" id="4PN-XC-lEE"/>
                     </view>
                     <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
                     <size key="freeformSize" width="320" height="150"/>
+                    <connections>
+                        <outlet property="activityViewController" destination="mzc-UA-rLg" id="XK6-3U-JW6"/>
+                        <outlet property="lockDetailLabel" destination="7mg-hs-RtN" id="yid-Of-Gx0"/>
+                        <outlet property="lockImageView" destination="QoN-Jv-JMb" id="NhD-VK-eIT"/>
+                        <outlet property="lockTitleLabel" destination="Irj-aN-5ZD" id="9gb-1v-ObH"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="X47-rx-isc" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
+            <point key="canvasLocation" x="47.826086956521742" y="20.758928571428569"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="permissionBadgeOwner" width="51" height="51"/>
+    </resources>
 </document>
