@@ -17,19 +17,24 @@ public final class NewKeyRecieveViewController: UITableViewController, ActivityI
     
     // MARK: - IB Outlets
     
-    @IBOutlet weak var permissionImageView: UIImageView!
-    @IBOutlet weak var permissionLabel: UILabel!
-    @IBOutlet weak var lockLabel: UILabel!
+    @IBOutlet private(set) weak var permissionView: PermissionIconView!
+    @IBOutlet private(set) weak var permissionLabel: UILabel!
+    @IBOutlet private(set) weak var lockLabel: UILabel!
     
     // MARK: - Properties
     
-    public var newKey: NewKey.Invitation!
-    
-    // MARK: - Private Properties
-    
+    public private(set) var newKey: NewKey.Invitation!
+        
     public lazy var progressHUD: JGProgressHUD = .currentStyle(for: self)
     
     // MARK: - Loading
+    
+    public static func fromStoryboard(with newKey: NewKey.Invitation) -> NewKeyRecieveViewController {
+        guard let viewController = R.storyboard.newKeyInvitation.newKeyRecieveViewController()
+            else { fatalError("Could not load \(self) from storyboard") }
+        viewController.newKey = newKey
+        return viewController
+    }
     
     public override func viewDidLoad() {
         super.viewDidLoad()
@@ -128,7 +133,7 @@ public final class NewKeyRecieveViewController: UITableViewController, ActivityI
         self.navigationItem.title = newKey.key.name
         let permission = newKey.key.permission
         self.lockLabel.text = newKey.lock.rawValue
-        self.permissionImageView.image = UIImage(permission: permission)
+        self.permissionView.permission = permission.type
         self.permissionLabel.text = permission.localizedText
     }
 }
@@ -144,12 +149,9 @@ public extension UIViewController {
             return false
         }
         
-        // show NewKeyReceiveVC
-        let navigationController = UIStoryboard(name: "NewKeyInvitation", bundle: .lockKit).instantiateInitialViewController() as! UINavigationController
-        let newKeyVC = navigationController.topViewController as! NewKeyRecieveViewController
-        newKeyVC.newKey = newKey
+        let newKeyViewController = NewKeyRecieveViewController.fromStoryboard(with: newKey)
+        let navigationController = UINavigationController(rootViewController: newKeyViewController)
         present(navigationController, animated: true, completion: nil)
-        
         return true
     }
 }

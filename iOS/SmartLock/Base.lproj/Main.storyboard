@@ -64,11 +64,17 @@
                             <outlet property="delegate" destination="JRc-fh-odg" id="cyl-k4-fNM"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="Keys" id="cv9-VF-XQV"/>
+                    <navigationItem key="navigationItem" title="Keys" id="cv9-VF-XQV">
+                        <barButtonItem key="rightBarButtonItem" systemItem="add" id="gAv-LZ-Pqw">
+                            <connections>
+                                <action selector="importFile:" destination="JRc-fh-odg" id="xMn-AF-N71"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ng6-2g-LNP" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1504" y="830"/>
+            <point key="canvasLocation" x="1444" y="829"/>
         </scene>
         <!--Settings-->
         <scene sceneID="ckP-rW-bkw">

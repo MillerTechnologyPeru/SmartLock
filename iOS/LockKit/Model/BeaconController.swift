@@ -9,7 +9,6 @@
 import Foundation
 import CoreLock
 import CoreLocation
-import UIKit
 
 #if !targetEnvironment(macCatalyst)
 /// iBeacon Controller

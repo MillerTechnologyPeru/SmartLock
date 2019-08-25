@@ -16,7 +16,6 @@ public typealias LockManager = CoreLock.LockManager<NativeCentral>
 public extension LockManager where Central == NativeCentral {
     
     static var shared: LockManager {
-        
         return LockManagerCache.manager
     }
 }

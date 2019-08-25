@@ -120,6 +120,11 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
         
         // update cache if modified by extension
         Store.shared.loadCache()
+                
+        #if !targetEnvironment(macCatalyst)
+        // update beacon status
+        BeaconController.shared.scanBeacons()
+        #endif
     }
 
     func applicationWillTerminate(_ application: UIApplication) {

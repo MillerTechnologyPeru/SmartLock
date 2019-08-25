@@ -86,11 +86,15 @@ final class NearbyLocksViewController: UITableViewController {
         // Update UI
         configureView()
         
+        #if targetEnvironment(macCatalyst)
+        scan()
+        #else
         // scan if none is setup
         if Store.shared.locks.value.isEmpty == true {
             DispatchQueue.main.asyncAfter(deadline: .now() + 1.0,
                                           execute: { [weak self] in self?.scan() })
         }
+        #endif
     }
     
     override func viewWillAppear(_ animated: Bool) {

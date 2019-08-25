@@ -57,6 +57,15 @@ final class KeysViewController: UITableViewController {
         userActivity?.becomeCurrent()
     }
     
+    // MARK: - Actions
+    
+    @IBAction func importFile(_ sender: UIBarButtonItem) {
+        
+        let documentPicker = UIDocumentPickerViewController(documentTypes: ["com.colemancda.lock.ekey"], in: .import)
+        documentPicker.delegate = self
+        self.present(documentPicker, sender: .barButtonItem(sender))
+    }
+    
     // MARK: - Methods
     
     private subscript (indexPath: IndexPath) -> Item {
@@ -96,7 +105,6 @@ final class KeysViewController: UITableViewController {
     }
     
     private func select(_ item: Item) {
-        
         select(lock: item.identifier)
     }
     
@@ -149,6 +157,7 @@ final class KeysViewController: UITableViewController {
         select(item)
     }
     
+    #if !targetEnvironment(macCatalyst)
     override func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
         
         var actions = [UITableViewRowAction]()
@@ -180,6 +189,48 @@ final class KeysViewController: UITableViewController {
         actions.append(delete)
         
         return actions
+    }
+    #endif
+}
+
+// MARK: - UIDocumentPickerDelegate
+
+extension KeysViewController: UIDocumentPickerDelegate {
+    
+    func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
+        
+        controller.dismiss(animated: true, completion: nil)
+        
+        // parse eKey file
+        guard let url = urls.first,
+            let data = try? Data(contentsOf: url),
+            let newKey = try? JSONDecoder().decode(NewKey.Invitation.self, from: data) else {
+                
+                showErrorAlert("Invalid Key file.")
+                return
+        }
+        
+        self.open(newKey: newKey)
+    }
+    
+    func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentAt url: URL) {
+        
+        controller.dismiss(animated: true, completion: nil)
+        
+        // parse eKey file
+        guard let data = try? Data(contentsOf: url),
+            let newKey = try? JSONDecoder().decode(NewKey.Invitation.self, from: data) else {
+                
+                showErrorAlert("Invalid Key file.")
+                return
+        }
+        
+        self.open(newKey: newKey)
+    }
+    
+    func documentPickerWasCancelled(_ controller: UIDocumentPickerViewController) {
+        
+        controller.dismiss(animated: true, completion: nil)
     }
 }
 
