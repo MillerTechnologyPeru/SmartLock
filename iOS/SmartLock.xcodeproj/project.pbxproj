@@ -33,8 +33,8 @@
 		6E806BB3230F6EC400C6FF78 /* R.LockKit.generated.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E806BB2230F6EC300C6FF78 /* R.LockKit.generated.swift */; };
 		6E806BD92310F36E00C6FF78 /* R.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E806BD82310F36E00C6FF78 /* R.swift */; };
 		6E806BDB2310FB2C00C6FF78 /* PermissionIconView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E806BDA2310FB2C00C6FF78 /* PermissionIconView.swift */; };
-		6E8772B523125185003B9469 /* CoreLock.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6E6000562121164B00787DAA /* CoreLock.framework */; };
-		6E8772B623125185003B9469 /* CoreLock.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 6E6000562121164B00787DAA /* CoreLock.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		6E8772CA231259DE003B9469 /* JGProgressHUD.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6E8772C5231258CD003B9469 /* JGProgressHUD.framework */; platformFilter = ios; };
+		6E8772CB231259DE003B9469 /* JGProgressHUD.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 6E8772C5231258CD003B9469 /* JGProgressHUD.framework */; platformFilter = ios; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		6E994A8D230DFB6D0076DC1B /* LockKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6E994A84230DFB6C0076DC1B /* LockKit.framework */; };
 		6E994A94230DFB6D0076DC1B /* LockKitTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E994A93230DFB6D0076DC1B /* LockKitTests.swift */; };
 		6E994A96230DFB6D0076DC1B /* LockKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 6E994A86230DFB6C0076DC1B /* LockKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -147,6 +147,27 @@
 			remoteGlobalIDString = DD75027A1C68FCFC006590AF;
 			remoteInfo = CoreLockTests;
 		};
+		6E8772C4231258CD003B9469 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6E8772BB231258CC003B9469 /* JGProgressHUD.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 6BF7DC5A1AEFCFD9000A0AE0;
+			remoteInfo = "JGProgressHUD-iOS";
+		};
+		6E8772C6231258CD003B9469 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6E8772BB231258CC003B9469 /* JGProgressHUD.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 6BABF9A31F7A6133005E783F;
+			remoteInfo = "JGProgressHUD-tvOS";
+		};
+		6E8772CC23125A70003B9469 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6E60004D2121164B00787DAA /* CoreLock.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 52D6D97B1BEFF229002C0205;
+			remoteInfo = "CoreLock-iOS";
+		};
 		6E994A8E230DFB6D0076DC1B /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 6E6000082121119400787DAA /* Project object */;
@@ -160,13 +181,6 @@
 			proxyType = 1;
 			remoteGlobalIDString = 6E60000F2121119400787DAA;
 			remoteInfo = SmartLock;
-		};
-		6E994AC6230DFE270076DC1B /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 6E60004D2121164B00787DAA /* CoreLock.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = 52D6D97B1BEFF229002C0205;
-			remoteInfo = "CoreLock-iOS";
 		};
 		6E994AEA230E56DD0076DC1B /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -242,17 +256,7 @@
 			files = (
 				6E9C95FD23114D07007C18FE /* CoreLock.framework in Embed Frameworks */,
 				6E9C95FF23114D60007C18FE /* LockKit.framework in Embed Frameworks */,
-			);
-			name = "Embed Frameworks";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		6E8772B723125186003B9469 /* Embed Frameworks */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-				6E8772B623125185003B9469 /* CoreLock.framework in Embed Frameworks */,
+				6E8772CB231259DE003B9469 /* JGProgressHUD.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -327,6 +331,7 @@
 		6E806BD82310F36E00C6FF78 /* R.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = R.swift; sourceTree = "<group>"; };
 		6E806BDA2310FB2C00C6FF78 /* PermissionIconView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionIconView.swift; sourceTree = "<group>"; };
 		6E81B293230CCE3D00783BC5 /* BeaconController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BeaconController.swift; sourceTree = "<group>"; };
+		6E8772BB231258CC003B9469 /* JGProgressHUD.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = JGProgressHUD.xcodeproj; path = ../Carthage/Checkouts/JGProgressHUD/JGProgressHUD.xcodeproj; sourceTree = "<group>"; };
 		6E994A79230DE1700076DC1B /* CoreSpotlight.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreSpotlight.swift; sourceTree = "<group>"; };
 		6E994A84230DFB6C0076DC1B /* LockKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = LockKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		6E994A86230DFB6C0076DC1B /* LockKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LockKit.h; sourceTree = "<group>"; };
@@ -383,6 +388,7 @@
 			files = (
 				6E9C95FC23114D07007C18FE /* CoreLock.framework in Frameworks */,
 				6E9C95FE23114D60007C18FE /* LockKit.framework in Frameworks */,
+				6E8772CA231259DE003B9469 /* JGProgressHUD.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -398,7 +404,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				6E64B7EA231236E5002BC0A2 /* Rswift in Frameworks */,
-				6E8772B523125185003B9469 /* CoreLock.framework in Frameworks */,
 				6E64B7F4231247EF002BC0A2 /* QRCodeReader in Frameworks */,
 				6E64B7F1231240CC002BC0A2 /* JGProgressHUD in Frameworks */,
 				6E64B7ED23123846002BC0A2 /* KeychainAccess in Frameworks */,
@@ -450,6 +455,7 @@
 		6E6000072121119400787DAA = {
 			isa = PBXGroup;
 			children = (
+				6E8772BB231258CC003B9469 /* JGProgressHUD.xcodeproj */,
 				6E60004D2121164B00787DAA /* CoreLock.xcodeproj */,
 				6E6000122121119400787DAA /* SmartLock */,
 				6E6000272121119500787DAA /* SmartLockUITests */,
@@ -589,6 +595,15 @@
 				6E806BA5230F654100C6FF78 /* SettingsIconView.swift */,
 			);
 			path = View;
+			sourceTree = "<group>";
+		};
+		6E8772BC231258CC003B9469 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				6E8772C5231258CD003B9469 /* JGProgressHUD.framework */,
+				6E8772C7231258CD003B9469 /* JGProgressHUD.framework */,
+			);
+			name = Products;
 			sourceTree = "<group>";
 		};
 		6E994A85230DFB6C0076DC1B /* LockKit */ = {
@@ -778,12 +793,11 @@
 				6E994A80230DFB6C0076DC1B /* Sources */,
 				6E994A81230DFB6C0076DC1B /* Frameworks */,
 				6E994A82230DFB6C0076DC1B /* Resources */,
-				6E8772B723125186003B9469 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				6E994AC7230DFE270076DC1B /* PBXTargetDependency */,
+				6E8772CD23125A70003B9469 /* PBXTargetDependency */,
 			);
 			name = LockKit;
 			packageProductDependencies = (
@@ -995,6 +1009,10 @@
 					ProductGroup = 6E60004E2121164B00787DAA /* Products */;
 					ProjectRef = 6E60004D2121164B00787DAA /* CoreLock.xcodeproj */;
 				},
+				{
+					ProductGroup = 6E8772BC231258CC003B9469 /* Products */;
+					ProjectRef = 6E8772BB231258CC003B9469 /* JGProgressHUD.xcodeproj */;
+				},
 			);
 			projectRoot = "";
 			targets = (
@@ -1044,6 +1062,20 @@
 			fileType = wrapper.cfbundle;
 			path = CoreLockTests.xctest;
 			remoteRef = 6E60005D2121164B00787DAA /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		6E8772C5231258CD003B9469 /* JGProgressHUD.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = JGProgressHUD.framework;
+			remoteRef = 6E8772C4231258CD003B9469 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		6E8772C7231258CD003B9469 /* JGProgressHUD.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = JGProgressHUD.framework;
+			remoteRef = 6E8772C6231258CD003B9469 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */
@@ -1305,6 +1337,11 @@
 			target = 6E60000F2121119400787DAA /* SmartLock */;
 			targetProxy = 6E6000252121119500787DAA /* PBXContainerItemProxy */;
 		};
+		6E8772CD23125A70003B9469 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "CoreLock-iOS";
+			targetProxy = 6E8772CC23125A70003B9469 /* PBXContainerItemProxy */;
+		};
 		6E994A8F230DFB6D0076DC1B /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 6E994A83230DFB6C0076DC1B /* LockKit */;
@@ -1314,11 +1351,6 @@
 			isa = PBXTargetDependency;
 			target = 6E60000F2121119400787DAA /* SmartLock */;
 			targetProxy = 6E994A90230DFB6D0076DC1B /* PBXContainerItemProxy */;
-		};
-		6E994AC7230DFE270076DC1B /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = "CoreLock-iOS";
-			targetProxy = 6E994AC6230DFE270076DC1B /* PBXContainerItemProxy */;
 		};
 		6E994AEB230E56DD0076DC1B /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;

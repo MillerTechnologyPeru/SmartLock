@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 import CoreLock
 
-#if canImport(QRCodeReader)
+#if os(iOS) && !targetEnvironment(macCatalyst)
 import QRCodeReader
 
 public extension ActivityIndicatorViewController where Self: UIViewController {

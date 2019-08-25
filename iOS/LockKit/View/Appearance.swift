@@ -29,6 +29,10 @@ internal extension UINavigationBar {
             .foregroundColor: UIColor.white
         ]
         
+        if #available(iOSApplicationExtension 11.0, *) {
+            self.appearance().largeTitleTextAttributes = titleTextAttributes
+        }
+        
         if #available(iOS 13.0, *) {
             let appearance = UINavigationBarAppearance()
             appearance.backgroundColor = barTintColor
@@ -41,8 +45,8 @@ internal extension UINavigationBar {
         
         self.appearance().titleTextAttributes = titleTextAttributes
         self.appearance().barTintColor = barTintColor
-        self.appearance().largeTitleTextAttributes = titleTextAttributes
         self.appearance().tintColor = tintColor
+        
     }
 }
 

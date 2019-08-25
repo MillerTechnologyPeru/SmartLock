@@ -289,6 +289,8 @@ final class NearbyLocksViewController: UITableViewController {
         case .setup:
             #if targetEnvironment(macCatalyst)
             showErrorAlert("Cannot setup Lock on macOS.")
+            #elseif targetEnvironment(simulator)
+            assertion("Cannot use in iOS simulator")
             #else
             setup(lock: lock)
             #endif
