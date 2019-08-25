@@ -201,13 +201,18 @@ public extension Store {
         } else {
             try self.scan(duration: scanDuration)
             for peripheral in peripherals.value.values {
+                // skip known locks that are not the targeted device
+                if let information = lockInformation.value[peripheral.scanData.peripheral] {
+                    guard information.identifier == identifier else { continue }
+                }
+                // request information
                 do { try self.readInformation(peripheral) }
-                catch { log("⚠️ Could not read information : \(error)"); continue } // ignore
+                catch { log("⚠️ Could not read information: \(error)"); continue } // ignore
                 if let foundDevice = device(for: identifier) {
                     return foundDevice
                 }
             }
-            return nil
+            return device(for: identifier)
         }
     }
     

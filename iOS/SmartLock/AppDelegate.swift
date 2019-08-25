@@ -141,8 +141,19 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
         
         // update cache if modified by extension
         Store.shared.loadCache()
+        
+        // attempt to scan for all known locks if they are not in central cache
+        async {
+            do {
+                for lock in Store.shared.locks.value.keys {
+                    let _ = try Store.shared.device(for: lock, scanDuration: 1.0)
+                }
+            } catch { log("⚠️ Unable to scan: \(error)") }
+        }
                 
-        #if !targetEnvironment(macCatalyst)
+        #if targetEnvironment(macCatalyst)
+        
+        #else
         BeaconController.shared.scanBeacons()
         #endif
     }
