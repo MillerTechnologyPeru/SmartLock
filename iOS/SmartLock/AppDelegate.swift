@@ -131,6 +131,11 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
         
         log("📱 Will terminate")
+        
+        #if !targetEnvironment(macCatalyst)
+        // update beacon status
+        BeaconController.shared.scanBeacons()
+        #endif
     }
     
     func application(_ application: UIApplication, handleOpen url: URL) -> Bool {
