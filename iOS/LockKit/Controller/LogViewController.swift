@@ -67,6 +67,26 @@ public final class LogViewController: UITableViewController {
         logChanged()
     }
     
+    public override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        if #available(iOS 13.0, iOSApplicationExtension 13.0, *) {
+            let appearance = UINavigationBar.appearance().scrollEdgeAppearance?.copy() ?? .init()
+            appearance.configureWithTransparentBackground()
+            self.navigationController?.navigationBar.scrollEdgeAppearance = appearance
+        }
+    }
+    
+    public override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        if #available(iOS 13.0, iOSApplicationExtension 13.0, *) {
+            if let appearance = UINavigationBar.appearance().scrollEdgeAppearance {
+                self.navigationController?.navigationBar.scrollEdgeAppearance = appearance
+            }
+        }
+    }
+    
     // MARK: - Actions
     
     @IBAction func share(_ sender: UIBarButtonItem) {

@@ -15,7 +15,7 @@
 		6E6000292121119500787DAA /* SmartLockUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E6000282121119500787DAA /* SmartLockUITests.swift */; };
 		6E64B7EA231236E5002BC0A2 /* Rswift in Frameworks */ = {isa = PBXBuildFile; productRef = 6E64B7E9231236E5002BC0A2 /* Rswift */; };
 		6E64B7ED23123846002BC0A2 /* KeychainAccess in Frameworks */ = {isa = PBXBuildFile; productRef = 6E64B7EC23123846002BC0A2 /* KeychainAccess */; };
-		6E64B7F1231240CC002BC0A2 /* JGProgressHUD in Frameworks */ = {isa = PBXBuildFile; productRef = 6E64B7F0231240CC002BC0A2 /* JGProgressHUD */; };
+		6E64B7F1231240CC002BC0A2 /* JGProgressHUD in Frameworks */ = {isa = PBXBuildFile; platformFilter = maccatalyst; productRef = 6E64B7F0231240CC002BC0A2 /* JGProgressHUD */; };
 		6E64B7F4231247EF002BC0A2 /* QRCodeReader in Frameworks */ = {isa = PBXBuildFile; platformFilter = ios; productRef = 6E64B7F3231247EF002BC0A2 /* QRCodeReader */; };
 		6E806B8C230F4F2800C6FF78 /* Preferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E806B8B230F4F2800C6FF78 /* Preferences.swift */; };
 		6E806B94230F4F4700C6FF78 /* Keychain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E806B93230F4F4700C6FF78 /* Keychain.swift */; };
@@ -167,6 +167,13 @@
 			proxyType = 1;
 			remoteGlobalIDString = 52D6D97B1BEFF229002C0205;
 			remoteInfo = "CoreLock-iOS";
+		};
+		6E8772D0231265B4003B9469 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6E8772BB231258CC003B9469 /* JGProgressHUD.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 6BF7DC591AEFCFD9000A0AE0;
+			remoteInfo = "JGProgressHUD-iOS";
 		};
 		6E994A8E230DFB6D0076DC1B /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -797,6 +804,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				6E8772D1231265B4003B9469 /* PBXTargetDependency */,
 				6E8772CD23125A70003B9469 /* PBXTargetDependency */,
 			);
 			name = LockKit;
@@ -1341,6 +1349,12 @@
 			isa = PBXTargetDependency;
 			name = "CoreLock-iOS";
 			targetProxy = 6E8772CC23125A70003B9469 /* PBXContainerItemProxy */;
+		};
+		6E8772D1231265B4003B9469 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "JGProgressHUD-iOS";
+			platformFilter = ios;
+			targetProxy = 6E8772D0231265B4003B9469 /* PBXContainerItemProxy */;
 		};
 		6E994A8F230DFB6D0076DC1B /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
