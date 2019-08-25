@@ -94,7 +94,6 @@ public final class NewKeyRecieveViewController: UITableViewController, ActivityI
                 mainQueue {
                     
                     // save to cache
-                    
                     let lockCache = LockCache(
                         key: Key(
                             identifier: newKeyInvitation.key.identifier,

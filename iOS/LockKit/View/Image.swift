@@ -25,12 +25,16 @@ public final class AssetExtractor {
     
     private lazy var fileManager = FileManager()
     
-    private lazy var cacheDirectory = self.fileManager.urls(for: .cachesDirectory, in: .userDomainMask)[0]
+    private lazy var cachesDirectory: URL = {
+        guard let url = fileManager.cachesDirectory
+            else { fatalError("Could not load cache directory") }
+        return url
+    }()
     
     public func url(for imageName: String, in bundle: Bundle) -> URL? {
         
         let fileName = bundle.bundleIdentifier ?? bundle.bundleURL.lastPathComponent + "." + imageName + ".png"
-        let url = cacheDirectory.appendingPathComponent(fileName)
+        let url = cachesDirectory.appendingPathComponent(fileName)
         
         if fileManager.fileExists(atPath: url.path) == false {
             guard let image = UIImage(named: imageName, in: bundle, compatibleWith: nil)

@@ -8,11 +8,6 @@
 
 import Foundation
 
-public final class Preferences {
-    
-    
-}
-
 public extension UserDefaults {
     
     convenience init?(suiteName appGroup: AppGroup) {

@@ -30,6 +30,8 @@ public final class Store {
         }
         #endif
         locks.observe { [unowned self] _ in self.lockCacheChanged() }
+        
+        // read from filesystem
         loadCache()
     }
     
@@ -37,11 +39,24 @@ public final class Store {
     
     public let locks = Observable([UUID: LockCache]())
     
-    private let defaults: Defaults = Defaults(userDefaults: UserDefaults(suiteName: .lock)!)
+    private lazy var defaults = UserDefaults(suiteName: .lock)
     
-    private let keychain = Keychain(service: .lock, accessGroup: .lock)
+    private let keychain = Keychain(service: .lock, accessGroup: .lock).synchronizable(true)
     
-    private let storageKey = DefaultsKey<[UUID: LockCache]>("locks")
+    public let fileManager: FileManager.Lock = .shared
+    
+    public private(set) var applicationData: ApplicationData {
+        get {
+            if let applicationData = fileManager.applicationData {
+                return applicationData
+            } else {
+                let applicationData = ApplicationData()
+                fileManager.applicationData = applicationData
+                return applicationData
+            }
+        }
+        set { fileManager.applicationData = newValue }
+    }
     
     public let lockManager: LockManager = .shared
     
@@ -56,7 +71,7 @@ public final class Store {
     
     public private(set) var lockInformation = Observable([NativeCentral.Peripheral: LockInformationCharacteristic]())
     
-    /// Key identifier for the specified
+    /// Cached information for the specified lock.
     public subscript (lock identifier: UUID) -> LockCache? {
         
         get { return locks.value[identifier] }
@@ -66,35 +81,49 @@ public final class Store {
         }
     }
     
+    /// Private Key for the specified lock.
     public subscript (key identifier: UUID) -> KeyData? {
         
         get {
             
-            guard let data = try! keychain.getData(identifier.rawValue),
-                let key = KeyData(data: data)
-                else { return nil }
-            
-            return key
+            do {
+                guard let data = try keychain.getData(identifier.rawValue)
+                    else { return nil }
+                guard let key = KeyData(data: data)
+                    else { assertionFailure("Invalid key data"); return nil }
+                return key
+            } catch {
+                #if DEBUG
+                dump(error)
+                #endif
+                fatalError("Unable retrieve value from keychain: \(error)")
+            }
         }
         
         set {
-            
+                        
             do {
-                guard let data = newValue?.data
-                    else { try keychain.remove(identifier.rawValue); return }
+                guard let data = newValue?.data else {
+                    try keychain.remove(identifier.rawValue)
+                    return
+                }
                 try keychain.set(data, key: identifier.rawValue)
             } catch {
+                #if DEBUG
                 dump(error)
+                #endif
                 fatalError("Unable store value in keychain: \(error)")
             }
         }
     }
     
+    /// The Bluetooth LE peripheral for the speciifed lock.
     public subscript (peripheral identifier: UUID) -> NativeCentral.Peripheral? {
         
         return lockInformation.value.first(where: { $0.value.identifier == identifier })?.key
     }
     
+    /// Remove the specified lock from the cache and keychain.
     @discardableResult
     public func remove(_ lock: UUID) -> Bool {
         
@@ -107,15 +136,20 @@ public final class Store {
         return true
     }
     
-    // Forceably load cache.
+    /// Forceably load cache.
     public func loadCache() {
         
-        locks.value = defaults.get(for: storageKey) ?? [:]
+        // read file
+        let applicationData = self.applicationData
+        // set value
+        locks.value = applicationData.locks
     }
     
+    /// Write to lock cache.
     private func writeCache() {
         
-        defaults.set(locks.value, for: storageKey)
+        // write file
+        applicationData.locks = locks.value
     }
     
     private func lockCacheChanged() {
@@ -295,6 +329,30 @@ public extension Store {
                                with: key)
         
         return true
+    }
+}
+
+// MARK: - Supporting Types
+
+/// Application Data.
+public struct ApplicationData: Codable, Equatable {
+    
+    public let created: Date
+    
+    public private(set) var updated: Date
+    
+    public var locks: [UUID: LockCache] {
+        didSet { didUpdate() }
+    }
+    
+    private mutating func didUpdate() {
+        updated = Date()
+    }
+    
+    public init() {
+        self.created = Date()
+        self.updated = Date()
+        self.locks = [:]
     }
 }
 
