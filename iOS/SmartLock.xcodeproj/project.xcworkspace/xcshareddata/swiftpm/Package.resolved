@@ -47,6 +47,15 @@
         }
       },
       {
+        "package": "QRCodeReader",
+        "repositoryURL": "https://github.com/MillerTechnologyPeru/QRCodeReader.swift.git",
+        "state": {
+          "branch": "master",
+          "revision": "9db77f45f6f58ad8643f295b7573f0061f03b888",
+          "version": null
+        }
+      },
+      {
         "package": "R.swift.Library",
         "repositoryURL": "https://github.com/mac-cain13/R.swift.Library",
         "state": {

@@ -16,6 +16,7 @@
 		6E64B7EA231236E5002BC0A2 /* Rswift in Frameworks */ = {isa = PBXBuildFile; productRef = 6E64B7E9231236E5002BC0A2 /* Rswift */; };
 		6E64B7ED23123846002BC0A2 /* KeychainAccess in Frameworks */ = {isa = PBXBuildFile; productRef = 6E64B7EC23123846002BC0A2 /* KeychainAccess */; };
 		6E64B7F1231240CC002BC0A2 /* JGProgressHUD in Frameworks */ = {isa = PBXBuildFile; productRef = 6E64B7F0231240CC002BC0A2 /* JGProgressHUD */; };
+		6E64B7F4231247EF002BC0A2 /* QRCodeReader in Frameworks */ = {isa = PBXBuildFile; platformFilter = ios; productRef = 6E64B7F3231247EF002BC0A2 /* QRCodeReader */; };
 		6E806B8C230F4F2800C6FF78 /* Preferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E806B8B230F4F2800C6FF78 /* Preferences.swift */; };
 		6E806B94230F4F4700C6FF78 /* Keychain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E806B93230F4F4700C6FF78 /* Keychain.swift */; };
 		6E806B96230F4F7300C6FF78 /* AppGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E806B95230F4F7300C6FF78 /* AppGroup.swift */; };
@@ -384,6 +385,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				6E64B7EA231236E5002BC0A2 /* Rswift in Frameworks */,
+				6E64B7F4231247EF002BC0A2 /* QRCodeReader in Frameworks */,
 				6E64B7F1231240CC002BC0A2 /* JGProgressHUD in Frameworks */,
 				6E64B7ED23123846002BC0A2 /* KeychainAccess in Frameworks */,
 			);
@@ -773,6 +775,7 @@
 				6E64B7E9231236E5002BC0A2 /* Rswift */,
 				6E64B7EC23123846002BC0A2 /* KeychainAccess */,
 				6E64B7F0231240CC002BC0A2 /* JGProgressHUD */,
+				6E64B7F3231247EF002BC0A2 /* QRCodeReader */,
 			);
 			productName = LockKit;
 			productReference = 6E994A84230DFB6C0076DC1B /* LockKit.framework */;
@@ -966,6 +969,7 @@
 				6E64B7E8231236E5002BC0A2 /* XCRemoteSwiftPackageReference "R.swift" */,
 				6E64B7EB23123846002BC0A2 /* XCRemoteSwiftPackageReference "KeychainAccess" */,
 				6E64B7EF231240CC002BC0A2 /* XCRemoteSwiftPackageReference "JGProgressHUD" */,
+				6E64B7F2231247EF002BC0A2 /* XCRemoteSwiftPackageReference "QRCodeReader.swift" */,
 			);
 			productRefGroup = 6E6000112121119400787DAA /* Products */;
 			projectDirPath = "";
@@ -2009,6 +2013,14 @@
 				kind = branch;
 			};
 		};
+		6E64B7F2231247EF002BC0A2 /* XCRemoteSwiftPackageReference "QRCodeReader.swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/MillerTechnologyPeru/QRCodeReader.swift.git";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -2026,6 +2038,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 6E64B7EF231240CC002BC0A2 /* XCRemoteSwiftPackageReference "JGProgressHUD" */;
 			productName = JGProgressHUD;
+		};
+		6E64B7F3231247EF002BC0A2 /* QRCodeReader */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6E64B7F2231247EF002BC0A2 /* XCRemoteSwiftPackageReference "QRCodeReader.swift" */;
+			productName = QRCodeReader;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
