@@ -104,16 +104,21 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
         log("\(bundle.symbol) Did enter background")
         
         #if !targetEnvironment(macCatalyst)
-        // update beacon status
+        // update beacons
+        BeaconController.shared.scanBeacons()
+        // scan in background
         let beaconTask = UIApplication.shared.beginBackgroundTask(withName: "Beacons", expirationHandler: {
             log("\(bundle.symbol) Background task expired")
         })
-        // update beacons
-        BeaconController.shared.scanBeacons()
         async { [unowned self] in
-            // scan for locks
-            do { try Store.shared.scan(duration: 3.0) }
-            catch { log("⚠️ Unable to scan: \(error)") }
+            do {
+                // scan for locks
+                try Store.shared.scan(duration: 3.0)
+                // make sure each stored lock is visible
+                for lock in Store.shared.locks.value.keys {
+                    let _ = try Store.shared.device(for: lock, scanDuration: 1.0)
+                }
+            } catch { log("⚠️ Unable to scan: \(error)") }
             mainQueue { self.logBackgroundTimeRemaining() }
             DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) {
                 UIApplication.shared.endBackgroundTask(beaconTask)
@@ -141,6 +146,10 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
         
         // update cache if modified by extension
         Store.shared.loadCache()
+                        
+        #if !targetEnvironment(macCatalyst)
+        BeaconController.shared.scanBeacons()
+        #endif
         
         // attempt to scan for all known locks if they are not in central cache
         async {
@@ -150,12 +159,6 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
                 }
             } catch { log("⚠️ Unable to scan: \(error)") }
         }
-                
-        #if targetEnvironment(macCatalyst)
-        
-        #else
-        BeaconController.shared.scanBeacons()
-        #endif
     }
 
     func applicationWillTerminate(_ application: UIApplication) {
