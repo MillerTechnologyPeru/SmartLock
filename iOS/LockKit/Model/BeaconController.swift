@@ -41,6 +41,8 @@ public final class BeaconController {
     
     public var foundLock: ((UUID, CLBeacon) -> ())?
     
+    public var lostLock: ((UUID) -> ())?
+    
     // MARK: - Methods
     
     public func requestAuthorization() {
@@ -171,6 +173,15 @@ private extension BeaconController {
         public func locationManager(_ manager: CLLocationManager, didExitRegion region: CLRegion) {
             
             log("Exited iBeacon region \(region.identifier)")
+            
+            if let beaconRegion = region as? CLBeaconRegion {
+                if manager.rangedRegions.contains(beaconRegion) {
+                     manager.stopRangingBeacons(in: beaconRegion)
+                }
+                if let lock = beaconController?.locks.first(where: { $0.value == region })?.key {
+                    beaconController?.lostLock?(lock)
+                }
+            }
         }
         
         @objc
@@ -187,7 +198,7 @@ private extension BeaconController {
                      .unknown:
                     manager.stopRangingBeacons(in: beaconRegion)
                     if let lock = beaconController?.locks.first(where: { $0.value == region })?.key {
-                        
+                        beaconController?.lostLock?(lock)
                     }
                 }
             }

@@ -25,6 +25,9 @@ public final class Store {
         beaconController.foundLock = { [unowned self] (lock, beacon) in
             self.lockBeaconFound(lock: lock, beacon: beacon)
         }
+        beaconController.lostLock = { [unowned self] (lock) in
+            self.lockBeaconExited(lock: lock)
+        }
         #endif
         locks.observe { [unowned self] _ in self.lockCacheChanged() }
         loadCache()
@@ -150,12 +153,31 @@ public final class Store {
     #if !targetEnvironment(macCatalyst)
     private func lockBeaconFound(lock: UUID, beacon: CLBeacon) {
         
-        async {
+        async { [weak self] in
+            guard let self = self else { return }
             do {
-                guard let _ = try Store.shared.device(for: lock, scanDuration: 1.0) else {
+                guard let _ = try self.device(for: lock, scanDuration: 1.0) else {
                     log("⚠️ Could not find lock \(lock) for beacon \(beacon)")
                     self.beaconController.scanBeacon(for: lock)
                     return
+                }
+            } catch {
+                log("⚠️ Could not scan: \(error)")
+            }
+        }
+    }
+    
+    private func lockBeaconExited(lock: UUID) {
+        
+        async { [weak self] in
+            guard let self = self else { return }
+            do {
+                try self.scan(duration: 1.0)
+                if self.device(for: lock) == nil {
+                    log("Lock \(lock) no longer in range")
+                } else {
+                    // lock is in range, refresh beacons
+                    self.beaconController.scanBeacon(for: lock)
                 }
             } catch {
                 log("⚠️ Could not scan: \(error)")
