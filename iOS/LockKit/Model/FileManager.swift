@@ -113,6 +113,5 @@ public extension FileManager.Lock {
     enum File: String {
         
         case applicationData = "data.json"
-        
     }
 }

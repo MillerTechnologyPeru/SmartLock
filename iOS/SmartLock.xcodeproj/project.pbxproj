@@ -101,6 +101,8 @@
 		6E9C95FF23114D60007C18FE /* LockKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 6E994A84230DFB6C0076DC1B /* LockKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		6E9C960A2311B176007C18FE /* ProgressHUD.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E9C96092311B176007C18FE /* ProgressHUD.swift */; };
 		6EAADF8C2122664A0074CEDF /* AppVersion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EAADF8B2122664A0074CEDF /* AppVersion.swift */; };
+		6EB59D5F2312E9E400D5EFA7 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6EB59D5E2312E9E400D5EFA7 /* CloudKit.framework */; };
+		6EB59D612313184A00D5EFA7 /* iCloud.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EB59D602313184A00D5EFA7 /* iCloud.swift */; };
 		6EC0412E230A226400357585 /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EC0412D230A226300357585 /* TabBarController.swift */; };
 /* End PBXBuildFile section */
 
@@ -381,6 +383,8 @@
 		6EAADF8B2122664A0074CEDF /* AppVersion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppVersion.swift; sourceTree = "<group>"; };
 		6EAADFB521229CBF0074CEDF /* LockTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LockTableViewCell.xib; sourceTree = "<group>"; };
 		6EAADFB621229CBF0074CEDF /* LockTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LockTableViewCell.swift; sourceTree = "<group>"; };
+		6EB59D5E2312E9E400D5EFA7 /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
+		6EB59D602313184A00D5EFA7 /* iCloud.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iCloud.swift; sourceTree = "<group>"; };
 		6EC041272309D6CB00357585 /* ActivityHandling.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityHandling.swift; sourceTree = "<group>"; };
 		6EC0412D230A226300357585 /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
 		6EC0412F230A494E00357585 /* UserActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserActivity.swift; sourceTree = "<group>"; };
@@ -394,6 +398,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				6E9C95FC23114D07007C18FE /* CoreLock.framework in Frameworks */,
+				6EB59D5F2312E9E400D5EFA7 /* CloudKit.framework in Frameworks */,
 				6E9C95FE23114D60007C18FE /* LockKit.framework in Frameworks */,
 				6E8772CA231259DE003B9469 /* JGProgressHUD.framework in Frameworks */,
 			);
@@ -560,6 +565,7 @@
 				6E60F8F72121540C0054995D /* Defaults.swift */,
 				6E60004A212113DF00787DAA /* DeviceManager.swift */,
 				6E806B97230F520400C6FF78 /* FileManager.swift */,
+				6EB59D602313184A00D5EFA7 /* iCloud.swift */,
 				6E994AFC230E657A0076DC1B /* Intent.swift */,
 				6E806B93230F4F4700C6FF78 /* Keychain.swift */,
 				6E60F8AC212127890054995D /* Log.swift */,
@@ -676,6 +682,7 @@
 		6E994AE0230E56DD0076DC1B /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				6EB59D5E2312E9E400D5EFA7 /* CloudKit.framework */,
 				6E994AE1230E56DD0076DC1B /* IntentsUI.framework */,
 				6E994B0A230E89440076DC1B /* Messages.framework */,
 				6E994B29230EF6DA0076DC1B /* NotificationCenter.framework */,
@@ -1289,6 +1296,7 @@
 				6E994ABE230DFDB60076DC1B /* UIAlertAction.swift in Sources */,
 				6E994ABF230DFDBE0076DC1B /* NewKeyViewController.swift in Sources */,
 				6E994AB7230DFDB10076DC1B /* Defaults.swift in Sources */,
+				6EB59D612313184A00D5EFA7 /* iCloud.swift in Sources */,
 				6E994AB0230DFDB10076DC1B /* UserActivity.swift in Sources */,
 				6E994ABA230DFDB60076DC1B /* Setup.swift in Sources */,
 				6E806B8C230F4F2800C6FF78 /* Preferences.swift in Sources */,

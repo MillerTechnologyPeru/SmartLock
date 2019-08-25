@@ -41,7 +41,7 @@ public final class Store {
     
     private lazy var defaults = UserDefaults(suiteName: .lock)
     
-    private let keychain = Keychain(service: .lock, accessGroup: .lock).synchronizable(true)
+    private let keychain = Keychain(service: .lock, accessGroup: .lock)
     
     public let fileManager: FileManager.Lock = .shared
     
