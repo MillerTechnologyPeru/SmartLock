@@ -101,7 +101,9 @@ public final class LockViewController: UITableViewController {
                 HomeKitEnableActivity(),
                 RenameActivity(),
                 UpdateActivity(),
-                DeleteLockActivity(),
+                DeleteLockActivity { [unowned self] in
+                    self.navigationController?.popViewController(animated: true)
+                },
                 AddVoiceShortcutActivity()
             ]
             

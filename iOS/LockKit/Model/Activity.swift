@@ -184,6 +184,15 @@ public final class DeleteLockActivity: UIActivity {
     
     private var item: LockActivityItem!
     
+    /// Called when lock deleted.
+    public var completion: (() -> ())?
+    
+    public convenience init(completion: (() -> ())?) {
+        
+        self.init()
+        self.completion = completion
+    }
+    
     public override var activityType: UIActivity.ActivityType? {
         return LockActivity.delete.activityType
     }
@@ -221,7 +230,10 @@ public final class DeleteLockActivity: UIActivity {
             
             Store.shared.remove(self.item.identifier)
             
-            alert.dismiss(animated: true) { self.activityDidFinish(true) }
+            alert.dismiss(animated: true) {
+                self.activityDidFinish(true)
+                self.completion?()
+            }
         }))
         
         return alert
