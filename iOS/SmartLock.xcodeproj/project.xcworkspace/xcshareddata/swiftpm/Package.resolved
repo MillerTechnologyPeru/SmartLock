@@ -29,6 +29,33 @@
         }
       },
       {
+        "package": "JGProgressHUD",
+        "repositoryURL": "https://github.com/MillerTechnologyPeru/JGProgressHUD.git",
+        "state": {
+          "branch": "master",
+          "revision": "4fed859fe0f3eabb58881af3d12a5ad5933c8491",
+          "version": null
+        }
+      },
+      {
+        "package": "KeychainAccess",
+        "repositoryURL": "https://github.com/MillerTechnologyPeru/KeychainAccess.git",
+        "state": {
+          "branch": "master",
+          "revision": "ee878eaeb3efa09753a9e29e8deb8c331b96f3c8",
+          "version": null
+        }
+      },
+      {
+        "package": "R.swift.Library",
+        "repositoryURL": "https://github.com/mac-cain13/R.swift.Library",
+        "state": {
+          "branch": "master",
+          "revision": "56562c38e46e2431e06dea757d1d416754974c54",
+          "version": null
+        }
+      },
+      {
         "package": "TLVCoding",
         "repositoryURL": "https://github.com/PureSwift/TLVCoding.git",
         "state": {
