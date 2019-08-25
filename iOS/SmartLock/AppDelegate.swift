@@ -29,6 +29,8 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
     
     private(set) var didBecomeActive: Bool = false
     
+    lazy var bundle = Bundle.Lock(rawValue: Bundle.main.bundleIdentifier ?? "") ?? .app
+    
     func application(_ application: UIApplication,
                      didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         
@@ -36,7 +38,7 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
         Log.shared = .mainApp
         
         // print app info
-        log("📱 Launching SmartLock v\(AppVersion) Build \(AppBuild)")
+        log("\(bundle.symbol) Launching SmartLock v\(AppVersion) Build \(AppBuild)")
         
         // set global appearance
         UIView.configureLockAppearance()
@@ -90,31 +92,50 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
         // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
         // Use this method to pause ongoing tasks, disable timers, and invalidate graphics rendering callbacks. Games should use this method to pause the game.
         
-        log("📱 Will resign active")
+        log("\(bundle.symbol) Will resign active")
     }
 
     func applicationDidEnterBackground(_ application: UIApplication) {
         // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
         // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
         
-        log("📱 Did enter background")
+        let bundle = self.bundle
+        
+        log("\(bundle.symbol) Did enter background")
         
         #if !targetEnvironment(macCatalyst)
         // update beacon status
+        let beaconTask = UIApplication.shared.beginBackgroundTask(withName: "Beacons", expirationHandler: {
+            log("\(bundle.symbol) Background task expired")
+        })
+        // update beacons
         BeaconController.shared.scanBeacons()
+        async { [unowned self] in
+            // scan for locks
+            do { try Store.shared.scan(duration: 3.0) }
+            catch { log("⚠️ Unable to scan: \(error)") }
+            mainQueue { self.logBackgroundTimeRemaining() }
+            DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) {
+                UIApplication.shared.endBackgroundTask(beaconTask)
+            }
+        }
         #endif
     }
 
     func applicationWillEnterForeground(_ application: UIApplication) {
         // Called as part of the transition from the background to the active state; here you can undo many of the changes made on entering the background.
         
-        log("📱 Will enter foreground")
+        log("\(bundle.symbol) Will enter foreground")
+        
+        #if !targetEnvironment(macCatalyst)
+        BeaconController.shared.scanBeacons()
+        #endif
     }
 
     func applicationDidBecomeActive(_ application: UIApplication) {
         // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
         
-        log("📱 Did become active")
+        log("\(bundle.symbol) Did become active")
         
         didBecomeActive = true
         
@@ -122,7 +143,6 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
         Store.shared.loadCache()
                 
         #if !targetEnvironment(macCatalyst)
-        // update beacon status
         BeaconController.shared.scanBeacons()
         #endif
     }
@@ -130,10 +150,9 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationWillTerminate(_ application: UIApplication) {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
         
-        log("📱 Will terminate")
+        log("\(bundle.symbol) Will terminate")
         
         #if !targetEnvironment(macCatalyst)
-        // update beacon status
         BeaconController.shared.scanBeacons()
         #endif
     }
@@ -215,6 +234,24 @@ extension AppDelegate {
         guard let tabBarController = window?.rootViewController as? TabBarController
             else { fatalError() }
         return tabBarController
+    }
+}
+
+private extension AppDelegate {
+    
+    private static let intervalFormatter: DateIntervalFormatter = {
+        let formatter = DateIntervalFormatter()
+        formatter.dateStyle = .short
+        formatter.timeStyle = .medium
+        return formatter
+    }()
+    
+    func logBackgroundTimeRemaining() {
+        
+        let backgroundTimeRemaining = UIApplication.shared.backgroundTimeRemaining
+        let start = Date()
+        let timeString = type(of: self).intervalFormatter.string(from: start, to: start + backgroundTimeRemaining)
+        log("\(bundle.symbol) Background time remaining: \(timeString)s")
     }
 }
 
