@@ -32,6 +32,7 @@ public extension ActivityIndicatorViewController {
         self.view.isUserInteractionEnabled = false
         self.view.endEditing(true)
         
+        progressHUD.interactionType = .blockTouchesOnHUDView
         progressHUD.show(in: self.navigationController?.view ?? self.view)
     }
     

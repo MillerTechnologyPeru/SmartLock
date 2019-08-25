@@ -43,6 +43,7 @@ public final class LockPermissionsViewController: UITableViewController, Activit
         
         // set user activity
         userActivity = NSUserActivity(.action(.shareKey(lockIdentifier)))
+        userActivity?.becomeCurrent()
         
         // setup table view
         tableView.rowHeight = UITableView.automaticDimension
@@ -95,13 +96,9 @@ public final class LockPermissionsViewController: UITableViewController, Activit
         }
     }
     
-    @IBAction func newKey(_ sender: AnyObject? = nil) {
+    @IBAction func newKey(_ sender: AnyObject) {
         
-        let navigationController = UIStoryboard(name: "NewKey", bundle: .lockKit).instantiateInitialViewController() as! UINavigationController
-        let destinationViewController = navigationController.viewControllers.first! as! NewKeySelectPermissionViewController
-        destinationViewController.lockIdentifier = lockIdentifier
-        destinationViewController.completion = { _ in mainQueue { self.reloadData() } }
-        self.present(navigationController, animated: true, completion: nil)
+        self.shareKey(lock: lockIdentifier)
     }
     
     @IBAction func done(_ sender: AnyObject? = nil) {
