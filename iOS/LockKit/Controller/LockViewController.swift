@@ -234,7 +234,7 @@ public final class LockViewController: UITableViewController {
 
 // MARK: - Extensions
 
-extension UIViewController {
+public extension UIViewController {
     
     @discardableResult
     func view(lock identifier: UUID) -> Bool {
@@ -244,12 +244,8 @@ extension UIViewController {
             return false
         }
         
-        let navigationController = UIStoryboard(name: "LockDetail", bundle: .lockKit).instantiateInitialViewController() as! UINavigationController
-        
-        let lockViewController = navigationController.topViewController as! LockViewController
-        lockViewController.lockIdentifier = identifier
-        show(lockViewController, sender: self)
-        
+        let viewController = LockViewController.fromStoryboard(with: identifier)
+        show(viewController, sender: self)
         return true
     }
 }

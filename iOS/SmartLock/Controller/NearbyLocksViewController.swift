@@ -191,6 +191,14 @@ final class NearbyLocksViewController: UITableViewController {
         select(item)
     }
     
+    override func tableView(_ tableView: UITableView, accessoryButtonTappedForRowWith indexPath: IndexPath) {
+        
+        let lock = self[indexPath]
+        guard let information = Store.shared.lockInformation.value[lock.scanData.peripheral]
+            else { assertionFailure(); return }
+        view(lock: information.identifier)
+    }
+    
     // MARK: - Private Methods
     
     private subscript (indexPath: IndexPath) -> LockPeripheral<NativeCentral> {
@@ -213,6 +221,7 @@ final class NearbyLocksViewController: UITableViewController {
         let detail: String
         let permission: PermissionType?
         let isEnabled: Bool
+        let showDetail: Bool
         
         if let information = Store.shared.lockInformation.value[lock.scanData.peripheral] {
             
@@ -229,14 +238,15 @@ final class NearbyLocksViewController: UITableViewController {
                 
                 // known lock
                 if let lockCache = Store.shared[lock: information.identifier] {
-                    
                     permission = lockCache.key.permission.type
                     title = lockCache.name
                     detail = lockCache.key.permission.localizedText
+                    showDetail = true
                 } else {
                     title = "Lock"
                     detail = information.identifier.description
                     permission = .anytime
+                    showDetail = false
                 }
                 
             case .setup:
@@ -244,6 +254,7 @@ final class NearbyLocksViewController: UITableViewController {
                 title = "Setup"
                 detail = information.identifier.description
                 permission = .owner
+                showDetail = false
             }
         } else {
             
@@ -251,6 +262,7 @@ final class NearbyLocksViewController: UITableViewController {
             title = "Loading..."
             detail = ""
             permission = nil
+            showDetail = false
             
             if cell.activityIndicatorView.isHidden {
                 cell.activityIndicatorView.isHidden = false
@@ -268,8 +280,8 @@ final class NearbyLocksViewController: UITableViewController {
         
         // hide image if loading
         cell.permissionView.isHidden = permission == nil
-        
         cell.selectionStyle = isEnabled ? .default : .none
+        cell.accessoryType = showDetail ? .detailDisclosureButton : .none
     }
     
     private func select(_ lock: LockPeripheral<NativeCentral>) {
