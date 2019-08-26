@@ -7,6 +7,9 @@
 //
 
 import Foundation
+import CloudKit
+import KeychainAccess
+import CoreLock
 
 /// UbiquityContainerIdentifier
 ///
@@ -42,12 +45,6 @@ public extension FileManager {
         
         // MARK: - Properties
         
-        // MARK: - Properties
-        
-        private let jsonDecoder = JSONDecoder()
-        
-        private let jsonEncoder = JSONEncoder()
-        
         private lazy var fileManager = FileManager()
         
         private lazy var containerURL: URL = {
@@ -78,6 +75,57 @@ public extension FileManager.Cloud {
         
         case applicationData = "data.json"
     }
+}
+
+public final class CloudStore {
     
+    public static let shared = CloudStore()
     
+    private init() { }
+    
+    private lazy var fileManager: FileManager.Cloud = .shared
+    
+    private lazy var keychain = Keychain(service: .lockCloud).synchronizable(true)
+    
+    public func upload(applicationData: ApplicationData,
+                       keys: [UUID: KeyData]) throws {
+        
+        // store lock private keys in keychain
+        for (keyIdentifier, keyData) in keys {
+            assert(applicationData.keys.lazy.map({ $0.identifier }).contains(keyIdentifier), "Invalid key")
+            try keychain.set(keyData.data, key: keyIdentifier.uuidString)
+        }
+        
+        // upload configuration file
+        let data = applicationData.encodeJSON()
+        try fileManager.write(data, to: .applicationData)
+    }
+    
+    public func download() throws -> (applicationData: ApplicationData, keys: [UUID: KeyData])? {
+        
+        guard let jsonData = fileManager.read(file: .applicationData)
+            else { return nil }
+        
+        let applicationData = try ApplicationData.decodeJSON(from: jsonData)
+        
+        var keys = [UUID: KeyData](minimumCapacity: applicationData.locks.count)
+        for key in applicationData.keys {
+            guard let data = try keychain.getData(key.identifier.uuidString),
+                let keyData = KeyData(data: data)
+                else { throw Error.missingKeychainItem(key.identifier) }
+            keys[key.identifier] = keyData
+        }
+        
+        return (applicationData, keys)
+    }
+}
+
+public extension CloudStore {
+    
+    /// CloudStore Error
+    enum Error: Swift.Error {
+        
+        ///
+        case missingKeychainItem(UUID)
+    }
 }

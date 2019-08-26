@@ -41,9 +41,9 @@ public final class Store {
     
     private lazy var defaults = UserDefaults(suiteName: .lock)
     
-    private let keychain = Keychain(service: .lock, accessGroup: .lock)
+    private lazy var keychain = Keychain(service: .lock, accessGroup: .lock)
     
-    public let fileManager: FileManager.Lock = .shared
+    public lazy var fileManager: FileManager.Lock = .shared
     
     public private(set) var applicationData: ApplicationData {
         get {
@@ -58,18 +58,18 @@ public final class Store {
         set { fileManager.applicationData = newValue }
     }
     
-    public let lockManager: LockManager = .shared
+    public lazy var lockManager: LockManager = .shared
     
     #if !targetEnvironment(macCatalyst)
-    public let beaconController: BeaconController = .shared
+    public lazy var beaconController: BeaconController = .shared
     #endif
     
-    public let spotlight: SpotlightController = .shared
+    public lazy var spotlight: SpotlightController = .shared
     
     // BLE cache
-    public private(set) var peripherals = Observable([NativeCentral.Peripheral: LockPeripheral<NativeCentral>]())
+    public let peripherals = Observable([NativeCentral.Peripheral: LockPeripheral<NativeCentral>]())
     
-    public private(set) var lockInformation = Observable([NativeCentral.Peripheral: LockInformationCharacteristic]())
+    public let lockInformation = Observable([NativeCentral.Peripheral: LockInformationCharacteristic]())
     
     /// Cached information for the specified lock.
     public subscript (lock identifier: UUID) -> LockCache? {
@@ -87,7 +87,7 @@ public final class Store {
         get {
             
             do {
-                guard let data = try keychain.getData(identifier.rawValue)
+                guard let data = try keychain.getData(identifier.uuidString)
                     else { return nil }
                 guard let key = KeyData(data: data)
                     else { assertionFailure("Invalid key data"); return nil }
@@ -104,10 +104,10 @@ public final class Store {
                         
             do {
                 guard let data = newValue?.data else {
-                    try keychain.remove(identifier.rawValue)
+                    try keychain.remove(identifier.uuidString)
                     return
                 }
-                try keychain.set(data, key: identifier.rawValue)
+                try keychain.set(data, key: identifier.uuidString)
             } catch {
                 #if DEBUG
                 dump(error)
@@ -329,76 +329,5 @@ public extension Store {
                                with: key)
         
         return true
-    }
-}
-
-// MARK: - Supporting Types
-
-/// Application Data.
-public struct ApplicationData: Codable, Equatable {
-    
-    public let identifier: UUID
-    
-    public let created: Date
-    
-    public private(set) var updated: Date
-    
-    public var locks: [UUID: LockCache] {
-        didSet { didUpdate() }
-    }
-    
-    private mutating func didUpdate() {
-        updated = Date()
-    }
-    
-    public init() {
-        self.identifier = UUID()
-        self.created = Date()
-        self.updated = Date()
-        self.locks = [:]
-    }
-}
-
-/// Lock Cache
-public struct LockCache: Codable, Equatable {
-    
-    /// Stored key for lock.
-    ///
-    /// Can only have one key per lock.
-    public let key: Key
-    
-    /// User-friendly lock name
-    public var name: String
-    
-    /// Lock information.
-    public var information: Information
-}
-
-public extension LockCache {
-    
-    struct Information: Codable, Equatable {
-        
-        /// Firmware build number
-        public var buildVersion: LockBuildVersion
-        
-        /// Firmware version
-        public var version: LockVersion
-        
-        /// Device state
-        public var status: LockStatus
-        
-        /// Supported lock actions
-        public var unlockActions: Set<UnlockAction>
-    }
-}
-
-internal extension LockCache.Information {
-    
-    init(characteristic: LockInformationCharacteristic) {
-        
-        self.buildVersion = characteristic.buildVersion
-        self.version = characteristic.version
-        self.status = characteristic.status
-        self.unlockActions = Set(characteristic.unlockActions)
     }
 }

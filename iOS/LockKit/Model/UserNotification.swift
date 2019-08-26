@@ -50,7 +50,7 @@ public final class UserNotificationCenter {
         notificationContent.title = cache.name
         notificationContent.subtitle = "Tap to unlock"
         
-        if let imageURL = AssetExtractor.shared.url(for: cache.key.permission.type.imageName, in: .lockKit),
+        if let imageURL = AssetExtractor.shared.url(for: cache.key.permission.type.image),
             let attachment = try? UNNotificationAttachment(
                 identifier: String(reflecting: cache.key.permission.type),
                 url: imageURL,

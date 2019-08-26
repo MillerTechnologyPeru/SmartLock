@@ -12,4 +12,3 @@ public enum AppGroup: String {
     
     case lock = "group.com.colemancda.Lock"
 }
-
