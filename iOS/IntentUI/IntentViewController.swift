@@ -27,10 +27,8 @@ final class IntentViewController: UIViewController, INUIHostedViewControlling {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
         
         let _ = IntentViewController.didLaunch
-        
         log("🎙 Loaded \(IntentViewController.self)")
     }
         
@@ -48,7 +46,7 @@ final class IntentViewController: UIViewController, INUIHostedViewControlling {
         guard let intent = interaction.intent as? UnlockIntent,
             let lockIdentifierString = intent.lock?.identifier,
             let lockIdentifier = UUID(uuidString: lockIdentifierString),
-            let lockCache = Store.shared[lock: lockIdentifier] else {
+            let lockCache = FileManager.Lock.shared.applicationData?.locks[lockIdentifier] else {
             completion(false, [], .zero)
             return
         }
@@ -104,14 +102,8 @@ final class IntentViewController: UIViewController, INUIHostedViewControlling {
 private extension IntentViewController {
     
     static let didLaunch: Void = {
-        
-        // configure logging
         Log.shared = .intentUI
-        
-        // setup Logging
         log("🎙 Launching Intent UI")
-        LockManager.shared.log = { log("🔒 LockManager: " + $0) }
-        BeaconController.shared.log = { log("📶 \(BeaconController.self): " + $0) }
     }()
 }
 
