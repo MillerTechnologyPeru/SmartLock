@@ -43,6 +43,8 @@ public final class BeaconController {
     
     public var lostLock: ((UUID) -> ())?
     
+    private var foundBeacons = [UUID: CLBeacon]()
+    
     // MARK: - Methods
     
     public func requestAuthorization() {
@@ -108,6 +110,7 @@ public final class BeaconController {
             if locationManager.rangedRegions.contains(region) == false {
                 locationManager.startRangingBeacons(in: region)
             }
+            locationManager.requestState(for: region)
         case .authorizedWhenInUse:
             if locationManager.rangedRegions.contains(region) == false {
                 locationManager.startRangingBeacons(in: region)
@@ -165,6 +168,10 @@ private extension BeaconController {
             log("Entered region \(region.identifier)")
             
             if let beaconRegion = region as? CLBeaconRegion {
+                if let lock = beaconController?.locks.first(where: { $0.value == region })?.key {
+                    // clear stale beacons
+                    self.beaconController?.foundBeacons[lock] = nil
+                }
                 manager.startRangingBeacons(in: beaconRegion)
             }
         }
@@ -172,14 +179,19 @@ private extension BeaconController {
         @objc
         public func locationManager(_ manager: CLLocationManager, didExitRegion region: CLRegion) {
             
-            log("Exited iBeacon region \(region.identifier)")
+            log("Exited beacon region \(region.identifier)")
             
             if let beaconRegion = region as? CLBeaconRegion {
                 if manager.rangedRegions.contains(beaconRegion) {
                      manager.stopRangingBeacons(in: beaconRegion)
                 }
                 if let lock = beaconController?.locks.first(where: { $0.value == region })?.key {
-                    beaconController?.lostLock?(lock)
+                    defer { self.beaconController?.foundBeacons[lock] = nil }
+                    let oldBeacon = self.beaconController?.foundBeacons[lock]
+                    if oldBeacon != nil {
+                        self.beaconController?.log?("Cannot find beacon for lock \(lock)")
+                        self.beaconController?.lostLock?(lock)
+                    }
                 }
             }
         }
@@ -198,7 +210,12 @@ private extension BeaconController {
                      .unknown:
                     manager.stopRangingBeacons(in: beaconRegion)
                     if let lock = beaconController?.locks.first(where: { $0.value == region })?.key {
-                        beaconController?.lostLock?(lock)
+                        defer { self.beaconController?.foundBeacons[lock] = nil }
+                        let oldBeacon = self.beaconController?.foundBeacons[lock]
+                        if oldBeacon != nil {
+                            self.beaconController?.log?("Cannot find beacon for lock \(lock)")
+                            self.beaconController?.lostLock?(lock)
+                        }
                     }
                 }
             }
@@ -216,12 +233,19 @@ private extension BeaconController {
             if let lock = beaconController.locks.first(where: { $0.value == region })?.key {
                 
                 assert(beacons.count <= 1, "Should only be one lock iBeacon")
+                
+                // stop BLE scanning for iBeacon
                 manager.stopRangingBeacons(in: region)
                 
-                guard let beacon = beacons.first
-                    else { return }
+                guard let beacon = beacons.first else {
+                    // make sure we are inside the Beacon region
+                    manager.requestState(for: region)
+                    return
+                }
                 
-                async {
+                let oldBeacon = beaconController.foundBeacons[lock]
+                beaconController.foundBeacons[lock] = beacon
+                if oldBeacon == nil {
                     beaconController.log?("Found beacon for lock \(lock)")
                     beaconController.foundLock?(lock, beacon)
                 }
