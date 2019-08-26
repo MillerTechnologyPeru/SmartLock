@@ -337,6 +337,8 @@ public extension Store {
 /// Application Data.
 public struct ApplicationData: Codable, Equatable {
     
+    public let identifier: UUID
+    
     public let created: Date
     
     public private(set) var updated: Date
@@ -350,6 +352,7 @@ public struct ApplicationData: Codable, Equatable {
     }
     
     public init() {
+        self.identifier = UUID()
         self.created = Date()
         self.updated = Date()
         self.locks = [:]
