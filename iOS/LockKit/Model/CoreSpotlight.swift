@@ -9,7 +9,55 @@
 import Foundation
 import CoreSpotlight
 import MobileCoreServices
-import UIKit
+import class UIKit.UIImage
+
+/// Managed the Spotlight index.
+@available(iOS 9.0, *)
+public final class SpotlightController {
+    
+    // MARK: - Initialization
+    
+    public static let shared = SpotlightController()
+    
+    private init(index: CSSearchableIndex = .default()) {
+        self.index = index
+    }
+    
+    // MARK: - Properties
+    
+    private let index: CSSearchableIndex
+    
+    public var log: ((String) -> ())?
+    
+    // MARK: - Methods
+    
+    public func update(locks: [UUID: LockCache]) {
+        
+        let searchableItems = locks
+            .lazy
+            .map { SearchableLock(identifier: $0.key, cache: $0.value) }
+            .map { $0.searchableItem() }
+        
+        index.deleteSearchableItems(withDomainIdentifiers: [SearchableLock.searchDomain]) { [weak self] (error) in
+            guard let self = self else { return }
+            if let error = error {
+                self.log?("Error: \(error)")
+                return
+            }
+            self.log?("Deleted old locks")
+            self.index.indexSearchableItems(Array(searchableItems)) { [weak self] (error) in
+                guard let self = self else { return }
+                if let error = error {
+                    self.log?("Error: \(error)")
+                    return
+                }
+                self.log?("Indexed locks")
+            }
+        }
+    }
+}
+
+// MARK: - Supporting Types
 
 public protocol CoreSpotlightSearchable: AppActivityData {
     
@@ -63,55 +111,14 @@ extension SearchableLock: CoreSpotlightSearchable {
         
         let attributeSet = CSSearchableItemAttributeSet(itemContentType: Swift.type(of: self).itemContentType)
         
-        let permissionImage = UIImage(permission: cache.key.permission)
-        let permissionText = cache.key.permission.localizedText
+        let permission = cache.key.permission
+        let permissionText = permission.localizedText
         
         attributeSet.displayName = cache.name
         attributeSet.contentDescription = permissionText
         attributeSet.version = cache.information.version.description
-        // TODO: Point to image URL
-        attributeSet.thumbnailData = permissionImage.pngData()
+        attributeSet.thumbnailURL = AssetExtractor.shared.url(for: permission.type.image)
         
         return attributeSet
-    }
-}
-
-/// Managed the Spotlight index.
-@available(iOS 9.0, *)
-public final class SpotlightController {
-    
-    public static let shared = SpotlightController()
-    
-    private init(index: CSSearchableIndex = .default()) {
-        self.index = index
-    }
-    
-    private let index: CSSearchableIndex
-    
-    public var log: ((String) -> ())?
-    
-    public func update(locks: [UUID: LockCache]) {
-        
-        let searchableItems = locks
-            .lazy
-            .map { SearchableLock(identifier: $0.key, cache: $0.value) }
-            .map { $0.searchableItem() }
-        
-        index.deleteSearchableItems(withDomainIdentifiers: [SearchableLock.searchDomain]) { [weak self] (error) in
-            guard let self = self else { return }
-            if let error = error {
-                self.log?("Error: \(error)")
-                return
-            }
-            self.log?("Deleted old locks")
-            self.index.indexSearchableItems(Array(searchableItems)) { [weak self] (error) in
-                guard let self = self else { return }
-                if let error = error {
-                    self.log?("Error: \(error)")
-                    return
-                }
-                self.log?("Indexed locks")
-            }
-        }
     }
 }

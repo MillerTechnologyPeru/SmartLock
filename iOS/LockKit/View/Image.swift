@@ -8,6 +8,7 @@
 
 import Foundation
 import UIKit
+import Rswift
 
 public extension UIImage {
     
@@ -45,5 +46,12 @@ public final class AssetExtractor {
         }
         
         return url
+    }
+}
+
+public extension AssetExtractor {
+    
+    func url(for image: ImageResource) -> URL? {
+        return url(for: image.name, in: image.bundle)
     }
 }
