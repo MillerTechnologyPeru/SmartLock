@@ -97,19 +97,34 @@ public final class CloudStore {
     private func read(file: File) throws -> Data? {
         let url = try self.url(for: file)
         try fileManager.startDownloadingUbiquitousItem(at: url)
-        guard let status = try url.resourceValues(forKeys: [.ubiquitousItemDownloadingStatusKey]).ubiquitousItemDownloadingStatus else {
-            assertionFailure("Should be downloading")
-            return nil
-        }
-        while status != .current {
-            sleep(1)
-        }
+        var status: URLUbiquitousItemDownloadingStatus = .notDownloaded
+        repeat {
+            status = try url.resourceValues(forKeys: [.ubiquitousItemDownloadingStatusKey]).ubiquitousItemDownloadingStatus ?? .notDownloaded
+            if status != .current {
+                sleep(3)
+            }
+        } while status != .current
         return try? Data(contentsOf: url, options: [.mappedIfSafe])
     }
     
     private func write(_ data: Data, to file: File) throws {
         let url = try self.url(for: file)
         try data.write(to: url, options: [.atomicWrite])
+        var isUploaded = false
+        repeat {
+            let resourceValues = try url.resourceValues(forKeys: [
+                .ubiquitousItemIsUploadedKey,
+                .ubiquitousItemIsUploadingKey,
+                .ubiquitousItemUploadingErrorKey
+            ])
+            isUploaded = resourceValues.ubiquitousItemIsUploaded ?? false
+            if let error = resourceValues.ubiquitousItemUploadingError {
+                throw error
+            }
+            if isUploaded == false {
+                sleep(3)
+            }
+        } while isUploaded == false
     }
 }
 
@@ -145,7 +160,7 @@ internal extension ApplicationData {
             else { return false }
         
         // if local copy is newer, should not be overwritten with older copy.
-        if self.locks != applicationData.locks {
+        if self.keys != applicationData.keys {
             guard self.updated <= applicationData.updated
                 else { return false }
         }
@@ -156,18 +171,17 @@ internal extension ApplicationData {
 
 public extension Store {
     
-    func syncCloud(_ cloud: CloudStore = .shared,
-                   conflicts: (ApplicationData) -> Bool? = { _ in return nil }) throws {
+    func syncCloud(conflicts: (ApplicationData) -> Bool? = { _ in return nil }) throws {
         
         assert(Thread.isMainThread == false)
         
-        guard try downloadCloud(cloud: cloud, conflicts: conflicts)
+        guard try downloadCloud(conflicts: conflicts)
             else { return } // aborted
         try uploadCloud()
     }
     
     @discardableResult
-    func downloadCloud(cloud: CloudStore = .shared, conflicts: (ApplicationData) -> Bool?) throws -> Bool {
+    func downloadCloud(conflicts: (ApplicationData) -> Bool?) throws -> Bool {
         
         assert(Thread.isMainThread == false)
         
@@ -231,7 +245,7 @@ public extension Store {
         return true
     }
     
-    func uploadCloud(cloud: CloudStore = .shared) throws {
+    func uploadCloud() throws {
         
         log("☁️ Uploading to iCloud")
         

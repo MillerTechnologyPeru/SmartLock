@@ -193,7 +193,10 @@ public final class Store {
     private func updateCloud() {
         
         DispatchQueue.cloud.async { [weak self] in
-            do { try self?.syncCloud() }
+            do {
+                //try self?.uploadCloud()
+                try self?.syncCloud()
+            }
             catch { log("⚠️ Unable to sync iCloud: \(error)") }
         }
     }
