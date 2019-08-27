@@ -99,7 +99,16 @@ public final class CloudStore {
         try fileManager.startDownloadingUbiquitousItem(at: url)
         var status: URLUbiquitousItemDownloadingStatus = .notDownloaded
         repeat {
-            status = try url.resourceValues(forKeys: [.ubiquitousItemDownloadingStatusKey]).ubiquitousItemDownloadingStatus ?? .notDownloaded
+            var url = try self.url(for: file)
+            url.removeAllCachedResourceValues()
+            let resourceValues = try url.resourceValues(forKeys: [
+                .ubiquitousItemDownloadingStatusKey,
+                .ubiquitousItemDownloadingErrorKey
+            ])
+            status = resourceValues.ubiquitousItemDownloadingStatus ?? .notDownloaded
+            if let error = resourceValues.ubiquitousItemDownloadingError {
+                throw error
+            }
             if status != .current {
                 sleep(3)
             }
@@ -112,6 +121,8 @@ public final class CloudStore {
         try data.write(to: url, options: [.atomicWrite])
         var isUploaded = false
         repeat {
+            var url = try self.url(for: file)
+            url.removeAllCachedResourceValues()
             let resourceValues = try url.resourceValues(forKeys: [
                 .ubiquitousItemIsUploadedKey,
                 .ubiquitousItemIsUploadingKey,
