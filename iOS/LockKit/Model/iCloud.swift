@@ -316,7 +316,7 @@ public extension UIViewController {
                     self?.resolveCloudSyncConflicts($0)
                 })
             }
-            catch { log("⚠️ Could not sync iCloud") }
+            catch { log("⚠️ Could not sync iCloud: \(error)") }
         }
     }
 }
