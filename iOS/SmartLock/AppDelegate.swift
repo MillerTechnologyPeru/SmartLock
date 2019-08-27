@@ -168,10 +168,7 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
         }
         
         // attempt to sync with iCloud
-        DispatchQueue.cloud.async {
-            do { try Store.shared.syncCloud() }
-            catch { log("⚠️ Unable to sync: \(error)") }
-        }
+        tabBarController.syncCloud()
     }
 
     func applicationWillTerminate(_ application: UIApplication) {

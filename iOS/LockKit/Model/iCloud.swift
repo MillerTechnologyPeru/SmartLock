@@ -137,8 +137,10 @@ internal extension ApplicationData {
             else { return false }
         
         // if local copy is newer, should not be overwritten with older copy.
-        guard self.updated < applicationData.updated
-            else { return false }
+        if self.locks != applicationData.locks {
+            guard self.updated <= applicationData.updated
+                else { return false }
+        }
         
         return true
     }
@@ -254,7 +256,7 @@ import UIKit
 
 public extension ActivityIndicatorViewController where Self: UIViewController {
     
-    func syncCloud(showProgressHUD: Bool = true) {
+    func syncCloud(showProgressHUD: Bool) {
         
         assert(Thread.isMainThread)
         
@@ -266,8 +268,29 @@ public extension ActivityIndicatorViewController where Self: UIViewController {
             
         })
     }
+}
+
+public extension UIViewController {
     
-    private func resolveCloudSyncConflicts(_ cloudData: ApplicationData) -> Bool? {
+    func syncCloud() {
+        
+        assert(Thread.isMainThread)
+        
+        // TODO: check user preferences to prevent iCloud sync
+        DispatchQueue.cloud.async {
+            do {
+                try Store.shared.syncCloud(conflicts: { [weak self] in
+                    self?.resolveCloudSyncConflicts($0)
+                })
+            }
+            catch { log("Could not sync iCloud") }
+        }
+    }
+}
+
+private extension UIViewController {
+    
+    func resolveCloudSyncConflicts(_ cloudData: ApplicationData) -> Bool? {
         
         assert(Thread.isMainThread == false)
         

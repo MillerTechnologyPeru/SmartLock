@@ -23,7 +23,7 @@ public struct ApplicationData: Codable, Equatable {
     
     /// Persistent lock information.
     public var locks: [UUID: LockCache] {
-        didSet { didUpdate() }
+        didSet { if locks != oldValue { didUpdate() } }
     }
     
     /// Update date when modified.
