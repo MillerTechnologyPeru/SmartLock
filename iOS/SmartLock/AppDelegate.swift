@@ -85,6 +85,7 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
                 else { return false }
         }
         
+        
         return true
     }
 
@@ -102,6 +103,7 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
         let bundle = self.bundle
         
         log("\(bundle.symbol) Did enter background")
+        logBackgroundTimeRemaining()
         
         #if !targetEnvironment(macCatalyst)
         // update beacons
@@ -119,9 +121,14 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
                     let _ = try Store.shared.device(for: lock, scanDuration: 1.0)
                 }
             } catch { log("⚠️ Unable to scan: \(error)") }
-            mainQueue { self.logBackgroundTimeRemaining() }
-            DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) {
-                UIApplication.shared.endBackgroundTask(beaconTask)
+            // attempt to sync with iCloud
+            DispatchQueue.cloud.async {
+                do { try Store.shared.syncCloud() }
+                catch { log("⚠️ Unable to sync: \(error)") }
+                mainQueue { self.logBackgroundTimeRemaining() }
+                DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) {
+                    UIApplication.shared.endBackgroundTask(beaconTask)
+                }
             }
         }
         #endif
@@ -158,6 +165,12 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
                     let _ = try Store.shared.device(for: lock, scanDuration: 1.0)
                 }
             } catch { log("⚠️ Unable to scan: \(error)") }
+        }
+        
+        // attempt to sync with iCloud
+        DispatchQueue.cloud.async {
+            do { try Store.shared.syncCloud() }
+            catch { log("⚠️ Unable to sync: \(error)") }
         }
     }
 

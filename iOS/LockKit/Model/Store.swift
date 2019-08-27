@@ -45,7 +45,7 @@ public final class Store {
     
     public lazy var fileManager: FileManager.Lock = .shared
     
-    public private(set) var applicationData: ApplicationData {
+    public internal(set) var applicationData: ApplicationData {
         get {
             if let applicationData = fileManager.applicationData {
                 return applicationData
@@ -55,7 +55,10 @@ public final class Store {
                 return applicationData
             }
         }
-        set { fileManager.applicationData = newValue }
+        set {
+            fileManager.applicationData = newValue
+            locks.value = newValue.locks // update locks
+        }
     }
     
     public lazy var lockManager: LockManager = .shared

@@ -47,12 +47,15 @@ public extension ActivityIndicatorViewController {
 public extension ActivityIndicatorViewController {
     
     func performActivity <T> (showProgressHUD: Bool = true,
+                              queue: DispatchQueue? = nil,
                               _ asyncOperation: @escaping () throws -> T,
                               completion: ((Self, T) -> ())? = nil) {
         
+        let queue = queue ?? appQueue
+        
         if showProgressHUD { self.showProgressHUD() }
         
-        async {
+        queue.async {
             
             do {
                 

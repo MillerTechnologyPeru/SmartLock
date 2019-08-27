@@ -16,10 +16,10 @@ public func mainQueue(_ block: @escaping () -> ()) {
 /// Perform a task on the internal queue.
 public func async(_ block: @escaping () -> ()) {
     
-    queue.async(execute: block)
+    appQueue.async(execute: block)
 }
 
-private let queue = DispatchQueue(label: Bundle.Lock.app.rawValue)
+internal let appQueue = DispatchQueue(label: Bundle.Lock.app.rawValue)
 
 public extension DispatchQueue {
     
