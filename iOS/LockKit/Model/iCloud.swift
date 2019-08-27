@@ -96,6 +96,14 @@ public final class CloudStore {
     
     private func read(file: File) throws -> Data? {
         let url = try self.url(for: file)
+        try fileManager.startDownloadingUbiquitousItem(at: url)
+        guard let status = try url.resourceValues(forKeys: [.ubiquitousItemDownloadingStatusKey]).ubiquitousItemDownloadingStatus else {
+            assertionFailure("Should be downloading")
+            return nil
+        }
+        while status != .current {
+            sleep(1)
+        }
         return try? Data(contentsOf: url, options: [.mappedIfSafe])
     }
     
@@ -283,7 +291,7 @@ public extension UIViewController {
                     self?.resolveCloudSyncConflicts($0)
                 })
             }
-            catch { log("Could not sync iCloud") }
+            catch { log("⚠️ Could not sync iCloud") }
         }
     }
 }

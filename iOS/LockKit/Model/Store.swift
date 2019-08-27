@@ -69,6 +69,8 @@ public final class Store {
     
     public lazy var spotlight: SpotlightController = .shared
     
+    public lazy var cloud: CloudStore = .shared
+    
     // BLE cache
     public let peripherals = Observable([NativeCentral.Peripheral: LockPeripheral<NativeCentral>]())
     
@@ -161,6 +163,7 @@ public final class Store {
         monitorBeacons()
         #endif
         updateSpotlight()
+        updateCloud()
     }
     
     #if !targetEnvironment(macCatalyst)
@@ -185,6 +188,14 @@ public final class Store {
     private func updateSpotlight() {
         
         spotlight.update(locks: locks.value)
+    }
+    
+    private func updateCloud() {
+        
+        DispatchQueue.cloud.async { [weak self] in
+            do { try self?.syncCloud() }
+            catch { log("⚠️ Unable to sync iCloud: \(error)") }
+        }
     }
     
     #if !targetEnvironment(macCatalyst)
