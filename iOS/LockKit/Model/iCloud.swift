@@ -34,21 +34,13 @@ public extension FileManager {
 
 public final class CloudStore {
     
-    public static let shared = CloudStore(identifier: .lock)
+    public static let shared = CloudStore()
     
-    internal init(identifier: UbiquityContainerIdentifier) {
-        self.identifier = identifier
-    }
+    private init() { }
     
     // MARK: - Properties
     
-    public let identifier: UbiquityContainerIdentifier
-    
-    public var cloudChanged: (() -> ())?
-    
-    private lazy var fileManager = FileManager()
-    
-    private lazy var keychain = Keychain(service: .lockCloud).synchronizable(true)
+    private lazy var keychain = Keychain(service: .lockCloud, accessGroup: .lock).synchronizable(true)
     
     // MARK: - Methods
     
@@ -56,19 +48,20 @@ public final class CloudStore {
                        keys: [UUID: KeyData]) throws {
         
         // store lock private keys in keychain
+        try keychain.removeAll()
         for (keyIdentifier, keyData) in keys {
-            assert(applicationData.keys.lazy.map({ $0.identifier }).contains(keyIdentifier), "Invalid key")
+            assert(applicationData[key: keyIdentifier] != nil, "Invalid key")
             try keychain.set(keyData.data, key: keyIdentifier.uuidString)
         }
         
         // upload configuration file
         let data = applicationData.encodeJSON()
-        try write(data, to: .applicationData)
+        try keychain.set(data, key: .applicationData)
     }
     
     public func download() throws -> (applicationData: ApplicationData, keys: [UUID: KeyData])? {
         
-        guard let jsonData = try read(file: .applicationData)
+        guard let jsonData = try keychain.getData(.applicationData)
             else { return nil }
         
         let applicationData = try ApplicationData.decodeJSON(from: jsonData)
@@ -83,69 +76,12 @@ public final class CloudStore {
         
         return (applicationData, keys)
     }
-    
-    private func containerURL() throws -> URL {
-        guard let containerURL = fileManager.ubiquityContainerURL(for: .lock)
-            else { throw Error.missingCloudAccount }
-        return containerURL
-    }
-    
-    private func url(for file: File) throws -> URL {
-        return try containerURL().appendingPathComponent(file.rawValue)
-    }
-    
-    private func read(file: File) throws -> Data? {
-        let url = try self.url(for: file)
-        try fileManager.startDownloadingUbiquitousItem(at: url)
-        var status: URLUbiquitousItemDownloadingStatus = .notDownloaded
-        repeat {
-            var url = try self.url(for: file)
-            url.removeAllCachedResourceValues()
-            let resourceValues = try url.resourceValues(forKeys: [
-                .ubiquitousItemDownloadingStatusKey,
-                .ubiquitousItemDownloadingErrorKey
-            ])
-            status = resourceValues.ubiquitousItemDownloadingStatus ?? .notDownloaded
-            if let error = resourceValues.ubiquitousItemDownloadingError {
-                throw error
-            }
-            if status != .current {
-                sleep(3)
-            }
-        } while status != .current
-        return try? Data(contentsOf: url, options: [.mappedIfSafe])
-    }
-    
-    private func write(_ data: Data, to file: File) throws {
-        let url = try self.url(for: file)
-        try data.write(to: url, options: [.atomicWrite])
-        var isUploaded = false
-        repeat {
-            var url = try self.url(for: file)
-            url.removeAllCachedResourceValues()
-            let resourceValues = try url.resourceValues(forKeys: [
-                .ubiquitousItemIsUploadedKey,
-                .ubiquitousItemIsUploadingKey,
-                .ubiquitousItemUploadingErrorKey
-            ])
-            isUploaded = resourceValues.ubiquitousItemIsUploaded ?? false
-            if let error = resourceValues.ubiquitousItemUploadingError {
-                throw error
-            }
-            if isUploaded == false {
-                sleep(3)
-            }
-        } while isUploaded == false
-    }
 }
 
 public extension CloudStore {
     
     /// CloudStore Error
     enum Error: Swift.Error {
-        
-        /// Not signed in to iCloud.
-        case missingCloudAccount
         
         /// Could not import due to missing KeyChain item.
         case missingKeychainItem(UUID)
@@ -154,9 +90,20 @@ public extension CloudStore {
 
 private extension CloudStore {
     
-    enum File: String {
+    enum Key: String {
         
-        case applicationData = "data.json"
+        case applicationData = "com.colemancda.Lock.ApplicationData"
+    }
+}
+
+private extension Keychain {
+    
+    func set(_ value: Data, key: CloudStore.Key) throws {
+        try set(value, key: key.rawValue)
+    }
+    
+    func getData(_ key: CloudStore.Key) throws -> Data? {
+        return try getData(key.rawValue)
     }
 }
 
@@ -195,9 +142,7 @@ public extension Store {
     func downloadCloud(conflicts: (ApplicationData) -> Bool?) throws -> Bool {
         
         assert(Thread.isMainThread == false)
-        
-        log("☁️ Downloading from iCloud")
-        
+                
         guard let (cloudData, cloudKeys) = try cloud.download() else {
             log("☁️ No data in iCloud")
             return true
@@ -219,8 +164,18 @@ public extension Store {
         let oldApplicationData = self.applicationData
         guard cloudData != oldApplicationData else {
             log("☁️ No new data from iCloud")
-            return true
+            return false
         }
+        
+        #if DEBUG
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateStyle = .short
+        dateFormatter.timeStyle = .medium
+        print("Cloud: \(cloudData.identifier) \(dateFormatter.string(from: cloudData.updated))")
+        dump(cloudData)
+        print("Local: \(oldApplicationData.identifier) \(dateFormatter.string(from: oldApplicationData.updated))")
+        dump(oldApplicationData)
+        #endif
         
         // attempt to overwrite
         if oldApplicationData.canUpdate(with: cloudData) {
@@ -235,6 +190,7 @@ public extension Store {
             } else {
                 log("☁️ Discarding conflicting iCloud application data")
             }
+            self.applicationData.didUpdate() // define as latest
         } else {
             log("☁️ Aborted iCloud download due to unresolved conflict")
             return false
@@ -253,13 +209,12 @@ public extension Store {
         if removedKeys > 0 {
             log("☁️ Removed \(removedKeys) old keys from keychain")
         }
+        log("☁️ Downloaded from iCloud")
         return true
     }
     
     func uploadCloud() throws {
-        
-        log("☁️ Uploading to iCloud")
-        
+                
         let applicationData = self.applicationData
         
         // read from to keychain
@@ -271,6 +226,8 @@ public extension Store {
         
         // upload keychain and application data to iCloud
         try cloud.upload(applicationData: applicationData, keys: keys)
+        
+        log("☁️ Uploaded to iCloud")
     }
 }
 

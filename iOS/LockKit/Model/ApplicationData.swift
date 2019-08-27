@@ -27,7 +27,7 @@ public struct ApplicationData: Codable, Equatable {
     }
     
     /// Update date when modified.
-    private mutating func didUpdate() {
+    internal mutating func didUpdate() {
         updated = Date()
     }
     
@@ -44,6 +44,15 @@ public extension ApplicationData {
     
     var keys: [Key] {
         return locks.values.map { $0.key }
+    }
+    
+    subscript (lock identifier: UUID) -> LockCache? {
+        get { return locks[identifier] }
+        set { locks[identifier] = newValue }
+    }
+    
+    subscript (key identifier: UUID) -> Key? {
+        return locks.values.lazy.map { $0.key }.lazy.first(where: { $0.identifier == identifier })
     }
 }
 

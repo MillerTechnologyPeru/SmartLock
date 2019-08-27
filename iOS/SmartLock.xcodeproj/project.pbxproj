@@ -58,7 +58,6 @@
 		6E994AB4230DFDB10076DC1B /* CoreSpotlight.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E994A79230DE1700076DC1B /* CoreSpotlight.swift */; };
 		6E994AB5230DFDB10076DC1B /* Store.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60F8A62121259F0054995D /* Store.swift */; };
 		6E994AB6230DFDB10076DC1B /* Observable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EA3D128212180C000BC50D8 /* Observable.swift */; };
-		6E994AB7230DFDB10076DC1B /* Defaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60F8F72121540C0054995D /* Defaults.swift */; };
 		6E994AB8230DFDB10076DC1B /* Log.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60F8AC212127890054995D /* Log.swift */; };
 		6E994AB9230DFDB60076DC1B /* Unlock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EC04137230B15AD00357585 /* Unlock.swift */; };
 		6E994ABA230DFDB60076DC1B /* Setup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EC04139230B162F00357585 /* Setup.swift */; };
@@ -325,7 +324,6 @@
 		6E6000D02121224D00787DAA /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		6E60F8A62121259F0054995D /* Store.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Store.swift; sourceTree = "<group>"; };
 		6E60F8AC212127890054995D /* Log.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Log.swift; sourceTree = "<group>"; };
-		6E60F8F72121540C0054995D /* Defaults.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Defaults.swift; sourceTree = "<group>"; };
 		6E806B8B230F4F2800C6FF78 /* Preferences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Preferences.swift; sourceTree = "<group>"; };
 		6E806B93230F4F4700C6FF78 /* Keychain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Keychain.swift; sourceTree = "<group>"; };
 		6E806B95230F4F7300C6FF78 /* AppGroup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppGroup.swift; sourceTree = "<group>"; };
@@ -568,7 +566,6 @@
 				6E81B293230CCE3D00783BC5 /* BeaconController.swift */,
 				6E994AC9230E01C90076DC1B /* Bundle.swift */,
 				6E994A79230DE1700076DC1B /* CoreSpotlight.swift */,
-				6E60F8F72121540C0054995D /* Defaults.swift */,
 				6E60004A212113DF00787DAA /* DeviceManager.swift */,
 				6E806B97230F520400C6FF78 /* FileManager.swift */,
 				6EB59D602313184A00D5EFA7 /* iCloud.swift */,
@@ -1303,7 +1300,6 @@
 				6E9C960A2311B176007C18FE /* ProgressHUD.swift in Sources */,
 				6E994ABE230DFDB60076DC1B /* UIAlertAction.swift in Sources */,
 				6E994ABF230DFDBE0076DC1B /* NewKeyViewController.swift in Sources */,
-				6E994AB7230DFDB10076DC1B /* Defaults.swift in Sources */,
 				6EB59D612313184A00D5EFA7 /* iCloud.swift in Sources */,
 				6E994AB0230DFDB10076DC1B /* UserActivity.swift in Sources */,
 				6E994ABA230DFDB60076DC1B /* Setup.swift in Sources */,
