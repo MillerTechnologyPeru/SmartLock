@@ -46,7 +46,7 @@ public final class BeaconController {
     
     // MARK: - Methods
     
-    public func requestAuthorization() {
+    public func requestAlwaysAuthorization() {
         locationManager.requestAlwaysAuthorization()
     }
     
@@ -104,8 +104,12 @@ public final class BeaconController {
         switch CLLocationManager.authorizationStatus() {
         case .authorizedAlways:
             #if !targetEnvironment(macCatalyst)
-            if locationManager.monitoredRegions.contains(region) == false {
-                locationManager.startMonitoring(for: region)
+            if #available(iOSApplicationExtension 13.0, *) {
+                locationManager.startMonitoring(for: CLBeaconRegion(proximityUUID: region.proximityUUID, identifier: region.identifier))
+            } else {
+                if locationManager.monitoredRegions.contains(region) == false {
+                    locationManager.startMonitoring(for: region)
+                }
             }
             #endif
             if #available(iOS 13, *) {
@@ -363,7 +367,7 @@ private extension CLBeaconRegion {
     
     convenience init(uuid identifier: UUID) {
         if #available(iOS 13.0, iOSApplicationExtension 13.0, *) {
-            self.init(uuid: identifier, identifier: identifier.uuidString)
+            self.init(beaconIdentityConstraint: .init(uuid: identifier), identifier: identifier.uuidString)
         } else {
             self.init(proximityUUID: identifier, identifier: identifier.uuidString)
         }

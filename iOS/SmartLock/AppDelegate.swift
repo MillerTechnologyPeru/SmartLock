@@ -71,7 +71,7 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
         
         // request permissions
         BeaconController.shared.allowsBackgroundLocationUpdates = true
-        BeaconController.shared.requestAuthorization()
+        BeaconController.shared.requestAlwaysAuthorization()
         if #available(iOS 10.0, *) {
             UserNotificationCenter.shared.requestAuthorization()
         }
