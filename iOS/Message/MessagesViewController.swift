@@ -49,6 +49,9 @@ final class MessagesViewController: MSMessagesAppViewController {
         tableView.rowHeight = UITableView.automaticDimension
         tableView.estimatedRowHeight = 60
         
+        // load updated lock information
+        Store.shared.loadCache()
+        
         // update UI
         configureView()
     }
@@ -60,6 +63,9 @@ final class MessagesViewController: MSMessagesAppViewController {
         // This will happen when the extension is about to present UI.
         
         log("✉️ Will become active")
+        
+        // load updated lock information
+        Store.shared.loadCache()
         
         if let selectedMessage = conversation.selectedMessage {
             
@@ -101,12 +107,18 @@ final class MessagesViewController: MSMessagesAppViewController {
         // Use this method to trigger UI updates in response to the message.
         
         log("✉️ Did recieve \(message)")
+        
+        // load updated lock information
+        Store.shared.loadCache()
     }
     
     override func didStartSending(_ message: MSMessage, conversation: MSConversation) {
         // Called when the user taps the send button.
         
          log("✉️ Did recieve \(message)")
+        
+        // load updated lock information
+        Store.shared.loadCache()
     }
     
     override func didCancelSending(_ message: MSMessage, conversation: MSConversation) {
@@ -150,6 +162,9 @@ final class MessagesViewController: MSMessagesAppViewController {
     }
     
     private func configureView() {
+        
+        // load updated lock information
+        Store.shared.loadCache()
         
         // set data
         self.items = Store.shared.locks.value

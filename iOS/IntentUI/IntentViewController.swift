@@ -43,6 +43,9 @@ final class IntentViewController: UIViewController, INUIHostedViewControlling {
         
         assert(isViewLoaded)
         
+        // load updated lock information
+        Store.shared.loadCache()
+        
         guard let intent = interaction.intent as? UnlockIntent,
             let lockIdentifierString = intent.lock?.identifier,
             let lockIdentifier = UUID(uuidString: lockIdentifierString),

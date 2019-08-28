@@ -368,7 +368,7 @@ private extension AppDelegate {
         let bundle = self.bundle
         log("\(bundle.symbol) Will update data")
         
-        async { [unowned self] in
+        async {
             do {
                 // scan for locks
                 try Store.shared.scan(duration: 3.0)

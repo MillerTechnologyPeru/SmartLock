@@ -115,6 +115,9 @@ final class TodayViewController: UIViewController, NCWidgetProviding {
         
         log("☀️ Update Widget Data")
         
+        // load updated lock information
+        Store.shared.loadCache()
+        
         if #available(iOS 10.0, *) {
             selectionFeedbackGenerator.prepare()
         }
@@ -150,6 +153,9 @@ final class TodayViewController: UIViewController, NCWidgetProviding {
     
     private func configureView() {
         
+        // load updated lock information
+        Store.shared.loadCache()
+        
         let locks = Store.shared.peripherals.value.values
             .lazy
             .sorted { $0.scanData.rssi < $1.scanData.rssi }
@@ -175,6 +181,9 @@ final class TodayViewController: UIViewController, NCWidgetProviding {
     }
     
     private func reloadData(_ completion: ((Bool) -> ())? = nil) {
+        
+        // load updated lock information
+        Store.shared.loadCache()
         
         // scan beacons
         BeaconController.shared.scanBeacons()

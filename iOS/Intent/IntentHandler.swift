@@ -44,6 +44,9 @@ final class IntentHandler: INExtension, INSendMessageIntentHandling, INSearchFor
             BeaconController.shared.log = { log("📶 \(BeaconController.self): " + $0) }
         }
         
+        // load updated lock information
+        Store.shared.loadCache()
+        
         return UnlockIntentHandler()
     }
     
