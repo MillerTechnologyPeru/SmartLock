@@ -110,20 +110,27 @@ private extension Keychain {
 internal extension ApplicationData {
     
     /// Attempt to update with no conflicts.
-    func canUpdate(with applicationData: ApplicationData) -> Bool {
+    func update(with applicationData: ApplicationData) -> ApplicationData? {
         
         // must be originally the same application data
         guard self.identifier == applicationData.identifier,
             self.created == applicationData.created
-            else { return false }
+            else { return nil }
         
         // if local copy is newer, should not be overwritten with older copy.
-        if self.keys != applicationData.keys {
-            guard self.updated <= applicationData.updated
-                else { return false }
+        if self.locks != applicationData.locks {
+            if self.keys != applicationData.keys {
+                // overwrite with newer keys
+                guard self.updated <= applicationData.updated
+                    else { return nil }
+                return applicationData
+            } else {
+                // no keys changed, keep newer local copy
+                return self
+            }
+        } else {
+            return applicationData
         }
-        
-        return true
     }
 }
 
@@ -178,9 +185,9 @@ public extension Store {
         #endif
         
         // attempt to overwrite
-        if oldApplicationData.canUpdate(with: cloudData) {
+        if let newData = oldApplicationData.update(with: cloudData) {
             // write new application data
-            self.applicationData = cloudData
+            self.applicationData = newData
             log("☁️ Updated application data from iCloud")
         } else if let shouldOverwrite = conflicts(cloudData) {
             // ask user to replace with conflicting data
@@ -190,11 +197,11 @@ public extension Store {
             } else {
                 log("☁️ Discarding conflicting iCloud application data")
             }
-            self.applicationData.didUpdate() // define as latest
         } else {
             log("☁️ Aborted iCloud download due to unresolved conflict")
             return false
         }
+        self.applicationData.didUpdate() // define as latest
         // remove old keys
         var removedKeys = 0
         let newData = self.applicationData
