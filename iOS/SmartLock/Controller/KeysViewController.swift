@@ -55,6 +55,10 @@ final class KeysViewController: UITableViewController {
         
         userActivity = NSUserActivity(.screen(.keys))
         userActivity?.becomeCurrent()
+        
+        #if targetEnvironment(macCatalyst)
+        syncCloud()
+        #endif
     }
     
     // MARK: - Actions

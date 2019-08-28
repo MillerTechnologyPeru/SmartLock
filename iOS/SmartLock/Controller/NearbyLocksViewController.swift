@@ -122,6 +122,10 @@ final class NearbyLocksViewController: UITableViewController {
         
         userActivity = NSUserActivity(.screen(.nearbyLocks))
         userActivity?.becomeCurrent()
+        
+        #if targetEnvironment(macCatalyst)
+        syncCloud()
+        #endif
     }
     
     // MARK: - Actions
