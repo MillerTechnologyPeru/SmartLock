@@ -193,6 +193,11 @@ public extension Store {
     
     func cloudDidChangeExternally(retry: Bool = false) {
         
+        if let lastUpdatedCloud = self.cloud.lastUpdated() {
+            guard self.applicationData.updated < lastUpdatedCloud
+                else { return }
+        }
+        
         if retry == false {
             log("☁️ iCloud changed externally")
         }
@@ -207,12 +212,11 @@ public extension Store {
                 })
             }
             catch { log("⚠️ Could not sync iCloud") }
-            let lastUpdatedLocally = self.applicationData.updated
             // sync again until data is no longer stale
             if conflicts == false,
                 retry == false,
                 let lastUpdatedCloud = self.cloud.lastUpdated(),
-                lastUpdatedLocally < lastUpdatedCloud {
+                self.applicationData.updated < lastUpdatedCloud {
                 self.cloudDidChangeExternally(retry: true)
             }
         }
