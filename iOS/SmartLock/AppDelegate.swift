@@ -63,19 +63,15 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
         
         // setup logging
         LockManager.shared.log = { log("🔒 LockManager: " + $0) }
-        #if !targetEnvironment(macCatalyst)
         BeaconController.shared.log = { log("📶 \(BeaconController.self): " + $0) }
-        #endif
         SpotlightController.shared.log = { log("🔦 \(SpotlightController.self): " + $0) }
         if #available(iOS 10.0, *) {
             UserNotificationCenter.shared.log = { log("📨 \(UserNotificationCenter.self): " + $0) }
         }
         
-        #if !targetEnvironment(macCatalyst)
         // request permissions
         BeaconController.shared.allowsBackgroundLocationUpdates = true
         BeaconController.shared.requestAuthorization()
-        #endif
         if #available(iOS 10.0, *) {
             UserNotificationCenter.shared.requestAuthorization()
         }
@@ -88,7 +84,9 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
         }
         
         // background fetch
+        #if !targetEnvironment(macCatalyst)
         application.setMinimumBackgroundFetchInterval(60 * 10)
+        #endif
         
         // scan periodically in macOS
         #if targetEnvironment(macCatalyst)
@@ -119,7 +117,6 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
         log("\(bundle.symbol) Did enter background")
         logBackgroundTimeRemaining()
         
-        #if !targetEnvironment(macCatalyst)
         // update beacons
         BeaconController.shared.scanBeacons()
         // scan in background
@@ -146,7 +143,6 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
                 }
             }
         }
-        #endif
     }
 
     func applicationWillEnterForeground(_ application: UIApplication) {
@@ -154,9 +150,7 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
         
         log("\(bundle.symbol) Will enter foreground")
         
-        #if !targetEnvironment(macCatalyst)
         BeaconController.shared.scanBeacons()
-        #endif
     }
 
     func applicationDidBecomeActive(_ application: UIApplication) {
@@ -169,9 +163,8 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
         // update cache if modified by extension
         Store.shared.loadCache()
                         
-        #if !targetEnvironment(macCatalyst)
         BeaconController.shared.scanBeacons()
-        #endif
+
         
         // attempt to scan for all known locks if they are not in central cache
         async {
@@ -191,9 +184,8 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
         
         log("\(bundle.symbol) Will terminate")
         
-        #if !targetEnvironment(macCatalyst)
         BeaconController.shared.scanBeacons()
-        #endif
+
     }
     
     func application(_ application: UIApplication, handleOpen url: URL) -> Bool {
@@ -207,9 +199,7 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
         log("\(bundle.symbol) Perform background fetch")
         logBackgroundTimeRemaining()
         
-        #if !targetEnvironment(macCatalyst)
         BeaconController.shared.scanBeacons()
-        #endif
         
         // 30 sec max background fetch
         var result: UIBackgroundFetchResult = .noData

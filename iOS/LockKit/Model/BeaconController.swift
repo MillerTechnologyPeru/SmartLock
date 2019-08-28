@@ -10,7 +10,6 @@ import Foundation
 import CoreLock
 import CoreLocation
 
-#if !targetEnvironment(macCatalyst)
 /// iBeacon Controller
 public final class BeaconController {
     
@@ -53,7 +52,12 @@ public final class BeaconController {
     
     public func monitor(lock identifier: UUID) {
         
-        let region = CLBeaconRegion(proximityUUID: identifier, major: 0, minor: 0, identifier: identifier.uuidString)
+        let region: CLBeaconRegion
+        if #available(iOS 13.0, iOSApplicationExtension 13.0, *) {
+            region = CLBeaconRegion(uuid: identifier, identifier: identifier.uuidString)
+        } else {
+            region = CLBeaconRegion(proximityUUID: identifier, identifier: identifier.uuidString)
+        }
         region.notifyOnEntry = true
         region.notifyEntryStateOnDisplay = true
         region.notifyOnExit = true
@@ -74,9 +78,13 @@ public final class BeaconController {
         switch CLLocationManager.authorizationStatus() {
         case .authorizedAlways:
             locationManager.stopMonitoring(for: region)
+            #if !targetEnvironment(macCatalyst)
             locationManager.stopRangingBeacons(in: region)
+            #endif
         case .authorizedWhenInUse:
+            #if !targetEnvironment(macCatalyst)
             locationManager.stopRangingBeacons(in: region)
+            #endif
         case .denied,
              .notDetermined,
              .restricted:
@@ -104,25 +112,33 @@ public final class BeaconController {
         
         switch CLLocationManager.authorizationStatus() {
         case .authorizedAlways:
+            #if !targetEnvironment(macCatalyst)
             if locationManager.monitoredRegions.contains(region) == false {
                 locationManager.startMonitoring(for: region)
             }
             if locationManager.rangedRegions.contains(region) == false {
                 locationManager.startRangingBeacons(in: region)
             }
+            #endif
             locationManager.requestState(for: region)
         case .authorizedWhenInUse:
+            #if !targetEnvironment(macCatalyst)
             if locationManager.rangedRegions.contains(region) == false {
                 locationManager.startRangingBeacons(in: region)
             }
+            #endif
+            locationManager.requestState(for: region)
         case .denied,
              .notDetermined,
              .restricted:
             break
         @unknown default:
-            // try just in case, ignore erros
+            // try just in case, ignore errors
+            #if !targetEnvironment(macCatalyst)
             locationManager.startMonitoring(for: region)
             locationManager.startRangingBeacons(in: region)
+            #endif
+            locationManager.requestState(for: region)
         }
     }
 }
@@ -172,7 +188,9 @@ private extension BeaconController {
                     // clear stale beacons
                     self.beaconController?.foundBeacons[lock] = nil
                 }
+                #if !targetEnvironment(macCatalyst)
                 manager.startRangingBeacons(in: beaconRegion)
+                #endif
             }
         }
         
@@ -182,9 +200,11 @@ private extension BeaconController {
             log("Exited beacon region \(region.identifier)")
             
             if let beaconRegion = region as? CLBeaconRegion {
+                #if !targetEnvironment(macCatalyst)
                 if manager.rangedRegions.contains(beaconRegion) {
                      manager.stopRangingBeacons(in: beaconRegion)
                 }
+                #endif
                 if let lock = beaconController?.locks.first(where: { $0.value == region })?.key {
                     defer { self.beaconController?.foundBeacons[lock] = nil }
                     let oldBeacon = self.beaconController?.foundBeacons[lock]
@@ -205,10 +225,16 @@ private extension BeaconController {
                 
                 switch state {
                 case .inside:
+                    #if targetEnvironment(macCatalyst)
+                    
+                    #else
                     manager.startRangingBeacons(in: beaconRegion)
+                    #endif
                 case .outside,
                      .unknown:
+                    #if !targetEnvironment(macCatalyst)
                     manager.stopRangingBeacons(in: beaconRegion)
+                    #endif
                     if let lock = beaconController?.locks.first(where: { $0.value == region })?.key {
                         defer { self.beaconController?.foundBeacons[lock] = nil }
                         let oldBeacon = self.beaconController?.foundBeacons[lock]
@@ -221,6 +247,7 @@ private extension BeaconController {
             }
         }
         
+        #if !targetEnvironment(macCatalyst)
         @objc
         public func locationManager(_ manager: CLLocationManager, didRangeBeacons beacons: [CLBeacon], in region: CLBeaconRegion) {
             
@@ -259,6 +286,7 @@ private extension BeaconController {
             
             log("Ranging beacons failed for region \(region). \(error)")
         }
+        #endif
     }
 }
 
@@ -287,5 +315,3 @@ private extension CLRegionState {
         }
     }
 }
-
-#endif

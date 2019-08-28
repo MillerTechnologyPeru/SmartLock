@@ -22,14 +22,12 @@ public final class Store {
     private init() {
         
         // observe iBeacons
-        #if !targetEnvironment(macCatalyst)
         beaconController.foundLock = { [unowned self] (lock, beacon) in
             self.lockBeaconFound(lock: lock, beacon: beacon)
         }
         beaconController.lostLock = { [unowned self] (lock) in
             self.lockBeaconExited(lock: lock)
         }
-        #endif
         
         // observe local cache changes
         locks.observe { [unowned self] _ in self.lockCacheChanged() }
@@ -69,9 +67,7 @@ public final class Store {
     
     public lazy var lockManager: LockManager = .shared
     
-    #if !targetEnvironment(macCatalyst)
     public lazy var beaconController: BeaconController = .shared
-    #endif
     
     public lazy var spotlight: SpotlightController = .shared
     
@@ -165,14 +161,11 @@ public final class Store {
     
     private func lockCacheChanged() {
         
-        #if !targetEnvironment(macCatalyst)
         monitorBeacons()
-        #endif
         updateSpotlight()
         updateCloud()
     }
     
-    #if !targetEnvironment(macCatalyst)
     private func monitorBeacons() {
         
         // remove old beacons
@@ -189,7 +182,6 @@ public final class Store {
             }
         }
     }
-    #endif
     
     private func updateSpotlight() {
         
@@ -207,7 +199,6 @@ public final class Store {
         }
     }
     
-    #if !targetEnvironment(macCatalyst)
     private func lockBeaconFound(lock: UUID, beacon: CLBeacon) {
         
         async { [weak self] in
@@ -241,7 +232,6 @@ public final class Store {
             }
         }
     }
-    #endif
 }
 
 // MARK: - Lock Bluetooth Operations

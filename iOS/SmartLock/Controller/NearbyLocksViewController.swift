@@ -104,15 +104,15 @@ final class NearbyLocksViewController: UITableViewController {
         }
         
         #if targetEnvironment(macCatalyst)
-        if Store.shared.lockInformation.value.isEmpty {
-            scan()
-        }
+        scan()
         #else
-        if BeaconController.shared.locks.isEmpty {
-            scan()
-        } else {
-            // Update beacon status
-            BeaconController.shared.scanBeacons()
+        async {
+            if BeaconController.shared.locks.isEmpty {
+                mainQueue { [weak self] in self?.scan() }
+            } else {
+                // Update beacon status
+                BeaconController.shared.scanBeacons()
+            }
         }
         #endif
     }
@@ -154,10 +154,8 @@ final class NearbyLocksViewController: UITableViewController {
         userActivity = NSUserActivity(.screen(.nearbyLocks))
         userActivity?.becomeCurrent()
         
-        #if !targetEnvironment(macCatalyst)
         // refresh iBeacons in background
         BeaconController.shared.scanBeacons()
-        #endif
         
         let scanDuration = self.scanDuration
         
@@ -310,9 +308,9 @@ final class NearbyLocksViewController: UITableViewController {
         switch information.status {
         case .setup:
             #if targetEnvironment(macCatalyst)
-            showErrorAlert("Cannot setup Lock on macOS.")
+            showErrorAlert("Cannot setup on macOS.")
             #elseif targetEnvironment(simulator)
-            assertion("Cannot use in iOS simulator")
+            showErrorAlert("Cannot setup in iOS simulator")
             #else
             setup(lock: lock)
             #endif
