@@ -104,12 +104,8 @@ public final class BeaconController {
         switch CLLocationManager.authorizationStatus() {
         case .authorizedAlways:
             #if !targetEnvironment(macCatalyst)
-            if #available(iOSApplicationExtension 13.0, *) {
-                locationManager.startMonitoring(for: CLBeaconRegion(proximityUUID: region.proximityUUID, identifier: region.identifier))
-            } else {
-                if locationManager.monitoredRegions.contains(region) == false {
-                    locationManager.startMonitoring(for: region)
-                }
+            if locationManager.monitoredRegions.contains(region) == false {
+                locationManager.startMonitoring(for: region)
             }
             #endif
             if #available(iOS 13, *) {
