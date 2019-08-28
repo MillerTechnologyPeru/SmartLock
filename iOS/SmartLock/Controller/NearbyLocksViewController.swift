@@ -146,10 +146,8 @@ final class NearbyLocksViewController: UITableViewController {
         self.refreshControl?.endRefreshing()
         
         /// ignore if off or not authorized
-        #if os(iOS)
         guard LockManager.shared.central.state == .poweredOn
             else { return } // cannot scan
-        #endif
         
         userActivity = NSUserActivity(.screen(.nearbyLocks))
         userActivity?.becomeCurrent()
