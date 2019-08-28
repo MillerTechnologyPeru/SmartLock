@@ -103,9 +103,11 @@ public final class BeaconController {
         
         switch CLLocationManager.authorizationStatus() {
         case .authorizedAlways:
+            #if !targetEnvironment(macCatalyst)
             if locationManager.monitoredRegions.contains(region) == false {
                 locationManager.startMonitoring(for: region)
             }
+            #endif
             if #available(iOS 13, *) {
                 if locationManager.rangedBeaconConstraints.contains(.init(region)) == false {
                     locationManager.startRangingBeacons(satisfying: .init(region))
