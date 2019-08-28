@@ -9,6 +9,8 @@
 import Foundation
 import UIKit
 import CoreLock
+
+#if os(iOS)
 import Rswift
 
 public extension UIImage {
@@ -38,6 +40,8 @@ public extension PermissionType {
         }
     }
 }
+
+#endif
 
 public extension PermissionType {
     

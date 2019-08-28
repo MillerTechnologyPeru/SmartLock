@@ -25,6 +25,7 @@ public extension Bundle {
         
         case app = "com.colemancda.Lock"
         case macApp = "maccatalyst.com.colemancda.Lock"
+        case watch = "com.colemancda.Lock.watchkitapp.watchkitextension"
         case coreLock = "com.colemancda.CoreLock"
         case lockKit = "com.colemancda.LockKit"
         case intent = "com.colemancda.Lock.Intent"
@@ -42,6 +43,8 @@ public extension Bundle.Lock {
             return "📱"
         case .macApp:
             return "💻"
+        case .watch:
+            return "⌚️"
         case .coreLock,
              .lockKit:
             return "🔒"
@@ -61,6 +64,8 @@ public extension Bundle.Lock {
         case .app:
             return "Application"
         case .macApp:
+            return "Application"
+        case .watch:
             return "Application"
         case .coreLock:
             return "CoreLock"

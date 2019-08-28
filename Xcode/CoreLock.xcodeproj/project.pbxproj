@@ -16,6 +16,18 @@
 		6E9C95ED231149A5007C18FE /* GATT in Frameworks */ = {isa = PBXBuildFile; productRef = 6E9C95EC231149A5007C18FE /* GATT */; };
 		6E9C95EF231149A5007C18FE /* DarwinGATT in Frameworks */ = {isa = PBXBuildFile; productRef = 6E9C95EE231149A5007C18FE /* DarwinGATT */; };
 		6E9C95F2231149F5007C18FE /* TLVCoding in Frameworks */ = {isa = PBXBuildFile; productRef = 6E9C95F1231149F5007C18FE /* TLVCoding */; };
+		6ED81FE1231662E200B69520 /* CryptoSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 6ED81FE0231662E200B69520 /* CryptoSwift */; };
+		6ED81FE3231662E200B69520 /* DarwinGATT in Frameworks */ = {isa = PBXBuildFile; productRef = 6ED81FE2231662E200B69520 /* DarwinGATT */; };
+		6ED81FE5231662E200B69520 /* GATT in Frameworks */ = {isa = PBXBuildFile; productRef = 6ED81FE4231662E200B69520 /* GATT */; };
+		6ED81FE7231662E200B69520 /* TLVCoding in Frameworks */ = {isa = PBXBuildFile; productRef = 6ED81FE6231662E200B69520 /* TLVCoding */; };
+		6ED81FE9231662F100B69520 /* CryptoSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 6ED81FE8231662F100B69520 /* CryptoSwift */; };
+		6ED81FEB231662F100B69520 /* DarwinGATT in Frameworks */ = {isa = PBXBuildFile; productRef = 6ED81FEA231662F100B69520 /* DarwinGATT */; };
+		6ED81FED231662F100B69520 /* GATT in Frameworks */ = {isa = PBXBuildFile; productRef = 6ED81FEC231662F100B69520 /* GATT */; };
+		6ED81FEF231662F100B69520 /* TLVCoding in Frameworks */ = {isa = PBXBuildFile; productRef = 6ED81FEE231662F100B69520 /* TLVCoding */; };
+		6ED81FF1231662FB00B69520 /* CryptoSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 6ED81FF0231662FB00B69520 /* CryptoSwift */; };
+		6ED81FF3231662FB00B69520 /* DarwinGATT in Frameworks */ = {isa = PBXBuildFile; productRef = 6ED81FF2231662FB00B69520 /* DarwinGATT */; };
+		6ED81FF5231662FB00B69520 /* GATT in Frameworks */ = {isa = PBXBuildFile; productRef = 6ED81FF4231662FB00B69520 /* GATT */; };
+		6ED81FF7231662FB00B69520 /* TLVCoding in Frameworks */ = {isa = PBXBuildFile; productRef = 6ED81FF6231662FB00B69520 /* TLVCoding */; };
 		6EF1C65522C9AC9F005E9818 /* SetupCharacteristic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF1C62E22C9AC9D005E9818 /* SetupCharacteristic.swift */; };
 		6EF1C65622C9AC9F005E9818 /* SetupCharacteristic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF1C62E22C9AC9D005E9818 /* SetupCharacteristic.swift */; };
 		6EF1C65722C9AC9F005E9818 /* SetupCharacteristic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF1C62E22C9AC9D005E9818 /* SetupCharacteristic.swift */; };
@@ -256,6 +268,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6ED81FED231662F100B69520 /* GATT in Frameworks */,
+				6ED81FE9231662F100B69520 /* CryptoSwift in Frameworks */,
+				6ED81FEB231662F100B69520 /* DarwinGATT in Frameworks */,
+				6ED81FEF231662F100B69520 /* TLVCoding in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -263,6 +279,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6ED81FF5231662FB00B69520 /* GATT in Frameworks */,
+				6ED81FF1231662FB00B69520 /* CryptoSwift in Frameworks */,
+				6ED81FF3231662FB00B69520 /* DarwinGATT in Frameworks */,
+				6ED81FF7231662FB00B69520 /* TLVCoding in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -270,6 +290,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6ED81FE5231662E200B69520 /* GATT in Frameworks */,
+				6ED81FE1231662E200B69520 /* CryptoSwift in Frameworks */,
+				6ED81FE3231662E200B69520 /* DarwinGATT in Frameworks */,
+				6ED81FE7231662E200B69520 /* TLVCoding in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -291,6 +315,7 @@
 				6E60FF512121041400787DAA /* Tests */,
 				52D6D99C1BEFF38C002C0205 /* Configs */,
 				52D6D97D1BEFF229002C0205 /* Products */,
+				6ED81FDF231662E200B69520 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -400,6 +425,13 @@
 			path = CoreLock;
 			sourceTree = "<group>";
 		};
+		6ED81FDF231662E200B69520 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		DD7502721C68FC1B006590AF /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -488,6 +520,12 @@
 			dependencies = (
 			);
 			name = "CoreLock-watchOS";
+			packageProductDependencies = (
+				6ED81FE8231662F100B69520 /* CryptoSwift */,
+				6ED81FEA231662F100B69520 /* DarwinGATT */,
+				6ED81FEC231662F100B69520 /* GATT */,
+				6ED81FEE231662F100B69520 /* TLVCoding */,
+			);
 			productName = "SmartLock-watchOS";
 			productReference = 52D6D9E21BEFFF6E002C0205 /* CoreLock.framework */;
 			productType = "com.apple.product-type.framework";
@@ -506,6 +544,12 @@
 			dependencies = (
 			);
 			name = "CoreLock-tvOS";
+			packageProductDependencies = (
+				6ED81FF0231662FB00B69520 /* CryptoSwift */,
+				6ED81FF2231662FB00B69520 /* DarwinGATT */,
+				6ED81FF4231662FB00B69520 /* GATT */,
+				6ED81FF6231662FB00B69520 /* TLVCoding */,
+			);
 			productName = "SmartLock-tvOS";
 			productReference = 52D6D9F01BEFFFBE002C0205 /* CoreLock.framework */;
 			productType = "com.apple.product-type.framework";
@@ -524,6 +568,12 @@
 			dependencies = (
 			);
 			name = "CoreLock-macOS";
+			packageProductDependencies = (
+				6ED81FE0231662E200B69520 /* CryptoSwift */,
+				6ED81FE2231662E200B69520 /* DarwinGATT */,
+				6ED81FE4231662E200B69520 /* GATT */,
+				6ED81FE6231662E200B69520 /* TLVCoding */,
+			);
 			productName = "SmartLock-macOS";
 			productReference = 52D6DA0F1BF000BD002C0205 /* CoreLock.framework */;
 			productType = "com.apple.product-type.framework";
@@ -1325,6 +1375,66 @@
 			productName = DarwinGATT;
 		};
 		6E9C95F1231149F5007C18FE /* TLVCoding */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6E9C95F0231149F5007C18FE /* XCRemoteSwiftPackageReference "TLVCoding" */;
+			productName = TLVCoding;
+		};
+		6ED81FE0231662E200B69520 /* CryptoSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6E9C95E823114962007C18FE /* XCRemoteSwiftPackageReference "CryptoSwift" */;
+			productName = CryptoSwift;
+		};
+		6ED81FE2231662E200B69520 /* DarwinGATT */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6E9C95EB231149A5007C18FE /* XCRemoteSwiftPackageReference "GATT" */;
+			productName = DarwinGATT;
+		};
+		6ED81FE4231662E200B69520 /* GATT */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6E9C95EB231149A5007C18FE /* XCRemoteSwiftPackageReference "GATT" */;
+			productName = GATT;
+		};
+		6ED81FE6231662E200B69520 /* TLVCoding */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6E9C95F0231149F5007C18FE /* XCRemoteSwiftPackageReference "TLVCoding" */;
+			productName = TLVCoding;
+		};
+		6ED81FE8231662F100B69520 /* CryptoSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6E9C95E823114962007C18FE /* XCRemoteSwiftPackageReference "CryptoSwift" */;
+			productName = CryptoSwift;
+		};
+		6ED81FEA231662F100B69520 /* DarwinGATT */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6E9C95EB231149A5007C18FE /* XCRemoteSwiftPackageReference "GATT" */;
+			productName = DarwinGATT;
+		};
+		6ED81FEC231662F100B69520 /* GATT */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6E9C95EB231149A5007C18FE /* XCRemoteSwiftPackageReference "GATT" */;
+			productName = GATT;
+		};
+		6ED81FEE231662F100B69520 /* TLVCoding */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6E9C95F0231149F5007C18FE /* XCRemoteSwiftPackageReference "TLVCoding" */;
+			productName = TLVCoding;
+		};
+		6ED81FF0231662FB00B69520 /* CryptoSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6E9C95E823114962007C18FE /* XCRemoteSwiftPackageReference "CryptoSwift" */;
+			productName = CryptoSwift;
+		};
+		6ED81FF2231662FB00B69520 /* DarwinGATT */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6E9C95EB231149A5007C18FE /* XCRemoteSwiftPackageReference "GATT" */;
+			productName = DarwinGATT;
+		};
+		6ED81FF4231662FB00B69520 /* GATT */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6E9C95EB231149A5007C18FE /* XCRemoteSwiftPackageReference "GATT" */;
+			productName = GATT;
+		};
+		6ED81FF6231662FB00B69520 /* TLVCoding */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 6E9C95F0231149F5007C18FE /* XCRemoteSwiftPackageReference "TLVCoding" */;
 			productName = TLVCoding;

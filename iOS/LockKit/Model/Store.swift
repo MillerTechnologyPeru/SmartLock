@@ -21,6 +21,7 @@ public final class Store {
     
     private init() {
         
+        #if os(iOS)
         // observe iBeacons
         beaconController.foundLock = { [unowned self] (lock, beacon) in
             self.lockBeaconFound(lock: lock, beacon: beacon)
@@ -28,12 +29,15 @@ public final class Store {
         beaconController.lostLock = { [unowned self] (lock) in
             self.lockBeaconExited(lock: lock)
         }
+        #endif
         
         // observe local cache changes
         locks.observe { [unowned self] _ in self.lockCacheChanged() }
         
+        #if os(iOS)
         // observe external cloud changes
         cloud.didChange = { [unowned self] in self.cloudDidChangeExternally() }
+        #endif
         
         // read from filesystem
         loadCache()
@@ -67,11 +71,13 @@ public final class Store {
     
     public lazy var lockManager: LockManager = .shared
     
+    public lazy var cloud: CloudStore = .shared
+    
+    #if os(iOS)
     public lazy var beaconController: BeaconController = .shared
     
     public lazy var spotlight: SpotlightController = .shared
-    
-    public lazy var cloud: CloudStore = .shared
+    #endif
     
     // BLE cache
     public let peripherals = Observable([NativeCentral.Peripheral: LockPeripheral<NativeCentral>]())
@@ -161,11 +167,14 @@ public final class Store {
     
     private func lockCacheChanged() {
         
+        #if os(iOS)
         monitorBeacons()
         updateSpotlight()
+        #endif
         updateCloud()
     }
     
+    #if os(iOS)
     private func monitorBeacons() {
         
         // remove old beacons
@@ -187,6 +196,7 @@ public final class Store {
         
         spotlight.update(locks: locks.value)
     }
+    #endif
     
     private func updateCloud() {
         
@@ -199,6 +209,7 @@ public final class Store {
         }
     }
     
+    #if os(iOS)
     private func lockBeaconFound(lock: UUID, beacon: CLBeacon) {
         
         async { [weak self] in
@@ -232,6 +243,7 @@ public final class Store {
             }
         }
     }
+    #endif
 }
 
 // MARK: - Lock Bluetooth Operations
