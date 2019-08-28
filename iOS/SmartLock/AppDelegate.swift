@@ -24,12 +24,20 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
     static var shared: AppDelegate {
         return UIApplication.shared.delegate as! AppDelegate
     }
+    
+    // MARK: - Properties
 
     var window: UIWindow?
     
     private(set) var didBecomeActive: Bool = false
     
     lazy var bundle = Bundle.Lock(rawValue: Bundle.main.bundleIdentifier ?? "") ?? .app
+    
+    #if DEBUG || targetEnvironment(macCatalyst)
+    private var updateTimer: Timer?
+    #endif
+    
+    // MARK: - UIApplicationDelegate
     
     func application(_ application: UIApplication,
                      didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
@@ -82,6 +90,11 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
         // background fetch
         application.setMinimumBackgroundFetchInterval(60 * 10)
         
+        // scan periodically in macOS
+        #if targetEnvironment(macCatalyst)
+        setupBackgroundUpdates()
+        #endif
+        
         // handle url
         if let url = launchOptions?[.url] as? URL {
             guard open(url: url)
@@ -110,7 +123,7 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
         // update beacons
         BeaconController.shared.scanBeacons()
         // scan in background
-        let beaconTask = UIApplication.shared.beginBackgroundTask(withName: "BackgoundUpdate", expirationHandler: {
+        let beaconTask = UIApplication.shared.beginBackgroundTask(withName: bundle.rawValue, expirationHandler: {
             log("\(bundle.symbol) Background task expired")
         })
         async { [unowned self] in
@@ -337,6 +350,46 @@ private extension AppDelegate {
         log("\(bundle.symbol) Background time remaining: \(timeString)")
     }
 }
+
+#if DEBUG || targetEnvironment(macCatalyst)
+private extension AppDelegate {
+    
+    @available(macOS 10.13, iOS 10.0, *)
+    func setupBackgroundUpdates() {
+        
+        let interval = 90.0
+        updateTimer = Timer.scheduledTimer(withTimeInterval: interval, repeats: true) { [weak self] _ in
+            self?.updateBackground()
+        }
+    }
+    
+    func updateBackground() {
+        
+        let bundle = self.bundle
+        log("\(bundle.symbol) Will update data")
+        
+        async { [unowned self] in
+            do {
+                // scan for locks
+                try Store.shared.scan(duration: 3.0)
+                // make sure each stored lock is visible
+                for lock in Store.shared.locks.value.keys {
+                    let _ = try Store.shared.device(for: lock, scanDuration: 1.0)
+                }
+            } catch { log("⚠️ Unable to scan: \(error)") }
+            // attempt to sync with iCloud
+            DispatchQueue.cloud.async {
+                do { try Store.shared.syncCloud() }
+                catch { log("⚠️ Unable to sync: \(error)") }
+                mainQueue { self.logBackgroundTimeRemaining() }
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                    log("\(bundle.symbol) Updated data")
+                }
+            }
+        }
+    }
+}
+#endif
 
 // MARK: - URL Handling
 
