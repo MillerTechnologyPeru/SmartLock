@@ -126,7 +126,11 @@ internal extension ApplicationData {
                 return applicationData
             } else {
                 // no keys changed, keep newer local copy
-                return self
+                if self.updated <= applicationData.updated {
+                    return applicationData
+                } else {
+                    return self
+                }
             }
         } else {
             return applicationData
@@ -188,7 +192,11 @@ public extension Store {
         if let newData = oldApplicationData.update(with: cloudData) {
             // write new application data
             self.applicationData = newData
-            log("☁️ Updated application data from iCloud")
+            if newData != oldApplicationData {
+                log("☁️ Updated application data from iCloud")
+            } else {
+                log("☁️ Keeping local data over iCloud")
+            }
         } else if let shouldOverwrite = conflicts(cloudData) {
             // ask user to replace with conflicting data
             if shouldOverwrite {
