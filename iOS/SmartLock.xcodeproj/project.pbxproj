@@ -9,6 +9,9 @@
 /* Begin PBXBuildFile section */
 		6E05B6E122C9BF86001218D9 /* eKeyDocument.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 6E05B6DC22C9BF85001218D9 /* eKeyDocument.pdf */; };
 		6E05B6E722C9C159001218D9 /* KeysViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E05B6E622C9C159001218D9 /* KeysViewController.swift */; };
+		6E08FB7C231687AA00177026 /* AnimatedButtonController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E08FB77231687A800177026 /* AnimatedButtonController.swift */; };
+		6E08FB7E231688BA00177026 /* ErrorAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E08FB7D231688BA00177026 /* ErrorAlert.swift */; };
+		6E08FB8023168CEB00177026 /* ActivityInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E08FB7F23168CEB00177026 /* ActivityInterface.swift */; };
 		6E3B70B22313E24F00BEB6FF /* ApplicationData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E3B70B12313E24F00BEB6FF /* ApplicationData.swift */; };
 		6E3B70BA2313EF1000BEB6FF /* JSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E3B70B82313E99A00BEB6FF /* JSON.swift */; };
 		6E6000142121119400787DAA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E6000132121119400787DAA /* AppDelegate.swift */; };
@@ -446,6 +449,9 @@
 		6E05B6FD22C9F2A5001218D9 /* NewKeyViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewKeyViewController.swift; sourceTree = "<group>"; };
 		6E05B6FF22CA0029001218D9 /* NewKeyInvitation.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = NewKeyInvitation.storyboard; sourceTree = "<group>"; };
 		6E05B70122CA0047001218D9 /* LockPermissions.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = LockPermissions.storyboard; sourceTree = "<group>"; };
+		6E08FB77231687A800177026 /* AnimatedButtonController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnimatedButtonController.swift; sourceTree = "<group>"; };
+		6E08FB7D231688BA00177026 /* ErrorAlert.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ErrorAlert.swift; sourceTree = "<group>"; };
+		6E08FB7F23168CEB00177026 /* ActivityInterface.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityInterface.swift; sourceTree = "<group>"; };
 		6E0F602F230DD05400B013AB /* UserNotification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserNotification.swift; sourceTree = "<group>"; };
 		6E3B70B12313E24F00BEB6FF /* ApplicationData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplicationData.swift; sourceTree = "<group>"; };
 		6E3B70B82313E99A00BEB6FF /* JSON.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSON.swift; sourceTree = "<group>"; };
@@ -954,11 +960,11 @@
 			isa = PBXGroup;
 			children = (
 				6ED820552316696F00B69520 /* Watch Extension.entitlements */,
+				6ED81FC72316618400B69520 /* Assets.xcassets */,
+				6ED81FC92316618400B69520 /* Info.plist */,
 				6ED81FC12316618100B69520 /* ExtensionDelegate.swift */,
 				6ED8206523166D6B00B69520 /* Controller */,
 				6ED8206423166D6000B69520 /* Model */,
-				6ED81FC72316618400B69520 /* Assets.xcassets */,
-				6ED81FC92316618400B69520 /* Info.plist */,
 				6ED81FCA2316618400B69520 /* PushNotificationPayload.apns */,
 			);
 			path = "Watch Extension";
@@ -978,6 +984,9 @@
 				6ED81FBF2316618100B69520 /* InterfaceController.swift */,
 				6ED81FC32316618100B69520 /* NotificationController.swift */,
 				6ED81FC52316618100B69520 /* ComplicationController.swift */,
+				6E08FB7D231688BA00177026 /* ErrorAlert.swift */,
+				6E08FB77231687A800177026 /* AnimatedButtonController.swift */,
+				6E08FB7F23168CEB00177026 /* ActivityInterface.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -1788,11 +1797,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6E08FB8023168CEB00177026 /* ActivityInterface.swift in Sources */,
 				6ED8209E231677A800B69520 /* Intents.intentdefinition in Sources */,
 				6ED81FC42316618100B69520 /* NotificationController.swift in Sources */,
 				6ED81FC62316618100B69520 /* ComplicationController.swift in Sources */,
 				6ED81FC22316618100B69520 /* ExtensionDelegate.swift in Sources */,
 				6ED81FC02316618100B69520 /* InterfaceController.swift in Sources */,
+				6E08FB7E231688BA00177026 /* ErrorAlert.swift in Sources */,
+				6E08FB7C231687AA00177026 /* AnimatedButtonController.swift in Sources */,
 				6ED8204F231668AC00B69520 /* AppVersion.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

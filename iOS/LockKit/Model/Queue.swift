@@ -23,6 +23,11 @@ internal let appQueue = DispatchQueue(label: Bundle.Lock.app.rawValue)
 
 public extension DispatchQueue {
     
+    static var app: DispatchQueue { return appQueue }
+}
+
+public extension DispatchQueue {
+    
     convenience init<T>(for type: T.Type,
                         in bundle: Bundle.Lock,
                         qualityOfService: DispatchQoS = .default,

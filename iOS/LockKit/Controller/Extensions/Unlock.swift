@@ -31,7 +31,7 @@ public extension ActivityIndicatorViewController where Self: UIViewController {
     }
     
     func unlock(lock: LockPeripheral<NativeCentral>, action: UnlockAction = .default) {
-                
+        
         performActivity({ try Store.shared.unlock(lock, action: action) })
     }
 }

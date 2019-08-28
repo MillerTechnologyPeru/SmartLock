@@ -30,6 +30,11 @@ final class ExtensionDelegate: NSObject, WKExtensionDelegate {
         
         log("⌚️ Did become active")
         
+        
+        // load updated lock information
+        Store.shared.loadCache()
+        
+        // scan for locks
         refresh()
     }
 

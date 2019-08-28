@@ -92,7 +92,7 @@ final class TodayViewController: UIViewController, NCWidgetProviding {
         // scan for locks
         if Store.shared.lockInformation.value.isEmpty {
             DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
-                self?.reloadData()
+                self?.scan()
             }
         }
         
@@ -128,7 +128,7 @@ final class TodayViewController: UIViewController, NCWidgetProviding {
         // If there's no update required, use NCUpdateResult.NoData
         // If there's an update, use NCUpdateResult.NewData
         
-        reloadData { completionHandler($0 ? .newData : .failed) }
+        scan { completionHandler($0 ? .newData : .failed) }
     }
     
     @available(iOSApplicationExtension 10.0, *)
@@ -180,7 +180,7 @@ final class TodayViewController: UIViewController, NCWidgetProviding {
         }
     }
     
-    private func reloadData(_ completion: ((Bool) -> ())? = nil) {
+    private func scan(_ completion: ((Bool) -> ())? = nil) {
         
         // load updated lock information
         Store.shared.loadCache()
@@ -190,7 +190,6 @@ final class TodayViewController: UIViewController, NCWidgetProviding {
         
         // scan for devices
         async {
-            log("Scanning...")
             do { try Store.shared.scan(duration: 1.0) }
             catch {
                 log("⚠️ Could not scan: \(error)")
@@ -233,7 +232,7 @@ final class TodayViewController: UIViewController, NCWidgetProviding {
         
         switch item {
         case .noNearbyLocks:
-            reloadData()
+            scan()
         case let .lock(identifier, cache):
             // unlock
             async {

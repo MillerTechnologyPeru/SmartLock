@@ -12,7 +12,7 @@
             <objects>
                 <controller id="AgC-eL-Hgc" customClass="InterfaceController" customModule="Watch" customModuleProvider="target"/>
             </objects>
-            <point key="canvasLocation" x="229" y="-117"/>
+            <point key="canvasLocation" x="241" y="1040"/>
         </scene>
         <!--Static Notification Interface Controller-->
         <scene sceneID="AEw-b0-oYE">
@@ -29,7 +29,7 @@
                     </connections>
                 </notificationController>
             </objects>
-            <point key="canvasLocation" x="220" y="643"/>
+            <point key="canvasLocation" x="109" y="643"/>
         </scene>
         <!--Notification Controller-->
         <scene sceneID="ZPc-GJ-vnh">
@@ -45,5 +45,74 @@
             </objects>
             <point key="canvasLocation" x="468" y="345"/>
         </scene>
+        <!--Interface Controller-->
+        <scene sceneID="lnH-w9-HPR">
+            <objects>
+                <controller id="Zjw-i6-u6T"/>
+            </objects>
+            <point key="canvasLocation" x="-177" y="18"/>
+        </scene>
+        <!--Keys-->
+        <scene sceneID="GEV-15-dWS">
+            <objects>
+                <controller title="Keys" id="ShR-W8-Ue9" customClass="KeysInterfaceController" customModule="CerraduraWatch_Extension">
+                    <items>
+                        <imageView width="1" height="1" alignment="left" hidden="YES" contentMode="center" id="dJE-Ho-7vY"/>
+                        <table alignment="left" id="Jj8-yd-a2P">
+                            <items>
+                                <tableRow identifier="Lock" id="Nmb-JL-HB5" customClass="LockRowController" customModule="CerraduraWatch_Extension">
+                                    <group key="rootItem" width="1" alignment="left" spacing="5" id="tG3-7d-d1d">
+                                        <items>
+                                            <imageView width="0.29999999999999999" height="0.90000000000000002" alignment="left" verticalAlignment="center" image="permissionBadgeAdmin" contentMode="scaleAspectFit" id="Rlb-ce-PGN"/>
+                                            <label width="0.69999999999999996" alignment="left" verticalAlignment="center" text="My Lock" id="TBE-Rf-HgD"/>
+                                        </items>
+                                        <connections>
+                                            <segue destination="V2r-of-aqL" kind="push" identifier="showLock" id="npJ-UG-SYY"/>
+                                        </connections>
+                                    </group>
+                                    <connections>
+                                        <outlet property="imageView" destination="Rlb-ce-PGN" id="G4h-ES-zYg"/>
+                                        <outlet property="label" destination="TBE-Rf-HgD" id="9Q3-9j-QXK"/>
+                                    </connections>
+                                </tableRow>
+                            </items>
+                        </table>
+                    </items>
+                    <connections>
+                        <outlet property="loadingImageView" destination="dJE-Ho-7vY" id="rbf-n0-SVj"/>
+                        <outlet property="tableView" destination="Jj8-yd-a2P" id="Zfd-yX-fF6"/>
+                    </connections>
+                </controller>
+            </objects>
+            <point key="canvasLocation" x="51" y="18"/>
+        </scene>
+        <!--Lock Name-->
+        <scene sceneID="Rt3-iu-R39">
+            <objects>
+                <controller title="Lock Name" id="V2r-of-aqL" customClass="LockInterfaceController" customModule="CerraduraWatch_Extension">
+                    <items>
+                        <button alignment="left" id="axN-gW-PHV">
+                            <group key="contentGroup" width="1" height="1" alignment="left" id="wla-zt-gZd">
+                                <items>
+                                    <imageView width="0.90000000000000002" height="1" heightAdjustment="0.90000000000000002" alignment="center" verticalAlignment="center" image="watchAdmin" contentMode="scaleAspectFit" id="oVw-zA-ZJp"/>
+                                </items>
+                            </group>
+                            <connections>
+                                <action selector="unlock:" destination="V2r-of-aqL" id="XfY-KI-vwR"/>
+                            </connections>
+                        </button>
+                    </items>
+                    <connections>
+                        <outlet property="button" destination="axN-gW-PHV" id="0Ky-qx-ITb"/>
+                        <outlet property="imageView" destination="oVw-zA-ZJp" id="DYm-BU-Kci"/>
+                    </connections>
+                </controller>
+            </objects>
+            <point key="canvasLocation" x="343" y="18"/>
+        </scene>
     </scenes>
+    <resources>
+        <image name="permissionBadgeAdmin" width="51" height="51"/>
+        <image name="watchAdmin" width="130" height="130"/>
+    </resources>
 </document>

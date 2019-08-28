@@ -36,6 +36,9 @@
       "role" : "modular"
     },
     {
+      "filename" : "PlaceholderModular.imageset"
+    },
+    {
       "idiom" : "watch",
       "filename" : "Utilitarian.imageset",
       "role" : "utilitarian"
