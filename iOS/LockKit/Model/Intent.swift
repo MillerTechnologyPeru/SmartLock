@@ -9,7 +9,7 @@
 import Foundation
 import Intents
 
-@available(iOS 12, iOSApplicationExtension 12.0, *)
+@available(iOS 12, iOSApplicationExtension 12.0, watchOS 5.0, *)
 public extension UnlockIntent {
     
     convenience init(lock identifier: UUID, name: String) {

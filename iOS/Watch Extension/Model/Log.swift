@@ -8,6 +8,6 @@
 
 import Foundation
 
-func log(_ message: String) {
+public func log(_ message: String) {
     print(message)
 }

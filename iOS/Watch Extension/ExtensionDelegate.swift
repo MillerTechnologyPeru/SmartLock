@@ -11,6 +11,7 @@ import WatchKit
 import CoreBluetooth
 import CoreLocation
 import CoreLock
+import LockKit
 
 final class ExtensionDelegate: NSObject, WKExtensionDelegate {
 
@@ -29,22 +30,7 @@ final class ExtensionDelegate: NSObject, WKExtensionDelegate {
         
         log("⌚️ Did become active")
         
-        // scan for locks
-        async {
-            do {
-                // scan for locks
-                try Store.shared.scan(duration: 3.0)
-                // make sure each stored lock is visible
-                for lock in Store.shared.locks.value.keys {
-                    let _ = try Store.shared.device(for: lock, scanDuration: 1.0)
-                }
-            } catch { log("⚠️ Unable to scan: \(error)") }
-            // attempt to sync with iCloud
-            DispatchQueue.cloud.async {
-                do { try Store.shared.syncCloud() }
-                catch { log("⚠️ Unable to sync: \(error)") }
-            }
-        }
+        refresh()
     }
 
     func applicationWillResignActive() {
@@ -57,6 +43,8 @@ final class ExtensionDelegate: NSObject, WKExtensionDelegate {
     func handle(_ backgroundTasks: Set<WKRefreshBackgroundTask>) {
         // Sent when the system needs to launch the application in the background to process tasks. Tasks arrive in a set, so loop through and process each one.
         log("⌚️ Handle background tasks")
+        
+        refresh()
         
         for task in backgroundTasks {
             // Use a switch statement to check the task type
@@ -82,6 +70,29 @@ final class ExtensionDelegate: NSObject, WKExtensionDelegate {
             default:
                 // make sure to complete unhandled task types
                 task.setTaskCompleted(refreshSnapshot: false)
+            }
+        }
+    }
+}
+
+internal extension ExtensionDelegate {
+    
+    func refresh() {
+        
+        // scan for locks
+        async {
+            do {
+                // scan for locks
+                try Store.shared.scan(duration: 3.0)
+                // make sure each stored lock is visible
+                for lock in Store.shared.locks.value.keys {
+                    let _ = try Store.shared.device(for: lock, scanDuration: 1.0)
+                }
+            } catch { log("⚠️ Unable to scan: \(error)") }
+            // attempt to sync with iCloud
+            DispatchQueue.cloud.async {
+                do { try Store.shared.syncCloud(conflicts: { _ in return true }) }
+                catch { log("⚠️ Unable to sync: \(error)") }
             }
         }
     }
