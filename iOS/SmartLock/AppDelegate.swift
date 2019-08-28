@@ -381,7 +381,6 @@ private extension AppDelegate {
             DispatchQueue.cloud.async {
                 do { try Store.shared.syncCloud() }
                 catch { log("⚠️ Unable to sync: \(error)") }
-                mainQueue { self.logBackgroundTimeRemaining() }
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
                     log("\(bundle.symbol) Updated data")
                 }
