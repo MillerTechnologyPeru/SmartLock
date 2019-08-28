@@ -239,7 +239,7 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
                     }
                 }
                 mainQueue { self.logBackgroundTimeRemaining() }
-                log("\(bundle.symbol) background fetch ended")
+                log("\(bundle.symbol) Background fetch ended")
                 completionHandler(result)
             }
         }
