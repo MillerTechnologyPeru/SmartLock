@@ -53,7 +53,7 @@ public final class Store {
     
     public lazy var fileManager: FileManager.Lock = .shared
     
-    public internal(set) var applicationData: ApplicationData {
+    public var applicationData: ApplicationData {
         get {
             if let applicationData = fileManager.applicationData {
                 return applicationData

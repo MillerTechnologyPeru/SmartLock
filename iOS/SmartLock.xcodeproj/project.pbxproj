@@ -12,6 +12,10 @@
 		6E08FB7C231687AA00177026 /* AnimatedButtonController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E08FB77231687A800177026 /* AnimatedButtonController.swift */; };
 		6E08FB7E231688BA00177026 /* ErrorAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E08FB7D231688BA00177026 /* ErrorAlert.swift */; };
 		6E08FB8023168CEB00177026 /* ActivityInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E08FB7F23168CEB00177026 /* ActivityInterface.swift */; };
+		6E08FB832316E64D00177026 /* SessionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E08FB822316E64D00177026 /* SessionController.swift */; };
+		6E08FB852316EF3D00177026 /* WatchController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E08FB842316EF3D00177026 /* WatchController.swift */; };
+		6E08FB8A2316F63700177026 /* WatchMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E08FB872316EF6000177026 /* WatchMessage.swift */; };
+		6E08FB8B2316F9F600177026 /* WatchMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E08FB872316EF6000177026 /* WatchMessage.swift */; };
 		6E3B70B22313E24F00BEB6FF /* ApplicationData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E3B70B12313E24F00BEB6FF /* ApplicationData.swift */; };
 		6E3B70BA2313EF1000BEB6FF /* JSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E3B70B82313E99A00BEB6FF /* JSON.swift */; };
 		6E6000142121119400787DAA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E6000132121119400787DAA /* AppDelegate.swift */; };
@@ -452,6 +456,9 @@
 		6E08FB77231687A800177026 /* AnimatedButtonController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnimatedButtonController.swift; sourceTree = "<group>"; };
 		6E08FB7D231688BA00177026 /* ErrorAlert.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ErrorAlert.swift; sourceTree = "<group>"; };
 		6E08FB7F23168CEB00177026 /* ActivityInterface.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityInterface.swift; sourceTree = "<group>"; };
+		6E08FB822316E64D00177026 /* SessionController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionController.swift; sourceTree = "<group>"; };
+		6E08FB842316EF3D00177026 /* WatchController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchController.swift; sourceTree = "<group>"; };
+		6E08FB872316EF6000177026 /* WatchMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchMessage.swift; sourceTree = "<group>"; };
 		6E0F602F230DD05400B013AB /* UserNotification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserNotification.swift; sourceTree = "<group>"; };
 		6E3B70B12313E24F00BEB6FF /* ApplicationData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplicationData.swift; sourceTree = "<group>"; };
 		6E3B70B82313E99A00BEB6FF /* JSON.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSON.swift; sourceTree = "<group>"; };
@@ -662,6 +669,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		6E08FB862316EF4300177026 /* WatchKit */ = {
+			isa = PBXGroup;
+			children = (
+				6E08FB842316EF3D00177026 /* WatchController.swift */,
+				6E08FB872316EF6000177026 /* WatchMessage.swift */,
+			);
+			path = WatchKit;
+			sourceTree = "<group>";
+		};
 		6E6000072121119400787DAA = {
 			isa = PBXGroup;
 			children = (
@@ -714,6 +730,7 @@
 				6E994AA2230DFC180076DC1B /* Assets.xcassets */,
 				6E60001C2121119500787DAA /* LaunchScreen.storyboard */,
 				6E6000172121119400787DAA /* Main.storyboard */,
+				6E08FB862316EF4300177026 /* WatchKit */,
 				6E806BA7230F654600C6FF78 /* View */,
 				6E994AA8230DFC8E0076DC1B /* Controller */,
 				6E60001F2121119500787DAA /* Info.plist */,
@@ -963,6 +980,7 @@
 				6ED81FC72316618400B69520 /* Assets.xcassets */,
 				6ED81FC92316618400B69520 /* Info.plist */,
 				6ED81FC12316618100B69520 /* ExtensionDelegate.swift */,
+				6E08FB822316E64D00177026 /* SessionController.swift */,
 				6ED8206523166D6B00B69520 /* Controller */,
 				6ED8206423166D6000B69520 /* Model */,
 				6ED81FCA2316618400B69520 /* PushNotificationPayload.apns */,
@@ -1704,6 +1722,7 @@
 				6E05B6E722C9C159001218D9 /* KeysViewController.swift in Sources */,
 				6EC0412E230A226400357585 /* TabBarController.swift in Sources */,
 				6E6000142121119400787DAA /* AppDelegate.swift in Sources */,
+				6E08FB852316EF3D00177026 /* WatchController.swift in Sources */,
 				6E806B9A230F56B000C6FF78 /* Log.swift in Sources */,
 				6E994AC8230E011E0076DC1B /* NearbyLocksViewController.swift in Sources */,
 				6E806BB1230F6E8800C6FF78 /* R.generated.swift in Sources */,
@@ -1726,6 +1745,7 @@
 				6E994AFD230E657A0076DC1B /* Intent.swift in Sources */,
 				6E994AB6230DFDB10076DC1B /* Observable.swift in Sources */,
 				6E994AC5230DFDC60076DC1B /* NewKeyRecieveViewController.swift in Sources */,
+				6E08FB8B2316F9F600177026 /* WatchMessage.swift in Sources */,
 				6E806BAB230F67D900C6FF78 /* LogViewController.swift in Sources */,
 				6E994AC1230DFDC60076DC1B /* LockViewController.swift in Sources */,
 				6E994ABB230DFDB60076DC1B /* AdaptiveNavigation.swift in Sources */,
@@ -1856,10 +1876,12 @@
 				6ED820AF2316785500B69520 /* Store.swift in Sources */,
 				6ED820A4231677EF00B69520 /* JSON.swift in Sources */,
 				6ED820AE2316784D00B69520 /* Queue.swift in Sources */,
+				6E08FB832316E64D00177026 /* SessionController.swift in Sources */,
 				6ED820B12316787B00B69520 /* Log.swift in Sources */,
 				6ED820A72316780100B69520 /* FileManager.swift in Sources */,
 				6ED820A82316780900B69520 /* iCloud.swift in Sources */,
 				6ED820A0231677C000B69520 /* Image.swift in Sources */,
+				6E08FB8A2316F63700177026 /* WatchMessage.swift in Sources */,
 				6ED820A2231677E400B69520 /* AppGroup.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

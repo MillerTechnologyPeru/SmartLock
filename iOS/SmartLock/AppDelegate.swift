@@ -57,7 +57,7 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
             try RLockKit.validate()
         } catch {
             dump(error)
-            assertionFailure("Could not validate R.swift \(error)")
+            assertionFailure("Could not validate R.swift \(error.localizedDescription)")
         }
         #endif
         
@@ -65,6 +65,7 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
         LockManager.shared.log = { log("🔒 LockManager: " + $0) }
         BeaconController.shared.log = { log("📶 \(BeaconController.self): " + $0) }
         SpotlightController.shared.log = { log("🔦 \(SpotlightController.self): " + $0) }
+        WatchController.shared.log = { log("⌚️ \(WatchController.self): " + $0) }
         if #available(iOS 10.0, *) {
             UserNotificationCenter.shared.log = { log("📨 \(UserNotificationCenter.self): " + $0) }
         }
@@ -82,6 +83,11 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
                 mainQueue { self.handle(activity: activity) }
             }
         }
+        
+        // setup watch
+        WatchController.shared.activate()
+        WatchController.shared.applicationData = { Store.shared.applicationData }
+        WatchController.shared.keys = { Store.shared[key: $0] }
         
         // background fetch
         #if !targetEnvironment(macCatalyst)
