@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder.WatchKit.Storyboard" version="3.0" toolsVersion="14865.1" targetRuntime="watchKit" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="AgC-eL-Hgc">
+<document type="com.apple.InterfaceBuilder.WatchKit.Storyboard" version="3.0" toolsVersion="14865.1" targetRuntime="watchKit" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="Zjw-i6-u6T">
     <device id="watch38"/>
     <dependencies>
         <deployment identifier="watchOS"/>
@@ -45,46 +45,54 @@
             </objects>
             <point key="canvasLocation" x="468" y="345"/>
         </scene>
-        <!--Interface Controller-->
+        <!--Nearby-->
         <scene sceneID="lnH-w9-HPR">
             <objects>
-                <controller id="Zjw-i6-u6T"/>
+                <controller identifier="NearbyLocks" title="Nearby" id="Zjw-i6-u6T" customClass="InterfaceController" customModule="Watch_Extension">
+                    <items>
+                        <imageView width="1" height="1" alignment="left" hidden="YES" contentMode="center" id="dJE-Ho-7vY"/>
+                        <group width="1" alignment="left" layout="vertical" id="Sl5-q3-eLy">
+                            <items>
+                                <button width="1" alignment="left" title="Scan" id="8xj-4B-MZP">
+                                    <connections>
+                                        <action selector="scan:" destination="Zjw-i6-u6T" id="POO-mr-CkA"/>
+                                    </connections>
+                                </button>
+                                <table alignment="left" id="Jj8-yd-a2P">
+                                    <items>
+                                        <tableRow identifier="Lock" id="Nmb-JL-HB5" customClass="LockRowController" customModule="CerraduraWatch_Extension">
+                                            <group key="rootItem" width="1" alignment="left" spacing="5" id="tG3-7d-d1d">
+                                                <items>
+                                                    <imageView width="0.29999999999999999" height="0.90000000000000002" alignment="left" verticalAlignment="center" image="permissionBadgeAdmin" contentMode="scaleAspectFit" id="Rlb-ce-PGN"/>
+                                                    <label width="0.69999999999999996" alignment="left" verticalAlignment="center" text="My Lock" id="TBE-Rf-HgD"/>
+                                                </items>
+                                            </group>
+                                            <connections>
+                                                <outlet property="imageView" destination="Rlb-ce-PGN" id="G4h-ES-zYg"/>
+                                                <outlet property="label" destination="TBE-Rf-HgD" id="9Q3-9j-QXK"/>
+                                            </connections>
+                                        </tableRow>
+                                    </items>
+                                </table>
+                            </items>
+                        </group>
+                    </items>
+                    <connections>
+                        <outlet property="activityImageView" destination="dJE-Ho-7vY" id="SAn-Mw-uHr"/>
+                        <outlet property="contentGroup" destination="Sl5-q3-eLy" id="zxo-LH-aX5"/>
+                        <outlet property="scanButton" destination="8xj-4B-MZP" id="pFS-kY-js0"/>
+                        <outlet property="tableView" destination="Jj8-yd-a2P" id="fYp-tt-FEx"/>
+                    </connections>
+                </controller>
             </objects>
             <point key="canvasLocation" x="-177" y="18"/>
         </scene>
         <!--Keys-->
         <scene sceneID="GEV-15-dWS">
             <objects>
-                <controller title="Keys" id="ShR-W8-Ue9" customClass="KeysInterfaceController" customModule="CerraduraWatch_Extension">
-                    <items>
-                        <imageView width="1" height="1" alignment="left" hidden="YES" contentMode="center" id="dJE-Ho-7vY"/>
-                        <table alignment="left" id="Jj8-yd-a2P">
-                            <items>
-                                <tableRow identifier="Lock" id="Nmb-JL-HB5" customClass="LockRowController" customModule="CerraduraWatch_Extension">
-                                    <group key="rootItem" width="1" alignment="left" spacing="5" id="tG3-7d-d1d">
-                                        <items>
-                                            <imageView width="0.29999999999999999" height="0.90000000000000002" alignment="left" verticalAlignment="center" image="permissionBadgeAdmin" contentMode="scaleAspectFit" id="Rlb-ce-PGN"/>
-                                            <label width="0.69999999999999996" alignment="left" verticalAlignment="center" text="My Lock" id="TBE-Rf-HgD"/>
-                                        </items>
-                                        <connections>
-                                            <segue destination="V2r-of-aqL" kind="push" identifier="showLock" id="npJ-UG-SYY"/>
-                                        </connections>
-                                    </group>
-                                    <connections>
-                                        <outlet property="imageView" destination="Rlb-ce-PGN" id="G4h-ES-zYg"/>
-                                        <outlet property="label" destination="TBE-Rf-HgD" id="9Q3-9j-QXK"/>
-                                    </connections>
-                                </tableRow>
-                            </items>
-                        </table>
-                    </items>
-                    <connections>
-                        <outlet property="loadingImageView" destination="dJE-Ho-7vY" id="rbf-n0-SVj"/>
-                        <outlet property="tableView" destination="Jj8-yd-a2P" id="Zfd-yX-fF6"/>
-                    </connections>
-                </controller>
+                <controller title="Keys" id="ShR-W8-Ue9" customClass="KeysInterfaceController" customModule="CerraduraWatch_Extension"/>
             </objects>
-            <point key="canvasLocation" x="51" y="18"/>
+            <point key="canvasLocation" x="84" y="18"/>
         </scene>
         <!--Lock Name-->
         <scene sceneID="Rt3-iu-R39">

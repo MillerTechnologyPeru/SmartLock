@@ -15,9 +15,13 @@ final class InterfaceController: WKInterfaceController {
     
     // MARK: - IB Outlets
     
-    @IBOutlet weak var tableView: WKInterfaceTable!
+    @IBOutlet private(set) weak var tableView: WKInterfaceTable!
     
-    @IBOutlet weak var activityImageView: WKInterfaceImage?
+    @IBOutlet private(set) weak var activityImageView: WKInterfaceImage?
+    
+    @IBOutlet private(set) weak var contentGroup: WKInterfaceGroup!
+    
+    @IBOutlet private(set) weak var scanButton: WKInterfaceButton!
     
     // MARK: - Properties
     
@@ -87,6 +91,14 @@ final class InterfaceController: WKInterfaceController {
         super.didDeactivate()
     }
     
+    // MARK: - Actions
+    
+    @IBAction func scan(_ sender: NSObject) {
+        
+        WKInterfaceDevice.current().play(.start)
+        scan()
+    }
+    
     // MARK: - Methods
     
     private func scan() {
@@ -143,14 +155,15 @@ final class InterfaceController: WKInterfaceController {
             }
             rowController.imageView.setImage(image)
             rowController.label.setText(lock.cache.name)
-
         }
     }
     
     private func select(_ item: Item) {
         
         log("Selected lock \(item.identifier)")
-        performActivity( { try Store.shared.unlock(item.peripheral) })
+        performActivity({ try Store.shared.unlock(item.peripheral) }, completion: { (controller, _) in
+            WKInterfaceDevice.current().play(.success)
+        })
     }
     
     // MARK: - Segue
@@ -174,7 +187,7 @@ final class InterfaceController: WKInterfaceController {
 extension InterfaceController: ActivityInterface {
     
     var contentView: WKInterfaceObject {
-        return tableView
+        return contentGroup
     }
 }
 
