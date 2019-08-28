@@ -182,3 +182,59 @@ public extension SessionController {
         case invalidResponse
     }
 }
+
+// MARK: - Sync
+
+public extension Store {
+    
+    func syncApp(session: SessionController = .shared) {
+        
+        // activate session
+        async { [weak self] in
+            guard let self = self else { return }
+            do { try session.activate() }
+            catch { log("⚠️ Unable to activate session \(error)") }
+            do {
+                let newData = try session.requestApplicationData()
+                let oldApplicationData = self.applicationData
+                guard newData != oldApplicationData else {
+                    log("📱 No new data")
+                    return
+                }
+                #if DEBUG
+                print("📱 Recieved new application data")
+                dump(newData)
+                #endif
+                var importedKeys = 0
+                for key in newData.keys {
+                    if self[key: key.identifier] == nil {
+                        let keyData = try session.requestKeyData(for: key.identifier)
+                        self[key: key.identifier] = keyData
+                        importedKeys += 1
+                    }
+                }
+                if importedKeys > 0 {
+                    log("📱 Imported \(importedKeys) keys")
+                }
+                // write new data
+                self.applicationData = newData
+                log("📱 Updated application data")
+                // remove old keys
+                var removedKeys = 0
+                for oldKey in oldApplicationData.keys {
+                    // old key no longer exists
+                    if newData.keys.contains(oldKey) == false {
+                        // remove from keychain
+                        self[key: oldKey.identifier] = nil
+                        removedKeys += 1
+                    }
+                }
+                if removedKeys > 0 {
+                    log("📱 Removed \(removedKeys) old keys from keychain")
+                }
+            } catch {
+                log("⚠️ Unable to sync application data \(error)")
+            }
+        }
+    }
+}

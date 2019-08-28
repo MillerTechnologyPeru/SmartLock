@@ -8,7 +8,6 @@
 
 import Foundation
 import WatchKit
-import LockKit
 
 public protocol ActivityInterface: class {
     

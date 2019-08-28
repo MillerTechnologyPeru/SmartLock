@@ -95,7 +95,7 @@ final class InterfaceController: WKInterfaceController {
     
     @IBAction func scan(_ sender: NSObject) {
         
-        WKInterfaceDevice.current().play(.start)
+        WKInterfaceDevice.current().play(.click)
         scan()
     }
     
@@ -162,24 +162,6 @@ final class InterfaceController: WKInterfaceController {
         
         log("Selected lock \(item.identifier)")
         unlock(lock: item.identifier, peripheral: item.peripheral)
-    }
-    
-    private func unlock(lock identifier: UUID, peripheral: LockPeripheral<NativeCentral>) {
-        
-        let needsSync: Bool
-        if let lockCache = Store.shared[lock: identifier] {
-            needsSync = Store.shared[key: lockCache.key.identifier] == nil
-        } else {
-            needsSync = true
-        }
-        if needsSync {
-            Store.shared.syncApp()
-        }
-        performActivity({
-            try Store.shared.unlock(peripheral)
-        }, completion: { (controller, _) in
-            WKInterfaceDevice.current().play(.success)
-        })
     }
     
     // MARK: - Segue

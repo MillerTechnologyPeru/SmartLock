@@ -20,10 +20,6 @@ final class ComplicationController: NSObject, CLKComplicationDataSource {
         log("⌚️ Initialized \(type(of: self))")
     }
     
-    // MARK: - Properties
-    
-    let blueTintColor = UIColor(red: CGFloat(0.278), green: CGFloat(0.506), blue: CGFloat(0.976), alpha: CGFloat(1.000))
-    
     // MARK: - Timeline Configuration
     
     func getSupportedTimeTravelDirections(for complication: CLKComplication, withHandler handler: @escaping (CLKComplicationTimeTravelDirections) -> Void) {
@@ -64,8 +60,7 @@ final class ComplicationController: NSObject, CLKComplicationDataSource {
     
     func getPlaceholderTemplate(for complication: CLKComplication, withHandler handler: @escaping (CLKComplicationTemplate?) -> ()) {
         // This method will be called once per supported complication, and the results will be cached
-        
-        print("Providing placeholder template for complication")
+        log("⌚️ Providing placeholder template for complication")
         let template = self.template(for: complication)
         handler(template)
     }
@@ -83,14 +78,16 @@ final class ComplicationController: NSObject, CLKComplicationDataSource {
         
         switch complication.family {
         case .modularSmall:
-            let image = #imageLiteral(resourceName: "modularSmallAdmin")
+            let image = StyleKit.imageOfPermissionBadgeAnytime(imageSize: CGSize(width: 64, height: 64))
             let complicationTemplate = CLKComplicationTemplateModularSmallSimpleImage()
             let imageProvider = CLKImageProvider(onePieceImage: image)
-            imageProvider.tintColor = blueTintColor
+            imageProvider.tintColor = StyleKit.wirelessBlue
             complicationTemplate.imageProvider = imageProvider
             return complicationTemplate
         default:
-            fatalError("Complication family \(complication.family.rawValue) not supported")
+            log("Complication family \(complication.family.rawValue) not supported")
+            let complicationTemplate = CLKComplicationTemplate()
+            return complicationTemplate
         }
     }
 }
