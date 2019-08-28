@@ -212,6 +212,7 @@ final class TodayViewController: UIViewController, NCWidgetProviding {
             cell.activityIndicatorView.isHidden = true
             cell.permissionView.isHidden = true
             cell.selectionStyle = .none
+            cell.accessoryType = .none
         case let .lock(_, cache):
             let permission = cache.key.permission
             cell.lockTitleLabel.text = cache.name
@@ -220,6 +221,7 @@ final class TodayViewController: UIViewController, NCWidgetProviding {
             cell.activityIndicatorView.isHidden = true
             cell.permissionView.isHidden = false
             cell.selectionStyle = .default
+            cell.accessoryType = .detailButton
         }
     }
     
@@ -278,6 +280,15 @@ extension TodayViewController: UITableViewDelegate {
         defer { tableView.deselectRow(at: indexPath, animated: true) }
         let item = self[indexPath]
         select(item)
+    }
+    
+    func tableView(_ tableView: UITableView, accessoryButtonTappedForRowWith indexPath: IndexPath) {
+        
+        let item = self[indexPath]
+        guard case let .lock(identifier, _) = item
+            else { assertionFailure(); return }
+        let url = LockURL.unlock(lock: identifier)
+        self.extensionContext?.open(url.rawValue, completionHandler: nil)
     }
 }
 
