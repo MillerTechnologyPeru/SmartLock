@@ -21,6 +21,7 @@ public final class Store {
     
     private init() {
         
+        // observe iBeacons
         #if !targetEnvironment(macCatalyst)
         beaconController.foundLock = { [unowned self] (lock, beacon) in
             self.lockBeaconFound(lock: lock, beacon: beacon)
@@ -29,7 +30,12 @@ public final class Store {
             self.lockBeaconExited(lock: lock)
         }
         #endif
+        
+        // observe local cache changes
         locks.observe { [unowned self] _ in self.lockCacheChanged() }
+        
+        // observe external cloud changes
+        cloud.didChange = { [unowned self] in self.cloudDidChangeExternally() }
         
         // read from filesystem
         loadCache()

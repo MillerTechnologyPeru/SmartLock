@@ -36,12 +36,33 @@ public final class CloudStore {
     
     public static let shared = CloudStore()
     
-    private init() { }
+    deinit {
+        
+        if let observer = keyValueStoreObserver {
+            NotificationCenter.default.removeObserver(observer)
+        }
+    }
+    
+    private init() {
+        
+        // observe changes
+        keyValueStoreObserver = NotificationCenter.default.addObserver(
+            forName: NSUbiquitousKeyValueStore.didChangeExternallyNotification,
+            object: self.keyValueStore,
+            queue: nil,
+            using: { [weak self] in self?.didChangeExternally($0) })
+    }
     
     // MARK: - Properties
     
+    public var didChange: (() -> ())?
+    
     private lazy var keychain = Keychain(service: .lockCloud, accessGroup: .lock).synchronizable(true)
     
+    private lazy var keyValueStore: NSUbiquitousKeyValueStore = .default
+    
+    private var keyValueStoreObserver: NSObjectProtocol?
+        
     // MARK: - Methods
     
     public func upload(applicationData: ApplicationData,
@@ -57,6 +78,9 @@ public final class CloudStore {
         // upload configuration file
         let data = applicationData.encodeJSON()
         try keychain.set(data, key: .applicationData)
+        
+        // inform via key value store
+        didUpload(applicationData: applicationData)
     }
     
     public func download() throws -> (applicationData: ApplicationData, keys: [UUID: KeyData])? {
@@ -76,6 +100,25 @@ public final class CloudStore {
         
         return (applicationData, keys)
     }
+    
+    private func didUpload(applicationData: ApplicationData) {
+        
+        // inform iCloud Key Value Store
+        keyValueStore.set(applicationData.updated as NSDate, forKey: UbiquitousKey.updated.rawValue)
+        keyValueStore.synchronize()
+    }
+    
+    public func lastUpdated() -> Date? {
+        
+        keyValueStore.synchronize()
+        return keyValueStore.object(forKey: UbiquitousKey.updated.rawValue) as? Date
+    }
+    
+    private func didChangeExternally(_ notification: Notification) {
+        
+        keyValueStore.synchronize()
+        didChange?()
+    }
 }
 
 public extension CloudStore {
@@ -90,7 +133,7 @@ public extension CloudStore {
 
 private extension CloudStore {
     
-    enum Key: String {
+    enum KeyChainKey: String {
         
         case applicationData = "com.colemancda.Lock.ApplicationData"
     }
@@ -98,12 +141,20 @@ private extension CloudStore {
 
 private extension Keychain {
     
-    func set(_ value: Data, key: CloudStore.Key) throws {
+    func set(_ value: Data, key: CloudStore.KeyChainKey) throws {
         try set(value, key: key.rawValue)
     }
     
-    func getData(_ key: CloudStore.Key) throws -> Data? {
+    func getData(_ key: CloudStore.KeyChainKey) throws -> Data? {
         return try getData(key.rawValue)
+    }
+}
+
+private extension CloudStore {
+    
+    enum UbiquitousKey: String {
+        
+        case updated
     }
 }
 
@@ -139,6 +190,33 @@ internal extension ApplicationData {
 }
 
 public extension Store {
+    
+    func cloudDidChangeExternally(retry: Bool = false) {
+        
+        if retry == false {
+            log("☁️ iCloud changed externally")
+        }
+        
+        DispatchQueue.cloud.async { [weak self] in
+            guard let self = self else { return }
+            var conflicts = false
+            do {
+                try self.syncCloud(conflicts: { _ in
+                    conflicts = true
+                    return nil
+                })
+            }
+            catch { log("⚠️ Could not sync iCloud") }
+            let lastUpdatedLocally = self.applicationData.updated
+            // sync again until data is no longer stale
+            if conflicts == false,
+                retry == false,
+                let lastUpdatedCloud = self.cloud.lastUpdated(),
+                lastUpdatedLocally < lastUpdatedCloud {
+                self.cloudDidChangeExternally(retry: true)
+            }
+        }
+    }
     
     func syncCloud(conflicts: (ApplicationData) -> Bool? = { _ in return nil }) throws {
         
