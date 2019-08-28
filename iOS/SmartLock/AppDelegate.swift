@@ -79,12 +79,14 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
             }
         }
         
+        // background fetch
+        application.setMinimumBackgroundFetchInterval(60 * 10)
+        
         // handle url
         if let url = launchOptions?[.url] as? URL {
             guard open(url: url)
                 else { return false }
         }
-        
         
         return true
     }
@@ -101,7 +103,6 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
         // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
         
         let bundle = self.bundle
-        
         log("\(bundle.symbol) Did enter background")
         logBackgroundTimeRemaining()
         
@@ -109,7 +110,7 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
         // update beacons
         BeaconController.shared.scanBeacons()
         // scan in background
-        let beaconTask = UIApplication.shared.beginBackgroundTask(withName: "Beacons", expirationHandler: {
+        let beaconTask = UIApplication.shared.beginBackgroundTask(withName: "BackgoundUpdate", expirationHandler: {
             log("\(bundle.symbol) Background task expired")
         })
         async { [unowned self] in
@@ -126,7 +127,8 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
                 do { try Store.shared.syncCloud() }
                 catch { log("⚠️ Unable to sync: \(error)") }
                 mainQueue { self.logBackgroundTimeRemaining() }
-                DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                    log("\(bundle.symbol) Background task ended")
                     UIApplication.shared.endBackgroundTask(beaconTask)
                 }
             }
@@ -184,6 +186,63 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, handleOpen url: URL) -> Bool {
         
         return open(url: url)
+    }
+    
+    func application(_ application: UIApplication, performFetchWithCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
+        
+        let bundle = self.bundle
+        log("\(bundle.symbol) Perform background fetch")
+        logBackgroundTimeRemaining()
+        
+        #if !targetEnvironment(macCatalyst)
+        BeaconController.shared.scanBeacons()
+        #endif
+        
+        // 30 sec max background fetch
+        var result: UIBackgroundFetchResult = .noData
+        async { [unowned self] in
+            let applicationData = Store.shared.applicationData
+            let information = Array(Store.shared.lockInformation.value.values)
+            do {
+                // scan for locks
+                try Store.shared.scan(duration: 5.0)
+                // make sure each stored lock is visible
+                let locks = Store.shared.locks.value
+                    .lazy
+                    .sorted(by: { $0.value.key.created < $1.value.key.created })
+                    .lazy
+                    .map { $0.key }
+                    .lazy
+                    .filter { Store.shared.device(for: $0) == nil }
+                    .prefix(10)
+                // scan for locks not found
+                for lock in locks {
+                    let _ = try Store.shared.device(for: lock, scanDuration: 1.0)
+                }
+            } catch {
+                log("⚠️ Unable to scan: \(error)")
+                result = .failed
+            }
+            // attempt to sync with iCloud
+            DispatchQueue.cloud.async {
+                do { try Store.shared.syncCloud() }
+                catch {
+                    log("⚠️ Unable to sync: \(error)")
+                    result = .failed
+                }
+                if result != .failed {
+                    if applicationData == Store.shared.applicationData,
+                        information == Array(Store.shared.lockInformation.value.values) {
+                        result = .noData
+                    } else {
+                        result = .newData
+                    }
+                }
+                mainQueue { self.logBackgroundTimeRemaining() }
+                log("\(bundle.symbol) background fetch ended")
+                completionHandler(result)
+            }
+        }
     }
     
     func application(_ application: UIApplication, willContinueUserActivityWithType userActivityType: String) -> Bool {
@@ -275,7 +334,7 @@ private extension AppDelegate {
         let backgroundTimeRemaining = UIApplication.shared.backgroundTimeRemaining
         let start = Date()
         let timeString = type(of: self).intervalFormatter.string(from: start, to: start + backgroundTimeRemaining)
-        log("\(bundle.symbol) Background time remaining: \(timeString)s")
+        log("\(bundle.symbol) Background time remaining: \(timeString)")
     }
 }
 
