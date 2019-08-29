@@ -22,12 +22,13 @@ public final class SessionController: NSObject {
     
     internal let session: WCSession = .default
 
-    @available(iOS 9.3, *)
     public var activationState: WCSessionActivationState {
         return session.activationState
     }
     
     public var isReachable: Bool {
+        guard session.activationState == .activated
+            else { return false }
         return session.isReachable
     }
     
@@ -195,10 +196,12 @@ public extension SessionController {
 
 public extension Store {
     
-    func syncApp(session: SessionController = .shared) {
+    func syncApp(session: SessionController = .shared,
+                 completion: (() -> ())? = nil) {
         
         // activate session
         async { [weak self] in
+            defer { mainQueue { completion?() } }
             guard let self = self else { return }
             do { try session.activate() }
             catch { log("⚠️ Unable to activate session \(error)") }

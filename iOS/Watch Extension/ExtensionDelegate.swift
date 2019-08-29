@@ -24,9 +24,6 @@ final class ExtensionDelegate: NSObject, WKExtensionDelegate {
         // setup logging
         Store.shared.lockManager.log = { log("🔒 LockManager: " + $0) }
         SessionController.shared.log = { log("📱 SessionController: " + $0) }
-        
-        // activate session and sync with phone
-        Store.shared.syncApp()
     }
 
     func applicationDidBecomeActive() {
@@ -51,21 +48,21 @@ final class ExtensionDelegate: NSObject, WKExtensionDelegate {
     func handle(_ backgroundTasks: Set<WKRefreshBackgroundTask>) {
         // Sent when the system needs to launch the application in the background to process tasks. Tasks arrive in a set, so loop through and process each one.
         log("⌚️ Handle background tasks")
-        
-        refresh()
-        
+                
         for task in backgroundTasks {
             // Use a switch statement to check the task type
             switch task {
             case let backgroundTask as WKApplicationRefreshBackgroundTask:
                 // Be sure to complete the background task once you’re done.
-                backgroundTask.setTaskCompleted(refreshSnapshot: false)
+                refresh { backgroundTask.setTaskCompleted(refreshSnapshot: true) }
             case let snapshotTask as WKSnapshotRefreshBackgroundTask:
                 // Snapshot tasks have a unique completion call, make sure to set your expiration date
-                snapshotTask.setTaskCompleted(restoredDefaultState: true, estimatedSnapshotExpiration: Date.distantFuture, userInfo: nil)
+                refresh {
+                    snapshotTask.setTaskCompleted(restoredDefaultState: true, estimatedSnapshotExpiration: Date() + 60, userInfo: nil)
+                }
             case let connectivityTask as WKWatchConnectivityRefreshBackgroundTask:
                 // Be sure to complete the connectivity task once you’re done.
-                connectivityTask.setTaskCompleted(refreshSnapshot: false)
+                refresh { connectivityTask.setTaskCompleted(refreshSnapshot: true) }
             case let urlSessionTask as WKURLSessionRefreshBackgroundTask:
                 // Be sure to complete the URL session task once you’re done.
                 urlSessionTask.setTaskCompleted(refreshSnapshot: false)
@@ -77,7 +74,7 @@ final class ExtensionDelegate: NSObject, WKExtensionDelegate {
                 //intentDidRunTask.setTaskCompleted(refreshSnapshot: false)
             default:
                 // make sure to complete unhandled task types
-                task.setTaskCompleted(refreshSnapshot: false)
+                refresh { task.setTaskCompleted(refreshSnapshot: true) }
             }
         }
     }
@@ -85,16 +82,25 @@ final class ExtensionDelegate: NSObject, WKExtensionDelegate {
 
 internal extension ExtensionDelegate {
     
-    func refresh() {
+    func refresh(completion: (() -> ())? = nil) {
         
         // sync with iPhone
         if SessionController.shared.activationState == .activated,
             SessionController.shared.isReachable {
-            Store.shared.syncApp()
+            Store.shared.syncApp(completion: { [unowned self] in
+                self.scan(completion: completion)
+            })
+        } else {
+            self.scan(completion: completion)
         }
+    }
+    
+    /// Scan for nearby locks in the background.
+    func scan(completion: (() -> ())? = nil) {
         
         // scan for locks
         async {
+            defer { mainQueue { completion?() } }
             do {
                 // scan for locks
                 try Store.shared.scan(duration: 1.0)
@@ -103,18 +109,13 @@ internal extension ExtensionDelegate {
                     let _ = try Store.shared.device(for: lock, scanDuration: 1.0)
                 }
             } catch { log("⚠️ Unable to scan: \(error)") }
-            // attempt to sync with iCloud
-            /*
-            DispatchQueue.cloud.async {
-                do { try Store.shared.syncCloud(conflicts: { _ in return true }) }
-                catch { log("⚠️ Unable to sync: \(error)") }
-            }*/
         }
     }
 }
 
 internal extension WKRefreshBackgroundTask {
     
+    /// Marks the task as complete and indicates whether the system should take a new snapshot of the app.
     func setTaskCompleted(refreshSnapshot: Bool) {
         if #available(watchOSApplicationExtension 4.0, *) {
             setTaskCompletedWithSnapshot(refreshSnapshot)

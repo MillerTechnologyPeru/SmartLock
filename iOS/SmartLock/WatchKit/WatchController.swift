@@ -131,13 +131,14 @@ extension WatchController: WCSessionDelegate {
     @objc
     func session(_ session: WCSession, activationDidCompleteWith activationState: WCSessionActivationState, error: Swift.Error?) {
         
-        log?("Activation did complete with state: \(activationState.debugDescription) \(error?.localizedDescription ?? "")")
-        
-        #if DEBUG
         if let error = error {
+            log?("Activation did not complete: " + error.localizedDescription)
+            #if DEBUG
             dump(error)
+            #endif
+        } else {
+            log?(activationState.debugDescription)
         }
-        #endif
         
         if let isPaired = WatchController.shared.isPaired, isPaired {
             log?("Watch is paired")
