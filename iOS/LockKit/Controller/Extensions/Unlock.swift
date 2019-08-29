@@ -47,7 +47,7 @@ public extension UIViewController {
             else { return}
         
         if #available(iOS 12, iOSApplicationExtension 12.0, *) {
-            let intent = UnlockIntent(lock: lock, name: lockCache.name)
+            let intent = UnlockIntent(identifier: lock, cache: lockCache)
             let interaction = INInteraction(intent: intent, response: nil)
             interaction.donate { error in
                 if let error = error {

@@ -38,7 +38,7 @@
 					<key>INIntentParameterCombinationSupportsBackgroundExecution</key>
 					<true/>
 					<key>INIntentParameterCombinationTitle</key>
-					<string>Unlock "${lock}"</string>
+					<string>Unlock `${lock}`</string>
 					<key>INIntentParameterCombinationTitleID</key>
 					<string>O5ezH4</string>
 					<key>INIntentParameterCombinationUpdatesLinked</key>
@@ -56,7 +56,7 @@
 					<key>INIntentParameterCombinationSupportsBackgroundExecution</key>
 					<true/>
 					<key>INIntentParameterCombinationTitle</key>
-					<string>Unlock "${lock}"</string>
+					<string>Unlock `${lock}`</string>
 					<key>INIntentParameterCombinationTitleID</key>
 					<string>dAVo2n</string>
 				</dict>
