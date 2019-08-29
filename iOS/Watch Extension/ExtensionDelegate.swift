@@ -87,7 +87,9 @@ internal extension ExtensionDelegate {
     
     func refresh() {
         
-        if SessionController.shared.activationState == .activated, SessionController.shared.isReachable {
+        // sync with iPhone
+        if SessionController.shared.activationState == .activated,
+            SessionController.shared.isReachable {
             Store.shared.syncApp()
         }
         
@@ -95,17 +97,18 @@ internal extension ExtensionDelegate {
         async {
             do {
                 // scan for locks
-                try Store.shared.scan(duration: 3.0)
+                try Store.shared.scan(duration: 1.0)
                 // make sure each stored lock is visible
                 for lock in Store.shared.locks.value.keys {
                     let _ = try Store.shared.device(for: lock, scanDuration: 1.0)
                 }
             } catch { log("⚠️ Unable to scan: \(error)") }
             // attempt to sync with iCloud
+            /*
             DispatchQueue.cloud.async {
                 do { try Store.shared.syncCloud(conflicts: { _ in return true }) }
                 catch { log("⚠️ Unable to sync: \(error)") }
-            }
+            }*/
         }
     }
 }

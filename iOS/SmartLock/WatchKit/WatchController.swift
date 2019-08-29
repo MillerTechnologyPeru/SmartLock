@@ -25,6 +25,11 @@ final class WatchController: NSObject {
     
     private let session: WCSession = .default
     
+    /// Returns a Boolean value indicating whether the current iOS device is able to use a session object.
+    static var isSupported: Bool {
+        return WCSession.isSupported()
+    }
+    
     @available(iOS 9.3, *)
     var activationState: WCSessionActivationState {
         return session.activationState
@@ -124,6 +129,10 @@ extension WatchController: WCSessionDelegate {
         let response = self.response(for: message)
         log?("Respond with \(response)")
         let responseMessage = WatchMessage.response(response).toMessage()
+        guard session.isReachable else {
+            log?("Session not reachable, will not respond")
+            return
+        }
         session.sendMessage(responseMessage, replyHandler: { [weak self] (reply) in
             self?.log?("Reply: \(reply)")
         }, errorHandler: { [weak self] (error) in

@@ -85,18 +85,18 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
         }
         
         // setup watch
-        WatchController.shared.activate()
-        WatchController.shared.applicationData = { Store.shared.applicationData }
-        WatchController.shared.keys = { Store.shared[key: $0] }
+        if WatchController.isSupported {
+            WatchController.shared.activate()
+            WatchController.shared.applicationData = { Store.shared.applicationData }
+            WatchController.shared.keys = { Store.shared[key: $0] }
+        }
         
-        // background fetch
-        #if !targetEnvironment(macCatalyst)
-        application.setMinimumBackgroundFetchInterval(60 * 10)
-        #endif
-        
-        // scan periodically in macOS
         #if targetEnvironment(macCatalyst)
+        // scan periodically in macOS
         setupBackgroundUpdates()
+        #else
+        // background fetch in iOS
+        application.setMinimumBackgroundFetchInterval(60 * 10)
         #endif
         
         // handle url

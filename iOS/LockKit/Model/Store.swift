@@ -71,9 +71,9 @@ public final class Store {
     
     public lazy var lockManager: LockManager = .shared
     
+    #if os(iOS)
     public lazy var cloud: CloudStore = .shared
     
-    #if os(iOS)
     public lazy var beaconController: BeaconController = .shared
     
     public lazy var spotlight: SpotlightController = .shared
@@ -170,11 +170,12 @@ public final class Store {
         #if os(iOS)
         monitorBeacons()
         updateSpotlight()
-        #endif
         updateCloud()
+        #endif
     }
     
     #if os(iOS)
+    
     private func monitorBeacons() {
         
         // remove old beacons
@@ -196,20 +197,15 @@ public final class Store {
         
         spotlight.update(locks: locks.value)
     }
-    #endif
     
     private func updateCloud() {
         
         DispatchQueue.cloud.async { [weak self] in
-            do {
-                //try self?.uploadCloud()
-                try self?.syncCloud()
-            }
+            do { try self?.syncCloud() }
             catch { log("⚠️ Unable to sync iCloud: \(error)") }
         }
     }
     
-    #if os(iOS)
     private func lockBeaconFound(lock: UUID, beacon: CLBeacon) {
         
         async { [weak self] in
@@ -243,6 +239,7 @@ public final class Store {
             }
         }
     }
+    
     #endif
 }
 

@@ -143,7 +143,6 @@
 		6ED820A5231677F800B69520 /* Bundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E994AC9230E01C90076DC1B /* Bundle.swift */; };
 		6ED820A6231677FE00B69520 /* DeviceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60004A212113DF00787DAA /* DeviceManager.swift */; };
 		6ED820A72316780100B69520 /* FileManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E806B97230F520400C6FF78 /* FileManager.swift */; };
-		6ED820A82316780900B69520 /* iCloud.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EB59D602313184A00D5EFA7 /* iCloud.swift */; };
 		6ED820A92316781000B69520 /* Intent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E994AFC230E657A0076DC1B /* Intent.swift */; };
 		6ED820AA2316782B00B69520 /* Keychain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E806B93230F4F4700C6FF78 /* Keychain.swift */; };
 		6ED820AB2316783500B69520 /* Observable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EA3D128212180C000BC50D8 /* Observable.swift */; };
@@ -1883,7 +1882,6 @@
 				6ED820B12316787B00B69520 /* Log.swift in Sources */,
 				6E08FB9523171F9300177026 /* AnimatedButtonController.swift in Sources */,
 				6ED820A72316780100B69520 /* FileManager.swift in Sources */,
-				6ED820A82316780900B69520 /* iCloud.swift in Sources */,
 				6ED820A0231677C000B69520 /* Image.swift in Sources */,
 				6E08FB8A2316F63700177026 /* WatchMessage.swift in Sources */,
 				6ED820A2231677E400B69520 /* AppGroup.swift in Sources */,

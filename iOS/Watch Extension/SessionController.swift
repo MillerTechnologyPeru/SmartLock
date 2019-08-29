@@ -79,7 +79,14 @@ public final class SessionController: NSObject {
     
     private func request(_ request: WatchMessage.Request) throws -> WatchMessage.Response {
         
+        // activate if not already activated
+        try activate()
+        
+        guard session.isReachable
+            else { throw Error.notReachable }
+                
         log?("Will request \(request)")
+        
         let requestMessage = WatchMessage.request(request).toMessage()
         
         let semaphore = DispatchSemaphore(value: 0)
@@ -138,9 +145,7 @@ public final class SessionController: NSObject {
 
 // MARK: - WCSessionDelegate
 
-@objc
 extension SessionController: WCSessionDelegate {
-    
     
     @objc @available(iOS 9.3, *)
     public func session(_ session: WCSession, activationDidCompleteWith activationState: WCSessionActivationState, error: Swift.Error?) {
