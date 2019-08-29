@@ -37,7 +37,10 @@ public final class SessionController: NSObject {
     
     // MARK: - Mehods
     
+    /// Activates the session asynchronously.
     public func activate() throws {
+        
+        assert(Thread.isMainThread == false, "Do not call from main thread")
         
         guard session.activationState != .activated
             else { return }

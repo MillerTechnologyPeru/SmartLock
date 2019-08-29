@@ -23,6 +23,7 @@ final class WatchController: NSObject {
     
     var keys: ((UUID) -> (KeyData?))?
     
+    /// The object that initiates communication between a WatchKit extension and its companion iOS app.
     private let session: WCSession = .default
     
     /// Returns a Boolean value indicating whether the current iOS device is able to use a session object.
@@ -30,18 +31,47 @@ final class WatchController: NSObject {
         return WCSession.isSupported()
     }
     
+    /// The current activation state of the session.
     @available(iOS 9.3, *)
     var activationState: WCSessionActivationState {
         return session.activationState
     }
     
-    var isReachable: Bool {
+    /// A Boolean value indicating whether the counterpart app is available for live messaging.
+    @available(iOS 9.3, *)
+    var isReachable: Bool? {
+        guard session.activationState == .activated
+            else { return nil }
         return session.isReachable
+    }
+    
+    /// A Boolean value indicating whether the Watch app is installed on the currently paired and active Apple Watch.
+    @available(iOS 9.3, *)
+    var isWatchAppInstalled: Bool? {
+        guard session.activationState == .activated
+            else { return nil }
+        return session.isWatchAppInstalled
+    }
+    
+    /// A Boolean indicating whether the current iPhone is paired to an Apple Watch.
+    @available(iOS 9.3, *)
+    var isPaired: Bool? {
+        guard session.activationState == .activated
+            else { return nil }
+        return session.isPaired
     }
     
     // MARK: - Methods
     
+    /// Activates the session asynchronously.
     func activate() {
+        
+        if #available(iOS 9.3, *) {
+            guard session.activationState != .activated
+                else { return }
+        }
+        
+        log?("Request session activation")
         
         session.delegate = self
         session.activate()
@@ -101,13 +131,24 @@ extension WatchController: WCSessionDelegate {
     @objc
     func session(_ session: WCSession, activationDidCompleteWith activationState: WCSessionActivationState, error: Swift.Error?) {
         
-        log?("Activation did complete with state: \(activationState) \(error?.localizedDescription ?? "")")
+        log?("Activation did complete with state: \(activationState.debugDescription) \(error?.localizedDescription ?? "")")
         
         #if DEBUG
         if let error = error {
             dump(error)
         }
         #endif
+        
+        if let isPaired = WatchController.shared.isPaired, isPaired {
+            log?("Watch is paired")
+            if let isWatchAppInstalled = WatchController.shared.isWatchAppInstalled {
+                if isWatchAppInstalled {
+                    log?("Watch app is installed")
+                } else {
+                    log?("Watch app is not installed")
+                }
+            }
+        }
     }
     
     @objc(sessionReachabilityDidChange:)
@@ -138,5 +179,23 @@ extension WatchController: WCSessionDelegate {
         }, errorHandler: { [weak self] (error) in
             self?.log?("Unable to respond: \(error)")
         })
+    }
+}
+
+@available(iOS 9.3, *)
+private extension WCSessionActivationState {
+    
+    var debugDescription: String {
+        
+        switch self {
+        case .notActivated:
+            return "Not Activated"
+        case .inactive:
+            return "Inactive"
+        case .activated:
+             return "Activated"
+        @unknown default:
+            return "Activation State \(rawValue)"
+        }
     }
 }
