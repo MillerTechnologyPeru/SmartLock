@@ -38,7 +38,7 @@ public final class SessionController: NSObject {
     
     // MARK: - Mehods
     
-    /// Activates the session asynchronously.
+    /// Activates the session synchronously.
     public func activate() throws {
         
         assert(Thread.isMainThread == false, "Do not call from main thread")
@@ -154,13 +154,17 @@ extension SessionController: WCSessionDelegate {
     @objc @available(iOS 9.3, *)
     public func session(_ session: WCSession, activationDidCompleteWith activationState: WCSessionActivationState, error: Swift.Error?) {
         
-        log?("Activation did complete with state: \(activationState) \(error?.localizedDescription ?? "")")
-        
-        guard activationState == .activated && session.isReachable else {
-            let error: Swift.Error = error ?? Error.notReachable
-            stopWaiting(error)
-            return
+        if let error = error {
+            log?("Activation did not complete: " + error.localizedDescription)
+            #if DEBUG
+            dump(error)
+            #endif
+        } else {
+            log?(activationState.debugDescription)
         }
+        
+        log?("Session reachable: \(isReachable)")
+        
         stopWaiting(error)
     }
     
@@ -189,6 +193,23 @@ public extension SessionController {
         case notActivated
         case errorResponse(String)
         case invalidResponse
+    }
+}
+
+private extension WCSessionActivationState {
+    
+    var debugDescription: String {
+        
+        switch self {
+        case .notActivated:
+            return "Not Activated"
+        case .inactive:
+            return "Inactive"
+        case .activated:
+             return "Activated"
+        @unknown default:
+            return "Activation State \(rawValue)"
+        }
     }
 }
 

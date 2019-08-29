@@ -113,6 +113,11 @@ final class InterfaceController: WKInterfaceController {
         
         let scanDuration = self.scanDuration
         
+        // sync with app if nearby
+        if SessionController.shared.isReachable {
+            Store.shared.syncApp()
+        }
+        
         // scan
         performActivity({
             try Store.shared.scan(duration: scanDuration)

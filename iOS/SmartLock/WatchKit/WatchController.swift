@@ -145,6 +145,11 @@ extension WatchController: WCSessionDelegate {
             if let isWatchAppInstalled = WatchController.shared.isWatchAppInstalled {
                 if isWatchAppInstalled {
                     log?("Watch app is installed")
+                    if let isReachable = WatchController.shared.isReachable, isReachable {
+                        log?("Watch app is reachable")
+                    } else {
+                        log?("Watch app is not reachable")
+                    }
                 } else {
                     log?("Watch app is not installed")
                 }
