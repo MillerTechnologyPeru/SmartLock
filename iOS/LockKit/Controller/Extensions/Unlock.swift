@@ -43,8 +43,10 @@ public extension UIViewController {
     /// - Note: Prior to iOS 12 this method sets the current user activity.
     func donateUnlockIntent(for lock: UUID) {
         
-        if #available(iOS 12, iOSApplicationExtension 12.0, *),
-            let lockCache = Store.shared[lock: lock] {
+        guard let lockCache = Store.shared[lock: lock]
+            else { return}
+        
+        if #available(iOS 12, iOSApplicationExtension 12.0, *) {
             let intent = UnlockIntent(lock: lock, name: lockCache.name)
             let interaction = INInteraction(intent: intent, response: nil)
             interaction.donate { error in

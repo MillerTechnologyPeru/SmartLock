@@ -15,6 +15,14 @@ public extension UnlockIntent {
     convenience init(lock identifier: UUID, name: String) {
         
         self.init()
-        self.lock = INObject(identifier: identifier.uuidString, display: name)
+        self.lock = IntentLock(identifier: identifier, name: name)
+    }
+}
+
+@available(iOS 12, iOSApplicationExtension 12.0, watchOS 5.0, *)
+public extension IntentLock {
+    
+    convenience init(identifier: UUID, name: String) {
+        self.init(identifier: identifier.uuidString, display: name, pronunciationHint: name)
     }
 }

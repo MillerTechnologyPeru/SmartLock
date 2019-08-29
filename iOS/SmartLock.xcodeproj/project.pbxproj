@@ -1399,7 +1399,7 @@
 				};
 			};
 			buildConfigurationList = 6E60000B2121119400787DAA /* Build configuration list for PBXProject "SmartLock" */;
-			compatibilityVersion = "Xcode 9.3";
+			compatibilityVersion = "Xcode 11.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (

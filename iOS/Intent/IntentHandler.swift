@@ -30,17 +30,16 @@ final class IntentHandler: INExtension {
         // This is the default implementation.  If you want different objects to handle different intents,
         // you can override this and return the handler you want for that particular intent.
         
+        assert(Thread.isMainThread == false)
         DispatchQueue.main.sync {
-            
             let _  = IntentHandler.didLaunch
             LockManager.shared.log = { log("🔒 LockManager: " + $0) }
             #if os(iOS)
             BeaconController.shared.log = { log("📶 \(BeaconController.self): " + $0) }
             #endif
+            // load updated lock information
+            Store.shared.loadCache()
         }
-        
-        // load updated lock information
-        Store.shared.loadCache()
         
         if #available(watchOSApplicationExtension 5.0, *) {
             return UnlockIntentHandler()
@@ -55,11 +54,76 @@ final class IntentHandler: INExtension {
 @available(watchOSApplicationExtension 5.0, *)
 final class UnlockIntentHandler: NSObject, UnlockIntentHandling {
     
+    @available(iOSApplicationExtension 13.0, watchOSApplicationExtension 6.0, *)
+    func provideLockOptions(for intent: UnlockIntent, with completion: @escaping ([IntentLock]?, Error?) -> Void) {
+        
+        async {
+            // load updated lock information
+            Store.shared.loadCache()
+            
+            // locks
+            let intentLocks = Store.shared.locks.value.map { IntentLock(identifier: $0, name: $1.name) }
+            completion(intentLocks, nil)
+        }
+    }
+    
+    @available(iOSApplicationExtension 13.0, watchOSApplicationExtension 6.0, *)
+    func resolveLock(for intent: UnlockIntent, with completion: @escaping (UnlockLockResolutionResult) -> Void) {
+        
+        async {
+            
+            // load updated lock information
+            Store.shared.loadCache()
+            
+            // a specified lock is required to complete the action
+            guard let intentLock = intent.lock else {
+                completion(.needsValue())
+                return
+            }
+                        
+            // validate UUID string
+            guard let identifier = intentLock.identifier.flatMap({ UUID(uuidString: $0) }) else {
+                completion(.unsupported())
+                return
+            }
+            
+            // validate key is available for lock.
+            guard let lockCache = Store.shared[lock: identifier],
+                Store.shared[key: lockCache.key.identifier] != nil else {
+                    completion(.unsupported(forReason: .unknownLock))
+                    return
+            }
+            
+            // check if lock is in range
+            var device: LockPeripheral<NativeCentral>?
+            do { device = try Store.shared.device(for: identifier, scanDuration: 2.0) }
+            catch {
+                completion(.confirmationRequired(with: intentLock))
+                return
+            }
+            
+            // device not in range
+            guard let _ = device else {
+                completion(.confirmationRequired(with: intentLock))
+                return
+            }
+            
+            completion(.success(with: intentLock))
+        }
+    }
+    
     func confirm(intent: UnlockIntent, completion: @escaping (UnlockIntentResponse) -> Void) {
+        
+        assert(Thread.isMainThread == false, "Should not be main thread")
         
         mainQueue {
             
-            guard let identifierString = intent.lock?.identifier,
+            guard let intentLock = intent.lock else {
+                completion(.failure(failureReason: "No lock specified."))
+                return
+            }
+            
+            guard let identifierString = intentLock.identifier,
                 let lockIdentifier = UUID(uuidString: identifierString),
                 let _ = Store.shared[lock: lockIdentifier] else {
                     completion(.failure(failureReason: "Invalid lock."))
@@ -72,11 +136,16 @@ final class UnlockIntentHandler: NSObject, UnlockIntentHandling {
     
     func handle(intent: UnlockIntent, completion: @escaping (UnlockIntentResponse) -> Void) {
         
-        assert(Thread.isMainThread == false, "Not main thread")
+        assert(Thread.isMainThread == false, "Should not be main thread")
         
         mainQueue {
             
-            guard let identifierString = intent.lock?.identifier,
+            guard let intentLock = intent.lock else {
+                completion(.failure(failureReason: "No lock specified."))
+                return
+            }
+            
+            guard let identifierString = intentLock.identifier,
                 let lockIdentifier = UUID(uuidString: identifierString),
                 let lockCache = Store.shared[lock: lockIdentifier] else {
                     completion(.failure(failureReason: "Invalid lock."))
@@ -103,7 +172,7 @@ final class UnlockIntentHandler: NSObject, UnlockIntentHandling {
                         return
                     }
                     
-                    completion(.success(lock: lockCache.name))
+                    completion(.success(lock: intentLock))
                 }
                 catch {
                     completion(.failure(failureReason: error.localizedDescription))
