@@ -521,7 +521,7 @@ public final class AddVoiceShortcutActivity: UIActivity {
         guard let lockCache = Store.shared[lock: lockItem.identifier]
             else { assertionFailure("Invalid lock"); return nil }
         
-        let intent = UnlockIntent(lock: lockItem.identifier, name: lockCache.name)
+        let intent = UnlockIntent(identifier: lockItem.identifier, cache: lockCache)
         let shortcut = INShortcut.intent(intent)
         let viewController = INUIAddVoiceShortcutViewController(shortcut: shortcut)
         viewController.modalPresentationStyle = .formSheet
