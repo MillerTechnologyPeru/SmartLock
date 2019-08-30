@@ -17,6 +17,12 @@
 		6E08FB9323171F2A00177026 /* ActivityInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E08FB7F23168CEB00177026 /* ActivityInterface.swift */; };
 		6E08FB9423171F8B00177026 /* ErrorAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E08FB7D231688BA00177026 /* ErrorAlert.swift */; };
 		6E08FB9523171F9300177026 /* AnimatedButtonController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E08FB77231687A800177026 /* AnimatedButtonController.swift */; };
+		6E15AD7C2318C9060004D1AE /* NotificationCenter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6E994B29230EF6DA0076DC1B /* NotificationCenter.framework */; };
+		6E15AD7F2318C9060004D1AE /* TodayViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E15AD7E2318C9060004D1AE /* TodayViewController.swift */; };
+		6E15AD812318C9060004D1AE /* ListRowViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E15AD802318C9060004D1AE /* ListRowViewController.swift */; };
+		6E15AD842318C9060004D1AE /* TodayViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6E15AD822318C9060004D1AE /* TodayViewController.xib */; };
+		6E15AD872318C9060004D1AE /* ListRowViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6E15AD852318C9060004D1AE /* ListRowViewController.xib */; };
+		6E15AD8B2318C9060004D1AE /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6E15AD892318C9060004D1AE /* InfoPlist.strings */; };
 		6E3B70B22313E24F00BEB6FF /* ApplicationData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E3B70B12313E24F00BEB6FF /* ApplicationData.swift */; };
 		6E3B70BA2313EF1000BEB6FF /* JSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E3B70B82313E99A00BEB6FF /* JSON.swift */; };
 		6E6000142121119400787DAA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E6000132121119400787DAA /* AppDelegate.swift */; };
@@ -124,7 +130,6 @@
 		6EA570F923189DCC008027D4 /* ExtensionDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6ED81FC12316618100B69520 /* ExtensionDelegate.swift */; };
 		6EA570FB23189E4D008027D4 /* Interface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6ED81FB02316617E00B69520 /* Interface.storyboard */; };
 		6EAADF8C2122664A0074CEDF /* AppVersion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EAADF8B2122664A0074CEDF /* AppVersion.swift */; };
-		6EB59D5F2312E9E400D5EFA7 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6EB59D5E2312E9E400D5EFA7 /* CloudKit.framework */; };
 		6EB59D612313184A00D5EFA7 /* iCloud.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EB59D602313184A00D5EFA7 /* iCloud.swift */; };
 		6EC0412E230A226400357585 /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EC0412D230A226300357585 /* TabBarController.swift */; };
 		6ED81F972316292900B69520 /* BackgroundTasks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6ED81F962316292900B69520 /* BackgroundTasks.swift */; };
@@ -154,6 +159,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		6E15AD952318CA4B0004D1AE /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6E6000082121119400787DAA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 6E15AD7A2318C9060004D1AE;
+			remoteInfo = "Today macOS";
+		};
 		6E6000252121119500787DAA /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 6E6000082121119400787DAA /* Project object */;
@@ -434,6 +446,14 @@
 		6E08FB872316EF6000177026 /* WatchMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchMessage.swift; sourceTree = "<group>"; };
 		6E08FB8C23171C3400177026 /* Unlock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Unlock.swift; sourceTree = "<group>"; };
 		6E0F602F230DD05400B013AB /* UserNotification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserNotification.swift; sourceTree = "<group>"; };
+		6E15AD7B2318C9060004D1AE /* Today.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = Today.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		6E15AD7E2318C9060004D1AE /* TodayViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodayViewController.swift; sourceTree = "<group>"; };
+		6E15AD802318C9060004D1AE /* ListRowViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListRowViewController.swift; sourceTree = "<group>"; };
+		6E15AD832318C9060004D1AE /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/TodayViewController.xib; sourceTree = "<group>"; };
+		6E15AD862318C9060004D1AE /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/ListRowViewController.xib; sourceTree = "<group>"; };
+		6E15AD882318C9060004D1AE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		6E15AD8A2318C9060004D1AE /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		6E15AD8C2318C9060004D1AE /* Today_macOS.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Today_macOS.entitlements; sourceTree = "<group>"; };
 		6E3B70B12313E24F00BEB6FF /* ApplicationData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplicationData.swift; sourceTree = "<group>"; };
 		6E3B70B82313E99A00BEB6FF /* JSON.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSON.swift; sourceTree = "<group>"; };
 		6E6000102121119400787DAA /* SmartLock.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SmartLock.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -547,12 +567,19 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		6E15AD782318C9060004D1AE /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6E15AD7C2318C9060004D1AE /* NotificationCenter.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		6E60000D2121119400787DAA /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 				6E9C95FC23114D07007C18FE /* CoreLock.framework in Frameworks */,
-				6EB59D5F2312E9E400D5EFA7 /* CloudKit.framework in Frameworks */,
 				6E9C95FE23114D60007C18FE /* LockKit.framework in Frameworks */,
 				6E8772CA231259DE003B9469 /* JGProgressHUD.framework in Frameworks */,
 			);
@@ -653,6 +680,20 @@
 			path = WatchKit;
 			sourceTree = "<group>";
 		};
+		6E15AD7D2318C9060004D1AE /* Today macOS */ = {
+			isa = PBXGroup;
+			children = (
+				6E15AD7E2318C9060004D1AE /* TodayViewController.swift */,
+				6E15AD802318C9060004D1AE /* ListRowViewController.swift */,
+				6E15AD822318C9060004D1AE /* TodayViewController.xib */,
+				6E15AD852318C9060004D1AE /* ListRowViewController.xib */,
+				6E15AD882318C9060004D1AE /* Info.plist */,
+				6E15AD892318C9060004D1AE /* InfoPlist.strings */,
+				6E15AD8C2318C9060004D1AE /* Today_macOS.entitlements */,
+			);
+			path = "Today macOS";
+			sourceTree = "<group>";
+		};
 		6E6000072121119400787DAA = {
 			isa = PBXGroup;
 			children = (
@@ -670,6 +711,7 @@
 				6ED81FBE2316618100B69520 /* Watch Extension */,
 				6ED8206D2316711900B69520 /* WatchIntent */,
 				6ED82087231676AE00B69520 /* LockKit watchOS */,
+				6E15AD7D2318C9060004D1AE /* Today macOS */,
 				6E994AE0230E56DD0076DC1B /* Frameworks */,
 				6E6000112121119400787DAA /* Products */,
 			);
@@ -690,6 +732,7 @@
 				6ED82086231676AE00B69520 /* LockKit.framework */,
 				6EA570C423189871008027D4 /* Watch.app */,
 				6EA570D023189874008027D4 /* Watch Extension.appex */,
+				6E15AD7B2318C9060004D1AE /* Today.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1023,6 +1066,23 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
+		6E15AD7A2318C9060004D1AE /* Today macOS */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 6E15AD932318C9060004D1AE /* Build configuration list for PBXNativeTarget "Today macOS" */;
+			buildPhases = (
+				6E15AD772318C9060004D1AE /* Sources */,
+				6E15AD782318C9060004D1AE /* Frameworks */,
+				6E15AD792318C9060004D1AE /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "Today macOS";
+			productName = "Today macOS";
+			productReference = 6E15AD7B2318C9060004D1AE /* Today.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 		6E60000F2121119400787DAA /* SmartLock */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 6E60002D2121119500787DAA /* Build configuration list for PBXNativeTarget "SmartLock" */;
@@ -1034,15 +1094,17 @@
 				6E6000492121134700787DAA /* Embed Frameworks */,
 				6E994AF6230E56DD0076DC1B /* Embed App Extensions */,
 				6ED81FCE2316618400B69520 /* Embed Watch Content */,
+				6E15AD992318CB8A0004D1AE /* Embed macOS Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				6E9C960123114D60007C18FE /* PBXTargetDependency */,
+				6E15AD962318CA4B0004D1AE /* PBXTargetDependency */,
+				6E994B33230EF6DB0076DC1B /* PBXTargetDependency */,
 				6E994AEB230E56DD0076DC1B /* PBXTargetDependency */,
 				6E994AEE230E56DD0076DC1B /* PBXTargetDependency */,
 				6E994B16230E89490076DC1B /* PBXTargetDependency */,
-				6E994B33230EF6DB0076DC1B /* PBXTargetDependency */,
-				6E9C960123114D60007C18FE /* PBXTargetDependency */,
 				6EA570E223189877008027D4 /* PBXTargetDependency */,
 			);
 			name = SmartLock;
@@ -1278,6 +1340,9 @@
 				LastUpgradeCheck = 0940;
 				ORGANIZATIONNAME = ColemanCDA;
 				TargetAttributes = {
+					6E15AD7A2318C9060004D1AE = {
+						CreatedOnToolsVersion = 11.0;
+					};
 					6E60000F2121119400787DAA = {
 						CreatedOnToolsVersion = 9.4.1;
 						SystemCapabilities = {
@@ -1402,6 +1467,7 @@
 				6E994ADE230E56DD0076DC1B /* IntentUI */,
 				6E994B08230E89440076DC1B /* Message */,
 				6E994B27230EF6DA0076DC1B /* Today */,
+				6E15AD7A2318C9060004D1AE /* Today macOS */,
 				6EA570C323189871008027D4 /* Watch */,
 				6EA570CF23189874008027D4 /* Watch Extension */,
 				6ED8206B2316711900B69520 /* WatchIntent */,
@@ -1462,6 +1528,16 @@
 /* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
+		6E15AD792318C9060004D1AE /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6E15AD842318C9060004D1AE /* TodayViewController.xib in Resources */,
+				6E15AD8B2318C9060004D1AE /* InfoPlist.strings in Resources */,
+				6E15AD872318C9060004D1AE /* ListRowViewController.xib in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		6E60000E2121119400787DAA /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -1567,6 +1643,24 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		6E15AD992318CB8A0004D1AE /* Embed macOS Extensions */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 12;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Embed macOS Extensions";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "echo \"Checking configuration to determine whether to copy: CONFIGURATION=$CONFIGURATION\"\nif [ \"$CONFIGURATION\" == \"Debug\" ]; then\ncp -R \"${BUILT_PRODUCTS_DIR}/../Debug/Today.appex\" \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.app/Contents/PlugIns/\"\nrm -rf \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.app/Contents/PlugIns/Contents\"\nelse\necho \"Skipped copying - not required for $CONFIGURATION configuration.\"\nfi\n";
+		};
 		6E806BAC230F68BB00C6FF78 /* R.swift */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -1610,6 +1704,15 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		6E15AD772318C9060004D1AE /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6E15AD7F2318C9060004D1AE /* TodayViewController.swift in Sources */,
+				6E15AD812318C9060004D1AE /* ListRowViewController.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		6E60000C2121119400787DAA /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -1787,6 +1890,12 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		6E15AD962318CA4B0004D1AE /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			platformFilter = maccatalyst;
+			target = 6E15AD7A2318C9060004D1AE /* Today macOS */;
+			targetProxy = 6E15AD952318CA4B0004D1AE /* PBXContainerItemProxy */;
+		};
 		6E6000262121119500787DAA /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 6E60000F2121119400787DAA /* SmartLock */;
@@ -1895,6 +2004,30 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
+		6E15AD822318C9060004D1AE /* TodayViewController.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				6E15AD832318C9060004D1AE /* Base */,
+			);
+			name = TodayViewController.xib;
+			sourceTree = "<group>";
+		};
+		6E15AD852318C9060004D1AE /* ListRowViewController.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				6E15AD862318C9060004D1AE /* Base */,
+			);
+			name = ListRowViewController.xib;
+			sourceTree = "<group>";
+		};
+		6E15AD892318C9060004D1AE /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				6E15AD8A2318C9060004D1AE /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
 		6E6000172121119400787DAA /* Main.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -1946,6 +2079,55 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		6E15AD8D2318C9060004D1AE /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = "Today macOS/Today_macOS.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = 4W79SG34MW;
+				INFOPLIST_FILE = "Today macOS/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.12;
+				MARKETING_VERSION = 1.0.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = maccatalyst.com.colemancda.Lock.Today;
+				PRODUCT_NAME = Today;
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		6E15AD8E2318C9060004D1AE /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = "Today macOS/Today_macOS.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = 4W79SG34MW;
+				INFOPLIST_FILE = "Today macOS/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.12;
+				MARKETING_VERSION = 1.0.0;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = maccatalyst.com.colemancda.Lock.Today;
+				PRODUCT_NAME = Today;
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
 		6E60002B2121119500787DAA /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -2667,6 +2849,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		6E15AD932318C9060004D1AE /* Build configuration list for PBXNativeTarget "Today macOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6E15AD8D2318C9060004D1AE /* Debug */,
+				6E15AD8E2318C9060004D1AE /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		6E60000B2121119400787DAA /* Build configuration list for PBXProject "SmartLock" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
