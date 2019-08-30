@@ -70,7 +70,7 @@ public final class SessionController: NSObject {
     
     public func requestKeyData(for identifier: UUID) throws -> KeyData {
         
-        let response = try request(.applicationData)
+        let response = try request(.key(identifier))
         switch response {
         case let .error(error):
             throw Error.errorResponse(error)
@@ -111,8 +111,14 @@ public final class SessionController: NSObject {
         }
         guard let message = reply
             else { throw Error.timeout }
+        #if DEBUG
+        print("Recieved response")
+        #endif
         guard let replyMessage = WatchMessage(message: message)
             else { throw Error.invalidResponse }
+        #if DEBUG
+        dump(replyMessage)
+        #endif
         switch replyMessage {
         case let .response(response):
             return response
@@ -191,6 +197,10 @@ extension SessionController: WCSessionDelegate {
     public func session(_ session: WCSession, didReceiveMessage message: [String : Any]) {
         
         log?("Recieved message")
+        
+        #if DEBUG
+        dump(message)
+        #endif
     }
     
     public func session(_ session: WCSession, didReceiveApplicationContext applicationContext: [String : Any]) {
@@ -250,7 +260,6 @@ public extension Store {
         
         // activate session
         async { [weak self] in
-            defer { Store.shared.defaults.lastWatchUpdate = Date() }
             defer { mainQueue { completion?() } }
             guard let self = self else { return }
             do { try session.activate() }
@@ -258,14 +267,6 @@ public extension Store {
             do {
                 let newData = try session.requestApplicationData()
                 let oldApplicationData = self.applicationData
-                guard newData != oldApplicationData else {
-                    log("📱 No new data")
-                    return
-                }
-                #if DEBUG
-                print("📱 Recieved new application data")
-                dump(newData)
-                #endif
                 var importedKeys = 0
                 for key in newData.keys {
                     if self[key: key.identifier] == nil {
@@ -277,6 +278,14 @@ public extension Store {
                 if importedKeys > 0 {
                     log("📱 Imported \(importedKeys) keys")
                 }
+                guard newData != oldApplicationData else {
+                    log("📱 No new data")
+                    return
+                }
+                #if DEBUG
+                print("📱 Recieved new application data")
+                dump(newData)
+                #endif
                 // write new data
                 self.applicationData = newData
                 log("📱 Updated application data")
@@ -293,6 +302,8 @@ public extension Store {
                 if removedKeys > 0 {
                     log("📱 Removed \(removedKeys) old keys from keychain")
                 }
+                // store date last updated
+                self.defaults.lastWatchUpdate = Date()
             } catch {
                 log("⚠️ Unable to sync application data \(error)")
             }

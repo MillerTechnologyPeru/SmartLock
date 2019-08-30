@@ -14,7 +14,7 @@ extension WKInterfaceController {
     func showError(_ error: String) {
                 
         let action = WKAlertAction(title: "OK", style: WKAlertActionStyle.`default`) { }
-        
+        WKInterfaceDevice.current().play(.retry)
         self.presentAlert(withTitle: "Error", message: error, preferredStyle: .actionSheet, actions: [action])
     }
 }

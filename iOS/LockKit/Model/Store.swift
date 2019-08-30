@@ -300,9 +300,7 @@ public extension Store {
     func scan(duration: TimeInterval) throws {
         
         assert(Thread.isMainThread == false)
-        
         self.peripherals.value.removeAll()
-        
         try lockManager.scanLocks(duration: duration, filterDuplicates: true) { [unowned self] in
             self.peripherals.value[$0.scanData.peripheral] = $0
         }
@@ -314,15 +312,12 @@ public extension Store {
                name: String) throws {
         
         assert(Thread.isMainThread == false)
-        
         let setupRequest = SetupRequest()
-        
         let information = try lockManager.setup(setupRequest,
                                                 for: lock.scanData.peripheral,
                                                 sharedSecret: sharedSecret)
         
         let ownerKey = Key(setup: setupRequest)
-        
         let lockCache = LockCache(
             key: ownerKey,
             name: name,
@@ -365,7 +360,6 @@ public extension Store {
         try lockManager.unlock(action,
                                for: lock.scanData.peripheral,
                                with: key)
-        
         return true
     }
 }

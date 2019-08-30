@@ -26,8 +26,9 @@ public extension ActivityInterface {
         }
         performActivity({
             try Store.shared.unlock(peripheral)
-        }, completion: { (controller, _) in
-            WKInterfaceDevice.current().play(.success)
+        }, completion: { (controller, hasKey) in
+            let haptic: WKHapticType = hasKey ? .success : .failure
+            WKInterfaceDevice.current().play(haptic)
         })
     }
 }
