@@ -2,18 +2,10 @@
 <document type="com.apple.InterfaceBuilder.WatchKit.Storyboard" version="3.0" toolsVersion="14865.1" targetRuntime="watchKit" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="Zjw-i6-u6T">
     <device id="watch38"/>
     <dependencies>
-        <deployment identifier="watchOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14819.2"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBWatchKitPlugin" version="14642"/>
     </dependencies>
     <scenes>
-        <!--Interface Controller-->
-        <scene sceneID="aou-V4-d1y">
-            <objects>
-                <controller id="AgC-eL-Hgc" customClass="InterfaceController" customModule="Watch" customModuleProvider="target"/>
-            </objects>
-            <point key="canvasLocation" x="241" y="1040"/>
-        </scene>
         <!--Static Notification Interface Controller-->
         <scene sceneID="AEw-b0-oYE">
             <objects>
@@ -90,14 +82,14 @@
         <!--Keys-->
         <scene sceneID="GEV-15-dWS">
             <objects>
-                <controller title="Keys" id="ShR-W8-Ue9" customClass="KeysInterfaceController" customModule="CerraduraWatch_Extension"/>
+                <controller title="Keys" id="ShR-W8-Ue9" customClass="KeysInterfaceController"/>
             </objects>
             <point key="canvasLocation" x="84" y="18"/>
         </scene>
         <!--Lock Name-->
         <scene sceneID="Rt3-iu-R39">
             <objects>
-                <controller title="Lock Name" id="V2r-of-aqL" customClass="LockInterfaceController" customModule="CerraduraWatch_Extension">
+                <controller title="Lock Name" id="V2r-of-aqL" customClass="LockInterfaceController">
                     <items>
                         <button alignment="left" id="axN-gW-PHV">
                             <group key="contentGroup" width="1" height="1" alignment="left" id="wla-zt-gZd">

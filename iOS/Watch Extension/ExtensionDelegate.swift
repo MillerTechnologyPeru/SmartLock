@@ -14,6 +14,10 @@ import CoreLock
 import LockKit
 
 final class ExtensionDelegate: NSObject, WKExtensionDelegate {
+    
+    var shared: ExtensionDelegate { return WKExtension.shared().delegate as! ExtensionDelegate }
+    
+    let appLaunch = Date()
 
     func applicationDidFinishLaunching() {
         // Perform any final initialization of your application.
@@ -24,6 +28,9 @@ final class ExtensionDelegate: NSObject, WKExtensionDelegate {
         // setup logging
         Store.shared.lockManager.log = { log("🔒 LockManager: " + $0) }
         SessionController.shared.log = { log("📱 SessionController: " + $0) }
+        
+        // sync with iOS app on launch
+        Store.shared.syncApp()
     }
 
     func applicationDidBecomeActive() {
@@ -34,7 +41,7 @@ final class ExtensionDelegate: NSObject, WKExtensionDelegate {
         // load updated lock information
         Store.shared.loadCache()
         
-        // scan for locks
+        // scan for locks and sync with iPhone
         refresh()
     }
 

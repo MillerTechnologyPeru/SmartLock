@@ -31,11 +31,14 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
     
     private(set) var didBecomeActive: Bool = false
     
+    let appLaunch = Date()
+    
     lazy var bundle = Bundle.Lock(rawValue: Bundle.main.bundleIdentifier ?? "") ?? .app
     
     #if DEBUG || targetEnvironment(macCatalyst)
     private var updateTimer: Timer?
     #endif
+    
     
     // MARK: - UIApplicationDelegate
     

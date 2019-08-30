@@ -29,7 +29,6 @@ internal extension WatchMessage {
 public extension WatchMessage {
     
     enum Request: Equatable {
-        
         case applicationData
         case key(UUID)
     }
@@ -38,7 +37,6 @@ public extension WatchMessage {
 public extension WatchMessage {
     
     enum Response: Equatable {
-        
         case error(String)
         case applicationData(ApplicationData)
         case key(KeyData)

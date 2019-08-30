@@ -9,6 +9,7 @@
 import Foundation
 import WatchKit
 import CoreLock
+import Intents
 
 public extension ActivityInterface {
     
@@ -28,5 +29,25 @@ public extension ActivityInterface {
         }, completion: { (controller, _) in
             WKInterfaceDevice.current().play(.success)
         })
+    }
+}
+
+public extension WKInterfaceController {
+    
+    /// Donate Siri Shortcut to unlock the specified lock.
+    func donateUnlockIntent(for lock: UUID) {
+        
+        guard let lockCache = Store.shared[lock: lock]
+            else { return }
+        
+        if #available(watchOSApplicationExtension 5.0, *) {
+            let intent = UnlockIntent(identifier: lock, cache: lockCache)
+            let interaction = INInteraction(intent: intent, response: nil)
+            interaction.donate { error in
+                if let error = error {
+                    log("⚠️ Donating intent failed with error \(error)")
+                }
+            }
+        }
     }
 }

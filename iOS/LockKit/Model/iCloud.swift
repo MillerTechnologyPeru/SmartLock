@@ -240,11 +240,13 @@ public extension Store {
     
     func syncCloud(conflicts: (ApplicationData) -> Bool? = { _ in return nil }) throws {
         
+        // make sure iCloud is enabled
+        guard defaults.isCloudEnabled else { return }
         assert(Thread.isMainThread == false)
-        
         guard try downloadCloud(conflicts: conflicts)
             else { return } // aborted
         try uploadCloud()
+        defaults.lastCloudUpdate = Date()
     }
     
     @discardableResult

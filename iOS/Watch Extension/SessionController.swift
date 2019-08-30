@@ -16,7 +16,7 @@ public final class SessionController: NSObject {
     
     // MARK: - Properties
     
-    public var timeout: TimeInterval = 5.0
+    public var timeout: TimeInterval = 15.0
     
     public var log: ((String) -> ())?
     
@@ -145,6 +145,19 @@ public final class SessionController: NSObject {
         operationState?.error = error
         operationState?.semaphore.signal()
     }
+    
+    /// Have to move these here due to compiler bug.
+    @objc(sessionDidBecomeInactive:)
+    public func sessionDidBecomeInactive(_ session: WCSession) {
+        
+        log?("Session did become inactive")
+    }
+    
+    @objc(sessionDidDeactivate:)
+    public func sessionDidDeactivate(_ session: WCSession) {
+        
+        log?("Session did deactivate")
+    }
 }
 
 // MARK: - WCSessionDelegate
@@ -222,6 +235,7 @@ public extension Store {
         
         // activate session
         async { [weak self] in
+            defer { Store.shared.defaults.lastWatchUpdate = Date() }
             defer { mainQueue { completion?() } }
             guard let self = self else { return }
             do { try session.activate() }

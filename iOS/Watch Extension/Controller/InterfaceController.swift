@@ -25,6 +25,8 @@ final class InterfaceController: WKInterfaceController {
     
     // MARK: - Properties
     
+    let activity = NSUserActivity(.screen(.nearbyLocks))
+    
     let scanDuration: TimeInterval = 3.0
     
     private var items = [Item]()
@@ -80,13 +82,20 @@ final class InterfaceController: WKInterfaceController {
         // This method is called when watch view controller is about to be visible to user
         super.willActivate()
                 
-        let activity = NSUserActivity(.screen(.nearbyLocks))
         activity.becomeCurrent()
+        
+        // sync with app if nearby and never updated
+        if Store.shared.defaults.lastWatchUpdate == nil,
+            SessionController.shared.isReachable {
+            Store.shared.syncApp()
+        }
     }
     
     override func didDeactivate() {
         // This method is called when watch view controller is no longer visible
         super.didDeactivate()
+        
+        activity.invalidate()
     }
     
     // MARK: - Actions
@@ -101,22 +110,22 @@ final class InterfaceController: WKInterfaceController {
     
     private func scan() {
         
+        // sync with app if nearby and never updated
+        if Store.shared.defaults.lastWatchUpdate == nil,
+            SessionController.shared.isReachable {
+            Store.shared.syncApp()
+        }
+        
         /// ignore if off or not authorized
         guard LockManager.shared.central.state == .poweredOn
             else { return } // cannot scan
         
-        let userActivity = NSUserActivity(.screen(.nearbyLocks))
-        userActivity.becomeCurrent()
-                
+        activity.becomeCurrent()
+        
         // reset table
         self.items.removeAll(keepingCapacity: true)
         
         let scanDuration = self.scanDuration
-        
-        // sync with app if nearby
-        if SessionController.shared.isReachable {
-            Store.shared.syncApp()
-        }
         
         // scan
         performActivity({
@@ -164,6 +173,8 @@ final class InterfaceController: WKInterfaceController {
     private func select(_ item: Item) {
         
         log("Selected lock \(item.identifier)")
+        
+        donateUnlockIntent(for: item.identifier)
         unlock(lock: item.identifier, peripheral: item.peripheral)
     }
     
