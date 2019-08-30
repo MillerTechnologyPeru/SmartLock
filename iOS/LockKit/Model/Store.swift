@@ -24,7 +24,7 @@ public final class Store {
         // clear keychain on newly installed app.
         if defaults.isAppInstalled == false {
             defaults.isAppInstalled = true
-            do { try Store.shared.keychain.removeAll() }
+            do { try keychain.removeAll() }
             catch {
                 DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) {
                     #if DEBUG
