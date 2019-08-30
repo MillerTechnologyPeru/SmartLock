@@ -22,10 +22,19 @@ struct CloudSettingsView: View {
     
     var body: some View {
         List {
-            Toggle(isOn: $preferences.isCloudEnabled) {
-                Text("iCloud Syncronization")
+            Section(header: Text(verbatim: "")) {
+                Toggle(isOn: $preferences.isCloudEnabled) {
+                    Text("iCloud Syncronization")
+                }
+            }
+            if preferences.isCloudEnabled {
+                Button(action: {  }) {
+                    Text("Backup now")
+                }
             }
         }
+        
+        .listStyle(GroupedListStyle())
         .navigationBarTitle(Text("iCloud"), displayMode: .large)
     }
 }
