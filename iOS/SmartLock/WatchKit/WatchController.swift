@@ -128,36 +128,12 @@ final class WatchController: NSObject {
             return .key(keyData)
         }
     }
-}
-
-// MARK: - WCSessionDelegate
-
-@objc
-extension WatchController: WCSessionDelegate {
     
-    @objc
-    func sessionDidBecomeInactive(_ session: WCSession) {
+    private func sessionStateChanged() {
         
-        log?("Session did become inactive")
-    }
-    
-    @objc
-    func sessionDidDeactivate(_ session: WCSession) {
-        
-        log?("Session did deactivate")
-    }
-    
-    @available(iOS 9.3, *)
-    @objc
-    func session(_ session: WCSession, activationDidCompleteWith activationState: WCSessionActivationState, error: Swift.Error?) {
-        
-        if let error = error {
-            log?("Activation did not complete: " + error.localizedDescription)
-            #if DEBUG
-            dump(error)
-            #endif
-        } else {
-            log?(activationState.debugDescription)
+        guard #available(iOS 9.3, *) else {
+            updateApplicationContext()
+            return
         }
         
         guard let isPaired = WatchController.shared.isPaired, isPaired
@@ -182,6 +158,44 @@ extension WatchController: WCSessionDelegate {
             log?("Watch app is not reachable")
         }
     }
+}
+
+// MARK: - WCSessionDelegate
+
+@objc
+extension WatchController: WCSessionDelegate {
+    
+    @objc
+    func sessionDidBecomeInactive(_ session: WCSession) {
+        
+        log?("Session did become inactive")
+        
+        sessionStateChanged()
+    }
+    
+    @objc
+    func sessionDidDeactivate(_ session: WCSession) {
+        
+        log?("Session did deactivate")
+        
+        sessionStateChanged()
+    }
+    
+    @available(iOS 9.3, *)
+    @objc
+    func session(_ session: WCSession, activationDidCompleteWith activationState: WCSessionActivationState, error: Swift.Error?) {
+        
+        if let error = error {
+            log?("Activation did not complete: " + error.localizedDescription)
+            #if DEBUG
+            dump(error)
+            #endif
+        } else {
+            log?(activationState.debugDescription)
+        }
+        
+        sessionStateChanged()
+    }
     
     @objc(sessionReachabilityDidChange:)
     func sessionReachabilityDidChange(_ session: WCSession) {
@@ -196,14 +210,14 @@ extension WatchController: WCSessionDelegate {
         
         log?("Watch state did change")
         
-        updateApplicationContext()
+        sessionStateChanged()
     }
     
     /** Called on the delegate of the receiver. Will be called on startup if the incoming message caused the receiver to launch. */
     @objc(session:didReceiveMessage:)
     func session(_ session: WCSession, didReceiveMessage message: [String : Any]) {
         
-        log?("Recieved message: \(message)")
+        log?("Recieved message")
         if #available(iOS 9.3, *) {
             guard session.activationState == .activated else {
                 log?("Session not active, will not respond")
@@ -211,7 +225,6 @@ extension WatchController: WCSessionDelegate {
             }
         }
         let response = self.response(for: message)
-        log?("Respond with \(response)")
         let responseMessage = WatchMessage.response(response).toMessage()
         guard session.isReachable else {
             log?("Session not reachable, will not respond")
@@ -228,9 +241,8 @@ extension WatchController: WCSessionDelegate {
     @objc
     func session(_ session: WCSession, didReceiveMessage message: [String : Any], replyHandler: @escaping ([String : Any]) -> Void) {
         
-        log?("Recieved message: \(message)")
+        log?("Recieved message")
         let response = self.response(for: message)
-        log?("Respond with \(response)")
         let responseMessage = WatchMessage.response(response).toMessage()
         replyHandler(responseMessage)
     }

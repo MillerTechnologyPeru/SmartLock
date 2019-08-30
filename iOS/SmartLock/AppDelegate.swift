@@ -39,7 +39,6 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
     private var updateTimer: Timer?
     #endif
     
-    
     // MARK: - UIApplicationDelegate
     
     func application(_ application: UIApplication,

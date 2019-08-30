@@ -35,9 +35,7 @@ public final class SessionController: NSObject {
     }
     
     private var operationState: (semaphore: DispatchSemaphore, error: Swift.Error?)?
-    
-    private var lastMessage: [String: Any]?
-    
+        
     // MARK: - Mehods
     
     /// Activates the session synchronously.
@@ -192,13 +190,12 @@ extension SessionController: WCSessionDelegate {
     @objc
     public func session(_ session: WCSession, didReceiveMessage message: [String : Any]) {
         
-        log?("Recieved message: \(message)")
-        lastMessage = message
+        log?("Recieved message")
     }
     
     public func session(_ session: WCSession, didReceiveApplicationContext applicationContext: [String : Any]) {
         
-        log?("Received application context \(applicationContext)")
+        log?("Received application context")
         
         guard let context = WatchApplicationContext(message: applicationContext) else {
             log?("⚠️ Invalid application context")

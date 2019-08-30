@@ -30,6 +30,9 @@ final class ExtensionDelegate: NSObject, WKExtensionDelegate {
         SessionController.shared.log = { log("📱 SessionController: " + $0) }
         
         // sync with iOS app on launch
+        SessionController.shared.context = {
+            Store.shared.applicationData = $0.applicationData
+        }
         Store.shared.syncApp()
     }
 
