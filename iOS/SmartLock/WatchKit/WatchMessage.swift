@@ -100,7 +100,7 @@ public extension WatchMessage {
         case let .response(.applicationData(applicationData)):
             return [
                 Key.response.rawValue: [
-                    Key.applicationData: applicationData.encodeJSON()
+                    Key.applicationData.rawValue: applicationData.encodeJSON()
                 ]
             ]
         case let .response(.key(keyData)):
