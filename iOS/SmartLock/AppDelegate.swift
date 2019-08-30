@@ -90,8 +90,15 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
         // setup watch
         if WatchController.isSupported {
             WatchController.shared.activate()
-            WatchController.shared.applicationData = { Store.shared.applicationData }
             WatchController.shared.keys = { Store.shared[key: $0] }
+            WatchController.shared.context = .init(
+                applicationData: Store.shared.applicationData
+            )
+            Store.shared.locks.observe { _ in
+                WatchController.shared.context = .init(
+                    applicationData: Store.shared.applicationData
+                )
+            }
         }
         
         #if targetEnvironment(macCatalyst)

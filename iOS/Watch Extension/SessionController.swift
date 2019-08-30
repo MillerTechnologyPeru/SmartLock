@@ -21,6 +21,8 @@ public final class SessionController: NSObject {
     public var log: ((String) -> ())?
     
     internal let session: WCSession = .default
+    
+    public var context: ((WatchApplicationContext) -> ())?
 
     public var activationState: WCSessionActivationState {
         return session.activationState
@@ -192,6 +194,22 @@ extension SessionController: WCSessionDelegate {
         
         log?("Recieved message: \(message)")
         lastMessage = message
+    }
+    
+    public func session(_ session: WCSession, didReceiveApplicationContext applicationContext: [String : Any]) {
+        
+        log?("Received application context \(applicationContext)")
+        
+        guard let context = WatchApplicationContext(message: applicationContext) else {
+            log?("⚠️ Invalid application context")
+            return
+        }
+        
+        #if DEBUG
+        dump(context)
+        #endif
+        
+        self.context?(context)
     }
 }
 

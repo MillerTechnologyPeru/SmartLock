@@ -19,7 +19,9 @@ final class WatchController: NSObject {
     
     var log: ((String) -> ())?
     
-    var applicationData: (() -> (ApplicationData))?
+    var context: WatchApplicationContext? {
+        didSet { if context != oldValue { updateApplicationContext() } }
+    }
     
     var keys: ((UUID) -> (KeyData?))?
     
@@ -77,6 +79,24 @@ final class WatchController: NSObject {
         session.activate()
     }
     
+    private func updateApplicationContext() {
+        
+        // session must be activated first
+        if #available(iOS 9.3, *) {
+            guard session.activationState == .activated
+                else { return }
+        }
+        
+        let message = context?.toMessage() ?? [:]
+        do { try session.updateApplicationContext(message) }
+        catch {
+            log?("⚠️ Unable to update application context: \(error)")
+            return
+        }
+        
+        log?("Updated application context")
+    }
+    
     private func response(for message: [String: Any]) -> WatchMessage.Response {
         
         guard let message = WatchMessage(message: message)
@@ -99,7 +119,7 @@ final class WatchController: NSObject {
         
         switch request {
         case .applicationData:
-            guard let applicationData = self.applicationData?()
+            guard let applicationData = self.context?.applicationData
                 else { return .error("No application data") }
             return .applicationData(applicationData)
         case let .key(identifier):
@@ -140,20 +160,26 @@ extension WatchController: WCSessionDelegate {
             log?(activationState.debugDescription)
         }
         
-        if let isPaired = WatchController.shared.isPaired, isPaired {
-            log?("Watch is paired")
-            if let isWatchAppInstalled = WatchController.shared.isWatchAppInstalled {
-                if isWatchAppInstalled {
-                    log?("Watch app is installed")
-                    if let isReachable = WatchController.shared.isReachable, isReachable {
-                        log?("Watch app is reachable")
-                    } else {
-                        log?("Watch app is not reachable")
-                    }
-                } else {
-                    log?("Watch app is not installed")
-                }
-            }
+        guard let isPaired = WatchController.shared.isPaired, isPaired
+            else { return }
+        
+        log?("Watch is paired")
+        
+        guard let isWatchAppInstalled = WatchController.shared.isWatchAppInstalled
+            else { return }
+        
+        guard isWatchAppInstalled else {
+            log?("Watch app is not installed")
+            return
+        }
+        
+        // update context, regardless of reachability
+        updateApplicationContext()
+        
+        if let isReachable = WatchController.shared.isReachable, isReachable {
+            log?("Watch app is reachable")
+        } else {
+            log?("Watch app is not reachable")
         }
     }
     
@@ -161,9 +187,20 @@ extension WatchController: WCSessionDelegate {
     func sessionReachabilityDidChange(_ session: WCSession) {
         
         log?("Session reachable: \(session.isReachable)")
+        
+        updateApplicationContext()
     }
     
-    @objc
+    @objc(sessionWatchStateDidChange:)
+    func sessionWatchStateDidChange(_ session: WCSession) {
+        
+        log?("Watch state did change")
+        
+        updateApplicationContext()
+    }
+    
+    /** Called on the delegate of the receiver. Will be called on startup if the incoming message caused the receiver to launch. */
+    @objc(session:didReceiveMessage:)
     func session(_ session: WCSession, didReceiveMessage message: [String : Any]) {
         
         log?("Recieved message: \(message)")
@@ -185,6 +222,31 @@ extension WatchController: WCSessionDelegate {
         }, errorHandler: { [weak self] (error) in
             self?.log?("Unable to respond: \(error)")
         })
+    }
+    
+    /** Called on the delegate of the receiver when the sender sends a message that expects a reply. Will be called on startup if the incoming message caused the receiver to launch. */
+    @objc
+    func session(_ session: WCSession, didReceiveMessage message: [String : Any], replyHandler: @escaping ([String : Any]) -> Void) {
+        
+        log?("Recieved message: \(message)")
+        let response = self.response(for: message)
+        log?("Respond with \(response)")
+        let responseMessage = WatchMessage.response(response).toMessage()
+        replyHandler(responseMessage)
+    }
+    
+    /** Called on the delegate of the receiver. Will be called on startup if the incoming message data caused the receiver to launch. */
+    @objc
+    func session(_ session: WCSession, didReceiveMessageData messageData: Data) {
+        
+        log?("Recieved message data: \(messageData)")
+    }
+    
+    /** Called on the delegate of the receiver when the sender sends message data that expects a reply. Will be called on startup if the incoming message data caused the receiver to launch. */
+    @objc
+    func session(_ session: WCSession, didReceiveMessageData messageData: Data, replyHandler: @escaping (Data) -> Void) {
+        
+        log?("Recieved message data: \(messageData)")
     }
 }
 
