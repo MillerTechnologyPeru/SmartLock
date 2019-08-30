@@ -28,14 +28,26 @@ struct CloudSettingsView: View {
                 }
             }
             if preferences.isCloudEnabled {
-                Button(action: {  }) {
+                Button(action: { self.backup() }) {
                     Text("Backup now")
                 }
+                preferences.lastCloudUpdate.flatMap {
+                    Text("Last updated \($0)")
+                } ?? Text("Never updated")
             }
         }
-        
         .listStyle(GroupedListStyle())
         .navigationBarTitle(Text("iCloud"), displayMode: .large)
+    }
+}
+
+// MARK: - Methods
+
+@available(iOS 13, *)
+private extension CloudSettingsView {
+    
+    func backup() {
+        AppDelegate.shared.tabBarController.syncCloud()
     }
 }
 
