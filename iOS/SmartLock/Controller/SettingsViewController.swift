@@ -8,6 +8,8 @@
 
 import Foundation
 import UIKit
+import SwiftUI
+import CoreLock
 import LockKit
 
 final class SettingsViewController: UITableViewController {
@@ -53,19 +55,36 @@ final class SettingsViewController: UITableViewController {
         
         // update table view items
         data = [
-            Section(header: nil,
-                    footer: version,
-                    items: [
-                        Item(icon: .report,
-                             title: "Report",
-                             accessory: .none,
-                             action: { $0.show(LogsViewController.fromStoryboard(), sender: $1) /* $0.report($1.titleLabel) */ }),
-                        Item(icon: .logs,
-                             title: "Logs",
-                             accessory: .disclosureIndicator,
-                             action: { $0.show(LogsViewController.fromStoryboard(), sender: $1) })
-                ])
+            [
+                Item(
+                    icon: .report,
+                    title: "Report",
+                    accessory: .none,
+                    action: { $0.show(LogsViewController.fromStoryboard(), sender: $1) /* $0.report($1.titleLabel) */ }
+                ),
+                Item(
+                    icon: .logs,
+                    title: "Logs",
+                    accessory: .disclosureIndicator,
+                    action: { $0.show(LogsViewController.fromStoryboard(), sender: $1) }
+                )
+            ]
         ]
+        
+        if #available(iOS 13, *) {
+            let section: Section = [
+                Item(
+                    icon: .logs,
+                    title: "iCloud",
+                    accessory: .disclosureIndicator,
+                    action: { $0.show(UIHostingController(rootView: CloudSettingsView()), sender: $1) }
+                )
+            ]
+            data.append(section)
+        }
+        
+        // set version footer for last section
+        data[data.count - 1].footer = version
         
         tableView.reloadData()
     }
@@ -129,9 +148,9 @@ private extension SettingsViewController {
     
     struct Section {
         
-        let header: String?
-        let footer: String?
-        let items: [Item]
+        var header: String?
+        var footer: String?
+        var items: [Item]
     }
     
     struct Item {
@@ -142,6 +161,13 @@ private extension SettingsViewController {
         let title: String
         let accessory: UITableViewCell.AccessoryType
         let action: (SettingsViewController, SettingsTableViewCell) -> ()
+    }
+}
+
+extension SettingsViewController.Section: ExpressibleByArrayLiteral {
+    
+    init(arrayLiteral elements: SettingsViewController.Item...) {
+        self.init(header: nil, footer: nil, items: elements)
     }
 }
 

@@ -17,6 +17,7 @@
 		6E08FB9323171F2A00177026 /* ActivityInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E08FB7F23168CEB00177026 /* ActivityInterface.swift */; };
 		6E08FB9423171F8B00177026 /* ErrorAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E08FB7D231688BA00177026 /* ErrorAlert.swift */; };
 		6E08FB9523171F9300177026 /* AnimatedButtonController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E08FB77231687A800177026 /* AnimatedButtonController.swift */; };
+		6E135CA72319193300FFA7F7 /* CloudSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E135CA62319193300FFA7F7 /* CloudSettingsView.swift */; };
 		6E15AD7C2318C9060004D1AE /* NotificationCenter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6E994B29230EF6DA0076DC1B /* NotificationCenter.framework */; };
 		6E15AD7F2318C9060004D1AE /* TodayViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E15AD7E2318C9060004D1AE /* TodayViewController.swift */; };
 		6E15AD812318C9060004D1AE /* ListRowViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E15AD802318C9060004D1AE /* ListRowViewController.swift */; };
@@ -448,6 +449,7 @@
 		6E08FB872316EF6000177026 /* WatchMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchMessage.swift; sourceTree = "<group>"; };
 		6E08FB8C23171C3400177026 /* Unlock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Unlock.swift; sourceTree = "<group>"; };
 		6E0F602F230DD05400B013AB /* UserNotification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserNotification.swift; sourceTree = "<group>"; };
+		6E135CA62319193300FFA7F7 /* CloudSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudSettingsView.swift; sourceTree = "<group>"; };
 		6E15AD7B2318C9060004D1AE /* Today.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = Today.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		6E15AD7E2318C9060004D1AE /* TodayViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodayViewController.swift; sourceTree = "<group>"; };
 		6E15AD802318C9060004D1AE /* ListRowViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListRowViewController.swift; sourceTree = "<group>"; };
@@ -912,6 +914,7 @@
 				6E6000152121119400787DAA /* NearbyLocksViewController.swift */,
 				6E05B6E622C9C159001218D9 /* KeysViewController.swift */,
 				6E806BA3230F650F00C6FF78 /* SettingsViewController.swift */,
+				6E135CA62319193300FFA7F7 /* CloudSettingsView.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -1728,6 +1731,7 @@
 				6E05B6E722C9C159001218D9 /* KeysViewController.swift in Sources */,
 				6EC0412E230A226400357585 /* TabBarController.swift in Sources */,
 				6E6000142121119400787DAA /* AppDelegate.swift in Sources */,
+				6E135CA72319193300FFA7F7 /* CloudSettingsView.swift in Sources */,
 				6E08FB852316EF3D00177026 /* WatchController.swift in Sources */,
 				6E806B9A230F56B000C6FF78 /* Log.swift in Sources */,
 				6E994AC8230E011E0076DC1B /* NearbyLocksViewController.swift in Sources */,
