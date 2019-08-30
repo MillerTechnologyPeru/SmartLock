@@ -85,7 +85,7 @@ final class InterfaceController: WKInterfaceController {
         activity.becomeCurrent()
         
         // sync with app if nearby and never updated
-        if Store.shared.defaults.lastWatchUpdate == nil,
+        if Store.shared.preferences.lastWatchUpdate == nil,
             SessionController.shared.isReachable {
             Store.shared.syncApp()
         }
@@ -111,7 +111,7 @@ final class InterfaceController: WKInterfaceController {
     private func scan() {
         
         // sync with app if nearby and never updated
-        if Store.shared.defaults.lastWatchUpdate == nil,
+        if Store.shared.preferences.lastWatchUpdate == nil,
             SessionController.shared.isReachable {
             Store.shared.syncApp()
         }

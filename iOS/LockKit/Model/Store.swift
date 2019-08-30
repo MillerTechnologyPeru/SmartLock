@@ -14,6 +14,7 @@ import CoreLock
 import GATT
 import DarwinGATT
 import KeychainAccess
+import Combine
 
 public final class Store {
     
@@ -22,8 +23,8 @@ public final class Store {
     private init() {
         
         // clear keychain on newly installed app.
-        if defaults.isAppInstalled == false {
-            defaults.isAppInstalled = true
+        if preferences.isAppInstalled == false {
+            preferences.isAppInstalled = true
             do { try keychain.removeAll() }
             catch {
                 DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) {
@@ -58,11 +59,14 @@ public final class Store {
         loadCache()
     }
     
+    @available(iOS 13.0, watchOSApplicationExtension 6.0, *)
+    public lazy var objectWillChange = ObservableObjectPublisher()
+    
     public let isScanning = Observable(false)
     
     public let locks = Observable([UUID: LockCache]())
     
-    public lazy var defaults = UserDefaults(suiteName: .lock)!
+    public lazy var preferences = Preferences(suiteName: .lock)!
     
     internal lazy var keychain = Keychain(service: .lock, accessGroup: .lock)
     
