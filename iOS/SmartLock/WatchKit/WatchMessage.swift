@@ -106,7 +106,7 @@ public extension WatchMessage {
         case let .response(.key(keyData)):
             return [
                 Key.response.rawValue: [
-                    Key.key.rawValue: keyData
+                    Key.key.rawValue: keyData.data
                 ]
             ]
         case let .response(.error(message)):
