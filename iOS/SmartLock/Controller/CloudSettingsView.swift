@@ -10,6 +10,7 @@ import Foundation
 import SwiftUI
 import LockKit
 
+/// iCloud Settings View
 @available(iOS 13, *)
 struct CloudSettingsView: View {
     
@@ -27,13 +28,15 @@ struct CloudSettingsView: View {
                     Text("iCloud Syncronization")
                 }
             }
-            if preferences.isCloudEnabled {
-                Button(action: { self.backup() }) {
-                    Text("Backup now")
+            Section(header: Text(verbatim: "")) {
+                if preferences.isCloudEnabled {
+                    Button(action: { self.backup() }) {
+                        Text("Backup now")
+                    }
+                    preferences.lastCloudUpdate.flatMap {
+                        Text("Last updated \($0)")
+                    } ?? Text("Never updated")
                 }
-                preferences.lastCloudUpdate.flatMap {
-                    Text("Last updated \($0)")
-                } ?? Text("Never updated")
             }
         }
         .listStyle(GroupedListStyle())

@@ -75,6 +75,12 @@ final class SettingsViewController: UITableViewController {
             let section: Section = [
                 Item(
                     icon: .logs,
+                    title: "Bluetooth",
+                    accessory: .disclosureIndicator,
+                    action: { $0.show(UIHostingController(rootView: BluetoothSettingsView()), sender: $1) }
+                ),
+                Item(
+                    icon: .logs,
                     title: "iCloud",
                     accessory: .disclosureIndicator,
                     action: { $0.show(UIHostingController(rootView: CloudSettingsView()), sender: $1) }

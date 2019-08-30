@@ -26,9 +26,7 @@ final class NearbyLocksViewController: UITableViewController {
     // MARK: - Properties
     
     private var items = [LockPeripheral<NativeCentral>]()
-    
-    let scanDuration: TimeInterval = 3.0
-    
+        
     internal lazy var progressHUD: JGProgressHUD = JGProgressHUD.currentStyle(for: self)
     
     @available(iOS 10.0, *)
@@ -154,15 +152,13 @@ final class NearbyLocksViewController: UITableViewController {
         
         // refresh iBeacons in background
         BeaconController.shared.scanBeacons()
-        
-        let scanDuration = self.scanDuration
-        
+                
         // reset table
         self.items.removeAll(keepingCapacity: true)
         
         // scan
         performActivity({
-            try Store.shared.scan(duration: scanDuration)
+            try Store.shared.scan()
             for peripheral in Store.shared.peripherals.value.values {
                 do { try Store.shared.readInformation(peripheral) }
                 catch { log("⚠️ Could not read information for peripheral \(peripheral.scanData.peripheral)") }

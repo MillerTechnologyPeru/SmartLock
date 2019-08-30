@@ -8,7 +8,6 @@
 
 import Foundation
 import UIKit
-import Foundation
 import CoreLock
 
 public protocol NewKeyViewController: ActivityIndicatorViewController {

@@ -268,10 +268,11 @@ public final class Store {
 public extension Store {
     
     func device(for identifier: UUID,
-                scanDuration: TimeInterval) throws -> LockPeripheral<NativeCentral>? {
+                scanDuration: TimeInterval? = nil) throws -> LockPeripheral<NativeCentral>? {
         
         assert(Thread.isMainThread == false)
         
+        let scanDuration = scanDuration ?? preferences.scanDuration
         if let lock = device(for: identifier) {
             return lock
         } else {
@@ -301,11 +302,13 @@ public extension Store {
         return lock
     }
     
-    func scan(duration: TimeInterval) throws {
+    func scan(duration: TimeInterval? = nil) throws {
         
+        let duration = preferences.scanDuration
+        let filterDuplicates = preferences.filterDuplicates
         assert(Thread.isMainThread == false)
         self.peripherals.value.removeAll()
-        try lockManager.scanLocks(duration: duration, filterDuplicates: true) { [unowned self] in
+        try lockManager.scanLocks(duration: duration, filterDuplicates: filterDuplicates) { [unowned self] in
             self.peripherals.value[$0.scanData.peripheral] = $0
         }
     }
@@ -317,9 +320,12 @@ public extension Store {
         
         assert(Thread.isMainThread == false)
         let setupRequest = SetupRequest()
-        let information = try lockManager.setup(setupRequest,
-                                                for: lock.scanData.peripheral,
-                                                sharedSecret: sharedSecret)
+        let information = try lockManager.setup(
+            setupRequest,
+            for: lock.scanData.peripheral,
+            sharedSecret: sharedSecret,
+            timeout: preferences.bluetoothTimeout
+        )
         
         let ownerKey = Key(setup: setupRequest)
         let lockCache = LockCache(
@@ -340,7 +346,10 @@ public extension Store {
         
         assert(Thread.isMainThread == false)
         
-        let information = try lockManager.readInformation(for: lock.scanData.peripheral)
+        let information = try lockManager.readInformation(
+            for: lock.scanData.peripheral,
+            timeout: preferences.bluetoothTimeout
+        )
         
         // update lock information cache
         self.lockInformation.value[lock.scanData.peripheral] = information
@@ -363,7 +372,8 @@ public extension Store {
         
         try lockManager.unlock(action,
                                for: lock.scanData.peripheral,
-                               with: key)
+                               with: key,
+                               timeout: preferences.bluetoothTimeout)
         return true
     }
 }
