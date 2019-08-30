@@ -21,6 +21,22 @@ public final class Store {
     
     private init() {
         
+        // clear keychain on newly installed app.
+        if defaults.isAppInstalled == false {
+            defaults.isAppInstalled = true
+            do { try keychain.removeAll() }
+            catch {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) {
+                    #if DEBUG
+                    dump(error)
+                    #endif
+                    log("⚠️ Unable to clear keychain: \(error.localizedDescription)")
+                    assertionFailure("Unable to clear keychain")
+                }
+            }
+        }
+        
+        #if os(iOS)
         // observe iBeacons
         beaconController.foundLock = { [unowned self] (lock, beacon) in
             self.lockBeaconFound(lock: lock, beacon: beacon)
@@ -28,28 +44,31 @@ public final class Store {
         beaconController.lostLock = { [unowned self] (lock) in
             self.lockBeaconExited(lock: lock)
         }
+        #endif
         
         // observe local cache changes
         locks.observe { [unowned self] _ in self.lockCacheChanged() }
         
+        #if os(iOS)
         // observe external cloud changes
         cloud.didChange = { [unowned self] in self.cloudDidChangeExternally() }
+        #endif
         
         // read from filesystem
         loadCache()
     }
     
-    public let scanning = Observable(false)
+    public let isScanning = Observable(false)
     
     public let locks = Observable([UUID: LockCache]())
     
-    private lazy var defaults = UserDefaults(suiteName: .lock)
+    public lazy var defaults = UserDefaults(suiteName: .lock)!
     
-    private lazy var keychain = Keychain(service: .lock, accessGroup: .lock)
+    internal lazy var keychain = Keychain(service: .lock, accessGroup: .lock)
     
     public lazy var fileManager: FileManager.Lock = .shared
     
-    public internal(set) var applicationData: ApplicationData {
+    public var applicationData: ApplicationData {
         get {
             if let applicationData = fileManager.applicationData {
                 return applicationData
@@ -67,11 +86,13 @@ public final class Store {
     
     public lazy var lockManager: LockManager = .shared
     
+    #if os(iOS)
+    public lazy var cloud: CloudStore = .shared
+    
     public lazy var beaconController: BeaconController = .shared
     
     public lazy var spotlight: SpotlightController = .shared
-    
-    public lazy var cloud: CloudStore = .shared
+    #endif
     
     // BLE cache
     public let peripherals = Observable([NativeCentral.Peripheral: LockPeripheral<NativeCentral>]())
@@ -103,7 +124,8 @@ public final class Store {
                 #if DEBUG
                 dump(error)
                 #endif
-                fatalError("Unable retrieve value from keychain: \(error)")
+                assertionFailure("Unable retrieve value from keychain: \(error)")
+                return nil
             }
         }
         
@@ -119,7 +141,7 @@ public final class Store {
                 #if DEBUG
                 dump(error)
                 #endif
-                fatalError("Unable store value in keychain: \(error)")
+                assertionFailure("Unable store value in keychain: \(error)")
             }
         }
     }
@@ -161,10 +183,14 @@ public final class Store {
     
     private func lockCacheChanged() {
         
+        #if os(iOS)
         monitorBeacons()
         updateSpotlight()
         updateCloud()
+        #endif
     }
+    
+    #if os(iOS)
     
     private func monitorBeacons() {
         
@@ -191,10 +217,7 @@ public final class Store {
     private func updateCloud() {
         
         DispatchQueue.cloud.async { [weak self] in
-            do {
-                //try self?.uploadCloud()
-                try self?.syncCloud()
-            }
+            do { try self?.syncCloud() }
             catch { log("⚠️ Unable to sync iCloud: \(error)") }
         }
     }
@@ -232,6 +255,8 @@ public final class Store {
             }
         }
     }
+    
+    #endif
 }
 
 // MARK: - Lock Bluetooth Operations
@@ -275,9 +300,7 @@ public extension Store {
     func scan(duration: TimeInterval) throws {
         
         assert(Thread.isMainThread == false)
-        
         self.peripherals.value.removeAll()
-        
         try lockManager.scanLocks(duration: duration, filterDuplicates: true) { [unowned self] in
             self.peripherals.value[$0.scanData.peripheral] = $0
         }
@@ -289,15 +312,12 @@ public extension Store {
                name: String) throws {
         
         assert(Thread.isMainThread == false)
-        
         let setupRequest = SetupRequest()
-        
         let information = try lockManager.setup(setupRequest,
                                                 for: lock.scanData.peripheral,
                                                 sharedSecret: sharedSecret)
         
         let ownerKey = Key(setup: setupRequest)
-        
         let lockCache = LockCache(
             key: ownerKey,
             name: name,
@@ -340,7 +360,6 @@ public extension Store {
         try lockManager.unlock(action,
                                for: lock.scanData.peripheral,
                                with: key)
-        
         return true
     }
 }

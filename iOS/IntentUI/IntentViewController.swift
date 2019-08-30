@@ -68,9 +68,9 @@ final class IntentViewController: UIViewController, INUIHostedViewControlling {
         case .failure:
             desiredSize = .zero
         case .deferredToApplication:
-            desiredSize = .zero
+            desiredSize = configureView(for: lockCache)
         case .userConfirmationRequired:
-            desiredSize = .zero
+            desiredSize = configureView(for: lockCache)
         case .unspecified:
             desiredSize = configureView(for: lockCache)
         @unknown default:

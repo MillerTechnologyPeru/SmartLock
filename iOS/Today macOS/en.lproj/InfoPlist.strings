@@ -1,0 +1,3 @@
+/* Display name and description for this extension. */
+"CFBundleDisplayName" = "Lock";
+"com.apple.notificationcenter.widget.description" = "Widget for controlling your locks.";

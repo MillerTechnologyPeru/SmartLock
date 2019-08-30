@@ -60,7 +60,7 @@
         "repositoryURL": "https://github.com/mac-cain13/R.swift.Library",
         "state": {
           "branch": "master",
-          "revision": "56562c38e46e2431e06dea757d1d416754974c54",
+          "revision": "3365947d725398694d6ed49f2e6622f05ca3fc0f",
           "version": null
         }
       },
@@ -69,7 +69,7 @@
         "repositoryURL": "https://github.com/PureSwift/TLVCoding.git",
         "state": {
           "branch": "master",
-          "revision": "129ad84d45d7a25e29a902dd58567ff2fed4fc14",
+          "revision": "ae79b25d192778b00b10cdc6e28f7d734e084fad",
           "version": null
         }
       }

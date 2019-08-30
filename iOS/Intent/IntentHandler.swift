@@ -9,26 +9,19 @@
 import Foundation
 import Intents
 import CoreBluetooth
+import CoreLock
 import Bluetooth
 import GATT
 import DarwinGATT
-import CoreLock
 import LockKit
 
-// As an example, this class is set up to handle Message intents.
-// You will want to replace this or add other intents as appropriate.
-// The intents you wish to handle must be declared in the extension's Info.plist.
-
-// You can test your example integration by saying things to Siri like:
-// "Send a message using <myApp>"
-// "<myApp> John saying hello"
-// "Search for messages in <myApp>"
-
-final class IntentHandler: INExtension, INSendMessageIntentHandling, INSearchForMessagesIntentHandling, INSetMessageAttributeIntentHandling {
+final class IntentHandler: INExtension {
     
     static let didLaunch: Void = {
         // configure logging
+        #if os(iOS)
         Log.shared = .intent
+        #endif
         // print app info
         log("🎙 Launching Intent")
     }()
@@ -37,125 +30,100 @@ final class IntentHandler: INExtension, INSendMessageIntentHandling, INSearchFor
         // This is the default implementation.  If you want different objects to handle different intents,
         // you can override this and return the handler you want for that particular intent.
         
+        assert(Thread.isMainThread == false)
         DispatchQueue.main.sync {
-            
             let _  = IntentHandler.didLaunch
             LockManager.shared.log = { log("🔒 LockManager: " + $0) }
+            #if os(iOS)
             BeaconController.shared.log = { log("📶 \(BeaconController.self): " + $0) }
+            #endif
+            // load updated lock information
+            Store.shared.loadCache()
         }
         
-        // load updated lock information
-        Store.shared.loadCache()
-        
-        return UnlockIntentHandler()
-    }
-    
-    // MARK: - INSendMessageIntentHandling
-    
-    // Implement resolution methods to provide additional information about your intent (optional).
-    func resolveRecipients(for intent: INSendMessageIntent, with completion: @escaping ([INSendMessageRecipientResolutionResult]) -> Void) {
-        
-        if let recipients = intent.recipients {
-            
-            // If no recipients were provided we'll need to prompt for a value.
-            if recipients.count == 0 {
-                completion([INSendMessageRecipientResolutionResult.needsValue()])
-                return
-            }
-            
-            var resolutionResults = [INSendMessageRecipientResolutionResult]()
-            for recipient in recipients {
-                let matchingContacts = [recipient] // Implement your contact matching logic here to create an array of matching contacts
-                switch matchingContacts.count {
-                case 2  ... Int.max:
-                    // We need Siri's help to ask user to pick one from the matches.
-                    resolutionResults += [INSendMessageRecipientResolutionResult.disambiguation(with: matchingContacts)]
-                    
-                case 1:
-                    // We have exactly one matching contact
-                    resolutionResults += [INSendMessageRecipientResolutionResult.success(with: recipient)]
-                    
-                case 0:
-                    // We have no contacts matching the description provided
-                    resolutionResults += [INSendMessageRecipientResolutionResult.unsupported()]
-                    
-                default:
-                    break
-                    
-                }
-            }
-            completion(resolutionResults)
-        }
-    }
-    
-    func resolveContent(for intent: INSendMessageIntent, with completion: @escaping (INStringResolutionResult) -> Void) {
-        if let text = intent.content, !text.isEmpty {
-            completion(INStringResolutionResult.success(with: text))
+        if #available(watchOSApplicationExtension 5.0, *) {
+            return UnlockIntentHandler()
         } else {
-            completion(INStringResolutionResult.needsValue())
+            fatalError()
         }
-    }
-    
-    // Once resolution is completed, perform validation on the intent and provide confirmation (optional).
-    
-    func confirm(intent: INSendMessageIntent, completion: @escaping (INSendMessageIntentResponse) -> Void) {
-        // Verify user is authenticated and your app is ready to send a message.
-        
-        let userActivity = NSUserActivity(activityType: NSStringFromClass(INSendMessageIntent.self))
-        let response = INSendMessageIntentResponse(code: .ready, userActivity: userActivity)
-        completion(response)
-    }
-    
-    // Handle the completed intent (required).
-    
-    func handle(intent: INSendMessageIntent, completion: @escaping (INSendMessageIntentResponse) -> Void) {
-        // Implement your application logic to send a message here.
-        
-        let userActivity = NSUserActivity(activityType: NSStringFromClass(INSendMessageIntent.self))
-        let response = INSendMessageIntentResponse(code: .success, userActivity: userActivity)
-        completion(response)
-    }
-    
-    // Implement handlers for each intent you wish to handle.  As an example for messages, you may wish to also handle searchForMessages and setMessageAttributes.
-    
-    // MARK: - INSearchForMessagesIntentHandling
-    
-    func handle(intent: INSearchForMessagesIntent, completion: @escaping (INSearchForMessagesIntentResponse) -> Void) {
-        // Implement your application logic to find a message that matches the information in the intent.
-        
-        let userActivity = NSUserActivity(activityType: NSStringFromClass(INSearchForMessagesIntent.self))
-        let response = INSearchForMessagesIntentResponse(code: .success, userActivity: userActivity)
-        // Initialize with found message's attributes
-        response.messages = [INMessage(
-            identifier: "identifier",
-            content: "I am so excited about SiriKit!",
-            dateSent: Date(),
-            sender: INPerson(personHandle: INPersonHandle(value: "sarah@example.com", type: .emailAddress), nameComponents: nil, displayName: "Sarah", image: nil,  contactIdentifier: nil, customIdentifier: nil),
-            recipients: [INPerson(personHandle: INPersonHandle(value: "+1-415-555-5555", type: .phoneNumber), nameComponents: nil, displayName: "John", image: nil,  contactIdentifier: nil, customIdentifier: nil)]
-            )]
-        completion(response)
-    }
-    
-    // MARK: - INSetMessageAttributeIntentHandling
-    
-    func handle(intent: INSetMessageAttributeIntent, completion: @escaping (INSetMessageAttributeIntentResponse) -> Void) {
-        // Implement your application logic to set the message attribute here.
-        
-        let userActivity = NSUserActivity(activityType: NSStringFromClass(INSetMessageAttributeIntent.self))
-        let response = INSetMessageAttributeIntentResponse(code: .success, userActivity: userActivity)
-        completion(response)
     }
 }
 
 // MARK: - UnlockIntentHandler
 
+@available(watchOSApplicationExtension 5.0, *)
 final class UnlockIntentHandler: NSObject, UnlockIntentHandling {
+    
+    @available(iOSApplicationExtension 13.0, watchOSApplicationExtension 6.0, *)
+    func provideLockOptions(for intent: UnlockIntent, with completion: @escaping ([IntentLock]?, Error?) -> Void) {
+        
+        async {
+            // load updated lock information
+            Store.shared.loadCache()
+            
+            // locks
+            let intentLocks = Store.shared.locks.value.map { IntentLock(identifier: $0, name: $1.name) }
+            completion(intentLocks, nil)
+        }
+    }
+    
+    @available(iOSApplicationExtension 13.0, watchOSApplicationExtension 6.0, *)
+    func resolveLock(for intent: UnlockIntent, with completion: @escaping (UnlockLockResolutionResult) -> Void) {
+        
+        async {
+            
+            // load updated lock information
+            Store.shared.loadCache()
+            
+            // a specified lock is required to complete the action
+            guard let intentLock = intent.lock else {
+                completion(.needsValue())
+                return
+            }
+                        
+            // validate UUID string
+            guard let identifier = intentLock.identifier.flatMap({ UUID(uuidString: $0) }) else {
+                completion(.unsupported())
+                return
+            }
+            
+            // validate key is available for lock.
+            guard let lockCache = Store.shared[lock: identifier],
+                Store.shared[key: lockCache.key.identifier] != nil else {
+                    completion(.unsupported(forReason: .unknownLock))
+                    return
+            }
+            
+            // check if lock is in range
+            var device: LockPeripheral<NativeCentral>?
+            do { device = try Store.shared.device(for: identifier, scanDuration: 2.0) }
+            catch {
+                completion(.confirmationRequired(with: intentLock))
+                return
+            }
+            
+            // device not in range
+            guard let _ = device else {
+                completion(.confirmationRequired(with: intentLock))
+                return
+            }
+            
+            completion(.success(with: intentLock))
+        }
+    }
     
     func confirm(intent: UnlockIntent, completion: @escaping (UnlockIntentResponse) -> Void) {
         
+        assert(Thread.isMainThread == false, "Should not be main thread")
+        
         mainQueue {
             
-            guard let identifierString = intent.lock?.identifier,
+            guard let intentLock = intent.lock else {
+                completion(.failure(failureReason: "No lock specified."))
+                return
+            }
+            
+            guard let identifierString = intentLock.identifier,
                 let lockIdentifier = UUID(uuidString: identifierString),
                 let _ = Store.shared[lock: lockIdentifier] else {
                     completion(.failure(failureReason: "Invalid lock."))
@@ -168,11 +136,16 @@ final class UnlockIntentHandler: NSObject, UnlockIntentHandling {
     
     func handle(intent: UnlockIntent, completion: @escaping (UnlockIntentResponse) -> Void) {
         
-        assert(Thread.isMainThread == false, "Not main thread")
+        assert(Thread.isMainThread == false, "Should not be main thread")
         
         mainQueue {
             
-            guard let identifierString = intent.lock?.identifier,
+            guard let intentLock = intent.lock else {
+                completion(.failure(failureReason: "No lock specified."))
+                return
+            }
+            
+            guard let identifierString = intentLock.identifier,
                 let lockIdentifier = UUID(uuidString: identifierString),
                 let lockCache = Store.shared[lock: lockIdentifier] else {
                     completion(.failure(failureReason: "Invalid lock."))
@@ -199,7 +172,7 @@ final class UnlockIntentHandler: NSObject, UnlockIntentHandling {
                         return
                     }
                     
-                    completion(.success(lock: lockCache.name))
+                    completion(.success(lock: intentLock))
                 }
                 catch {
                     completion(.failure(failureReason: error.localizedDescription))
@@ -212,6 +185,7 @@ final class UnlockIntentHandler: NSObject, UnlockIntentHandling {
 
 // MARK: - Logging
 
+#if os(iOS)
 extension Log {
     
     static var intent: Log {
@@ -224,3 +198,4 @@ extension Log {
         return Cache.log
     }
 }
+#endif

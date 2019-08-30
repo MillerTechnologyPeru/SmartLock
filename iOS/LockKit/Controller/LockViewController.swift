@@ -89,7 +89,7 @@ public final class LockViewController: UITableViewController {
         
         let foundLock = Store.shared[lock: lockIdentifier]
         
-        let isScanning = Store.shared.scanning.value == false
+        let isScanning = Store.shared.isScanning.value == false
         
         let shouldScan = foundLock == nil && isScanning == false
         

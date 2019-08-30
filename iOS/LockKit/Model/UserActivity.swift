@@ -9,7 +9,9 @@
 import Foundation
 import UIKit
 import Intents
+#if os(iOS)
 import CoreSpotlight
+#endif
 import MobileCoreServices
 
 /// `NSUserActivity` type
@@ -202,6 +204,7 @@ public extension NSUserActivity {
             self.init(activityType: .screen, userInfo: [
                 .screen: screen.rawValue as NSString
                 ])
+            #if os(iOS)
             let attributes = CSSearchableItemAttributeSet(itemContentType: screen.rawValue)
             switch screen {
             case .nearbyLocks:
@@ -214,10 +217,11 @@ public extension NSUserActivity {
                 attributes.thumbnailData = UIImage(lockKit: "activityLock")?.pngData()
             }
             self.contentAttributeSet = attributes
+            #endif
             self.isEligibleForSearch = false
             self.isEligibleForHandoff = true
             #if !targetEnvironment(macCatalyst)
-            if #available(iOS 12.0, *) {
+            if #available(iOS 12.0, watchOS 5.0, *) {
                 self.isEligibleForPrediction = true
                 self.isEligibleForPublicIndexing = true // show in Siri Shortcuts gallery
             }
@@ -228,14 +232,16 @@ public extension NSUserActivity {
                 ])
             if let lockCache = Store.shared[lock: lockIdentifier] {
                 self.title = lockCache.name
+                #if os(iOS)
                 self.contentAttributeSet = SearchableLock(identifier: lockIdentifier, cache: lockCache).searchableAttributeSet()
+                #endif
             } else {
                 self.title = "Lock \(lockIdentifier)"
             }
             self.isEligibleForSearch = false // use Spotlight instead
             self.isEligibleForHandoff = true
             #if !targetEnvironment(macCatalyst)
-            if #available(iOS 12.0, *) {
+            if #available(iOS 12.0, watchOS 5.0, *) {
                 self.isEligibleForPrediction = true
             }
             #endif
@@ -244,18 +250,20 @@ public extension NSUserActivity {
                 .action: AppActivity.ActionType.shareKey.rawValue as NSString,
                 .lock: lockIdentifier.uuidString as NSString
                 ])
+            #if os(iOS)
             let attributes = CSSearchableItemAttributeSet(itemContentType: kUTTypeText as String)
+            attributes.thumbnailData = UIImage(lockKit: "activityNewKey")?.pngData()
+            self.contentAttributeSet = attributes
+            #endif
             if let lockCache = Store.shared[lock: lockIdentifier] {
                 self.title = "Share Key for \(lockCache.name)"
             } else {
                 self.title = "Share Key for \(lockIdentifier)"
             }
-            attributes.thumbnailData = UIImage(lockKit: "activityNewKey")?.pngData()
-            self.contentAttributeSet = attributes
             self.isEligibleForSearch = false
             self.isEligibleForHandoff = false
             #if !targetEnvironment(macCatalyst)
-            if #available(iOS 12.0, *) {
+            if #available(iOS 12.0, watchOS 5.0, *) {
                 self.isEligibleForPrediction = true
             }
             #endif
@@ -272,13 +280,13 @@ public extension NSUserActivity {
             self.isEligibleForSearch = false
             self.isEligibleForHandoff = false
             #if !targetEnvironment(macCatalyst)
-            if #available(iOS 12.0, *) {
+            if #available(iOS 12.0, watchOS 5.0, *) {
                 self.isEligibleForPrediction = true
                 self.suggestedInvocationPhrase = "Unlock my door"
             }
             #endif
         }
-        if #available(iOS 12.0, *) {
+        if #available(iOS 12.0, watchOS 5.0, *) {
             switch activity {
             case let .action(action):
                 self.persistentIdentifier = action.rawValue

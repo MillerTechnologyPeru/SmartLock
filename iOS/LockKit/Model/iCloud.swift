@@ -38,19 +38,23 @@ public final class CloudStore {
     
     deinit {
         
+        #if os(iOS)
         if let observer = keyValueStoreObserver {
             NotificationCenter.default.removeObserver(observer)
         }
+        #endif
     }
     
     private init() {
         
+        #if os(iOS)
         // observe changes
         keyValueStoreObserver = NotificationCenter.default.addObserver(
             forName: NSUbiquitousKeyValueStore.didChangeExternallyNotification,
             object: self.keyValueStore,
             queue: nil,
             using: { [weak self] in self?.didChangeExternally($0) })
+        #endif
     }
     
     // MARK: - Properties
@@ -59,7 +63,9 @@ public final class CloudStore {
     
     private lazy var keychain = Keychain(service: .lockCloud, accessGroup: .lock).synchronizable(true)
     
+    #if os(iOS)
     private lazy var keyValueStore: NSUbiquitousKeyValueStore = .default
+    #endif
     
     private var keyValueStoreObserver: NSObjectProtocol?
         
@@ -103,22 +109,30 @@ public final class CloudStore {
     
     private func didUpload(applicationData: ApplicationData) {
         
+        #if os(iOS)
         // inform iCloud Key Value Store
         keyValueStore.set(applicationData.updated as NSDate, forKey: UbiquitousKey.updated.rawValue)
         keyValueStore.synchronize()
+        #elseif os(watchOS)
+        
+        #endif
     }
     
+    #if os(iOS)
     public func lastUpdated() -> Date? {
         
         keyValueStore.synchronize()
         return keyValueStore.object(forKey: UbiquitousKey.updated.rawValue) as? Date
     }
+    #endif
     
+    #if os(iOS)
     private func didChangeExternally(_ notification: Notification) {
         
         keyValueStore.synchronize()
         didChange?()
     }
+    #endif
 }
 
 public extension CloudStore {
@@ -191,6 +205,7 @@ internal extension ApplicationData {
 
 public extension Store {
     
+    #if os(iOS)
     func cloudDidChangeExternally(retry: Bool = false) {
         
         if let lastUpdatedCloud = self.cloud.lastUpdated() {
@@ -221,14 +236,17 @@ public extension Store {
             }
         }
     }
+    #endif
     
     func syncCloud(conflicts: (ApplicationData) -> Bool? = { _ in return nil }) throws {
         
+        // make sure iCloud is enabled
+        guard defaults.isCloudEnabled else { return }
         assert(Thread.isMainThread == false)
-        
         guard try downloadCloud(conflicts: conflicts)
             else { return } // aborted
         try uploadCloud()
+        defaults.lastCloudUpdate = Date()
     }
     
     @discardableResult
@@ -338,7 +356,7 @@ public extension DispatchQueue {
     }
 }
 
-#if canImport(UIKit)
+#if os(iOS)
 import UIKit
 
 public extension ActivityIndicatorViewController where Self: UIViewController {

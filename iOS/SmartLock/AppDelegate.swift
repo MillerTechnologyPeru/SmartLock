@@ -31,6 +31,8 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
     
     private(set) var didBecomeActive: Bool = false
     
+    let appLaunch = Date()
+    
     lazy var bundle = Bundle.Lock(rawValue: Bundle.main.bundleIdentifier ?? "") ?? .app
     
     #if DEBUG || targetEnvironment(macCatalyst)
@@ -57,7 +59,7 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
             try RLockKit.validate()
         } catch {
             dump(error)
-            assertionFailure("Could not validate R.swift \(error)")
+            assertionFailure("Could not validate R.swift \(error.localizedDescription)")
         }
         #endif
         
@@ -65,6 +67,7 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
         LockManager.shared.log = { log("🔒 LockManager: " + $0) }
         BeaconController.shared.log = { log("📶 \(BeaconController.self): " + $0) }
         SpotlightController.shared.log = { log("🔦 \(SpotlightController.self): " + $0) }
+        WatchController.shared.log = { log("⌚️ \(WatchController.self): " + $0) }
         if #available(iOS 10.0, *) {
             UserNotificationCenter.shared.log = { log("📨 \(UserNotificationCenter.self): " + $0) }
         }
@@ -83,14 +86,26 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
             }
         }
         
-        // background fetch
-        #if !targetEnvironment(macCatalyst)
-        application.setMinimumBackgroundFetchInterval(60 * 10)
-        #endif
+        // setup watch
+        if WatchController.isSupported {
+            WatchController.shared.activate()
+            WatchController.shared.keys = { Store.shared[key: $0] }
+            WatchController.shared.context = .init(
+                applicationData: Store.shared.applicationData
+            )
+            Store.shared.locks.observe { _ in
+                WatchController.shared.context = .init(
+                    applicationData: Store.shared.applicationData
+                )
+            }
+        }
         
-        // scan periodically in macOS
         #if targetEnvironment(macCatalyst)
+        // scan periodically in macOS
         setupBackgroundUpdates()
+        #else
+        // background fetch in iOS
+        application.setMinimumBackgroundFetchInterval(60 * 10)
         #endif
         
         // handle url
