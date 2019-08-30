@@ -34,7 +34,7 @@
 		<key>NSExtensionPrincipalClass</key>
 		<string>$(PRODUCT_MODULE_NAME).TodayViewController</string>
 		<key>com.apple.notificationcenter.widget.description</key>
-		<string>Today macOS</string>
+		<string>Lock</string>
 	</dict>
 	<key>NSHumanReadableCopyright</key>
 	<string>Copyright © 2019 ColemanCDA. All rights reserved.</string>

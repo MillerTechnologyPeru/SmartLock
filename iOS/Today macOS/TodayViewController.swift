@@ -9,7 +9,7 @@
 import Cocoa
 import NotificationCenter
 
-class TodayViewController: NSViewController, NCWidgetProviding, NCWidgetListViewDelegate, NCWidgetSearchViewDelegate {
+final class TodayViewController: NSViewController, NCWidgetProviding, NCWidgetListViewDelegate, NCWidgetSearchViewDelegate {
 
     @IBOutlet var listViewController: NCWidgetListViewController!
     var searchController: NCWidgetSearchViewController?
@@ -23,10 +23,13 @@ class TodayViewController: NSViewController, NCWidgetProviding, NCWidgetListView
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        print("Loaded \(TodayViewController.self)")
+        
         // Set up the widget list view controller.
         // The contents property should contain an object for each row in the list.
-        self.listViewController.contents = ["Hello World!"]
+        self.listViewController.contents = ["Swift!"]
     }
+    
     
     override func dismiss(_ viewController: NSViewController) {
         super.dismiss(viewController)
