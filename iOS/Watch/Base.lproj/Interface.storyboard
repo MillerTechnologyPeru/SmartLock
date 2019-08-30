@@ -2,6 +2,7 @@
 <document type="com.apple.InterfaceBuilder.WatchKit.Storyboard" version="3.0" toolsVersion="14865.1" targetRuntime="watchKit" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="Zjw-i6-u6T">
     <device id="watch38"/>
     <dependencies>
+        <deployment identifier="watchOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14819.2"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBWatchKitPlugin" version="14642"/>
     </dependencies>
@@ -52,7 +53,7 @@
                                 </button>
                                 <table alignment="left" id="Jj8-yd-a2P">
                                     <items>
-                                        <tableRow identifier="Lock" id="Nmb-JL-HB5" customClass="LockRowController" customModule="CerraduraWatch_Extension">
+                                        <tableRow identifier="Lock" id="Nmb-JL-HB5" customClass="LockRowController" customModule="Watch_Extension">
                                             <group key="rootItem" width="1" alignment="left" spacing="5" id="tG3-7d-d1d">
                                                 <items>
                                                     <imageView width="0.29999999999999999" height="0.90000000000000002" alignment="left" verticalAlignment="center" image="permissionBadgeAdmin" contentMode="scaleAspectFit" id="Rlb-ce-PGN"/>
