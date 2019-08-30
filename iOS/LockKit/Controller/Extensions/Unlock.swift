@@ -42,7 +42,8 @@ public extension UIViewController {
     ///
     /// - Note: Prior to iOS 12 this method sets the current user activity.
     func donateUnlockIntent(for lock: UUID) {
-        
+        #if targetEnvironment(macCatalyst)
+        #else
         guard let lockCache = Store.shared[lock: lock]
             else { return}
         
@@ -59,5 +60,6 @@ public extension UIViewController {
             self.userActivity = NSUserActivity(.action(.unlock(lock)))
             self.userActivity?.becomeCurrent()
         }
+        #endif
     }
 }
