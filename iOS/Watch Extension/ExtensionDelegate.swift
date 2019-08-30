@@ -53,6 +53,19 @@ final class ExtensionDelegate: NSObject, WKExtensionDelegate {
         // Use this method to pause ongoing tasks, disable timers, etc.
         
         log("⌚️ Will resign active")
+        
+        #if DEBUG
+        let updateInterval: TimeInterval = 10
+        #else
+        let updateInterval: TimeInterval = 60 * 3
+        #endif
+        WKExtension.shared().scheduleBackgroundRefresh(withPreferredDate: Date() + updateInterval, userInfo: nil) { (error) in
+            if let error = error {
+                log("⚠️ Could not end background task: \(error.localizedDescription)")
+                return
+            }
+            log("Background task completed")
+        }
     }
 
     func handle(_ backgroundTasks: Set<WKRefreshBackgroundTask>) {
