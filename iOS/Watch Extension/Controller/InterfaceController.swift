@@ -10,6 +10,7 @@ import Foundation
 import WatchKit
 import CoreLock
 import LockKit
+import OpenCombine
 
 final class InterfaceController: WKInterfaceController {
     
@@ -31,36 +32,23 @@ final class InterfaceController: WKInterfaceController {
     
     private var items = [Item]()
     
-    private var peripheralsObserver: Int?
-    private var informationObserver: Int?
-    private var locksObserver: Int?
+    private var peripheralsObserver: AnyCancellable?
+    private var informationObserver: AnyCancellable?
+    private var locksObserver: AnyCancellable?
     
     // MARK: - Loading
-    
-    deinit {
-        
-        if let observer = peripheralsObserver {
-            Store.shared.peripherals.remove(observer: observer)
-        }
-        if let observer = informationObserver {
-            Store.shared.lockInformation.remove(observer: observer)
-        }
-        if let observer = locksObserver {
-            Store.shared.locks.remove(observer: observer)
-        }
-    }
 
     override func awake(withContext context: Any?) {
         super.awake(withContext: context)
         
         // Observe changes
-        peripheralsObserver = Store.shared.peripherals.observe { [weak self] _ in
+        peripheralsObserver = Store.shared.peripherals.sink { [weak self] _ in
             mainQueue { self?.configureView() }
         }
-        informationObserver = Store.shared.lockInformation.observe { [weak self] _ in
+        informationObserver = Store.shared.lockInformation.sink { [weak self] _ in
             mainQueue { self?.configureView() }
         }
-        locksObserver = Store.shared.locks.observe { [weak self] _ in
+        locksObserver = Store.shared.locks.sink { [weak self] _ in
             mainQueue { self?.configureView() }
         }
         

@@ -29,6 +29,15 @@
         }
       },
       {
+        "package": "GottaGoFast",
+        "repositoryURL": "https://github.com/broadwaylamb/GottaGoFast.git",
+        "state": {
+          "branch": null,
+          "revision": "85e1f5104fb1ede87d6f31acc0445555007c474c",
+          "version": "0.1.0"
+        }
+      },
+      {
         "package": "JGProgressHUD",
         "repositoryURL": "https://github.com/MillerTechnologyPeru/JGProgressHUD.git",
         "state": {
@@ -43,6 +52,15 @@
         "state": {
           "branch": "master",
           "revision": "ee878eaeb3efa09753a9e29e8deb8c331b96f3c8",
+          "version": null
+        }
+      },
+      {
+        "package": "OpenCombine",
+        "repositoryURL": "https://github.com/MillerTechnologyPeru/OpenCombine.git",
+        "state": {
+          "branch": "master",
+          "revision": "9b9915bde7bcb5c812a577fdd39c1c982668339e",
           "version": null
         }
       },
@@ -71,6 +89,15 @@
           "branch": "master",
           "revision": "ae79b25d192778b00b10cdc6e28f7d734e084fad",
           "version": null
+        }
+      },
+      {
+        "package": "Yams",
+        "repositoryURL": "https://github.com/jpsim/Yams.git",
+        "state": {
+          "branch": null,
+          "revision": "c947a306d2e80ecb2c0859047b35c73b8e1ca27f",
+          "version": "2.0.0"
         }
       }
     ]

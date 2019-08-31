@@ -15,6 +15,7 @@ import GATT
 import DarwinGATT
 import KeychainAccess
 import Combine
+import OpenCombine
 
 public final class Store {
     
@@ -48,7 +49,9 @@ public final class Store {
         #endif
         
         // observe local cache changes
-        locks.observe { [unowned self] _ in self.lockCacheChanged() }
+        let _ = locks.sink(receiveValue: { [unowned self] _ in
+            self.lockCacheChanged()
+        })
         
         #if os(iOS)
         // observe external cloud changes
@@ -62,9 +65,9 @@ public final class Store {
     @available(iOS 13.0, watchOSApplicationExtension 6.0, *)
     public lazy var objectWillChange = ObservableObjectPublisher()
     
-    public let isScanning = Observable(false)
+    public let isScanning = OpenCombine.CurrentValueSubject<Bool, Never>(false)
     
-    public let locks = Observable([UUID: LockCache]())
+    public let locks = OpenCombine.CurrentValueSubject<[UUID: LockCache], Never>([UUID: LockCache]())
     
     public lazy var preferences = Preferences(suiteName: .lock)!
     
@@ -99,9 +102,9 @@ public final class Store {
     #endif
     
     // BLE cache
-    public let peripherals = Observable([NativeCentral.Peripheral: LockPeripheral<NativeCentral>]())
+    public let peripherals = OpenCombine.CurrentValueSubject<[NativeCentral.Peripheral: LockPeripheral<NativeCentral>], Never>([NativeCentral.Peripheral: LockPeripheral<NativeCentral>]())
     
-    public let lockInformation = Observable([NativeCentral.Peripheral: LockInformationCharacteristic]())
+    public let lockInformation = OpenCombine.CurrentValueSubject<[NativeCentral.Peripheral: LockInformationCharacteristic], Never>([NativeCentral.Peripheral: LockInformationCharacteristic]())
     
     /// Cached information for the specified lock.
     public subscript (lock identifier: UUID) -> LockCache? {
@@ -262,6 +265,10 @@ public final class Store {
     
     #endif
 }
+
+// MARK: - ObservableObject
+
+extension Store: Combine.ObservableObject { }
 
 // MARK: - Lock Bluetooth Operations
 

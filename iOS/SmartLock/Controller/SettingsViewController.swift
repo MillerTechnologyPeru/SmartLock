@@ -8,7 +8,7 @@
 
 import Foundation
 import UIKit
-import SwiftUI
+//import SwiftUI
 import CoreLock
 import LockKit
 
@@ -71,6 +71,7 @@ final class SettingsViewController: UITableViewController {
             ]
         ]
         
+        /*
         if #available(iOS 13, *) {
             let section: Section = [
                 Item(
@@ -87,7 +88,7 @@ final class SettingsViewController: UITableViewController {
                 )
             ]
             data.append(section)
-        }
+        }*/
         
         // set version footer for last section
         data[data.count - 1].footer = version
