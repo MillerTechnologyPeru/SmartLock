@@ -42,6 +42,19 @@ public extension LockEvent {
             return event.date
         }
     }
+    
+    var lock: UUID {
+        switch self {
+        case let .setup(event):
+            return event.lock
+        case let .unlock(event):
+            return event.lock
+        case let .createNewKey(event):
+            return event.lock
+        case let .confirmNewKey(event):
+            return event.lock
+        }
+    }
 }
 
 // MARK: - Codable
@@ -121,13 +134,17 @@ public extension LockEvent {
         
         public let date: Date
         
+        public let lock: UUID
+        
         public let key: Key
         
         public init(identifier: UUID = UUID(),
                     date: Date = Date(),
+                    lock: UUID,
                     key: Key) {
             self.identifier = identifier
             self.date = date
+            self.lock = lock
             self.key = key
         }
     }
@@ -138,16 +155,20 @@ public extension LockEvent {
         
         public let date: Date
         
+        public let lock: UUID
+        
         public let key: Key
         
         public let action: UnlockAction
         
         public init(identifier: UUID = UUID(),
                     date: Date = Date(),
+                    lock: UUID,
                     key: Key,
                     action: UnlockAction = .default) {
             self.identifier = identifier
             self.date = date
+            self.lock = lock
             self.key = key
             self.action = action
         }
@@ -159,16 +180,20 @@ public extension LockEvent {
         
         public let date: Date
         
+        public let lock: UUID
+        
         public let key: Key
         
         public let newKey: NewKey
         
         public init(identifier: UUID = UUID(),
                     date: Date = Date(),
+                    lock: UUID,
                     key: Key,
                     newKey: NewKey) {
             self.identifier = identifier
             self.date = date
+            self.lock = lock
             self.key = key
             self.newKey = newKey
         }
@@ -180,6 +205,8 @@ public extension LockEvent {
         
         public let date: Date
         
+        public let lock: UUID
+        
         /// The new key invitation.
         public let newKey: NewKey
         
@@ -188,10 +215,12 @@ public extension LockEvent {
         
         public init(identifier: UUID = UUID(),
                     date: Date = Date(),
+                    lock: UUID,
                     newKey: NewKey,
                     key: Key) {
             self.identifier = identifier
             self.date = date
+            self.lock = lock
             self.newKey = newKey
             self.key = key
         }
