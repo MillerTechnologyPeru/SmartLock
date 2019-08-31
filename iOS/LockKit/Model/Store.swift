@@ -14,6 +14,8 @@ import CoreLock
 import GATT
 import DarwinGATT
 import KeychainAccess
+import Combine
+import OpenCombine
 
 public final class Store {
     
@@ -22,8 +24,8 @@ public final class Store {
     private init() {
         
         // clear keychain on newly installed app.
-        if defaults.isAppInstalled == false {
-            defaults.isAppInstalled = true
+        if preferences.isAppInstalled == false {
+            preferences.isAppInstalled = true
             do { try keychain.removeAll() }
             catch {
                 DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) {
@@ -47,7 +49,9 @@ public final class Store {
         #endif
         
         // observe local cache changes
-        locks.observe { [unowned self] _ in self.lockCacheChanged() }
+        let _ = locks.sink(receiveValue: { [unowned self] _ in
+            self.lockCacheChanged()
+        })
         
         #if os(iOS)
         // observe external cloud changes
@@ -58,11 +62,14 @@ public final class Store {
         loadCache()
     }
     
-    public let isScanning = Observable(false)
+    @available(iOS 13.0, watchOSApplicationExtension 6.0, *)
+    public lazy var objectWillChange = ObservableObjectPublisher()
     
-    public let locks = Observable([UUID: LockCache]())
+    public let isScanning = OpenCombine.CurrentValueSubject<Bool, Never>(false)
     
-    public lazy var defaults = UserDefaults(suiteName: .lock)!
+    public let locks = OpenCombine.CurrentValueSubject<[UUID: LockCache], Never>([UUID: LockCache]())
+    
+    public lazy var preferences = Preferences(suiteName: .lock)!
     
     internal lazy var keychain = Keychain(service: .lock, accessGroup: .lock)
     
@@ -95,9 +102,9 @@ public final class Store {
     #endif
     
     // BLE cache
-    public let peripherals = Observable([NativeCentral.Peripheral: LockPeripheral<NativeCentral>]())
+    public let peripherals = OpenCombine.CurrentValueSubject<[NativeCentral.Peripheral: LockPeripheral<NativeCentral>], Never>([NativeCentral.Peripheral: LockPeripheral<NativeCentral>]())
     
-    public let lockInformation = Observable([NativeCentral.Peripheral: LockInformationCharacteristic]())
+    public let lockInformation = OpenCombine.CurrentValueSubject<[NativeCentral.Peripheral: LockInformationCharacteristic], Never>([NativeCentral.Peripheral: LockInformationCharacteristic]())
     
     /// Cached information for the specified lock.
     public subscript (lock identifier: UUID) -> LockCache? {
@@ -259,15 +266,20 @@ public final class Store {
     #endif
 }
 
+// MARK: - ObservableObject
+
+extension Store: Combine.ObservableObject { }
+
 // MARK: - Lock Bluetooth Operations
 
 public extension Store {
     
     func device(for identifier: UUID,
-                scanDuration: TimeInterval) throws -> LockPeripheral<NativeCentral>? {
+                scanDuration: TimeInterval? = nil) throws -> LockPeripheral<NativeCentral>? {
         
         assert(Thread.isMainThread == false)
         
+        let scanDuration = scanDuration ?? preferences.scanDuration
         if let lock = device(for: identifier) {
             return lock
         } else {
@@ -297,11 +309,13 @@ public extension Store {
         return lock
     }
     
-    func scan(duration: TimeInterval) throws {
+    func scan(duration: TimeInterval? = nil) throws {
         
+        let duration = preferences.scanDuration
+        let filterDuplicates = preferences.filterDuplicates
         assert(Thread.isMainThread == false)
         self.peripherals.value.removeAll()
-        try lockManager.scanLocks(duration: duration, filterDuplicates: true) { [unowned self] in
+        try lockManager.scanLocks(duration: duration, filterDuplicates: filterDuplicates) { [unowned self] in
             self.peripherals.value[$0.scanData.peripheral] = $0
         }
     }
@@ -313,9 +327,12 @@ public extension Store {
         
         assert(Thread.isMainThread == false)
         let setupRequest = SetupRequest()
-        let information = try lockManager.setup(setupRequest,
-                                                for: lock.scanData.peripheral,
-                                                sharedSecret: sharedSecret)
+        let information = try lockManager.setup(
+            setupRequest,
+            for: lock.scanData.peripheral,
+            sharedSecret: sharedSecret,
+            timeout: preferences.bluetoothTimeout
+        )
         
         let ownerKey = Key(setup: setupRequest)
         let lockCache = LockCache(
@@ -336,7 +353,10 @@ public extension Store {
         
         assert(Thread.isMainThread == false)
         
-        let information = try lockManager.readInformation(for: lock.scanData.peripheral)
+        let information = try lockManager.readInformation(
+            for: lock.scanData.peripheral,
+            timeout: preferences.bluetoothTimeout
+        )
         
         // update lock information cache
         self.lockInformation.value[lock.scanData.peripheral] = information
@@ -359,7 +379,8 @@ public extension Store {
         
         try lockManager.unlock(action,
                                for: lock.scanData.peripheral,
-                               with: key)
+                               with: key,
+                               timeout: preferences.bluetoothTimeout)
         return true
     }
 }

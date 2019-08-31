@@ -303,7 +303,7 @@ public extension Store {
                     log("📱 Removed \(removedKeys) old keys from keychain")
                 }
                 // store date last updated
-                self.defaults.lastWatchUpdate = Date()
+                self.preferences.lastWatchUpdate = Date()
             } catch {
                 log("⚠️ Unable to sync application data \(error)")
             }

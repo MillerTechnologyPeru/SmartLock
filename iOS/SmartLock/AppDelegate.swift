@@ -93,7 +93,7 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
             WatchController.shared.context = .init(
                 applicationData: Store.shared.applicationData
             )
-            Store.shared.locks.observe { _ in
+            Store.shared.locks.sink { _ in
                 WatchController.shared.context = .init(
                     applicationData: Store.shared.applicationData
                 )

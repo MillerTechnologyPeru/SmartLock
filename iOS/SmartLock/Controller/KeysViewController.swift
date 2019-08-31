@@ -14,6 +14,7 @@ import GATT
 import CoreLock
 import LockKit
 import JGProgressHUD
+import OpenCombine
 
 final class KeysViewController: UITableViewController {
     
@@ -23,16 +24,9 @@ final class KeysViewController: UITableViewController {
         didSet { configureView() }
     }
     
-    private var locksObserver: Int?
+    private var locksObserver: AnyCancellable?
     
     // MARK: - Loading
-    
-    deinit {
-        
-        if let observer = self.locksObserver {
-            Store.shared.locks.remove(observer: observer)
-        }
-    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -43,7 +37,7 @@ final class KeysViewController: UITableViewController {
         tableView.estimatedRowHeight = 60
         
         // load data
-        locksObserver = Store.shared.locks.observe { locks in
+        locksObserver = Store.shared.locks.sink { locks in
             mainQueue { [weak self] in self?.reloadData(locks) }
         }
         

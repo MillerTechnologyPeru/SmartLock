@@ -15,7 +15,6 @@ public func mainQueue(_ block: @escaping () -> ()) {
 
 /// Perform a task on the internal queue.
 public func async(_ block: @escaping () -> ()) {
-    
     appQueue.async(execute: block)
 }
 
