@@ -43,6 +43,8 @@ public final class LockServiceController <Peripheral: PeripheralProtocol> : GATT
     
     public var unlockDelegate: UnlockDelegate = UnlockSimulator()
     
+    public var event: ((LockEvent) -> ())?
+    
     // handles
     internal let serviceHandle: UInt16
     internal let informationHandle: UInt16
@@ -274,6 +276,8 @@ public final class LockServiceController <Peripheral: PeripheralProtocol> : GATT
             
             updateInformation()
             
+            event?(.setup(.init(key: ownerKey)))
+            
         } catch { print("Setup error: \(error)") }
     }
     
@@ -301,7 +305,6 @@ public final class LockServiceController <Peripheral: PeripheralProtocol> : GATT
             
             // enforce schedule
             if case let .scheduled(schedule) = key.permission {
-                
                 guard schedule.isValid()
                     else { print("Cannot unlock during schedule"); return }
             }
@@ -310,6 +313,8 @@ public final class LockServiceController <Peripheral: PeripheralProtocol> : GATT
             try unlockDelegate.unlock(unlock.action)
             
             print("Key \(key.identifier) \(key.name) unlocked with action \(unlock.action)")
+            
+            event?(.unlock(.init(key: key, action: unlock.action)))
             
         } catch { print("Unlock error: \(error)")  }
     }
@@ -353,6 +358,8 @@ public final class LockServiceController <Peripheral: PeripheralProtocol> : GATT
             
             print("Key \(keyIdentifier) \(key.name) created new key \(request.identifier)")
             
+            event?(.createNewKey(.init(key: key, newKey: newKey)))
+            
         } catch { print("Create new key error: \(error)")  }
     }
     
@@ -394,6 +401,8 @@ public final class LockServiceController <Peripheral: PeripheralProtocol> : GATT
             print("Key \(newKeyIdentifier) \(key.name) confirmed with shared secret")
             
             assert(try! authorization.key(for: key.identifier) != nil, "Key not stored")
+            
+            event?(.confirmNewKey(.init(newKey: newKey, key: key)))
             
         } catch { print("Confirm new key error: \(error)")  }
     }
