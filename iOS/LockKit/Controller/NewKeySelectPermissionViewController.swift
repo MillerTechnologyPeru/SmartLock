@@ -11,6 +11,7 @@ import UIKit
 import CoreLock
 import Foundation
 import JGProgressHUD
+import SwiftUI
 
 public final class NewKeySelectPermissionViewController: UITableViewController, NewKeyViewController {
     
@@ -22,7 +23,7 @@ public final class NewKeySelectPermissionViewController: UITableViewController, 
     
     public lazy var progressHUD: JGProgressHUD = .currentStyle(for: self)
     
-    private let permissionTypes: [PermissionType] = [.admin, .anytime /*, .scheduled */ ]
+    private var permissionTypes: [PermissionType] = [.admin, .anytime]
     
     // MARK: - Loading
     
@@ -46,6 +47,10 @@ public final class NewKeySelectPermissionViewController: UITableViewController, 
         // setup table view
         self.tableView.estimatedRowHeight = 100
         self.tableView.rowHeight = UITableView.automaticDimension
+        
+        if #available(iOSApplicationExtension 13, *) {
+            permissionTypes.append(.scheduled)
+        }
     }
     
     public override func viewDidLayoutSubviews() {
@@ -130,7 +135,14 @@ public final class NewKeySelectPermissionViewController: UITableViewController, 
                 self?.completion?(($0, .view(cell.permissionView)))
             }
         case .scheduled:
-            fatalError("Not implemented")
+            
+            guard #available(iOSApplicationExtension 13, *) else {
+                assertionFailure("Only available on iOS 13")
+                return
+            }
+            
+            let viewController = UIHostingController(rootView: PermissionScheduleView())
+            navigationController?.pushViewController(viewController, animated: true)
         }
     }
 }
