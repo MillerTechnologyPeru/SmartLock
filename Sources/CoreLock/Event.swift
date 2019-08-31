@@ -15,6 +15,35 @@ public enum LockEvent: Equatable {
     case confirmNewKey(ConfirmNewKey)
 }
 
+public extension LockEvent {
+    
+    var identifier: UUID {
+        switch self {
+        case let .setup(event):
+            return event.identifier
+        case let .unlock(event):
+            return event.identifier
+        case let .createNewKey(event):
+            return event.identifier
+        case let .confirmNewKey(event):
+            return event.identifier
+        }
+    }
+    
+    var date: Date {
+        switch self {
+        case let .setup(event):
+            return event.date
+        case let .unlock(event):
+            return event.date
+        case let .createNewKey(event):
+            return event.date
+        case let .confirmNewKey(event):
+            return event.date
+        }
+    }
+}
+
 // MARK: - Codable
 
 extension LockEvent: Codable {
@@ -88,11 +117,16 @@ public extension LockEvent {
     
     struct Setup: Codable, Equatable {
         
+        public let identifier: UUID
+        
         public let date: Date
         
         public let key: Key
         
-        public init(date: Date = Date(), key: Key) {
+        public init(identifier: UUID = UUID(),
+                    date: Date = Date(),
+                    key: Key) {
+            self.identifier = identifier
             self.date = date
             self.key = key
         }
@@ -100,15 +134,19 @@ public extension LockEvent {
     
     struct Unlock: Codable, Equatable {
         
+        public let identifier: UUID
+        
         public let date: Date
         
         public let key: Key
         
         public let action: UnlockAction
         
-        public init(date: Date = Date(),
+        public init(identifier: UUID = UUID(),
+                    date: Date = Date(),
                     key: Key,
                     action: UnlockAction = .default) {
+            self.identifier = identifier
             self.date = date
             self.key = key
             self.action = action
@@ -117,15 +155,19 @@ public extension LockEvent {
     
     struct CreateNewKey: Codable, Equatable {
         
+        public let identifier: UUID
+        
         public let date: Date
         
         public let key: Key
         
         public let newKey: NewKey
         
-        public init(date: Date = Date(),
+        public init(identifier: UUID = UUID(),
+                    date: Date = Date(),
                     key: Key,
                     newKey: NewKey) {
+            self.identifier = identifier
             self.date = date
             self.key = key
             self.newKey = newKey
@@ -133,6 +175,8 @@ public extension LockEvent {
     }
     
     struct ConfirmNewKey: Codable, Equatable {
+        
+        public let identifier: UUID
         
         public let date: Date
         
@@ -142,10 +186,11 @@ public extension LockEvent {
         /// The newly created key.
         public let key: Key
         
-        public init(date: Date = Date(),
+        public init(identifier: UUID = UUID(),
+                    date: Date = Date(),
                     newKey: NewKey,
                     key: Key) {
-            
+            self.identifier = identifier
             self.date = date
             self.newKey = newKey
             self.key = key
