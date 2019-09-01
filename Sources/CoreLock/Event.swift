@@ -13,6 +13,7 @@ public enum LockEvent: Equatable {
     case unlock(Unlock)
     case createNewKey(CreateNewKey)
     case confirmNewKey(ConfirmNewKey)
+    case removeKey(RemoveKey)
 }
 
 public extension LockEvent {
@@ -27,6 +28,8 @@ public extension LockEvent {
             return event.identifier
         case let .confirmNewKey(event):
             return event.identifier
+        case let .removeKey(event):
+            return event.identifier
         }
     }
     
@@ -40,6 +43,8 @@ public extension LockEvent {
             return event.date
         case let .confirmNewKey(event):
             return event.date
+        case let .removeKey(event):
+            return event.date
         }
     }
     
@@ -52,6 +57,8 @@ public extension LockEvent {
         case let .createNewKey(event):
             return event.key
         case let .confirmNewKey(event):
+            return event.key
+        case let .removeKey(event):
             return event.key
         }
     }
@@ -83,6 +90,9 @@ extension LockEvent: Codable {
         case .confirmNewKey:
             let event = try container.decode(ConfirmNewKey.self, forKey: .event)
             self = .confirmNewKey(event)
+        case .removeKey:
+            let event = try container.decode(RemoveKey.self, forKey: .event)
+            self = .removeKey(event)
         }
     }
     
@@ -99,6 +109,8 @@ extension LockEvent: Codable {
             try container.encode(event, forKey: .event)
         case let .confirmNewKey(event):
             try container.encode(event, forKey: .event)
+        case let .removeKey(event):
+            try container.encode(event, forKey: .event)
         }
     }
 }
@@ -109,10 +121,11 @@ public extension LockEvent {
     
     enum EventType: String, Codable {
         
-        case setup = "com.colemancda.Lock.Event.Setup"
-        case unlock = "com.colemancda.Lock.Event.Unlock"
-        case createNewKey = "com.colemancda.Lock.Event.CreateNewKey"
-        case confirmNewKey = "com.colemancda.Lock.Event.ConfirmNewKey"
+        case setup          = "com.colemancda.Lock.Event.Setup"
+        case unlock         = "com.colemancda.Lock.Event.Unlock"
+        case createNewKey   = "com.colemancda.Lock.Event.CreateNewKey"
+        case confirmNewKey  = "com.colemancda.Lock.Event.ConfirmNewKey"
+        case removeKey      = "com.colemancda.Lock.Event.RemoveKey"
     }
     
     var type: EventType {
@@ -122,6 +135,7 @@ public extension LockEvent {
         case .unlock:           return .unlock
         case .createNewKey:     return .createNewKey
         case .confirmNewKey:    return .confirmNewKey
+        case .removeKey:        return .removeKey
         }
     }
 }
@@ -209,6 +223,31 @@ public extension LockEvent {
             self.date = date
             self.newKey = newKey
             self.key = key
+        }
+    }
+    
+    struct RemoveKey: Codable, Equatable {
+        
+        public let identifier: UUID
+        
+        public let date: Date
+        
+        public let key: UUID
+        
+        public let removedKey: UUID
+        
+        public let type: KeyType
+        
+        public init(identifier: UUID = UUID(),
+                    date: Date = Date(),
+                    key: UUID,
+                    removedKey: UUID,
+                    type: KeyType) {
+            self.identifier = identifier
+            self.date = date
+            self.key = key
+            self.removedKey = removedKey
+            self.type = type
         }
     }
 }

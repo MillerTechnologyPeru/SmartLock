@@ -401,6 +401,54 @@ public final class LockServiceController <Peripheral: PeripheralProtocol> : GATT
         } catch { print("Confirm new key error: \(error)")  }
     }
     
+    private func removeKey(_ characteristic: RemoveKeyCharacteristic) {
+        
+        let keyIdentifier = characteristic.identifier
+        
+        do {
+            
+            guard let (key, secret) = try authorization.key(for: keyIdentifier)
+                else { print("Unknown key \(keyIdentifier)"); return }
+            
+            assert(key.identifier == keyIdentifier, "Invalid key")
+            
+            // validate HMAC
+            guard characteristic.authentication.isAuthenticated(with: secret)
+                else { print("Invalid key secret"); return }
+            
+            // guard against replay attacks
+            let timestamp = characteristic.authentication.message.date
+            let now = Date()
+            guard timestamp <= now + 5, // cannot be used later for replay attacks
+                timestamp > now - 5.0 // only valid for 5 seconds
+                else { print("Authentication expired"); return }
+            
+            // enforce permission
+            guard key.permission.isAdministrator else {
+                print("Only lock owner and admins can remove keys")
+                return
+            }
+            
+            switch characteristic.type {
+            case .key:
+                guard let (removeKey, _) = try authorization.key(for: characteristic.key)
+                    else { print("Key \(characteristic.key) does not exist"); return }
+                assert(removeKey.identifier == characteristic.key)
+                try authorization.removeKey(removeKey.identifier)
+            case .newKey:
+                guard let (removeKey, _) = try authorization.newKey(for: characteristic.key)
+                    else { print("New Key \(characteristic.key) does not exist"); return }
+                assert(removeKey.identifier == characteristic.key)
+                try authorization.removeNewKey(removeKey.identifier)
+            }
+            
+            print("Key \(key.identifier) \(key.name) removed \(characteristic.type) \(characteristic.key)")
+            
+            try events.save(.removeKey(.init(key: key.identifier, removedKey: characteristic.key, type: characteristic.type)))
+            
+        } catch { print("Remove key error: \(error)")  }
+    }
+    
     private func listKeysRequest(_ characteristic: ListKeysCharacteristic, maximumUpdateValueLength: Int) {
         
         let keyIdentifier = characteristic.identifier
@@ -449,55 +497,6 @@ public final class LockServiceController <Peripheral: PeripheralProtocol> : GATT
             print("Key \(key.identifier) \(key.name) recieved keys list")
             
         } catch { print("List keys error: \(error)")  }
-    }
-    
-    private func removeKey(_ characteristic: RemoveKeyCharacteristic) {
-        
-        let keyIdentifier = characteristic.identifier
-        
-        do {
-            
-            guard let (key, secret) = try authorization.key(for: keyIdentifier)
-                else { print("Unknown key \(keyIdentifier)"); return }
-            
-            assert(key.identifier == keyIdentifier, "Invalid key")
-            
-            // validate HMAC
-            guard characteristic.authentication.isAuthenticated(with: secret)
-                else { print("Invalid key secret"); return }
-            
-            // guard against replay attacks
-            let timestamp = characteristic.authentication.message.date
-            let now = Date()
-            guard timestamp <= now + 5, // cannot be used later for replay attacks
-                timestamp > now - 5.0 // only valid for 5 seconds
-                else { print("Authentication expired"); return }
-            
-            // enforce permission
-            switch key.permission {
-            case .owner, .admin:
-                break
-            case .anytime, .scheduled:
-                print("Only lock owner and admins can remove keys")
-                return
-            }
-            
-            switch characteristic.type {
-            case .key:
-                guard let (removeKey, _) = try authorization.key(for: characteristic.key)
-                    else { print("Key \(characteristic.key) does not exist"); return }
-                assert(removeKey.identifier == characteristic.key)
-                try authorization.removeKey(removeKey.identifier)
-            case .newKey:
-                guard let (removeKey, _) = try authorization.newKey(for: characteristic.key)
-                    else { print("New Key \(characteristic.key) does not exist"); return }
-                assert(removeKey.identifier == characteristic.key)
-                try authorization.removeNewKey(removeKey.identifier)
-            }
-            
-            print("Key \(key.identifier) \(key.name) removed \(characteristic.type) \(characteristic.key)")
-            
-        } catch { print("Remove key error: \(error)")  }
     }
     
     private func listEventsRequest(_ characteristic: ListEventsCharacteristic, maximumUpdateValueLength: Int) {
