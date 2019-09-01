@@ -276,7 +276,7 @@ public final class LockServiceController <Peripheral: PeripheralProtocol> : GATT
             
             updateInformation()
             
-            event?(.setup(.init(lock: configurationStore.configuration.identifier, key: ownerKey)))
+            event?(.setup(.init()))
             
         } catch { print("Setup error: \(error)") }
     }
@@ -314,7 +314,7 @@ public final class LockServiceController <Peripheral: PeripheralProtocol> : GATT
             
             print("Key \(key.identifier) \(key.name) unlocked with action \(unlock.action)")
             
-            event?(.unlock(.init(lock: configurationStore.configuration.identifier, key: key, action: unlock.action)))
+            event?(.unlock(.init(key: key.identifier, action: unlock.action)))
             
         } catch { print("Unlock error: \(error)")  }
     }
@@ -358,7 +358,7 @@ public final class LockServiceController <Peripheral: PeripheralProtocol> : GATT
             
             print("Key \(keyIdentifier) \(key.name) created new key \(request.identifier)")
             
-            event?(.createNewKey(.init(lock: configurationStore.configuration.identifier, key: key, newKey: newKey)))
+            event?(.createNewKey(.init(key: key.identifier, newKey: newKey.identifier)))
             
         } catch { print("Create new key error: \(error)")  }
     }
@@ -402,7 +402,7 @@ public final class LockServiceController <Peripheral: PeripheralProtocol> : GATT
             
             assert(try! authorization.key(for: key.identifier) != nil, "Key not stored")
             
-            event?(.confirmNewKey(.init(lock: configurationStore.configuration.identifier, newKey: newKey, key: key)))
+            event?(.confirmNewKey(.init(newKey: newKey.identifier, key: key.identifier)))
             
         } catch { print("Confirm new key error: \(error)")  }
     }
