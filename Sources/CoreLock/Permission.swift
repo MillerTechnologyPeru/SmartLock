@@ -49,8 +49,11 @@ public extension Permission {
 
 public extension Permission {
     
-    /// Whether the permission allows for sharing keys.
-    var canShareKeys: Bool {
+    /// User can administrate the device.
+    ///
+    /// - View and edit keys.
+    /// - View full event history.
+    var isAdministrator: Bool {
         switch self {
         case .owner,
              .admin:

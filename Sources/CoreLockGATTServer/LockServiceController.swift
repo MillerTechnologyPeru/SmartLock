@@ -23,12 +23,10 @@ public final class LockServiceController <Peripheral: PeripheralProtocol> : GATT
     public let peripheral: Peripheral
     
     public var hardware: LockHardware = .empty  {
-        
         didSet { updateInformation() }
     }
     
     public var configurationStore: LockConfigurationStore {
-        
         didSet { updateInformation() }
     }
     
@@ -37,11 +35,12 @@ public final class LockServiceController <Peripheral: PeripheralProtocol> : GATT
     public var setupSecret: KeyData = KeyData()
     
     public var authorization: LockAuthorizationStore = InMemoryLockAuthorization()  {
-        
         didSet { updateInformation() }
     }
     
     public var unlockDelegate: UnlockDelegate = UnlockSimulator()
+    
+    public var events: LockEventStore = InMemoryLockEvents()
     
     // handles
     internal let serviceHandle: UInt16
@@ -274,6 +273,8 @@ public final class LockServiceController <Peripheral: PeripheralProtocol> : GATT
             
             updateInformation()
             
+            try events.save(.setup(.init(key: ownerKey.identifier)))
+            
         } catch { print("Setup error: \(error)") }
     }
     
@@ -301,7 +302,6 @@ public final class LockServiceController <Peripheral: PeripheralProtocol> : GATT
             
             // enforce schedule
             if case let .scheduled(schedule) = key.permission {
-                
                 guard schedule.isValid()
                     else { print("Cannot unlock during schedule"); return }
             }
@@ -310,6 +310,8 @@ public final class LockServiceController <Peripheral: PeripheralProtocol> : GATT
             try unlockDelegate.unlock(unlock.action)
             
             print("Key \(key.identifier) \(key.name) unlocked with action \(unlock.action)")
+            
+            try events.save(.unlock(.init(key: key.identifier, action: unlock.action)))
             
         } catch { print("Unlock error: \(error)")  }
     }
@@ -337,10 +339,7 @@ public final class LockServiceController <Peripheral: PeripheralProtocol> : GATT
                 else { print("Authentication expired \(timestamp) < \(now)"); return }
             
             // enforce permission
-            switch key.permission {
-            case .owner, .admin:
-                break
-            case .anytime, .scheduled:
+            guard key.permission.isAdministrator else {
                 print("Only lock owner and admins can create new keys")
                 return
             }
@@ -352,6 +351,8 @@ public final class LockServiceController <Peripheral: PeripheralProtocol> : GATT
             try self.authorization.add(newKey, secret: request.secret)
             
             print("Key \(keyIdentifier) \(key.name) created new key \(request.identifier)")
+            
+            try events.save(.createNewKey(.init(key: key.identifier, newKey: newKey.identifier)))
             
         } catch { print("Create new key error: \(error)")  }
     }
@@ -395,7 +396,57 @@ public final class LockServiceController <Peripheral: PeripheralProtocol> : GATT
             
             assert(try! authorization.key(for: key.identifier) != nil, "Key not stored")
             
+            try events.save(.confirmNewKey(.init(newKey: newKey.identifier, key: key.identifier)))
+            
         } catch { print("Confirm new key error: \(error)")  }
+    }
+    
+    private func removeKey(_ characteristic: RemoveKeyCharacteristic) {
+        
+        let keyIdentifier = characteristic.identifier
+        
+        do {
+            
+            guard let (key, secret) = try authorization.key(for: keyIdentifier)
+                else { print("Unknown key \(keyIdentifier)"); return }
+            
+            assert(key.identifier == keyIdentifier, "Invalid key")
+            
+            // validate HMAC
+            guard characteristic.authentication.isAuthenticated(with: secret)
+                else { print("Invalid key secret"); return }
+            
+            // guard against replay attacks
+            let timestamp = characteristic.authentication.message.date
+            let now = Date()
+            guard timestamp <= now + 5, // cannot be used later for replay attacks
+                timestamp > now - 5.0 // only valid for 5 seconds
+                else { print("Authentication expired"); return }
+            
+            // enforce permission
+            guard key.permission.isAdministrator else {
+                print("Only lock owner and admins can remove keys")
+                return
+            }
+            
+            switch characteristic.type {
+            case .key:
+                guard let (removeKey, _) = try authorization.key(for: characteristic.key)
+                    else { print("Key \(characteristic.key) does not exist"); return }
+                assert(removeKey.identifier == characteristic.key)
+                try authorization.removeKey(removeKey.identifier)
+            case .newKey:
+                guard let (removeKey, _) = try authorization.newKey(for: characteristic.key)
+                    else { print("New Key \(characteristic.key) does not exist"); return }
+                assert(removeKey.identifier == characteristic.key)
+                try authorization.removeNewKey(removeKey.identifier)
+            }
+            
+            print("Key \(key.identifier) \(key.name) removed \(characteristic.type) \(characteristic.key)")
+            
+            try events.save(.removeKey(.init(key: key.identifier, removedKey: characteristic.key, type: characteristic.type)))
+            
+        } catch { print("Remove key error: \(error)")  }
     }
     
     private func listKeysRequest(_ characteristic: ListKeysCharacteristic, maximumUpdateValueLength: Int) {
@@ -421,10 +472,7 @@ public final class LockServiceController <Peripheral: PeripheralProtocol> : GATT
                 else { print("Authentication expired \(timestamp) < \(now)"); return }
             
             // enforce permission
-            switch key.permission {
-            case .owner, .admin:
-                break
-            case .anytime, .scheduled:
+            guard key.permission.isAdministrator else {
                 print("Only lock owner and admins can view list of keys")
                 return
             }
@@ -451,7 +499,7 @@ public final class LockServiceController <Peripheral: PeripheralProtocol> : GATT
         } catch { print("List keys error: \(error)")  }
     }
     
-    private func removeKey(_ characteristic: RemoveKeyCharacteristic) {
+    private func listEventsRequest(_ characteristic: ListEventsCharacteristic, maximumUpdateValueLength: Int) {
         
         let keyIdentifier = characteristic.identifier
         
@@ -471,33 +519,41 @@ public final class LockServiceController <Peripheral: PeripheralProtocol> : GATT
             let now = Date()
             guard timestamp <= now + 5, // cannot be used later for replay attacks
                 timestamp > now - 5.0 // only valid for 5 seconds
-                else { print("Authentication expired"); return }
+                else { print("Authentication expired \(timestamp) < \(now)"); return }
+                        
+            print("Key \(key.identifier) \(key.name) requested events list")
             
-            // enforce permission
-            switch key.permission {
-            case .owner, .admin:
-                break
-            case .anytime, .scheduled:
-                print("Only lock owner and admins can remove keys")
-                return
+            if let fetchRequest = characteristic.fetchRequest {
+                dump(fetchRequest)
             }
             
-            switch characteristic.type {
-            case .key:
-                guard let (removeKey, _) = try authorization.key(for: characteristic.key)
-                    else { print("Key \(characteristic.key) does not exist"); return }
-                assert(removeKey.identifier == characteristic.key)
-                try authorization.removeKey(removeKey.identifier)
-            case .newKey:
-                guard let (removeKey, _) = try authorization.newKey(for: characteristic.key)
-                    else { print("New Key \(characteristic.key) does not exist"); return }
-                assert(removeKey.identifier == characteristic.key)
-                try authorization.removeNewKey(removeKey.identifier)
+            var fetchRequest = characteristic.fetchRequest ?? .init()
+            
+            // enforce permission, non-administrators can only view their own events.
+            if key.permission.isAdministrator == false {
+                var predicate = fetchRequest.predicate ?? .empty
+                predicate.keys = [key.identifier]
+                fetchRequest.predicate = predicate
             }
             
-            print("Key \(key.identifier) \(key.name) removed \(characteristic.type) \(characteristic.key)")
+            // send list via notifications
+            let list = try events.fetch(fetchRequest)
+            let notifications = EventListNotification.from(list: list)
+            let notificationChunks = try notifications.map {
+                ($0, try EventsCharacteristic.from($0, sharedSecret: secret, maximumUpdateValueLength: maximumUpdateValueLength))
+            }
             
-        } catch { print("Remove key error: \(error)")  }
+            // write to characteristic and issue notifications
+            for (notification, chunks) in notificationChunks {
+                for (index, chunk) in chunks.enumerated() {
+                    peripheral[characteristic: keysResponseHandle] = chunk.data
+                    print("Sent chunk \(index + 1) for event \(notification.event.identifier) (\(chunk.data.count) bytes)")
+                }
+            }
+            
+            print("Key \(key.identifier) \(key.name) recieved events list")
+            
+        } catch { print("List keys error: \(error)")  }
     }
 }
 
@@ -529,6 +585,13 @@ public protocol LockAuthorizationStore {
     var list: KeysList { get }
 }
 
+public protocol LockEventStore {
+    
+    func fetch(_ fetchRequest: ListEventsCharacteristic.FetchRequest) throws -> [LockEvent]
+    
+    func save(_ event: LockEvent) throws
+}
+
 /// Lock unlock manager
 public protocol UnlockDelegate {
     
@@ -540,12 +603,10 @@ public final class InMemoryLockConfigurationStore: LockConfigurationStore {
     public private(set) var configuration: LockConfiguration
     
     public init(configuration: LockConfiguration = LockConfiguration()) {
-        
         self.configuration = configuration
     }
     
     public func update(_ configuration: LockConfiguration) throws {
-        
         self.configuration = configuration
     }
 }
@@ -555,6 +616,19 @@ public struct UnlockSimulator: UnlockDelegate {
     public func unlock(_ action: UnlockAction) throws {
         
         print("Simulate unlock with action \(action)")
+    }
+}
+
+public final class InMemoryLockEvents: LockEventStore {
+    
+    public private(set) var events = [LockEvent]()
+    
+    public func fetch(_ fetchRequest: ListEventsCharacteristic.FetchRequest) throws -> [LockEvent] {
+        return events.fetch(fetchRequest)
+    }
+    
+    public func save(_ event: LockEvent) throws {
+        events.append(event)
     }
 }
 

@@ -10,7 +10,7 @@ import Bluetooth
 import TLVCoding
 
 /// Encrypted list of keys.
-public struct KeysCharacteristic: GATTProfileCharacteristic, Equatable {
+public struct KeysCharacteristic: GATTEncryptedNotification, Equatable {
     
     public static let uuid = BluetoothUUID(rawValue: "6AFA0D36-4567-4486-BEE5-E14A622B805F")!
     
@@ -24,22 +24,8 @@ public struct KeysCharacteristic: GATTProfileCharacteristic, Equatable {
     
     public let chunk: Chunk
     
-    internal init(chunk: Chunk) {
-        
+    public init(chunk: Chunk) {
         self.chunk = chunk
-    }
-    
-    public init?(data: Data) {
-        
-        guard let chunk = Chunk(data: data)
-            else { return nil }
-        
-        self.chunk = chunk
-    }
-    
-    public var data: Data {
-        
-        return chunk.data
     }
 }
 
@@ -125,7 +111,7 @@ internal extension KeysList {
     }
 }
 
-public struct KeyListNotification: Codable, Equatable {
+public struct KeyListNotification: Codable, Equatable, GATTEncryptedNotificationValue {
     
     public var key: KeyValue
     
