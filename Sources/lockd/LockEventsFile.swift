@@ -18,10 +18,13 @@ public struct LockEventsFile: LockEventStore {
     
     public let url: URL
     
+    public var limit: UInt
+    
     // MARK: - Initialization
     
-    public init(url: URL) {
+    public init(url: URL, limit: UInt = 256) {
         self.url = url
+        self.limit = limit
     }
     
     // MARK: - Methods
@@ -34,6 +37,9 @@ public struct LockEventsFile: LockEventStore {
         try load {
             $0.append(event)
             $0.sort(by: { $0.date > $1.date })
+            if $0.count > Int(limit) {
+                $0 = Events($0.prefix(Int(limit)))
+            }
         }
     }
     
