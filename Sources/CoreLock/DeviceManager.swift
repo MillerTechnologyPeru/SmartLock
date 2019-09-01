@@ -189,17 +189,40 @@ public final class LockManager <Central: CentralProtocol> {
         }
     }
     
+    /// Remove the specified key. 
+    public func removeKey(_ identifier: UUID,
+                          type: KeyType = .key,
+                          for peripheral: Peripheral,
+                          with key: KeyCredentials,
+                          timeout: TimeInterval = .gattDefaultTimeout) throws {
+        
+        log?("Remove \(type) \(identifier)")
+        
+        let timeout = Timeout(timeout: timeout)
+        
+        try central.device(for: peripheral, timeout: timeout) { [unowned self] (cache) in
+            
+            let characteristicValue = RemoveKeyCharacteristic(identifier: key.identifier,
+                                                              key: identifier,
+                                                              type: type,
+                                                              authentication: Authentication(key: key.secret))
+            
+            // Write unlock data to characteristic
+            try self.central.write(characteristicValue, for: cache, timeout: timeout)
+        }
+    }
+    
     /// Retreive a list of all keys on device.
     public func listKeys(for peripheral: Peripheral,
                          with key: KeyCredentials,
                          timeout: TimeInterval = .gattDefaultTimeout) throws -> KeysList {
         
-        var keys = KeysList()
+        var list = KeysList()
         try listKeys(for: peripheral,
                      with: key,
-                     notification: { (newValue, _) in keys = newValue },
+                     notification: { (newValue, isLast) in if isLast { list = newValue } },
                      timeout: timeout)
-        return keys
+        return list
     }
     
     /// Retreive a list of all keys on device.
@@ -286,26 +309,100 @@ public final class LockManager <Central: CentralProtocol> {
         }
     }
     
-    /// Remove the specified key. 
-    public func removeKey(_ identifier: UUID,
-                          type: KeyType = .key,
-                          for peripheral: Peripheral,
-                          with key: KeyCredentials,
-                          timeout: TimeInterval = .gattDefaultTimeout) throws {
+    /// Retreive a list of events on device.
+    public func listEvents(fetchRequest: ListEventsCharacteristic.FetchRequest,
+                           for peripheral: Peripheral,
+                           with key: KeyCredentials,
+                           timeout: TimeInterval = .gattDefaultTimeout) throws -> EventsList {
         
-        log?("Remove \(type) \(identifier)")
+        var list = EventsList()
+        try listEvents(fetchRequest: fetchRequest,
+                       for: peripheral,
+                       with: key,
+                       notification: { (newValue, isLast) in if isLast { list = newValue } },
+                       timeout: timeout)
+        return list
+    }
+    
+    /// Retreive a list of events on device.
+    public func listEvents(fetchRequest: ListEventsCharacteristic.FetchRequest,
+                           for peripheral: Peripheral,
+                           with key: KeyCredentials,
+                           notification: @escaping (EventsList, Bool) -> (),
+                           timeout: TimeInterval = .gattDefaultTimeout) throws {
+        
+        log?("List events for \(peripheral)")
+        
+        typealias Notification = EventsCharacteristic
         
         let timeout = Timeout(timeout: timeout)
         
         try central.device(for: peripheral, timeout: timeout) { [unowned self] (cache) in
             
-            let characteristicValue = RemoveKeyCharacteristic(identifier: key.identifier,
-                                                              key: identifier,
-                                                              type: type,
-                                                              authentication: Authentication(key: key.secret))
+            let semaphore = Semaphore(timeout: timeout.timeout)
             
-            // Write unlock data to characteristic
+            var chunks = [Chunk]()
+            chunks.reserveCapacity(2)
+            var lastNotification: EventListNotification?
+            var list = EventsList(reserveCapacity: fetchRequest.limit.flatMap({ Int($0) }) ?? 1)
+            
+            // notify
+            try self.central.notify(Notification.self, for: cache, timeout: timeout) { (response) in
+                
+                switch response {
+                case let .error(error):
+                    semaphore.stopWaiting(error)
+                case let .value(value):
+                    let chunk = value.chunk
+                    self.log?("Received chunk \(chunks.count + 1) (\(chunk.bytes.count) bytes)")
+                    chunks.append(chunk)
+                    assert(chunks.isEmpty == false)
+                    guard chunks.length >= chunk.total
+                        else { return }// wait for more chunks
+                    do {
+                        let notificationValue = try EventsCharacteristic.from(chunks: chunks, secret: key.secret)
+                        chunks.removeAll(keepingCapacity: true)
+                        lastNotification = notificationValue
+                        list.append(notificationValue.event)
+                        self.log?("Recieved event \(notificationValue.event.identifier)")
+                        notification(list, notificationValue.isLast)
+                        if notificationValue.isLast {
+                            semaphore.stopWaiting()
+                        }
+                    } catch {
+                        semaphore.stopWaiting(error)
+                    }
+                }
+            }
+            
+            let characteristicValue = ListKeysCharacteristic(
+                identifier: key.identifier,
+                authentication: Authentication(key: key.secret)
+            )
+            
+            // Write data to characteristic
             try self.central.write(characteristicValue, for: cache, timeout: timeout)
+            
+            // handle disconnect
+            self.central.didDisconnect = {
+                guard $0 == cache.peripheral else { return }
+                semaphore.stopWaiting(CentralError.disconnected)
+            }
+            
+            /// Wait for all pending notifications
+            while (lastNotification?.isLast ?? false) == false {
+                try semaphore.wait() // wait for notification
+            }
+            
+            assert(list.isEmpty == false)
+            assert(lastNotification != nil)
+            assert(lastNotification?.isLast ?? true, "Invalid last notification")
+            
+            // ignore disconnection
+            central.didDisconnect = nil
+            
+            // stop notifications
+            try self.central.notify(Notification.self, for: cache, timeout: Timeout(timeout: timeout.timeout), notification: nil)
         }
     }
 }
@@ -321,7 +418,7 @@ public extension LockManager where Central == DarwinCentral {
     ///
     /// - Parameter event: Callback for a found device.
     func scanLocks(filterDuplicates: Bool = false,
-                               event: @escaping (LockPeripheral<Central>) -> ()) throws {
+                   event: @escaping (LockPeripheral<Central>) -> ()) throws {
         
         log?("Scanning...")
         
