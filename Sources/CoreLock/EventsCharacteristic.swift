@@ -5,13 +5,12 @@
 //  Created by Alsey Coleman Miller on 8/31/19.
 //
 
-
 import Foundation
 import Bluetooth
 import TLVCoding
 
 /// Encrypted list of events.
-public struct EventsCharacteristic: GATTProfileCharacteristic, Equatable {
+public struct EventsCharacteristic: GATTEncryptedNotification, Equatable {
     
     public static let uuid = BluetoothUUID(rawValue: "DB2E0806-C9B1-4E39-A94C-0CF9A032D483")!
     
@@ -25,22 +24,8 @@ public struct EventsCharacteristic: GATTProfileCharacteristic, Equatable {
     
     public let chunk: Chunk
     
-    internal init(chunk: Chunk) {
-        
+    public init(chunk: Chunk) {
         self.chunk = chunk
-    }
-    
-    public init?(data: Data) {
-        
-        guard let chunk = Chunk(data: data)
-            else { return nil }
-        
-        self.chunk = chunk
-    }
-    
-    public var data: Data {
-        
-        return chunk.data
     }
 }
 
@@ -82,7 +67,7 @@ public extension EventsCharacteristic {
 
 public typealias EventsList = [LockEvent]
 
-public struct EventListNotification: Codable, Equatable {
+public struct EventListNotification: Codable, Equatable, GATTEncryptedNotificationValue {
     
     public var event: LockEvent
     
