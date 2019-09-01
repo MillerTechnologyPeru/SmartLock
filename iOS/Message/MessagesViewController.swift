@@ -169,7 +169,7 @@ final class MessagesViewController: MSMessagesAppViewController {
         // set data
         self.items = Store.shared.locks.value
             .lazy
-            .filter { $0.value.key.permission.canShareKeys }
+            .filter { $0.value.key.permission.isAdministrator }
             .lazy
             .map { Item(identifier: $0.key, cache: $0.value) }
             .sorted(by: { $0.cache.key.created < $1.cache.key.created })

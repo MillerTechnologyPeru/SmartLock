@@ -95,7 +95,8 @@ public final class NewKeyActivity: UIActivity {
             Store.shared[peripheral: lockItem.identifier] != nil // Lock must be reachable
             else { return false }
         
-        return lockCache.key.permission.canShareKeys
+        // only owner and admin can share keys
+        return lockCache.key.permission.isAdministrator
     }
     
     public override func prepare(withActivityItems activityItems: [Any]) {
