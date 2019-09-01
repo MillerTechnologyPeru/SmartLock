@@ -16,6 +16,10 @@
 		6E9C95ED231149A5007C18FE /* GATT in Frameworks */ = {isa = PBXBuildFile; productRef = 6E9C95EC231149A5007C18FE /* GATT */; };
 		6E9C95EF231149A5007C18FE /* DarwinGATT in Frameworks */ = {isa = PBXBuildFile; productRef = 6E9C95EE231149A5007C18FE /* DarwinGATT */; };
 		6E9C95F2231149F5007C18FE /* TLVCoding in Frameworks */ = {isa = PBXBuildFile; productRef = 6E9C95F1231149F5007C18FE /* TLVCoding */; };
+		6EACDA99231B353A000CF82A /* Event.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EACDA98231B3539000CF82A /* Event.swift */; };
+		6EACDA9A231B353A000CF82A /* Event.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EACDA98231B3539000CF82A /* Event.swift */; };
+		6EACDA9B231B353A000CF82A /* Event.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EACDA98231B3539000CF82A /* Event.swift */; };
+		6EACDA9C231B353A000CF82A /* Event.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EACDA98231B3539000CF82A /* Event.swift */; };
 		6ED81FE1231662E200B69520 /* CryptoSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 6ED81FE0231662E200B69520 /* CryptoSwift */; };
 		6ED81FE3231662E200B69520 /* DarwinGATT in Frameworks */ = {isa = PBXBuildFile; productRef = 6ED81FE2231662E200B69520 /* DarwinGATT */; };
 		6ED81FE5231662E200B69520 /* GATT in Frameworks */ = {isa = PBXBuildFile; productRef = 6ED81FE4231662E200B69520 /* GATT */; };
@@ -208,6 +212,7 @@
 		6E60FF542121041400787DAA /* GATTProfileTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GATTProfileTests.swift; sourceTree = "<group>"; };
 		6E60FF552121041400787DAA /* LinuxMain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinuxMain.swift; sourceTree = "<group>"; };
 		6E60FF572121041400787DAA /* ServerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServerTests.swift; sourceTree = "<group>"; };
+		6EACDA98231B3539000CF82A /* Event.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Event.swift; sourceTree = "<group>"; };
 		6EF1C62E22C9AC9D005E9818 /* SetupCharacteristic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SetupCharacteristic.swift; sourceTree = "<group>"; };
 		6EF1C62F22C9AC9D005E9818 /* LockConfiguration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LockConfiguration.swift; sourceTree = "<group>"; };
 		6EF1C63022C9AC9D005E9818 /* EncryptedData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EncryptedData.swift; sourceTree = "<group>"; };
@@ -421,6 +426,7 @@
 				6EF1C64722C9AC9E005E9818 /* UnlockCharacteristic.swift */,
 				6EF1C64922C9AC9E005E9818 /* Version.swift */,
 				6E0A32D422D8FCFB002EF9DE /* URL.swift */,
+				6EACDA98231B3539000CF82A /* Event.swift */,
 			);
 			path = CoreLock;
 			sourceTree = "<group>";
@@ -727,6 +733,7 @@
 				6EF1C68122C9AC9F005E9818 /* Central.swift in Sources */,
 				6EF1C6C522C9AC9F005E9818 /* Status.swift in Sources */,
 				6EF1C6C122C9AC9F005E9818 /* Version.swift in Sources */,
+				6EACDA99231B353A000CF82A /* Event.swift in Sources */,
 				6EF1C65D22C9AC9F005E9818 /* EncryptedData.swift in Sources */,
 				6EF1C65522C9AC9F005E9818 /* SetupCharacteristic.swift in Sources */,
 				6EF1C6A122C9AC9F005E9818 /* UIDevice.swift in Sources */,
@@ -774,6 +781,7 @@
 				6EF1C68322C9AC9F005E9818 /* Central.swift in Sources */,
 				6EF1C6C722C9AC9F005E9818 /* Status.swift in Sources */,
 				6EF1C6C322C9AC9F005E9818 /* Version.swift in Sources */,
+				6EACDA9B231B353A000CF82A /* Event.swift in Sources */,
 				6EF1C65F22C9AC9F005E9818 /* EncryptedData.swift in Sources */,
 				6EF1C65722C9AC9F005E9818 /* SetupCharacteristic.swift in Sources */,
 				6EF1C6A322C9AC9F005E9818 /* UIDevice.swift in Sources */,
@@ -821,6 +829,7 @@
 				6EF1C68422C9AC9F005E9818 /* Central.swift in Sources */,
 				6EF1C6C822C9AC9F005E9818 /* Status.swift in Sources */,
 				6EF1C6C422C9AC9F005E9818 /* Version.swift in Sources */,
+				6EACDA9C231B353A000CF82A /* Event.swift in Sources */,
 				6EF1C66022C9AC9F005E9818 /* EncryptedData.swift in Sources */,
 				6EF1C65822C9AC9F005E9818 /* SetupCharacteristic.swift in Sources */,
 				6EF1C6A422C9AC9F005E9818 /* UIDevice.swift in Sources */,
@@ -868,6 +877,7 @@
 				6EF1C68222C9AC9F005E9818 /* Central.swift in Sources */,
 				6EF1C6C622C9AC9F005E9818 /* Status.swift in Sources */,
 				6EF1C6C222C9AC9F005E9818 /* Version.swift in Sources */,
+				6EACDA9A231B353A000CF82A /* Event.swift in Sources */,
 				6EF1C65E22C9AC9F005E9818 /* EncryptedData.swift in Sources */,
 				6EF1C65622C9AC9F005E9818 /* SetupCharacteristic.swift in Sources */,
 				6EF1C6A222C9AC9F005E9818 /* UIDevice.swift in Sources */,

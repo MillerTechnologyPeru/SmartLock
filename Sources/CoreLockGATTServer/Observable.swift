@@ -55,7 +55,7 @@ public final class Observable<Value> {
     @discardableResult
     public func remove(observer: Int) -> Bool {
         
-        guard let index = observers.index(where: { $0.identifier == observer })
+        guard let index = observers.firstIndex(where: { $0.identifier == observer })
             else { return false }
         
         observers.remove(at: index)

@@ -42,6 +42,19 @@ public extension LockEvent {
             return event.date
         }
     }
+    
+    var key: UUID {
+        switch self {
+        case let .setup(event):
+            return event.key
+        case let .unlock(event):
+            return event.key
+        case let .createNewKey(event):
+            return event.key
+        case let .confirmNewKey(event):
+            return event.key
+        }
+    }
 }
 
 // MARK: - Codable
@@ -121,14 +134,18 @@ public extension LockEvent {
         
         public let date: Date
         
+        public let key: UUID
+        
         public init(identifier: UUID = UUID(),
-                    date: Date = Date()) {
+                    date: Date = Date(),
+                    key: UUID) {
             
             self.identifier = identifier
             self.date = date
+            self.key = key
         }
     }
-    
+
     struct Unlock: Codable, Equatable {
         
         public let identifier: UUID
