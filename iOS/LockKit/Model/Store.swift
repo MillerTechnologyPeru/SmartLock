@@ -106,7 +106,7 @@ public final class Store {
     
     public let lockInformation = OpenCombine.CurrentValueSubject<[NativeCentral.Peripheral: LockInformationCharacteristic], Never>([NativeCentral.Peripheral: LockInformationCharacteristic]())
     
-    private var locksObserver: AnyCancellable?
+    private var locksObserver: OpenCombine.AnyCancellable?
     
     // MARK: - Subscript
     
