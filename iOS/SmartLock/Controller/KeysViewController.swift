@@ -164,13 +164,11 @@ final class KeysViewController: UITableViewController {
         let delete = UITableViewRowAction(style: .destructive, title: "Delete") {
             
             assert($1 == indexPath)
-            
             let alert = UIAlertController(title: NSLocalizedString("Confirmation", comment: "DeletionConfirmation"),
                                           message: "Are you sure you want to delete this key?",
-                                          preferredStyle: UIAlertController.Style.alert)
+                                          preferredStyle: .alert)
             
             alert.addAction(UIAlertAction(title: NSLocalizedString("Cancel", comment: "Cancel"), style: .cancel, handler: { (UIAlertAction) in
-                
                 alert.dismiss(animated: true, completion: nil)
             }))
             
@@ -185,7 +183,6 @@ final class KeysViewController: UITableViewController {
         }
         
         actions.append(delete)
-        
         return actions
     }
     #endif

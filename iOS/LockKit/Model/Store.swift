@@ -49,7 +49,7 @@ public final class Store {
         #endif
         
         // observe local cache changes
-        let _ = locks.sink(receiveValue: { [unowned self] _ in
+        locksObserver = locks.sink(receiveValue: { [unowned self] _ in
             self.lockCacheChanged()
         })
         
@@ -105,6 +105,10 @@ public final class Store {
     public let peripherals = OpenCombine.CurrentValueSubject<[NativeCentral.Peripheral: LockPeripheral<NativeCentral>], Never>([NativeCentral.Peripheral: LockPeripheral<NativeCentral>]())
     
     public let lockInformation = OpenCombine.CurrentValueSubject<[NativeCentral.Peripheral: LockInformationCharacteristic], Never>([NativeCentral.Peripheral: LockInformationCharacteristic]())
+    
+    private var locksObserver: AnyCancellable?
+    
+    // MARK: - Subscript
     
     /// Cached information for the specified lock.
     public subscript (lock identifier: UUID) -> LockCache? {
