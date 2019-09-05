@@ -25,6 +25,8 @@
 		6E15AD8B2318C9060004D1AE /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6E15AD892318C9060004D1AE /* InfoPlist.strings */; };
 		6E3B70B22313E24F00BEB6FF /* ApplicationData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E3B70B12313E24F00BEB6FF /* ApplicationData.swift */; };
 		6E3B70BA2313EF1000BEB6FF /* JSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E3B70B82313E99A00BEB6FF /* JSON.swift */; };
+		6E50B0E223216F7E001014A8 /* Events.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6E50B0E123216F7E001014A8 /* Events.storyboard */; };
+		6E50B0E523217491001014A8 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 6E50B0E323217491001014A8 /* Model.xcdatamodeld */; };
 		6E5DF8B32319E3A50070787B /* OpenCombine in Frameworks */ = {isa = PBXBuildFile; productRef = 6E5DF8B22319E3A50070787B /* OpenCombine */; };
 		6E5DF8C32319EB020070787B /* OpenCombine in Frameworks */ = {isa = PBXBuildFile; productRef = 6E5DF8C22319EB020070787B /* OpenCombine */; };
 		6E6000142121119400787DAA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E6000132121119400787DAA /* AppDelegate.swift */; };
@@ -461,6 +463,9 @@
 		6E15AD8C2318C9060004D1AE /* Today_macOS.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Today_macOS.entitlements; sourceTree = "<group>"; };
 		6E3B70B12313E24F00BEB6FF /* ApplicationData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplicationData.swift; sourceTree = "<group>"; };
 		6E3B70B82313E99A00BEB6FF /* JSON.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSON.swift; sourceTree = "<group>"; };
+		6E50B0DB2320C344001014A8 /* EventsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventsView.swift; sourceTree = "<group>"; };
+		6E50B0E123216F7E001014A8 /* Events.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Events.storyboard; sourceTree = "<group>"; };
+		6E50B0E423217491001014A8 /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
 		6E6000102121119400787DAA /* SmartLock.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SmartLock.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6E6000132121119400787DAA /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		6E6000152121119400787DAA /* NearbyLocksViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NearbyLocksViewController.swift; sourceTree = "<group>"; };
@@ -692,6 +697,7 @@
 			isa = PBXGroup;
 			children = (
 				6E135CBD2319842A00FFA7F7 /* SliderCell.swift */,
+				6E50B0DB2320C344001014A8 /* EventsView.swift */,
 			);
 			path = SwiftUI;
 			sourceTree = "<group>";
@@ -813,6 +819,7 @@
 		6E6000BE21211C5F00787DAA /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				6E50B0E323217491001014A8 /* Model.xcdatamodeld */,
 				6E05B6EC22C9E42C001218D9 /* Activity.swift */,
 				6EC041272309D6CB00357585 /* ActivityHandling.swift */,
 				6E806B95230F4F7300C6FF78 /* AppGroup.swift */,
@@ -911,6 +918,7 @@
 				6E05B6EF22C9E74C001218D9 /* NewKey.storyboard */,
 				6E05B6FF22CA0029001218D9 /* NewKeyInvitation.storyboard */,
 				6E806B9D230F5F5500C6FF78 /* Logs.storyboard */,
+				6E50B0E123216F7E001014A8 /* Events.storyboard */,
 			);
 			path = Storyboards;
 			sourceTree = "<group>";
@@ -1586,6 +1594,7 @@
 				6E994AA7230DFC770076DC1B /* NewKeyInvitation.storyboard in Resources */,
 				6E994AA4230DFC770076DC1B /* LockDetail.storyboard in Resources */,
 				6E994AAB230DFDA00076DC1B /* Assets.xcassets in Resources */,
+				6E50B0E223216F7E001014A8 /* Events.storyboard in Resources */,
 				6E806B9E230F5F5500C6FF78 /* Logs.storyboard in Resources */,
 				6E994AAA230DFD980076DC1B /* LockTableViewCell.xib in Resources */,
 			);
@@ -1776,6 +1785,7 @@
 				6E994ABC230DFDB60076DC1B /* ErrorAlert.swift in Sources */,
 				6E994AC0230DFDBE0076DC1B /* ActivityIndicatorViewController.swift in Sources */,
 				6E806B96230F4F7300C6FF78 /* AppGroup.swift in Sources */,
+				6E50B0E523217491001014A8 /* Model.xcdatamodeld in Sources */,
 				6E806B98230F520400C6FF78 /* FileManager.swift in Sources */,
 				6E994AB8230DFDB10076DC1B /* Log.swift in Sources */,
 				6E3B70BA2313EF1000BEB6FF /* JSON.swift in Sources */,
@@ -3083,6 +3093,19 @@
 			productName = KeychainAccess;
 		};
 /* End XCSwiftPackageProductDependency section */
+
+/* Begin XCVersionGroup section */
+		6E50B0E323217491001014A8 /* Model.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				6E50B0E423217491001014A8 /* Model.xcdatamodel */,
+			);
+			currentVersion = 6E50B0E423217491001014A8 /* Model.xcdatamodel */;
+			path = Model.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = 6E6000082121119400787DAA /* Project object */;
 }

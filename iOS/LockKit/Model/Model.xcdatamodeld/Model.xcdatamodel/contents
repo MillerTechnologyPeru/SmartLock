@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="14897.2" systemVersion="19A546d" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="ConfirmNewKeyEvent" representedClassName=".ConfirmNewKeyEventManagedObject" parentEntity="Event" syncable="YES" codeGenerationType="category">
+        <attribute name="newKey" attributeType="UUID" usesScalarValueType="NO"/>
+    </entity>
+    <entity name="CreateNewKeyEvent" representedClassName=".CreateNewKeyEventManagedObject" parentEntity="Event" syncable="YES" codeGenerationType="category">
+        <attribute name="newKey" attributeType="UUID" usesScalarValueType="NO"/>
+    </entity>
+    <entity name="Event" representedClassName=".EventManagedObject" isAbstract="YES" syncable="YES" codeGenerationType="category">
+        <attribute name="date" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="identifier" attributeType="UUID" usesScalarValueType="NO"/>
+        <relationship name="key" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Key" inverseName="events" inverseEntity="Key"/>
+        <relationship name="lock" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Lock" inverseName="events" inverseEntity="Lock"/>
+    </entity>
+    <entity name="Key" representedClassName=".KeyManagedObject" syncable="YES" codeGenerationType="category">
+        <attribute name="identifier" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="name" optional="YES" attributeType="String"/>
+        <attribute name="type" attributeType="String"/>
+        <relationship name="events" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Event" inverseName="key" inverseEntity="Event"/>
+        <relationship name="lock" maxCount="1" deletionRule="Nullify" destinationEntity="Lock" inverseName="key" inverseEntity="Lock"/>
+        <relationship name="schedule" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Schedule" inverseName="key" inverseEntity="Schedule"/>
+    </entity>
+    <entity name="Lock" representedClassName=".LockMangedObject" syncable="YES" codeGenerationType="category">
+        <attribute name="identifier" attributeType="UUID" usesScalarValueType="YES"/>
+        <attribute name="name" attributeType="String" defaultValueString=""/>
+        <relationship name="events" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Event" inverseName="lock" inverseEntity="Event"/>
+        <relationship name="key" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Key" inverseName="lock" inverseEntity="Key"/>
+    </entity>
+    <entity name="RemoveKeyEvent" representedClassName=".RemoveKeyEventManagedObject" parentEntity="Event" syncable="YES" codeGenerationType="category">
+        <relationship name="key" optional="YES" maxCount="1" deletionRule="Nullify"/>
+    </entity>
+    <entity name="Schedule" representedClassName=".ScheduleManagedObject" syncable="YES" codeGenerationType="category">
+        <attribute name="expiry" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="friday" attributeType="Boolean" defaultValueString="YES" usesScalarValueType="YES"/>
+        <attribute name="intervalMax" attributeType="Integer 16" defaultValueString="1440" usesScalarValueType="YES"/>
+        <attribute name="intervalMin" attributeType="Integer 16" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="monday" attributeType="Boolean" defaultValueString="YES" usesScalarValueType="YES"/>
+        <attribute name="saturday" attributeType="Boolean" defaultValueString="YES" usesScalarValueType="YES"/>
+        <attribute name="sunday" attributeType="Boolean" defaultValueString="YES" usesScalarValueType="YES"/>
+        <attribute name="thursday" attributeType="Boolean" defaultValueString="YES" usesScalarValueType="YES"/>
+        <attribute name="tuesday" attributeType="Boolean" defaultValueString="YES" usesScalarValueType="YES"/>
+        <attribute name="wednesday" attributeType="Boolean" defaultValueString="YES" usesScalarValueType="YES"/>
+        <relationship name="key" maxCount="1" deletionRule="Nullify" destinationEntity="Key" inverseName="schedule" inverseEntity="Key"/>
+    </entity>
+    <entity name="SetupEvent" representedClassName=".SetupEventManagedObject" parentEntity="Event" syncable="YES" codeGenerationType="category"/>
+    <entity name="UnlockEvent" representedClassName="UnlockEvent" parentEntity="Event" syncable="YES" codeGenerationType="class">
+        <attribute name="action" attributeType="Integer 64" defaultValueString="NO" usesScalarValueType="YES"/>
+    </entity>
+    <elements>
+        <element name="Event" positionX="-63" positionY="-18" width="128" height="103"/>
+        <element name="Lock" positionX="-54" positionY="9" width="128" height="103"/>
+        <element name="Key" positionX="-36" positionY="36" width="128" height="133"/>
+        <element name="SetupEvent" positionX="-27" positionY="63" width="128" height="43"/>
+        <element name="Schedule" positionX="-9" positionY="90" width="128" height="208"/>
+        <element name="UnlockEvent" positionX="9" positionY="180" width="128" height="58"/>
+        <element name="CreateNewKeyEvent" positionX="-36" positionY="126" width="128" height="58"/>
+        <element name="ConfirmNewKeyEvent" positionX="-27" positionY="135" width="128" height="58"/>
+        <element name="RemoveKeyEvent" positionX="-18" positionY="144" width="128" height="58"/>
+    </elements>
+</model>
