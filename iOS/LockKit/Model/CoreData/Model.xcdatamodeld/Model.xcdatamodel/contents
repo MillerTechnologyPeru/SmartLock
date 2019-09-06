@@ -18,14 +18,14 @@
         <attribute name="name" attributeType="String"/>
         <attribute name="permission" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
         <relationship name="lock" maxCount="1" deletionRule="Nullify" destinationEntity="Lock" inverseName="keys" inverseEntity="Lock"/>
-        <relationship name="schedule" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Schedule" inverseName="key" inverseEntity="Schedule"/>
+        <relationship name="schedule" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="Schedule" inverseName="key" inverseEntity="Schedule"/>
     </entity>
     <entity name="Lock" representedClassName=".LockManagedObject" syncable="YES" codeGenerationType="category">
         <attribute name="identifier" attributeType="UUID" usesScalarValueType="NO"/>
         <attribute name="name" attributeType="String" defaultValueString=""/>
-        <relationship name="events" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Event" inverseName="lock" inverseEntity="Event"/>
-        <relationship name="information" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="LockInformation" inverseName="lock" inverseEntity="LockInformation"/>
-        <relationship name="keys" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Key" inverseName="lock" inverseEntity="Key"/>
+        <relationship name="events" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Event" inverseName="lock" inverseEntity="Event"/>
+        <relationship name="information" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="LockInformation" inverseName="lock" inverseEntity="LockInformation"/>
+        <relationship name="keys" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Key" inverseName="lock" inverseEntity="Key"/>
     </entity>
     <entity name="LockInformation" representedClassName=".LockInformationManagedObject" syncable="YES" codeGenerationType="category">
         <attribute name="buildVersion" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>

@@ -8,8 +8,21 @@
 
 import Foundation
 import CoreData
+import CoreLock
 
 public final class UnlockEventManagedObject: EventManagedObject {
     
-    
+    internal convenience init(_ value: LockEvent.Unlock, lock: LockManagedObject, context: NSManagedObjectContext) {
+        
+        self.init(context: context)
+        self.identifier = value.identifier
+        self.lock = lock
+        self.date = value.date
+        self.key = value.key
+        self.action = numericCast(value.action.rawValue)
+    }
 }
+
+// MARK: - IdentifiableManagedObject
+
+extension UnlockEventManagedObject: IdentifiableManagedObject { }

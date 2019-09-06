@@ -9,6 +9,17 @@
 import Foundation
 import CoreData
 
+public extension NSManagedObjectModel {
+    
+    static var lock: NSManagedObjectModel {
+        guard let url = Bundle.lockKit.url(forResource: "Model", withExtension: "momd")
+            else { fatalError("No url for model") }
+        guard let model = NSManagedObjectModel(contentsOf: url)
+            else { fatalError("No model at \(url.path)") }
+        return model
+    }
+}
+
 internal extension NSManagedObjectContext {
     
     /// Wraps the block to allow for error throwing.
@@ -16,7 +27,7 @@ internal extension NSManagedObjectContext {
         
         var blockError: Swift.Error?
         
-        self.performAndWait {
+        performAndWait {
             do { try block() }
             catch { blockError = error }
             return
@@ -25,53 +36,20 @@ internal extension NSManagedObjectContext {
         if let error = blockError {
             throw error
         }
-        
-        return
-    }
-    
-    func find<T: NSManagedObject>(identifier: NSObject, property: String, entityName: String) throws -> T? {
-        
-        let fetchRequest = NSFetchRequest<T>(entityName: entityName)
-        fetchRequest.predicate = NSPredicate(format: "%K == %@", property, identifier)
-        fetchRequest.fetchLimit = 1
-        fetchRequest.includesSubentities = true
-        fetchRequest.returnsObjectsAsFaults = false
-        return try self.fetch(fetchRequest).first
-    }
-    
-    func findOrCreate<T: NSManagedObject>(identifier: NSObject, property: String, entityName: String) throws -> T {
-        
-        if let existing: T = try self.find(identifier: identifier, property: property, entityName: entityName) {
-            
-            return existing
-            
-        } else {
-            
-            // create a new entity
-            let newManagedObject = NSEntityDescription.insertNewObject(forEntityName: entityName, into: self) as! T
-            
-            // set resource ID
-            newManagedObject.setValue(identifier, forKey: property)
-            
-            return newManagedObject
-        }
     }
 }
 
-internal protocol IdentifiableManagedObject {
-    
-    associatedtype ManagedObject: NSManagedObject
-    
-    static func fetchRequest() -> NSFetchRequest<ManagedObject>
+public protocol IdentifiableManagedObject {
     
     var identifier: UUID? { get }
 }
 
-internal extension NSManagedObjectContext {
+public extension NSManagedObjectContext {
     
-    func find<T>(identifier: UUID, type: T.Type) throws -> T.ManagedObject? where T: IdentifiableManagedObject {
+    func find<T>(identifier: UUID, type: T.Type) throws -> T? where T: IdentifiableManagedObject, T: NSManagedObject {
         
-        let fetchRequest = T.fetchRequest()
+        let fetchRequest = NSFetchRequest<T>()
+        fetchRequest.entity = T.entity()
         fetchRequest.predicate = NSPredicate(format: "%K == %@", "identifier", identifier as NSUUID)
         fetchRequest.fetchLimit = 1
         fetchRequest.includesSubentities = true

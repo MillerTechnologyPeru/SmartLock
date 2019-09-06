@@ -12,9 +12,9 @@ import CoreData
 public final class LockManagedObject: NSManagedObject {
     
     internal convenience init(identifier: UUID,
-                     name: String,
-                     information: LockCache.Information? = nil,
-                     context: NSManagedObjectContext) {
+                              name: String,
+                              information: LockCache.Information? = nil,
+                              context: NSManagedObjectContext) {
         
         self.init(context: context)
         self.identifier = identifier
@@ -37,4 +37,38 @@ internal extension LockManagedObject {
     }
 }
 
+// MARK: - IdentifiableManagedObject
+
 extension LockManagedObject: IdentifiableManagedObject { }
+
+// MARK: - Store
+
+internal extension NSManagedObjectContext {
+    
+    @discardableResult
+    func insert(_ locks: [UUID: LockCache]) throws -> [LockManagedObject] {
+        
+        // insert locks
+        locks.map { (identifier, cache) in
+            
+        }
+        for (identifier, cache) in locks {
+            // find or create managed object
+            let lock: LockManagedObject
+            if let managedObject = try find(identifier: identifier, type: LockManagedObject.self) {
+                managedObject.name = cache.name
+                managedObject.update(information: cache.information, context: self)
+                lock = managedObject
+            } else {
+                lock = LockManagedObject(identifier: identifier,
+                                         name: cache.name,
+                                         information: cache.information,
+                                         context: self)
+            }
+
+            // insert keys
+            //let key = try insert(cache.key, for: lock)
+            //assert((lock.keys ?? []).contains(key))
+        }
+    }
+}

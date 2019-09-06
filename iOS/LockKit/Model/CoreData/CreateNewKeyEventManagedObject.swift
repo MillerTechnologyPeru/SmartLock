@@ -8,8 +8,21 @@
 
 import Foundation
 import CoreData
+import CoreLock
 
 public final class CreateNewKeyEventManagedObject: EventManagedObject {
     
-    
+    internal convenience init(_ value: LockEvent.CreateNewKey, lock: LockManagedObject, context: NSManagedObjectContext) {
+        
+        self.init(context: context)
+        self.identifier = value.identifier
+        self.lock = lock
+        self.date = value.date
+        self.key = value.key
+        self.newKey = value.newKey
+    }
 }
+
+// MARK: - IdentifiableManagedObject
+
+extension CreateNewKeyEventManagedObject: IdentifiableManagedObject { }

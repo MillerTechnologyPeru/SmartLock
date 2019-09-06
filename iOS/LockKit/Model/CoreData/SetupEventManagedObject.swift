@@ -21,3 +21,8 @@ public final class SetupEventManagedObject: EventManagedObject {
         self.key = value.key
     }
 }
+
+// MARK: - IdentifiableManagedObject
+
+extension SetupEventManagedObject: IdentifiableManagedObject { }
+

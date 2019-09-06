@@ -25,4 +25,22 @@ public final class KeyManagedObject: NSManagedObject {
     }
 }
 
+// MARK: - IdentifiableManagedObject
+
 extension KeyManagedObject: IdentifiableManagedObject { }
+
+// MARK: - Store
+
+internal extension NSManagedObjectContext {
+    
+    @discardableResult
+    func insert(_ key: Key, for lock: LockManagedObject) throws -> KeyManagedObject {
+        
+        if let managedObject = try find(identifier: key.identifier, type: KeyManagedObject.self) {
+            assert(managedObject.lock == lock, "Key stored with conflicting lock")
+            return managedObject
+        } else {
+            return KeyManagedObject(key, lock: lock, context: self)
+        }
+    }
+}
