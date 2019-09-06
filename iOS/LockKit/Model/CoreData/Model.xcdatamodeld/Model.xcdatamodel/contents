@@ -9,25 +9,37 @@
     <entity name="Event" representedClassName=".EventManagedObject" isAbstract="YES" syncable="YES" codeGenerationType="category">
         <attribute name="date" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="identifier" attributeType="UUID" usesScalarValueType="NO"/>
-        <relationship name="key" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Key" inverseName="events" inverseEntity="Key"/>
-        <relationship name="lock" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Lock" inverseName="events" inverseEntity="Lock"/>
+        <attribute name="key" attributeType="UUID" usesScalarValueType="NO"/>
+        <relationship name="lock" maxCount="1" deletionRule="Nullify" destinationEntity="Lock" inverseName="events" inverseEntity="Lock"/>
     </entity>
     <entity name="Key" representedClassName=".KeyManagedObject" syncable="YES" codeGenerationType="category">
+        <attribute name="created" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="identifier" attributeType="UUID" usesScalarValueType="NO"/>
-        <attribute name="name" optional="YES" attributeType="String"/>
-        <attribute name="type" attributeType="String"/>
-        <relationship name="events" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Event" inverseName="key" inverseEntity="Event"/>
-        <relationship name="lock" maxCount="1" deletionRule="Nullify" destinationEntity="Lock" inverseName="key" inverseEntity="Lock"/>
+        <attribute name="name" attributeType="String"/>
+        <attribute name="permission" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <relationship name="lock" maxCount="1" deletionRule="Nullify" destinationEntity="Lock" inverseName="keys" inverseEntity="Lock"/>
         <relationship name="schedule" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Schedule" inverseName="key" inverseEntity="Schedule"/>
     </entity>
-    <entity name="Lock" representedClassName=".LockMangedObject" syncable="YES" codeGenerationType="category">
-        <attribute name="identifier" attributeType="UUID" usesScalarValueType="YES"/>
+    <entity name="Lock" representedClassName=".LockManagedObject" syncable="YES" codeGenerationType="category">
+        <attribute name="identifier" attributeType="UUID" usesScalarValueType="NO"/>
         <attribute name="name" attributeType="String" defaultValueString=""/>
         <relationship name="events" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Event" inverseName="lock" inverseEntity="Event"/>
-        <relationship name="key" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Key" inverseName="lock" inverseEntity="Key"/>
+        <relationship name="information" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="LockInformation" inverseName="lock" inverseEntity="LockInformation"/>
+        <relationship name="keys" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Key" inverseName="lock" inverseEntity="Key"/>
+    </entity>
+    <entity name="LockInformation" representedClassName=".LockInformationManagedObject" syncable="YES" codeGenerationType="category">
+        <attribute name="buildVersion" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="buttonUnlockAction" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="defaultUnlockAction" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="status" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="versionMajor" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="versionMinor" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="versionPatch" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <relationship name="lock" maxCount="1" deletionRule="Nullify" destinationEntity="Lock" inverseName="information" inverseEntity="Lock"/>
     </entity>
     <entity name="RemoveKeyEvent" representedClassName=".RemoveKeyEventManagedObject" parentEntity="Event" syncable="YES" codeGenerationType="category">
-        <relationship name="key" optional="YES" maxCount="1" deletionRule="Nullify"/>
+        <attribute name="removedKey" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="type" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
     </entity>
     <entity name="Schedule" representedClassName=".ScheduleManagedObject" syncable="YES" codeGenerationType="category">
         <attribute name="expiry" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
@@ -43,18 +55,19 @@
         <relationship name="key" maxCount="1" deletionRule="Nullify" destinationEntity="Key" inverseName="schedule" inverseEntity="Key"/>
     </entity>
     <entity name="SetupEvent" representedClassName=".SetupEventManagedObject" parentEntity="Event" syncable="YES" codeGenerationType="category"/>
-    <entity name="UnlockEvent" representedClassName="UnlockEvent" parentEntity="Event" syncable="YES" codeGenerationType="class">
+    <entity name="UnlockEvent" representedClassName=".UnlockEventManagedObject" parentEntity="Event" syncable="YES" codeGenerationType="category">
         <attribute name="action" attributeType="Integer 64" defaultValueString="NO" usesScalarValueType="YES"/>
     </entity>
     <elements>
         <element name="Event" positionX="-63" positionY="-18" width="128" height="103"/>
-        <element name="Lock" positionX="-54" positionY="9" width="128" height="103"/>
+        <element name="Lock" positionX="-54" positionY="9" width="128" height="118"/>
         <element name="Key" positionX="-36" positionY="36" width="128" height="133"/>
         <element name="SetupEvent" positionX="-27" positionY="63" width="128" height="43"/>
         <element name="Schedule" positionX="-9" positionY="90" width="128" height="208"/>
         <element name="UnlockEvent" positionX="9" positionY="180" width="128" height="58"/>
         <element name="CreateNewKeyEvent" positionX="-36" positionY="126" width="128" height="58"/>
         <element name="ConfirmNewKeyEvent" positionX="-27" positionY="135" width="128" height="58"/>
-        <element name="RemoveKeyEvent" positionX="-18" positionY="144" width="128" height="58"/>
+        <element name="RemoveKeyEvent" positionX="-18" positionY="144" width="128" height="73"/>
+        <element name="LockInformation" positionX="-9" positionY="153" width="128" height="163"/>
     </elements>
 </model>
