@@ -12,7 +12,7 @@ import CoreLock
 
 public class EventManagedObject: NSManagedObject {
     
-    internal static func `init`(_ value: LockEvent, lock: LockManagedObject, context: NSManagedObjectContext) -> EventManagedObject {
+    internal static func initWith(_ value: LockEvent, lock: LockManagedObject, context: NSManagedObjectContext) -> EventManagedObject {
                 
         switch value {
         case let .setup(event):
@@ -26,6 +26,13 @@ public class EventManagedObject: NSManagedObject {
         case let .removeKey(event):
             return RemoveKeyEventManagedObject(event, lock: lock, context: context)
         }
+    }
+    
+    internal static func find(_ identifier: UUID, in context: NSManagedObjectContext) throws -> EventManagedObject? {
+        
+        try context.find(identifier: identifier as NSUUID,
+                         propertyName: #keyPath(EventManagedObject.identifier),
+                         type: EventManagedObject.self)
     }
 }
 
@@ -42,5 +49,28 @@ public extension EventManagedObject {
         }
         
         return try context.find(identifier: key, type: KeyManagedObject.self)
+    }
+}
+
+// MARK: - Store
+
+internal extension NSManagedObjectContext {
+    
+    @discardableResult
+    func insert(_ events: [LockEvent], for lock: LockManagedObject) throws -> [EventManagedObject] {
+        
+        // insert events
+        return try events.map {
+            try EventManagedObject.find($0.identifier, in: self)
+                ?? EventManagedObject.initWith($0, lock: lock, context: self)
+        }
+    }
+    
+    @discardableResult
+    func insert(_ events: [LockEvent], for lock: UUID) throws -> [EventManagedObject] {
+        
+        let managedObject = try find(identifier: lock, type: LockManagedObject.self)
+            ?? LockManagedObject(identifier: lock, name: "", context: self)
+        return try insert(events, for: managedObject)
     }
 }

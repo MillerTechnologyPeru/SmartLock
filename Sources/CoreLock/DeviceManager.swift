@@ -324,8 +324,8 @@ public final class LockManager <Central: CentralProtocol> {
         try listEvents(fetchRequest: fetchRequest,
                        for: peripheral,
                        with: key,
-                       notification: { (newValue, isLast) in if isLast { list = newValue } },
-                       timeout: timeout)
+                       timeout: timeout,
+                       notification: { (newValue, isLast) in if isLast { list = newValue } })
         return list
     }
     
@@ -333,8 +333,8 @@ public final class LockManager <Central: CentralProtocol> {
     public func listEvents(fetchRequest: ListEventsCharacteristic.FetchRequest? = nil,
                            for peripheral: Peripheral,
                            with key: KeyCredentials,
-                           notification: @escaping (EventsList, Bool) -> (),
-                           timeout: TimeInterval = .gattDefaultTimeout) throws {
+                           timeout: TimeInterval = .gattDefaultTimeout,
+                           notification: @escaping (EventsList, Bool) -> ()) throws {
         
         log?("List events for \(peripheral)")
         typealias Notification = EventsCharacteristic

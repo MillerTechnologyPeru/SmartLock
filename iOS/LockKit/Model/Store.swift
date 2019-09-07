@@ -454,4 +454,32 @@ public extension Store {
         
         return true
     }
+    
+    @discardableResult
+    func listEvents(_ lock: LockPeripheral<NativeCentral>,
+                    fetchRequest: ListEventsCharacteristic.FetchRequest? = nil,
+                    notification: @escaping (EventsList, Bool) -> ()) throws -> Bool {
+        
+        // get lock key
+        guard let information = self.lockInformation.value[lock.scanData.peripheral],
+            let lockCache = self[lock: information.identifier],
+            let keyData = self[key: lockCache.key.identifier]
+            else { return false }
+        
+        let key = KeyCredentials(
+            identifier: lockCache.key.identifier,
+            secret: keyData
+        )
+        
+        try lockManager.listEvents(fetchRequest: fetchRequest, for: lock.scanData.peripheral, with: key, timeout: preferences.bluetoothTimeout) { [weak self] (list, isComplete) in
+            // call completion block
+            notification(list, isComplete)
+            // store in CoreData
+            self?.persistentContainer.commit { (context) in
+                try context.insert(list, for: information.identifier)
+            }
+        }
+        
+        return true
+    }
 }

@@ -104,10 +104,12 @@
             </objects>
             <point key="canvasLocation" x="166.875" y="123.59154929577466"/>
         </scene>
-        <!--Navigation Controller-->
+        <!--Events-->
         <scene sceneID="hgy-PC-SfB">
             <objects>
                 <navigationController id="D9D-Do-ihn" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="Events" id="ZK5-9J-hkU"/>
+                    <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="yoM-3J-9U8">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>

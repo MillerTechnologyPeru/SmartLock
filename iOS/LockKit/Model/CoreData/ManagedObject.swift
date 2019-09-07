@@ -68,6 +68,20 @@ internal extension NSManagedObjectContext {
     }
 }
 
+internal extension NSManagedObjectContext {
+    
+    func find<T>(identifier: NSObject, propertyName: String, type: T.Type) throws -> T? where T: NSManagedObject {
+        
+        let fetchRequest = NSFetchRequest<T>()
+        fetchRequest.entity = T.entity()
+        fetchRequest.predicate = NSPredicate(format: "%K == %@", propertyName, identifier)
+        fetchRequest.fetchLimit = 1
+        fetchRequest.includesSubentities = true
+        fetchRequest.returnsObjectsAsFaults = false
+        return try self.fetch(fetchRequest).first
+    }
+}
+
 public protocol IdentifiableManagedObject {
     
     var identifier: UUID? { get }
