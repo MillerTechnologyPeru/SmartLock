@@ -43,4 +43,12 @@ internal extension NSManagedObjectContext {
             return KeyManagedObject(key, lock: lock, context: self)
         }
     }
+    
+    @discardableResult
+    func insert(_ key: Key, for lock: UUID) throws -> KeyManagedObject {
+        
+        let managedObject = try find(identifier: lock, type: LockManagedObject.self)
+            ?? LockManagedObject(identifier: lock, name: "", context: self)
+        return try insert(key, for: managedObject)
+    }
 }

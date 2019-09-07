@@ -47,6 +47,8 @@ public final class Store {
         beaconController.lostLock = { [unowned self] (lock) in
             self.lockBeaconExited(lock: lock)
         }
+        // observe external cloud changes
+        cloud.didChange = { [unowned self] in self.cloudDidChangeExternally() }
         #endif
         
         // observe local cache changes
@@ -54,24 +56,24 @@ public final class Store {
             self.lockCacheChanged()
         })
         
-        #if os(iOS)
-        // observe external cloud changes
-        cloud.didChange = { [unowned self] in self.cloudDidChangeExternally() }
-        #endif
-        
         // read from filesystem
         loadCache()
         
         // load CoreData
-        persistentContainer.loadPersistentStores { (store, error) in
+        persistentContainer.loadPersistentStores { [weak self] (store, error) in
             if let error = error {
-                assertionFailure("Unable to load persistent store \(store) \(error)")
+                log("⚠️ Unable to load persistent store: \(error.localizedDescription)")
+                #if DEBUG
+                dump(error)
+                #endif
+                assertionFailure("Unable to load persistent store")
                 return
             }
             log("Loaded persistent store")
             #if DEBUG
             print(store)
             #endif
+            self?.loadCache()
         }
     }
     
@@ -339,6 +341,21 @@ public extension Store {
         return lock
     }
     
+    func key(for lock: LockPeripheral<NativeCentral>) -> KeyCredentials? {
+        
+        guard let information = self.lockInformation.value[lock.scanData.peripheral],
+            let lockCache = self[lock: information.identifier],
+            let keyData = self[key: lockCache.key.identifier]
+            else { return nil }
+        
+        let key = KeyCredentials(
+            identifier: lockCache.key.identifier,
+            secret: keyData
+        )
+        
+        return key
+    }
+    
     func scan(duration: TimeInterval? = nil) throws {
         
         let duration = preferences.scanDuration
@@ -397,6 +414,21 @@ public extension Store {
     func unlock(_ lock: LockPeripheral<NativeCentral>, action: UnlockAction = .default) throws -> Bool {
         
         // get lock key
+        guard let key = self.key(for: lock)
+            else { return false }
+        
+        try lockManager.unlock(action,
+                               for: lock.scanData.peripheral,
+                               with: key,
+                               timeout: preferences.bluetoothTimeout)
+        return true
+    }
+    
+    @discardableResult
+    func listKeys(_ lock: LockPeripheral<NativeCentral>,
+                  notification: @escaping (KeysList, Bool) -> ()) throws -> Bool {
+        
+        // get lock key
         guard let information = self.lockInformation.value[lock.scanData.peripheral],
             let lockCache = self[lock: information.identifier],
             let keyData = self[key: lockCache.key.identifier]
@@ -407,10 +439,19 @@ public extension Store {
             secret: keyData
         )
         
-        try lockManager.unlock(action,
-                               for: lock.scanData.peripheral,
-                               with: key,
-                               timeout: preferences.bluetoothTimeout)
+        // BLE request
+        try lockManager.listKeys(for: lock.scanData.peripheral, with: key, timeout: preferences.bluetoothTimeout) { [weak self] (list, isComplete) in
+            // call completion block
+            notification(list, isComplete)
+            // store in CoreData
+            guard list.keys.isEmpty == false else { return }
+            self?.persistentContainer.commit { (context) in
+                try list.keys.forEach {
+                    try context.insert($0, for: information.identifier)
+                }
+            }
+        }
+        
         return true
     }
 }

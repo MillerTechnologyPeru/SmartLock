@@ -285,16 +285,16 @@ public final class LockManager <Central: CentralProtocol> {
         var list = KeysList()
         try listKeys(for: peripheral,
                      with: key,
-                     notification: { (newValue, isLast) in if isLast { list = newValue } },
-                     timeout: timeout)
+                     timeout: timeout,
+                     notification: { (newValue, isLast) in if isLast { list = newValue } })
         return list
     }
     
     /// Retreive a list of all keys on device.
     public func listKeys(for peripheral: Peripheral,
                          with key: KeyCredentials,
-                         notification: @escaping (KeysList, Bool) -> (),
-                         timeout: TimeInterval = .gattDefaultTimeout) throws {
+                         timeout: TimeInterval = .gattDefaultTimeout,
+                         notification: @escaping (KeysList, Bool) -> ()) throws {
         
         log?("List keys for \(peripheral)")
         typealias Notification = KeysCharacteristic
