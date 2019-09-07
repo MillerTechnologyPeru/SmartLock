@@ -87,6 +87,8 @@ final class WatchController: NSObject {
                 else { return }
         }
         
+        guard session.isPaired else { return }
+        
         let message = context?.toMessage() ?? [:]
         do { try session.updateApplicationContext(message) }
         catch {
