@@ -9,6 +9,13 @@
 import Foundation
 import CoreData
 
+public extension NSPersistentContainer {
+    
+    static var lock: NSPersistentContainer {
+        return NSPersistentContainer(name: "LockCache", managedObjectModel: .lock)
+    }
+}
+
 public extension NSManagedObjectModel {
     
     static var lock: NSManagedObjectModel {

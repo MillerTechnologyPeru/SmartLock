@@ -49,26 +49,17 @@ internal extension NSManagedObjectContext {
     func insert(_ locks: [UUID: LockCache]) throws -> [LockManagedObject] {
         
         // insert locks
-        locks.map { (identifier, cache) in
-            
-        }
-        for (identifier, cache) in locks {
-            // find or create managed object
-            let lock: LockManagedObject
+        return try locks.map { (identifier, cache) in
             if let managedObject = try find(identifier: identifier, type: LockManagedObject.self) {
                 managedObject.name = cache.name
                 managedObject.update(information: cache.information, context: self)
-                lock = managedObject
+                return managedObject
             } else {
-                lock = LockManagedObject(identifier: identifier,
+                return LockManagedObject(identifier: identifier,
                                          name: cache.name,
                                          information: cache.information,
                                          context: self)
             }
-
-            // insert keys
-            //let key = try insert(cache.key, for: lock)
-            //assert((lock.keys ?? []).contains(key))
         }
     }
 }

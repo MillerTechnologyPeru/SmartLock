@@ -25,6 +25,18 @@
 		6E15AD8B2318C9060004D1AE /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6E15AD892318C9060004D1AE /* InfoPlist.strings */; };
 		6E3B70B22313E24F00BEB6FF /* ApplicationData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E3B70B12313E24F00BEB6FF /* ApplicationData.swift */; };
 		6E3B70BA2313EF1000BEB6FF /* JSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E3B70B82313E99A00BEB6FF /* JSON.swift */; };
+		6E4051822323624300FE338B /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 6E50B0E323217491001014A8 /* Model.xcdatamodeld */; };
+		6E4051872323624700FE338B /* ManagedObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E50B0E623219EB3001014A8 /* ManagedObject.swift */; };
+		6E4051882323624700FE338B /* LockManagedObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E50B0EB23224293001014A8 /* LockManagedObject.swift */; };
+		6E4051892323624700FE338B /* LockInformationManagedObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E50B0FB23224719001014A8 /* LockInformationManagedObject.swift */; };
+		6E40518A2323624700FE338B /* KeyManagedObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E50B0ED232242CA001014A8 /* KeyManagedObject.swift */; };
+		6E40518B2323624700FE338B /* ScheduleManagedObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E50B0E92322424B001014A8 /* ScheduleManagedObject.swift */; };
+		6E40518C2323624700FE338B /* EventManagedObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E50B0EF232242D7001014A8 /* EventManagedObject.swift */; };
+		6E40518D2323624700FE338B /* SetupEventManagedObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E50B0F123224396001014A8 /* SetupEventManagedObject.swift */; };
+		6E40518E2323624700FE338B /* UnlockEventManagedObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E50B0F3232243A2001014A8 /* UnlockEventManagedObject.swift */; };
+		6E40518F2323624700FE338B /* CreateNewKeyEventManagedObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E50B0F5232243AE001014A8 /* CreateNewKeyEventManagedObject.swift */; };
+		6E4051902323624700FE338B /* ConfirmNewKeyEventManagedObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E50B0F723224415001014A8 /* ConfirmNewKeyEventManagedObject.swift */; };
+		6E4051912323624700FE338B /* RemoveKeyEventManagedObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E50B0F923224428001014A8 /* RemoveKeyEventManagedObject.swift */; };
 		6E50B0E223216F7E001014A8 /* Events.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6E50B0E123216F7E001014A8 /* Events.storyboard */; };
 		6E50B0E523217491001014A8 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 6E50B0E323217491001014A8 /* Model.xcdatamodeld */; };
 		6E50B0E723219EB3001014A8 /* ManagedObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E50B0E623219EB3001014A8 /* ManagedObject.swift */; };
@@ -1943,16 +1955,23 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6E4051872323624700FE338B /* ManagedObject.swift in Sources */,
 				6E08FB9323171F2A00177026 /* ActivityInterface.swift in Sources */,
 				6ED820B02316785A00B69520 /* UserActivity.swift in Sources */,
 				6ED820A3231677EA00B69520 /* ApplicationData.swift in Sources */,
 				6ED820AD2316784400B69520 /* Preferences.swift in Sources */,
 				6ED820A92316781000B69520 /* Intent.swift in Sources */,
 				6ED820A6231677FE00B69520 /* DeviceManager.swift in Sources */,
+				6E40518A2323624700FE338B /* KeyManagedObject.swift in Sources */,
 				6ED820A5231677F800B69520 /* Bundle.swift in Sources */,
+				6E4051892323624700FE338B /* LockInformationManagedObject.swift in Sources */,
 				6E08FB9123171CC600177026 /* Unlock.swift in Sources */,
 				6ED820A1231677D800B69520 /* StyleKit.swift in Sources */,
 				6ED820AA2316782B00B69520 /* Keychain.swift in Sources */,
+				6E40518E2323624700FE338B /* UnlockEventManagedObject.swift in Sources */,
+				6E4051882323624700FE338B /* LockManagedObject.swift in Sources */,
+				6E40518C2323624700FE338B /* EventManagedObject.swift in Sources */,
+				6E40518D2323624700FE338B /* SetupEventManagedObject.swift in Sources */,
 				6ED8209B2316779100B69520 /* Intents.intentdefinition in Sources */,
 				6ED820AC2316783A00B69520 /* Permission.swift in Sources */,
 				6E7503C42318E78400103EBB /* WatchApplicationContext.swift in Sources */,
@@ -1962,9 +1981,14 @@
 				6ED820AE2316784D00B69520 /* Queue.swift in Sources */,
 				6E08FB832316E64D00177026 /* SessionController.swift in Sources */,
 				6ED820B12316787B00B69520 /* Log.swift in Sources */,
+				6E4051902323624700FE338B /* ConfirmNewKeyEventManagedObject.swift in Sources */,
+				6E4051912323624700FE338B /* RemoveKeyEventManagedObject.swift in Sources */,
 				6E08FB9523171F9300177026 /* AnimatedButtonController.swift in Sources */,
 				6ED820A72316780100B69520 /* FileManager.swift in Sources */,
 				6ED820A0231677C000B69520 /* Image.swift in Sources */,
+				6E4051822323624300FE338B /* Model.xcdatamodeld in Sources */,
+				6E40518F2323624700FE338B /* CreateNewKeyEventManagedObject.swift in Sources */,
+				6E40518B2323624700FE338B /* ScheduleManagedObject.swift in Sources */,
 				6E08FB8A2316F63700177026 /* WatchMessage.swift in Sources */,
 				6ED820A2231677E400B69520 /* AppGroup.swift in Sources */,
 			);
@@ -2264,12 +2288,15 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
+				TVOS_DEPLOYMENT_TARGET = 11.0;
+				WATCHOS_DEPLOYMENT_TARGET = 4.0;
 			};
 			name = Debug;
 		};
@@ -2320,12 +2347,15 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				SWIFT_VERSION = 5.0;
+				TVOS_DEPLOYMENT_TARGET = 11.0;
 				VALIDATE_PRODUCT = YES;
+				WATCHOS_DEPLOYMENT_TARGET = 4.0;
 			};
 			name = Release;
 		};
@@ -2488,7 +2518,6 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				INFOPLIST_FILE = LockKitTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -2510,7 +2539,6 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				INFOPLIST_FILE = LockKitTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -2733,7 +2761,6 @@
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 4;
-				WATCHOS_DEPLOYMENT_TARGET = 3.0;
 			};
 			name = Debug;
 		};
@@ -2758,7 +2785,6 @@
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 4;
-				WATCHOS_DEPLOYMENT_TARGET = 3.0;
 			};
 			name = Release;
 		};
@@ -2782,7 +2808,6 @@
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 4;
-				WATCHOS_DEPLOYMENT_TARGET = 3.0;
 			};
 			name = Debug;
 		};
@@ -2805,7 +2830,6 @@
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 4;
-				WATCHOS_DEPLOYMENT_TARGET = 3.0;
 			};
 			name = Release;
 		};
@@ -2831,7 +2855,6 @@
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 4;
-				WATCHOS_DEPLOYMENT_TARGET = 4.0;
 			};
 			name = Debug;
 		};
@@ -2856,7 +2879,6 @@
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 4;
-				WATCHOS_DEPLOYMENT_TARGET = 4.0;
 			};
 			name = Release;
 		};
@@ -2889,7 +2911,6 @@
 				TARGETED_DEVICE_FAMILY = 4;
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
-				WATCHOS_DEPLOYMENT_TARGET = 3.0;
 			};
 			name = Debug;
 		};
@@ -2921,7 +2942,6 @@
 				TARGETED_DEVICE_FAMILY = 4;
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
-				WATCHOS_DEPLOYMENT_TARGET = 3.0;
 			};
 			name = Release;
 		};

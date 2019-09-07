@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import CoreData
 import CoreBluetooth
 import CoreLocation
 import Bluetooth
@@ -60,6 +61,18 @@ public final class Store {
         
         // read from filesystem
         loadCache()
+        
+        // load CoreData
+        persistentContainer.loadPersistentStores { (store, error) in
+            if let error = error {
+                assertionFailure("Unable to load persistent store \(store) \(error)")
+                return
+            }
+            log("Loaded persistent store")
+            #if DEBUG
+            print(store)
+            #endif
+        }
     }
     
     @available(iOS 13.0, watchOSApplicationExtension 6.0, *)
@@ -87,11 +100,15 @@ public final class Store {
         }
         set {
             fileManager.applicationData = newValue
-            locks.value = newValue.locks // update locks
+            if locks.value != newValue.locks {
+                locks.value = newValue.locks // update locks
+            }
         }
     }
     
     public lazy var lockManager: LockManager = .shared
+    
+    public lazy var persistentContainer: NSPersistentContainer = .lock
     
     #if os(iOS)
     public lazy var cloud: CloudStore = .shared
@@ -115,8 +132,8 @@ public final class Store {
         
         get { return locks.value[identifier] }
         set {
-            locks.value[identifier] = newValue
-            writeCache()
+            locks.value[identifier] = newValue // update observers
+            applicationData.locks = locks.value // write file
         }
     }
     
@@ -182,23 +199,32 @@ public final class Store {
         // read file
         let applicationData = self.applicationData
         // set value
-        locks.value = applicationData.locks
-    }
-    
-    /// Write to lock cache.
-    private func writeCache() {
-        
-        // write file
-        applicationData.locks = locks.value
+        if locks.value != applicationData.locks {
+            locks.value = applicationData.locks
+        }
     }
     
     private func lockCacheChanged() {
+        
+        updateCoreData()
         
         #if os(iOS)
         monitorBeacons()
         updateSpotlight()
         updateCloud()
         #endif
+    }
+    
+    private func updateCoreData() {
+        
+        let locks = self.locks.value
+        persistentContainer.performBackgroundTask { (context) in
+            do {
+                try context.insert(locks)
+            } catch {
+                assertionFailure("Could not save \(error)")
+            }
+        }
     }
     
     #if os(iOS)

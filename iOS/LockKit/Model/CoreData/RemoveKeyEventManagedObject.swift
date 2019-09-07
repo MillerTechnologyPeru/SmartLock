@@ -35,7 +35,7 @@ public extension RemoveKeyEventManagedObject {
     /// Fetch the removed key specified by the event.
     func removedKey(in context: NSManagedObjectContext) throws -> KeyManagedObject? {
         
-        guard let key = self.key else {
+        guard let removedKey = self.removedKey else {
             assertionFailure("Missing key value")
             return nil
         }
@@ -47,7 +47,7 @@ public extension RemoveKeyEventManagedObject {
         
         switch type {
         case .key:
-            return try context.find(identifier: key, type: KeyManagedObject.self)
+            return try context.find(identifier: removedKey, type: KeyManagedObject.self)
         case .newKey:
             return nil
         }

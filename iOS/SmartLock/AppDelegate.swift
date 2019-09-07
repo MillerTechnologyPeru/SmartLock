@@ -93,6 +93,7 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
             WatchController.shared.context = .init(
                 applicationData: Store.shared.applicationData
             )
+            // FIXME: store watch locks observer
             Store.shared.locks.sink { _ in
                 WatchController.shared.context = .init(
                     applicationData: Store.shared.applicationData
