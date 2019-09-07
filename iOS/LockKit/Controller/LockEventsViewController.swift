@@ -114,7 +114,7 @@ public final class LockEventsViewController: TableViewController {
                         throw CentralError.unknownPeripheral
                     }
                 }
-                //Store.shared.list
+                try Store.shared.listEvents(device, fetchRequest: nil)
             }
         })
     }

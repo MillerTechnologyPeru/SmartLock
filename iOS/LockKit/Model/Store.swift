@@ -426,7 +426,7 @@ public extension Store {
     
     @discardableResult
     func listKeys(_ lock: LockPeripheral<NativeCentral>,
-                  notification: @escaping (KeysList, Bool) -> ()) throws -> Bool {
+                  notification: @escaping ((KeysList, Bool) -> ()) = { _,_ in }) throws -> Bool {
         
         // get lock key
         guard let information = self.lockInformation.value[lock.scanData.peripheral],
@@ -458,7 +458,7 @@ public extension Store {
     @discardableResult
     func listEvents(_ lock: LockPeripheral<NativeCentral>,
                     fetchRequest: ListEventsCharacteristic.FetchRequest? = nil,
-                    notification: @escaping (EventsList, Bool) -> ()) throws -> Bool {
+                    notification: @escaping ((EventsList, Bool) -> ()) = { _,_ in }) throws -> Bool {
         
         // get lock key
         guard let information = self.lockInformation.value[lock.scanData.peripheral],
