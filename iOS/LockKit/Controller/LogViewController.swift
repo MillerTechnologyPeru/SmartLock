@@ -97,7 +97,8 @@ public final class LogViewController: UITableViewController {
         self.present(activityViewController, sender: .barButtonItem(sender))
     }
     
-    // MARK: - Private Methods
+    // MARK: - Methods
+    
     private subscript (indexPath: IndexPath) -> Item {
         get { return items[indexPath.row] }
     }
