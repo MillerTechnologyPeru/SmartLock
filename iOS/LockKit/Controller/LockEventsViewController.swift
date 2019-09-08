@@ -68,7 +68,16 @@ public final class LockEventsViewController: TableViewController {
     public override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
+        reloadData(showProgressHUD: false)
+    }
+    
+    // MARK: - Actions
+    
+    @IBAction func refresh(_ sender: UIRefreshControl) {
         
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
+            self?.reloadData(showProgressHUD: false)
+        }
     }
     
     // MARK: - Methods
@@ -101,11 +110,13 @@ public final class LockEventsViewController: TableViewController {
         
     }
     
-    private func reloadData() {
+    private func reloadData(showProgressHUD: Bool = true) {
+        
+        refreshControl?.endRefreshing()
         
         let locks: Set<UUID> = self.lock.flatMap { [$0] } ?? Set(Store.shared.locks.value.keys)
         
-        performActivity({ [weak self] in
+        performActivity(showProgressHUD: showProgressHUD, { [weak self] in
             for lock in locks {
                 guard let device = try Store.shared.device(for: lock, scanDuration: 1.0) else {
                     if self?.lock == nil {
@@ -116,6 +127,8 @@ public final class LockEventsViewController: TableViewController {
                 }
                 try Store.shared.listEvents(device, fetchRequest: nil)
             }
+        }, completion: { (viewController, _) in
+            viewController.refreshControl?.endRefreshing()
         })
     }
     
