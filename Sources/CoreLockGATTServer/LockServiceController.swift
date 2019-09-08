@@ -26,7 +26,7 @@ public final class LockServiceController <Peripheral: PeripheralProtocol> : GATT
         didSet { updateInformation() }
     }
     
-    public var configurationStore: LockConfigurationStore {
+    public var configurationStore: LockConfigurationStore = InMemoryLockConfigurationStore() {
         didSet { updateInformation() }
     }
     
@@ -49,18 +49,18 @@ public final class LockServiceController <Peripheral: PeripheralProtocol> : GATT
     internal let unlockHandle: UInt16
     internal let createNewKeyHandle: UInt16
     internal let confirmNewKeyHandle: UInt16
+    internal let removeKeyHandle: UInt16
     internal let keysRequestHandle: UInt16
     internal let keysResponseHandle: UInt16
-    internal let removeKeyHandle: UInt16
+    internal let eventsRequestHandle: UInt16
+    internal let eventsResponseHandle: UInt16
     
     // MARK: - Initialization
     
     public init(peripheral: Peripheral) throws {
         
         self.peripheral = peripheral
-        
-        let configurationStore = InMemoryLockConfigurationStore()
-        
+                
         let characteristics = [
             
             GATT.Characteristic(uuid: LockInformationCharacteristic.uuid,
@@ -88,6 +88,11 @@ public final class LockServiceController <Peripheral: PeripheralProtocol> : GATT
                                 permissions: [.write],
                                 properties: ConfirmNewKeyCharacteristic.properties),
             
+            GATT.Characteristic(uuid: RemoveKeyCharacteristic.uuid,
+                                value: Data(),
+                                permissions: [.write],
+                                properties: RemoveKeyCharacteristic.properties),
+            
             GATT.Characteristic(uuid: ListKeysCharacteristic.uuid,
                                 value: Data(),
                                 permissions: [.write],
@@ -99,10 +104,17 @@ public final class LockServiceController <Peripheral: PeripheralProtocol> : GATT
                                 properties: KeysCharacteristic.properties,
                                 descriptors: [GATTClientCharacteristicConfiguration().descriptor]),
             
-            GATT.Characteristic(uuid: RemoveKeyCharacteristic.uuid,
+            
+            GATT.Characteristic(uuid: ListEventsCharacteristic.uuid,
                                 value: Data(),
                                 permissions: [.write],
-                                properties: RemoveKeyCharacteristic.properties),
+                                properties: ListEventsCharacteristic.properties),
+            
+            GATT.Characteristic(uuid: EventsCharacteristic.uuid,
+                                value: Data(),
+                                permissions: [],
+                                properties: EventsCharacteristic.properties,
+                                descriptors: [GATTClientCharacteristicConfiguration().descriptor]),
         ]
         
         self.characteristics = Set(characteristics.map { $0.uuid })
@@ -118,17 +130,16 @@ public final class LockServiceController <Peripheral: PeripheralProtocol> : GATT
         self.unlockHandle = peripheral.characteristics(for: UnlockCharacteristic.uuid)[0]
         self.createNewKeyHandle = peripheral.characteristics(for: CreateNewKeyCharacteristic.uuid)[0]
         self.confirmNewKeyHandle = peripheral.characteristics(for: ConfirmNewKeyCharacteristic.uuid)[0]
+        self.removeKeyHandle = peripheral.characteristics(for: RemoveKeyCharacteristic.uuid)[0]
         self.keysRequestHandle = peripheral.characteristics(for: ListKeysCharacteristic.uuid)[0]
         self.keysResponseHandle = peripheral.characteristics(for: KeysCharacteristic.uuid)[0]
-        self.removeKeyHandle = peripheral.characteristics(for: RemoveKeyCharacteristic.uuid)[0]
-        
-        self.configurationStore = configurationStore
-        
+        self.eventsRequestHandle = peripheral.characteristics(for: ListEventsCharacteristic.uuid)[0]
+        self.eventsResponseHandle = peripheral.characteristics(for: EventsCharacteristic.uuid)[0]
+                
         updateInformation()
     }
     
     deinit {
-        
         self.peripheral.remove(service: serviceHandle)
     }
     
