@@ -135,7 +135,7 @@ public final class LockServiceController <Peripheral: PeripheralProtocol> : GATT
         self.keysResponseHandle = peripheral.characteristics(for: KeysCharacteristic.uuid)[0]
         self.eventsRequestHandle = peripheral.characteristics(for: ListEventsCharacteristic.uuid)[0]
         self.eventsResponseHandle = peripheral.characteristics(for: EventsCharacteristic.uuid)[0]
-                
+        
         updateInformation()
     }
     
@@ -208,6 +208,16 @@ public final class LockServiceController <Peripheral: PeripheralProtocol> : GATT
             
             confirmNewKey(characteristic)
             
+        case removeKeyHandle:
+            
+            assert(authorization.isEmpty == false, "No keys")
+            
+            // parse characteristic
+            guard let characteristic = RemoveKeyCharacteristic(data: write.value)
+                else { print("Could not parse \(RemoveKeyCharacteristic.self)"); return }
+            
+            removeKey(characteristic)
+            
         case keysRequestHandle:
             
             assert(authorization.isEmpty == false, "No keys")
@@ -219,18 +229,20 @@ public final class LockServiceController <Peripheral: PeripheralProtocol> : GATT
             listKeysRequest(characteristic, maximumUpdateValueLength: write.maximumUpdateValueLength)
             
         case keysResponseHandle:
-            
             assertionFailure("Not writable")
             
-        case removeKeyHandle:
+        case eventsRequestHandle:
             
-            assert(authorization.isEmpty == false, "No keys")
+            assert(authorization.isEmpty == false, "Not setup yet")
             
             // parse characteristic
-            guard let characteristic = RemoveKeyCharacteristic(data: write.value)
-                else { print("Could not parse \(RemoveKeyCharacteristic.self)"); return }
+            guard let characteristic = ListEventsCharacteristic(data: write.value)
+                else { print("Could not parse \(ListEventsCharacteristic.self)"); return }
             
-            removeKey(characteristic)
+            listEventsRequest(characteristic, maximumUpdateValueLength: write.maximumUpdateValueLength)
+            
+        case eventsResponseHandle:
+            assertionFailure("Not writable")
             
         default:
             break
