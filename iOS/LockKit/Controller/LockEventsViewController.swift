@@ -60,9 +60,6 @@ public final class LockEventsViewController: TableViewController {
         
         // configure FRC
         configureView()
-        
-        // load from BLE
-        reloadData()
     }
     
     public override func viewWillAppear(_ animated: Bool) {

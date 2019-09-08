@@ -17,6 +17,8 @@
 		6E08FB9323171F2A00177026 /* ActivityInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E08FB7F23168CEB00177026 /* ActivityInterface.swift */; };
 		6E08FB9423171F8B00177026 /* ErrorAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E08FB7D231688BA00177026 /* ErrorAlert.swift */; };
 		6E08FB9523171F9300177026 /* AnimatedButtonController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E08FB77231687A800177026 /* AnimatedButtonController.swift */; };
+		6E0A89A12325A2450089E2EC /* PersistentContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E0A89A02325A2450089E2EC /* PersistentContainer.swift */; };
+		6E0A89A22325A2450089E2EC /* PersistentContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E0A89A02325A2450089E2EC /* PersistentContainer.swift */; };
 		6E15AD7C2318C9060004D1AE /* NotificationCenter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6E994B29230EF6DA0076DC1B /* NotificationCenter.framework */; };
 		6E15AD7F2318C9060004D1AE /* TodayViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E15AD7E2318C9060004D1AE /* TodayViewController.swift */; };
 		6E15AD812318C9060004D1AE /* ListRowViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E15AD802318C9060004D1AE /* ListRowViewController.swift */; };
@@ -475,6 +477,7 @@
 		6E08FB842316EF3D00177026 /* WatchController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchController.swift; sourceTree = "<group>"; };
 		6E08FB872316EF6000177026 /* WatchMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchMessage.swift; sourceTree = "<group>"; };
 		6E08FB8C23171C3400177026 /* Unlock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Unlock.swift; sourceTree = "<group>"; };
+		6E0A89A02325A2450089E2EC /* PersistentContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistentContainer.swift; sourceTree = "<group>"; };
 		6E0F602F230DD05400B013AB /* UserNotification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserNotification.swift; sourceTree = "<group>"; };
 		6E135CA62319193300FFA7F7 /* CloudSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudSettingsView.swift; sourceTree = "<group>"; };
 		6E135CB72319832900FFA7F7 /* BluetoothSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BluetoothSettingsView.swift; sourceTree = "<group>"; };
@@ -761,6 +764,7 @@
 			children = (
 				6E50B0E323217491001014A8 /* Model.xcdatamodeld */,
 				6E50B0E623219EB3001014A8 /* ManagedObject.swift */,
+				6E0A89A02325A2450089E2EC /* PersistentContainer.swift */,
 				6E50B0EB23224293001014A8 /* LockManagedObject.swift */,
 				6E50B0FB23224719001014A8 /* LockInformationManagedObject.swift */,
 				6E50B0ED232242CA001014A8 /* KeyManagedObject.swift */,
@@ -1862,6 +1866,7 @@
 				6E3B70BA2313EF1000BEB6FF /* JSON.swift in Sources */,
 				6E994ABD230DFDB60076DC1B /* PresentPopover.swift in Sources */,
 				6E994AC2230DFDC60076DC1B /* LockPermissionsViewController.swift in Sources */,
+				6E0A89A12325A2450089E2EC /* PersistentContainer.swift in Sources */,
 				6E994AAD230DFDB10076DC1B /* Queue.swift in Sources */,
 				6E83BAF62323842500FBC12E /* TableViewController.swift in Sources */,
 				6E994AB4230DFDB10076DC1B /* CoreSpotlight.swift in Sources */,
@@ -1991,6 +1996,7 @@
 				6ED820AF2316785500B69520 /* Store.swift in Sources */,
 				6ED820A4231677EF00B69520 /* JSON.swift in Sources */,
 				6ED820AE2316784D00B69520 /* Queue.swift in Sources */,
+				6E0A89A22325A2450089E2EC /* PersistentContainer.swift in Sources */,
 				6E08FB832316E64D00177026 /* SessionController.swift in Sources */,
 				6ED820B12316787B00B69520 /* Log.swift in Sources */,
 				6E4051902323624700FE338B /* ConfirmNewKeyEventManagedObject.swift in Sources */,

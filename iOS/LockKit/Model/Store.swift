@@ -23,7 +23,7 @@ public final class Store {
     public static let shared = Store()
     
     private init() {
-        
+                
         // clear keychain on newly installed app.
         if preferences.isAppInstalled == false {
             preferences.isAppInstalled = true
@@ -38,6 +38,27 @@ public final class Store {
                 }
             }
         }
+        
+        // load CoreData
+        let semaphore = DispatchSemaphore(value: 0)
+        persistentContainer.loadPersistentStores { [weak self] (store, error) in
+            semaphore.signal()
+            if let error = error {
+                log("⚠️ Unable to load persistent store: \(error.localizedDescription)")
+                #if DEBUG
+                dump(error)
+                #endif
+                assertionFailure("Unable to load persistent store")
+                return
+            }
+            #if DEBUG
+            print(store)
+            print("Loaded persistent store")
+            #endif
+            self?.persistentContainer.viewContext.automaticallyMergesChangesFromParent = true
+            self?.loadCache()
+        }
+        let _ = semaphore.wait(timeout: .now() + 5.0)
         
         #if os(iOS)
         // observe iBeacons
@@ -58,23 +79,6 @@ public final class Store {
         
         // read from filesystem
         loadCache()
-        
-        // load CoreData
-        persistentContainer.loadPersistentStores { [weak self] (store, error) in
-            if let error = error {
-                log("⚠️ Unable to load persistent store: \(error.localizedDescription)")
-                #if DEBUG
-                dump(error)
-                #endif
-                assertionFailure("Unable to load persistent store")
-                return
-            }
-            log("Loaded persistent store")
-            #if DEBUG
-            print(store)
-            #endif
-            self?.loadCache()
-        }
     }
     
     @available(iOS 13.0, watchOSApplicationExtension 6.0, *)
