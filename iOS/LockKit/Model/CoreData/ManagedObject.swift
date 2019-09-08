@@ -12,7 +12,9 @@ import CoreData
 public extension NSPersistentContainer {
     
     static var lock: NSPersistentContainer {
-        return NSPersistentContainer(name: "LockCache", managedObjectModel: .lock)
+        let container = NSPersistentContainer(name: "LockCache", managedObjectModel: .lock)
+        container.viewContext.automaticallyMergesChangesFromParent = true
+        return container
     }
 }
 

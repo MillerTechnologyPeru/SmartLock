@@ -471,6 +471,7 @@ public extension Store {
             secret: keyData
         )
         
+        /// 
         try lockManager.listEvents(fetchRequest: fetchRequest, for: lock.scanData.peripheral, with: key, timeout: preferences.bluetoothTimeout) { [weak self] (list, isComplete) in
             // call completion block
             notification(list, isComplete)

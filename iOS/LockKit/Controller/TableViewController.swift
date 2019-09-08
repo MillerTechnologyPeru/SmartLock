@@ -17,10 +17,10 @@ open class TableViewController: UITableViewController, NSFetchedResultsControlle
     final var fetchedResultsController: NSFetchedResultsController<NSManagedObject>! {
         didSet {
             loadViewIfNeeded()
+            tableView.reloadData()
             fetchedResultsController?.delegate = self
             do { try fetchedResultsController?.performFetch() }
             catch { assertionFailure("Unable to fetch \(error)") }
-            tableView.reloadData()
         }
     }
     

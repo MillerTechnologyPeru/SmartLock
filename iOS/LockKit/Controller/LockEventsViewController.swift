@@ -68,7 +68,7 @@ public final class LockEventsViewController: TableViewController {
     public override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        reloadData(showProgressHUD: false)
+        reloadData()
     }
     
     // MARK: - Actions
@@ -76,7 +76,7 @@ public final class LockEventsViewController: TableViewController {
     @IBAction func refresh(_ sender: UIRefreshControl) {
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
-            self?.reloadData(showProgressHUD: false)
+            self?.reloadData()
         }
     }
     
@@ -92,7 +92,7 @@ public final class LockEventsViewController: TableViewController {
         fetchRequest.sortDescriptors = [
             NSSortDescriptor(
                 key: #keyPath(EventManagedObject.date),
-                ascending: true
+                ascending: false
             )
         ]
         if let lock = self.lock {
@@ -110,13 +110,13 @@ public final class LockEventsViewController: TableViewController {
         
     }
     
-    private func reloadData(showProgressHUD: Bool = true) {
+    private func reloadData() {
         
         refreshControl?.endRefreshing()
         
         let locks: Set<UUID> = self.lock.flatMap { [$0] } ?? Set(Store.shared.locks.value.keys)
         
-        performActivity(showProgressHUD: showProgressHUD, { [weak self] in
+        performActivity({ [weak self] in
             for lock in locks {
                 guard let device = try Store.shared.device(for: lock, scanDuration: 1.0) else {
                     if self?.lock == nil {
@@ -125,7 +125,14 @@ public final class LockEventsViewController: TableViewController {
                         throw CentralError.unknownPeripheral
                     }
                 }
-                try Store.shared.listEvents(device, fetchRequest: nil)
+                do { try Store.shared.listEvents(device, fetchRequest: nil) }
+                catch {
+                    if self?.lock == nil {
+                        continue
+                    } else {
+                        throw error
+                    }
+                }
             }
         }, completion: { (viewController, _) in
             viewController.refreshControl?.endRefreshing()
@@ -177,7 +184,7 @@ public final class LockEventsViewController: TableViewController {
         }
         
         let lockName = managedObject.lock?.name ?? ""
-        if self.lock != nil {
+        if self.lock == nil, lockName.isEmpty == false {
             keyName = keyName.isEmpty ? lockName : lockName + " - " + keyName
         }
         
