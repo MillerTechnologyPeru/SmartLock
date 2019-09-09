@@ -32,6 +32,7 @@ public extension ActivityIndicatorViewController {
         let queue = queue ?? appQueue
         if showActivity { self.showActivity() }
         queue.async {
+            mainQueue { if showActivity { self.showActivity() } }
             do {
                 let value = try asyncOperation()
                 mainQueue { [weak self] in

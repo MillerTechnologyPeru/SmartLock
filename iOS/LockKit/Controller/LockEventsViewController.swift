@@ -26,6 +26,10 @@ public final class LockEventsViewController: TableViewController {
     
     public lazy var activityIndicator: UIActivityIndicatorView = self.loadActivityIndicatorView()
     
+    private var locks: Set<UUID> {
+        return self.lock.flatMap { [$0] } ?? Set(Store.shared.locks.value.keys)
+    }
+    
     private lazy var dateFormatter: DateFormatter = {
         let dateFormatter = DateFormatter()
         dateFormatter.dateStyle = .short
@@ -60,6 +64,9 @@ public final class LockEventsViewController: TableViewController {
         
         // configure FRC
         configureView()
+        
+        // load keys
+        loadKeys()
     }
     
     public override func viewWillAppear(_ animated: Bool) {
@@ -85,6 +92,8 @@ public final class LockEventsViewController: TableViewController {
         let fetchRequest = NSFetchRequest<EventManagedObject>()
         fetchRequest.entity = EventManagedObject.entity()
         fetchRequest.includesSubentities = true
+        fetchRequest.returnsObjectsAsFaults = false
+        fetchRequest.includesPropertyValues = true
         fetchRequest.fetchBatchSize = 30
         fetchRequest.sortDescriptors = [
             NSSortDescriptor(
@@ -111,11 +120,10 @@ public final class LockEventsViewController: TableViewController {
         
         typealias FetchRequest = ListEventsCharacteristic.FetchRequest
         typealias Predicate = ListEventsCharacteristic.Predicate
-                
-        let locks: Set<UUID> = self.lock.flatMap { [$0] } ?? Set(Store.shared.locks.value.keys)
         
+        let locks = self.locks
+        let context = Store.shared.backgroundContext
         performActivity({ [weak self] in
-            let context = Store.shared.backgroundContext
             for lock in locks {
                 guard let device = try Store.shared.device(for: lock, scanDuration: 1.0) else {
                     if self?.lock == nil {
@@ -205,6 +213,41 @@ public final class LockEventsViewController: TableViewController {
         cell.dateLabel.text = managedObject.date.flatMap { dateFormatter.string(from: $0) }
         cell.timeLabel.text = managedObject.date.flatMap { timeFormatter.string(from: $0) }
     }
+    
+    private func loadKeys() {
+        
+        let locks = self.locks
+        performActivity({
+            try locks.forEach {
+                try Store.shared.device(for: $0, scanDuration: 1.0).flatMap {
+                    let canListKeys = try Store.shared.listKeys($0)
+                    assert(canListKeys)
+                }
+            }
+        }, completion: { (viewController, _) in
+            viewController.reloadData()
+        })
+    }
+    
+    /*
+    private func loadKeys(for indexPath: IndexPath) {
+        
+        let event = self[indexPath]
+        let context = Store.shared.persistentContainer.viewContext
+        if let lock = event.lock?.identifier,
+            try! event.key(in: context) == nil {
+            performActivity({
+                let context = Store.shared.backgroundContext
+                let eventKey = try context.performErrorBlockAndWait {
+                    try (context.existingObject(with: event.objectID) as? EventManagedObject)?.key(in: context)
+                }
+                guard eventKey == nil,
+                    let device = Store.shared.device(for: lock)
+                    else { return }
+                try Store.shared.listKeys(device)
+            })
+        }
+    }*/
     
     // MARK: - UITableViewDataSource
     
