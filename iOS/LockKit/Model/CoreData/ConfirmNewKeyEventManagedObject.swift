@@ -47,4 +47,14 @@ public extension ConfirmNewKeyEventManagedObject {
         fetchRequest.returnsObjectsAsFaults = false
         return try context.fetch(fetchRequest).first
     }
+    
+    /// Fetch the new key specified by the event.
+    func newKey(in context: NSManagedObjectContext) throws -> NewKeyManagedObject? {
+        
+        guard let newKey = self.newKey else {
+            assertionFailure("Missing key value")
+            return nil
+        }
+        return try context.find(identifier: newKey, type: NewKeyManagedObject.self)
+    }
 }

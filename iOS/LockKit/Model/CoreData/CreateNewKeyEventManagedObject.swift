@@ -26,3 +26,18 @@ public final class CreateNewKeyEventManagedObject: EventManagedObject {
 // MARK: - IdentifiableManagedObject
 
 extension CreateNewKeyEventManagedObject: IdentifiableManagedObject { }
+
+// MARK: - Fetch
+
+public extension CreateNewKeyEventManagedObject {
+    
+    /// Fetch the new key specified by the event.
+    func newKey(in context: NSManagedObjectContext) throws -> NewKeyManagedObject? {
+        
+        guard let newKey = self.newKey else {
+            assertionFailure("Missing key value")
+            return nil
+        }
+        return try context.find(identifier: newKey, type: NewKeyManagedObject.self)
+    }
+}

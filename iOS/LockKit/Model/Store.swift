@@ -56,9 +56,9 @@ public final class Store {
             print("Loaded persistent store")
             #endif
             self?.persistentContainer.viewContext.automaticallyMergesChangesFromParent = true
-            self?.loadCache()
         }
-        let _ = semaphore.wait(timeout: .now() + 5.0)
+        let didTimeout = semaphore.wait(timeout: .now() + 5.0) == .timedOut
+        assert(didTimeout == false)
         
         #if os(iOS)
         // observe iBeacons
@@ -79,6 +79,7 @@ public final class Store {
         
         // read from filesystem
         loadCache()
+        updateCoreData()
     }
     
     @available(iOS 13.0, watchOSApplicationExtension 6.0, *)
@@ -451,6 +452,9 @@ public extension Store {
             guard list.keys.isEmpty == false else { return }
             self?.persistentContainer.commit { (context) in
                 try list.keys.forEach {
+                    try context.insert($0, for: information.identifier)
+                }
+                try list.newKeys.forEach {
                     try context.insert($0, for: information.identifier)
                 }
             }
