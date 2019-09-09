@@ -225,7 +225,7 @@ public final class LockEventsViewController: TableViewController {
                 }
             }
         }, completion: { (viewController, _) in
-            viewController.reloadData()
+            viewController.tableView.reloadData()
         })
     }
     
