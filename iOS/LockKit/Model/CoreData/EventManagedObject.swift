@@ -54,6 +54,32 @@ public extension EventManagedObject {
     }
 }
 
+public extension LockManagedObject {
+    
+    func lastEvent(in context: NSManagedObjectContext) throws -> EventManagedObject? {
+        
+        let fetchRequest = NSFetchRequest<EventManagedObject>()
+        fetchRequest.entity = EventManagedObject.entity()
+        fetchRequest.fetchBatchSize = 10
+        fetchRequest.includesSubentities = true
+        fetchRequest.shouldRefreshRefetchedObjects = false
+        fetchRequest.returnsObjectsAsFaults = true
+        fetchRequest.includesPropertyValues = false
+        fetchRequest.sortDescriptors = [
+            NSSortDescriptor(
+                key: #keyPath(EventManagedObject.date),
+                ascending: false
+            )
+        ]
+        fetchRequest.predicate = NSPredicate(
+            format: "%K == %@",
+            #keyPath(EventManagedObject.lock),
+            self
+        )
+        return try context.fetch(fetchRequest).first
+    }
+}
+
 // MARK: - Store
 
 internal extension NSManagedObjectContext {
