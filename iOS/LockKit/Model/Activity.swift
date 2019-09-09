@@ -168,13 +168,12 @@ public final class ManageKeysActivity: UIActivity {
     
     public override var activityViewController: UIViewController? {
         
-        let navigationController = UIStoryboard(name: "LockPermissions", bundle: .lockKit).instantiateInitialViewController() as! UINavigationController
+        let viewController = LockPermissionsViewController.fromStoryboard(
+            with: item.identifier,
+            completion: { [weak self] in self?.activityDidFinish(true) }
+        )
         
-        let destinationViewController = navigationController.viewControllers.first! as! LockPermissionsViewController
-        destinationViewController.lockIdentifier = item.identifier
-        destinationViewController.completion = { self.activityDidFinish(true) }
-        
-        return navigationController
+        return UINavigationController(rootViewController: viewController)
     }
 }
 

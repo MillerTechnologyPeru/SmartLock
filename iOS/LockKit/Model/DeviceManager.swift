@@ -30,9 +30,7 @@ public typealias NativeCentral = DarwinCentral
 private struct LockManagerCache {
     
     static let options = DarwinCentral.Options(showPowerAlert: false, restoreIdentifier: nil)
-    
     static let central = DarwinCentral(options: options)
-    
     static let manager = LockManager(central: central)
 }
 

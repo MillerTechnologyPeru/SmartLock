@@ -361,13 +361,13 @@ import UIKit
 
 public extension ActivityIndicatorViewController where Self: UIViewController {
     
-    func syncCloud(showProgressHUD: Bool) {
+    func syncCloud(showActivity: Bool) {
         
         assert(Thread.isMainThread)
         
         // TODO: check user preferences to prevent iCloud sync
         
-        performActivity(showProgressHUD: showProgressHUD, queue: .cloud, { [weak self] in
+        performActivity(showActivity: showActivity, queue: .cloud, { [weak self] in
             try Store.shared.syncCloud(conflicts: { self?.resolveCloudSyncConflicts($0) })
         }, completion: { (viewController, _) in
             

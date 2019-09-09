@@ -50,6 +50,10 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
         // print app info
         log("\(bundle.symbol) Launching SmartLock v\(AppVersion) Build \(AppBuild)")
         
+        #if DEBUG
+        defer { log("\(bundle.symbol) App finished launching in \(String(format: "%.3f", Date().timeIntervalSince(appLaunch)))s") }
+        #endif
+        
         // set global appearance
         UIView.configureLockAppearance()
         
@@ -62,6 +66,9 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
             assertionFailure("Could not validate R.swift \(error.localizedDescription)")
         }
         #endif
+        
+        // load store singleton
+        let _ = Store.shared
         
         // setup logging
         LockManager.shared.log = { log("🔒 LockManager: " + $0) }
@@ -93,6 +100,7 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
             WatchController.shared.context = .init(
                 applicationData: Store.shared.applicationData
             )
+            // FIXME: store watch locks observer
             Store.shared.locks.sink { _ in
                 WatchController.shared.context = .init(
                     applicationData: Store.shared.applicationData

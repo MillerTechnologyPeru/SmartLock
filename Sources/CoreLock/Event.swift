@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import TLVCoding
 
 public enum LockEvent: Equatable {
     
@@ -137,6 +138,29 @@ public extension LockEvent {
         case .confirmNewKey:    return .confirmNewKey
         case .removeKey:        return .removeKey
         }
+    }
+}
+
+extension LockEvent.EventType: TLVCodable {
+    
+    internal enum TLVType: UInt8 {
+        case setup          = 0x01
+        case unlock         = 0x02
+        case createNewKey   = 0x03
+        case confirmNewKey  = 0x04
+        case removeKey      = 0x05
+    }
+    
+    public init?(tlvData: Data) {
+        guard tlvData.count == 1,
+            let type = TLVType(rawValue: tlvData[0])
+            else { return nil }
+        self = unsafeBitCast(type, to: LockEvent.EventType.self)
+    }
+    
+    public var tlvData: Data {
+        let type = unsafeBitCast(self, to: TLVType.self)
+        return Data([type.rawValue])
     }
 }
 

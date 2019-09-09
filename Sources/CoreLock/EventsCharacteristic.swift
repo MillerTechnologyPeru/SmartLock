@@ -69,7 +69,7 @@ public typealias EventsList = [LockEvent]
 
 public struct EventListNotification: Codable, Equatable, GATTEncryptedNotificationValue {
     
-    public var event: LockEvent
+    public var event: LockEvent?
     
     public var isLast: Bool
 }
@@ -78,7 +78,8 @@ public extension EventListNotification {
     
     static func from(list: EventsList) -> [EventListNotification] {
         
-        guard list.isEmpty == false else { return [] }
+        guard list.isEmpty == false
+            else { return [EventListNotification(event: nil, isLast: true) ] }
         var notifications = list.map { EventListNotification(event: $0, isLast: false) }
         assert(notifications.isEmpty == false)
         notifications[notifications.count - 1].isLast = true

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14854.2" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14865.1" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES">
     <device id="retina4_0" orientation="portrait" appearance="dark"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14806.4"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14819.2"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -16,31 +16,31 @@
                 <rect key="frame" x="0.0" y="0.0" width="320" height="80"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Anytime" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xdG-uQ-Fad">
-                        <rect key="frame" x="67" y="43" width="238" height="17"/>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Anytime" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xdG-uQ-Fad">
+                        <rect key="frame" x="74" y="43" width="231" height="17"/>
                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                         <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Lock Name" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HtH-Ax-ubI" userLabel="Lock Name Label">
-                        <rect key="frame" x="67" y="12" width="238" height="23"/>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Lock Name" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HtH-Ax-ubI" userLabel="Lock Name Label">
+                        <rect key="frame" x="74" y="12" width="231" height="23"/>
                         <fontDescription key="fontDescription" type="system" pointSize="19"/>
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
                     </label>
                     <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="ugV-rn-Ig8">
-                        <rect key="frame" x="8" y="8" width="51" height="51"/>
+                        <rect key="frame" x="15" y="14.5" width="51" height="51"/>
                         <constraints>
                             <constraint firstAttribute="width" secondItem="ugV-rn-Ig8" secondAttribute="height" multiplier="1:1" id="2o1-oe-qcz"/>
                             <constraint firstAttribute="width" constant="51" id="x0A-Ae-LrP"/>
                         </constraints>
                     </imageView>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Qax-zc-WDt" customClass="PermissionIconView" customModule="LockKit" customModuleProvider="target">
-                        <rect key="frame" x="8" y="8" width="51" height="51"/>
+                        <rect key="frame" x="15" y="14.5" width="51" height="51"/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     </view>
                     <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="VER-Zq-zSD">
-                        <rect key="frame" x="15" y="15" width="37" height="37"/>
+                        <rect key="frame" x="22" y="21.5" width="37" height="37"/>
                         <color key="color" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     </activityIndicatorView>
                 </subviews>
@@ -50,10 +50,11 @@
                     <constraint firstItem="Qax-zc-WDt" firstAttribute="width" secondItem="ugV-rn-Ig8" secondAttribute="width" id="4Pz-Uu-Anc"/>
                     <constraint firstAttribute="trailingMargin" secondItem="HtH-Ax-ubI" secondAttribute="trailing" id="HxB-dj-YIF"/>
                     <constraint firstItem="HtH-Ax-ubI" firstAttribute="leading" secondItem="xdG-uQ-Fad" secondAttribute="leading" id="NjE-YR-Fba"/>
+                    <constraint firstItem="ugV-rn-Ig8" firstAttribute="centerY" secondItem="ViR-ve-Wnx" secondAttribute="centerY" id="SE3-uV-p76"/>
                     <constraint firstItem="Qax-zc-WDt" firstAttribute="centerY" secondItem="ugV-rn-Ig8" secondAttribute="centerY" id="SfF-lZ-16b"/>
-                    <constraint firstItem="ugV-rn-Ig8" firstAttribute="top" secondItem="ViR-ve-Wnx" secondAttribute="top" constant="8" id="WfO-VU-IXe"/>
+                    <constraint firstItem="ugV-rn-Ig8" firstAttribute="top" relation="greaterThanOrEqual" secondItem="ViR-ve-Wnx" secondAttribute="top" constant="8" id="WfO-VU-IXe"/>
                     <constraint firstItem="xdG-uQ-Fad" firstAttribute="top" secondItem="HtH-Ax-ubI" secondAttribute="bottom" constant="8" id="X7i-Ol-cei"/>
-                    <constraint firstItem="ugV-rn-Ig8" firstAttribute="leading" secondItem="ViR-ve-Wnx" secondAttribute="leading" constant="8" id="Y5r-55-DCb"/>
+                    <constraint firstItem="ugV-rn-Ig8" firstAttribute="leading" secondItem="ViR-ve-Wnx" secondAttribute="leadingMargin" id="Y5r-55-DCb"/>
                     <constraint firstItem="VER-Zq-zSD" firstAttribute="centerX" secondItem="ugV-rn-Ig8" secondAttribute="centerX" id="aiS-d8-M8k"/>
                     <constraint firstItem="HtH-Ax-ubI" firstAttribute="leading" secondItem="ugV-rn-Ig8" secondAttribute="trailing" constant="8" id="gPS-zr-gXo"/>
                     <constraint firstItem="HtH-Ax-ubI" firstAttribute="trailing" secondItem="xdG-uQ-Fad" secondAttribute="trailing" id="qN5-yL-5Bf"/>
@@ -63,7 +64,7 @@
                     <constraint firstItem="HtH-Ax-ubI" firstAttribute="top" secondItem="ViR-ve-Wnx" secondAttribute="top" constant="12" id="xRq-I6-c5O"/>
                 </constraints>
             </tableViewCellContentView>
-            <inset key="separatorInset" minX="67" minY="0.0" maxX="0.0" maxY="0.0"/>
+            <inset key="separatorInset" minX="74" minY="0.0" maxX="0.0" maxY="0.0"/>
             <connections>
                 <outlet property="activityIndicatorView" destination="VER-Zq-zSD" id="JnQ-A2-yBx"/>
                 <outlet property="lockDetailLabel" destination="xdG-uQ-Fad" id="6I0-Ve-QjA"/>

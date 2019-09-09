@@ -87,6 +87,8 @@ final class WatchController: NSObject {
                 else { return }
         }
         
+        guard session.isPaired else { return }
+        
         let message = context?.toMessage() ?? [:]
         do { try session.updateApplicationContext(message) }
         catch {
@@ -242,9 +244,6 @@ extension WatchController: WCSessionDelegate {
     func session(_ session: WCSession, didReceiveMessage message: [String : Any], replyHandler: @escaping ([String : Any]) -> Void) {
         
         log?("Recieved message")
-        #if DEBUG
-        dump(message)
-        #endif
         let response = self.response(for: message)
         let responseMessage = WatchMessage.response(response).toMessage()
         replyHandler(responseMessage)

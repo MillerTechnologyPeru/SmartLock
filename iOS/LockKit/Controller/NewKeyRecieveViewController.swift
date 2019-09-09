@@ -13,7 +13,7 @@ import GATT
 import CoreLock
 import JGProgressHUD
 
-public final class NewKeyRecieveViewController: UITableViewController, ActivityIndicatorViewController {
+public final class NewKeyRecieveViewController: UITableViewController {
     
     // MARK: - IB Outlets
     
@@ -64,7 +64,7 @@ public final class NewKeyRecieveViewController: UITableViewController, ActivityI
         let newKeyInvitation = self.newKey!
         sender.isEnabled = false
         let keyData = KeyData()
-        showProgressHUD()
+        showActivity()
         
         async { [weak self] in
             
@@ -107,7 +107,7 @@ public final class NewKeyRecieveViewController: UITableViewController, ActivityI
                     
                     Store.shared[lock: newKeyInvitation.lock] = lockCache
                     Store.shared[key: newKeyInvitation.key.identifier] = keyData
-                    controller.dismissProgressHUD()
+                    controller.hideActivity(animated: true)
                     controller.dismiss(animated: true, completion: nil)
                 }
             }
@@ -115,8 +115,7 @@ public final class NewKeyRecieveViewController: UITableViewController, ActivityI
             catch {
                 
                 mainQueue {
-                    
-                    controller.dismissProgressHUD(animated: false)
+                    controller.hideActivity(animated: false)
                     controller.showErrorAlert("\(error)", okHandler: {
                         controller.dismiss(animated: true, completion: nil)
                     })
@@ -125,7 +124,7 @@ public final class NewKeyRecieveViewController: UITableViewController, ActivityI
         }
     }
     
-    // MARK: - Private Methods
+    // MARK: - Methods
     
     private func configureView() {
         
@@ -136,6 +135,12 @@ public final class NewKeyRecieveViewController: UITableViewController, ActivityI
         self.permissionLabel.text = permission.localizedText
     }
 }
+
+// MARK: - ProgressHUDViewController
+
+extension NewKeyRecieveViewController: ProgressHUDViewController { }
+
+// MARK: - View Controller Extensions
 
 public extension UIViewController {
     

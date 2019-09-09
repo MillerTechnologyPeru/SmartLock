@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import CoreData
 import CoreBluetooth
 import CoreLocation
 import Bluetooth
@@ -22,7 +23,7 @@ public final class Store {
     public static let shared = Store()
     
     private init() {
-        
+                
         // clear keychain on newly installed app.
         if preferences.isAppInstalled == false {
             preferences.isAppInstalled = true
@@ -38,6 +39,32 @@ public final class Store {
             }
         }
         
+        // load CoreData
+        let semaphore = DispatchSemaphore(value: 0)
+        persistentContainer.loadPersistentStores { [weak self] (store, error) in
+            semaphore.signal()
+            if let error = error {
+                log("⚠️ Unable to load persistent store: \(error.localizedDescription)")
+                #if DEBUG
+                dump(error)
+                #endif
+                if let url = store.url {
+                    do { try FileManager.default.removeItem(at: url) }
+                    catch { dump(error) }
+                }
+                assertionFailure("Unable to load persistent store")
+                return
+            }
+            #if DEBUG
+            print(store)
+            print("Loaded persistent store")
+            #endif
+            self?.persistentContainer.viewContext.automaticallyMergesChangesFromParent = true
+            self?.persistentContainer.viewContext.mergePolicy = NSMergePolicy.mergeByPropertyObjectTrump
+        }
+        let didTimeout = semaphore.wait(timeout: .now() + 5.0) == .timedOut
+        assert(didTimeout == false)
+        
         #if os(iOS)
         // observe iBeacons
         beaconController.foundLock = { [unowned self] (lock, beacon) in
@@ -46,6 +73,8 @@ public final class Store {
         beaconController.lostLock = { [unowned self] (lock) in
             self.lockBeaconExited(lock: lock)
         }
+        // observe external cloud changes
+        cloud.didChange = { [unowned self] in self.cloudDidChangeExternally() }
         #endif
         
         // observe local cache changes
@@ -53,17 +82,13 @@ public final class Store {
             self.lockCacheChanged()
         })
         
-        #if os(iOS)
-        // observe external cloud changes
-        cloud.didChange = { [unowned self] in self.cloudDidChangeExternally() }
-        #endif
-        
         // read from filesystem
         loadCache()
+        updateCoreData()
     }
     
     @available(iOS 13.0, watchOSApplicationExtension 6.0, *)
-    public lazy var objectWillChange = ObservableObjectPublisher()
+    public lazy var objectWillChange = Combine.ObservableObjectPublisher()
     
     public let isScanning = OpenCombine.CurrentValueSubject<Bool, Never>(false)
     
@@ -87,11 +112,17 @@ public final class Store {
         }
         set {
             fileManager.applicationData = newValue
-            locks.value = newValue.locks // update locks
+            if locks.value != newValue.locks {
+                locks.value = newValue.locks // update locks
+            }
         }
     }
     
     public lazy var lockManager: LockManager = .shared
+    
+    public lazy var persistentContainer: NSPersistentContainer = .lock
+    
+    internal lazy var backgroundContext = self.persistentContainer.newBackgroundContext()
     
     #if os(iOS)
     public lazy var cloud: CloudStore = .shared
@@ -115,8 +146,8 @@ public final class Store {
         
         get { return locks.value[identifier] }
         set {
-            locks.value[identifier] = newValue
-            writeCache()
+            locks.value[identifier] = newValue // update observers
+            applicationData.locks = locks.value // write file
         }
     }
     
@@ -159,7 +190,6 @@ public final class Store {
     
     /// The Bluetooth LE peripheral for the speciifed lock.
     public subscript (peripheral identifier: UUID) -> NativeCentral.Peripheral? {
-        
         return lockInformation.value.first(where: { $0.value.identifier == identifier })?.key
     }
     
@@ -182,23 +212,28 @@ public final class Store {
         // read file
         let applicationData = self.applicationData
         // set value
-        locks.value = applicationData.locks
-    }
-    
-    /// Write to lock cache.
-    private func writeCache() {
-        
-        // write file
-        applicationData.locks = locks.value
+        if locks.value != applicationData.locks {
+            locks.value = applicationData.locks
+        }
     }
     
     private func lockCacheChanged() {
+        
+        updateCoreData()
         
         #if os(iOS)
         monitorBeacons()
         updateSpotlight()
         updateCloud()
         #endif
+    }
+    
+    private func updateCoreData() {
+        
+        let locks = self.locks.value
+        backgroundContext.commit {
+            try $0.insert(locks)
+        }
     }
     
     #if os(iOS)
@@ -313,6 +348,21 @@ public extension Store {
         return lock
     }
     
+    func key(for lock: LockPeripheral<NativeCentral>) -> KeyCredentials? {
+        
+        guard let information = self.lockInformation.value[lock.scanData.peripheral],
+            let lockCache = self[lock: information.identifier],
+            let keyData = self[key: lockCache.key.identifier]
+            else { return nil }
+        
+        let key = KeyCredentials(
+            identifier: lockCache.key.identifier,
+            secret: keyData
+        )
+        
+        return key
+    }
+    
     func scan(duration: TimeInterval? = nil) throws {
         
         let duration = preferences.scanDuration
@@ -371,6 +421,21 @@ public extension Store {
     func unlock(_ lock: LockPeripheral<NativeCentral>, action: UnlockAction = .default) throws -> Bool {
         
         // get lock key
+        guard let key = self.key(for: lock)
+            else { return false }
+        
+        try lockManager.unlock(action,
+                               for: lock.scanData.peripheral,
+                               with: key,
+                               timeout: preferences.bluetoothTimeout)
+        return true
+    }
+    
+    @discardableResult
+    func listKeys(_ lock: LockPeripheral<NativeCentral>,
+                  notification: @escaping ((KeysList, Bool) -> ()) = { _,_ in }) throws -> Bool {
+        
+        // get lock key
         guard let information = self.lockInformation.value[lock.scanData.peripheral],
             let lockCache = self[lock: information.identifier],
             let keyData = self[key: lockCache.key.identifier]
@@ -381,10 +446,51 @@ public extension Store {
             secret: keyData
         )
         
-        try lockManager.unlock(action,
-                               for: lock.scanData.peripheral,
-                               with: key,
-                               timeout: preferences.bluetoothTimeout)
+        // BLE request
+        try lockManager.listKeys(for: lock.scanData.peripheral, with: key, timeout: preferences.bluetoothTimeout) { [weak self] (list, isComplete) in
+            // call completion block
+            notification(list, isComplete)
+            // store in CoreData
+            guard list.keys.isEmpty == false else { return }
+            self?.backgroundContext.commit { (context) in
+                try list.keys.forEach {
+                    try context.insert($0, for: information.identifier)
+                }
+                try list.newKeys.forEach {
+                    try context.insert($0, for: information.identifier)
+                }
+            }
+        }
+        
+        return true
+    }
+    
+    @discardableResult
+    func listEvents(_ lock: LockPeripheral<NativeCentral>,
+                    fetchRequest: ListEventsCharacteristic.FetchRequest? = nil,
+                    notification: @escaping ((EventsList, Bool) -> ()) = { _,_ in }) throws -> Bool {
+        
+        // get lock key
+        guard let information = self.lockInformation.value[lock.scanData.peripheral],
+            let lockCache = self[lock: information.identifier],
+            let keyData = self[key: lockCache.key.identifier]
+            else { return false }
+        
+        let key = KeyCredentials(
+            identifier: lockCache.key.identifier,
+            secret: keyData
+        )
+        
+        // BLE request
+        try lockManager.listEvents(fetchRequest: fetchRequest, for: lock.scanData.peripheral, with: key, timeout: preferences.bluetoothTimeout) { [weak self] (list, isComplete) in
+            // call completion block
+            notification(list, isComplete)
+            // store in CoreData
+            self?.backgroundContext.commit { (context) in
+                try context.insert(list, for: information.identifier)
+            }
+        }
+        
         return true
     }
 }
