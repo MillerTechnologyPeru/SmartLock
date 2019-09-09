@@ -108,10 +108,14 @@ public final class LockEventsViewController: TableViewController {
     }
     
     private func reloadData() {
+        
+        typealias FetchRequest = ListEventsCharacteristic.FetchRequest
+        typealias Predicate = ListEventsCharacteristic.Predicate
                 
         let locks: Set<UUID> = self.lock.flatMap { [$0] } ?? Set(Store.shared.locks.value.keys)
         
         performActivity({ [weak self] in
+            let context = Store.shared.backgroundContext
             for lock in locks {
                 guard let device = try Store.shared.device(for: lock, scanDuration: 1.0) else {
                     if self?.lock == nil {
@@ -120,7 +124,20 @@ public final class LockEventsViewController: TableViewController {
                         throw CentralError.unknownPeripheral
                     }
                 }
-                do { try Store.shared.listEvents(device, fetchRequest: nil) }
+                let lastEventDate = try context.performErrorBlockAndWait {
+                    try context.find(identifier: lock, type: LockManagedObject.self)
+                        .flatMap { try $0.lastEvent(in: context)?.date }
+                }
+                let fetchRequest = FetchRequest(
+                    offset: 0,
+                    limit: nil,
+                    predicate: Predicate(
+                        keys: nil,
+                        start: lastEventDate,
+                        end: nil
+                    )
+                )
+                do { try Store.shared.listEvents(device, fetchRequest: fetchRequest) }
                 catch {
                     if self?.lock == nil {
                         continue

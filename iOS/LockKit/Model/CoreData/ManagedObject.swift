@@ -23,12 +23,12 @@ public extension NSManagedObjectModel {
 internal extension NSManagedObjectContext {
     
     /// Wraps the block to allow for error throwing.
-    func performErrorBlockAndWait(_ block: @escaping () throws -> ()) throws {
+    func performErrorBlockAndWait<T>(_ block: @escaping () throws -> (T)) throws -> T {
         
         var blockError: Swift.Error?
-        
+        var value: T!
         performAndWait {
-            do { try block() }
+            do { value = try block() }
             catch { blockError = error }
             return
         }
@@ -36,6 +36,7 @@ internal extension NSManagedObjectContext {
         if let error = blockError {
             throw error
         }
+        return value
     }
     
     func commit(_ block: @escaping (NSManagedObjectContext) throws -> ()) {
