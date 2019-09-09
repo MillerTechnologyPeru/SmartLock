@@ -56,6 +56,7 @@ public final class Store {
             print("Loaded persistent store")
             #endif
             self?.persistentContainer.viewContext.automaticallyMergesChangesFromParent = true
+            self?.persistentContainer.viewContext.mergePolicy = NSMergePolicy.mergeByPropertyObjectTrump
         }
         let didTimeout = semaphore.wait(timeout: .now() + 5.0) == .timedOut
         assert(didTimeout == false)
@@ -83,7 +84,7 @@ public final class Store {
     }
     
     @available(iOS 13.0, watchOSApplicationExtension 6.0, *)
-    public lazy var objectWillChange = ObservableObjectPublisher()
+    public lazy var objectWillChange = Combine.ObservableObjectPublisher()
     
     public let isScanning = OpenCombine.CurrentValueSubject<Bool, Never>(false)
     
@@ -225,12 +226,8 @@ public final class Store {
     private func updateCoreData() {
         
         let locks = self.locks.value
-        persistentContainer.performBackgroundTask { (context) in
-            do {
-                try context.insert(locks)
-            } catch {
-                assertionFailure("Could not save \(error)")
-            }
+        persistentContainer.commit {
+            try $0.insert(locks)
         }
     }
     
