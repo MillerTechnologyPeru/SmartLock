@@ -214,7 +214,7 @@ public final class LockPermissionsViewController: UITableViewController {
                 
                 alert.dismiss(animated: true) { }
                 
-                self.showProgressHUD()
+                self.showActivity()
                 
                 async { [weak self] in
                     
@@ -228,13 +228,13 @@ public final class LockPermissionsViewController: UITableViewController {
                     catch {
                         mainQueue {
                             self?.showErrorAlert(error.localizedDescription)
-                            self?.dismissProgressHUD(animated: false)
+                            self?.hideActivity(animated: false)
                         }
                         return
                     }
                     mainQueue {
                         self?.list.remove(keyEntry.identifier, type: keyEntry.type)
-                        self?.dismissProgressHUD(animated: true)
+                        self?.hideActivity(animated: true)
                     }
                 }                
             }))
@@ -251,7 +251,7 @@ public final class LockPermissionsViewController: UITableViewController {
 
 // MARK: - ActivityIndicatorViewController
 
-extension LockPermissionsViewController: ActivityIndicatorViewController { }
+extension LockPermissionsViewController: ProgressHUDViewController { }
 
 // MARK: - Supporting Types
 

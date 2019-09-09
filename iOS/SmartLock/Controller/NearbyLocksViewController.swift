@@ -309,4 +309,4 @@ final class NearbyLocksViewController: UITableViewController {
 
 // MARK: - ActivityIndicatorViewController
 
-extension NearbyLocksViewController: ActivityIndicatorViewController { }
+extension NearbyLocksViewController: ProgressHUDViewController { }

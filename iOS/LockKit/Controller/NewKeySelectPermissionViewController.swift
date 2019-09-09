@@ -135,6 +135,12 @@ public final class NewKeySelectPermissionViewController: UITableViewController, 
     }
 }
 
+// MARK: - ProgressHUDViewController
+
+extension NewKeySelectPermissionViewController: ProgressHUDViewController { }
+
+// MARK: - View Controller Extensions
+
 public extension UIViewController {
     
     func shareKey(lock identifier: UUID, completion: @escaping (((invitation: NewKey.Invitation, sender: PopoverPresentingView)?) -> ())) {

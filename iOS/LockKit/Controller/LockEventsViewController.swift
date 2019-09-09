@@ -24,7 +24,7 @@ public final class LockEventsViewController: TableViewController {
         didSet { configureView() }
     }
     
-    public lazy var progressHUD: JGProgressHUD = .currentStyle(for: self)
+    public lazy var activityIndicator: UIActivityIndicatorView = self.loadActivityIndicatorView()
     
     private lazy var dateFormatter: DateFormatter = {
         let dateFormatter = DateFormatter()
@@ -214,7 +214,7 @@ public final class LockEventsViewController: TableViewController {
 
 // MARK: - ActivityIndicatorViewController
 
-extension LockEventsViewController: ActivityIndicatorViewController { }
+extension LockEventsViewController: TableViewActivityIndicatorViewController { }
 
 // MARK: - Supporting Types
 
@@ -225,6 +225,4 @@ public final class LockEventTableViewCell: UITableViewCell {
     @IBOutlet private(set) weak var keyNameLabel: UILabel!
     @IBOutlet private(set) weak var dateLabel: UILabel!
     @IBOutlet private(set) weak var timeLabel: UILabel!
-    
-    
 }
