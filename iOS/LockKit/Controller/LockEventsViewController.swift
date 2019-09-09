@@ -108,9 +108,7 @@ public final class LockEventsViewController: TableViewController {
     }
     
     private func reloadData() {
-        
-        refreshControl?.endRefreshing()
-        
+                
         let locks: Set<UUID> = self.lock.flatMap { [$0] } ?? Set(Store.shared.locks.value.keys)
         
         performActivity({ [weak self] in
@@ -131,8 +129,6 @@ public final class LockEventsViewController: TableViewController {
                     }
                 }
             }
-        }, completion: { (viewController, _) in
-            viewController.refreshControl?.endRefreshing()
         })
     }
     

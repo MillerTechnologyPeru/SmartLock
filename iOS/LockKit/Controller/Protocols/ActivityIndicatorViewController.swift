@@ -86,7 +86,7 @@ internal extension ActivityIndicatorViewController {
     
     func loadActivityIndicatorView() -> UIActivityIndicatorView {
         
-        let activityIndicator = UIActivityIndicatorView(style: .gray)
+        let activityIndicator = UIActivityIndicatorView(style: .white)
         activityIndicator.frame.origin = CGPoint(x: 6.5, y: 15)
         
         let view = UIView(frame: CGRect(x: 0, y: 0, width: 33, height: 44))
