@@ -217,7 +217,9 @@ public final class LockEventsViewController: TableViewController {
     
     private func loadKeys() {
         
-        let locks = self.locks
+        let locks = self.locks.filter {
+            Store.shared[lock: $0]?.key.permission.isAdministrator ?? false
+        }
         performActivity({
             try locks.forEach {
                 try Store.shared.device(for: $0, scanDuration: 1.0).flatMap {
