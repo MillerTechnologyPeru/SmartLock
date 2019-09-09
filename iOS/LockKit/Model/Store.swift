@@ -118,6 +118,8 @@ public final class Store {
     
     public lazy var persistentContainer: NSPersistentContainer = .lock
     
+    internal lazy var backgroundContext = self.persistentContainer.newBackgroundContext()
+    
     #if os(iOS)
     public lazy var cloud: CloudStore = .shared
     
@@ -184,7 +186,6 @@ public final class Store {
     
     /// The Bluetooth LE peripheral for the speciifed lock.
     public subscript (peripheral identifier: UUID) -> NativeCentral.Peripheral? {
-        
         return lockInformation.value.first(where: { $0.value.identifier == identifier })?.key
     }
     
@@ -226,7 +227,7 @@ public final class Store {
     private func updateCoreData() {
         
         let locks = self.locks.value
-        persistentContainer.commit {
+        backgroundContext.commit {
             try $0.insert(locks)
         }
     }
@@ -447,7 +448,7 @@ public extension Store {
             notification(list, isComplete)
             // store in CoreData
             guard list.keys.isEmpty == false else { return }
-            self?.persistentContainer.commit { (context) in
+            self?.backgroundContext.commit { (context) in
                 try list.keys.forEach {
                     try context.insert($0, for: information.identifier)
                 }
@@ -476,12 +477,12 @@ public extension Store {
             secret: keyData
         )
         
-        /// 
+        // BLE request
         try lockManager.listEvents(fetchRequest: fetchRequest, for: lock.scanData.peripheral, with: key, timeout: preferences.bluetoothTimeout) { [weak self] (list, isComplete) in
             // call completion block
             notification(list, isComplete)
             // store in CoreData
-            self?.persistentContainer.commit { (context) in
+            self?.backgroundContext.commit { (context) in
                 try context.insert(list, for: information.identifier)
             }
         }

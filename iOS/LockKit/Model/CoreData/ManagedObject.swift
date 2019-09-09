@@ -37,6 +37,26 @@ internal extension NSManagedObjectContext {
             throw error
         }
     }
+    
+    func commit(_ block: @escaping (NSManagedObjectContext) throws -> ()) {
+        
+        assert(concurrencyType == .privateQueueConcurrencyType)
+        perform { [unowned self] in
+            do {
+                try block(self)
+                if self.hasChanges {
+                    try self.save()
+                }
+            } catch {
+                log("⚠️ Unable to commit changes: \(error.localizedDescription)")
+                #if DEBUG
+                dump(error)
+                #endif
+                assertionFailure("Core Data error")
+                return
+            }
+        }
+    }
 }
 
 internal extension NSManagedObjectContext {
