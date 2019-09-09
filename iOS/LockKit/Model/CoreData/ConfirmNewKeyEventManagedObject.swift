@@ -21,7 +21,7 @@ public final class ConfirmNewKeyEventManagedObject: EventManagedObject {
         self.lock = lock
         self.date = value.date
         self.key = value.key
-        self.newKey = value.newKey
+        self.pendingKey = value.newKey
     }
 }
 
@@ -36,14 +36,14 @@ public extension ConfirmNewKeyEventManagedObject {
     /// Fetch the removed key specified by the event.
     func createKeyEvent(in context: NSManagedObjectContext) throws -> CreateNewKeyEventManagedObject? {
         
-        guard let newKey = self.newKey else {
+        guard let newKey = self.pendingKey else {
             assertionFailure("Missing new key value")
             return nil
         }
         
         let fetchRequest = NSFetchRequest<CreateNewKeyEventManagedObject>()
         fetchRequest.entity = CreateNewKeyEventManagedObject.entity()
-        fetchRequest.predicate = NSPredicate(format: "%K == %@", #keyPath(CreateNewKeyEventManagedObject.newKey), newKey as NSUUID)
+        fetchRequest.predicate = NSPredicate(format: "%K == %@", #keyPath(CreateNewKeyEventManagedObject.pendingKey), newKey as NSUUID)
         fetchRequest.fetchLimit = 1
         fetchRequest.includesSubentities = true
         fetchRequest.returnsObjectsAsFaults = false
@@ -53,7 +53,7 @@ public extension ConfirmNewKeyEventManagedObject {
     /// Fetch the new key specified by the event.
     func newKey(in context: NSManagedObjectContext) throws -> NewKeyManagedObject? {
         
-        guard let newKey = self.newKey else {
+        guard let newKey = self.pendingKey else {
             assertionFailure("Missing key value")
             return nil
         }

@@ -48,6 +48,10 @@ public final class Store {
                 #if DEBUG
                 dump(error)
                 #endif
+                if let url = store.url {
+                    do { try FileManager.default.removeItem(at: url) }
+                    catch { dump(error) }
+                }
                 assertionFailure("Unable to load persistent store")
                 return
             }

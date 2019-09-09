@@ -21,7 +21,7 @@ public final class CreateNewKeyEventManagedObject: EventManagedObject {
         self.lock = lock
         self.date = value.date
         self.key = value.key
-        self.newKey = value.newKey
+        self.pendingKey = value.newKey
     }
 }
 
@@ -36,7 +36,7 @@ public extension CreateNewKeyEventManagedObject {
     /// Fetch the new key specified by the event.
     func newKey(in context: NSManagedObjectContext) throws -> NewKeyManagedObject? {
         
-        guard let newKey = self.newKey else {
+        guard let newKey = self.pendingKey else {
             assertionFailure("Missing key value")
             return nil
         }
