@@ -570,7 +570,7 @@ public final class LockServiceController <Peripheral: PeripheralProtocol> : GATT
             for (notification, chunks) in notificationChunks {
                 for (index, chunk) in chunks.enumerated() {
                     peripheral[characteristic: eventsResponseHandle] = chunk.data
-                    print("Sent chunk \(index + 1) for event \(notification.event.identifier) (\(chunk.data.count) bytes)")
+                    print("Sent chunk \(index + 1)\(notification.event.flatMap({ " for event \($0.identifier)" }) ?? "") (\(chunk.data.count) bytes)")
                 }
             }
             

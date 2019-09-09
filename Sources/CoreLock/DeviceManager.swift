@@ -345,11 +345,12 @@ public final class LockManager <Central: CentralProtocol> {
             fetchRequest: fetchRequest
         )
         try list(write: characteristicValue, notify: Notification.self, for: peripheral, with: key, timeout: timeout) { [unowned self] (notificationValue) in
-            events.append(notificationValue.event)
-            self.log?("Recieved event \(notificationValue.event.identifier)")
+            if let event = notificationValue.event {
+                events.append(event)
+                self.log?("Recieved event \(event.identifier)")
+            }
             notification(events, notificationValue.isLast)
         }
-        assert(events.isEmpty == false)
     }
 }
 
