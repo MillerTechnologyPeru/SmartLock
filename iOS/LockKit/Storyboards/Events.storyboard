@@ -25,9 +25,21 @@
                                     <subviews>
                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5VN-VE-I3w">
                                             <rect key="frame" x="16" y="15.5" width="50" height="50"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="🔓" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Vmr-kP-LhB">
+                                                    <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="37"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             <constraints>
                                                 <constraint firstAttribute="width" secondItem="5VN-VE-I3w" secondAttribute="height" id="4fO-ja-WFr"/>
+                                                <constraint firstAttribute="trailing" secondItem="Vmr-kP-LhB" secondAttribute="trailing" id="I9m-R4-Vlg"/>
+                                                <constraint firstItem="Vmr-kP-LhB" firstAttribute="top" secondItem="5VN-VE-I3w" secondAttribute="top" id="LIh-8B-pDv"/>
+                                                <constraint firstItem="Vmr-kP-LhB" firstAttribute="leading" secondItem="5VN-VE-I3w" secondAttribute="leading" id="WT1-fr-Pzx"/>
+                                                <constraint firstAttribute="bottom" secondItem="Vmr-kP-LhB" secondAttribute="bottom" id="gHe-nA-HGC"/>
                                                 <constraint firstAttribute="width" constant="50" id="zuA-BT-ZNC"/>
                                             </constraints>
                                         </view>
@@ -88,6 +100,7 @@
                                     <outlet property="actionLabel" destination="7qV-11-Xsb" id="Qdy-zZ-Bes"/>
                                     <outlet property="dateLabel" destination="FY3-Sd-szW" id="OjL-JZ-zkF"/>
                                     <outlet property="keyNameLabel" destination="G7S-LB-M9s" id="wgt-fl-s9s"/>
+                                    <outlet property="symbolLabel" destination="Vmr-kP-LhB" id="R0s-hj-us6"/>
                                     <outlet property="timeLabel" destination="rUj-Jh-B5Q" id="fuE-So-kfU"/>
                                 </connections>
                             </tableViewCell>
@@ -99,6 +112,7 @@
                     </tableView>
                     <navigationItem key="navigationItem" title="Events" id="zct-Tm-IiS"/>
                     <refreshControl key="refreshControl" opaque="NO" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" id="mJm-Kt-Nnn">
+                        <rect key="frame" x="0.0" y="0.0" width="1000" height="1000"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <connections>
                             <action selector="refresh:" destination="fgM-Nz-uya" eventType="valueChanged" id="nEW-80-sUd"/>

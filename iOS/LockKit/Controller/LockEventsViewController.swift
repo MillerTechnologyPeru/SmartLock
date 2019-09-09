@@ -144,6 +144,7 @@ public final class LockEventsViewController: TableViewController {
         
         let managedObject = self[indexPath]
         let context = Store.shared.persistentContainer.viewContext
+        let eventType = type(of: managedObject).eventType
         let action: String
         var keyName: String
         switch managedObject {
@@ -187,6 +188,7 @@ public final class LockEventsViewController: TableViewController {
         
         cell.actionLabel.text = action
         cell.keyNameLabel.text = keyName
+        cell.symbolLabel.text = eventType.symbol
         cell.dateLabel.text = managedObject.date.flatMap { dateFormatter.string(from: $0) }
         cell.timeLabel.text = managedObject.date.flatMap { timeFormatter.string(from: $0) }
     }
@@ -218,8 +220,11 @@ extension LockEventsViewController: ActivityIndicatorViewController { }
 
 public final class LockEventTableViewCell: UITableViewCell {
     
+    @IBOutlet private(set) weak var symbolLabel: UILabel!
     @IBOutlet private(set) weak var actionLabel: UILabel!
     @IBOutlet private(set) weak var keyNameLabel: UILabel!
     @IBOutlet private(set) weak var dateLabel: UILabel!
     @IBOutlet private(set) weak var timeLabel: UILabel!
+    
+    
 }

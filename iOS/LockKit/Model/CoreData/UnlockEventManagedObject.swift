@@ -12,6 +12,8 @@ import CoreLock
 
 public final class UnlockEventManagedObject: EventManagedObject {
     
+    @nonobjc override class var eventType: LockEvent.EventType { return .unlock }
+    
     internal convenience init(_ value: LockEvent.Unlock, lock: LockManagedObject, context: NSManagedObjectContext) {
         
         self.init(context: context)

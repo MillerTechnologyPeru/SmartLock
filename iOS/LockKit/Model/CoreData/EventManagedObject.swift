@@ -12,6 +12,8 @@ import CoreLock
 
 public class EventManagedObject: NSManagedObject {
     
+    @nonobjc class var eventType: LockEvent.EventType { fatalError("Implemented by subclass") }
+    
     internal static func initWith(_ value: LockEvent, lock: LockManagedObject, context: NSManagedObjectContext) -> EventManagedObject {
                 
         switch value {
