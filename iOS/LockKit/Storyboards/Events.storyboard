@@ -28,7 +28,7 @@
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="🔓" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Vmr-kP-LhB">
                                                     <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="37"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="43"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
@@ -44,10 +44,10 @@
                                             </constraints>
                                         </view>
                                         <stackView opaque="NO" contentMode="scaleToFill" distribution="equalSpacing" spacing="15" translatesAutoresizingMaskIntoConstraints="NO" id="eOu-xO-yMV">
-                                            <rect key="frame" x="81" y="18.5" width="223" height="44"/>
+                                            <rect key="frame" x="74" y="18.5" width="230" height="44"/>
                                             <subviews>
                                                 <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillProportionally" alignment="top" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="BSd-IC-KQ2">
-                                                    <rect key="frame" x="0.0" y="0.0" width="153" height="44"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="160" height="44"/>
                                                     <subviews>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Unlock" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7qV-11-Xsb">
                                                             <rect key="frame" x="0.0" y="0.0" width="53.5" height="19.5"/>
@@ -56,7 +56,7 @@
                                                             <nil key="highlightedColor"/>
                                                         </label>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="By Alsey Coleman Miller" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="G7S-LB-M9s">
-                                                            <rect key="frame" x="0.0" y="27.5" width="153" height="16.5"/>
+                                                            <rect key="frame" x="0.0" y="27.5" width="160" height="16.5"/>
                                                             <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                                             <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                             <nil key="highlightedColor"/>
@@ -64,7 +64,7 @@
                                                     </subviews>
                                                 </stackView>
                                                 <stackView opaque="NO" contentMode="scaleToFill" horizontalCompressionResistancePriority="1000" verticalCompressionResistancePriority="1000" axis="vertical" distribution="fillProportionally" alignment="bottom" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="AOB-rs-rWx">
-                                                    <rect key="frame" x="168" y="0.0" width="55" height="44"/>
+                                                    <rect key="frame" x="175" y="0.0" width="55" height="44"/>
                                                     <subviews>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Today" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FY3-Sd-szW">
                                                             <rect key="frame" x="13.5" y="0.0" width="41.5" height="18"/>
@@ -87,7 +87,7 @@
                                         <constraint firstAttribute="trailingMargin" secondItem="eOu-xO-yMV" secondAttribute="trailing" id="5nn-AD-AQH"/>
                                         <constraint firstItem="eOu-xO-yMV" firstAttribute="top" relation="greaterThanOrEqual" secondItem="iaQ-YQ-sLH" secondAttribute="topMargin" id="I37-2p-DLO"/>
                                         <constraint firstItem="5VN-VE-I3w" firstAttribute="centerY" secondItem="iaQ-YQ-sLH" secondAttribute="centerY" id="Iz7-ID-Nwe"/>
-                                        <constraint firstItem="eOu-xO-yMV" firstAttribute="leading" secondItem="5VN-VE-I3w" secondAttribute="trailing" constant="15" id="KqF-Wc-QVD"/>
+                                        <constraint firstItem="eOu-xO-yMV" firstAttribute="leading" secondItem="5VN-VE-I3w" secondAttribute="trailing" constant="8" id="KqF-Wc-QVD"/>
                                         <constraint firstAttribute="bottomMargin" relation="greaterThanOrEqual" secondItem="5VN-VE-I3w" secondAttribute="bottom" id="N0J-r2-c8Q"/>
                                         <constraint firstItem="eOu-xO-yMV" firstAttribute="centerY" secondItem="5VN-VE-I3w" secondAttribute="centerY" id="WAu-lT-Nij"/>
                                         <constraint firstItem="5VN-VE-I3w" firstAttribute="leading" secondItem="iaQ-YQ-sLH" secondAttribute="leadingMargin" id="YJ6-Vh-Snz"/>
@@ -95,7 +95,7 @@
                                         <constraint firstAttribute="bottomMargin" relation="greaterThanOrEqual" secondItem="eOu-xO-yMV" secondAttribute="bottom" id="kYD-dd-aLg"/>
                                     </constraints>
                                 </tableViewCellContentView>
-                                <inset key="separatorInset" minX="81" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                <inset key="separatorInset" minX="74" minY="0.0" maxX="0.0" maxY="0.0"/>
                                 <connections>
                                     <outlet property="actionLabel" destination="7qV-11-Xsb" id="Qdy-zZ-Bes"/>
                                     <outlet property="dateLabel" destination="FY3-Sd-szW" id="OjL-JZ-zkF"/>
