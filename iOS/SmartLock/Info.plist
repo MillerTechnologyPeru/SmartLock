@@ -6,8 +6,6 @@
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
 	<string>Lock</string>
-	<key>NSBluetoothAlwaysUsageDescription</key>
-	<string>Bluetooth is used to scan for nearby locks in the background.</string>
 	<key>CFBundleDocumentTypes</key>
 	<array>
 		<dict>
@@ -58,6 +56,8 @@
 	<string>public.app-category.utilities</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSBluetoothAlwaysUsageDescription</key>
+	<string>Bluetooth is used to scan for nearby locks in the background.</string>
 	<key>NSBluetoothPeripheralUsageDescription</key>
 	<string>Bluetooth is needed to connect to your smart lock.</string>
 	<key>NSCameraUsageDescription</key>
@@ -79,6 +79,7 @@
 		<string>fetch</string>
 		<string>location</string>
 		<string>processing</string>
+		<string>remote-notification</string>
 	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
