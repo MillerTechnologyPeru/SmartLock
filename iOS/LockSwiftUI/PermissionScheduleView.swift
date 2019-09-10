@@ -131,44 +131,7 @@ public struct SectionBottom: View {
     // MARK: - View
     
     public var body: some View {
-        Text(verbatim: weekdays.stringValue)
-    }
-}
-
-
-extension Permission.Schedule.Weekdays.Day {
-    
-    var stringValue: String {
-        switch self {
-        case .sunday: return "Sunday"
-        case .monday: return "Monday"
-        case .tuesday: return "Tuesday"
-        case .wednesday: return "Wednesday"
-        case .thursday: return "Thursday"
-        case .friday: return "Friday"
-        case .saturday: return "Saturday"
-        }
-    }
-}
-
-extension Permission.Schedule.Weekdays {
-    
-    var stringValue: String {
-        
-        let every = "Every"
-        
-        if self == .none {
-            
-            return "Never"
-            
-        } else if self == .all {
-            
-            return String(format: "%@ %@", every, "Day")
-            
-        } else {
-            
-            return String(format: "%@ %@", every, self.days.map({ $0.stringValue }).joined(separator: ", "))
-        }
+        Text(verbatim: weekdays.localizedText)
     }
 }
  
