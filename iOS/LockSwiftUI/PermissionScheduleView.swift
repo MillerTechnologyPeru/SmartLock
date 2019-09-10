@@ -16,66 +16,162 @@ public struct PermissionScheduleView: View {
     // MARK: - Properties
     
     @State
-    public var schedule = Permission.Schedule()
+    private var schedule = Permission.Schedule()
     
-    let action: () -> Void = {
-        print("🐀🐀")
+    func isAllDaysSelected() -> Bool {
+        
+        return schedule.weekdays == .all
     }
     
     // MARK: - View
     
     public var body: some View {
         
-        List{
-            Section(header: Text(verbatim: "Header")) {
-                Text(verbatim: "All Day")
+        Form {
+            Section {
                 Button(action: {
-                    print("🐀🐀")
+                    if self.isAllDaysSelected() {
+                        
+                        self.schedule.weekdays = .none
+                    } else {
+                        
+                        self.schedule.weekdays = .all
+                    }
                 }) {
-                    Text(verbatim: "Text Button")
-                        .foregroundColor(.white)
-                        .bold()
+                    HStack {
+                        if isAllDaysSelected() {
+                            Image(systemName: "checkmark")
+                                .foregroundColor(Color.orange)
+                        }
+                        Text(verbatim: "All Days")
+                            .foregroundColor(Color.primary)
+                    }
                 }
+                
                 DatePicker(selection: $schedule.expiry, displayedComponents: .hourAndMinute) {
-                    Text(verbatim: "Date Picker")
+                    Text(verbatim: "Expiry Date")
                 }
             }
             
-            Divider()
-                
-            HStack{
-                Button(action: action) {
-                    Text(verbatim: "A")
-                        .foregroundColor(.white)
+            Section(header: Text(verbatim: "Repeat"), footer: SectionBottom(weekdays: schedule.weekdays)) {
+                HStack {
+                    Spacer()
+                    Text(verbatim: "S")
+                        .modifier(RoundText(enabled: schedule.weekdays.sunday))
+                        .onTapGesture {
+                            self.schedule.weekdays.sunday.toggle()
+                        }
+                    Text(verbatim: "M")
+                        .modifier(RoundText(enabled: schedule.weekdays.monday))
+                        .onTapGesture {
+                            self.schedule.weekdays.monday.toggle()
+                        }
+                    Text(verbatim: "T")
+                        .modifier(RoundText(enabled: schedule.weekdays.tuesday))
+                        .onTapGesture {
+                            self.schedule.weekdays.tuesday.toggle()
+                        }
+                    Text(verbatim: "W")
+                        .modifier(RoundText(enabled: schedule.weekdays.wednesday))
+                        .onTapGesture {
+                            self.schedule.weekdays.wednesday.toggle()
+                        }
+                    Text(verbatim: "T")
+                        .modifier(RoundText(enabled: schedule.weekdays.thursday))
+                        .onTapGesture {
+                            self.schedule.weekdays.thursday.toggle()
+                        }
+                    Text(verbatim: "F")
+                        .modifier(RoundText(enabled: schedule.weekdays.friday))
+                        .onTapGesture {
+                            self.schedule.weekdays.friday.toggle()
+                        }
+                    Text(verbatim: "S")
+                        .modifier(RoundText(enabled: schedule.weekdays.saturday))
+                        .onTapGesture {
+                            self.schedule.weekdays.saturday.toggle()
+                        }
+                    Spacer()
                 }
-                Button(action: action) {
-                    Text(verbatim: "B")
-                        .foregroundColor(.white)
-                }
-                Button(action: action) {
-                    Text(verbatim: "C")
-                        .foregroundColor(.white)
-                }
-                .foregroundColor(.yellow)
-                .clipShape(Circle())
             }
         }
-        .listStyle(ListStyle())
-        .navigationBarTitle(Text("NavigationBar"))
+        .navigationBarTitle(Text("Permission Schedule"))
     }
-    
 }
 
-@available(iOS 13, *)
-public struct DayView: View {
+struct RoundText: ViewModifier {
+    
+    // MARK: - Properties
+    let enabled: Bool
+    
+    // MARK: - View Modifier
+    func body(content: Content) -> some View {
+        content
+            .frame(width: 15, height: 15)
+            .padding(10)
+            .foregroundColor(Color.white)
+            .background(color)
+            .mask(Circle())
+    }
+}
+
+extension RoundText {
+    
+    // MARK: - Properties
+    var color: SwiftUI.Color {
+        return enabled ? .orange : .gray
+    }
+}
+
+public struct SectionBottom: View {
+    
+    // MARK: - Properties
+    let weekdays: Permission.Schedule.Weekdays
     
     // MARK: - View
     
     public var body: some View {
-        Text(verbatim: "Text")
+        Text(verbatim: weekdays.stringValue)
     }
 }
 
+
+extension Permission.Schedule.Weekdays.Day {
+    
+    var stringValue: String {
+        switch self {
+        case .sunday: return "Sunday"
+        case .monday: return "Monday"
+        case .tuesday: return "Tuesday"
+        case .wednesday: return "Wednesday"
+        case .thursday: return "Thursday"
+        case .friday: return "Friday"
+        case .saturday: return "Saturday"
+        }
+    }
+}
+
+extension Permission.Schedule.Weekdays {
+    
+    var stringValue: String {
+        
+        let every = "Every"
+        
+        if self == .none {
+            
+            return "Never"
+            
+        } else if self == .all {
+            
+            return String(format: "%@ %@", every, "Day")
+            
+        } else {
+            
+            return String(format: "%@ %@", every, self.days.map({ $0.stringValue }).joined(separator: ", "))
+        }
+    }
+}
+ 
 @available(iOS 13, *)
 extension PermissionScheduleView {
     
@@ -90,7 +186,7 @@ extension PermissionScheduleView {
 @available(iOS 13, *)
 struct DayViewPreview: PreviewProvider {
     static var previews: some View {
-        DayView()
+        PermissionScheduleView()
     }
 }
 #endif
