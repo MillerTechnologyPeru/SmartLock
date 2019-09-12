@@ -33,6 +33,13 @@ public extension FileManager {
     }
 }
 
+public extension CKContainer {
+    
+    convenience init(identifier: UbiquityContainerIdentifier) {
+        self.init(identifier: identifier.rawValue)
+    }
+}
+
 public final class CloudStore {
     
     public static let shared = CloudStore()
@@ -70,8 +77,8 @@ public final class CloudStore {
     
     private var keyValueStoreObserver: NSObjectProtocol?
     
-    private lazy var cloudEncoder = CloudKitEncoder()
-        
+    internal lazy var container = CKContainer(identifier: .lock)
+            
     // MARK: - Methods
     
     public func upload(applicationData: ApplicationData,
@@ -85,6 +92,7 @@ public final class CloudStore {
         }
         
         // upload configuration
+        let cloudEncoder = CloudKitEncoder(context: container.privateCloudDatabase)
         let cloudData = ApplicationData.Cloud(applicationData)
         let operation = try cloudEncoder.encode(cloudData)
         operation.isAtomic = true

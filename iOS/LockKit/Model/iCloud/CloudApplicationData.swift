@@ -56,13 +56,15 @@ extension ApplicationData.Cloud.ID: CloudKitIdentifier {
     }
     
     public init?(cloudRecordID: CKRecord.ID) {
-        guard let rawValue = UUID(uuidString: cloudRecordID.recordName)
+        let string = cloudRecordID.recordName
+            .replacingOccurrences(of: type(of: self).cloudRecordType + "/", with: "")
+        guard let rawValue = UUID(uuidString: string)
             else { return nil }
         self.init(rawValue: rawValue)
     }
     
     public var cloudRecordID: CKRecord.ID {
-        return CKRecord.ID(recordName: rawValue.uuidString)
+        return CKRecord.ID(recordName: type(of: self).cloudRecordType + "/" + rawValue.uuidString)
     }
 }
 
@@ -118,13 +120,15 @@ extension LockCache.Cloud.ID: CloudKitIdentifier {
     }
     
     public init?(cloudRecordID: CKRecord.ID) {
-        guard let rawValue = UUID(uuidString: cloudRecordID.recordName)
+        let string = cloudRecordID.recordName
+            .replacingOccurrences(of: type(of: self).cloudRecordType + "/", with: "")
+        guard let rawValue = UUID(uuidString: string)
             else { return nil }
         self.init(rawValue: rawValue)
     }
     
     public var cloudRecordID: CKRecord.ID {
-        return CKRecord.ID(recordName: rawValue.uuidString)
+        return CKRecord.ID(recordName: type(of: self).cloudRecordType + "/" + rawValue.uuidString)
     }
 }
 
@@ -182,12 +186,14 @@ extension LockCache.Information.Cloud.ID: CloudKitIdentifier {
     }
     
     public init?(cloudRecordID: CKRecord.ID) {
-        guard let rawValue = UUID(uuidString: cloudRecordID.recordName)
+        let string = cloudRecordID.recordName
+            .replacingOccurrences(of: type(of: self).cloudRecordType + "/", with: "")
+        guard let rawValue = UUID(uuidString: string)
             else { return nil }
         self.init(rawValue: rawValue)
     }
     
     public var cloudRecordID: CKRecord.ID {
-        return CKRecord.ID(recordName: rawValue.uuidString)
+        return CKRecord.ID(recordName: type(of: self).cloudRecordType + "/" + rawValue.uuidString)
     }
 }
