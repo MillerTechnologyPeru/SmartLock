@@ -77,7 +77,19 @@ public extension Preferences {
     }
     
     var isCloudEnabled: Bool {
-        get { return self[.isCloudEnabled] ?? false }
+        get {
+            #if os(iOS)
+            #if targetEnvironment(macCatalyst)
+            let defaultValue = true
+            #else
+            let defaultValue = false
+            #elseif os(tvOS)
+            let defaultValue = true
+            #else
+            let defaultValue = false
+            #endif
+            return self[.isCloudEnabled] ?? defaultValue
+        }
         set { self[.isCloudEnabled] = newValue }
     }
     

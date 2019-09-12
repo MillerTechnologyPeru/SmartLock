@@ -8,6 +8,7 @@
 
 import Foundation
 import CloudKit
+import CloudKitCodable
 import KeychainAccess
 import CoreLock
 
@@ -68,6 +69,8 @@ public final class CloudStore {
     #endif
     
     private var keyValueStoreObserver: NSObjectProtocol?
+    
+    private lazy var cloudEncoder = CloudKitEncoder()
         
     // MARK: - Methods
     
@@ -81,9 +84,18 @@ public final class CloudStore {
             try keychain.set(keyData.data, key: keyIdentifier.uuidString)
         }
         
-        // upload configuration file
-        let data = applicationData.encodeJSON()
-        try keychain.set(data, key: .applicationData)
+        // upload configuration
+        let cloudData = ApplicationData.Cloud(applicationData)
+        let operation = try cloudEncoder.encode(cloudData)
+        operation.isAtomic = true
+        var cloudKitError: Swift.Error?
+        operation.modifyRecordsCompletionBlock = { _,_,error in
+            cloudKitError = error
+        }
+        OperationQueue.cloudKit.addOperations([operation], waitUntilFinished: true)
+        if let error = cloudKitError {
+            throw error
+        }
         
         // inform via key value store
         didUpload(applicationData: applicationData)
@@ -91,10 +103,12 @@ public final class CloudStore {
     
     public func download() throws -> (applicationData: ApplicationData, keys: [UUID: KeyData])? {
         
+        /*
         guard let jsonData = try keychain.getData(.applicationData)
             else { return nil }
         
         let applicationData = try ApplicationData.decodeJSON(from: jsonData)
+        
         
         var keys = [UUID: KeyData](minimumCapacity: applicationData.locks.count)
         for key in applicationData.keys {
@@ -105,6 +119,8 @@ public final class CloudStore {
         }
         
         return (applicationData, keys)
+        */
+        return nil
     }
     
     private func didUpload(applicationData: ApplicationData) {
@@ -348,9 +364,26 @@ public extension Store {
 
 public extension DispatchQueue {
     
+    /// iCloud GCD Queue
     static var cloud: DispatchQueue {
         struct Cache {
             static let queue = DispatchQueue(label: "com.colemancda.Lock.iCloud")
+        }
+        return Cache.queue
+    }
+}
+
+internal extension OperationQueue {
+    
+    /// CloudKit Operation Queue
+    static var cloudKit: OperationQueue {
+        struct Cache {
+            static let queue: OperationQueue = {
+                let queue = OperationQueue()
+                queue.name = "com.colemancda.Lock.CloudKit"
+                queue.maxConcurrentOperationCount = 3
+                return queue
+            }()
         }
         return Cache.queue
     }
