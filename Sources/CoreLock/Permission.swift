@@ -73,7 +73,7 @@ public extension Permission {
     struct Schedule: Codable, Equatable, Hashable {
         
         /// The date this permission becomes invalid.
-        public var expiry: Date
+        public var expiry: Date?
         
         /// The minute interval range the lock can be unlocked.
         public var interval: Interval
@@ -81,7 +81,7 @@ public extension Permission {
         /// The days of the week the permission is valid
         public var weekdays: Weekdays
         
-        public init(expiry: Date = .distantFuture,
+        public init(expiry: Date? = nil,
                     interval: Interval = .anytime,
                     weekdays: Weekdays = .all) {
             
@@ -93,7 +93,9 @@ public extension Permission {
         /// Verify that the specified date is valid for this schedule.
         public func isValid(for date: Date = Date()) -> Bool {
             
-            guard date < expiry else { return false }
+            if let expiry = self.expiry {
+                guard date < expiry else { return false }
+            }
             
             // need to get hour and minute of day to validate
             let dateComponents = DateComponents(date: date)
