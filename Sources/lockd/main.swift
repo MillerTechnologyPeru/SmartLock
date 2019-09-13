@@ -108,6 +108,9 @@ func run() throws {
             print("Loaded GPIO Controller: \(type(of: gpioController))")
             controller?.lockServiceController.unlockDelegate = gpioController
             gpio = gpioController
+            gpioController.didPressResetButton = {
+                print("Press Button \(Date())")
+            }
         }
     }
     

@@ -98,6 +98,7 @@ public final class OrangePiOneGPIO: LockGPIOController {
 public final class RaspberryPi3GPIO: LockGPIOController {
     
     public init() {
+        self.resetSwitchGPIO.bounceTime = 10
         self.resetSwitchGPIO.onRaising { [weak self] in
             if $0.value == 1 {
                 self?.didPressResetButton()
@@ -120,7 +121,7 @@ public final class RaspberryPi3GPIO: LockGPIOController {
     }()
     
     internal lazy var resetSwitchGPIO: GPIO = {
-        let gpio = RaspberryGPIO(name:"GPIO12", id:5, baseAddr:0x3F000000)
+        let gpio = RaspberryGPIO(name:"GPIO12", id:12, baseAddr:0x3F000000)
         gpio.direction = .IN
         gpio.value = 0
         return gpio
