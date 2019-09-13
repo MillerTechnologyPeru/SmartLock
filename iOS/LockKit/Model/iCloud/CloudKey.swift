@@ -25,7 +25,7 @@ public extension Key {
         public let created: Date
         
         /// Key's permissions.
-        public let permissionType: PermissionType
+        public let permissionType: PermissionType.Cloud
         
         /// Key Permission Schedule
         public let schedule: Permission.Schedule.Cloud?
@@ -38,7 +38,7 @@ public extension Key.Cloud {
         self.id = .init(rawValue: value.identifier)
         self.name = value.name
         self.created = value.created
-        self.permissionType = value.permission.type
+        self.permissionType = .init(value.permission.type)
         if case let .scheduled(schedule) = value.permission {
             self.schedule = Permission.Schedule.Cloud(id: value.identifier, value: schedule)
         } else {
@@ -108,6 +108,33 @@ extension Key.Cloud.ID: CloudKitIdentifier {
     
     public var cloudRecordID: CKRecord.ID {
         return CKRecord.ID(recordName: type(of: self).cloudRecordType + "/" + rawValue.uuidString)
+    }
+}
+
+
+public extension PermissionType {
+    
+    /// A Key's permission level.
+    enum Cloud: String, Codable {
+        
+        case owner
+        case admin
+        case anytime
+        case scheduled
+    }
+}
+
+public extension PermissionType.Cloud {
+    
+    init(_ value: PermissionType) {
+        self = unsafeBitCast(value, to: PermissionType.Cloud.self)
+    }
+}
+
+public extension PermissionType {
+    
+    init(_ value: PermissionType.Cloud) {
+        self = unsafeBitCast(value, to: PermissionType.self)
     }
 }
 
