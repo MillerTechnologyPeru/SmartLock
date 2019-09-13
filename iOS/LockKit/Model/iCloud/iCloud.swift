@@ -89,12 +89,19 @@ public final class CloudStore {
     
     public func download() throws -> (applicationData: ApplicationData, keys: [UUID: KeyData])? {
         
-        
-        /*
-        guard let jsonData = try keychain.getData(.applicationData)
+        // get iCloud user
+        let user = try CloudUser.fetch(in: container, database: .private)
+        guard let cloudData = user.applicationData
             else { return nil }
+        guard let applicationData = ApplicationData(cloudData) else {
+            #if DEBUG
+            dump(cloudData)
+            assertionFailure("Could not initialize from iCloud")
+            #endif
+            return nil
+        }
         
-        let applicationData = try ApplicationData.decodeJSON(from: jsonData)
+        // download keys from keychain
         var keys = [UUID: KeyData](minimumCapacity: applicationData.locks.count)
         for key in applicationData.keys {
             guard let data = try keychain.getData(key.identifier.uuidString),
@@ -104,8 +111,6 @@ public final class CloudStore {
         }
         
         return (applicationData, keys)
-        */
-        return nil
     }
     
     private func didUpload(applicationData: ApplicationData) {

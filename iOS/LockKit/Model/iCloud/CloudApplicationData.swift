@@ -199,7 +199,7 @@ internal extension LockCache.Information {
     init?(_ cloud: LockCache.Information.Cloud) {
         
         guard let buildVersion = UInt64(cloud.buildVersion).flatMap(LockBuildVersion.init),
-            let version = LockVersion(rawValue: cloud.buildVersion)
+            let version = LockVersion(rawValue: cloud.version)
             else { return nil }
         
         self.buildVersion = buildVersion
