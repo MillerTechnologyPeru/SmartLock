@@ -59,12 +59,19 @@ public protocol TableViewActivityIndicatorViewController: ActivityIndicatorViewC
     var tableView: UITableView! { get }
     var refreshControl: UIRefreshControl? { get }
     var activityIndicator: UIActivityIndicatorView { get }
+    var activityShouldDisableUserInteration: Bool { get }
 }
 
 public extension TableViewActivityIndicatorViewController {
     
+    var activityShouldDisableUserInteration: Bool {
+        return false
+    }
+    
     func showActivity() {
-        self.view.isUserInteractionEnabled = false
+        if activityShouldDisableUserInteration {
+            self.view.isUserInteractionEnabled = false
+        }
         if refreshControl?.isRefreshing ?? false {
             // refresh control animating
         } else {
@@ -73,7 +80,9 @@ public extension TableViewActivityIndicatorViewController {
     }
     
     func hideActivity(animated: Bool = true) {
-        self.view.isUserInteractionEnabled = true
+        if activityShouldDisableUserInteration {
+            self.view.isUserInteractionEnabled = true
+        }
         if let refreshControl = self.refreshControl,
             refreshControl.isRefreshing {
             refreshControl.endRefreshing()
