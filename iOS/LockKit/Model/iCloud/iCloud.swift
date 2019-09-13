@@ -12,34 +12,6 @@ import CloudKitCodable
 import KeychainAccess
 import CoreLock
 
-/// UbiquityContainerIdentifier
-///
-/// iCloud Identifier
-public enum UbiquityContainerIdentifier: String {
-    
-    case lock = "iCloud.com.colemancda.Lock"
-}
-
-public extension FileManager {
-    
-    /**
-     Returns the URL for the iCloud container associated with the specified identifier and establishes access to that container.
-     
-     - Note: Do not call this method from your app’s main thread. Because this method might take a nontrivial amount of time to set up iCloud and return the requested URL, you should always call it from a secondary thread.
-     */
-    func ubiquityContainerURL(for identifier: UbiquityContainerIdentifier) -> URL? {
-        assert(Thread.isMainThread == false, "Use iCloud from secondary thread")
-        return url(forUbiquityContainerIdentifier: identifier.rawValue)
-    }
-}
-
-public extension CKContainer {
-    
-    convenience init(identifier: UbiquityContainerIdentifier) {
-        self.init(identifier: identifier.rawValue)
-    }
-}
-
 public final class CloudStore {
     
     public static let shared = CloudStore()
@@ -77,30 +49,36 @@ public final class CloudStore {
     
     private var keyValueStoreObserver: NSObjectProtocol?
     
-    internal lazy var container = CKContainer(identifier: .lock)
-            
+    internal lazy var container: CKContainer = .lock
+    
     // MARK: - Methods
     
     public func upload(applicationData: ApplicationData,
                        keys: [UUID: KeyData]) throws {
         
-        // store lock private keys in keychain
+        // store lock private keys in iCloud keychain
         try keychain.removeAll()
         for (keyIdentifier, keyData) in keys {
             assert(applicationData[key: keyIdentifier] != nil, "Invalid key")
             try keychain.set(keyData.data, key: keyIdentifier.uuidString)
         }
         
+        // get iCloud user
+        var user = try CloudUser.fetch(in: container, database: .private)
+        
         // upload configuration
         let cloudEncoder = CloudKitEncoder(context: container.privateCloudDatabase)
-        let cloudData = ApplicationData.Cloud(applicationData)
-        let operation = try cloudEncoder.encode(cloudData)
+        user.applicationData = .init(applicationData) // set new application data
+        let operation = try cloudEncoder.encode(user)
         operation.isAtomic = true
         var cloudKitError: Swift.Error?
+        let semaphore = DispatchSemaphore(value: 0)
         operation.modifyRecordsCompletionBlock = { _,_,error in
             cloudKitError = error
+            semaphore.signal()
         }
-        OperationQueue.cloudKit.addOperations([operation], waitUntilFinished: true)
+        container.privateCloudDatabase.add(operation)
+        semaphore.wait()
         if let error = cloudKitError {
             throw error
         }
@@ -117,8 +95,6 @@ public final class CloudStore {
             else { return nil }
         
         let applicationData = try ApplicationData.decodeJSON(from: jsonData)
-        
-        
         var keys = [UUID: KeyData](minimumCapacity: applicationData.locks.count)
         for key in applicationData.keys {
             guard let data = try keychain.getData(key.identifier.uuidString),
@@ -382,22 +358,6 @@ public extension DispatchQueue {
     }
 }
 
-internal extension OperationQueue {
-    
-    /// CloudKit Operation Queue
-    static var cloudKit: OperationQueue {
-        struct Cache {
-            static let queue: OperationQueue = {
-                let queue = OperationQueue()
-                queue.name = "com.colemancda.Lock.CloudKit"
-                queue.maxConcurrentOperationCount = 3
-                return queue
-            }()
-        }
-        return Cache.queue
-    }
-}
-
 #if os(iOS)
 import UIKit
 
@@ -474,3 +434,69 @@ private extension UIViewController {
     }
 }
 #endif
+
+// MARK: - CloudKit Extensions
+
+/// UbiquityContainerIdentifier
+///
+/// iCloud Identifier
+public enum UbiquityContainerIdentifier: String {
+    
+    case lock = "iCloud.com.colemancda.Lock"
+}
+
+public extension FileManager {
+    
+    /**
+     Returns the URL for the iCloud container associated with the specified identifier and establishes access to that container.
+     
+     - Note: Do not call this method from your app’s main thread. Because this method might take a nontrivial amount of time to set up iCloud and return the requested URL, you should always call it from a secondary thread.
+     */
+    func ubiquityContainerURL(for identifier: UbiquityContainerIdentifier) -> URL? {
+        assert(Thread.isMainThread == false, "Use iCloud from secondary thread")
+        return url(forUbiquityContainerIdentifier: identifier.rawValue)
+    }
+}
+
+public extension CKContainer {
+    
+    convenience init(identifier: UbiquityContainerIdentifier) {
+        self.init(identifier: identifier.rawValue)
+    }
+}
+
+public extension CKContainer {
+    
+    /// `iCloud.com.colemancda.Lock` CloudKit container.
+    static var lock: CKContainer {
+        struct Cache {
+            static let container = CKContainer(identifier: .lock)
+        }
+        return Cache.container
+    }
+}
+
+public extension CKContainer {
+    
+    func fetchUserRecordID() throws -> CKRecord.ID {
+        let semaphore = DispatchSemaphore(value: 0)
+        var result: Result<CKRecord.ID, Swift.Error>!
+        fetchUserRecordID { (recordID, error) in
+            defer { semaphore.signal() }
+            if let recordID = recordID {
+                result = .success(recordID)
+            } else if let error = error {
+                result = .failure(error)
+            } else {
+                fatalError()
+            }
+        }
+        semaphore.wait()
+        switch result! {
+        case let .success(recordID):
+            return recordID
+        case let .failure(error):
+            throw error
+        }
+    }
+}
