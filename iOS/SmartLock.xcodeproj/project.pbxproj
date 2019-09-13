@@ -170,6 +170,7 @@
 		6EA570F923189DCC008027D4 /* ExtensionDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6ED81FC12316618100B69520 /* ExtensionDelegate.swift */; };
 		6EA570FB23189E4D008027D4 /* Interface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6ED81FB02316617E00B69520 /* Interface.storyboard */; };
 		6EAADF8C2122664A0074CEDF /* AppVersion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EAADF8B2122664A0074CEDF /* AppVersion.swift */; };
+		6EB4B2DA232B5E260077ADD3 /* CloudUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EB4B2D9232B5E260077ADD3 /* CloudUser.swift */; };
 		6EB59D612313184A00D5EFA7 /* iCloud.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EB59D602313184A00D5EFA7 /* iCloud.swift */; };
 		6EC0412E230A226400357585 /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EC0412D230A226300357585 /* TabBarController.swift */; };
 		6ED81F972316292900B69520 /* BackgroundTasks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6ED81F962316292900B69520 /* BackgroundTasks.swift */; };
@@ -605,6 +606,7 @@
 		6EAADF8B2122664A0074CEDF /* AppVersion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppVersion.swift; sourceTree = "<group>"; };
 		6EAADFB521229CBF0074CEDF /* LockTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LockTableViewCell.xib; sourceTree = "<group>"; };
 		6EAADFB621229CBF0074CEDF /* LockTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LockTableViewCell.swift; sourceTree = "<group>"; };
+		6EB4B2D9232B5E260077ADD3 /* CloudUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudUser.swift; sourceTree = "<group>"; };
 		6EB59D5E2312E9E400D5EFA7 /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
 		6EB59D602313184A00D5EFA7 /* iCloud.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iCloud.swift; sourceTree = "<group>"; };
 		6EC041272309D6CB00357585 /* ActivityHandling.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityHandling.swift; sourceTree = "<group>"; };
@@ -1158,6 +1160,7 @@
 			isa = PBXGroup;
 			children = (
 				6EB59D602313184A00D5EFA7 /* iCloud.swift */,
+				6EB4B2D9232B5E260077ADD3 /* CloudUser.swift */,
 				6EE5A1072329F8790000235C /* CloudApplicationData.swift */,
 				6EE5A10C2329FD090000235C /* CloudKey.swift */,
 			);
@@ -1910,6 +1913,7 @@
 				6E994AB5230DFDB10076DC1B /* Store.swift in Sources */,
 				6E6B78B62325F14600635EEF /* SliderCell.swift in Sources */,
 				6E50B0EE232242CA001014A8 /* KeyManagedObject.swift in Sources */,
+				6EB4B2DA232B5E260077ADD3 /* CloudUser.swift in Sources */,
 				6E806BD92310F36E00C6FF78 /* R.swift in Sources */,
 				6E50B0EC23224293001014A8 /* LockManagedObject.swift in Sources */,
 				6E994AAF230DFDB10076DC1B /* Activity.swift in Sources */,
