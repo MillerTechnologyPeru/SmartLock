@@ -110,7 +110,7 @@ func run() throws {
             gpio = gpioController
             gpioController.didPressResetButton = {
                 print("Press Button \(Date())")
-                controller?.lockServiceController.authorization.removeAll()
+                try controller?.lockServiceController.authorization.removeAll()
             }
         }
     }
