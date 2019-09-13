@@ -111,6 +111,7 @@ public final class CloudStore {
     
     public func download() throws -> (applicationData: ApplicationData, keys: [UUID: KeyData])? {
         
+        
         /*
         guard let jsonData = try keychain.getData(.applicationData)
             else { return nil }

@@ -290,7 +290,6 @@ public extension Permission.Schedule.Weekdays {
 extension Permission: Codable {
     
     public enum CodingKeys: String, CodingKey {
-        
         case type
         case schedule
     }
@@ -298,7 +297,6 @@ extension Permission: Codable {
     public init(from decoder: Decoder) throws {
         
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        
         let type = try container.decode(PermissionType.self, forKey: .type)
         
         switch type {
@@ -317,16 +315,13 @@ extension Permission: Codable {
     public func encode(to encoder: Encoder) throws {
         
         var container = encoder.container(keyedBy: CodingKeys.self)
-        
         try container.encode(type, forKey: .type)
         
         switch self {
-            
         case .owner,
              .admin,
              .anytime:
             break
-            
         case let .scheduled(schedule):
             try container.encode(schedule, forKey: .schedule)
         }
@@ -336,7 +331,6 @@ extension Permission: Codable {
 extension Permission.Schedule.Interval: Codable {
     
     public enum CodingKeys: String, CodingKey {
-        
         case max
         case min
     }
@@ -360,12 +354,9 @@ extension Permission.Schedule.Interval: Codable {
 extension Permission.Schedule.Weekdays: TLVCodable {
         
     public init?(tlvData data: Data) {
-        
         guard data.count == 1
             else { return nil }
-        
-        let days = BitMaskOptionSet<Day>(rawValue: data[0])
-        self.init(days: days)
+        self.init(days: .init(rawValue: data[0]))
     }
     
     public var tlvData: Data {

@@ -28,7 +28,7 @@ public extension Key {
         public let permissionType: PermissionType
         
         /// Key Permission Schedule
-        public let schedule: Permission.Schedule?
+        public let schedule: Permission.Schedule.Cloud?
     }
 }
 
@@ -40,10 +40,40 @@ public extension Key.Cloud {
         self.created = value.created
         self.permissionType = value.permission.type
         if case let .scheduled(schedule) = value.permission {
-            self.schedule = schedule
+            self.schedule = Permission.Schedule.Cloud(id: value.identifier, value: schedule)
         } else {
             self.schedule = nil
         }
+    }
+}
+
+public extension Key {
+    
+    init?(_ cloud: Cloud) {
+        
+        let id = cloud.id.rawValue
+        let permission: Permission
+        
+        switch cloud.permissionType {
+        case .owner:
+            permission = .owner
+        case .admin:
+            permission = .admin
+        case .anytime:
+            permission = .anytime
+        case .scheduled:
+            guard let cloudSchedule = cloud.schedule,
+                let schedule = Permission.Schedule(cloudSchedule)
+                else { return nil }
+            permission = .scheduled(schedule)
+        }
+        
+        self.init(
+            identifier: id,
+            name: cloud.name,
+            created: cloud.created,
+            permission: permission
+        )
     }
 }
 
@@ -96,7 +126,6 @@ public extension Permission.Schedule {
         public var intervalMax: UInt16
         
         // weekdays
-        
         public var sunday: Bool
         public var monday: Bool
         public var tuesday: Bool
@@ -107,7 +136,7 @@ public extension Permission.Schedule {
     }
 }
 
-public extension Permission.Schedule.Cloud {
+internal extension Permission.Schedule.Cloud {
     
     init(id: UUID, value: Permission.Schedule) {
         self.id = .init(rawValue: id)
@@ -121,6 +150,31 @@ public extension Permission.Schedule.Cloud {
         self.thursday = value.weekdays.thursday
         self.friday = value.weekdays.friday
         self.saturday = value.weekdays.saturday
+    }
+}
+
+internal extension Permission.Schedule {
+    
+    init?(_ cloud: Cloud) {
+        
+        guard let interval = Interval(rawValue: cloud.intervalMin ... cloud.intervalMax)
+            else { return nil }
+        
+        let weekdays = Weekdays(
+            sunday: cloud.sunday,
+            monday: cloud.monday,
+            tuesday: cloud.tuesday,
+            wednesday: cloud.wednesday,
+            thursday: cloud.thursday,
+            friday: cloud.friday,
+            saturday: cloud.saturday
+        )
+        
+        self.init(
+            expiry: cloud.expiry,
+            interval: interval,
+            weekdays: weekdays
+        )
     }
 }
 

@@ -34,6 +34,24 @@ public extension ApplicationData.Cloud {
     }
 }
 
+public extension ApplicationData {
+    
+    init?(_ cloud: Cloud) {
+        var locks = [UUID: LockCache]()
+        for lock in cloud.locks {
+            guard let value = LockCache(lock)
+                else { return nil }
+            locks[lock.id.rawValue] = value
+        }
+        self.init(
+            identifier: cloud.id.rawValue,
+            created: cloud.created,
+            updated: cloud.updated,
+            locks: locks
+        )
+    }
+}
+
 public extension ApplicationData.Cloud {
     struct ID: RawRepresentable, Codable, Equatable, Hashable {
         public let rawValue: UUID
@@ -88,13 +106,25 @@ public extension LockCache {
     }
 }
 
-public extension LockCache.Cloud {
+internal extension LockCache.Cloud {
     
     init(id: UUID, value: LockCache) {
         self.id = .init(rawValue: id)
         self.key = .init(value.key)
         self.name = value.name
         self.information = .init(id: id, value: value.information)
+    }
+}
+
+internal extension LockCache {
+    
+    init?(_ cloud: Cloud) {
+        guard let key = Key(cloud.key),
+            let information = Information(cloud.information)
+            else { return nil }
+        self.name = cloud.name
+        self.key = key
+        self.information = information
     }
 }
 
@@ -153,7 +183,7 @@ public extension LockCache.Information {
     }
 }
 
-public extension LockCache.Information.Cloud {
+internal extension LockCache.Information.Cloud {
     
     init(id: UUID, value: LockCache.Information) {
         self.id = .init(rawValue: id)
@@ -161,6 +191,21 @@ public extension LockCache.Information.Cloud {
         self.version = value.version.description
         self.status = value.status
         self.unlockActions = value.unlockActions
+    }
+}
+
+internal extension LockCache.Information {
+    
+    init?(_ cloud: LockCache.Information.Cloud) {
+        
+        guard let buildVersion = UInt64(cloud.buildVersion).flatMap(LockBuildVersion.init),
+            let version = LockVersion(rawValue: cloud.buildVersion)
+            else { return nil }
+        
+        self.buildVersion = buildVersion
+        self.version = version
+        self.status = cloud.status
+        self.unlockActions = cloud.unlockActions
     }
 }
 
