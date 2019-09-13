@@ -31,7 +31,7 @@ public final class Preferences {
         get { userDefaults.object(forKey: key.rawValue) as? T }
         set {
             if #available(iOS 13.0, watchOSApplicationExtension 6.0, *) {
-                DispatchQueue.main.sync { objectWillChange.send() }
+                objectWillChange.send()
             }
             userDefaults.set(newValue, forKey: key.rawValue)
         }

@@ -249,10 +249,16 @@ public extension Store {
         // make sure iCloud is enabled
         guard preferences.isCloudEnabled else { return }
         assert(Thread.isMainThread == false)
-        guard try downloadCloud(conflicts: conflicts)
-            else { return } // aborted
+        guard try downloadCloud(conflicts: conflicts) else {
+            DispatchQueue.main.async { [weak self] in
+                self?.preferences.lastCloudUpdate = Date()
+            }
+            return
+        } // aborted
         try uploadCloud()
-        preferences.lastCloudUpdate = Date()
+        DispatchQueue.main.async { [weak self] in
+            self?.preferences.lastCloudUpdate = Date()
+        }
     }
     
     @discardableResult
