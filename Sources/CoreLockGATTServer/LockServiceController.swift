@@ -526,6 +526,8 @@ public protocol LockAuthorizationStore {
     
     func removeNewKey(_ identifier: UUID) throws
     
+    func removeAll() throws
+    
     var list: KeysList { get }
 }
 
@@ -605,6 +607,12 @@ public final class InMemoryLockAuthorization: LockAuthorizationStore {
     public func removeNewKey(_ identifier: UUID) throws {
         
         newKeys.removeAll(where: { $0.newKey.identifier == identifier })
+    }
+    
+    public func removeAll() throws {
+        
+        keys.removeAll()
+        newKeys.removeAll()
     }
     
     public var list: KeysList {
