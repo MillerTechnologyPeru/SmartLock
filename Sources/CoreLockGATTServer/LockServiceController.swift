@@ -135,7 +135,7 @@ public final class LockServiceController <Peripheral: PeripheralProtocol> : GATT
     
     public func reset() {
         
-        authorization.removeAll()
+        try? authorization.removeAll()
         updateInformation()
     }
     
