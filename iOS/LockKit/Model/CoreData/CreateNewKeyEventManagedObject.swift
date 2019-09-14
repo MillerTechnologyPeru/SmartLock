@@ -25,6 +25,20 @@ public final class CreateNewKeyEventManagedObject: EventManagedObject {
     }
 }
 
+public extension LockEvent.CreateNewKey {
+    
+    init?(managedObject: CreateNewKeyEventManagedObject) {
+        
+        guard let identifier = managedObject.identifier,
+            let date = managedObject.date,
+            let key = managedObject.key,
+            let pendingKey = managedObject.pendingKey
+            else { return nil }
+        
+        self.init(identifier: identifier, date: date, key: key, newKey: pendingKey)
+    }
+}
+
 // MARK: - IdentifiableManagedObject
 
 extension CreateNewKeyEventManagedObject: IdentifiableManagedObject { }

@@ -14,7 +14,9 @@ public final class ConfirmNewKeyEventManagedObject: EventManagedObject {
     
     @nonobjc override class var eventType: LockEvent.EventType { return .confirmNewKey }
     
-    internal convenience init(_ value: LockEvent.ConfirmNewKey, lock: LockManagedObject, context: NSManagedObjectContext) {
+    internal convenience init(_ value: LockEvent.ConfirmNewKey,
+                              lock: LockManagedObject,
+                              context: NSManagedObjectContext) {
         
         self.init(context: context)
         self.identifier = value.identifier
@@ -22,6 +24,20 @@ public final class ConfirmNewKeyEventManagedObject: EventManagedObject {
         self.date = value.date
         self.key = value.key
         self.pendingKey = value.newKey
+    }
+}
+
+internal extension LockEvent.ConfirmNewKey {
+    
+    init?(managedObject: ConfirmNewKeyEventManagedObject) {
+        
+        guard let identifier = managedObject.identifier,
+            let date = managedObject.date,
+            let key = managedObject.key,
+            let pendingKey = managedObject.pendingKey
+            else { return nil }
+        
+        self.init(identifier: identifier, date: date, newKey: pendingKey, key: key)
     }
 }
 

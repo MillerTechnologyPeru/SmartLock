@@ -38,6 +38,38 @@ public class EventManagedObject: NSManagedObject {
     }
 }
 
+internal extension LockEvent {
+    
+    init?(managedObject: EventManagedObject) {
+        
+        switch managedObject {
+        case let eventManagedObject as SetupEventManagedObject:
+            guard let event = Setup(managedObject: eventManagedObject)
+                else { return nil }
+            self = .setup(event)
+        case let eventManagedObject as UnlockEventManagedObject:
+            guard let event = Unlock(managedObject: eventManagedObject)
+                else { return nil }
+            self = .unlock(event)
+        case let eventManagedObject as CreateNewKeyEventManagedObject:
+            guard let event = CreateNewKey(managedObject: eventManagedObject)
+                else { return nil }
+            self = .createNewKey(event)
+        case let eventManagedObject as ConfirmNewKeyEventManagedObject:
+            guard let event = ConfirmNewKey(managedObject: eventManagedObject)
+                else { return nil }
+            self = .confirmNewKey(event)
+        case let eventManagedObject as RemoveKeyEventManagedObject:
+            guard let event = RemoveKey(managedObject: eventManagedObject)
+                else { return nil }
+            self = .removeKey(event)
+        default:
+            assertionFailure("Invalid \(managedObject)")
+            return nil
+        }
+    }
+}
+
 // MARK: - Fetch
 
 public extension EventManagedObject {
