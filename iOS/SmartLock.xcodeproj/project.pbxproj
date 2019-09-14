@@ -2250,7 +2250,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = "Today macOS/Today_macOS.entitlements";
-				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = 4W79SG34MW;
@@ -2276,7 +2276,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = "Today macOS/Today_macOS.entitlements";
-				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = 4W79SG34MW;
