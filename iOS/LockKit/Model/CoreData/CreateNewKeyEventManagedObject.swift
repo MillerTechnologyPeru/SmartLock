@@ -42,4 +42,20 @@ public extension CreateNewKeyEventManagedObject {
         }
         return try context.find(identifier: newKey, type: NewKeyManagedObject.self)
     }
+    
+    func confirmKeyEvent(in context: NSManagedObjectContext) throws -> ConfirmNewKeyEventManagedObject? {
+        
+        guard let newKey = self.pendingKey else {
+            assertionFailure("Missing new key value")
+            return nil
+        }
+        
+        let fetchRequest = NSFetchRequest<ConfirmNewKeyEventManagedObject>()
+        fetchRequest.entity = ConfirmNewKeyEventManagedObject.entity()
+        fetchRequest.predicate = NSPredicate(format: "%K == %@", #keyPath(ConfirmNewKeyEventManagedObject.pendingKey), newKey as NSUUID)
+        fetchRequest.fetchLimit = 1
+        fetchRequest.includesSubentities = false
+        fetchRequest.returnsObjectsAsFaults = false
+        return try context.fetch(fetchRequest).first
+    }
 }
