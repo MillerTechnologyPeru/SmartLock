@@ -78,6 +78,17 @@ public final class LockEventsViewController: TableViewController {
         reloadData()
     }
     
+    public override func viewDidDisappear(_ animated: Bool) {
+        
+        if let refreshControl = refreshControl,
+            refreshControl.isRefreshing {
+            refreshControl.endRefreshing()
+            showActivity()
+        }
+        
+        super.viewDidDisappear(animated)
+    }
+    
     // MARK: - Actions
     
     @IBAction func refresh(_ sender: UIRefreshControl) {

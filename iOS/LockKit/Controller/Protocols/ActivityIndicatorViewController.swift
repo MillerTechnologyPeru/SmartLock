@@ -70,25 +70,28 @@ public extension TableViewActivityIndicatorViewController {
     
     func showActivity() {
         if activityShouldDisableUserInteration {
-            self.view.isUserInteractionEnabled = false
+            view.isUserInteractionEnabled = false
         }
         if refreshControl?.isRefreshing ?? false {
             // refresh control animating
         } else {
             activityIndicator.startAnimating()
+            refreshControl?.alpha = 0.0
         }
     }
     
     func hideActivity(animated: Bool = true) {
         if activityShouldDisableUserInteration {
-            self.view.isUserInteractionEnabled = true
+            view.isUserInteractionEnabled = true
         }
         if let refreshControl = self.refreshControl,
             refreshControl.isRefreshing {
             refreshControl.endRefreshing()
-        } else {
+        }
+        if activityIndicator.isAnimating {
             activityIndicator.stopAnimating()
         }
+        refreshControl?.alpha = 1.0
     }
 }
 

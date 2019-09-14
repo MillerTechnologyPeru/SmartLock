@@ -24,6 +24,14 @@ open class TableViewController: UITableViewController, NSFetchedResultsControlle
         }
     }
     
+    // MARK: - View Transition
+    
+    open override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        
+        refreshControl?.endRefreshing()
+    }
+    
     // MARK: - UITableViewDataSource
     
     public final override func numberOfSections(in tableView: UITableView) -> Int {
