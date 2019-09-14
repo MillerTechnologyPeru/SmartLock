@@ -37,7 +37,6 @@ public final class LockServiceController <Peripheral: PeripheralProtocol> : GATT
     public var setupSecret: KeyData = KeyData()
     
     public var authorization: LockAuthorizationStore = InMemoryLockAuthorization()  {
-        
         didSet { updateInformation() }
     }
     
@@ -129,11 +128,16 @@ public final class LockServiceController <Peripheral: PeripheralProtocol> : GATT
     }
     
     deinit {
-        
         self.peripheral.remove(service: serviceHandle)
     }
     
     // MARK: - Methods
+    
+    public func reset() {
+        
+        authorization.removeAll()
+        updateInformation()
+    }
     
     public func willRead(_ request: GATTReadRequest<Peripheral.Central>) -> ATT.Error? {
         
