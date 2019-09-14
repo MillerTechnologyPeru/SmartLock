@@ -365,7 +365,7 @@ public extension Store {
     
     func scan(duration: TimeInterval? = nil) throws {
         
-        let duration = preferences.scanDuration
+        let duration = duration ?? preferences.scanDuration
         let filterDuplicates = preferences.filterDuplicates
         assert(Thread.isMainThread == false)
         self.peripherals.value.removeAll()
