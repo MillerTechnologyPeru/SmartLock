@@ -111,7 +111,6 @@ extension Key.Cloud.ID: CloudKitIdentifier {
     }
 }
 
-
 public extension PermissionType {
     
     /// A Key's permission level.
