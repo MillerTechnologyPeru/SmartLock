@@ -175,7 +175,6 @@ public final class LockEventsViewController: TableViewController {
             }
         }, completion: { (viewController, _) in
             viewController.needsKeys.removeAll()
-            viewController.tableView.reloadData()
         })
     }
     
