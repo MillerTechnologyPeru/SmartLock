@@ -33,6 +33,16 @@ extension ConfirmNewKeyEventManagedObject: IdentifiableManagedObject { }
 
 public extension ConfirmNewKeyEventManagedObject {
     
+    /// Fetch the new key specified by the event.
+    func newKey(in context: NSManagedObjectContext) throws -> NewKeyManagedObject? {
+        
+        guard let newKey = self.pendingKey else {
+            assertionFailure("Missing key value")
+            return nil
+        }
+        return try context.find(identifier: newKey, type: NewKeyManagedObject.self)
+    }
+    
     /// Fetch the removed key specified by the event.
     func createKeyEvent(in context: NSManagedObjectContext) throws -> CreateNewKeyEventManagedObject? {
         
@@ -45,18 +55,8 @@ public extension ConfirmNewKeyEventManagedObject {
         fetchRequest.entity = CreateNewKeyEventManagedObject.entity()
         fetchRequest.predicate = NSPredicate(format: "%K == %@", #keyPath(CreateNewKeyEventManagedObject.pendingKey), newKey as NSUUID)
         fetchRequest.fetchLimit = 1
-        fetchRequest.includesSubentities = true
+        fetchRequest.includesSubentities = false
         fetchRequest.returnsObjectsAsFaults = false
         return try context.fetch(fetchRequest).first
-    }
-    
-    /// Fetch the new key specified by the event.
-    func newKey(in context: NSManagedObjectContext) throws -> NewKeyManagedObject? {
-        
-        guard let newKey = self.pendingKey else {
-            assertionFailure("Missing key value")
-            return nil
-        }
-        return try context.find(identifier: newKey, type: NewKeyManagedObject.self)
     }
 }

@@ -44,6 +44,8 @@ public final class LockEventsViewController: TableViewController {
         return dateFormatter
     }()
     
+    private var needsKeys = Set<UUID>()
+    
     // MARK: - Loading
     
     /*
@@ -119,6 +121,8 @@ public final class LockEventsViewController: TableViewController {
     
     private func reloadData() {
         
+        loadKeys()
+        
         typealias FetchRequest = ListEventsCharacteristic.FetchRequest
         typealias Predicate = ListEventsCharacteristic.Predicate
         
@@ -155,6 +159,9 @@ public final class LockEventsViewController: TableViewController {
                     }
                 }
             }
+        }, completion: { (viewController, _) in
+            viewController.needsKeys.removeAll()
+            viewController.tableView.reloadData()
         })
     }
     
@@ -165,40 +172,58 @@ public final class LockEventsViewController: TableViewController {
     private func configure(cell: LockEventTableViewCell, at indexPath: IndexPath) {
         
         let managedObject = self[indexPath]
+        guard let lock = managedObject.lock?.identifier else {
+            assertionFailure("Missing identifier")
+            return
+        }
         let context = Store.shared.persistentContainer.viewContext
         let eventType = type(of: managedObject).eventType
         let action: String
         var keyName: String
+        let key = try! managedObject.key(in: context)
+        if key == nil {
+            needsKeys.insert(lock)
+        }
         switch managedObject {
-        case let event as SetupEventManagedObject:
+        case is SetupEventManagedObject:
             action = "Setup"
-            keyName = try! event.key(in: context)?.name ?? ""
-        case let event as UnlockEventManagedObject:
+            keyName = key?.name ?? ""
+        case is UnlockEventManagedObject:
             action = "Unlocked"
-            keyName = try! event.key(in: context)?.name ?? ""
+            keyName = key?.name ?? ""
         case let event as CreateNewKeyEventManagedObject:
-            action = "Shared key"
-            keyName = try! event.key(in: context)?.name ?? ""
+            if let newKey = try! event.confirmKeyEvent(in: context)?.key(in: context)?.name {
+                action = "Shared \"\(newKey)\" key"
+            } else if let newKey = try! event.newKey(in: context)?.name {
+                action = "Shared \"\(newKey)\" key"
+            } else {
+                action = "Shared key"
+                needsKeys.insert(lock)
+            }
+            keyName = key?.name ?? ""
         case let event as ConfirmNewKeyEventManagedObject:
-            if let key = try! event.key(in: context),
+            if let key = key,
                 let permission = PermissionType(rawValue: numericCast(key.permission)) {
                 action = "Created \"\(key.name ?? "")\" \(permission.localizedText) key"
                 if let parentKey = try! event.createKeyEvent(in: context)?.key(in: context) {
                     keyName = "Shared by \"\(parentKey.name ?? "")\""
                 } else {
                     keyName = ""
+                    needsKeys.insert(lock)
                 }
             } else {
                 action = "Created key"
                 keyName = ""
+                needsKeys.insert(lock)
             }
         case let event as RemoveKeyEventManagedObject:
-            if let removedKey = try! event.removedKey(in: context) {
-                action = "Removed \"\(removedKey.name ?? "")\" key"
+            if let removedKey = try! event.removedKey(in: context)?.name {
+                action = "Removed \"\(removedKey)\" key"
             } else {
                 action = "Removed key"
+                needsKeys.insert(lock)
             }
-            keyName = try! event.key(in: context)?.name ?? ""
+            keyName = key?.name ?? ""
         default:
             fatalError("Invalid event \(managedObject)")
         }
@@ -219,6 +244,7 @@ public final class LockEventsViewController: TableViewController {
         
         let locks = self.locks.filter {
             Store.shared[lock: $0]?.key.permission.isAdministrator ?? false
+                && (needsKeys.isEmpty ? true : needsKeys.contains($0))
         }
         performActivity({
             try locks.forEach {
@@ -228,29 +254,10 @@ public final class LockEventsViewController: TableViewController {
                 }
             }
         }, completion: { (viewController, _) in
+            viewController.needsKeys.removeAll()
             viewController.tableView.reloadData()
         })
     }
-    
-    /*
-    private func loadKeys(for indexPath: IndexPath) {
-        
-        let event = self[indexPath]
-        let context = Store.shared.persistentContainer.viewContext
-        if let lock = event.lock?.identifier,
-            try! event.key(in: context) == nil {
-            performActivity({
-                let context = Store.shared.backgroundContext
-                let eventKey = try context.performErrorBlockAndWait {
-                    try (context.existingObject(with: event.objectID) as? EventManagedObject)?.key(in: context)
-                }
-                guard eventKey == nil,
-                    let device = Store.shared.device(for: lock)
-                    else { return }
-                try Store.shared.listKeys(device)
-            })
-        }
-    }*/
     
     // MARK: - UITableViewDataSource
     
