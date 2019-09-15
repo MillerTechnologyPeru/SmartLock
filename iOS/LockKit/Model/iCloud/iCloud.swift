@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import CoreData
 import CloudKit
 import CloudKitCodable
 import KeychainAccess
@@ -72,12 +73,45 @@ public final class CloudStore {
         didUpload(applicationData: applicationData)
     }
     
+    public func upload(context: NSManagedObjectContext) throws {
+        
+        // upload all locks and keys]
+        let locks = try LockManagedObject.fetch(in: context)
+        for lockManagedObject in locks {
+            guard let lock = CloudLock(managedObject: lockManagedObject) else {
+                assertionFailure("Invalid \(lockManagedObject)")
+                continue
+            }
+            let lockRecord = try upload(lock)
+            // upload events
+            let events = ((lockManagedObject.events as? Set<EventManagedObject>) ?? [])
+                .lazy
+                .sorted(by: { $0.date! > $1.date! })
+            for eventManagedObject in events {
+                guard let event = LockEvent(managedObject: eventManagedObject)
+                    .flatMap({ LockEvent.Cloud($0) }) else {
+                    assertionFailure("Invalid \(eventManagedObject)")
+                    continue
+                }
+                if try container.privateCloudDatabase.fetch(record: event.cloudIdentifier.cloudRecordID) == nil {
+                    let _ = try upload(event, parent: lockRecord.recordID)
+                } else {
+                    break // don't upload older events
+                }
+            }
+        }
+    }
+    
     @discardableResult
-    public func upload <T: CloudKitEncodable> (_ encodable: T) throws -> CKRecord {
+    public func upload <T: CloudKitEncodable> (_ encodable: T, parent: CKRecord.ID? = nil) throws -> CKRecord {
         
         let cloudEncoder = CloudKitEncoder(context: container.privateCloudDatabase)
         let operation = try cloudEncoder.encode(encodable)
-        
+        guard let record = operation.recordsToSave?.first
+            else { fatalError() }
+        assert(encodable.cloudIdentifier.cloudRecordID == record.recordID)
+        assert(type(of: encodable.cloudIdentifier).cloudRecordType == record.recordType)
+        record.setParent(parent)
         operation.isAtomic = true
         var cloudKitError: Swift.Error?
         let semaphore = DispatchSemaphore(value: 0)
@@ -90,10 +124,6 @@ public final class CloudStore {
         if let error = cloudKitError {
             throw error
         }
-        guard let record = operation.recordsToSave?.first
-            else { fatalError() }
-        assert(encodable.cloudIdentifier.cloudRecordID == record.recordID)
-        assert(type(of: encodable.cloudIdentifier).cloudRecordType == record.recordType)
         return record
     }
     
@@ -256,23 +286,30 @@ public extension Store {
     
     func syncCloud(conflicts: (ApplicationData) -> Bool? = { _ in return nil }) throws {
         
+        assert(Thread.isMainThread == false)
+        
         // make sure iCloud is enabled
         guard preferences.isCloudEnabled else { return }
-        assert(Thread.isMainThread == false)
-        guard try downloadCloud(conflicts: conflicts) else {
-            DispatchQueue.main.async { [weak self] in
-                self?.preferences.lastCloudUpdate = Date()
-            }
-            return
-        } // aborted
-        try uploadCloud()
+        
+        // download and upload application data
+        if try downloadCloudApplicationData(conflicts: conflicts) {
+            try uploadCloudApplicationData()
+        }
+        
+        // upload cache
+        let context = persistentContainer.newBackgroundContext()
+        try context.performErrorBlockAndWait { [unowned self] in
+            try self.cloud.upload(context: context)
+        }
+        
+        // cache date last updated
         DispatchQueue.main.async { [weak self] in
             self?.preferences.lastCloudUpdate = Date()
         }
     }
     
     @discardableResult
-    func downloadCloud(conflicts: (ApplicationData) -> Bool?) throws -> Bool {
+    func downloadCloudApplicationData(conflicts: (ApplicationData) -> Bool?) throws -> Bool {
         
         assert(Thread.isMainThread == false)
                 
@@ -346,11 +383,11 @@ public extension Store {
         if removedKeys > 0 {
             log("☁️ Removed \(removedKeys) old keys from keychain")
         }
-        log("☁️ Downloaded from iCloud")
+        log("☁️ Downloaded application data from iCloud")
         return true
     }
     
-    func uploadCloud() throws {
+    func uploadCloudApplicationData() throws {
                 
         let applicationData = self.applicationData
         
@@ -364,7 +401,7 @@ public extension Store {
         // upload keychain and application data to iCloud
         try cloud.upload(applicationData: applicationData, keys: keys)
         
-        log("☁️ Uploaded to iCloud")
+        log("☁️ Uploaded application data to iCloud")
     }
 }
 

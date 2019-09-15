@@ -41,6 +41,21 @@ internal extension LockManagedObject {
 
 extension LockManagedObject: IdentifiableManagedObject { }
 
+// MARK: - Fetch
+
+public extension LockManagedObject {
+    
+    static func fetch(in context: NSManagedObjectContext, sort: [NSSortDescriptor] = []) throws -> [LockManagedObject] {
+        let fetchRequest = NSFetchRequest<LockManagedObject>()
+        fetchRequest.entity = entity()
+        fetchRequest.fetchBatchSize = 10
+        fetchRequest.sortDescriptors = sort.isEmpty == false ? sort : [
+            .init(keyPath: \LockManagedObject.identifier, ascending: true)
+        ]
+        return try context.fetch(fetchRequest)
+    }
+}
+
 // MARK: - Store
 
 internal extension NSManagedObjectContext {
