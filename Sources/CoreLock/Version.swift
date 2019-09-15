@@ -15,6 +15,12 @@ public struct LockVersion: Equatable, Hashable {
     public var minor: UInt8
     
     public var patch: UInt8
+    
+    public init(major: UInt8, minor: UInt8, patch: UInt8) {
+        self.major = major
+        self.minor = minor
+        self.patch = patch
+    }
 }
 
 // MARK: - Definitions
