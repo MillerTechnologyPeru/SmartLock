@@ -29,7 +29,7 @@ public final class LockViewController: UITableViewController {
         didSet { if self.isViewLoaded { self.configureView() } }
     }
     
-    public lazy var progressHUD: JGProgressHUD = .currentStyle(for: self)
+    public var progressHUD: JGProgressHUD?
     
     @available(iOS 10.0, *)
     private lazy var feedbackGenerator: UIImpactFeedbackGenerator = {
@@ -78,7 +78,9 @@ public final class LockViewController: UITableViewController {
     public override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
-        view.bringSubviewToFront(progressHUD)
+        if let progressHUD = self.progressHUD {
+            view.bringSubviewToFront(progressHUD)
+        }
     }
     
     // MARK: - Actions
@@ -120,34 +122,12 @@ public final class LockViewController: UITableViewController {
         }
         
         if shouldScan {
-            
-            self.progressHUD.show(in: self.view)
-            
-            async { [weak self] in
-                
-                guard let controller = self else { return }
-                
-                // try to scan if not in range
-                do { try Store.shared.scan(duration: 3) }
-                
-                catch {
-                    
-                    mainQueue {
-                        
-                        controller.progressHUD.dismiss(animated: false)
-                        controller.showErrorAlert("\(error)")
-                    }
-                }
-                
-                mainQueue {
-                    
-                    controller.progressHUD.dismiss()
-                    show()
-                }
-            }
-            
+            performActivity({
+                try Store.shared.scan(duration: 1)
+            }, completion: { (viewController, _) in
+                show()
+            })
         } else {
-            
             show()
         }
     }
@@ -231,6 +211,10 @@ public final class LockViewController: UITableViewController {
         self.permissionLabel.text = lockCache.key.permission.localizedText
     }
 }
+
+// MARK: - ProgressHUDViewController
+
+extension LockViewController: ProgressHUDViewController { }
 
 // MARK: - Extensions
 
