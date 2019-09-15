@@ -22,8 +22,6 @@ public struct CloudLock {
     public var keys: [Key.Cloud]
     
     public var newKeys: [NewKey.Cloud]
-    
-    public var events: [LockEvent.Cloud]
 }
 
 public extension CloudLock {

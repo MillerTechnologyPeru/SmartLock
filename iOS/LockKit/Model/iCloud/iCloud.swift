@@ -63,13 +63,21 @@ public final class CloudStore {
             try keychain.set(keyData.data, key: keyIdentifier.uuidString)
         }
         
-        // get iCloud user
+        // update iCloud user
         var user = try CloudUser.fetch(in: container, database: .private)
-        
-        // upload configuration
-        let cloudEncoder = CloudKitEncoder(context: container.privateCloudDatabase)
         user.applicationData = .init(applicationData) // set new application data
-        let operation = try cloudEncoder.encode(user)
+        try upload(user)
+        
+        // inform via key value store
+        didUpload(applicationData: applicationData)
+    }
+    
+    @discardableResult
+    public func upload <T: CloudKitEncodable> (_ encodable: T) throws -> CKRecord {
+        
+        let cloudEncoder = CloudKitEncoder(context: container.privateCloudDatabase)
+        let operation = try cloudEncoder.encode(encodable)
+        
         operation.isAtomic = true
         var cloudKitError: Swift.Error?
         let semaphore = DispatchSemaphore(value: 0)
@@ -82,9 +90,11 @@ public final class CloudStore {
         if let error = cloudKitError {
             throw error
         }
-        
-        // inform via key value store
-        didUpload(applicationData: applicationData)
+        guard let record = operation.recordsToSave?.first
+            else { fatalError() }
+        assert(encodable.cloudIdentifier.cloudRecordID == record.recordID)
+        assert(type(of: encodable.cloudIdentifier).cloudRecordType == record.recordType)
+        return record
     }
     
     public func download() throws -> (applicationData: ApplicationData, keys: [UUID: KeyData])? {
