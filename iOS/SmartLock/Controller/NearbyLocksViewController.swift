@@ -93,7 +93,7 @@ final class NearbyLocksViewController: UITableViewController {
         scan()
         #else
         async {
-            if BeaconController.shared.locks.isEmpty {
+            if Store.shared.locks.value.isEmpty {
                 mainQueue { [weak self] in self?.scan() }
             } else {
                 // Update beacon status

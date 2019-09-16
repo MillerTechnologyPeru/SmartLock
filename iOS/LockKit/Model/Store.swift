@@ -67,11 +67,11 @@ public final class Store {
         
         #if os(iOS)
         // observe iBeacons
-        beaconController.foundLock = { [unowned self] (lock, beacon) in
-            self.lockBeaconFound(lock: lock, beacon: beacon)
+        beaconController.foundBeacon = { [unowned self] (beacon, beacons) in
+            self.beaconFound(beacon, beacons: beacons)
         }
-        beaconController.lostLock = { [unowned self] (lock) in
-            self.lockBeaconExited(lock: lock)
+        beaconController.lostBeacon = { [unowned self] (beacon) in
+            self.beaconExited(beacon)
         }
         // observe external cloud changes
         cloud.didChange = { [unowned self] in self.cloudDidChangeExternally() }
@@ -240,17 +240,20 @@ public final class Store {
     
     private func monitorBeacons() {
         
+        // always monitor lock notification iBeacon
+        self.beaconController.monitor(beacon: .lockBeaconNotification)
+        
         // remove old beacons
-        for lock in self.beaconController.locks.keys {
+        for lock in self.beaconController.beacons.keys {
             if self.locks.value.keys.contains(lock) == false {
-                self.beaconController.stopMonitoring(lock: lock)
+                self.beaconController.stopMonitoring(lock)
             }
         }
         
         // add new beacons
         for lock in self.locks.value.keys {
-            if self.beaconController.locks.keys.contains(lock) == false {
-                self.beaconController.monitor(lock: lock)
+            if self.beaconController.beacons.keys.contains(lock) == false {
+                self.beaconController.monitor(beacon: lock)
             }
         }
     }
@@ -268,33 +271,67 @@ public final class Store {
         }
     }
     
-    private func lockBeaconFound(lock: UUID, beacon: CLBeacon) {
-        
+    private func beaconFound(_ beacon: UUID, beacons: [CLBeacon]) {
+                
         async { [weak self] in
             guard let self = self else { return }
-            do {
-                guard let _ = try self.device(for: lock, scanDuration: 1.0) else {
-                    log("⚠️ Could not find lock \(lock) for beacon \(beacon)")
-                    self.beaconController.scanBeacon(for: lock)
-                    return
+            if let _ = Store.shared[lock: beacon] {
+                do {
+                    guard let _ = try self.device(for: beacon, scanDuration: 1.0) else {
+                        log("⚠️ Could not find lock \(beacon) for beacon \(beacon)")
+                        self.beaconController.scanBeacon(for: beacon)
+                        return
+                    }
+                } catch {
+                    log("⚠️ Could not scan: \(error)")
                 }
-            } catch {
-                log("⚠️ Could not scan: \(error)")
+            } else if beacon == .lockBeaconNotification {
+                log("📶 Lock Notification iBeacon detected")
+                typealias FetchRequest = ListEventsCharacteristic.FetchRequest
+                typealias Predicate = ListEventsCharacteristic.Predicate
+                let context = Store.shared.backgroundContext
+                // scan for all locks
+                for (lock, _) in Store.shared.locks.value {
+                    do {
+                        guard let device = try self.device(for: lock, scanDuration: 1.0)
+                            else { continue }
+                        let lastEventDate = try context.performErrorBlockAndWait {
+                            try context.find(identifier: lock, type: LockManagedObject.self)
+                                .flatMap { try $0.lastEvent(in: context)?.date }
+                        }
+                        let fetchRequest = FetchRequest(
+                            offset: 0,
+                            limit: nil,
+                            predicate: Predicate(
+                                keys: nil,
+                                start: lastEventDate,
+                                end: nil
+                            )
+                        )
+                        try self.listEvents(device, fetchRequest: fetchRequest, notification: { _,_ in })
+                    } catch {
+                        log("⚠️ Could not fetch latest data for lock \(lock): \(error)")
+                        continue
+                    }
+                }
             }
         }
     }
     
-    private func lockBeaconExited(lock: UUID) {
+    private func beaconExited(_ beacon: UUID) {
+        
+        guard let _ = Store.shared[lock: beacon]
+            else { return }
         
         async { [weak self] in
             guard let self = self else { return }
             do {
                 try self.scan(duration: 1.0)
-                if self.device(for: lock) == nil {
-                    log("Lock \(lock) no longer in range")
+                if self.device(for: beacon) == nil {
+                    log("Lock \(beacon) no longer in range")
                 } else {
                     // lock is in range, refresh beacons
-                    self.beaconController.scanBeacon(for: lock)
+                    self.beaconController.scanBeacon(for: beacon)
                 }
             } catch {
                 log("⚠️ Could not scan: \(error)")
