@@ -79,6 +79,7 @@ internal extension NSManagedObjectContext {
         }
     }
     
+    #if os(iOS)
     @discardableResult
     func insert(_ cloudValue: CloudLock) throws -> LockManagedObject {
         
@@ -112,5 +113,7 @@ internal extension NSManagedObjectContext {
             }
             try insert(newKey, for: lockManagedObject)
         }
+        return lockManagedObject
     }
+    #endif
 }

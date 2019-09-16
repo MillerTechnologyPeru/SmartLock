@@ -174,7 +174,7 @@ public final class CloudStore {
             predicate: NSPredicate(format: "%K == %@", "lock", lockReference)
         )
         query.sortDescriptors = [
-            .init(keyPath: \LockEvent.Cloud.date, ascending: false)
+            .init(key: "date", ascending: false) // \LockEvent.Cloud.date
         ]
         
         let decoder = CloudKitDecoder(context: database)
@@ -355,6 +355,12 @@ public extension Store {
     
     func downloadCloudLocks() throws {
         
+        var insertedEventsCount = 0
+        defer {
+            if insertedEventsCount > 0 {
+                log("☁️ Fetched \(insertedEventsCount) events")
+            }
+        }
         let context = backgroundContext
         try cloud.fetchLocks { [weak self] (lock) in
             guard let self = self else { return false }
@@ -373,6 +379,7 @@ public extension Store {
                 context.commit {
                     try $0.insert(event, for: cloudEvent.lock.rawValue)
                 }
+                insertedEventsCount += 1
                 return true
             }
             return true
