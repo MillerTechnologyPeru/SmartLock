@@ -20,17 +20,28 @@ public final class NewKeySelectPermissionViewController: UITableViewController, 
     
     public var lockIdentifier: UUID!
     
-    public let progressHUD = JGProgressHUD(style: .dark)
+    public var progressHUD: JGProgressHUD?
     
     private let permissionTypes: [PermissionType] = [.admin, .anytime /*, .scheduled */ ]
     
     // MARK: - Loading
+    
+    public static func fromStoryboard(with lock: UUID, completion: (((invitation: NewKey.Invitation, sender: PopoverPresentingView)?) -> ())? = nil) -> NewKeySelectPermissionViewController {
+        
+        guard let viewController = R.storyboard.newKey.newKeySelectPermissionViewController()
+            else { fatalError("Could not load \(self) from storyboard") }
+        
+        viewController.lockIdentifier = lock
+        viewController.completion = completion
+        return viewController
+    }
     
     public override func viewDidLoad() {
         super.viewDidLoad()
         
         // set user activity
         userActivity = NSUserActivity(.action(.shareKey(lockIdentifier)))
+        userActivity?.becomeCurrent()
         
         // setup table view
         self.tableView.estimatedRowHeight = 100
@@ -40,7 +51,9 @@ public final class NewKeySelectPermissionViewController: UITableViewController, 
     public override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
-        view.bringSubviewToFront(progressHUD)
+        if let progressHUD = self.progressHUD {
+            view.bringSubviewToFront(progressHUD)
+        }
     }
     
     // MARK: - Actions
@@ -124,15 +137,18 @@ public final class NewKeySelectPermissionViewController: UITableViewController, 
     }
 }
 
+// MARK: - ProgressHUDViewController
+
+extension NewKeySelectPermissionViewController: ProgressHUDViewController { }
+
+// MARK: - View Controller Extensions
+
 public extension UIViewController {
     
     func shareKey(lock identifier: UUID, completion: @escaping (((invitation: NewKey.Invitation, sender: PopoverPresentingView)?) -> ())) {
         
-        let navigationController = UIStoryboard(name: "NewKey", bundle: .lockKit).instantiateInitialViewController() as! UINavigationController
-        
-        let destinationViewController = navigationController.viewControllers.first! as! NewKeySelectPermissionViewController
-        destinationViewController.lockIdentifier = identifier
-        destinationViewController.completion = completion
+        let newKeyViewController = NewKeySelectPermissionViewController.fromStoryboard(with: identifier, completion: completion)
+        let navigationController = UINavigationController(rootViewController: newKeyViewController)
         self.present(navigationController, animated: true, completion: nil)
     }
     
@@ -144,7 +160,7 @@ public extension UIViewController {
                 return
             }
             // show share sheet
-            self.share(invitation: invitation, sender: sender) {
+            (self.presentedViewController ?? self).share(invitation: invitation, sender: sender) {
                 self.dismiss(animated: true, completion: nil)
             }
         }

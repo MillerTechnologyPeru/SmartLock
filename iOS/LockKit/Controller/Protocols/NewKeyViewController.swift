@@ -8,7 +8,6 @@
 
 import Foundation
 import UIKit
-import Foundation
 import CoreLock
 
 public protocol NewKeyViewController: ActivityIndicatorViewController {
@@ -47,7 +46,7 @@ public extension NewKeyViewController {
             
             log("Setting up new key for lock \(lockIdentifier)")
             
-            self.showProgressHUD()
+            self.showActivity()
             
             // add new key to lock
             async { [weak self] in
@@ -70,7 +69,7 @@ public extension NewKeyViewController {
                 do {
                     guard let peripheral = try Store.shared.device(for: lockIdentifier, scanDuration: 2.0) else {
                         mainQueue {
-                            self.dismissProgressHUD(animated: false)
+                            self.hideActivity(animated: false)
                             self.newKeyError("Lock is not in range.")
                         }
                         return
@@ -82,7 +81,7 @@ public extension NewKeyViewController {
                     
                 catch {
                     mainQueue {
-                        self.dismissProgressHUD(animated: false)
+                        self.hideActivity(animated: false)
                         self.newKeyError("Could not create new key. (\(error))")
                     }
                     return

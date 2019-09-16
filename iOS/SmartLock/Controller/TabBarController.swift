@@ -13,6 +13,14 @@ import LockKit
 
 final class TabBarController: UITabBarController {
     
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        #if targetEnvironment(macCatalyst)
+        select(NearbyLocksViewController.self)
+        #endif
+    }
+    
     internal func select <T: UIViewController> (_ viewController: T.Type, _ block: ((T) -> ())? = nil) {
         loadViewIfNeeded()
         for (index, child) in (viewControllers ?? []).enumerated() {

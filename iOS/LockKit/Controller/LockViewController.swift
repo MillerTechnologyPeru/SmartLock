@@ -29,7 +29,7 @@ public final class LockViewController: UITableViewController {
         didSet { if self.isViewLoaded { self.configureView() } }
     }
     
-    private let progressHUD = JGProgressHUD(style: .dark)
+    public var progressHUD: JGProgressHUD?
     
     @available(iOS 10.0, *)
     private lazy var feedbackGenerator: UIImpactFeedbackGenerator = {
@@ -78,7 +78,9 @@ public final class LockViewController: UITableViewController {
     public override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
-        view.bringSubviewToFront(progressHUD)
+        if let progressHUD = self.progressHUD {
+            view.bringSubviewToFront(progressHUD)
+        }
     }
     
     // MARK: - Actions
@@ -89,7 +91,7 @@ public final class LockViewController: UITableViewController {
         
         let foundLock = Store.shared[lock: lockIdentifier]
         
-        let isScanning = Store.shared.scanning.value == false
+        let isScanning = Store.shared.isScanning.value == false
         
         let shouldScan = foundLock == nil && isScanning == false
         
@@ -101,7 +103,9 @@ public final class LockViewController: UITableViewController {
                 HomeKitEnableActivity(),
                 RenameActivity(),
                 UpdateActivity(),
-                DeleteLockActivity(),
+                DeleteLockActivity { [unowned self] in
+                    self.navigationController?.popViewController(animated: true)
+                },
                 AddVoiceShortcutActivity()
             ]
             
@@ -118,34 +122,12 @@ public final class LockViewController: UITableViewController {
         }
         
         if shouldScan {
-            
-            self.progressHUD.show(in: self.view)
-            
-            async { [weak self] in
-                
-                guard let controller = self else { return }
-                
-                // try to scan if not in range
-                do { try Store.shared.scan(duration: 3) }
-                
-                catch {
-                    
-                    mainQueue {
-                        
-                        controller.progressHUD.dismiss(animated: false)
-                        controller.showErrorAlert("\(error)")
-                    }
-                }
-                
-                mainQueue {
-                    
-                    controller.progressHUD.dismiss()
-                    show()
-                }
-            }
-            
+            performActivity({
+                try Store.shared.scan(duration: 1)
+            }, completion: { (viewController, _) in
+                show()
+            })
         } else {
-            
             show()
         }
     }
@@ -230,9 +212,13 @@ public final class LockViewController: UITableViewController {
     }
 }
 
+// MARK: - ProgressHUDViewController
+
+extension LockViewController: ProgressHUDViewController { }
+
 // MARK: - Extensions
 
-extension UIViewController {
+public extension UIViewController {
     
     @discardableResult
     func view(lock identifier: UUID) -> Bool {
@@ -242,12 +228,8 @@ extension UIViewController {
             return false
         }
         
-        let navigationController = UIStoryboard(name: "LockDetail", bundle: .lockKit).instantiateInitialViewController() as! UINavigationController
-        
-        let lockViewController = navigationController.topViewController as! LockViewController
-        lockViewController.lockIdentifier = identifier
-        show(lockViewController, sender: self)
-        
+        let viewController = LockViewController.fromStoryboard(with: identifier)
+        show(viewController, sender: self)
         return true
     }
 }

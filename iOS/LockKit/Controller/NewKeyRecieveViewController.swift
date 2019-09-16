@@ -13,23 +13,28 @@ import GATT
 import CoreLock
 import JGProgressHUD
 
-public final class NewKeyRecieveViewController: UITableViewController, ActivityIndicatorViewController {
+public final class NewKeyRecieveViewController: UITableViewController {
     
     // MARK: - IB Outlets
     
-    @IBOutlet weak var permissionImageView: UIImageView!
-    @IBOutlet weak var permissionLabel: UILabel!
-    @IBOutlet weak var lockLabel: UILabel!
+    @IBOutlet private(set) weak var permissionView: PermissionIconView!
+    @IBOutlet private(set) weak var permissionLabel: UILabel!
+    @IBOutlet private(set) weak var lockLabel: UILabel!
     
     // MARK: - Properties
     
-    public var newKey: NewKey.Invitation!
-    
-    // MARK: - Private Properties
-    
-    public let progressHUD = JGProgressHUD(style: .dark)
+    public private(set) var newKey: NewKey.Invitation!
+        
+    public var progressHUD: JGProgressHUD?
     
     // MARK: - Loading
+    
+    public static func fromStoryboard(with newKey: NewKey.Invitation) -> NewKeyRecieveViewController {
+        guard let viewController = R.storyboard.newKeyInvitation.newKeyRecieveViewController()
+            else { fatalError("Could not load \(self) from storyboard") }
+        viewController.newKey = newKey
+        return viewController
+    }
     
     public override func viewDidLoad() {
         super.viewDidLoad()
@@ -44,7 +49,9 @@ public final class NewKeyRecieveViewController: UITableViewController, ActivityI
     public override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
-        view.bringSubviewToFront(progressHUD)
+        if let progressHUD = self.progressHUD {
+            view.bringSubviewToFront(progressHUD)
+        }
     }
     
     // MARK: - Actions
@@ -59,7 +66,7 @@ public final class NewKeyRecieveViewController: UITableViewController, ActivityI
         let newKeyInvitation = self.newKey!
         sender.isEnabled = false
         let keyData = KeyData()
-        showProgressHUD()
+        showActivity()
         
         async { [weak self] in
             
@@ -89,7 +96,6 @@ public final class NewKeyRecieveViewController: UITableViewController, ActivityI
                 mainQueue {
                     
                     // save to cache
-                    
                     let lockCache = LockCache(
                         key: Key(
                             identifier: newKeyInvitation.key.identifier,
@@ -103,7 +109,7 @@ public final class NewKeyRecieveViewController: UITableViewController, ActivityI
                     
                     Store.shared[lock: newKeyInvitation.lock] = lockCache
                     Store.shared[key: newKeyInvitation.key.identifier] = keyData
-                    controller.dismissProgressHUD()
+                    controller.hideActivity(animated: true)
                     controller.dismiss(animated: true, completion: nil)
                 }
             }
@@ -111,8 +117,7 @@ public final class NewKeyRecieveViewController: UITableViewController, ActivityI
             catch {
                 
                 mainQueue {
-                    
-                    controller.dismissProgressHUD(animated: false)
+                    controller.hideActivity(animated: false)
                     controller.showErrorAlert("\(error)", okHandler: {
                         controller.dismiss(animated: true, completion: nil)
                     })
@@ -121,17 +126,23 @@ public final class NewKeyRecieveViewController: UITableViewController, ActivityI
         }
     }
     
-    // MARK: - Private Methods
+    // MARK: - Methods
     
     private func configureView() {
         
         self.navigationItem.title = newKey.key.name
         let permission = newKey.key.permission
         self.lockLabel.text = newKey.lock.rawValue
-        self.permissionImageView.image = UIImage(permission: permission)
+        self.permissionView.permission = permission.type
         self.permissionLabel.text = permission.localizedText
     }
 }
+
+// MARK: - ProgressHUDViewController
+
+extension NewKeyRecieveViewController: ProgressHUDViewController { }
+
+// MARK: - View Controller Extensions
 
 public extension UIViewController {
     
@@ -144,12 +155,9 @@ public extension UIViewController {
             return false
         }
         
-        // show NewKeyReceiveVC
-        let navigationController = UIStoryboard(name: "NewKeyInvitation", bundle: .lockKit).instantiateInitialViewController() as! UINavigationController
-        let newKeyVC = navigationController.topViewController as! NewKeyRecieveViewController
-        newKeyVC.newKey = newKey
+        let newKeyViewController = NewKeyRecieveViewController.fromStoryboard(with: newKey)
+        let navigationController = UINavigationController(rootViewController: newKeyViewController)
         present(navigationController, animated: true, completion: nil)
-        
         return true
     }
 }

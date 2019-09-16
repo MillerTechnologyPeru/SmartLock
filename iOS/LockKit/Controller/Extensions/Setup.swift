@@ -9,6 +9,8 @@
 import Foundation
 import UIKit
 import CoreLock
+
+#if os(iOS) && !targetEnvironment(macCatalyst)
 import QRCodeReader
 
 public extension ActivityIndicatorViewController where Self: UIViewController {
@@ -51,10 +53,14 @@ public extension ActivityIndicatorViewController where Self: UIViewController {
         readerViewController.modalPresentationStyle = .formSheet
         present(readerViewController, animated: true, completion: nil)
     }
+}
+#endif
+
+public extension ActivityIndicatorViewController where Self: UIViewController {
     
     func setup(lock identifier: UUID, secret: KeyData, name: String = "Lock", scanDuration: TimeInterval = 2.0) {
         
-        performActivity(showProgressHUD: true, { () -> Bool in
+        performActivity(showActivity: true, { () -> Bool in
             guard let lockPeripheral = try Store.shared.device(for: identifier, scanDuration: scanDuration)
                 else { return false }
             try Store.shared.setup(lockPeripheral, sharedSecret: secret, name: name)

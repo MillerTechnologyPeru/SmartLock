@@ -95,7 +95,8 @@ public final class NewKeyActivity: UIActivity {
             Store.shared[peripheral: lockItem.identifier] != nil // Lock must be reachable
             else { return false }
         
-        return lockCache.key.permission.canShareKeys
+        // only owner and admin can share keys
+        return lockCache.key.permission.isAdministrator
     }
     
     public override func prepare(withActivityItems activityItems: [Any]) {
@@ -150,30 +151,21 @@ public final class ManageKeysActivity: UIActivity {
             Store.shared[peripheral: lockItem.identifier] != nil // Lock must be reachable
             else { return false }
         
-        switch lockCache.key.permission {
-        case .owner,
-             .admin:
-            return true
-        case .anytime,
-             .scheduled:
-            return false
-        }
+        return lockCache.key.permission.isAdministrator
     }
     
     public override func prepare(withActivityItems activityItems: [Any]) {
-        
         self.item = activityItems.first as? LockActivityItem
     }
     
     public override var activityViewController: UIViewController? {
         
-        let navigationController = UIStoryboard(name: "LockPermissions", bundle: .lockKit).instantiateInitialViewController() as! UINavigationController
+        let viewController = LockPermissionsViewController.fromStoryboard(
+            with: item.identifier,
+            completion: { [weak self] in self?.activityDidFinish(true) }
+        )
         
-        let destinationViewController = navigationController.viewControllers.first! as! LockPermissionsViewController
-        destinationViewController.lockIdentifier = item.identifier
-        destinationViewController.completion = { self.activityDidFinish(true) }
-        
-        return navigationController
+        return UINavigationController(rootViewController: viewController)
     }
 }
 
@@ -183,6 +175,15 @@ public final class DeleteLockActivity: UIActivity {
     public override class var activityCategory: UIActivity.Category { return .action }
     
     private var item: LockActivityItem!
+    
+    /// Called when lock deleted.
+    public var completion: (() -> ())?
+    
+    public convenience init(completion: (() -> ())?) {
+        
+        self.init()
+        self.completion = completion
+    }
     
     public override var activityType: UIActivity.ActivityType? {
         return LockActivity.delete.activityType
@@ -221,7 +222,10 @@ public final class DeleteLockActivity: UIActivity {
             
             Store.shared.remove(self.item.identifier)
             
-            alert.dismiss(animated: true) { self.activityDidFinish(true) }
+            alert.dismiss(animated: true) {
+                self.activityDidFinish(true)
+                self.completion?()
+            }
         }))
         
         return alert
@@ -476,6 +480,9 @@ public final class AddVoiceShortcutActivity: UIActivity {
     
     public override func canPerform(withActivityItems activityItems: [Any]) -> Bool {
         
+        #if targetEnvironment(macCatalyst)
+        return false
+        #else
         guard #available(iOS 12, *)
             else { return false }
         
@@ -484,6 +491,7 @@ public final class AddVoiceShortcutActivity: UIActivity {
             else { return false }
         
         return true
+        #endif
     }
     
     public override func prepare(withActivityItems activityItems: [Any]) {
@@ -493,6 +501,9 @@ public final class AddVoiceShortcutActivity: UIActivity {
     
     public override var activityViewController: UIViewController? {
         
+        #if targetEnvironment(macCatalyst)
+        return nil
+        #else
         guard #available(iOS 12, *)
             else { return nil }
         
@@ -502,12 +513,13 @@ public final class AddVoiceShortcutActivity: UIActivity {
         guard let lockCache = Store.shared[lock: lockItem.identifier]
             else { assertionFailure("Invalid lock"); return nil }
         
-        let intent = UnlockIntent(lock: lockItem.identifier, name: lockCache.name)
+        let intent = UnlockIntent(identifier: lockItem.identifier, cache: lockCache)
         let shortcut = INShortcut.intent(intent)
         let viewController = INUIAddVoiceShortcutViewController(shortcut: shortcut)
         viewController.modalPresentationStyle = .formSheet
         viewController.delegate = self
         return viewController
+        #endif
     }
 }
 

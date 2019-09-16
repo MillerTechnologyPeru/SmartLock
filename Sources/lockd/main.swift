@@ -86,7 +86,8 @@ func run() throws {
     
     // Intialize Smart Connect BLE Controller
     controller = try LockController(peripheral: peripheral)
-    
+
+    // load files
     controller?.lockServiceController.configurationStore = configurationStore
     controller?.lockServiceController.authorization = try AuthorizationStoreFile(
         url: URL(fileURLWithPath: "/opt/colemancda/lockd/data.json")
@@ -94,6 +95,9 @@ func run() throws {
     controller?.lockServiceController.setupSecret = try LockSetupSecretFile(
         createdAt: URL(fileURLWithPath: "/opt/colemancda/lockd/sharedSecret")
     ).sharedSecret
+    controller?.lockServiceController.events = LockEventsFile(
+        url: URL(fileURLWithPath: "/opt/colemancda/lockd/events.json")
+     )
     
     // setup controller
     if let hardware = try? JSONDecoder().decode(LockHardware.self, from: URL(fileURLWithPath: "/opt/colemancda/lockd/hardware.json")) {

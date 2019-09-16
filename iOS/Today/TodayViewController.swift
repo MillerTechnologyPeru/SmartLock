@@ -15,6 +15,7 @@ import GATT
 import DarwinGATT
 import CoreLock
 import LockKit
+import OpenCombine
 
 final class TodayViewController: UIViewController, NCWidgetProviding {
     
@@ -26,9 +27,9 @@ final class TodayViewController: UIViewController, NCWidgetProviding {
     
     private(set) var items: [Item] = [.noNearbyLocks]
     
-    private var peripheralsObserver: Int?
-    private var informationObserver: Int?
-    private var locksObserver: Int?
+    private var peripheralsObserver: AnyCancellable?
+    private var informationObserver: AnyCancellable?
+    private var locksObserver: AnyCancellable?
     
     @available(iOS 10.0, *)
     private lazy var selectionFeedbackGenerator: UISelectionFeedbackGenerator = {
@@ -38,19 +39,6 @@ final class TodayViewController: UIViewController, NCWidgetProviding {
     }()
     
     // MARK: - Loading
-    
-    deinit {
-        
-        if let observer = peripheralsObserver {
-            Store.shared.peripherals.remove(observer: observer)
-        }
-        if let observer = informationObserver {
-            Store.shared.lockInformation.remove(observer: observer)
-        }
-        if let observer = locksObserver {
-            Store.shared.locks.remove(observer: observer)
-        }
-    }
         
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -76,13 +64,13 @@ final class TodayViewController: UIViewController, NCWidgetProviding {
         BeaconController.shared.scanBeacons()
         
         // Observe changes
-        peripheralsObserver = Store.shared.peripherals.observe { [weak self] _ in
+        peripheralsObserver = Store.shared.peripherals.sink { [weak self] _ in
             mainQueue { self?.configureView() }
         }
-        informationObserver = Store.shared.lockInformation.observe { [weak self] _ in
+        informationObserver = Store.shared.lockInformation.sink { [weak self] _ in
             mainQueue { self?.configureView() }
         }
-        locksObserver = Store.shared.locks.observe { [weak self] _ in
+        locksObserver = Store.shared.locks.sink { [weak self] _ in
             mainQueue { self?.configureView() }
         }
         
@@ -92,7 +80,7 @@ final class TodayViewController: UIViewController, NCWidgetProviding {
         // scan for locks
         if Store.shared.lockInformation.value.isEmpty {
             DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
-                self?.reloadData()
+                self?.scan()
             }
         }
         
@@ -115,6 +103,9 @@ final class TodayViewController: UIViewController, NCWidgetProviding {
         
         log("☀️ Update Widget Data")
         
+        // load updated lock information
+        Store.shared.loadCache()
+        
         if #available(iOS 10.0, *) {
             selectionFeedbackGenerator.prepare()
         }
@@ -125,7 +116,7 @@ final class TodayViewController: UIViewController, NCWidgetProviding {
         // If there's no update required, use NCUpdateResult.NoData
         // If there's an update, use NCUpdateResult.NewData
         
-        reloadData { completionHandler($0 ? .newData : .failed) }
+        scan { completionHandler($0 ? .newData : .failed) }
     }
     
     @available(iOSApplicationExtension 10.0, *)
@@ -149,6 +140,9 @@ final class TodayViewController: UIViewController, NCWidgetProviding {
     }
     
     private func configureView() {
+        
+        // load updated lock information
+        Store.shared.loadCache()
         
         let locks = Store.shared.peripherals.value.values
             .lazy
@@ -174,14 +168,16 @@ final class TodayViewController: UIViewController, NCWidgetProviding {
         }
     }
     
-    private func reloadData(_ completion: ((Bool) -> ())? = nil) {
+    private func scan(_ completion: ((Bool) -> ())? = nil) {
+        
+        // load updated lock information
+        Store.shared.loadCache()
         
         // scan beacons
         BeaconController.shared.scanBeacons()
         
         // scan for devices
         async {
-            log("Scanning...")
             do { try Store.shared.scan(duration: 1.0) }
             catch {
                 log("⚠️ Could not scan: \(error)")
@@ -203,6 +199,7 @@ final class TodayViewController: UIViewController, NCWidgetProviding {
             cell.activityIndicatorView.isHidden = true
             cell.permissionView.isHidden = true
             cell.selectionStyle = .none
+            cell.accessoryType = .none
         case let .lock(_, cache):
             let permission = cache.key.permission
             cell.lockTitleLabel.text = cache.name
@@ -211,6 +208,7 @@ final class TodayViewController: UIViewController, NCWidgetProviding {
             cell.activityIndicatorView.isHidden = true
             cell.permissionView.isHidden = false
             cell.selectionStyle = .default
+            cell.accessoryType = .detailButton
         }
     }
     
@@ -222,7 +220,7 @@ final class TodayViewController: UIViewController, NCWidgetProviding {
         
         switch item {
         case .noNearbyLocks:
-            reloadData()
+            scan()
         case let .lock(identifier, cache):
             // unlock
             async {
@@ -269,6 +267,15 @@ extension TodayViewController: UITableViewDelegate {
         defer { tableView.deselectRow(at: indexPath, animated: true) }
         let item = self[indexPath]
         select(item)
+    }
+    
+    func tableView(_ tableView: UITableView, accessoryButtonTappedForRowWith indexPath: IndexPath) {
+        
+        let item = self[indexPath]
+        guard case let .lock(identifier, _) = item
+            else { assertionFailure(); return }
+        let url = LockURL.unlock(lock: identifier)
+        self.extensionContext?.open(url.rawValue, completionHandler: nil)
     }
 }
 

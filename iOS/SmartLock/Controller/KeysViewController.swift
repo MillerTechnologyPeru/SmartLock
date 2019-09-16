@@ -14,6 +14,7 @@ import GATT
 import CoreLock
 import LockKit
 import JGProgressHUD
+import OpenCombine
 
 final class KeysViewController: UITableViewController {
     
@@ -23,16 +24,9 @@ final class KeysViewController: UITableViewController {
         didSet { configureView() }
     }
     
-    private var locksObserver: Int?
+    private var locksObserver: AnyCancellable?
     
     // MARK: - Loading
-    
-    deinit {
-        
-        if let observer = self.locksObserver {
-            Store.shared.locks.remove(observer: observer)
-        }
-    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -43,7 +37,7 @@ final class KeysViewController: UITableViewController {
         tableView.estimatedRowHeight = 60
         
         // load data
-        locksObserver = Store.shared.locks.observe { locks in
+        locksObserver = Store.shared.locks.sink { locks in
             mainQueue { [weak self] in self?.reloadData(locks) }
         }
         
@@ -55,6 +49,19 @@ final class KeysViewController: UITableViewController {
         
         userActivity = NSUserActivity(.screen(.keys))
         userActivity?.becomeCurrent()
+        
+        #if targetEnvironment(macCatalyst)
+        syncCloud()
+        #endif
+    }
+    
+    // MARK: - Actions
+    
+    @IBAction func importFile(_ sender: UIBarButtonItem) {
+        
+        let documentPicker = UIDocumentPickerViewController(documentTypes: ["com.colemancda.lock.ekey"], in: .import)
+        documentPicker.delegate = self
+        self.present(documentPicker, sender: .barButtonItem(sender))
     }
     
     // MARK: - Methods
@@ -96,7 +103,6 @@ final class KeysViewController: UITableViewController {
     }
     
     private func select(_ item: Item) {
-        
         select(lock: item.identifier)
     }
     
@@ -149,6 +155,7 @@ final class KeysViewController: UITableViewController {
         select(item)
     }
     
+    #if !targetEnvironment(macCatalyst)
     override func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
         
         var actions = [UITableViewRowAction]()
@@ -157,13 +164,11 @@ final class KeysViewController: UITableViewController {
         let delete = UITableViewRowAction(style: .destructive, title: "Delete") {
             
             assert($1 == indexPath)
-            
             let alert = UIAlertController(title: NSLocalizedString("Confirmation", comment: "DeletionConfirmation"),
                                           message: "Are you sure you want to delete this key?",
-                                          preferredStyle: UIAlertController.Style.alert)
+                                          preferredStyle: .alert)
             
             alert.addAction(UIAlertAction(title: NSLocalizedString("Cancel", comment: "Cancel"), style: .cancel, handler: { (UIAlertAction) in
-                
                 alert.dismiss(animated: true, completion: nil)
             }))
             
@@ -178,8 +183,49 @@ final class KeysViewController: UITableViewController {
         }
         
         actions.append(delete)
-        
         return actions
+    }
+    #endif
+}
+
+// MARK: - UIDocumentPickerDelegate
+
+extension KeysViewController: UIDocumentPickerDelegate {
+    
+    func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
+        
+        controller.dismiss(animated: true, completion: nil)
+        
+        // parse eKey file
+        guard let url = urls.first,
+            let data = try? Data(contentsOf: url),
+            let newKey = try? JSONDecoder().decode(NewKey.Invitation.self, from: data) else {
+                
+                showErrorAlert("Invalid Key file.")
+                return
+        }
+        
+        self.open(newKey: newKey)
+    }
+    
+    func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentAt url: URL) {
+        
+        controller.dismiss(animated: true, completion: nil)
+        
+        // parse eKey file
+        guard let data = try? Data(contentsOf: url),
+            let newKey = try? JSONDecoder().decode(NewKey.Invitation.self, from: data) else {
+                
+                showErrorAlert("Invalid Key file.")
+                return
+        }
+        
+        self.open(newKey: newKey)
+    }
+    
+    func documentPickerWasCancelled(_ controller: UIDocumentPickerViewController) {
+        
+        controller.dismiss(animated: true, completion: nil)
     }
 }
 

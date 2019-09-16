@@ -16,7 +16,6 @@ public typealias LockManager = CoreLock.LockManager<NativeCentral>
 public extension LockManager where Central == NativeCentral {
     
     static var shared: LockManager {
-        
         return LockManagerCache.manager
     }
 }
@@ -31,9 +30,7 @@ public typealias NativeCentral = DarwinCentral
 private struct LockManagerCache {
     
     static let options = DarwinCentral.Options(showPowerAlert: false, restoreIdentifier: nil)
-    
     static let central = DarwinCentral(options: options)
-    
     static let manager = LockManager(central: central)
 }
 

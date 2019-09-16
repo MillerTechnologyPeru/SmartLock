@@ -17,8 +17,8 @@ import CoreBluetooth
 import DarwinGATT
 import AVFoundation
 import Intents
-import QRCodeReader
 import JGProgressHUD
+import OpenCombine
 
 final class NearbyLocksViewController: UITableViewController {
     
@@ -27,10 +27,8 @@ final class NearbyLocksViewController: UITableViewController {
     // MARK: - Properties
     
     private var items = [LockPeripheral<NativeCentral>]()
-    
-    let scanDuration: TimeInterval = 3.0
-    
-    internal lazy var progressHUD: JGProgressHUD = JGProgressHUD(style: .dark)
+        
+    internal var progressHUD: JGProgressHUD?
     
     @available(iOS 10.0, *)
     private lazy var selectionFeedbackGenerator: UISelectionFeedbackGenerator = {
@@ -46,24 +44,11 @@ final class NearbyLocksViewController: UITableViewController {
         return feedbackGenerator
     }()
     
-    private var peripheralsObserver: Int?
-    private var informationObserver: Int?
-    private var locksObserver: Int?
+    private var peripheralsObserver: AnyCancellable?
+    private var informationObserver: AnyCancellable?
+    private var locksObserver: AnyCancellable?
     
     // MARK: - Loading
-    
-    deinit {
-        
-        if let observer = peripheralsObserver {
-            Store.shared.peripherals.remove(observer: observer)
-        }
-        if let observer = informationObserver {
-            Store.shared.lockInformation.remove(observer: observer)
-        }
-        if let observer = locksObserver {
-            Store.shared.locks.remove(observer: observer)
-        }
-    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -74,24 +59,26 @@ final class NearbyLocksViewController: UITableViewController {
         tableView.estimatedRowHeight = 60
         
         // observe model changes
-        peripheralsObserver = Store.shared.peripherals.observe { [weak self] _ in
+        peripheralsObserver = Store.shared.peripherals.sink { [weak self] _ in
             mainQueue { self?.configureView() }
         }
-        informationObserver = Store.shared.lockInformation.observe { [weak self] _ in
+        informationObserver = Store.shared.lockInformation.sink { [weak self] _ in
             mainQueue { self?.configureView() }
         }
-        locksObserver = Store.shared.locks.observe { [weak self] _ in
+        locksObserver = Store.shared.locks.sink { [weak self] _ in
             mainQueue { self?.configureView() }
         }
         
         // Update UI
         configureView()
         
+        #if !targetEnvironment(macCatalyst)
         // scan if none is setup
         if Store.shared.locks.value.isEmpty == true {
             DispatchQueue.main.asyncAfter(deadline: .now() + 1.0,
                                           execute: { [weak self] in self?.scan() })
         }
+        #endif
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -102,8 +89,18 @@ final class NearbyLocksViewController: UITableViewController {
             impactFeedbackGenerator.prepare()
         }
         
-        // Update beacon status
-        BeaconController.shared.scanBeacons()
+        #if targetEnvironment(macCatalyst)
+        scan()
+        #else
+        async {
+            if BeaconController.shared.locks.isEmpty {
+                mainQueue { [weak self] in self?.scan() }
+            } else {
+                // Update beacon status
+                BeaconController.shared.scanBeacons()
+            }
+        }
+        #endif
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -111,6 +108,10 @@ final class NearbyLocksViewController: UITableViewController {
         
         userActivity = NSUserActivity(.screen(.nearbyLocks))
         userActivity?.becomeCurrent()
+        
+        #if targetEnvironment(macCatalyst)
+        syncCloud()
+        #endif
     }
     
     // MARK: - Actions
@@ -131,25 +132,21 @@ final class NearbyLocksViewController: UITableViewController {
         self.refreshControl?.endRefreshing()
         
         /// ignore if off or not authorized
-        #if os(iOS)
         guard LockManager.shared.central.state == .poweredOn
             else { return } // cannot scan
-        #endif
         
         userActivity = NSUserActivity(.screen(.nearbyLocks))
         userActivity?.becomeCurrent()
         
         // refresh iBeacons in background
         BeaconController.shared.scanBeacons()
-        
-        let scanDuration = self.scanDuration
-        
+                
         // reset table
         self.items.removeAll(keepingCapacity: true)
         
         // scan
         performActivity({
-            try Store.shared.scan(duration: scanDuration)
+            try Store.shared.scan()
             for peripheral in Store.shared.peripherals.value.values {
                 do { try Store.shared.readInformation(peripheral) }
                 catch { log("⚠️ Could not read information for peripheral \(peripheral.scanData.peripheral)") }
@@ -184,6 +181,14 @@ final class NearbyLocksViewController: UITableViewController {
         select(item)
     }
     
+    override func tableView(_ tableView: UITableView, accessoryButtonTappedForRowWith indexPath: IndexPath) {
+        
+        let lock = self[indexPath]
+        guard let information = Store.shared.lockInformation.value[lock.scanData.peripheral]
+            else { assertionFailure(); return }
+        view(lock: information.identifier)
+    }
+    
     // MARK: - Private Methods
     
     private subscript (indexPath: IndexPath) -> LockPeripheral<NativeCentral> {
@@ -206,6 +211,7 @@ final class NearbyLocksViewController: UITableViewController {
         let detail: String
         let permission: PermissionType?
         let isEnabled: Bool
+        let showDetail: Bool
         
         if let information = Store.shared.lockInformation.value[lock.scanData.peripheral] {
             
@@ -222,14 +228,15 @@ final class NearbyLocksViewController: UITableViewController {
                 
                 // known lock
                 if let lockCache = Store.shared[lock: information.identifier] {
-                    
                     permission = lockCache.key.permission.type
                     title = lockCache.name
                     detail = lockCache.key.permission.localizedText
+                    showDetail = true
                 } else {
                     title = "Lock"
                     detail = information.identifier.description
                     permission = .anytime
+                    showDetail = false
                 }
                 
             case .setup:
@@ -237,6 +244,7 @@ final class NearbyLocksViewController: UITableViewController {
                 title = "Setup"
                 detail = information.identifier.description
                 permission = .owner
+                showDetail = false
             }
         } else {
             
@@ -244,6 +252,7 @@ final class NearbyLocksViewController: UITableViewController {
             title = "Loading..."
             detail = ""
             permission = nil
+            showDetail = false
             
             if cell.activityIndicatorView.isHidden {
                 cell.activityIndicatorView.isHidden = false
@@ -261,8 +270,8 @@ final class NearbyLocksViewController: UITableViewController {
         
         // hide image if loading
         cell.permissionView.isHidden = permission == nil
-        
         cell.selectionStyle = isEnabled ? .default : .none
+        cell.accessoryType = showDetail ? .detailDisclosureButton : .none
     }
     
     private func select(_ lock: LockPeripheral<NativeCentral>) {
@@ -280,7 +289,13 @@ final class NearbyLocksViewController: UITableViewController {
         
         switch information.status {
         case .setup:
+            #if targetEnvironment(macCatalyst)
+            showErrorAlert("Cannot setup on macOS.")
+            #elseif targetEnvironment(simulator)
+            showErrorAlert("Cannot setup in iOS simulator")
+            #else
             setup(lock: lock)
+            #endif
         case .unlock:
             if let _ = Store.shared[lock: identifier] {
                 donateUnlockIntent(for: identifier)
@@ -294,4 +309,4 @@ final class NearbyLocksViewController: UITableViewController {
 
 // MARK: - ActivityIndicatorViewController
 
-extension NearbyLocksViewController: ActivityIndicatorViewController { }
+extension NearbyLocksViewController: ProgressHUDViewController { }

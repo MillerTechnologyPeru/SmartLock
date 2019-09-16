@@ -17,12 +17,17 @@ public enum KeychainGroup: String {
 public enum KeychainService: String {
     
     case lock = "com.colemancda.Lock"
+    case lockCloud = "com.colemancda.Lock.Cloud"
 }
 
 public extension Keychain {
     
     convenience init(accessGroup: KeychainGroup) {
         self.init(accessGroup: accessGroup.rawValue)
+    }
+    
+    convenience init(service: KeychainService) {
+        self.init(service: service.rawValue)
     }
     
     convenience init(service: KeychainService, accessGroup: KeychainGroup) {

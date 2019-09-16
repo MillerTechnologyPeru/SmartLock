@@ -9,7 +9,6 @@
 import Foundation
 import UIKit
 import CoreLock
-import LockKit
 import Intents
 
 public extension ActivityIndicatorViewController where Self: UIViewController {
@@ -32,7 +31,7 @@ public extension ActivityIndicatorViewController where Self: UIViewController {
     }
     
     func unlock(lock: LockPeripheral<NativeCentral>, action: UnlockAction = .default) {
-                
+        
         performActivity({ try Store.shared.unlock(lock, action: action) })
     }
 }
@@ -43,10 +42,13 @@ public extension UIViewController {
     ///
     /// - Note: Prior to iOS 12 this method sets the current user activity.
     func donateUnlockIntent(for lock: UUID) {
+        #if targetEnvironment(macCatalyst)
+        #else
+        guard let lockCache = Store.shared[lock: lock]
+            else { return}
         
-        if #available(iOS 12, iOSApplicationExtension 12.0, *),
-            let lockCache = Store.shared[lock: lock] {
-            let intent = UnlockIntent(lock: lock, name: lockCache.name)
+        if #available(iOS 12, iOSApplicationExtension 12.0, *) {
+            let intent = UnlockIntent(identifier: lock, cache: lockCache)
             let interaction = INInteraction(intent: intent, response: nil)
             interaction.donate { error in
                 if let error = error {
@@ -58,5 +60,6 @@ public extension UIViewController {
             self.userActivity = NSUserActivity(.action(.unlock(lock)))
             self.userActivity?.becomeCurrent()
         }
+        #endif
     }
 }

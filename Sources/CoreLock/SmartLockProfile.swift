@@ -28,8 +28,10 @@ public enum LockService: GATTProfileService {
         SetupCharacteristic.self,
         CreateNewKeyCharacteristic.self,
         ConfirmNewKeyCharacteristic.self,
+        RemoveKeyCharacteristic.self,
         ListKeysCharacteristic.self,
         KeysCharacteristic.self,
-        RemoveKeyCharacteristic.self
+        ListEventsCharacteristic.self,
+        EventsCharacteristic.self
     ]
 }

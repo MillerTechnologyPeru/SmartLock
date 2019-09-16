@@ -13,7 +13,7 @@ import GATT
 import CoreLock
 import JGProgressHUD
 
-public final class LockPermissionsViewController: UITableViewController, ActivityIndicatorViewController {
+public final class LockPermissionsViewController: UITableViewController {
     
     // MARK: - Properties
     
@@ -25,7 +25,7 @@ public final class LockPermissionsViewController: UITableViewController, Activit
         didSet { configureView() }
     }
     
-    public let progressHUD = JGProgressHUD(style: .dark)
+    public var progressHUD: JGProgressHUD?
     
     private static let dateFormatter: DateFormatter = {
         let dateFormatter = DateFormatter()
@@ -36,6 +36,15 @@ public final class LockPermissionsViewController: UITableViewController, Activit
     
     // MARK: - Loading
     
+    public static func fromStoryboard(with lock: UUID, completion: (() -> ())? = nil) -> LockPermissionsViewController {
+        
+        guard let viewController = R.storyboard.lockPermissions.lockPermissionsViewController()
+            else { fatalError("Unable to load \(self) from storyboard") }
+        viewController.lockIdentifier = lock
+        viewController.completion = completion
+        return viewController
+    }
+    
     public override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -43,6 +52,7 @@ public final class LockPermissionsViewController: UITableViewController, Activit
         
         // set user activity
         userActivity = NSUserActivity(.action(.shareKey(lockIdentifier)))
+        userActivity?.becomeCurrent()
         
         // setup table view
         tableView.rowHeight = UITableView.automaticDimension
@@ -59,49 +69,30 @@ public final class LockPermissionsViewController: UITableViewController, Activit
     public override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
-        view.bringSubviewToFront(progressHUD)
+        if let progressHUD = self.progressHUD {
+            view.bringSubviewToFront(progressHUD)
+        }
     }
     
     // MARK: - Actions
     
     @IBAction func reloadData(_ sender: AnyObject? = nil) {
         
-        self.showProgressHUD()
+        guard let lockIdentifier = self.lockIdentifier
+            else { assertionFailure(); return }
         
-        let lockIdentifier = self.lockIdentifier!
-        
-        guard let lockCache = Store.shared[lock: lockIdentifier],
-            let keyData = Store.shared[key: lockCache.key.identifier]
-            else { fatalError() }
-        
-        async { [weak self] in
-            let key = KeyCredentials(identifier: lockCache.key.identifier, secret: keyData)
-            do {
-                guard let peripheral = Store.shared[peripheral: lockIdentifier]
-                    else { throw CentralError.unknownPeripheral }
-                try LockManager.shared.listKeys(for: peripheral, with: key, notification: { (list, isComplete) in
-                    mainQueue { self?.list = list }
-                })
-                mainQueue { self?.dismissProgressHUD() }
-            }
-            catch {
-                mainQueue {
-                    self?.showErrorAlert("\(error)",
-                        okHandler: { self?.tableView.reloadData() },
-                        retryHandler: { self?.reloadData() })
-                }
-                return
-            }
-        }
+        performActivity({
+            guard let peripheral = try Store.shared.device(for: lockIdentifier, scanDuration: 1.0)
+                else { throw CentralError.unknownPeripheral }
+            try Store.shared.listKeys(peripheral, notification: { (list, isComplete) in
+                mainQueue { [weak self] in self?.list = list }
+            })
+        })
     }
     
-    @IBAction func newKey(_ sender: AnyObject? = nil) {
+    @IBAction func newKey(_ sender: AnyObject) {
         
-        let navigationController = UIStoryboard(name: "NewKey", bundle: .lockKit).instantiateInitialViewController() as! UINavigationController
-        let destinationViewController = navigationController.viewControllers.first! as! NewKeySelectPermissionViewController
-        destinationViewController.lockIdentifier = lockIdentifier
-        destinationViewController.completion = { _ in mainQueue { self.reloadData() } }
-        self.present(navigationController, animated: true, completion: nil)
+        self.shareKey(lock: lockIdentifier)
     }
     
     @IBAction func done(_ sender: AnyObject? = nil) {
@@ -193,6 +184,7 @@ public final class LockPermissionsViewController: UITableViewController, Activit
         // present key detail VC
     }
     
+    #if !targetEnvironment(macCatalyst)
     public override func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
         
         var actions = [UITableViewRowAction]()
@@ -224,7 +216,7 @@ public final class LockPermissionsViewController: UITableViewController, Activit
                 
                 alert.dismiss(animated: true) { }
                 
-                self.showProgressHUD()
+                self.showActivity()
                 
                 async { [weak self] in
                     
@@ -238,13 +230,13 @@ public final class LockPermissionsViewController: UITableViewController, Activit
                     catch {
                         mainQueue {
                             self?.showErrorAlert(error.localizedDescription)
-                            self?.dismissProgressHUD(animated: false)
+                            self?.hideActivity(animated: false)
                         }
                         return
                     }
                     mainQueue {
                         self?.list.remove(keyEntry.identifier, type: keyEntry.type)
-                        self?.dismissProgressHUD(animated: true)
+                        self?.hideActivity(animated: true)
                     }
                 }                
             }))
@@ -256,7 +248,12 @@ public final class LockPermissionsViewController: UITableViewController, Activit
         
         return actions
     }
+    #endif
 }
+
+// MARK: - ActivityIndicatorViewController
+
+extension LockPermissionsViewController: ProgressHUDViewController { }
 
 // MARK: - Supporting Types
 

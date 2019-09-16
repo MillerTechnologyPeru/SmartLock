@@ -49,8 +49,11 @@ public extension Permission {
 
 public extension Permission {
     
-    /// Whether the permission allows for sharing keys.
-    var canShareKeys: Bool {
+    /// User can administrate the device.
+    ///
+    /// - View and edit keys.
+    /// - View full event history.
+    var isAdministrator: Bool {
         switch self {
         case .owner,
              .admin:
@@ -70,7 +73,7 @@ public extension Permission {
     struct Schedule: Codable, Equatable, Hashable {
         
         /// The date this permission becomes invalid.
-        public var expiry: Date
+        public var expiry: Date?
         
         /// The minute interval range the lock can be unlocked.
         public var interval: Interval
@@ -78,7 +81,7 @@ public extension Permission {
         /// The days of the week the permission is valid
         public var weekdays: Weekdays
         
-        public init(expiry: Date = .distantFuture,
+        public init(expiry: Date? = nil,
                     interval: Interval = .anytime,
                     weekdays: Weekdays = .all) {
             
@@ -90,7 +93,9 @@ public extension Permission {
         /// Verify that the specified date is valid for this schedule.
         public func isValid(for date: Date = Date()) -> Bool {
             
-            guard date < expiry else { return false }
+            if let expiry = self.expiry {
+                guard date < expiry else { return false }
+            }
             
             // need to get hour and minute of day to validate
             let dateComponents = DateComponents(date: date)
@@ -170,46 +175,112 @@ public extension Permission.Schedule {
             self.friday = friday
             self.saturday = saturday
         }
+    }
+}
+
+public extension Permission.Schedule.Weekdays {
+    
+    static let all = Permission.Schedule.Weekdays(
+        sunday: true,
+        monday: true,
+        tuesday: true,
+        wednesday: true,
+        thursday: true,
+        friday: true,
+        saturday: true
+    )
+    
+    static let none = Permission.Schedule.Weekdays(
+        sunday: false,
+        monday: false,
+        tuesday: false,
+        wednesday: false,
+        thursday: false,
+        friday: false,
+        saturday: false
+    )
+}
+
+public extension Permission.Schedule.Weekdays {
+    
+    subscript (weekday: Day) -> Bool {
         
-        public static let all = Weekdays(
-            sunday: true,
-            monday: true,
-            tuesday: true,
-            wednesday: true,
-            thursday: true,
-            friday: true,
-            saturday: true
-        )
+        get {
+            switch weekday {
+            case .sunday:       return sunday
+            case .monday:       return monday
+            case .tuesday:      return tuesday
+            case .wednesday:    return wednesday
+            case .thursday:     return thursday
+            case .friday:       return friday
+            case .saturday:     return saturday
+            }
+        }
         
-        public subscript (weekday: Int) -> Bool {
-            
-            get {
-                
-                switch weekday {
-                case 1: return sunday
-                case 2: return monday
-                case 3: return tuesday
-                case 4: return wednesday
-                case 5: return thursday
-                case 6: return friday
-                case 7: return saturday
-                default: fatalError("Invalid weekday \(weekday)")
-                }
+        set {
+            switch weekday {
+            case .sunday:       sunday = newValue
+            case .monday:       monday = newValue
+            case .tuesday:      tuesday = newValue
+            case .wednesday:    wednesday = newValue
+            case .thursday:     thursday = newValue
+            case .friday:       friday = newValue
+            case .saturday:     saturday = newValue
             }
-            
-            set {
-                
-                switch weekday {
-                case 1: sunday = newValue
-                case 2: monday = newValue
-                case 3: tuesday = newValue
-                case 4: wednesday = newValue
-                case 5: thursday = newValue
-                case 6: friday = newValue
-                case 7: saturday = newValue
-                default: fatalError("Invalid weekday \(weekday)")
-                }
-            }
+        }
+    }
+}
+
+internal extension Permission.Schedule.Weekdays {
+    
+    subscript (weekday: Int) -> Bool {
+        
+        // TODO: Verify the day starts at 1 and not 0
+        switch weekday {
+        case 1: return sunday
+        case 2: return monday
+        case 3: return tuesday
+        case 4: return wednesday
+        case 5: return thursday
+        case 6: return friday
+        case 7: return saturday
+        default: fatalError("Invalid weekday \(weekday)")
+        }
+    }
+}
+
+public extension Permission.Schedule.Weekdays {
+    
+    /// Day of the week.
+    enum Day: UInt8, BitMaskOption {
+        
+        case sunday     = 0b00000001
+        case monday     = 0b00000010
+        case tuesday    = 0b00000100
+        case wednesday  = 0b00001000
+        case thursday   = 0b00010000
+        case friday     = 0b00100000
+        case saturday   = 0b01000000
+    }
+}
+
+extension Permission.Schedule.Weekdays: ExpressibleByArrayLiteral {
+    
+    public init(arrayLiteral elements: Day...) {
+        self.init(days: .init(elements))
+    }
+}
+
+public extension Permission.Schedule.Weekdays {
+    
+    init(days: BitMaskOptionSet<Day>) {
+        self = .none
+        days.forEach { self[$0] = true }
+    }
+    
+    var days: BitMaskOptionSet<Day> {
+        return Day.allCases.reduce(into: BitMaskOptionSet<Day>()) {
+            if self[$1] { $0.insert($1) }
         }
     }
 }
@@ -219,7 +290,6 @@ public extension Permission.Schedule {
 extension Permission: Codable {
     
     public enum CodingKeys: String, CodingKey {
-        
         case type
         case schedule
     }
@@ -227,7 +297,6 @@ extension Permission: Codable {
     public init(from decoder: Decoder) throws {
         
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        
         let type = try container.decode(PermissionType.self, forKey: .type)
         
         switch type {
@@ -246,16 +315,13 @@ extension Permission: Codable {
     public func encode(to encoder: Encoder) throws {
         
         var container = encoder.container(keyedBy: CodingKeys.self)
-        
         try container.encode(type, forKey: .type)
         
         switch self {
-            
         case .owner,
              .admin,
              .anytime:
             break
-            
         case let .scheduled(schedule):
             try container.encode(schedule, forKey: .schedule)
         }
@@ -265,7 +331,6 @@ extension Permission: Codable {
 extension Permission.Schedule.Interval: Codable {
     
     public enum CodingKeys: String, CodingKey {
-        
         case max
         case min
     }
@@ -287,42 +352,14 @@ extension Permission.Schedule.Interval: Codable {
 }
 
 extension Permission.Schedule.Weekdays: TLVCodable {
-    
-    internal static var length: Int { return 7 }
-    
+        
     public init?(tlvData data: Data) {
-        
-        guard data.count == type(of: self).length
+        guard data.count == 1
             else { return nil }
-        
-        guard let sunday = Bool(byteValue: data[0]),
-            let monday = Bool(byteValue: data[1]),
-            let tuesday = Bool(byteValue: data[2]),
-            let wednesday = Bool(byteValue: data[3]),
-            let thursday = Bool(byteValue: data[4]),
-            let friday = Bool(byteValue: data[5]),
-            let saturday = Bool(byteValue: data[6])
-            else { return nil }
-        
-        self.sunday = sunday
-        self.monday = monday
-        self.tuesday = tuesday
-        self.wednesday = wednesday
-        self.thursday = thursday
-        self.friday = friday
-        self.saturday = saturday
+        self.init(days: .init(rawValue: data[0]))
     }
     
     public var tlvData: Data {
-        
-        return Data([
-            sunday.byteValue,
-            monday.byteValue,
-            tuesday.byteValue,
-            wednesday.byteValue,
-            thursday.byteValue,
-            friday.byteValue,
-            saturday.byteValue
-            ])
+        return Data([days.rawValue])
     }
 }

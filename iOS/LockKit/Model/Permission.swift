@@ -10,6 +10,9 @@ import Foundation
 import UIKit
 import CoreLock
 
+#if os(iOS)
+import Rswift
+
 public extension UIImage {
     
     convenience init(permission: Permission) {
@@ -17,26 +20,28 @@ public extension UIImage {
     }
     
     convenience init(permissionType: PermissionType) {
-        self.init(named: permissionType.imageName, in: .lockKit, compatibleWith: nil)!
+        self.init(named: permissionType.image.name, in: .lockKit, compatibleWith: nil)!
     }
 }
 
 public extension PermissionType {
     
-    var imageName: String {
+    var image: ImageResource {
         
         switch self {
         case .owner:
-            return R.image.permissionBadgeOwner.name
+            return R.image.permissionBadgeOwner
         case .admin:
-            return R.image.permissionBadgeAdmin.name
+            return R.image.permissionBadgeAdmin
         case .anytime:
-            return R.image.permissionBadgeAnytime.name
+            return R.image.permissionBadgeAnytime
         case .scheduled:
-            return R.image.permissionBadgeScheduled.name
+            return R.image.permissionBadgeScheduled
         }
     }
 }
+
+#endif
 
 public extension PermissionType {
     
