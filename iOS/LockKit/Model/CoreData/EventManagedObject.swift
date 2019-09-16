@@ -133,4 +133,9 @@ internal extension NSManagedObjectContext {
             ?? LockManagedObject(identifier: lock, name: "", context: self)
         return try insert(events, for: managedObject)
     }
+    
+    @discardableResult
+    func insert(_ event: LockEvent, for lock: UUID) throws -> EventManagedObject {
+        return try insert([event], for: lock)[0]
+    }
 }

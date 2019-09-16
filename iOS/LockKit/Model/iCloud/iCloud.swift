@@ -89,7 +89,7 @@ public final class CloudStore {
                 .sorted(by: { $0.date! > $1.date! })
             for eventManagedObject in events {
                 guard let event = LockEvent(managedObject: eventManagedObject)
-                    .flatMap({ LockEvent.Cloud($0) }) else {
+                    .flatMap({ LockEvent.Cloud(event: $0, for: lock.id.rawValue) }) else {
                     assertionFailure("Invalid \(eventManagedObject)")
                     continue
                 }
@@ -113,21 +113,11 @@ public final class CloudStore {
         assert(type(of: encodable.cloudIdentifier).cloudRecordType == record.recordType)
         record.setParent(parent)
         operation.isAtomic = true
-        var cloudKitError: Swift.Error?
-        let semaphore = DispatchSemaphore(value: 0)
-        operation.modifyRecordsCompletionBlock = { _,_,error in
-            cloudKitError = error
-            semaphore.signal()
-        }
-        container.privateCloudDatabase.add(operation)
-        semaphore.wait()
-        if let error = cloudKitError {
-            throw error
-        }
+        try container.privateCloudDatabase.modify(operation)
         return record
     }
     
-    public func download() throws -> (applicationData: ApplicationData, keys: [UUID: KeyData])? {
+    public func downloadApplicationData() throws -> (applicationData: ApplicationData, keys: [UUID: KeyData])? {
         
         // get iCloud user
         let user = try CloudUser.fetch(in: container, database: .private)
@@ -151,6 +141,47 @@ public final class CloudStore {
         }
         
         return (applicationData, keys)
+    }
+    
+    public func fetchLocks(_ lock: @escaping (CloudLock) throws -> (Bool)) throws {
+        
+        let database = container.privateCloudDatabase
+        
+        let query = CKQuery(
+            recordType: CloudLock.ID.cloudRecordType,
+            predicate: NSPredicate(value: true)
+        )
+        
+        let decoder = CloudKitDecoder(context: database)
+        try database.queryAll(query) { (record) in
+            let value = try decoder.decode(CloudLock.self, from: record)
+            return try lock(value)
+        }
+    }
+    
+    public func fetchEvents(for lock: CloudLock.ID,
+                            event: @escaping (LockEvent.Cloud) throws -> (Bool)) throws {
+        
+        let database = container.privateCloudDatabase
+        
+        let lockReference = CKRecord.Reference(
+            recordID: lock.cloudRecordID,
+            action: .none
+        )
+        
+        let query = CKQuery(
+            recordType: LockEvent.Cloud.ID.cloudRecordType,
+            predicate: NSPredicate(format: "%K == %@", "lock", lockReference)
+        )
+        query.sortDescriptors = [
+            .init(keyPath: \LockEvent.Cloud.date, ascending: false)
+        ]
+        
+        let decoder = CloudKitDecoder(context: database)
+        try database.queryAll(query) { (record) in
+            let value = try decoder.decode(LockEvent.Cloud.self, from: record)
+            return try event(value)
+        }
     }
     
     private func didUpload(applicationData: ApplicationData) {
@@ -291,15 +322,21 @@ public extension Store {
         // make sure iCloud is enabled
         guard preferences.isCloudEnabled else { return }
         
+        // update from filesystem just in case
+        loadCache()
+        
+        // download to CoreData
+        try downloadCloudLocks()
+        
+        // local data should override remote
+        updateCoreData()
+        
+        // upload from CoreData
+        try uploadCloudLocks()
+        
         // download and upload application data
         if try downloadCloudApplicationData(conflicts: conflicts) {
             try uploadCloudApplicationData()
-        }
-        
-        // upload cache
-        let context = persistentContainer.newBackgroundContext()
-        try context.performErrorBlockAndWait { [unowned self] in
-            try self.cloud.upload(context: context)
         }
         
         // cache date last updated
@@ -308,12 +345,46 @@ public extension Store {
         }
     }
     
+    func uploadCloudLocks() throws {
+        
+        let context = persistentContainer.newBackgroundContext()
+        try context.performErrorBlockAndWait { [unowned self] in
+            try self.cloud.upload(context: context)
+        }
+    }
+    
+    func downloadCloudLocks() throws {
+        
+        let context = backgroundContext
+        try cloud.fetchLocks { [weak self] (lock) in
+            guard let self = self else { return false }
+            // store in CoreData
+            context.commit { try $0.insert(lock) }
+            // fetch events
+            try self.cloud.fetchEvents(for: lock.id) { (cloudEvent) in
+                guard let event = LockEvent(cloudEvent) else {
+                    assertionFailure()
+                    return true // more events, ignore invalid cloud value
+                }
+                // if already in CoreData, then stop
+                guard try EventManagedObject.find(event.identifier, in: context) == nil
+                    else { return false }
+                // save event in CoreData
+                context.commit {
+                    try $0.insert(event, for: cloudEvent.lock.rawValue)
+                }
+                return true
+            }
+            return true
+        }
+    }
+    
     @discardableResult
     func downloadCloudApplicationData(conflicts: (ApplicationData) -> Bool?) throws -> Bool {
         
         assert(Thread.isMainThread == false)
                 
-        guard let (cloudData, cloudKeys) = try cloud.download() else {
+        guard let (cloudData, cloudKeys) = try cloud.downloadApplicationData() else {
             log("☁️ No data in iCloud")
             return true
         }
@@ -425,7 +496,7 @@ public extension ActivityIndicatorViewController where Self: UIViewController {
         
         assert(Thread.isMainThread)
         
-        // TODO: check user preferences to prevent iCloud sync
+        guard Store.shared.preferences.isCloudEnabled else { return }
         
         performActivity(showActivity: showActivity, queue: .cloud, { [weak self] in
             try Store.shared.syncCloud(conflicts: { self?.resolveCloudSyncConflicts($0) })

@@ -19,6 +19,8 @@ public extension LockEvent {
         
         public let type: LockEvent.EventType
         
+        public let lock: CloudLock.ID
+        
         public let date: Date
         
         public let key: UUID
@@ -35,9 +37,10 @@ public extension LockEvent {
 
 internal extension LockEvent.Cloud {
     
-    init(_ value: LockEvent) {
+    init(event: LockEvent, for lock: UUID) {
         
-        switch value {
+        self.lock = .init(rawValue: lock)
+        switch event {
         case let .setup(event):
             self.type = .setup
             self.id = .init(rawValue: event.identifier)

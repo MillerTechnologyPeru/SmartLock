@@ -176,6 +176,17 @@ public final class LockEventsViewController: TableViewController {
         }, completion: { (viewController, _) in
             viewController.needsKeys.removeAll()
         })
+        
+        // attempt to load data from iCloud
+        performActivity({
+            do { try Store.shared.downloadCloudLocks() }
+            catch {
+                log("⚠️ Unable to load data from iCloud: \(error.localizedDescription)")
+                #if DEBUG
+                dump(error)
+                #endif
+            }
+        })
     }
     
     private subscript (indexPath: IndexPath) -> EventManagedObject {

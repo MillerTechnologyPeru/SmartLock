@@ -8,6 +8,7 @@
 
 import Foundation
 import CoreData
+import CoreLock
 
 public final class LockManagedObject: NSManagedObject {
     
@@ -75,6 +76,41 @@ internal extension NSManagedObjectContext {
                                          information: cache.information,
                                          context: self)
             }
+        }
+    }
+    
+    @discardableResult
+    func insert(_ cloudValue: CloudLock) throws -> LockManagedObject {
+        
+        // insert lock
+        let information = LockCache.Information(cloudValue.information)
+        let lockManagedObject: LockManagedObject
+        if let managedObject = try find(identifier: cloudValue.id.rawValue, type: LockManagedObject.self) {
+            managedObject.name = cloudValue.name
+            information.flatMap {
+                managedObject.update(information: $0, context: self)
+            }
+            lockManagedObject = managedObject
+        } else {
+            lockManagedObject = LockManagedObject(identifier: cloudValue.id.rawValue,
+                                                  name: cloudValue.name,
+                                                  information: information,
+                                                  context: self)
+        }
+        // update keys
+        for keyCloudValue in cloudValue.keys {
+            guard let key = Key(keyCloudValue) else {
+                assertionFailure()
+                continue
+            }
+            try insert(key, for: lockManagedObject)
+        }
+        for newKeyCloudValue in cloudValue.newKeys {
+            guard let newKey = NewKey(newKeyCloudValue) else {
+                assertionFailure()
+                continue
+            }
+            try insert(newKey, for: lockManagedObject)
         }
     }
 }

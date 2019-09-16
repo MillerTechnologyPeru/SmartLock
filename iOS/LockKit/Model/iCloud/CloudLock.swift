@@ -12,6 +12,7 @@ import CloudKit
 import CloudKitCodable
 import CoreLock
 
+/// CloudKit Lock
 public struct CloudLock {
     
     public let id: ID
@@ -20,9 +21,9 @@ public struct CloudLock {
     
     public var information: LockCache.Information.Cloud
     
-    public var keys: [Key.Cloud]?
+    public var keys: [Key.Cloud]
     
-    public var newKeys: [NewKey.Cloud]?
+    public var newKeys: [NewKey.Cloud]
 }
 
 public extension CloudLock {

@@ -228,7 +228,7 @@ public final class Store {
         #endif
     }
     
-    private func updateCoreData() {
+    internal func updateCoreData() {
         
         let locks = self.locks.value
         backgroundContext.commit {
