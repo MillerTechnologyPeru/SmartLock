@@ -259,57 +259,53 @@ internal extension ApplicationData {
             else { return nil }
         
         // if local copy is newer, should not be overwritten with older copy.
-        if self.locks != applicationData.locks {
-            if self.keys != applicationData.keys {
-                // overwrite with newer keys
-                guard self.updated <= applicationData.updated
-                    else { return nil }
+        guard self.locks != applicationData.locks else {
+            // locks not changed
+            if self.updated <= applicationData.updated {
                 return applicationData
             } else {
-                // no keys changed, keep newer local copy
-                if self.updated <= applicationData.updated {
-                    return applicationData
-                } else {
-                    return self
-                }
+                return self
             }
-        } else {
-            return applicationData
         }
+        
+        // if local copy is newer, should not be overwritten with older copy.
+        guard self.keys != applicationData.keys else {
+            // no keys changed, keep newer local copy
+            if self.updated <= applicationData.updated {
+                return applicationData
+            } else {
+                return self
+            }
+        }
+        
+        // overwrite with newer cloud data
+        guard self.updated > applicationData.updated
+            else { return applicationData }
+        
+        return nil
     }
 }
 
 public extension Store {
     
     #if os(iOS)
-    func cloudDidChangeExternally(retry: Bool = false) {
+    func cloudDidChangeExternally() {
         
         if let lastUpdatedCloud = self.cloud.lastUpdated() {
-            guard self.applicationData.updated < lastUpdatedCloud
+            guard self.applicationData.updated != lastUpdatedCloud
                 else { return }
         }
         
-        if retry == false {
-            log("☁️ iCloud changed externally")
-        }
+        log("☁️ iCloud changed externally")
         
         DispatchQueue.cloud.async { [weak self] in
             guard let self = self else { return }
-            var conflicts = false
             do {
                 try self.syncCloud(conflicts: { _ in
-                    conflicts = true
                     return nil
                 })
             }
-            catch { log("⚠️ Could not sync iCloud") }
-            // sync again until data is no longer stale
-            if conflicts == false,
-                retry == false,
-                let lastUpdatedCloud = self.cloud.lastUpdated(),
-                self.applicationData.updated < lastUpdatedCloud {
-                self.cloudDidChangeExternally(retry: true)
-            }
+            catch { log("⚠️ Could not sync iCloud: \(error.localizedDescription)") }
         }
     }
     #endif
@@ -396,15 +392,15 @@ public extension Store {
         }
         
         // Import private keys
-        var newKeys = 0
+        var newKeysCount = 0
         for (identifier, keyData) in cloudKeys {
             if self[key: identifier] == nil {
                 self[key: identifier] = keyData
-                newKeys += 1
+                newKeysCount += 1
             }
         }
-        if newKeys > 0 {
-            log("☁️ Imported \(newKeys) keys from iCloud")
+        if newKeysCount > 0 {
+            log("☁️ Imported \(newKeysCount) keys from iCloud")
         }
         
         // Import application data
@@ -445,17 +441,18 @@ public extension Store {
             log("☁️ Aborted iCloud download due to unresolved conflict")
             return false
         }
-        self.applicationData.didUpdate() // define as latest
         // remove old keys
         var removedKeys = 0
         let newData = self.applicationData
-        for oldKey in oldApplicationData.keys {
+        let newKeys = newData.keys.map { $0.identifier }
+        let oldKeys = oldApplicationData.keys.map { $0.identifier }
+        for oldKey in oldKeys {
             // old key no longer exists
-            if newData.keys.contains(oldKey) == false {
-                // remove from keychain
-                self[key: oldKey.identifier] = nil
-                removedKeys += 1
-            }
+            guard newKeys.contains(oldKey) == false
+                else { continue }
+            // remove from keychain
+            self[key: oldKey] = nil
+            removedKeys += 1
         }
         if removedKeys > 0 {
             log("☁️ Removed \(removedKeys) old keys from keychain")
