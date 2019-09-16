@@ -58,7 +58,6 @@ public final class CloudStore {
                        keys: [UUID: KeyData]) throws {
         
         // store lock private keys in iCloud keychain
-        try keychain.removeAll()
         for (keyIdentifier, keyData) in keys {
             assert(applicationData[key: keyIdentifier] != nil, "Invalid key")
             try keychain.set(keyData.data, key: keyIdentifier.uuidString)
