@@ -132,8 +132,8 @@ func run() throws {
                 try hostController.setLockAdvertisingData(lock: lockIdentifier, rssi: 30)
             }
             catch {
+                print("Unable to change advertising")
                 dump(error)
-                Error(error.localizedDescription)
             }
         }
     }
