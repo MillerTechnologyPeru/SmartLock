@@ -86,7 +86,7 @@ func run() throws {
     
     // Intialize Smart Connect BLE Controller
     controller = try LockController(peripheral: peripheral)
-
+    
     // load files
     controller?.lockServiceController.configurationStore = configurationStore
     controller?.lockServiceController.authorization = try AuthorizationStoreFile(
@@ -122,6 +122,21 @@ func run() throws {
     try hostController.setLockAdvertisingData(lock: lockIdentifier, rssi: 30) // FIXME: RSSI
     try hostController.setLockScanResponse()
     try hostController.writeLocalName("Lock")
+    
+    // change advertisment for notifications
+    controller?.lockServiceController.lockChanged = {
+        DispatchQueue.global(qos: .userInteractive).async {
+            do {
+                try hostController.setNotificationAdvertisement(rssi: 30) // FIXME: RSSI
+                sleep(5)
+                try hostController.setLockAdvertisingData(lock: lockIdentifier, rssi: 30)
+            }
+            catch {
+                dump(error)
+                Error(error.localizedDescription)
+            }
+        }
+    }
     
     // run main loop
     RunLoop.main.run()

@@ -33,6 +33,14 @@ public extension BluetoothHostControllerInterface {
         
         try setLowEnergyScanResponse(data, timeout: commandTimeout)
     }
+    
+    /// LE Advertise with iBeacon for data changed
+    func setNotificationAdvertisement(rssi: Int8, commandTimeout: HCICommandTimeout = .default) throws {
+        
+        let beacon = AppleBeacon(uuid: .lockBeaconNotification, rssi: rssi)
+        let flags: GAPFlags = [.lowEnergyGeneralDiscoverableMode, .notSupportedBREDR]
+        try iBeacon(beacon, flags: flags, interval: .min, timeout: commandTimeout)
+    }
 }
 
 #endif

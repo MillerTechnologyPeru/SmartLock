@@ -42,6 +42,8 @@ public final class LockServiceController <Peripheral: PeripheralProtocol> : GATT
     
     public var events: LockEventStore = InMemoryLockEvents()
     
+    public var lockChanged: (() -> ())?
+    
     // handles
     internal let serviceHandle: UInt16
     internal let informationHandle: UInt16
@@ -298,6 +300,8 @@ public final class LockServiceController <Peripheral: PeripheralProtocol> : GATT
             
             try events.save(.setup(.init(key: ownerKey.identifier)))
             
+            lockChanged?()
+            
         } catch { print("Setup error: \(error)") }
     }
     
@@ -335,6 +339,8 @@ public final class LockServiceController <Peripheral: PeripheralProtocol> : GATT
             print("Key \(key.identifier) \(key.name) unlocked with action \(unlock.action)")
             
             try events.save(.unlock(.init(key: key.identifier, action: unlock.action)))
+            
+            lockChanged?()
             
         } catch { print("Unlock error: \(error)")  }
     }
@@ -376,6 +382,8 @@ public final class LockServiceController <Peripheral: PeripheralProtocol> : GATT
             print("Key \(keyIdentifier) \(key.name) created new key \(request.identifier)")
             
             try events.save(.createNewKey(.init(key: key.identifier, newKey: newKey.identifier)))
+            
+            lockChanged?()
             
         } catch { print("Create new key error: \(error)")  }
     }
@@ -420,6 +428,8 @@ public final class LockServiceController <Peripheral: PeripheralProtocol> : GATT
             assert(try! authorization.key(for: key.identifier) != nil, "Key not stored")
             
             try events.save(.confirmNewKey(.init(newKey: newKey.identifier, key: key.identifier)))
+            
+            lockChanged?()
             
         } catch { print("Confirm new key error: \(error)")  }
     }
@@ -468,6 +478,8 @@ public final class LockServiceController <Peripheral: PeripheralProtocol> : GATT
             print("Key \(key.identifier) \(key.name) removed \(characteristic.type) \(characteristic.key)")
             
             try events.save(.removeKey(.init(key: key.identifier, removedKey: characteristic.key, type: characteristic.type)))
+            
+            lockChanged?()
             
         } catch { print("Remove key error: \(error)")  }
     }
