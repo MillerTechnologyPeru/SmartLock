@@ -26,6 +26,41 @@ public final class NewKeyManagedObject: NSManagedObject {
     }
 }
 
+public extension NewKey {
+    
+    init?(managedObject: NewKeyManagedObject) {
+        
+        guard let identifier = managedObject.identifier,
+            let name = managedObject.name,
+            let created = managedObject.created,
+            let permissionType = PermissionType(rawValue: numericCast(managedObject.permission)),
+            let expiration = managedObject.expiration
+            else { return nil }
+        
+        let permission: Permission
+        switch permissionType {
+        case .owner:
+            permission = .owner
+        case .admin:
+            permission = .owner
+        case .anytime:
+            permission = .anytime
+        case .scheduled:
+            guard let schedule = managedObject.schedule.flatMap({ Permission.Schedule(managedObject: $0) })
+                else { return nil }
+            permission = .scheduled(schedule)
+        }
+        
+        self.init(
+            identifier: identifier,
+            name: name,
+            permission: permission,
+            created: created,
+            expiration: expiration
+        )
+    }
+}
+
 // MARK: - IdentifiableManagedObject
 
 extension NewKeyManagedObject: IdentifiableManagedObject { }

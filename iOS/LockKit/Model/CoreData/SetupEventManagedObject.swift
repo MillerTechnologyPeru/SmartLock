@@ -24,6 +24,19 @@ public final class SetupEventManagedObject: EventManagedObject {
     }
 }
 
+public extension LockEvent.Setup {
+    
+    init?(managedObject: SetupEventManagedObject) {
+        
+        guard let identifier = managedObject.identifier,
+            let date = managedObject.date,
+            let key = managedObject.key
+            else { return nil }
+        
+        self.init(identifier: identifier, date: date, key: key)
+    }
+}
+
 // MARK: - IdentifiableManagedObject
 
 extension SetupEventManagedObject: IdentifiableManagedObject { }

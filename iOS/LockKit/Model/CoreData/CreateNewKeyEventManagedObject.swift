@@ -25,6 +25,20 @@ public final class CreateNewKeyEventManagedObject: EventManagedObject {
     }
 }
 
+public extension LockEvent.CreateNewKey {
+    
+    init?(managedObject: CreateNewKeyEventManagedObject) {
+        
+        guard let identifier = managedObject.identifier,
+            let date = managedObject.date,
+            let key = managedObject.key,
+            let pendingKey = managedObject.pendingKey
+            else { return nil }
+        
+        self.init(identifier: identifier, date: date, key: key, newKey: pendingKey)
+    }
+}
+
 // MARK: - IdentifiableManagedObject
 
 extension CreateNewKeyEventManagedObject: IdentifiableManagedObject { }
@@ -41,5 +55,21 @@ public extension CreateNewKeyEventManagedObject {
             return nil
         }
         return try context.find(identifier: newKey, type: NewKeyManagedObject.self)
+    }
+    
+    func confirmKeyEvent(in context: NSManagedObjectContext) throws -> ConfirmNewKeyEventManagedObject? {
+        
+        guard let newKey = self.pendingKey else {
+            assertionFailure("Missing new key value")
+            return nil
+        }
+        
+        let fetchRequest = NSFetchRequest<ConfirmNewKeyEventManagedObject>()
+        fetchRequest.entity = ConfirmNewKeyEventManagedObject.entity()
+        fetchRequest.predicate = NSPredicate(format: "%K == %@", #keyPath(ConfirmNewKeyEventManagedObject.pendingKey), newKey as NSUUID)
+        fetchRequest.fetchLimit = 1
+        fetchRequest.includesSubentities = false
+        fetchRequest.returnsObjectsAsFaults = false
+        return try context.fetch(fetchRequest).first
     }
 }

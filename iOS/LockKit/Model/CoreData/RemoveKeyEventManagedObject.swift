@@ -26,6 +26,21 @@ public final class RemoveKeyEventManagedObject: EventManagedObject {
     }
 }
 
+internal extension LockEvent.RemoveKey {
+    
+    init?(managedObject: RemoveKeyEventManagedObject) {
+        
+        guard let identifier = managedObject.identifier,
+            let date = managedObject.date,
+            let key = managedObject.key,
+            let removedKey = managedObject.removedKey,
+            let type = KeyType(rawValue: numericCast(managedObject.type))
+            else { return nil }
+        
+        self.init(identifier: identifier, date: date, key: key, removedKey: removedKey, type: type)
+    }
+}
+
 // MARK: - IdentifiableManagedObject
 
 extension RemoveKeyEventManagedObject: IdentifiableManagedObject { }

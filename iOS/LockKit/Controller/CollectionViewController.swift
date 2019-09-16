@@ -41,7 +41,6 @@ class CollectionViewController: UICollectionViewController, NSFetchedResultsCont
         
         switch type {
         case .insert:
-            
             if let insertIndexPath = newIndexPath {
                 self.changes.append(.insert(insertIndexPath))
             }
@@ -63,6 +62,8 @@ class CollectionViewController: UICollectionViewController, NSFetchedResultsCont
                 
                 self.changes.append(.move(old: old, new: new))
             }
+        @unknown default:
+            break
         }
     }
     

@@ -59,27 +59,39 @@ public protocol TableViewActivityIndicatorViewController: ActivityIndicatorViewC
     var tableView: UITableView! { get }
     var refreshControl: UIRefreshControl? { get }
     var activityIndicator: UIActivityIndicatorView { get }
+    var activityShouldDisableUserInteration: Bool { get }
 }
 
 public extension TableViewActivityIndicatorViewController {
     
+    var activityShouldDisableUserInteration: Bool {
+        return false
+    }
+    
     func showActivity() {
-        self.view.isUserInteractionEnabled = false
+        if activityShouldDisableUserInteration {
+            view.isUserInteractionEnabled = false
+        }
         if refreshControl?.isRefreshing ?? false {
             // refresh control animating
         } else {
             activityIndicator.startAnimating()
+            refreshControl?.alpha = 0.0
         }
     }
     
     func hideActivity(animated: Bool = true) {
-        self.view.isUserInteractionEnabled = true
+        if activityShouldDisableUserInteration {
+            view.isUserInteractionEnabled = true
+        }
         if let refreshControl = self.refreshControl,
             refreshControl.isRefreshing {
             refreshControl.endRefreshing()
-        } else {
+        }
+        if activityIndicator.isAnimating {
             activityIndicator.stopAnimating()
         }
+        refreshControl?.alpha = 1.0
     }
 }
 
@@ -106,24 +118,39 @@ import JGProgressHUD
 public protocol ProgressHUDViewController: ActivityIndicatorViewController {
     
     /// Progress HUD
-    var progressHUD: JGProgressHUD { get }
+    var progressHUD: JGProgressHUD? { set get }
 }
 
-public extension ProgressHUDViewController {
+public extension ProgressHUDViewController where Self: UIViewController {
     
     func showActivity() {
         
         view.isUserInteractionEnabled = false
         view.endEditing(true)
         
-        //progressHUD.style = .currentStyle(for: self)
+        // load style
+        let style: JGProgressHUDStyle
+        if #available(iOSApplicationExtension 12.0, *) {
+            style = JGProgressHUDStyle(userInterfaceStyle: traitCollection.userInterfaceStyle)
+        } else {
+            style = .dark
+        }
+        
+        // reuse existing view
+        let progressHUD: JGProgressHUD
+        if let view = self.progressHUD, view.style == style {
+            progressHUD = view
+        } else {
+            progressHUD = JGProgressHUD(style: style)
+            self.progressHUD = progressHUD
+        }
         progressHUD.interactionType = .blockTouchesOnHUDView
         progressHUD.show(in: self.navigationController?.view ?? self.view)
     }
     
     func hideActivity(animated: Bool = true) {
         view.isUserInteractionEnabled = true
-        progressHUD.dismiss(animated: animated)
+        progressHUD?.dismiss(animated: animated)
     }
 }
 

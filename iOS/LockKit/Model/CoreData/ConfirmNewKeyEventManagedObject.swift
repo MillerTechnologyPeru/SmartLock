@@ -14,7 +14,9 @@ public final class ConfirmNewKeyEventManagedObject: EventManagedObject {
     
     @nonobjc override class var eventType: LockEvent.EventType { return .confirmNewKey }
     
-    internal convenience init(_ value: LockEvent.ConfirmNewKey, lock: LockManagedObject, context: NSManagedObjectContext) {
+    internal convenience init(_ value: LockEvent.ConfirmNewKey,
+                              lock: LockManagedObject,
+                              context: NSManagedObjectContext) {
         
         self.init(context: context)
         self.identifier = value.identifier
@@ -25,6 +27,20 @@ public final class ConfirmNewKeyEventManagedObject: EventManagedObject {
     }
 }
 
+internal extension LockEvent.ConfirmNewKey {
+    
+    init?(managedObject: ConfirmNewKeyEventManagedObject) {
+        
+        guard let identifier = managedObject.identifier,
+            let date = managedObject.date,
+            let key = managedObject.key,
+            let pendingKey = managedObject.pendingKey
+            else { return nil }
+        
+        self.init(identifier: identifier, date: date, newKey: pendingKey, key: key)
+    }
+}
+
 // MARK: - IdentifiableManagedObject
 
 extension ConfirmNewKeyEventManagedObject: IdentifiableManagedObject { }
@@ -32,6 +48,16 @@ extension ConfirmNewKeyEventManagedObject: IdentifiableManagedObject { }
 // MARK: - Fetch
 
 public extension ConfirmNewKeyEventManagedObject {
+    
+    /// Fetch the new key specified by the event.
+    func newKey(in context: NSManagedObjectContext) throws -> NewKeyManagedObject? {
+        
+        guard let newKey = self.pendingKey else {
+            assertionFailure("Missing key value")
+            return nil
+        }
+        return try context.find(identifier: newKey, type: NewKeyManagedObject.self)
+    }
     
     /// Fetch the removed key specified by the event.
     func createKeyEvent(in context: NSManagedObjectContext) throws -> CreateNewKeyEventManagedObject? {
@@ -45,18 +71,8 @@ public extension ConfirmNewKeyEventManagedObject {
         fetchRequest.entity = CreateNewKeyEventManagedObject.entity()
         fetchRequest.predicate = NSPredicate(format: "%K == %@", #keyPath(CreateNewKeyEventManagedObject.pendingKey), newKey as NSUUID)
         fetchRequest.fetchLimit = 1
-        fetchRequest.includesSubentities = true
+        fetchRequest.includesSubentities = false
         fetchRequest.returnsObjectsAsFaults = false
         return try context.fetch(fetchRequest).first
-    }
-    
-    /// Fetch the new key specified by the event.
-    func newKey(in context: NSManagedObjectContext) throws -> NewKeyManagedObject? {
-        
-        guard let newKey = self.pendingKey else {
-            assertionFailure("Missing key value")
-            return nil
-        }
-        return try context.find(identifier: newKey, type: NewKeyManagedObject.self)
     }
 }

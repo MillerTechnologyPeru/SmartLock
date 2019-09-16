@@ -25,6 +25,20 @@ public final class UnlockEventManagedObject: EventManagedObject {
     }
 }
 
+public extension LockEvent.Unlock {
+    
+    init?(managedObject: UnlockEventManagedObject) {
+        
+        guard let identifier = managedObject.identifier,
+            let date = managedObject.date,
+            let key = managedObject.key,
+            let action = UnlockAction(rawValue: numericCast(managedObject.action))
+            else { return nil }
+        
+        self.init(identifier: identifier, date: date, key: key, action: action)
+    }
+}
+
 // MARK: - IdentifiableManagedObject
 
 extension UnlockEventManagedObject: IdentifiableManagedObject { }

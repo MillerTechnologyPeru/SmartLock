@@ -36,6 +36,6 @@ public struct Key: Codable, Equatable, Hashable {
 
 public enum KeyType: UInt8, Codable {
     
-    case key
-    case newKey
+    case key        = 0x00
+    case newKey     = 0x01
 }

@@ -11,11 +11,20 @@
         }
       },
       {
+        "package": "CloudKitCodable",
+        "repositoryURL": "https://github.com/colemancda/CloudKitCodable.git",
+        "state": {
+          "branch": "master",
+          "revision": "6dda58305aa0a567161e20fc7c0f4e85c2d60074",
+          "version": null
+        }
+      },
+      {
         "package": "CryptoSwift",
         "repositoryURL": "https://github.com/krzyzanowskim/CryptoSwift",
         "state": {
           "branch": "master",
-          "revision": "0d1095dcded97315d25e3e69f4700cfb8bf2608b",
+          "revision": "5d114736f5a98caa8a0ca1c254526f1ce5688f91",
           "version": null
         }
       },

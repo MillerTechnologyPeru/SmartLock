@@ -28,7 +28,7 @@ final class NearbyLocksViewController: UITableViewController {
     
     private var items = [LockPeripheral<NativeCentral>]()
         
-    internal lazy var progressHUD: JGProgressHUD = JGProgressHUD.currentStyle(for: self)
+    internal var progressHUD: JGProgressHUD?
     
     @available(iOS 10.0, *)
     private lazy var selectionFeedbackGenerator: UISelectionFeedbackGenerator = {

@@ -14,7 +14,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "6ED81FAD2316617E00B69520"
+               BlueprintIdentifier = "6EA570C323189871008027D4"
                BuildableName = "Watch.app"
                BlueprintName = "Watch"
                ReferencedContainer = "container:SmartLock.xcodeproj">
@@ -62,7 +62,7 @@
          RemotePath = "/SmartLock">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "6ED81FAD2316617E00B69520"
+            BlueprintIdentifier = "6EA570C323189871008027D4"
             BuildableName = "Watch.app"
             BlueprintName = "Watch"
             ReferencedContainer = "container:SmartLock.xcodeproj">
@@ -83,7 +83,7 @@
          RemotePath = "/SmartLock">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "6ED81FAD2316617E00B69520"
+            BlueprintIdentifier = "6EA570C323189871008027D4"
             BuildableName = "Watch.app"
             BlueprintName = "Watch"
             ReferencedContainer = "container:SmartLock.xcodeproj">
@@ -92,7 +92,7 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "6ED81FAD2316617E00B69520"
+            BlueprintIdentifier = "6EA570C323189871008027D4"
             BuildableName = "Watch.app"
             BlueprintName = "Watch"
             ReferencedContainer = "container:SmartLock.xcodeproj">

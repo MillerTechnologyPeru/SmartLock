@@ -25,7 +25,7 @@ public final class LockPermissionsViewController: UITableViewController {
         didSet { configureView() }
     }
     
-    public lazy var progressHUD: JGProgressHUD = .currentStyle(for: self)
+    public var progressHUD: JGProgressHUD?
     
     private static let dateFormatter: DateFormatter = {
         let dateFormatter = DateFormatter()
@@ -69,7 +69,9 @@ public final class LockPermissionsViewController: UITableViewController {
     public override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
-        view.bringSubviewToFront(progressHUD)
+        if let progressHUD = self.progressHUD {
+            view.bringSubviewToFront(progressHUD)
+        }
     }
     
     // MARK: - Actions

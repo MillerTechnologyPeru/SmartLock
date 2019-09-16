@@ -27,3 +27,24 @@ public final class ScheduleManagedObject: NSManagedObject {
         self.saturday = value.weekdays.saturday
     }
 }
+
+public extension Permission.Schedule {
+    
+    init?(managedObject: ScheduleManagedObject) {
+        guard let interval = Interval(rawValue: numericCast(managedObject.intervalMin) ... numericCast(managedObject.intervalMax))
+            else { return nil }
+        self.init(
+            expiry: managedObject.expiry,
+            interval: interval,
+            weekdays: Weekdays(
+                sunday: managedObject.sunday,
+                monday: managedObject.monday,
+                tuesday: managedObject.tuesday,
+                wednesday: managedObject.wednesday,
+                thursday: managedObject.thursday,
+                friday: managedObject.friday,
+                saturday: managedObject.saturday
+            )
+        )
+    }
+}

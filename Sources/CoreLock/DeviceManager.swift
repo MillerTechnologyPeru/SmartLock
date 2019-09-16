@@ -212,7 +212,7 @@ public final class LockManager <Central: CentralProtocol> {
         }
     }
     
-    internal func list <Write, Notify> (write: Write,
+    internal func list <Write, Notify> (write: @autoclosure () -> (Write),
                                         notify: Notify.Type,
                                         for peripheral: Peripheral,
                                         with key: KeyCredentials,
@@ -253,7 +253,7 @@ public final class LockManager <Central: CentralProtocol> {
             }
             
             // Write data to characteristic
-            try self.central.write(write, for: cache, timeout: timeout)
+            try self.central.write(write(), for: cache, timeout: timeout)
             
             // handle disconnect
             self.central.didDisconnect = {
@@ -302,11 +302,10 @@ public final class LockManager <Central: CentralProtocol> {
             keys: .init(reserveCapacity: 2),
             newKeys: .init(reserveCapacity: 1)
         )
-        let characteristicValue = ListKeysCharacteristic(
+        try list(write: ListKeysCharacteristic(
             identifier: key.identifier,
             authentication: Authentication(key: key.secret)
-        )
-        try list(write: characteristicValue, notify: Notification.self, for: peripheral, with: key, timeout: timeout) { [unowned self] (notificationValue) in
+        ), notify: Notification.self, for: peripheral, with: key, timeout: timeout) { [unowned self] (notificationValue) in
             keysList.append(notificationValue.key)
             self.log?("Recieved key \(notificationValue.key.identifier)")
             notification(keysList, notificationValue.isLast)
@@ -339,12 +338,11 @@ public final class LockManager <Central: CentralProtocol> {
         log?("List events for \(peripheral)")
         typealias Notification = EventsCharacteristic
         var events = EventsList(reserveCapacity: fetchRequest?.limit.flatMap({ Int($0) }) ?? 1)
-        let characteristicValue = ListEventsCharacteristic(
+        try list(write: ListEventsCharacteristic(
             identifier: key.identifier,
             authentication: Authentication(key: key.secret),
             fetchRequest: fetchRequest
-        )
-        try list(write: characteristicValue, notify: Notification.self, for: peripheral, with: key, timeout: timeout) { [unowned self] (notificationValue) in
+        ), notify: Notification.self, for: peripheral, with: key, timeout: timeout) { [unowned self] (notificationValue) in
             if let event = notificationValue.event {
                 events.append(event)
                 self.log?("Recieved event \(event.identifier)")

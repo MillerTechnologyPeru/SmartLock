@@ -228,7 +228,7 @@ public final class Store {
         #endif
     }
     
-    private func updateCoreData() {
+    internal func updateCoreData() {
         
         let locks = self.locks.value
         backgroundContext.commit {
@@ -365,7 +365,7 @@ public extension Store {
     
     func scan(duration: TimeInterval? = nil) throws {
         
-        let duration = preferences.scanDuration
+        let duration = duration ?? preferences.scanDuration
         let filterDuplicates = preferences.filterDuplicates
         assert(Thread.isMainThread == false)
         self.peripherals.value.removeAll()
@@ -481,14 +481,33 @@ public extension Store {
             secret: keyData
         )
         
+        let lockIdentifier = information.identifier
+        
         // BLE request
+        var events = [LockEvent]()
         try lockManager.listEvents(fetchRequest: fetchRequest, for: lock.scanData.peripheral, with: key, timeout: preferences.bluetoothTimeout) { [weak self] (list, isComplete) in
             // call completion block
             notification(list, isComplete)
+            events = list
             // store in CoreData
             self?.backgroundContext.commit { (context) in
                 try context.insert(list, for: information.identifier)
             }
+        }
+        
+        async { [weak self] in
+            #if os(iOS)
+            // upload to iCloud
+            do {
+                for event in events {
+                    let value = LockEvent.Cloud(event: event, for: lockIdentifier)
+                    let parent = CloudLock.ID(rawValue: lockIdentifier)
+                    try self?.cloud.upload(value, parent: parent.cloudRecordID)
+                }
+            } catch {
+                log("⚠️ Could not upload latest events to iCloud: \(error.localizedDescription)")
+            }
+            #endif
         }
         
         return true

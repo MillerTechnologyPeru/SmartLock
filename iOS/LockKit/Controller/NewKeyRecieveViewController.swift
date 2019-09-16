@@ -25,7 +25,7 @@ public final class NewKeyRecieveViewController: UITableViewController {
     
     public private(set) var newKey: NewKey.Invitation!
         
-    public lazy var progressHUD: JGProgressHUD = .currentStyle(for: self)
+    public var progressHUD: JGProgressHUD?
     
     // MARK: - Loading
     
@@ -49,7 +49,9 @@ public final class NewKeyRecieveViewController: UITableViewController {
     public override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
-        view.bringSubviewToFront(progressHUD)
+        if let progressHUD = self.progressHUD {
+            view.bringSubviewToFront(progressHUD)
+        }
     }
     
     // MARK: - Actions

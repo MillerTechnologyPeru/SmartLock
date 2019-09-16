@@ -38,6 +38,17 @@ public struct ApplicationData: Codable, Equatable {
         self.updated = Date()
         self.locks = [:]
     }
+    
+    public init(identifier: UUID,
+                created: Date,
+                updated: Date,
+                locks: [UUID: LockCache]) {
+        
+        self.identifier = identifier
+        self.created = created
+        self.updated = updated
+        self.locks = locks
+    }
 }
 
 public extension ApplicationData {
