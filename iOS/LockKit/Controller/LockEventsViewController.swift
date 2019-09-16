@@ -132,61 +132,66 @@ public final class LockEventsViewController: TableViewController {
     
     private func reloadData() {
         
+        typealias FetchRequest = ListEventsCharacteristic.FetchRequest
+        typealias Predicate = ListEventsCharacteristic.Predicate
+        
         // load keys if neccesary
         if needsKeys.isEmpty == false {
             loadKeys()
         }
         
-        typealias FetchRequest = ListEventsCharacteristic.FetchRequest
-        typealias Predicate = ListEventsCharacteristic.Predicate
-        
         let locks = self.locks
         let context = Store.shared.backgroundContext
-        performActivity({ [weak self] in
-            for lock in locks {
-                guard let device = try Store.shared.device(for: lock, scanDuration: 1.0) else {
-                    if self?.lock == nil {
-                        continue
-                    } else {
-                        throw CentralError.unknownPeripheral
+        
+        if Store.shared.lockManager.central.state == .poweredOn {
+            performActivity({ [weak self] in
+                for lock in locks {
+                    guard let device = try Store.shared.device(for: lock, scanDuration: 1.0) else {
+                        if self?.lock == nil {
+                            continue
+                        } else {
+                            throw CentralError.unknownPeripheral
+                        }
                     }
-                }
-                let lastEventDate = try context.performErrorBlockAndWait {
-                    try context.find(identifier: lock, type: LockManagedObject.self)
-                        .flatMap { try $0.lastEvent(in: context)?.date }
-                }
-                let fetchRequest = FetchRequest(
-                    offset: 0,
-                    limit: nil,
-                    predicate: Predicate(
-                        keys: nil,
-                        start: lastEventDate,
-                        end: nil
+                    let lastEventDate = try context.performErrorBlockAndWait {
+                        try context.find(identifier: lock, type: LockManagedObject.self)
+                            .flatMap { try $0.lastEvent(in: context)?.date }
+                    }
+                    let fetchRequest = FetchRequest(
+                        offset: 0,
+                        limit: nil,
+                        predicate: Predicate(
+                            keys: nil,
+                            start: lastEventDate,
+                            end: nil
+                        )
                     )
-                )
-                do { try Store.shared.listEvents(device, fetchRequest: fetchRequest) }
-                catch {
-                    if self?.lock == nil {
-                        continue
-                    } else {
-                        throw error
+                    do { try Store.shared.listEvents(device, fetchRequest: fetchRequest) }
+                    catch {
+                        if self?.lock == nil {
+                            continue
+                        } else {
+                            throw error
+                        }
                     }
                 }
-            }
-        }, completion: { (viewController, _) in
-            viewController.needsKeys.removeAll()
-        })
+            }, completion: { (viewController, _) in
+                viewController.needsKeys.removeAll()
+            })
+        }
         
         // attempt to load data from iCloud
-        performActivity({
-            do { try Store.shared.downloadCloudLocks() }
-            catch {
-                log("⚠️ Unable to load data from iCloud: \(error.localizedDescription)")
-                #if DEBUG
-                dump(error)
-                #endif
-            }
-        })
+        if Store.shared.preferences.isCloudEnabled {
+            performActivity({
+                do { try Store.shared.downloadCloudLocks() }
+                catch {
+                    log("⚠️ Unable to load data from iCloud: \(error.localizedDescription)")
+                    #if DEBUG
+                    dump(error)
+                    #endif
+                }
+            })
+        }
     }
     
     private subscript (indexPath: IndexPath) -> EventManagedObject {
@@ -265,6 +270,9 @@ public final class LockEventsViewController: TableViewController {
     }
     
     private func loadKeys() {
+        
+        guard Store.shared.lockManager.central.state == .poweredOn
+            else { return }
         
         let locks = self.locks.filter {
             Store.shared[lock: $0]?.key.permission.isAdministrator ?? false
