@@ -500,6 +500,11 @@ public extension Store {
             }
         }
         
+        // upload keys to cloud
+        #if os(iOS)
+        updateCloud()
+        #endif
+        
         return true
     }
     
@@ -533,8 +538,8 @@ public extension Store {
             }
         }
         
+        #if os(iOS)
         DispatchQueue.cloud.async { [weak self] in
-            #if os(iOS)
             // upload to iCloud
             do {
                 for event in events {
@@ -545,8 +550,8 @@ public extension Store {
             } catch {
                 log("⚠️ Could not upload latest events to iCloud: \(error.localizedDescription)")
             }
-            #endif
         }
+        #endif
         
         return true
     }

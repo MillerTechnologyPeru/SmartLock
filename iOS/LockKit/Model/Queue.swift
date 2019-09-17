@@ -58,7 +58,7 @@ public extension DispatchQueue {
         struct Cache {
             static let queue = DispatchQueue(
                 label: Bundle.Lock.app.rawValue + ".iCloud",
-                qos: .userInitiated
+                qos: .utility
             )
         }
         return Cache.queue
