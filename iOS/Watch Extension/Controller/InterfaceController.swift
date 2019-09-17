@@ -116,7 +116,7 @@ final class InterfaceController: WKInterfaceController {
         let scanDuration = self.scanDuration
         
         // scan
-        performActivity({
+        performActivity(queue: .bluetooth, {
             try Store.shared.scan(duration: scanDuration)
             for peripheral in Store.shared.peripherals.value.values {
                 do { try Store.shared.readInformation(peripheral) }

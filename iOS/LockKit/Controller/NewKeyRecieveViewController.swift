@@ -68,7 +68,7 @@ public final class NewKeyRecieveViewController: UITableViewController {
         let keyData = KeyData()
         showActivity()
         
-        async { [weak self] in
+        DispatchQueue.bluetooth.async { [weak self] in
             
             guard let controller = self else { return }
             

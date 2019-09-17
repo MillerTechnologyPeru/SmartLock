@@ -92,13 +92,11 @@ final class NearbyLocksViewController: UITableViewController {
         #if targetEnvironment(macCatalyst)
         scan()
         #else
-        async {
-            if Store.shared.locks.value.isEmpty {
-                mainQueue { [weak self] in self?.scan() }
-            } else {
-                // Update beacon status
-                BeaconController.shared.scanBeacons()
-            }
+        if Store.shared.locks.value.isEmpty {
+            scan()
+        } else {
+            // Update beacon status
+            BeaconController.shared.scanBeacons()
         }
         #endif
     }
@@ -145,7 +143,7 @@ final class NearbyLocksViewController: UITableViewController {
         self.items.removeAll(keepingCapacity: true)
         
         // scan
-        performActivity({
+        performActivity(queue: .bluetooth, {
             try Store.shared.scan()
             for peripheral in Store.shared.peripherals.value.values {
                 do { try Store.shared.readInformation(peripheral) }

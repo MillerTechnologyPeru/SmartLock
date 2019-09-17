@@ -341,7 +341,7 @@ public final class HomeKitEnableActivity: UIActivity {
                 let peripheral = Store.shared[peripheral: lockItem.identifier] // Lock must be reachable
                 else { alert.dismiss(animated: true) { self.activityDidFinish(false) }; return }
             
-            async {
+            DispatchQueue.bluetooth.async {
                 
                 //do { try LockManager.shared.enableHomeKit(lockItem.identifier, key: (lockCache.keyIdentifier, keyData), enable: enable) }
                 

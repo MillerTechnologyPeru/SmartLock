@@ -29,7 +29,7 @@ public extension ActivityIndicatorViewController {
                               _ asyncOperation: @escaping () throws -> T,
                               completion: ((Self, T) -> ())? = nil) {
         
-        let queue = queue ?? appQueue
+        let queue = queue ?? .app
         if showActivity { self.showActivity() }
         queue.async {
             mainQueue { if showActivity { self.showActivity() } }

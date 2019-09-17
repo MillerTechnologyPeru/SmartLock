@@ -144,7 +144,7 @@ public final class LockEventsViewController: TableViewController {
         let context = Store.shared.backgroundContext
         
         if Store.shared.lockManager.central.state == .poweredOn {
-            performActivity({ [weak self] in
+            performActivity(queue: .bluetooth, { [weak self] in
                 for lock in locks {
                     guard let device = try Store.shared.device(for: lock, scanDuration: 1.0) else {
                         if self?.lock == nil {
@@ -182,7 +182,7 @@ public final class LockEventsViewController: TableViewController {
         
         // attempt to load data from iCloud
         if Store.shared.preferences.isCloudEnabled {
-            performActivity({
+            performActivity(queue: .cloud, {
                 do { try Store.shared.downloadCloudLocks() }
                 catch {
                     log("⚠️ Unable to load data from iCloud: \(error.localizedDescription)")
@@ -278,7 +278,7 @@ public final class LockEventsViewController: TableViewController {
             Store.shared[lock: $0]?.key.permission.isAdministrator ?? false
                 && (needsKeys.isEmpty ? true : needsKeys.contains($0))
         }
-        performActivity({
+        performActivity(queue: .bluetooth, {
             try locks.forEach {
                 try Store.shared.device(for: $0, scanDuration: 1.0).flatMap {
                     let canListKeys = try Store.shared.listKeys($0)

@@ -259,7 +259,7 @@ public extension Store {
                  completion: (() -> ())? = nil) {
         
         // activate session
-        async { [weak self] in
+        DispatchQueue.app.async { [weak self] in
             defer { mainQueue { completion?() } }
             guard let self = self else { return }
             do { try session.activate() }

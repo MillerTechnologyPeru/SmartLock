@@ -17,7 +17,7 @@ public extension ActivityIndicatorViewController where Self: UIViewController {
         
         log("Unlock \(identifier)")
         
-        performActivity({ () -> String? in
+        performActivity(queue: .bluetooth, { () -> String? in
             guard let lockPeripheral = try Store.shared.device(for: identifier, scanDuration: scanDuration)
                 else { return "Could not find lock" }
             return try Store.shared.unlock(lockPeripheral, action: action) ? nil : "Unable to unlock"
@@ -31,8 +31,7 @@ public extension ActivityIndicatorViewController where Self: UIViewController {
     }
     
     func unlock(lock: LockPeripheral<NativeCentral>, action: UnlockAction = .default) {
-        
-        performActivity({ try Store.shared.unlock(lock, action: action) })
+        performActivity(queue: .bluetooth, { try Store.shared.unlock(lock, action: action) })
     }
 }
 

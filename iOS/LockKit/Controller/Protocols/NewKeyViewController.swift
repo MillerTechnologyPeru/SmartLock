@@ -49,7 +49,7 @@ public extension NewKeyViewController {
             self.showActivity()
             
             // add new key to lock
-            async { [weak self] in
+            DispatchQueue.bluetooth.async { [weak self] in
                 
                 guard let self = self else { return }
                 
@@ -74,9 +74,10 @@ public extension NewKeyViewController {
                         }
                         return
                     }
-                    try LockManager.shared.createKey(.init(key: newKey, secret: newKeySharedSecret),
-                                                     for: peripheral.scanData.peripheral,
-                                                     with: parentKey)
+                    try LockManager.shared.createKey(
+                        .init(key: newKey, secret: newKeySharedSecret),
+                        for: peripheral.scanData.peripheral,
+                        with: parentKey)
                 }
                     
                 catch {
@@ -133,7 +134,7 @@ public extension UIViewController {
                sender: PopoverPresentingView,
                completion: @escaping () -> ()) {
         
-        async {
+        DispatchQueue.app.async {
             
             // save invitation file
             let newKeyData = try! JSONEncoder().encode(invitation)

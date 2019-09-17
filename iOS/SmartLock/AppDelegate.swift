@@ -146,7 +146,7 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
         let beaconTask = UIApplication.shared.beginBackgroundTask(withName: bundle.rawValue, expirationHandler: {
             log("\(bundle.symbol) Background task expired")
         })
-        async { [unowned self] in
+        DispatchQueue.bluetooth.async { [unowned self] in
             do {
                 // scan for locks
                 try Store.shared.scan(duration: 3.0)
@@ -187,10 +187,9 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
         Store.shared.loadCache()
                         
         BeaconController.shared.scanBeacons()
-
         
         // attempt to scan for all known locks if they are not in central cache
-        async {
+        DispatchQueue.bluetooth.async {
             do {
                 for lock in Store.shared.locks.value.keys {
                     let _ = try Store.shared.device(for: lock, scanDuration: 1.0)
@@ -226,9 +225,9 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
         
         // 30 sec max background fetch
         var result: UIBackgroundFetchResult = .noData
-        async { [unowned self] in
-            let applicationData = Store.shared.applicationData
-            let information = Array(Store.shared.lockInformation.value.values)
+        let applicationData = Store.shared.applicationData
+        let information = Array(Store.shared.lockInformation.value.values)
+        DispatchQueue.bluetooth.async { [unowned self] in
             do {
                 // scan for locks
                 try Store.shared.scan(duration: 5.0)
@@ -381,7 +380,7 @@ private extension AppDelegate {
         let bundle = self.bundle
         log("\(bundle.symbol) Will update data")
         
-        async {
+        DispatchQueue.bluetooth.async {
             do {
                 // scan for locks
                 try Store.shared.scan(duration: 3.0)
@@ -430,7 +429,6 @@ internal extension AppDelegate {
     }
     
     func open(url: LockURL) {
-        
         tabBarController.handle(url: url)
     }
 }
@@ -440,12 +438,10 @@ internal extension AppDelegate {
 extension AppDelegate: LockActivityHandling {
     
     func handle(url: LockURL) {
-        
         tabBarController.handle(url: url)
     }
     
     func handle(activity: AppActivity) {
-        
         tabBarController.handle(activity: activity)
     }
 }

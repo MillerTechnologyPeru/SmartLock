@@ -57,7 +57,7 @@ final class UnlockIntentHandler: NSObject, UnlockIntentHandling {
     @available(iOSApplicationExtension 13.0, watchOSApplicationExtension 6.0, *)
     func provideLockOptions(for intent: UnlockIntent, with completion: @escaping ([IntentLock]?, Error?) -> Void) {
         
-        async {
+        DispatchQueue.app.async {
             // load updated lock information
             Store.shared.loadCache()
             
@@ -70,7 +70,7 @@ final class UnlockIntentHandler: NSObject, UnlockIntentHandling {
     @available(iOSApplicationExtension 13.0, watchOSApplicationExtension 6.0, *)
     func resolveLock(for intent: UnlockIntent, with completion: @escaping (UnlockLockResolutionResult) -> Void) {
         
-        async {
+        DispatchQueue.bluetooth.async {
             
             // load updated lock information
             Store.shared.loadCache()
@@ -160,7 +160,7 @@ final class UnlockIntentHandler: NSObject, UnlockIntentHandling {
                 }
             }
             
-            async {
+            DispatchQueue.bluetooth.async {
                 do {
                     guard let peripheral = try Store.shared.device(for: lockIdentifier, scanDuration: 1.0) else {
                         completion(.failure(failureReason: "Lock not in range. "))

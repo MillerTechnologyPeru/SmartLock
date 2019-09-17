@@ -274,7 +274,7 @@ public final class Store {
     
     private func beaconFound(_ beacon: UUID, beacons: [CLBeacon]) {
                 
-        async { [weak self] in
+        DispatchQueue.bluetooth.async { [weak self] in
             guard let self = self else { return }
             if let _ = Store.shared[lock: beacon] {
                 do {
@@ -324,7 +324,7 @@ public final class Store {
         guard let _ = Store.shared[lock: beacon]
             else { return }
         
-        async { [weak self] in
+        DispatchQueue.bluetooth.async { [weak self] in
             guard let self = self else { return }
             do {
                 try self.scan(duration: 1.0)
@@ -533,7 +533,7 @@ public extension Store {
             }
         }
         
-        async { [weak self] in
+        DispatchQueue.cloud.async { [weak self] in
             #if os(iOS)
             // upload to iCloud
             do {

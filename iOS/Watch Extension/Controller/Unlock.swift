@@ -24,7 +24,7 @@ public extension ActivityInterface {
         if needsSync {
             Store.shared.syncApp()
         }
-        performActivity({
+        performActivity(queue: .bluetooth, {
             try Store.shared.unlock(peripheral)
         }, completion: { (controller, hasKey) in
             let haptic: WKHapticType = hasKey ? .success : .failure

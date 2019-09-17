@@ -122,7 +122,7 @@ internal extension ExtensionDelegate {
     func scan(completion: (() -> ())? = nil) {
         
         // scan for locks
-        async {
+        DispatchQueue.bluetooth.async {
             defer { mainQueue { completion?() } }
             do {
                 // scan for locks
