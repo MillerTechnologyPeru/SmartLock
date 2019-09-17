@@ -125,7 +125,7 @@ func run() throws {
     
     // change advertisment for notifications
     controller?.lockServiceController.lockChanged = {
-        DispatchQueue.global(qos: .userInteractive).async {
+        DispatchQueue.global(qos: .userInteractive).asyncAfter(deadline: .now() + 2) {
             do {
                 try hostController.setNotificationAdvertisement(rssi: 30) // FIXME: RSSI
                 sleep(5)
