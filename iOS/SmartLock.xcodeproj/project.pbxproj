@@ -98,6 +98,11 @@
 		6E94EF75232F4A790028B745 /* CloudKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E94EF74232F4A790028B745 /* CloudKit.swift */; };
 		6E9740412318C13D00634631 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6ED81FB32316618100B69520 /* Assets.xcassets */; };
 		6E9740422318C14800634631 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6ED81FC72316618400B69520 /* Assets.xcassets */; };
+		6E9794CC23315E2E00B5C5C9 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6EB59D5E2312E9E400D5EFA7 /* CloudKit.framework */; };
+		6E9794D123315E7400B5C5C9 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6EB59D5E2312E9E400D5EFA7 /* CloudKit.framework */; };
+		6E9794D223315E8100B5C5C9 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6EB59D5E2312E9E400D5EFA7 /* CloudKit.framework */; };
+		6E9794D423315EA000B5C5C9 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6E9794D323315EA000B5C5C9 /* CloudKit.framework */; };
+		6E9794D523315EB000B5C5C9 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6E9794D323315EA000B5C5C9 /* CloudKit.framework */; };
 		6E994A8D230DFB6D0076DC1B /* LockKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6E994A84230DFB6C0076DC1B /* LockKit.framework */; };
 		6E994A94230DFB6D0076DC1B /* LockKitTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E994A93230DFB6D0076DC1B /* LockKitTests.swift */; };
 		6E994A96230DFB6D0076DC1B /* LockKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 6E994A86230DFB6C0076DC1B /* LockKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -570,6 +575,7 @@
 		6E83BAF72323843500FBC12E /* CollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionViewController.swift; sourceTree = "<group>"; };
 		6E8772BB231258CC003B9469 /* JGProgressHUD.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = JGProgressHUD.xcodeproj; path = ../Carthage/Checkouts/JGProgressHUD/JGProgressHUD.xcodeproj; sourceTree = "<group>"; };
 		6E94EF74232F4A790028B745 /* CloudKit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudKit.swift; sourceTree = "<group>"; };
+		6E9794D323315EA000B5C5C9 /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = Platforms/WatchOS.platform/Developer/SDKs/WatchOS6.0.sdk/System/Library/Frameworks/CloudKit.framework; sourceTree = DEVELOPER_DIR; };
 		6E994A79230DE1700076DC1B /* CoreSpotlight.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreSpotlight.swift; sourceTree = "<group>"; };
 		6E994A84230DFB6C0076DC1B /* LockKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = LockKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		6E994A86230DFB6C0076DC1B /* LockKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LockKit.h; sourceTree = "<group>"; };
@@ -694,6 +700,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6E9794CC23315E2E00B5C5C9 /* CloudKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -710,6 +717,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				6E994B0B230E89440076DC1B /* Messages.framework in Frameworks */,
+				6E9794D123315E7400B5C5C9 /* CloudKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -718,6 +726,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				6E994B2A230EF6DA0076DC1B /* NotificationCenter.framework in Frameworks */,
+				6E9794D223315E8100B5C5C9 /* CloudKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -725,6 +734,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6E9794D423315EA000B5C5C9 /* CloudKit.framework in Frameworks */,
 				6EA570F223189CE9008027D4 /* CoreLock.framework in Frameworks */,
 				6EA570EE23189CE9008027D4 /* LockKit.framework in Frameworks */,
 			);
@@ -735,6 +745,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				6ED820B22316795D00B69520 /* LockKit.framework in Frameworks */,
+				6E9794D523315EB000B5C5C9 /* CloudKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1043,6 +1054,7 @@
 		6E994AE0230E56DD0076DC1B /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				6E9794D323315EA000B5C5C9 /* CloudKit.framework */,
 				6EB59D5E2312E9E400D5EFA7 /* CloudKit.framework */,
 				6E994AE1230E56DD0076DC1B /* IntentsUI.framework */,
 				6E994B0A230E89440076DC1B /* Messages.framework */,
