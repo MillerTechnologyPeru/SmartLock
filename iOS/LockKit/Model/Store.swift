@@ -59,8 +59,6 @@ public final class Store {
             print(store)
             print("Loaded persistent store")
             #endif
-            self?.persistentContainer.viewContext.automaticallyMergesChangesFromParent = true
-            self?.persistentContainer.viewContext.mergePolicy = NSMergePolicy.mergeByPropertyObjectTrump
         }
         let didTimeout = semaphore.wait(timeout: .now() + 5.0) == .timedOut
         assert(didTimeout == false)
@@ -120,9 +118,19 @@ public final class Store {
     
     public lazy var lockManager: LockManager = .shared
     
-    public lazy var persistentContainer: NSPersistentContainer = .lock
+    internal lazy var persistentContainer: NSPersistentContainer = .lock
     
-    internal lazy var backgroundContext = self.persistentContainer.newBackgroundContext()
+    public lazy var managedObjectContext: NSManagedObjectContext = {
+        let context = self.persistentContainer.viewContext
+        context.mergePolicy = NSMergePolicy.mergeByPropertyObjectTrump
+        return context
+    }()
+    
+    internal lazy var backgroundContext: NSManagedObjectContext = {
+        let context = self.persistentContainer.newBackgroundContext()
+        context.mergePolicy = NSMergePolicy.mergeByPropertyObjectTrump
+        return context
+    }()
     
     #if os(iOS)
     public lazy var cloud: CloudStore = .shared
