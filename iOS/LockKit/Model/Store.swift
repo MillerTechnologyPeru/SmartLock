@@ -241,19 +241,20 @@ public final class Store {
     private func monitorBeacons() {
         
         // always monitor lock notification iBeacon
-        self.beaconController.monitor(beacon: .lockBeaconNotification)
+        let beacons = Set(self.locks.value.keys) + [.lockBeaconNotification]
+        let oldBeacons = self.beaconController.beacons.keys
         
         // remove old beacons
-        for lock in self.beaconController.beacons.keys {
-            if self.locks.value.keys.contains(lock) == false {
-                self.beaconController.stopMonitoring(lock)
+        for beacon in oldBeacons {
+            if beacons.contains(beacon) == false {
+                self.beaconController.stopMonitoring(beacon)
             }
         }
         
         // add new beacons
-        for lock in self.locks.value.keys {
-            if self.beaconController.beacons.keys.contains(lock) == false {
-                self.beaconController.monitor(beacon: lock)
+        for beacon in beacons {
+            if oldBeacons.contains(beacon) == false {
+                self.beaconController.monitor(beacon)
             }
         }
     }

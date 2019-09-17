@@ -50,13 +50,13 @@ public final class BeaconController {
         locationManager.requestAlwaysAuthorization()
     }
     
-    public func monitor(beacon identifier: UUID) {
+    public func monitor(_ beacon: UUID) {
         
-        let region = CLBeaconRegion(uuid: identifier)
+        let region = CLBeaconRegion(uuid: beacon)
         region.notifyOnEntry = true
         region.notifyEntryStateOnDisplay = true
         region.notifyOnExit = true
-        beacons[identifier] = region
+        beacons[beacon] = region
         
         // initiate monitoring and scanning
         scanBeacons(in: region)
@@ -251,10 +251,10 @@ private extension BeaconController {
             if let beaconRegion = region as? CLBeaconRegion {
                 
                 switch state {
-                case .inside:
-                    manager.startRangingBeacons(in: beaconRegion.proximityUUID)
-                case .outside,
+                case .inside,
                      .unknown:
+                    manager.startRangingBeacons(in: beaconRegion.proximityUUID)
+                case .outside:
                     manager.stopRangingBeacons(in: beaconRegion.proximityUUID)
                     if let beacon = beaconController?.beacons.first(where: { $0.value == region })?.key {
                         defer { self.beaconController?.foundBeacons[beacon] = nil }
