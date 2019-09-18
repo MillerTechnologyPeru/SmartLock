@@ -12,7 +12,7 @@ public func log(_ text: String) {
     
     let date = Date()
     
-    Log.queue.async {
+    DispatchQueue.log.async {
         
         // only print for debug builds
         #if DEBUG
@@ -29,7 +29,6 @@ public func log(_ text: String) {
 fileprivate extension Log {
     
     static var custom: Log?
-    static let queue = DispatchQueue(for: Log.self, in: .app, qualityOfService: .default, isConcurrent: false)
 }
 
 public extension Log {

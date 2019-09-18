@@ -17,7 +17,7 @@ public func mainQueue(_ block: @escaping () -> ()) {
 public extension DispatchQueue {
     
     convenience init<T>(for type: T.Type,
-                        in bundle: Bundle.Lock,
+                        in bundle: Bundle.Lock = .app,
                         qualityOfService: DispatchQoS = .default,
                         isConcurrent: Bool = false) {
         
@@ -36,7 +36,8 @@ public extension DispatchQueue {
         struct Cache {
             static let queue = DispatchQueue(
                 label: Bundle.Lock.app.rawValue,
-                qos: .userInitiated
+                qos: .userInitiated,
+                attributes: [.concurrent]
             )
         }
         return Cache.queue
@@ -48,6 +49,18 @@ public extension DispatchQueue {
             static let queue = DispatchQueue(
                 label: Bundle.Lock.app.rawValue + ".Bluetooth",
                 qos: .userInitiated
+            )
+        }
+        return Cache.queue
+    }
+    
+    /// Lock Bluetooth operations GCD Queue
+    static var log: DispatchQueue {
+        struct Cache {
+            static let queue = DispatchQueue(
+                for: Log.self,
+                qualityOfService: .utility,
+                isConcurrent: false
             )
         }
         return Cache.queue

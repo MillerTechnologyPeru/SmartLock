@@ -102,7 +102,7 @@ public final class LockEventsViewController: TableViewController {
     
     private func configureView() {
         
-        let context = Store.shared.persistentContainer.viewContext
+        let context = Store.shared.managedObjectContext
         let fetchRequest = NSFetchRequest<EventManagedObject>()
         fetchRequest.entity = EventManagedObject.entity()
         fetchRequest.includesSubentities = true
@@ -138,6 +138,19 @@ public final class LockEventsViewController: TableViewController {
         // load keys if neccesary
         if needsKeys.isEmpty == false {
             loadKeys()
+        }
+        
+        // attempt to load data from iCloud
+        if Store.shared.preferences.isCloudEnabled {
+            DispatchQueue.cloud.async {
+                do { try Store.shared.downloadCloudLocks() }
+                catch {
+                    log("⚠️ Unable to load data from iCloud: \(error.localizedDescription)")
+                    #if DEBUG
+                    dump(error)
+                    #endif
+                }
+            }
         }
         
         let locks = self.locks
@@ -179,19 +192,6 @@ public final class LockEventsViewController: TableViewController {
                 viewController.needsKeys.removeAll()
             })
         }
-        
-        // attempt to load data from iCloud
-        if Store.shared.preferences.isCloudEnabled {
-            performActivity(queue: .cloud, {
-                do { try Store.shared.downloadCloudLocks() }
-                catch {
-                    log("⚠️ Unable to load data from iCloud: \(error.localizedDescription)")
-                    #if DEBUG
-                    dump(error)
-                    #endif
-                }
-            })
-        }
     }
     
     private subscript (indexPath: IndexPath) -> EventManagedObject {
@@ -205,7 +205,7 @@ public final class LockEventsViewController: TableViewController {
             assertionFailure("Missing identifier")
             return
         }
-        let context = Store.shared.persistentContainer.viewContext
+        let context = Store.shared.managedObjectContext
         let eventType = type(of: managedObject).eventType
         let action: String
         var keyName: String
