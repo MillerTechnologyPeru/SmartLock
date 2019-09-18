@@ -19,9 +19,7 @@ final class IntentHandler: INExtension {
     
     static let didLaunch: Void = {
         // configure logging
-        #if os(iOS)
         Log.shared = .intent
-        #endif
         // print app info
         log("🎙 Launching Intent")
     }()
