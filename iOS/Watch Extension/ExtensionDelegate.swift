@@ -55,7 +55,7 @@ final class ExtensionDelegate: NSObject, WKExtensionDelegate {
         log("⌚️ Will resign active")
         
         #if DEBUG
-        let updateInterval: TimeInterval = 10
+        let updateInterval: TimeInterval = 30
         #else
         let updateInterval: TimeInterval = 60 * 3
         #endif
@@ -128,14 +128,8 @@ internal extension ExtensionDelegate {
         // scan for locks
         DispatchQueue.bluetooth.async {
             defer { mainQueue { completion?() } }
-            do {
-                // scan for locks
-                try Store.shared.scan(duration: 1.0)
-                // make sure each stored lock is visible
-                for lock in Store.shared.locks.value.keys {
-                    let _ = try Store.shared.device(for: lock, scanDuration: 1.0)
-                }
-            } catch { log("⚠️ Unable to scan: \(error)") }
+            do { try Store.shared.scan(duration: 0.5) }
+            catch { log("⚠️ Unable to scan: \(error.localizedDescription)") }
         }
     }
 }
