@@ -271,7 +271,6 @@ public final class Store {
     }
     
     private func updateSpotlight() {
-        
         spotlight.update(locks: locks.value)
     }
     
@@ -303,9 +302,14 @@ public final class Store {
                 typealias Predicate = ListEventsCharacteristic.Predicate
                 let context = Store.shared.backgroundContext
                 // scan for all locks
-                for (lock, _) in Store.shared.locks.value {
+                let locks = Store.shared.locks.value.keys
+                if locks.contains(where: { self.device(for: $0) == nil }) {
+                    do { try Store.shared.scan(duration: 1.0) }
+                    catch { log("⚠️ Could not scan for locks: \(error.localizedDescription)") }
+                }
+                for lock in locks {
                     do {
-                        guard let device = try self.device(for: lock, scanDuration: 1.0)
+                        guard let device = self.device(for: lock)
                             else { continue }
                         let lastEventDate = try context.performErrorBlockAndWait {
                             try context.find(identifier: lock, type: LockManagedObject.self)
