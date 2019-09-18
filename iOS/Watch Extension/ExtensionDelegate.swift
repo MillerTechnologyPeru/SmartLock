@@ -35,7 +35,7 @@ final class ExtensionDelegate: NSObject, WKExtensionDelegate {
         }
         Store.shared.syncApp()
     }
-
+    
     func applicationDidBecomeActive() {
         // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
         
@@ -81,7 +81,11 @@ final class ExtensionDelegate: NSObject, WKExtensionDelegate {
             case let snapshotTask as WKSnapshotRefreshBackgroundTask:
                 // Snapshot tasks have a unique completion call, make sure to set your expiration date
                 refresh {
-                    snapshotTask.setTaskCompleted(restoredDefaultState: true, estimatedSnapshotExpiration: Date() + 60, userInfo: nil)
+                    snapshotTask.setTaskCompleted(
+                        restoredDefaultState: true,
+                        estimatedSnapshotExpiration: Date() + 60,
+                        userInfo: nil
+                    )
                 }
             case let connectivityTask as WKWatchConnectivityRefreshBackgroundTask:
                 // Be sure to complete the connectivity task once you’re done.

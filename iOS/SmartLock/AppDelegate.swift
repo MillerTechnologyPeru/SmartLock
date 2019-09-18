@@ -17,6 +17,7 @@ import GATT
 import CoreLock
 import LockKit
 import JGProgressHUD
+import OpenCombine
 
 @UIApplicationMain
 final class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -38,6 +39,8 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
     #if DEBUG || targetEnvironment(macCatalyst)
     private var updateTimer: Timer?
     #endif
+    
+    private var locksObserver: OpenCombine.AnyCancellable?
     
     // MARK: - UIApplicationDelegate
     
@@ -100,8 +103,7 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
             WatchController.shared.context = .init(
                 applicationData: Store.shared.applicationData
             )
-            // FIXME: store watch locks observer
-            Store.shared.locks.sink { _ in
+            locksObserver = Store.shared.locks.sink { _ in
                 WatchController.shared.context = .init(
                     applicationData: Store.shared.applicationData
                 )
