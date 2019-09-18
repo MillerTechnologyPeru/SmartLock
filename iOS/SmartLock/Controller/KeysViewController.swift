@@ -195,33 +195,9 @@ final class KeysViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, contextMenuConfigurationForRowAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
         
         let item = self[indexPath]
-        return UIContextMenuConfiguration(identifier: item.identifier as NSUUID, previewProvider: nil) { (menuElements) -> UIMenu? in
+        return UIContextMenuConfiguration(identifier: item.identifier as NSUUID, previewProvider: nil) { [weak self] (menuElements) -> UIMenu? in
             
-            let rename = UIAction(title: "Rename", image: UIImage(systemName: "square.and.pencil")) { [weak self] (action) in
-                let alert = RenameActivity.viewController(for: item.identifier) { _ in
-                    
-                }
-                self?.present(alert, animated: true, completion: nil)
-            }
-            
-            let delete = UIAction(title: "Delete", image: UIImage(systemName: "trash"), attributes: .destructive) { [weak self] (action) in
-                let alert = DeleteLockActivity.viewController(for: item.identifier) { _ in
-                    
-                }
-                self?.present(alert, animated: true, completion: nil)
-            }
-            
-            return UIMenu(
-                title: "",
-                image: nil,
-                identifier: nil,
-                options: [],
-                children: [
-                    rename,
-                    delete,
-                    
-                ]
-            )
+            return self?.menu(forLock: item.identifier)
         }
     }
 }
