@@ -60,6 +60,9 @@ public final class LockEventsViewController: TableViewController {
     public override func viewDidLoad() {
         super.viewDidLoad()
         
+        // set activity
+        userActivity = NSUserActivity(.screen(.events))
+        
         // setup table view
         tableView.estimatedRowHeight = 60
         tableView.rowHeight = UITableView.automaticDimension
@@ -76,6 +79,12 @@ public final class LockEventsViewController: TableViewController {
         
         tableView.reloadData()
         reloadData()
+    }
+    
+    override public func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        userActivity?.becomeCurrent()
     }
     
     public override func viewDidDisappear(_ animated: Bool) {
