@@ -100,7 +100,6 @@ public final class NewKeyActivity: UIActivity {
     }
     
     public override func prepare(withActivityItems activityItems: [Any]) {
-        
         self.item = activityItems.first as? LockActivityItem
     }
     
@@ -198,33 +197,40 @@ public final class DeleteLockActivity: UIActivity {
     }
     
     public override func canPerform(withActivityItems activityItems: [Any]) -> Bool {
-        
         return activityItems.first as? LockActivityItem != nil
     }
     
     public override func prepare(withActivityItems activityItems: [Any]) {
-        
         self.item = activityItems.first as? LockActivityItem
     }
     
     public override var activityViewController: UIViewController? {
         
-        let alert = UIAlertController(title: NSLocalizedString("Confirmation", comment: "DeletionConfirmation"),
-                                      message: "Are you sure you want to delete this key?",
-                                      preferredStyle: UIAlertController.Style.alert)
+        return type(of: self).viewController(for: item.identifier, completion: { [weak self] (didDelete) in
+            self?.activityDidFinish(didDelete)
+            if didDelete { self?.completion?() }
+        })
+    }
+    
+    public static func viewController(for lock: UUID, completion: @escaping (Bool) -> ()) -> UIAlertController {
+        
+        let alert = UIAlertController(
+            title: NSLocalizedString("Confirmation", comment: "DeletionConfirmation"),
+            message: "Are you sure you want to delete this key?",
+            preferredStyle: .alert
+        )
         
         alert.addAction(UIAlertAction(title: NSLocalizedString("Cancel", comment: "Cancel"), style: .cancel, handler: { (UIAlertAction) in
             
-            alert.dismiss(animated: true) { self.activityDidFinish(false) }
+            alert.dismiss(animated: true) { completion(false) }
         }))
         
         alert.addAction(UIAlertAction(title: NSLocalizedString("Delete", comment: "Delete"), style: .destructive, handler: { (UIAlertAction) in
             
-            Store.shared.remove(self.item.identifier)
+            Store.shared.remove(lock)
             
             alert.dismiss(animated: true) {
-                self.activityDidFinish(true)
-                self.completion?()
+                completion(true)
             }
         }))
         
@@ -260,24 +266,29 @@ public final class RenameActivity: UIActivity {
     }
     
     public override var activityViewController: UIViewController? {
+        return type(of: self).viewController(for: item.identifier, completion: { [weak self] in
+            self?.activityDidFinish($0)
+        })
+    }
+    
+    public static func viewController(for lock: UUID,
+                                      completion: @escaping (Bool) -> ()) -> UIAlertController {
         
         let alert = UIAlertController(title: "Rename",
                                       message: "Type a user friendly name for this lock.",
                                       preferredStyle: .alert)
         
-        alert.addTextField { $0.text = Store.shared[lock: self.item.identifier]!.name }
+        alert.addTextField { $0.text = Store.shared[lock: lock]?.name }
         
         alert.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: "OK"), style: .`default`, handler: { (UIAlertAction) in
             
-            Store.shared[lock: self.item.identifier]!.name = alert.textFields![0].text ?? ""
-            
-            alert.dismiss(animated: true) { self.activityDidFinish(true) }
-            
+            Store.shared[lock: lock]?.name = alert.textFields?[0].text ?? ""
+            alert.dismiss(animated: true) { completion(true) }
         }))
         
         alert.addAction(UIAlertAction(title: NSLocalizedString("Cancel", comment: "Cancel"), style: .destructive, handler: { (UIAlertAction) in
             
-            alert.dismiss(animated: true) { self.activityDidFinish(false) }
+            alert.dismiss(animated: true) { completion(false) }
         }))
         
         return alert
@@ -408,7 +419,7 @@ public final class UpdateActivity: UIActivity {
     
     public override var activityViewController: UIViewController? {
         
-        let lockItem = self.item!
+        //let lockItem = self.item!
         
         let alert = UIAlertController(title: "Update Lock",
                                       message: "Are you sure you want to update the lock's software?",
@@ -495,7 +506,6 @@ public final class AddVoiceShortcutActivity: UIActivity {
     }
     
     public override func prepare(withActivityItems activityItems: [Any]) {
-        
         self.item = activityItems.first as? LockActivityItem
     }
     
