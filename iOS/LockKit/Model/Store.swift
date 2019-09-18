@@ -41,7 +41,7 @@ public final class Store {
         
         // load CoreData
         let semaphore = DispatchSemaphore(value: 0)
-        persistentContainer.loadPersistentStores { [weak self] (store, error) in
+        persistentContainer.loadPersistentStores { (store, error) in
             semaphore.signal()
             if let error = error {
                 log("⚠️ Unable to load persistent store: \(error.localizedDescription)")
@@ -122,6 +122,7 @@ public final class Store {
     
     public lazy var managedObjectContext: NSManagedObjectContext = {
         let context = self.persistentContainer.viewContext
+        context.automaticallyMergesChangesFromParent = true
         context.mergePolicy = NSMergePolicy.mergeByPropertyObjectTrump
         context.undoManager = nil
         return context
@@ -129,7 +130,7 @@ public final class Store {
     
     internal lazy var backgroundContext: NSManagedObjectContext = {
         let context = self.persistentContainer.newBackgroundContext()
-        context.mergePolicy = NSMergePolicy.mergeByPropertyObjectTrump
+        context.mergePolicy = NSMergePolicy.mergeByPropertyStoreTrump
         context.undoManager = nil
         return context
     }()
