@@ -105,12 +105,12 @@ public extension Preferences {
     }
     
     var bluetoothTimeout: TimeInterval {
-        get { return self[.bluetoothTimeout] ?? 30.0 }
+        get { return self[.bluetoothTimeout] ?? 15.0 }
         set { self[.bluetoothTimeout] = newValue }
     }
     
     var scanDuration: TimeInterval {
-        get { return self[.scanDuration] ?? 5.0 }
+        get { return self[.scanDuration] ?? 3.0 }
         set { self[.scanDuration] = newValue }
     }
     
