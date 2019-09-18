@@ -252,7 +252,7 @@ public final class Store {
     private func monitorBeacons() {
         
         // always monitor lock notification iBeacon
-        let beacons = Set(self.locks.value.keys) + [.lockBeaconNotification]
+        let beacons = Set(self.locks.value.keys) + [.lockNotificationBeacon]
         let oldBeacons = self.beaconController.beacons.keys
         
         // remove old beacons
@@ -283,51 +283,60 @@ public final class Store {
     }
     
     private func beaconFound(_ beacon: UUID, beacons: [CLBeacon]) {
-                
-        DispatchQueue.bluetooth.async { [weak self] in
-            guard let self = self else { return }
-            if let _ = Store.shared[lock: beacon] {
+        
+        if let _ = Store.shared[lock: beacon] {
+            DispatchQueue.bluetooth.async { [weak self] in
+                guard let self = self else { return }
                 do {
                     guard let _ = try self.device(for: beacon, scanDuration: 1.0) else {
                         log("⚠️ Could not find lock \(beacon) for beacon \(beacon)")
                         self.beaconController.scanBeacon(for: beacon)
                         return
                     }
+                    log("📶 Found lock \(beacon)")
                 } catch {
                     log("⚠️ Could not scan: \(error)")
                 }
-            } else if beacon == .lockBeaconNotification {
-                log("📶 Lock Notification iBeacon detected")
-                typealias FetchRequest = ListEventsCharacteristic.FetchRequest
-                typealias Predicate = ListEventsCharacteristic.Predicate
-                let context = Store.shared.backgroundContext
+            }
+        } else if beacon == .lockNotificationBeacon {
+            log("📶 Lock notification")
+            typealias FetchRequest = ListEventsCharacteristic.FetchRequest
+            typealias Predicate = ListEventsCharacteristic.Predicate
+            let context = Store.shared.backgroundContext
+            DispatchQueue.bluetooth.async {
                 // scan for all locks
                 let locks = Store.shared.locks.value.keys
-                if locks.contains(where: { self.device(for: $0) == nil }) {
+                // scan if none is visible
+                if locks.compactMap({ self.device(for: $0) }).isEmpty {
                     do { try Store.shared.scan(duration: 1.0) }
                     catch { log("⚠️ Could not scan for locks: \(error.localizedDescription)") }
                 }
-                for lock in locks {
-                    do {
-                        guard let device = self.device(for: lock)
-                            else { continue }
-                        let lastEventDate = try context.performErrorBlockAndWait {
-                            try context.find(identifier: lock, type: LockManagedObject.self)
-                                .flatMap { try $0.lastEvent(in: context)?.date }
-                        }
-                        let fetchRequest = FetchRequest(
-                            offset: 0,
-                            limit: nil,
-                            predicate: Predicate(
-                                keys: nil,
-                                start: lastEventDate,
-                                end: nil
+                let visibleLocks = locks.filter { self.device(for: $0) != nil }
+                // queue fetching events
+                DispatchQueue.bluetooth.asyncAfter(deadline: .now() + 5.0) {
+                    defer { self.beaconController.scanBeacons() } // refresh beacons
+                    for lock in visibleLocks {
+                        do {
+                            guard let device = try self.device(for: lock, scanDuration: 1.0)
+                                else { continue }
+                            let lastEventDate = try context.performErrorBlockAndWait {
+                                try context.find(identifier: lock, type: LockManagedObject.self)
+                                    .flatMap { try $0.lastEvent(in: context)?.date }
+                            }
+                            let fetchRequest = FetchRequest(
+                                offset: 0,
+                                limit: nil,
+                                predicate: Predicate(
+                                    keys: nil,
+                                    start: lastEventDate,
+                                    end: nil
+                                )
                             )
-                        )
-                        try self.listEvents(device, fetchRequest: fetchRequest, notification: { _,_ in })
-                    } catch {
-                        log("⚠️ Could not fetch latest data for lock \(lock): \(error)")
-                        continue
+                            try self.listEvents(device, fetchRequest: fetchRequest, notification: { _,_ in })
+                        } catch {
+                            log("⚠️ Could not fetch latest data for lock \(lock): \(error)")
+                            continue
+                        }
                     }
                 }
             }
