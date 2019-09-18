@@ -92,7 +92,7 @@ final class WatchController: NSObject {
         let message = context?.toMessage() ?? [:]
         do { try session.updateApplicationContext(message) }
         catch {
-            log?("⚠️ Unable to update application context: \(error)")
+            log?("⚠️ Unable to update application context: \(error.localizedDescription)")
             return
         }
         
@@ -235,7 +235,7 @@ extension WatchController: WCSessionDelegate {
         session.sendMessage(responseMessage, replyHandler: { [weak self] (reply) in
             self?.log?("Reply: \(reply)")
         }, errorHandler: { [weak self] (error) in
-            self?.log?("Unable to respond: \(error)")
+            self?.log?("Unable to respond: \(error.localizedDescription)")
         })
     }
     

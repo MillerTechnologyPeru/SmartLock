@@ -511,7 +511,7 @@ public extension UIViewController {
                     self?.resolveCloudSyncConflicts($0)
                 })
             }
-            catch { log("⚠️ Could not sync iCloud: \(error)") }
+            catch { log("⚠️ Could not sync iCloud: \(error.localizedDescription)") }
         }
     }
 }

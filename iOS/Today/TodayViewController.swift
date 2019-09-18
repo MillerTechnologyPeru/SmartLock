@@ -180,7 +180,7 @@ final class TodayViewController: UIViewController, NCWidgetProviding {
         DispatchQueue.bluetooth.async {
             do { try Store.shared.scan(duration: 1.0) }
             catch {
-                log("⚠️ Could not scan: \(error)")
+                log("⚠️ Could not scan: \(error.localizedDescription)")
                 mainQueue { completion?(false) }
                 return
             }
@@ -230,7 +230,7 @@ final class TodayViewController: UIViewController, NCWidgetProviding {
                         else { assertionFailure("Peripheral not found"); return }
                     try Store.shared.unlock(peripheral)
                 } catch {
-                    log("⚠️ Could not unlock: \(error)")
+                    log("⚠️ Could not unlock: \(error.localizedDescription)")
                 }
             }
         }

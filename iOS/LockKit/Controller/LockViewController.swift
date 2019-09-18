@@ -177,7 +177,7 @@ public final class LockViewController: UITableViewController {
                 try Store.shared.unlock(peripheral)
             }
             
-            catch { mainQueue { controller.showErrorAlert("\(error)") }; return }
+            catch { mainQueue { controller.showErrorAlert("\(error.localizedDescription)") }; return }
             
             log("Successfully unlocked lock \"\(controller.lockIdentifier!)\"")
         }

@@ -278,7 +278,7 @@ public final class Store {
         
         DispatchQueue.cloud.async { [weak self] in
             do { try self?.syncCloud() }
-            catch { log("⚠️ Unable to sync iCloud: \(error)") }
+            catch { log("⚠️ Unable to sync iCloud: \(error.localizedDescription)") }
         }
     }
     
@@ -295,7 +295,7 @@ public final class Store {
                     }
                     log("📶 Found lock \(beacon)")
                 } catch {
-                    log("⚠️ Could not scan: \(error)")
+                    log("⚠️ Could not scan: \(error.localizedDescription)")
                 }
             }
         } else if beacon == .lockNotificationBeacon {
@@ -334,7 +334,7 @@ public final class Store {
                             )
                             try self.listEvents(device, fetchRequest: fetchRequest, notification: { _,_ in })
                         } catch {
-                            log("⚠️ Could not fetch latest data for lock \(lock): \(error)")
+                            log("⚠️ Could not fetch latest data for lock \(lock): \(error.localizedDescription)")
                             continue
                         }
                     }
@@ -359,7 +359,7 @@ public final class Store {
                     self.beaconController.scanBeacon(for: beacon)
                 }
             } catch {
-                log("⚠️ Could not scan: \(error)")
+                log("⚠️ Could not scan: \(error.localizedDescription)")
             }
         }
     }
@@ -391,8 +391,12 @@ public extension Store {
                     guard information.identifier == identifier else { continue }
                 }
                 // request information
-                do { try self.readInformation(peripheral) }
-                catch { log("⚠️ Could not read information: \(error)"); continue } // ignore
+                do {
+                    try self.readInformation(peripheral)
+                } catch {
+                    log("⚠️ Could not read information: \(error.localizedDescription)")
+                    continue // ignore
+                }
                 if let foundDevice = device(for: identifier) {
                     return foundDevice
                 }

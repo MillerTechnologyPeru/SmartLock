@@ -81,7 +81,10 @@ public extension ActivityInterface {
                     if showActivity { controller.hideActivity() }
                     
                     // show error
-                    log("⚠️ Error: \(error)")
+                    log("⚠️ Error: \(error.localizedDescription)")
+                    #if DEBUG
+                    dump(error)
+                    #endif
                     controller.showError(error.localizedDescription)
                 }
             }

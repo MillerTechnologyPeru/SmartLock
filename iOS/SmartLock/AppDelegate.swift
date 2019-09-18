@@ -156,11 +156,11 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
                 for lock in Store.shared.locks.value.keys {
                     let _ = try Store.shared.device(for: lock, scanDuration: 1.0)
                 }
-            } catch { log("⚠️ Unable to scan: \(error)") }
+            } catch { log("⚠️ Unable to scan: \(error.localizedDescription)") }
             // attempt to sync with iCloud
             DispatchQueue.cloud.async {
                 do { try Store.shared.syncCloud() }
-                catch { log("⚠️ Unable to sync: \(error)") }
+                catch { log("⚠️ Unable to sync: \(error.localizedDescription)") }
                 mainQueue { self.logBackgroundTimeRemaining() }
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
                     log("\(bundle.symbol) Background task ended")
@@ -196,7 +196,7 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
                 for lock in Store.shared.locks.value.keys {
                     let _ = try Store.shared.device(for: lock, scanDuration: 1.0)
                 }
-            } catch { log("⚠️ Unable to scan: \(error)") }
+            } catch { log("⚠️ Unable to scan: \(error.localizedDescription)") }
         }
         
         // attempt to sync with iCloud
@@ -250,14 +250,14 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
                     let _ = try Store.shared.device(for: lock, scanDuration: 1.0)
                 }
             } catch {
-                log("⚠️ Unable to scan: \(error)")
+                log("⚠️ Unable to scan: \(error.localizedDescription)")
                 result = .failed
             }
             // attempt to sync with iCloud
             DispatchQueue.cloud.async {
                 do { try Store.shared.syncCloud() }
                 catch {
-                    log("⚠️ Unable to sync: \(error)")
+                    log("⚠️ Unable to sync: \(error.localizedDescription)")
                     result = .failed
                 }
                 if result != .failed {
@@ -393,11 +393,11 @@ private extension AppDelegate {
                 for lock in Store.shared.locks.value.keys {
                     let _ = try Store.shared.device(for: lock, scanDuration: 1.0)
                 }
-            } catch { log("⚠️ Unable to scan: \(error)") }
+            } catch { log("⚠️ Unable to scan: \(error.localizedDescription)") }
             // attempt to sync with iCloud
             DispatchQueue.cloud.async {
                 do { try Store.shared.syncCloud() }
-                catch { log("⚠️ Unable to sync: \(error)") }
+                catch { log("⚠️ Unable to sync: \(error.localizedDescription)") }
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
                     log("\(bundle.symbol) Updated data")
                 }

@@ -311,7 +311,7 @@ private extension BeaconController {
         @objc
         public func locationManager(_ manager: CLLocationManager, didFailRangingFor beaconConstraint: CLBeaconIdentityConstraint, error: Error) {
                         
-            log("Ranging beacons failed for \(beaconConstraint.uuid). \(error)")
+            log("Ranging beacons failed for \(beaconConstraint.uuid). \(error.localizedDescription)")
         }
         
         #if !targetEnvironment(macCatalyst)
@@ -324,7 +324,7 @@ private extension BeaconController {
         @objc
         public func locationManager(_ manager: CLLocationManager, rangingBeaconsDidFailFor region: CLBeaconRegion, withError error: Error) {
             
-            log("Ranging beacons failed for \(region.identifier). \(error)")
+            log("Ranging beacons failed for \(region.identifier). \(error.localizedDescription)")
         }
         #endif
     }

@@ -118,7 +118,7 @@ public final class NewKeyRecieveViewController: UITableViewController {
                 
                 mainQueue {
                     controller.hideActivity(animated: false)
-                    controller.showErrorAlert("\(error)", okHandler: {
+                    controller.showErrorAlert("\(error.localizedDescription)", okHandler: {
                         controller.dismiss(animated: true, completion: nil)
                     })
                 }
