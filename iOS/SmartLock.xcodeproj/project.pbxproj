@@ -210,6 +210,9 @@
 		6ED820B22316795D00B69520 /* LockKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6ED82086231676AE00B69520 /* LockKit.framework */; };
 		6EE05B80233309710014CEE4 /* Shortcut.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EE05B7F233309710014CEE4 /* Shortcut.swift */; };
 		6EE05B81233309710014CEE4 /* Shortcut.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EE05B7F233309710014CEE4 /* Shortcut.swift */; };
+		6EE05B8423331EB30014CEE4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6ED81FC72316618400B69520 /* Assets.xcassets */; };
+		6EE05B87233325820014CEE4 /* WatchAssets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6EE05B8523331F410014CEE4 /* WatchAssets.xcassets */; };
+		6EE05B88233325830014CEE4 /* WatchAssets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6EE05B8523331F410014CEE4 /* WatchAssets.xcassets */; };
 		6EE5A1082329F8790000235C /* CloudApplicationData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EE5A1072329F8790000235C /* CloudApplicationData.swift */; };
 		6EE5A10B2329FCA00000235C /* CloudKitCodable in Frameworks */ = {isa = PBXBuildFile; productRef = 6EE5A10A2329FCA00000235C /* CloudKitCodable */; };
 		6EE5A10D2329FD090000235C /* CloudKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EE5A10C2329FD090000235C /* CloudKey.swift */; };
@@ -662,6 +665,7 @@
 		6ED82086231676AE00B69520 /* LockKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = LockKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		6ED82089231676AF00B69520 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6EE05B7F233309710014CEE4 /* Shortcut.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Shortcut.swift; sourceTree = "<group>"; };
+		6EE05B8523331F410014CEE4 /* WatchAssets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = WatchAssets.xcassets; sourceTree = "<group>"; };
 		6EE5A1072329F8790000235C /* CloudApplicationData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudApplicationData.swift; sourceTree = "<group>"; };
 		6EE5A10C2329FD090000235C /* CloudKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudKey.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -1014,6 +1018,7 @@
 				6E994A86230DFB6C0076DC1B /* LockKit.h */,
 				6E994AF7230E571F0076DC1B /* Intents.intentdefinition */,
 				6E6000D02121224D00787DAA /* Assets.xcassets */,
+				6EE05B8523331F410014CEE4 /* WatchAssets.xcassets */,
 				6E806BD82310F36E00C6FF78 /* R.swift */,
 				6E806BB2230F6EC300C6FF78 /* R.LockKit.generated.swift */,
 				6EAADFB021229CB10074CEDF /* View */,
@@ -1786,6 +1791,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6EE05B87233325820014CEE4 /* WatchAssets.xcassets in Resources */,
 				6E9740422318C14800634631 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1794,6 +1800,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6EE05B88233325830014CEE4 /* WatchAssets.xcassets in Resources */,
+				6EE05B8423331EB30014CEE4 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

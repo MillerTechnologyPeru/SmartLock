@@ -142,7 +142,7 @@ internal extension ExtensionDelegate {
         // scan for locks
         DispatchQueue.bluetooth.async {
             defer { mainQueue { completion?() } }
-            do { try Store.shared.scan(duration: 0.5) }
+            do { try Store.shared.scan() }
             catch { log("⚠️ Unable to scan: \(error.localizedDescription)") }
         }
     }
