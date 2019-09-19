@@ -246,7 +246,7 @@ public extension NSUserActivity {
             self.isEligibleForHandoff = true
             #if !targetEnvironment(macCatalyst)
             if #available(iOS 12.0, watchOS 5.0, *) {
-                self.isEligibleForPrediction = true
+                self.isEligibleForPrediction = false
             }
             #endif
         case let .action(.shareKey(lockIdentifier)):
