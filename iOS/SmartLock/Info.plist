@@ -66,6 +66,8 @@
 	<string>Your camera is needed to setup your smart lock.</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
 	<string>Your location is needed to find nearby smart locks.</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>Your location is needed to monitor devices in the background.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Your location is needed to find nearby smart locks.</string>
 	<key>NSSiriUsageDescription</key>
