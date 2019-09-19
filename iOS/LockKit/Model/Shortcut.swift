@@ -16,6 +16,7 @@ import UIKit
 import WatchKit
 #endif
 
+#if !targetEnvironment(macCatalyst)
 @available(iOS 12.0, watchOS 5.0, *)
 public extension INRelevantShortcut {
     
@@ -79,3 +80,4 @@ public extension Store {
         INRelevantShortcutStore.default.setRelevantShortcuts(relevantShortcuts, completionHandler: completion)
     }
 }
+#endif

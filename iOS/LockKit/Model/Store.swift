@@ -231,9 +231,12 @@ public final class Store {
     private func lockCacheChanged() {
         
         updateCoreData()
+        
+        #if !targetEnvironment(macCatalyst)
         if #available(iOS 12.0, watchOS 5.0, *) {
             setRelevantShortcuts()
         }
+        #endif
         
         #if os(iOS)
         monitorBeacons()
