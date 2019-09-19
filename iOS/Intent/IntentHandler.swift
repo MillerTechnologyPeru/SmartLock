@@ -112,6 +112,7 @@ final class UnlockIntentHandler: NSObject, UnlockIntentHandling {
         }
     }
     
+    @available(iOSApplicationExtension 12.0, *)
     func confirm(intent: UnlockIntent, completion: @escaping (UnlockIntentResponse) -> Void) {
         
         assert(Thread.isMainThread == false, "Should not be main thread")
@@ -134,6 +135,7 @@ final class UnlockIntentHandler: NSObject, UnlockIntentHandling {
         }
     }
     
+    @available(iOSApplicationExtension 12.0, *)
     func handle(intent: UnlockIntent, completion: @escaping (UnlockIntentResponse) -> Void) {
         
         assert(Thread.isMainThread == false, "Should not be main thread")

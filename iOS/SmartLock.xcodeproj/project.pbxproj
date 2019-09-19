@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		6E05B6E122C9BF86001218D9 /* eKeyDocument.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 6E05B6DC22C9BF85001218D9 /* eKeyDocument.pdf */; };
 		6E05B6E722C9C159001218D9 /* KeysViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E05B6E622C9C159001218D9 /* KeysViewController.swift */; };
+		6E07C9E523335DF500B7996C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6E994B12230E89490076DC1B /* Assets.xcassets */; };
 		6E08FB832316E64D00177026 /* SessionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E08FB822316E64D00177026 /* SessionController.swift */; };
 		6E08FB852316EF3D00177026 /* WatchController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E08FB842316EF3D00177026 /* WatchController.swift */; };
 		6E08FB8A2316F63700177026 /* WatchMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E08FB872316EF6000177026 /* WatchMessage.swift */; };
@@ -158,7 +159,6 @@
 		6E994B0B230E89440076DC1B /* Messages.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6E994B0A230E89440076DC1B /* Messages.framework */; };
 		6E994B0E230E89460076DC1B /* MessagesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E994B0D230E89460076DC1B /* MessagesViewController.swift */; };
 		6E994B11230E89460076DC1B /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6E994B0F230E89460076DC1B /* MainInterface.storyboard */; };
-		6E994B13230E89490076DC1B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6E994B12230E89490076DC1B /* Assets.xcassets */; };
 		6E994B17230E89490076DC1B /* Message.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 6E994B09230E89440076DC1B /* Message.appex */; platformFilter = ios; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		6E994B2A230EF6DA0076DC1B /* NotificationCenter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6E994B29230EF6DA0076DC1B /* NotificationCenter.framework */; };
 		6E994B2D230EF6DB0076DC1B /* TodayViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E994B2C230EF6DB0076DC1B /* TodayViewController.swift */; };
@@ -1765,7 +1765,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6E994B13230E89490076DC1B /* Assets.xcassets in Resources */,
+				6E07C9E523335DF500B7996C /* Assets.xcassets in Resources */,
 				6E994B11230E89460076DC1B /* MainInterface.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -2732,7 +2732,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 4W79SG34MW;
 				INFOPLIST_FILE = Intent/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -2756,7 +2756,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 4W79SG34MW;
 				INFOPLIST_FILE = Intent/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
