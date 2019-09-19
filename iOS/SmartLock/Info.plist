@@ -31,8 +31,6 @@
 	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
-	<key>LSSupportsOpeningDocumentsInPlace</key>
-	<true/>
 	<key>CFBundleName</key>
 	<string>$(PRODUCT_NAME)</string>
 	<key>CFBundlePackageType</key>
@@ -58,6 +56,8 @@
 	<string>public.app-category.utilities</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>LSSupportsOpeningDocumentsInPlace</key>
+	<true/>
 	<key>NSBluetoothAlwaysUsageDescription</key>
 	<string>Bluetooth is used to scan for nearby locks in the background.</string>
 	<key>NSBluetoothPeripheralUsageDescription</key>
@@ -68,6 +68,8 @@
 	<string>Your location is needed to find nearby smart locks.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Your location is needed to find nearby smart locks.</string>
+	<key>NSSiriUsageDescription</key>
+	<string>Siri is used to unlock with voice commands.</string>
 	<key>NSUserActivityTypes</key>
 	<array>
 		<string>UnlockIntent</string>
