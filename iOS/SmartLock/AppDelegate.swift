@@ -17,6 +17,7 @@ import GATT
 import CoreLock
 import LockKit
 import JGProgressHUD
+import OpenCombine
 
 @UIApplicationMain
 final class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -38,6 +39,8 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
     #if DEBUG || targetEnvironment(macCatalyst)
     private var updateTimer: Timer?
     #endif
+    
+    private var locksObserver: OpenCombine.AnyCancellable?
     
     // MARK: - UIApplicationDelegate
     
@@ -100,8 +103,7 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
             WatchController.shared.context = .init(
                 applicationData: Store.shared.applicationData
             )
-            // FIXME: store watch locks observer
-            Store.shared.locks.sink { _ in
+            locksObserver = Store.shared.locks.sink { _ in
                 WatchController.shared.context = .init(
                     applicationData: Store.shared.applicationData
                 )
@@ -146,7 +148,7 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
         let beaconTask = UIApplication.shared.beginBackgroundTask(withName: bundle.rawValue, expirationHandler: {
             log("\(bundle.symbol) Background task expired")
         })
-        async { [unowned self] in
+        DispatchQueue.bluetooth.async { [unowned self] in
             do {
                 // scan for locks
                 try Store.shared.scan(duration: 3.0)
@@ -154,11 +156,11 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
                 for lock in Store.shared.locks.value.keys {
                     let _ = try Store.shared.device(for: lock, scanDuration: 1.0)
                 }
-            } catch { log("⚠️ Unable to scan: \(error)") }
+            } catch { log("⚠️ Unable to scan: \(error.localizedDescription)") }
             // attempt to sync with iCloud
             DispatchQueue.cloud.async {
                 do { try Store.shared.syncCloud() }
-                catch { log("⚠️ Unable to sync: \(error)") }
+                catch { log("⚠️ Unable to sync: \(error.localizedDescription)") }
                 mainQueue { self.logBackgroundTimeRemaining() }
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
                     log("\(bundle.symbol) Background task ended")
@@ -187,15 +189,14 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
         Store.shared.loadCache()
                         
         BeaconController.shared.scanBeacons()
-
         
         // attempt to scan for all known locks if they are not in central cache
-        async {
+        DispatchQueue.bluetooth.async {
             do {
                 for lock in Store.shared.locks.value.keys {
                     let _ = try Store.shared.device(for: lock, scanDuration: 1.0)
                 }
-            } catch { log("⚠️ Unable to scan: \(error)") }
+            } catch { log("⚠️ Unable to scan: \(error.localizedDescription)") }
         }
         
         // attempt to sync with iCloud
@@ -212,7 +213,10 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     func application(_ application: UIApplication, handleOpen url: URL) -> Bool {
-        
+        return open(url: url)
+    }
+    
+    func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
         return open(url: url)
     }
     
@@ -226,9 +230,9 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
         
         // 30 sec max background fetch
         var result: UIBackgroundFetchResult = .noData
-        async { [unowned self] in
-            let applicationData = Store.shared.applicationData
-            let information = Array(Store.shared.lockInformation.value.values)
+        let applicationData = Store.shared.applicationData
+        let information = Array(Store.shared.lockInformation.value.values)
+        DispatchQueue.bluetooth.async { [unowned self] in
             do {
                 // scan for locks
                 try Store.shared.scan(duration: 5.0)
@@ -246,14 +250,14 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
                     let _ = try Store.shared.device(for: lock, scanDuration: 1.0)
                 }
             } catch {
-                log("⚠️ Unable to scan: \(error)")
+                log("⚠️ Unable to scan: \(error.localizedDescription)")
                 result = .failed
             }
             // attempt to sync with iCloud
             DispatchQueue.cloud.async {
                 do { try Store.shared.syncCloud() }
                 catch {
-                    log("⚠️ Unable to sync: \(error)")
+                    log("⚠️ Unable to sync: \(error.localizedDescription)")
                     result = .failed
                 }
                 if result != .failed {
@@ -381,7 +385,7 @@ private extension AppDelegate {
         let bundle = self.bundle
         log("\(bundle.symbol) Will update data")
         
-        async {
+        DispatchQueue.bluetooth.async {
             do {
                 // scan for locks
                 try Store.shared.scan(duration: 3.0)
@@ -389,11 +393,11 @@ private extension AppDelegate {
                 for lock in Store.shared.locks.value.keys {
                     let _ = try Store.shared.device(for: lock, scanDuration: 1.0)
                 }
-            } catch { log("⚠️ Unable to scan: \(error)") }
+            } catch { log("⚠️ Unable to scan: \(error.localizedDescription)") }
             // attempt to sync with iCloud
             DispatchQueue.cloud.async {
                 do { try Store.shared.syncCloud() }
-                catch { log("⚠️ Unable to sync: \(error)") }
+                catch { log("⚠️ Unable to sync: \(error.localizedDescription)") }
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
                     log("\(bundle.symbol) Updated data")
                 }
@@ -430,7 +434,6 @@ internal extension AppDelegate {
     }
     
     func open(url: LockURL) {
-        
         tabBarController.handle(url: url)
     }
 }
@@ -440,12 +443,10 @@ internal extension AppDelegate {
 extension AppDelegate: LockActivityHandling {
     
     func handle(url: LockURL) {
-        
         tabBarController.handle(url: url)
     }
     
     func handle(activity: AppActivity) {
-        
         tabBarController.handle(activity: activity)
     }
 }

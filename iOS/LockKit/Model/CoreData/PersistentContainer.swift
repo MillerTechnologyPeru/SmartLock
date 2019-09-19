@@ -12,7 +12,13 @@ import CoreData
 public extension NSPersistentContainer {
     
     static var lock: NSPersistentContainer {
+        guard let appGroupURL = FileManager.default.containerURL(for: .lock)
+            else { fatalError("Couldn't get app group for \(AppGroup.lock.rawValue)") }
         let container = NSPersistentContainer(name: "LockCache", managedObjectModel: .lock)
+        let storeDescription = NSPersistentStoreDescription(url: appGroupURL.appendingPathComponent("data.sqlite"))
+        storeDescription.shouldInferMappingModelAutomatically = true
+        storeDescription.shouldMigrateStoreAutomatically = true
+        container.persistentStoreDescriptions = [storeDescription]
         return container
     }
 }

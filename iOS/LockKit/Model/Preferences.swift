@@ -105,12 +105,12 @@ public extension Preferences {
     }
     
     var bluetoothTimeout: TimeInterval {
-        get { return self[.bluetoothTimeout] ?? 30.0 }
+        get { return self[.bluetoothTimeout] ?? 15.0 }
         set { self[.bluetoothTimeout] = newValue }
     }
     
     var scanDuration: TimeInterval {
-        get { return self[.scanDuration] ?? 5.0 }
+        get { return self[.scanDuration] ?? 3.0 }
         set { self[.scanDuration] = newValue }
     }
     
@@ -127,6 +127,11 @@ public extension Preferences {
     var showPowerAlert: Bool {
         get { return self[.showPowerAlert] ?? false }
         set { self[.showPowerAlert] = newValue }
+    }
+    
+    var monitorBluetoothNotifications: Bool {
+        get { return self[.monitorBluetoothNotifications] ?? false }
+        set { self[.monitorBluetoothNotifications] = newValue }
     }
 }
 
@@ -146,5 +151,6 @@ public extension Preferences {
         case showPowerAlert
         case writeWithoutResponseTimeout
         case scanDuration
+        case monitorBluetoothNotifications
     }
 }

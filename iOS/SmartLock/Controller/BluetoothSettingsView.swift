@@ -52,6 +52,9 @@ struct BluetoothSettingsView: View {
             }
             Section(header: Text(verbatim: "")) {
                 Toggle("Filter Duplicates", isOn: $preferences.filterDuplicates)
+                #if !targetEnvironment(macCatalyst)
+                Toggle("Monitor Notifications", isOn: $preferences.monitorBluetoothNotifications)
+                #endif
             }
         }
         .listStyle(GroupedListStyle())

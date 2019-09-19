@@ -122,7 +122,7 @@ public final class LockViewController: UITableViewController {
         }
         
         if shouldScan {
-            performActivity({
+            performActivity(queue: .bluetooth, {
                 try Store.shared.scan(duration: 1)
             }, completion: { (viewController, _) in
                 show()
@@ -162,7 +162,7 @@ public final class LockViewController: UITableViewController {
         
         unlockButton.isEnabled = false
         
-        async { [weak self] in
+        DispatchQueue.bluetooth.async { [weak self] in
             
             guard let controller = self else { return }
             
@@ -177,7 +177,7 @@ public final class LockViewController: UITableViewController {
                 try Store.shared.unlock(peripheral)
             }
             
-            catch { mainQueue { controller.showErrorAlert("\(error)") }; return }
+            catch { mainQueue { controller.showErrorAlert("\(error.localizedDescription)") }; return }
             
             log("Successfully unlocked lock \"\(controller.lockIdentifier!)\"")
         }

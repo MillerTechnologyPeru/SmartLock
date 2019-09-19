@@ -27,9 +27,7 @@ final class InterfaceController: WKInterfaceController {
     // MARK: - Properties
     
     let activity = NSUserActivity(.screen(.nearbyLocks))
-    
-    let scanDuration: TimeInterval = 3.0
-    
+        
     private var items = [Item]()
     
     private var peripheralsObserver: AnyCancellable?
@@ -110,14 +108,9 @@ final class InterfaceController: WKInterfaceController {
         
         activity.becomeCurrent()
         
-        // reset table
-        self.items.removeAll(keepingCapacity: true)
-        
-        let scanDuration = self.scanDuration
-        
         // scan
-        performActivity({
-            try Store.shared.scan(duration: scanDuration)
+        performActivity(queue: .bluetooth, {
+            try Store.shared.scan()
             for peripheral in Store.shared.peripherals.value.values {
                 do { try Store.shared.readInformation(peripheral) }
                 catch { log("⚠️ Could not read information for peripheral \(peripheral.scanData.peripheral)") }
@@ -140,6 +133,10 @@ final class InterfaceController: WKInterfaceController {
                     Item(identifier: information.identifier, cache: $0, peripheral: device)
                 }
             }
+        
+        if items.isEmpty == false {
+            hideActivity()
+        }
         
         self.tableView.setNumberOfRows(items.count, withRowType: LockRowController.rowType)
         
@@ -209,7 +206,7 @@ final class LockRowController: NSObject {
     
     static let rowType = "Lock"
     
-    @IBOutlet weak var imageView: WKInterfaceImage!
+    @IBOutlet private(set) weak var imageView: WKInterfaceImage!
     
-    @IBOutlet weak var label: WKInterfaceLabel!
+    @IBOutlet private(set) weak var label: WKInterfaceLabel!
 }

@@ -31,18 +31,18 @@ public final class BeaconController {
     
     private lazy var delegate = Delegate(self)
     
-    public private(set) var locks = [UUID: CLBeaconRegion]()
+    public private(set) var beacons = [UUID: CLBeaconRegion]()
     
     public var allowsBackgroundLocationUpdates: Bool {
         get { return locationManager.allowsBackgroundLocationUpdates }
         set { locationManager.allowsBackgroundLocationUpdates = newValue }
     }
     
-    public var foundLock: ((UUID, CLBeacon) -> ())?
+    public var foundBeacon: ((UUID, [CLBeacon]) -> ())?
     
-    public var lostLock: ((UUID) -> ())?
+    public var lostBeacon: ((UUID) -> ())?
     
-    private var foundBeacons = [UUID: CLBeacon]()
+    private var foundBeacons = [UUID: [CLBeacon]]()
     
     // MARK: - Methods
     
@@ -50,50 +50,50 @@ public final class BeaconController {
         locationManager.requestAlwaysAuthorization()
     }
     
-    public func monitor(lock identifier: UUID) {
+    public func monitor(_ beacon: UUID) {
         
-        let region = CLBeaconRegion(uuid: identifier)
+        let region = CLBeaconRegion(uuid: beacon)
         region.notifyOnEntry = true
         region.notifyEntryStateOnDisplay = true
         region.notifyOnExit = true
-        locks[identifier] = region
+        beacons[beacon] = region
         
         // initiate monitoring and scanning
         scanBeacons(in: region)
     }
     
     @discardableResult
-    public func stopMonitoring(lock identifier: UUID) -> Bool {
+    public func stopMonitoring(_ beacon: UUID) -> Bool {
         
-        guard let region = locks[identifier]
+        guard let region = beacons[beacon]
             else { return false }
         
-        locks[identifier] = nil
+        beacons[beacon] = nil
         
         switch CLLocationManager.authorizationStatus() {
         case .authorizedAlways:
             locationManager.stopMonitoring(for: region)
-            locationManager.stopRangingBeacons(in: identifier)
+            locationManager.stopRangingBeacons(in: beacon)
         case .authorizedWhenInUse:
-            locationManager.stopRangingBeacons(in: identifier)
+            locationManager.stopRangingBeacons(in: beacon)
         case .denied,
              .notDetermined,
              .restricted:
             break
         @unknown default:
-            locationManager.stopRangingBeacons(in: identifier)
+            locationManager.stopRangingBeacons(in: beacon)
         }
         
         return true
     }
     
     public func scanBeacons() {
-        locks.values.forEach { scanBeacons(in: $0) }
+        beacons.values.forEach { scanBeacons(in: $0) }
     }
     
     @discardableResult
-    public func scanBeacon(for lock: UUID) -> Bool {
-        guard let region = locks[lock]
+    public func scanBeacon(for identifier: UUID) -> Bool {
+        guard let region = beacons[identifier]
             else { return false }
         scanBeacons(in: region)
         return true
@@ -197,9 +197,9 @@ private extension BeaconController {
             log("Entered region \(region.identifier)")
             
             if let beaconRegion = region as? CLBeaconRegion {
-                if let lock = beaconController?.locks.first(where: { $0.value == region })?.key {
+                if let beacon = beaconController?.beacons.first(where: { $0.value == region })?.key {
                     // clear stale beacons
-                    self.beaconController?.foundBeacons[lock] = nil
+                    self.beaconController?.foundBeacons[beacon] = nil
                 }
                 if #available(iOS 13, *) {
                     if manager.rangedBeaconConstraints.contains(.init(beaconRegion)) == false {
@@ -232,12 +232,12 @@ private extension BeaconController {
                     }
                     #endif
                 }
-                if let lock = beaconController?.locks.first(where: { $0.value == region })?.key {
-                    defer { self.beaconController?.foundBeacons[lock] = nil }
-                    let oldBeacon = self.beaconController?.foundBeacons[lock]
+                if let beacon = beaconController?.beacons.first(where: { $0.value == region })?.key {
+                    defer { self.beaconController?.foundBeacons[beacon] = nil }
+                    let oldBeacon = self.beaconController?.foundBeacons[beacon]
                     if oldBeacon != nil {
-                        self.beaconController?.log?("Cannot find beacon for lock \(lock)")
-                        self.beaconController?.lostLock?(lock)
+                        self.beaconController?.log?("Cannot find beacon \(beacon)")
+                        self.beaconController?.lostBeacon?(beacon)
                     }
                 }
             }
@@ -251,17 +251,17 @@ private extension BeaconController {
             if let beaconRegion = region as? CLBeaconRegion {
                 
                 switch state {
-                case .inside:
-                    manager.startRangingBeacons(in: beaconRegion.proximityUUID)
-                case .outside,
+                case .inside,
                      .unknown:
+                    manager.startRangingBeacons(in: beaconRegion.proximityUUID)
+                case .outside:
                     manager.stopRangingBeacons(in: beaconRegion.proximityUUID)
-                    if let lock = beaconController?.locks.first(where: { $0.value == region })?.key {
-                        defer { self.beaconController?.foundBeacons[lock] = nil }
-                        let oldBeacon = self.beaconController?.foundBeacons[lock]
+                    if let beacon = beaconController?.beacons.first(where: { $0.value == region })?.key {
+                        defer { self.beaconController?.foundBeacons[beacon] = nil }
+                        let oldBeacon = self.beaconController?.foundBeacons[beacon]
                         if oldBeacon != nil {
-                            self.beaconController?.log?("Cannot find beacon for lock \(lock)")
-                            self.beaconController?.lostLock?(lock)
+                            self.beaconController?.log?("Cannot find beacon \(beacon)")
+                            self.beaconController?.lostBeacon?(beacon)
                         }
                     }
                 }
@@ -278,24 +278,22 @@ private extension BeaconController {
             let manager = beaconController.locationManager
             
             // is lock iBeacon, make sure the lock is scanned for BLE operations
-            if let lock = beaconController.locks.first(where: { $0.value.identifier == uuid.uuidString })?.key {
-                
-                assert(beacons.count <= 1, "Should only be one lock iBeacon")
-                
+            if let beacon = beaconController.beacons.first(where: { $0.value.identifier == uuid.uuidString })?.key {
+                                
                 // stop BLE scanning for iBeacon
                 manager.stopRangingBeacons(in: uuid)
                 
-                guard let beacon = beacons.first else {
+                guard beacons.isEmpty == false else {
                     // make sure we are inside the Beacon region
                     manager.requestState(for: uuid)
                     return
                 }
                 
-                let oldBeacon = beaconController.foundBeacons[lock]
-                beaconController.foundBeacons[lock] = beacon
+                let oldBeacon = beaconController.foundBeacons[beacon]
+                beaconController.foundBeacons[beacon] = beacons
                 if oldBeacon == nil {
-                    beaconController.log?("Found beacon for lock \(lock)")
-                    beaconController.foundLock?(lock, beacon)
+                    beaconController.log?("Found beacon \(beacon)")
+                    beaconController.foundBeacon?(beacon, beacons)
                 }
             } else {
                 manager.stopRangingBeacons(in: uuid)
@@ -313,7 +311,7 @@ private extension BeaconController {
         @objc
         public func locationManager(_ manager: CLLocationManager, didFailRangingFor beaconConstraint: CLBeaconIdentityConstraint, error: Error) {
                         
-            log("Ranging beacons failed for \(beaconConstraint.uuid). \(error)")
+            log("Ranging beacons failed for \(beaconConstraint.uuid). \(error.localizedDescription)")
         }
         
         #if !targetEnvironment(macCatalyst)
@@ -326,7 +324,7 @@ private extension BeaconController {
         @objc
         public func locationManager(_ manager: CLLocationManager, rangingBeaconsDidFailFor region: CLBeaconRegion, withError error: Error) {
             
-            log("Ranging beacons failed for \(region.identifier). \(error)")
+            log("Ranging beacons failed for \(region.identifier). \(error.localizedDescription)")
         }
         #endif
     }

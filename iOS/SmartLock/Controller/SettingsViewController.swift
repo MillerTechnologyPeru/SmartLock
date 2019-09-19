@@ -74,13 +74,13 @@ final class SettingsViewController: UITableViewController {
         if #available(iOS 13, *) {
             let section: Section = [
                 Item(
-                    icon: .logs,
+                    icon: .bluetooth,
                     title: "Bluetooth",
                     accessory: .disclosureIndicator,
                     action: { $0.show(UIHostingController(rootView: BluetoothSettingsView()), sender: $1) }
                 ),
                 Item(
-                    icon: .logs,
+                    icon: .cloud,
                     title: "iCloud",
                     accessory: .disclosureIndicator,
                     action: { $0.show(UIHostingController(rootView: CloudSettingsView()), sender: $1) }

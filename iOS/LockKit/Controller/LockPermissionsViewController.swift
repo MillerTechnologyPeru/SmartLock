@@ -81,7 +81,7 @@ public final class LockPermissionsViewController: UITableViewController {
         guard let lockIdentifier = self.lockIdentifier
             else { assertionFailure(); return }
         
-        performActivity({
+        performActivity(queue: .bluetooth, {
             guard let peripheral = try Store.shared.device(for: lockIdentifier, scanDuration: 1.0)
                 else { throw CentralError.unknownPeripheral }
             try Store.shared.listKeys(peripheral, notification: { (list, isComplete) in
@@ -218,7 +218,7 @@ public final class LockPermissionsViewController: UITableViewController {
                 
                 self.showActivity()
                 
-                async { [weak self] in
+                DispatchQueue.bluetooth.async { [weak self] in
                     
                     do {
                         guard let peripheral = Store.shared[peripheral: lockIdentifier]

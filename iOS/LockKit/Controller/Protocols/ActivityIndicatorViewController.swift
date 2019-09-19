@@ -29,7 +29,7 @@ public extension ActivityIndicatorViewController {
                               _ asyncOperation: @escaping () throws -> T,
                               completion: ((Self, T) -> ())? = nil) {
         
-        let queue = queue ?? appQueue
+        let queue = queue ?? .app
         if showActivity { self.showActivity() }
         queue.async {
             mainQueue { if showActivity { self.showActivity() } }
@@ -46,7 +46,10 @@ public extension ActivityIndicatorViewController {
                     guard let self = self else { return }
                     if showActivity { self.hideActivity(animated: false) }
                     // show error
-                    log("⚠️ Error: \(error)")
+                    log("⚠️ Error: \(error.localizedDescription)")
+                    #if DEBUG
+                    dump(error)
+                    #endif
                     (self as? UIViewController)?.showErrorAlert(error.localizedDescription)
                 }
             }

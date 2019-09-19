@@ -24,6 +24,9 @@ extension TabBarController: LockActivityHandlingViewController {
         case .screen(.keys):
             // show keys
             select(KeysViewController.self)
+        case .screen(.events):
+            // show keys
+            select(LockEventsViewController.self)
         case .view(.lock):
             // forward
             select(KeysViewController.self) {
@@ -80,7 +83,8 @@ extension KeysViewController: LockActivityHandlingViewController {
         switch activity {
         case .screen(.keys):
             return
-        case .screen(.nearbyLocks):
+        case .screen(.nearbyLocks),
+             .screen(.events):
             AppDelegate.shared.handle(activity: activity)
         case let .view(.lock(identifier)):
             select(lock: identifier, animated: false)

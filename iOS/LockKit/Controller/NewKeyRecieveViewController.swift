@@ -68,7 +68,7 @@ public final class NewKeyRecieveViewController: UITableViewController {
         let keyData = KeyData()
         showActivity()
         
-        async { [weak self] in
+        DispatchQueue.bluetooth.async { [weak self] in
             
             guard let controller = self else { return }
             
@@ -118,7 +118,7 @@ public final class NewKeyRecieveViewController: UITableViewController {
                 
                 mainQueue {
                     controller.hideActivity(animated: false)
-                    controller.showErrorAlert("\(error)", okHandler: {
+                    controller.showErrorAlert("\(error.localizedDescription)", okHandler: {
                         controller.dismiss(animated: true, completion: nil)
                     })
                 }

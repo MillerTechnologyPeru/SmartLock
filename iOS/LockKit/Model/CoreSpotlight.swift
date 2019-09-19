@@ -41,14 +41,14 @@ public final class SpotlightController {
         index.deleteSearchableItems(withDomainIdentifiers: [SearchableLock.searchDomain]) { [weak self] (error) in
             guard let self = self else { return }
             if let error = error {
-                self.log?("Error: \(error)")
+                self.log?("Error: \(error.localizedDescription)")
                 return
             }
             self.log?("Deleted old locks")
             self.index.indexSearchableItems(Array(searchableItems)) { [weak self] (error) in
                 guard let self = self else { return }
                 if let error = error {
-                    self.log?("Error: \(error)")
+                    self.log?("Error: \(error.localizedDescription)")
                     return
                 }
                 self.log?("Indexed locks")

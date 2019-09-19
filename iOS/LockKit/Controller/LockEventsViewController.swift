@@ -60,6 +60,9 @@ public final class LockEventsViewController: TableViewController {
     public override func viewDidLoad() {
         super.viewDidLoad()
         
+        // set activity
+        userActivity = NSUserActivity(.screen(.events))
+        
         // setup table view
         tableView.estimatedRowHeight = 60
         tableView.rowHeight = UITableView.automaticDimension
@@ -76,6 +79,12 @@ public final class LockEventsViewController: TableViewController {
         
         tableView.reloadData()
         reloadData()
+    }
+    
+    override public func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        userActivity?.becomeCurrent()
     }
     
     public override func viewDidDisappear(_ animated: Bool) {
@@ -102,7 +111,7 @@ public final class LockEventsViewController: TableViewController {
     
     private func configureView() {
         
-        let context = Store.shared.persistentContainer.viewContext
+        let context = Store.shared.managedObjectContext
         let fetchRequest = NSFetchRequest<EventManagedObject>()
         fetchRequest.entity = EventManagedObject.entity()
         fetchRequest.includesSubentities = true
@@ -140,11 +149,24 @@ public final class LockEventsViewController: TableViewController {
             loadKeys()
         }
         
+        // attempt to load data from iCloud
+        if Store.shared.preferences.isCloudEnabled {
+            DispatchQueue.cloud.async {
+                do { try Store.shared.downloadCloudLocks() }
+                catch {
+                    log("⚠️ Unable to load data from iCloud: \(error.localizedDescription)")
+                    #if DEBUG
+                    dump(error)
+                    #endif
+                }
+            }
+        }
+        
         let locks = self.locks
         let context = Store.shared.backgroundContext
         
         if Store.shared.lockManager.central.state == .poweredOn {
-            performActivity({ [weak self] in
+            performActivity(queue: .bluetooth, { [weak self] in
                 for lock in locks {
                     guard let device = try Store.shared.device(for: lock, scanDuration: 1.0) else {
                         if self?.lock == nil {
@@ -179,19 +201,6 @@ public final class LockEventsViewController: TableViewController {
                 viewController.needsKeys.removeAll()
             })
         }
-        
-        // attempt to load data from iCloud
-        if Store.shared.preferences.isCloudEnabled {
-            performActivity({
-                do { try Store.shared.downloadCloudLocks() }
-                catch {
-                    log("⚠️ Unable to load data from iCloud: \(error.localizedDescription)")
-                    #if DEBUG
-                    dump(error)
-                    #endif
-                }
-            })
-        }
     }
     
     private subscript (indexPath: IndexPath) -> EventManagedObject {
@@ -205,7 +214,7 @@ public final class LockEventsViewController: TableViewController {
             assertionFailure("Missing identifier")
             return
         }
-        let context = Store.shared.persistentContainer.viewContext
+        let context = Store.shared.managedObjectContext
         let eventType = type(of: managedObject).eventType
         let action: String
         var keyName: String
@@ -278,7 +287,7 @@ public final class LockEventsViewController: TableViewController {
             Store.shared[lock: $0]?.key.permission.isAdministrator ?? false
                 && (needsKeys.isEmpty ? true : needsKeys.contains($0))
         }
-        performActivity({
+        performActivity(queue: .bluetooth, {
             try locks.forEach {
                 try Store.shared.device(for: $0, scanDuration: 1.0).flatMap {
                     let canListKeys = try Store.shared.listKeys($0)

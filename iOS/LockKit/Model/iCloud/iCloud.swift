@@ -479,17 +479,6 @@ public extension Store {
     }
 }
 
-public extension DispatchQueue {
-    
-    /// iCloud GCD Queue
-    static var cloud: DispatchQueue {
-        struct Cache {
-            static let queue = DispatchQueue(label: "com.colemancda.Lock.iCloud")
-        }
-        return Cache.queue
-    }
-}
-
 #if os(iOS)
 import UIKit
 
@@ -522,7 +511,7 @@ public extension UIViewController {
                     self?.resolveCloudSyncConflicts($0)
                 })
             }
-            catch { log("⚠️ Could not sync iCloud: \(error)") }
+            catch { log("⚠️ Could not sync iCloud: \(error.localizedDescription)") }
         }
     }
 }
@@ -587,48 +576,5 @@ public extension FileManager {
     func ubiquityContainerURL(for identifier: UbiquityContainerIdentifier) -> URL? {
         assert(Thread.isMainThread == false, "Use iCloud from secondary thread")
         return url(forUbiquityContainerIdentifier: identifier.rawValue)
-    }
-}
-
-public extension CKContainer {
-    
-    convenience init(identifier: UbiquityContainerIdentifier) {
-        self.init(identifier: identifier.rawValue)
-    }
-}
-
-public extension CKContainer {
-    
-    /// `iCloud.com.colemancda.Lock` CloudKit container.
-    static var lock: CKContainer {
-        struct Cache {
-            static let container = CKContainer(identifier: .lock)
-        }
-        return Cache.container
-    }
-}
-
-public extension CKContainer {
-    
-    func fetchUserRecordID() throws -> CKRecord.ID {
-        let semaphore = DispatchSemaphore(value: 0)
-        var result: Result<CKRecord.ID, Swift.Error>!
-        fetchUserRecordID { (recordID, error) in
-            defer { semaphore.signal() }
-            if let recordID = recordID {
-                result = .success(recordID)
-            } else if let error = error {
-                result = .failure(error)
-            } else {
-                fatalError()
-            }
-        }
-        semaphore.wait()
-        switch result! {
-        case let .success(recordID):
-            return recordID
-        case let .failure(error):
-            throw error
-        }
     }
 }

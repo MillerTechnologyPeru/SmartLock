@@ -28,6 +28,10 @@ public final class SettingsIconView: UIView {
             StyleKit.drawSettingsReportIcon(frame: bounds, resizing: .aspectFit)
         case .logs:
             StyleKit.drawSettingsLogsIcon(frame: bounds, resizing: .aspectFit)
+        case .bluetooth:
+            StyleKit.drawSettingsBluetoothIcon(frame: bounds, resizing: .aspectFit)
+        case .cloud:
+            StyleKit.drawSettingsCloudIcon(frame: bounds, resizing: .aspectFit)
         }
     }
 }
@@ -51,5 +55,7 @@ public extension SettingsIconView {
         
         case report
         case logs
+        case bluetooth
+        case cloud
     }
 }

@@ -41,7 +41,7 @@ public final class Store {
         
         // load CoreData
         let semaphore = DispatchSemaphore(value: 0)
-        persistentContainer.loadPersistentStores { [weak self] (store, error) in
+        persistentContainer.loadPersistentStores { (store, error) in
             semaphore.signal()
             if let error = error {
                 log("⚠️ Unable to load persistent store: \(error.localizedDescription)")
@@ -59,19 +59,17 @@ public final class Store {
             print(store)
             print("Loaded persistent store")
             #endif
-            self?.persistentContainer.viewContext.automaticallyMergesChangesFromParent = true
-            self?.persistentContainer.viewContext.mergePolicy = NSMergePolicy.mergeByPropertyObjectTrump
         }
         let didTimeout = semaphore.wait(timeout: .now() + 5.0) == .timedOut
         assert(didTimeout == false)
         
         #if os(iOS)
         // observe iBeacons
-        beaconController.foundLock = { [unowned self] (lock, beacon) in
-            self.lockBeaconFound(lock: lock, beacon: beacon)
+        beaconController.foundBeacon = { [unowned self] (beacon, beacons) in
+            self.beaconFound(beacon, beacons: beacons)
         }
-        beaconController.lostLock = { [unowned self] (lock) in
-            self.lockBeaconExited(lock: lock)
+        beaconController.lostBeacon = { [unowned self] (beacon) in
+            self.beaconExited(beacon)
         }
         // observe external cloud changes
         cloud.didChange = { [unowned self] in self.cloudDidChangeExternally() }
@@ -120,9 +118,22 @@ public final class Store {
     
     public lazy var lockManager: LockManager = .shared
     
-    public lazy var persistentContainer: NSPersistentContainer = .lock
+    internal lazy var persistentContainer: NSPersistentContainer = .lock
     
-    internal lazy var backgroundContext = self.persistentContainer.newBackgroundContext()
+    public lazy var managedObjectContext: NSManagedObjectContext = {
+        let context = self.persistentContainer.viewContext
+        context.automaticallyMergesChangesFromParent = true
+        context.mergePolicy = NSMergePolicy.mergeByPropertyObjectTrump
+        context.undoManager = nil
+        return context
+    }()
+    
+    internal lazy var backgroundContext: NSManagedObjectContext = {
+        let context = self.persistentContainer.newBackgroundContext()
+        context.mergePolicy = NSMergePolicy.mergeByPropertyStoreTrump
+        context.undoManager = nil
+        return context
+    }()
     
     #if os(iOS)
     public lazy var cloud: CloudStore = .shared
@@ -221,6 +232,12 @@ public final class Store {
         
         updateCoreData()
         
+        #if !targetEnvironment(macCatalyst)
+        if #available(iOS 12.0, watchOS 5.0, *) {
+            setRelevantShortcuts()
+        }
+        #endif
+        
         #if os(iOS)
         monitorBeacons()
         updateSpotlight()
@@ -240,23 +257,26 @@ public final class Store {
     
     private func monitorBeacons() {
         
+        // always monitor lock notification iBeacon
+        let beacons = Set(self.locks.value.keys) + [.lockNotificationBeacon]
+        let oldBeacons = self.beaconController.beacons.keys
+        
         // remove old beacons
-        for lock in self.beaconController.locks.keys {
-            if self.locks.value.keys.contains(lock) == false {
-                self.beaconController.stopMonitoring(lock: lock)
+        for beacon in oldBeacons {
+            if beacons.contains(beacon) == false {
+                self.beaconController.stopMonitoring(beacon)
             }
         }
         
         // add new beacons
-        for lock in self.locks.value.keys {
-            if self.beaconController.locks.keys.contains(lock) == false {
-                self.beaconController.monitor(lock: lock)
+        for beacon in beacons {
+            if oldBeacons.contains(beacon) == false {
+                self.beaconController.monitor(beacon)
             }
         }
     }
     
     private func updateSpotlight() {
-        
         spotlight.update(locks: locks.value)
     }
     
@@ -264,40 +284,90 @@ public final class Store {
         
         DispatchQueue.cloud.async { [weak self] in
             do { try self?.syncCloud() }
-            catch { log("⚠️ Unable to sync iCloud: \(error)") }
+            catch { log("⚠️ Unable to sync iCloud: \(error.localizedDescription)") }
         }
     }
     
-    private func lockBeaconFound(lock: UUID, beacon: CLBeacon) {
+    private func beaconFound(_ beacon: UUID, beacons: [CLBeacon]) {
         
-        async { [weak self] in
-            guard let self = self else { return }
-            do {
-                guard let _ = try self.device(for: lock, scanDuration: 1.0) else {
-                    log("⚠️ Could not find lock \(lock) for beacon \(beacon)")
-                    self.beaconController.scanBeacon(for: lock)
-                    return
+        if let _ = Store.shared[lock: beacon] {
+            DispatchQueue.bluetooth.async { [weak self] in
+                guard let self = self else { return }
+                do {
+                    guard let _ = try self.device(for: beacon, scanDuration: 1.0) else {
+                        log("⚠️ Could not find lock \(beacon) for beacon \(beacon)")
+                        self.beaconController.scanBeacon(for: beacon)
+                        return
+                    }
+                    log("📶 Found lock \(beacon)")
+                } catch {
+                    log("⚠️ Could not scan: \(error.localizedDescription)")
                 }
-            } catch {
-                log("⚠️ Could not scan: \(error)")
+            }
+        } else if beacon == .lockNotificationBeacon {
+            log("📶 Lock notification")
+            guard preferences.monitorBluetoothNotifications
+                else { return } // ignore notification
+            typealias FetchRequest = ListEventsCharacteristic.FetchRequest
+            typealias Predicate = ListEventsCharacteristic.Predicate
+            let context = Store.shared.backgroundContext
+            DispatchQueue.bluetooth.async {
+                // scan for all locks
+                let locks = Store.shared.locks.value.keys
+                // scan if none is visible
+                if locks.compactMap({ self.device(for: $0) }).isEmpty {
+                    do { try Store.shared.scan(duration: 1.0) }
+                    catch { log("⚠️ Could not scan for locks: \(error.localizedDescription)") }
+                }
+                let visibleLocks = locks.filter { self.device(for: $0) != nil }
+                // queue fetching events
+                DispatchQueue.bluetooth.asyncAfter(deadline: .now() + 5.0) {
+                    defer { self.beaconController.scanBeacons() } // refresh beacons
+                    for lock in visibleLocks {
+                        do {
+                            guard let device = try self.device(for: lock, scanDuration: 1.0)
+                                else { continue }
+                            let lastEventDate = try context.performErrorBlockAndWait {
+                                try context.find(identifier: lock, type: LockManagedObject.self)
+                                    .flatMap { try $0.lastEvent(in: context)?.date }
+                            }
+                            let fetchRequest = FetchRequest(
+                                offset: 0,
+                                limit: nil,
+                                predicate: Predicate(
+                                    keys: nil,
+                                    start: lastEventDate,
+                                    end: nil
+                                )
+                            )
+                            try self.listEvents(device, fetchRequest: fetchRequest, notification: { _,_ in })
+                        } catch {
+                            log("⚠️ Could not fetch latest data for lock \(lock): \(error.localizedDescription)")
+                            continue
+                        }
+                    }
+                }
             }
         }
     }
     
-    private func lockBeaconExited(lock: UUID) {
+    private func beaconExited(_ beacon: UUID) {
         
-        async { [weak self] in
+        guard let _ = Store.shared[lock: beacon]
+            else { return }
+        
+        DispatchQueue.bluetooth.async { [weak self] in
             guard let self = self else { return }
             do {
                 try self.scan(duration: 1.0)
-                if self.device(for: lock) == nil {
-                    log("Lock \(lock) no longer in range")
+                if self.device(for: beacon) == nil {
+                    log("Lock \(beacon) no longer in range")
                 } else {
                     // lock is in range, refresh beacons
-                    self.beaconController.scanBeacon(for: lock)
+                    self.beaconController.scanBeacon(for: beacon)
                 }
             } catch {
-                log("⚠️ Could not scan: \(error)")
+                log("⚠️ Could not scan: \(error.localizedDescription)")
             }
         }
     }
@@ -329,8 +399,12 @@ public extension Store {
                     guard information.identifier == identifier else { continue }
                 }
                 // request information
-                do { try self.readInformation(peripheral) }
-                catch { log("⚠️ Could not read information: \(error)"); continue } // ignore
+                do {
+                    try self.readInformation(peripheral)
+                } catch {
+                    log("⚠️ Could not read information: \(error.localizedDescription)")
+                    continue // ignore
+                }
                 if let foundDevice = device(for: identifier) {
                     return foundDevice
                 }
@@ -462,6 +536,11 @@ public extension Store {
             }
         }
         
+        // upload keys to cloud
+        #if os(iOS)
+        updateCloud()
+        #endif
+        
         return true
     }
     
@@ -495,8 +574,8 @@ public extension Store {
             }
         }
         
-        async { [weak self] in
-            #if os(iOS)
+        #if os(iOS)
+        DispatchQueue.cloud.async { [weak self] in
             // upload to iCloud
             do {
                 for event in events {
@@ -507,8 +586,8 @@ public extension Store {
             } catch {
                 log("⚠️ Could not upload latest events to iCloud: \(error.localizedDescription)")
             }
-            #endif
         }
+        #endif
         
         return true
     }

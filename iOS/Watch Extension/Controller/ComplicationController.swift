@@ -43,15 +43,11 @@ final class ComplicationController: NSObject, CLKComplicationDataSource {
     func getCurrentTimelineEntry(for complication: CLKComplication, withHandler handler: @escaping (CLKComplicationTimelineEntry?) -> Void) {
         // Call the handler with the current timeline entry
         log("⌚️ Providing current timeline entry for complication")
-        async {
-            do { try Store.shared.scan(duration: 1.0) }
-            catch { log("⚠️ Unable to scan") }
-            mainQueue { [weak self] in
-                guard let self = self else { return }
-                let template = self.template(for: complication)
-                let entry = CLKComplicationTimelineEntry(date: Date(), complicationTemplate: template)
-                handler(entry)
-            }
+        mainQueue { [weak self] in
+            guard let self = self else { return }
+            let template = self.template(for: complication)
+            let entry = CLKComplicationTimelineEntry(date: Date(), complicationTemplate: template)
+            handler(entry)
         }
     }
     

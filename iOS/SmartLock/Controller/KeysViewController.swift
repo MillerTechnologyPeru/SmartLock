@@ -158,6 +158,10 @@ final class KeysViewController: UITableViewController {
     #if !targetEnvironment(macCatalyst)
     override func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
         
+        if #available(iOS 13.0, *) {
+            return nil
+        }
+        
         var actions = [UITableViewRowAction]()
         let item = self[indexPath]
         
@@ -186,6 +190,16 @@ final class KeysViewController: UITableViewController {
         return actions
     }
     #endif
+    
+    @available(iOS 13.0, *)
+    override func tableView(_ tableView: UITableView, contextMenuConfigurationForRowAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
+        
+        let item = self[indexPath]
+        return UIContextMenuConfiguration(identifier: item.identifier as NSUUID, previewProvider: nil) { [weak self] (menuElements) -> UIMenu? in
+            
+            return self?.menu(forLock: item.identifier)
+        }
+    }
 }
 
 // MARK: - UIDocumentPickerDelegate

@@ -51,6 +51,7 @@ public extension AppActivity {
         
         case nearbyLocks
         case keys
+        case events
     }
 }
 
@@ -215,6 +216,9 @@ public extension NSUserActivity {
                 self.title = "Keys"
                 attributes.contentDescription = "Display stored keys."
                 attributes.thumbnailData = UIImage(lockKit: "activityLock")?.pngData()
+            case .events:
+                self.title = "Events"
+                attributes.contentDescription = "Display lock history."
             }
             self.contentAttributeSet = attributes
             #endif
@@ -242,7 +246,7 @@ public extension NSUserActivity {
             self.isEligibleForHandoff = true
             #if !targetEnvironment(macCatalyst)
             if #available(iOS 12.0, watchOS 5.0, *) {
-                self.isEligibleForPrediction = true
+                self.isEligibleForPrediction = false
             }
             #endif
         case let .action(.shareKey(lockIdentifier)):

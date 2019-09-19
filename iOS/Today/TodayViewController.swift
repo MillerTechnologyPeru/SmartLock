@@ -177,10 +177,10 @@ final class TodayViewController: UIViewController, NCWidgetProviding {
         BeaconController.shared.scanBeacons()
         
         // scan for devices
-        async {
+        DispatchQueue.bluetooth.async {
             do { try Store.shared.scan(duration: 1.0) }
             catch {
-                log("⚠️ Could not scan: \(error)")
+                log("⚠️ Could not scan: \(error.localizedDescription)")
                 mainQueue { completion?(false) }
                 return
             }
@@ -223,14 +223,14 @@ final class TodayViewController: UIViewController, NCWidgetProviding {
             scan()
         case let .lock(identifier, cache):
             // unlock
-            async {
+            DispatchQueue.bluetooth.async {
                 log("Unlock \(cache.name) \(identifier)")
                 do {
                     guard let peripheral = Store.shared.device(for: identifier)
                         else { assertionFailure("Peripheral not found"); return }
                     try Store.shared.unlock(peripheral)
                 } catch {
-                    log("⚠️ Could not unlock: \(error)")
+                    log("⚠️ Could not unlock: \(error.localizedDescription)")
                 }
             }
         }
