@@ -128,6 +128,11 @@ public extension Preferences {
         get { return self[.showPowerAlert] ?? false }
         set { self[.showPowerAlert] = newValue }
     }
+    
+    var monitorBluetoothNotifications: Bool {
+        get { return self[.monitorBluetoothNotifications] ?? false }
+        set { self[.monitorBluetoothNotifications] = newValue }
+    }
 }
 
 // MARK: - Supporting Types
@@ -146,5 +151,6 @@ public extension Preferences {
         case showPowerAlert
         case writeWithoutResponseTimeout
         case scanDuration
+        case monitorBluetoothNotifications
     }
 }

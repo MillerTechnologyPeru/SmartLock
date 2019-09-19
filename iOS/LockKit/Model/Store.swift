@@ -303,6 +303,8 @@ public final class Store {
             }
         } else if beacon == .lockNotificationBeacon {
             log("📶 Lock notification")
+            guard preferences.monitorBluetoothNotifications
+                else { return } // ignore notification
             typealias FetchRequest = ListEventsCharacteristic.FetchRequest
             typealias Predicate = ListEventsCharacteristic.Predicate
             let context = Store.shared.backgroundContext
