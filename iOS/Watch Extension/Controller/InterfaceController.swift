@@ -108,9 +108,6 @@ final class InterfaceController: WKInterfaceController {
         
         activity.becomeCurrent()
         
-        // reset table
-        self.items.removeAll(keepingCapacity: true)
-                
         // scan
         performActivity(queue: .bluetooth, {
             try Store.shared.scan()
@@ -136,6 +133,10 @@ final class InterfaceController: WKInterfaceController {
                     Item(identifier: information.identifier, cache: $0, peripheral: device)
                 }
             }
+        
+        if items.isEmpty == false {
+            hideActivity()
+        }
         
         self.tableView.setNumberOfRows(items.count, withRowType: LockRowController.rowType)
         

@@ -231,6 +231,9 @@ public final class Store {
     private func lockCacheChanged() {
         
         updateCoreData()
+        if #available(iOS 12.0, watchOS 5.0, *) {
+            setRelevantShortcuts()
+        }
         
         #if os(iOS)
         monitorBeacons()

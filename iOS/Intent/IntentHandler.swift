@@ -39,6 +39,8 @@ final class IntentHandler: INExtension {
             Store.shared.loadCache()
         }
         
+        log("🎙 Handle intent \(intent.intentDescription ?? intent.identifier ?? intent.description)")
+        
         if #available(watchOSApplicationExtension 5.0, *) {
             return UnlockIntentHandler()
         } else {
@@ -183,7 +185,6 @@ final class UnlockIntentHandler: NSObject, UnlockIntentHandling {
 
 // MARK: - Logging
 
-#if os(iOS)
 extension Log {
     
     static var intent: Log {
@@ -196,4 +197,3 @@ extension Log {
         return Cache.log
     }
 }
-#endif

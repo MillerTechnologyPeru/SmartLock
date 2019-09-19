@@ -8,10 +8,10 @@
 
 import Foundation
 import WatchKit
-import CoreLock
 import Intents
+import CoreLock
 
-public extension ActivityInterface {
+public extension ActivityInterface where Self: WKInterfaceController {
     
     func unlock(lock identifier: UUID, peripheral: LockPeripheral<NativeCentral>) {
         
@@ -38,10 +38,12 @@ public extension WKInterfaceController {
     /// Donate Siri Shortcut to unlock the specified lock.
     func donateUnlockIntent(for lock: UUID) {
         
-        guard let lockCache = Store.shared[lock: lock]
-            else { return }
+        guard let lockCache = Store.shared[lock: lock] else {
+            assertionFailure("Invalid lock \(lock)")
+            return
+        }
         
-        if #available(watchOSApplicationExtension 5.0, *) {
+        if #available(watchOS 5.0, *) {
             let intent = UnlockIntent(identifier: lock, cache: lockCache)
             let interaction = INInteraction(intent: intent, response: nil)
             interaction.donate { error in

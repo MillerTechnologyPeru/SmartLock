@@ -36,6 +36,13 @@
 		<key>NSExtensionPointIdentifier</key>
 		<string>com.apple.watchkit</string>
 	</dict>
+	<key>NSUserActivityTypes</key>
+	<array>
+		<string>UnlockIntent</string>
+		<string>com.colemancda.lock.activity.action</string>
+		<string>com.colemancda.lock.activity.screen</string>
+		<string>com.colemancda.lock.activity.view</string>
+	</array>
 	<key>WKExtensionDelegateClassName</key>
 	<string>$(PRODUCT_MODULE_NAME).ExtensionDelegate</string>
 </dict>

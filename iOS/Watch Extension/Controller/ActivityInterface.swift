@@ -40,7 +40,7 @@ public extension ActivityInterface {
     }
 }
 
-public extension ActivityInterface {
+public extension ActivityInterface where Self: WKInterfaceController {
     
     func performActivity <T> (showActivity: Bool = true,
                               queue: DispatchQueue? = nil,
@@ -75,7 +75,7 @@ public extension ActivityInterface {
                 
                 mainQueue { [weak self] in
                     
-                    guard let controller = self as? (WKInterfaceController & ActivityInterface)
+                    guard let controller = self
                         else { return }
                     
                     if showActivity { controller.hideActivity() }

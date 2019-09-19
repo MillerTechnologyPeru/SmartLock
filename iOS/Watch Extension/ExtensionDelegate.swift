@@ -8,6 +8,7 @@
 
 import Foundation
 import WatchKit
+import Intents
 import CoreBluetooth
 import CoreLocation
 import CoreLock
@@ -100,8 +101,21 @@ final class ExtensionDelegate: NSObject, WKExtensionDelegate {
                 // Be sure to complete the intent-did-run task once you're done.
                 //intentDidRunTask.setTaskCompleted(refreshSnapshot: false)
             default:
-                // make sure to complete unhandled task types
-                refresh { task.setTaskCompleted(refreshSnapshot: true) }
+                if #available(watchOS 5.0, *),
+                    let _ = task as? WKRelevantShortcutRefreshBackgroundTask {
+                    Store.shared.setRelevantShortcuts { (error) in
+                        if let error = error {
+                            log("⚠️ Donating relevant shortcuts failed. \(error.localizedDescription)")
+                            #if DEBUG
+                            dump(error)
+                            #endif
+                        }
+                        task.setTaskCompleted(refreshSnapshot: true)
+                    }
+                } else {
+                    // make sure to complete unhandled task types
+                    refresh { task.setTaskCompleted(refreshSnapshot: true) }
+                }
             }
         }
     }

@@ -43,8 +43,10 @@ public extension UIViewController {
     func donateUnlockIntent(for lock: UUID) {
         #if targetEnvironment(macCatalyst)
         #else
-        guard let lockCache = Store.shared[lock: lock]
-            else { return}
+        guard let lockCache = Store.shared[lock: lock] else {
+            assertionFailure("Invalid lock \(lock)")
+            return
+        }
         
         if #available(iOS 12, iOSApplicationExtension 12.0, *) {
             let intent = UnlockIntent(identifier: lock, cache: lockCache)
