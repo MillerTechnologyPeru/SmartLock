@@ -17,6 +17,9 @@ public extension NewKey {
         
         public let id: ID
         
+        /// Lock this key belongs to.
+        public let lock: CloudLock.ID
+        
         public var name: String
         
         public let created: Date
@@ -31,8 +34,9 @@ public extension NewKey {
 
 public extension NewKey.Cloud {
     
-    init(_ value: NewKey) {
+    init(_ value: NewKey, lock: UUID) {
         self.id = .init(rawValue: value.identifier)
+        self.lock = .init(rawValue: lock)
         self.name = value.name
         self.created = value.created
         self.expiration = value.expiration
@@ -88,6 +92,9 @@ public extension NewKey.Cloud {
 extension NewKey.Cloud: CloudKitCodable {
     public var cloudIdentifier: CloudKitIdentifier {
         return id
+    }
+    public var parentRecord: CloudKitIdentifier? {
+        return lock
     }
 }
 

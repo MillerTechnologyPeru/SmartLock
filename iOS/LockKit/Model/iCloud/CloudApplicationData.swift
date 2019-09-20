@@ -15,6 +15,7 @@ public extension ApplicationData {
     
     struct Cloud: Codable, Equatable {
         public let id: Cloud.ID
+        public let user: CloudUser.ID
         public let created: Date
         public var updated: Date
         public var locks: [LockCache.Cloud]
@@ -23,14 +24,15 @@ public extension ApplicationData {
 
 public extension ApplicationData.Cloud {
     
-    init(_ value: ApplicationData) {
+    init(_ value: ApplicationData, user: CloudUser.ID) {
         
         self.id = .init(rawValue: value.identifier)
+        self.user = user
         self.created = value.created
         self.updated = value.updated
         self.locks = value.locks
             .sorted(by: { $0.key.uuidString > $1.key.uuidString })
-            .map { LockCache.Cloud(id: $0.key, value: $0.value) }
+            .map { LockCache.Cloud(lock: $0.key, cache: $0.value, applicationData: value.identifier) }
     }
 }
 
@@ -65,6 +67,9 @@ extension ApplicationData.Cloud: CloudKitCodable {
     public var cloudIdentifier: CloudKitIdentifier {
         return id
     }
+    public var parentRecord: CloudKitIdentifier? {
+        return user
+    }
 }
 
 extension ApplicationData.Cloud.ID: CloudKitIdentifier {
@@ -93,6 +98,8 @@ public extension LockCache {
         /// Identifier
         public let id: ID
         
+        public let applicationData: ApplicationData.Cloud.ID
+        
         /// Stored key for lock.
         ///
         /// Can only have one key per lock.
@@ -108,11 +115,15 @@ public extension LockCache {
 
 internal extension LockCache.Cloud {
     
-    init(id: UUID, value: LockCache) {
-        self.id = .init(rawValue: id)
-        self.key = .init(value.key)
-        self.name = value.name
-        self.information = .init(id: id, value: value.information)
+    init(lock: UUID,
+         cache: LockCache,
+         applicationData: UUID) {
+        
+        self.id = .init(rawValue: lock)
+        self.key = .init(cache.key, lock: lock)
+        self.applicationData = .init(rawValue: applicationData)
+        self.name = cache.name
+        self.information = .init(id: lock, value: cache.information)
     }
 }
 
@@ -140,6 +151,9 @@ public extension LockCache.Cloud {
 extension LockCache.Cloud: CloudKitCodable {
     public var cloudIdentifier: CloudKitIdentifier {
         return id
+    }
+    public var parentRecord: CloudKitIdentifier? {
+        return applicationData
     }
 }
 
@@ -221,6 +235,9 @@ public extension LockCache.Information.Cloud {
 extension LockCache.Information.Cloud: CloudKitCodable {
     public var cloudIdentifier: CloudKitIdentifier {
         return id
+    }
+    public var parentRecord: CloudKitIdentifier? {
+        return LockCache.Cloud.ID(rawValue: id.rawValue)
     }
 }
 

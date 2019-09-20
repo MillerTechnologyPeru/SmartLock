@@ -130,6 +130,9 @@ extension LockEvent.Cloud: CloudKitCodable {
     public var cloudIdentifier: CloudKitIdentifier {
         return id
     }
+    public var parentRecord: CloudKitIdentifier? {
+        return lock
+    }
 }
 
 extension LockEvent.Cloud.ID: CloudKitIdentifier {

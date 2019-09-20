@@ -44,13 +44,13 @@ public extension CloudLock {
             .lazy
             .compactMap { Key(managedObject: $0) }
             .lazy
-            .compactMap { Key.Cloud($0) }
+            .compactMap { Key.Cloud($0, lock: identifier) }
             .sorted(by: { $0.created < $1.created })
-        self.newKeys = ((managedObject.keys as? Set<NewKeyManagedObject>) ?? [])
+        self.newKeys = ((managedObject.pendingKeys as? Set<NewKeyManagedObject>) ?? [])
             .lazy
             .compactMap { NewKey(managedObject: $0) }
             .lazy
-            .compactMap { NewKey.Cloud($0) }
+            .compactMap { NewKey.Cloud($0, lock: identifier) }
             .sorted(by: { $0.created < $1.created })
     }
 }

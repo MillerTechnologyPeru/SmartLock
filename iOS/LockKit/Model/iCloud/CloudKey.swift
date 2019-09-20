@@ -18,6 +18,9 @@ public extension Key {
         /// The unique identifier of the key.
         public let id: ID
         
+        /// Lock this key belongs to.
+        public let lock: CloudLock.ID
+        
         /// The name of the key.
         public var name: String
         
@@ -34,8 +37,9 @@ public extension Key {
 
 public extension Key.Cloud {
     
-    init(_ value: Key) {
+    init(_ value: Key, lock: UUID) {
         self.id = .init(rawValue: value.identifier)
+        self.lock = .init(rawValue: lock)
         self.name = value.name
         self.created = value.created
         self.permissionType = .init(value.permission.type)
@@ -89,6 +93,9 @@ public extension Key.Cloud {
 extension Key.Cloud: CloudKitCodable {
     public var cloudIdentifier: CloudKitIdentifier {
         return id
+    }
+    public var parentRecord: CloudKitIdentifier? {
+        return lock
     }
 }
 

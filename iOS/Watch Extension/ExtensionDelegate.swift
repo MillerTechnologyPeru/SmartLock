@@ -16,7 +16,9 @@ import LockKit
 
 final class ExtensionDelegate: NSObject, WKExtensionDelegate {
     
-    var shared: ExtensionDelegate { return WKExtension.shared().delegate as! ExtensionDelegate }
+    var shared: ExtensionDelegate {
+        return WKExtension.shared().delegate as! ExtensionDelegate
+    }
     
     let appLaunch = Date()
 

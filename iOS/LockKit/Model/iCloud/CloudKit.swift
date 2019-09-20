@@ -27,7 +27,7 @@ public extension CKContainer {
     }
 }
 
-public extension CKContainer {
+internal extension CKContainer {
     
     func fetchUserRecordID() throws -> CKRecord.ID {
         let semaphore = DispatchSemaphore(value: 0)

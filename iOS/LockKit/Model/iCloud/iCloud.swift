@@ -65,7 +65,7 @@ public final class CloudStore {
         
         // update iCloud user
         var user = try CloudUser.fetch(in: container, database: .private)
-        user.applicationData = .init(applicationData) // set new application data
+        user.applicationData = .init(applicationData, user: user.id) // set new application data
         try upload(user)
         
         // inform via key value store
@@ -102,7 +102,7 @@ public final class CloudStore {
     }
     
     @discardableResult
-    public func upload <T: CloudKitEncodable> (_ encodable: T, parent: CKRecord.ID? = nil) throws -> CKRecord {
+    internal func upload <T: CloudKitEncodable> (_ encodable: T, parent: CKRecord.ID? = nil) throws -> CKRecord {
         
         let cloudEncoder = CloudKitEncoder(context: container.privateCloudDatabase)
         let operation = try cloudEncoder.encode(encodable)
