@@ -18,12 +18,6 @@ public struct CloudLock {
     public let id: ID
     
     public var name: String
-    
-    public var information: LockCache.Information.Cloud
-    
-    public var keys: [Key.Cloud]
-    
-    public var newKeys: [NewKey.Cloud]
 }
 
 public extension CloudLock {
@@ -31,27 +25,11 @@ public extension CloudLock {
     init?(managedObject: LockManagedObject) {
         
         guard let identifier = managedObject.identifier,
-            let name = managedObject.name,
-            let information = managedObject.information
-                .flatMap({ LockCache.Information(managedObject: $0) })
-                .flatMap({ LockCache.Information.Cloud(id: identifier, value: $0) })
+            let name = managedObject.name
             else { return nil }
         
         self.id = .init(rawValue: identifier)
         self.name = name
-        self.information = information
-        self.keys = ((managedObject.keys as? Set<KeyManagedObject>) ?? [])
-            .lazy
-            .compactMap { Key(managedObject: $0) }
-            .lazy
-            .compactMap { Key.Cloud($0, lock: identifier) }
-            .sorted(by: { $0.created < $1.created })
-        self.newKeys = ((managedObject.pendingKeys as? Set<NewKeyManagedObject>) ?? [])
-            .lazy
-            .compactMap { NewKey(managedObject: $0) }
-            .lazy
-            .compactMap { NewKey.Cloud($0, lock: identifier) }
-            .sorted(by: { $0.created < $1.created })
     }
 }
 

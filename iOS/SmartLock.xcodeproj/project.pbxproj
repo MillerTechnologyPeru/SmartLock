@@ -216,6 +216,7 @@
 		6EE5A1082329F8790000235C /* CloudApplicationData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EE5A1072329F8790000235C /* CloudApplicationData.swift */; };
 		6EE5A10B2329FCA00000235C /* CloudKitCodable in Frameworks */ = {isa = PBXBuildFile; productRef = 6EE5A10A2329FCA00000235C /* CloudKitCodable */; };
 		6EE5A10D2329FD090000235C /* CloudKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EE5A10C2329FD090000235C /* CloudKey.swift */; };
+		6EEACA5323348EFD005820C0 /* CloudPermission.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EEACA5223348EFD005820C0 /* CloudPermission.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -668,6 +669,7 @@
 		6EE05B8523331F410014CEE4 /* WatchAssets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = WatchAssets.xcassets; sourceTree = "<group>"; };
 		6EE5A1072329F8790000235C /* CloudApplicationData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudApplicationData.swift; sourceTree = "<group>"; };
 		6EE5A10C2329FD090000235C /* CloudKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudKey.swift; sourceTree = "<group>"; };
+		6EEACA5223348EFD005820C0 /* CloudPermission.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudPermission.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1199,9 +1201,10 @@
 				6E94EF74232F4A790028B745 /* CloudKit.swift */,
 				6EB4B2D9232B5E260077ADD3 /* CloudUser.swift */,
 				6EE5A1072329F8790000235C /* CloudApplicationData.swift */,
+				6E6DB100232D7E8100481C36 /* CloudLock.swift */,
 				6EE5A10C2329FD090000235C /* CloudKey.swift */,
 				6E6DB102232DA10000481C36 /* CloudNewKey.swift */,
-				6E6DB100232D7E8100481C36 /* CloudLock.swift */,
+				6EEACA5223348EFD005820C0 /* CloudPermission.swift */,
 				6E6DB104232DA11100481C36 /* CloudEvent.swift */,
 			);
 			path = iCloud;
@@ -1943,6 +1946,7 @@
 				6E806B98230F520400C6FF78 /* FileManager.swift in Sources */,
 				6E50B0FC23224719001014A8 /* LockInformationManagedObject.swift in Sources */,
 				6E83BAF42323831200FBC12E /* LockEventsViewController.swift in Sources */,
+				6EEACA5323348EFD005820C0 /* CloudPermission.swift in Sources */,
 				6E6DB103232DA10000481C36 /* CloudNewKey.swift in Sources */,
 				6E994AB8230DFDB10076DC1B /* Log.swift in Sources */,
 				6E50B0F823224415001014A8 /* ConfirmNewKeyEventManagedObject.swift in Sources */,
