@@ -433,14 +433,26 @@ public extension Store {
     func downloadCloudLocks() throws {
         
         var insertedEventsCount = 0
+        var insertedKeysCount = 0
+        var insertedNewKeysCount = 0
+        
         defer {
             if insertedEventsCount > 0 {
                 log("☁️ Fetched \(insertedEventsCount) events")
             }
+            if insertedKeysCount > 0 {
+                log("☁️ Fetched \(insertedKeysCount) keys")
+            }
+            if insertedNewKeysCount > 0 {
+                log("☁️ Fetched \(insertedNewKeysCount) pending keys")
+            }
         }
+        
         let context = backgroundContext
+        
         try cloud.fetchLocks { [weak self] (lock) in
             guard let self = self else { return false }
+            
             // store in CoreData
             context.commit {
                 let managedObject = try $0.insert(lock)
@@ -449,6 +461,7 @@ public extension Store {
                     managedObject.name = cache.name
                 }
             }
+            
             // fetch events
             try self.cloud.fetchEvents(for: lock.id) { (cloudEvent) in
                 guard let event = LockEvent(cloudEvent) else {
@@ -465,12 +478,7 @@ public extension Store {
                 insertedEventsCount += 1
                 return true
             }
-            var insertedKeysCount = 0
-            defer {
-                if insertedKeysCount > 0 {
-                    log("☁️ Fetched \(insertedKeysCount) keys")
-                }
-            }
+            
             // fetch keys
             try self.cloud.fetchKeys(for: lock.id) { (cloudValue) in
                 guard let value = Key(cloudValue) else {
@@ -487,12 +495,7 @@ public extension Store {
                 insertedKeysCount += 1
                 return true
             }
-            var insertedNewKeysCount = 0
-            defer {
-                if insertedNewKeysCount > 0 {
-                    log("☁️ Fetched \(insertedNewKeysCount) pending keys")
-                }
-            }
+            
             // fetch new keys
             try self.cloud.fetchNewKeys(for: lock.id) { (cloudValue) in
                 guard let value = NewKey(cloudValue) else {
@@ -509,6 +512,7 @@ public extension Store {
                 insertedNewKeysCount += 1
                 return true
             }
+            
             return true
         }
     }
