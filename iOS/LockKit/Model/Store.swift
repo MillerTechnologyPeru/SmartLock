@@ -575,15 +575,17 @@ public extension Store {
         }
         
         #if os(iOS)
-        DispatchQueue.cloud.async { [weak self] in
-            // upload to iCloud
-            do {
-                for event in events {
-                    let value = LockEvent.Cloud(event: event, for: lockIdentifier)
-                    try self?.cloud.upload(value)
+        if preferences.isCloudEnabled {
+            DispatchQueue.cloud.async { [weak self] in
+                // upload to iCloud
+                do {
+                    for event in events {
+                        let value = LockEvent.Cloud(event: event, for: lockIdentifier)
+                        try self?.cloud.upload(value)
+                    }
+                } catch {
+                    log("⚠️ Could not upload latest events to iCloud: \(error.localizedDescription)")
                 }
-            } catch {
-                log("⚠️ Could not upload latest events to iCloud: \(error.localizedDescription)")
             }
         }
         #endif
