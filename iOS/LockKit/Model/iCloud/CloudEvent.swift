@@ -153,3 +153,33 @@ extension LockEvent.Cloud.ID: CloudKitIdentifier {
         return CKRecord.ID(recordName: type(of: self).cloudRecordType + "/" + rawValue.uuidString)
     }
 }
+
+// MARK: - CloudKit Fetch
+
+public extension CloudStore {
+    
+    func fetchEvents(for lock: CloudLock.ID,
+                     event: @escaping (LockEvent.Cloud) throws -> (Bool)) throws {
+        
+        let database = container.privateCloudDatabase
+        
+        let lockReference = CKRecord.Reference(
+            recordID: lock.cloudRecordID,
+            action: .none
+        )
+        
+        let query = CKQuery(
+            recordType: LockEvent.Cloud.ID.cloudRecordType,
+            predicate: NSPredicate(format: "%K == %@", "lock", lockReference)
+        )
+        query.sortDescriptors = [
+            .init(key: "date", ascending: false) // \LockEvent.Cloud.date
+        ]
+        
+        let decoder = CloudKitDecoder(context: database)
+        try database.queryAll(query) { (record) in
+            let value = try decoder.decode(LockEvent.Cloud.self, from: record)
+            return try event(value)
+        }
+    }
+}

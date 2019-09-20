@@ -116,3 +116,33 @@ extension NewKey.Cloud.ID: CloudKitIdentifier {
         return CKRecord.ID(recordName: type(of: self).cloudRecordType + "/" + rawValue.uuidString)
     }
 }
+
+// MARK: - CloudKit Fetch
+
+public extension CloudStore {
+    
+    func fetchNewKeys(for lock: CloudLock.ID,
+                      result: @escaping (NewKey.Cloud) throws -> (Bool)) throws {
+        
+        let database = container.privateCloudDatabase
+        
+        let lockReference = CKRecord.Reference(
+            recordID: lock.cloudRecordID,
+            action: .none
+        )
+        
+        let query = CKQuery(
+            recordType: NewKey.Cloud.ID.cloudRecordType,
+            predicate: NSPredicate(format: "%K == %@", "lock", lockReference)
+        )
+        query.sortDescriptors = [
+            .init(key: "created", ascending: false) // \Key.Cloud.created
+        ]
+        
+        let decoder = CloudKitDecoder(context: database)
+        try database.queryAll(query) { (record) in
+            let value = try decoder.decode(NewKey.Cloud.self, from: record)
+            return try result(value)
+        }
+    }
+}

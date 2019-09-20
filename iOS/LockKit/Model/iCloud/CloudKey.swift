@@ -142,3 +142,33 @@ public extension KeyType {
         self = unsafeBitCast(value, to: KeyType.self)
     }
 }
+
+// MARK: - CloudKit Fetch
+
+public extension CloudStore {
+    
+    func fetchKeys(for lock: CloudLock.ID,
+                   result: @escaping (Key.Cloud) throws -> (Bool)) throws {
+        
+        let database = container.privateCloudDatabase
+        
+        let lockReference = CKRecord.Reference(
+            recordID: lock.cloudRecordID,
+            action: .none
+        )
+        
+        let query = CKQuery(
+            recordType: Key.Cloud.ID.cloudRecordType,
+            predicate: NSPredicate(format: "%K == %@", "lock", lockReference)
+        )
+        query.sortDescriptors = [
+            .init(key: "created", ascending: false) // \Key.Cloud.created
+        ]
+        
+        let decoder = CloudKitDecoder(context: database)
+        try database.queryAll(query) { (record) in
+            let value = try decoder.decode(Key.Cloud.self, from: record)
+            return try result(value)
+        }
+    }
+}

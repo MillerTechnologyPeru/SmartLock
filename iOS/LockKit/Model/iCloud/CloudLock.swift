@@ -66,3 +66,24 @@ extension CloudLock.ID: CloudKitIdentifier {
         return CKRecord.ID(recordName: type(of: self).cloudRecordType + "/" + rawValue.uuidString)
     }
 }
+
+// MARK: - CloudKit Fetch
+
+public extension CloudStore {
+    
+    func fetchLocks(_ lock: @escaping (CloudLock) throws -> (Bool)) throws {
+        
+        let database = container.privateCloudDatabase
+        
+        let query = CKQuery(
+            recordType: CloudLock.ID.cloudRecordType,
+            predicate: NSPredicate(value: true)
+        )
+        
+        let decoder = CloudKitDecoder(context: database)
+        try database.queryAll(query) { (record) in
+            let value = try decoder.decode(CloudLock.self, from: record)
+            return try lock(value)
+        }
+    }
+}
