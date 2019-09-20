@@ -105,22 +105,19 @@ public final class NewKeyActivity: UIActivity {
     
     public override var activityViewController: UIViewController? {
         
-        let navigationController = UIStoryboard(name: "NewKey", bundle: .lockKit).instantiateInitialViewController() as! UINavigationController
-        
-        let destinationViewController = navigationController.viewControllers.first! as! NewKeySelectPermissionViewController
-        destinationViewController.lockIdentifier = item.identifier
-        destinationViewController.completion = { [unowned self] in
+        let viewController = NewKeySelectPermissionViewController.fromStoryboard(with: item.identifier)
+        viewController.completion =  { [unowned self] in
             guard let (invitation, sender) = $0 else {
                 self.activityDidFinish(false)
                 return
             }
             // show share sheet
-            destinationViewController.share(invitation: invitation, sender: sender) { [unowned self] in
+            viewController.share(invitation: invitation, sender: sender) { [unowned self] in
                 self.activityDidFinish(true)
             }
         }
         
-        return navigationController
+        return UINavigationController(rootViewController: viewController)
     }
 }
 
