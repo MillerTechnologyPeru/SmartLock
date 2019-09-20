@@ -15,7 +15,7 @@
         "repositoryURL": "https://github.com/colemancda/CloudKitCodable.git",
         "state": {
           "branch": "master",
-          "revision": "6dda58305aa0a567161e20fc7c0f4e85c2d60074",
+          "revision": "598e04c5c6f1162d51fdc45d11c85574d39ee85c",
           "version": null
         }
       },
@@ -42,8 +42,8 @@
         "repositoryURL": "https://github.com/broadwaylamb/GottaGoFast.git",
         "state": {
           "branch": null,
-          "revision": "85e1f5104fb1ede87d6f31acc0445555007c474c",
-          "version": "0.1.0"
+          "revision": "098e92679419e509d42fd97d3e84292acd53e291",
+          "version": "0.2.0"
         }
       },
       {
