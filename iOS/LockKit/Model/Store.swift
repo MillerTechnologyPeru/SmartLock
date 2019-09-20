@@ -580,8 +580,7 @@ public extension Store {
             do {
                 for event in events {
                     let value = LockEvent.Cloud(event: event, for: lockIdentifier)
-                    let parent = CloudLock.ID(rawValue: lockIdentifier)
-                    try self?.cloud.upload(value, parent: parent.cloudRecordID)
+                    try self?.cloud.upload(value)
                 }
             } catch {
                 log("⚠️ Could not upload latest events to iCloud: \(error.localizedDescription)")

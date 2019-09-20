@@ -15,7 +15,6 @@ public extension ApplicationData {
     
     struct Cloud: Codable, Equatable {
         public let id: Cloud.ID
-        public let user: CloudUser.ID
         public let created: Date
         public var updated: Date
         public var locks: [LockCache.Cloud]
@@ -27,7 +26,6 @@ public extension ApplicationData.Cloud {
     init(_ value: ApplicationData, user: CloudUser.ID) {
         
         self.id = .init(rawValue: value.identifier)
-        self.user = user
         self.created = value.created
         self.updated = value.updated
         self.locks = value.locks
@@ -66,9 +64,6 @@ public extension ApplicationData.Cloud {
 extension ApplicationData.Cloud: CloudKitCodable {
     public var cloudIdentifier: CloudKitIdentifier {
         return id
-    }
-    public var parentRecord: CloudKitIdentifier? {
-        return user
     }
 }
 

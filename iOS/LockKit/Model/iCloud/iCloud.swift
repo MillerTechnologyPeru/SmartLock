@@ -81,7 +81,7 @@ public final class CloudStore {
                 assertionFailure("Invalid \(lockManagedObject)")
                 continue
             }
-            let lockRecord = try upload(lock)
+            try upload(lock)
             // upload events
             let events = ((lockManagedObject.events as? Set<EventManagedObject>) ?? [])
                 .lazy
@@ -93,7 +93,40 @@ public final class CloudStore {
                     continue
                 }
                 if try container.privateCloudDatabase.fetch(record: event.cloudIdentifier.cloudRecordID) == nil {
-                    let _ = try upload(event, parent: lockRecord.recordID)
+                    let _ = try upload(event)
+                } else {
+                    break // don't upload older events
+                }
+            }
+            // upload keys
+            let keys = ((lockManagedObject.keys as? Set<KeyManagedObject>) ?? [])
+                .lazy
+                .sorted(by: { $0.created! > $1.created! })
+            for managedObject in keys {
+                guard let key = Key(managedObject: managedObject)
+                    .flatMap({ Key.Cloud($0, lock: lock.id.rawValue) }) else {
+                    assertionFailure("Invalid \(managedObject)")
+                    continue
+                }
+                if try container.privateCloudDatabase.fetch(record: key.cloudIdentifier.cloudRecordID) == nil {
+                    let _ = try upload(key)
+                } else {
+                    break // don't upload older events
+                }
+            }
+            // upload new keys
+            let newKeys = ((lockManagedObject.pendingKeys as? Set<NewKeyManagedObject>) ?? [])
+                .lazy
+                .sorted(by: { $0.created! > $1.created! })
+            for managedObject in newKeys {
+                guard let newKey = NewKey(managedObject: managedObject)
+                    .flatMap({ NewKey.Cloud($0, lock: lock.id.rawValue) }) else {
+                    assertionFailure("Invalid \(managedObject)")
+                    continue
+                }
+                let existingRecord = try container.privateCloudDatabase.fetch(record: newKey.cloudIdentifier.cloudRecordID)
+                if existingRecord == nil {
+                    let _ = try upload(newKey)
                 } else {
                     break // don't upload older events
                 }
@@ -102,7 +135,7 @@ public final class CloudStore {
     }
     
     @discardableResult
-    internal func upload <T: CloudKitEncodable> (_ encodable: T, parent: CKRecord.ID? = nil) throws -> CKRecord {
+    internal func upload <T: CloudKitEncodable> (_ encodable: T) throws -> CKRecord {
         
         let cloudEncoder = CloudKitEncoder(context: container.privateCloudDatabase)
         let operation = try cloudEncoder.encode(encodable)
@@ -110,7 +143,6 @@ public final class CloudStore {
             else { fatalError() }
         assert(encodable.cloudIdentifier.cloudRecordID == record.recordID)
         assert(type(of: encodable.cloudIdentifier).cloudRecordType == record.recordType)
-        record.setParent(parent)
         operation.isAtomic = true
         try container.privateCloudDatabase.modify(operation)
         return record
@@ -180,6 +212,56 @@ public final class CloudStore {
         try database.queryAll(query) { (record) in
             let value = try decoder.decode(LockEvent.Cloud.self, from: record)
             return try event(value)
+        }
+    }
+    
+    public func fetchKeys(for lock: CloudLock.ID,
+                          result: @escaping (Key.Cloud) throws -> (Bool)) throws {
+        
+        let database = container.privateCloudDatabase
+        
+        let lockReference = CKRecord.Reference(
+            recordID: lock.cloudRecordID,
+            action: .none
+        )
+        
+        let query = CKQuery(
+            recordType: Key.Cloud.ID.cloudRecordType,
+            predicate: NSPredicate(format: "%K == %@", "lock", lockReference)
+        )
+        query.sortDescriptors = [
+            .init(key: "created", ascending: false) // \Key.Cloud.created
+        ]
+        
+        let decoder = CloudKitDecoder(context: database)
+        try database.queryAll(query) { (record) in
+            let value = try decoder.decode(Key.Cloud.self, from: record)
+            return try result(value)
+        }
+    }
+    
+    public func fetchNewKeys(for lock: CloudLock.ID,
+                             result: @escaping (NewKey.Cloud) throws -> (Bool)) throws {
+        
+        let database = container.privateCloudDatabase
+        
+        let lockReference = CKRecord.Reference(
+            recordID: lock.cloudRecordID,
+            action: .none
+        )
+        
+        let query = CKQuery(
+            recordType: NewKey.Cloud.ID.cloudRecordType,
+            predicate: NSPredicate(format: "%K == %@", "lock", lockReference)
+        )
+        query.sortDescriptors = [
+            .init(key: "created", ascending: false) // \Key.Cloud.created
+        ]
+        
+        let decoder = CloudKitDecoder(context: database)
+        try database.queryAll(query) { (record) in
+            let value = try decoder.decode(NewKey.Cloud.self, from: record)
+            return try result(value)
         }
     }
     
@@ -360,7 +442,13 @@ public extension Store {
         try cloud.fetchLocks { [weak self] (lock) in
             guard let self = self else { return false }
             // store in CoreData
-            context.commit { try $0.insert(lock) }
+            context.commit {
+                let managedObject = try $0.insert(lock)
+                // override name
+                if let cache = self.locks.value[lock.id.rawValue] {
+                    managedObject.name = cache.name
+                }
+            }
             // fetch events
             try self.cloud.fetchEvents(for: lock.id) { (cloudEvent) in
                 guard let event = LockEvent(cloudEvent) else {
@@ -375,6 +463,50 @@ public extension Store {
                     try $0.insert(event, for: cloudEvent.lock.rawValue)
                 }
                 insertedEventsCount += 1
+                return true
+            }
+            var insertedKeysCount = 0
+            defer {
+                if insertedKeysCount > 0 {
+                    log("☁️ Fetched \(insertedKeysCount) keys")
+                }
+            }
+            // fetch keys
+            try self.cloud.fetchKeys(for: lock.id) { (cloudValue) in
+                guard let value = Key(cloudValue) else {
+                    assertionFailure()
+                    return true // more values, ignore invalid cloud value
+                }
+                // if already in CoreData, then stop
+                guard try context.find(identifier: value.identifier, type: KeyManagedObject.self) == nil
+                    else { return false }
+                // save value in CoreData
+                context.commit {
+                    try $0.insert(value, for: cloudValue.lock.rawValue)
+                }
+                insertedKeysCount += 1
+                return true
+            }
+            var insertedNewKeysCount = 0
+            defer {
+                if insertedNewKeysCount > 0 {
+                    log("☁️ Fetched \(insertedNewKeysCount) pending keys")
+                }
+            }
+            // fetch new keys
+            try self.cloud.fetchNewKeys(for: lock.id) { (cloudValue) in
+                guard let value = NewKey(cloudValue) else {
+                    assertionFailure()
+                    return true // more values, ignore invalid cloud value
+                }
+                // if already in CoreData, then stop
+                guard try context.find(identifier: value.identifier, type: NewKeyManagedObject.self) == nil
+                    else { return false }
+                // save value in CoreData
+                context.commit {
+                    try $0.insert(value, for: cloudValue.lock.rawValue)
+                }
+                insertedNewKeysCount += 1
                 return true
             }
             return true

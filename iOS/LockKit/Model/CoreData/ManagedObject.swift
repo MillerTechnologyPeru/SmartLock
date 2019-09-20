@@ -43,6 +43,7 @@ internal extension NSManagedObjectContext {
         
         assert(concurrencyType == .privateQueueConcurrencyType)
         perform { [unowned self] in
+            self.reset()
             do {
                 try block(self)
                 if self.hasChanges {
