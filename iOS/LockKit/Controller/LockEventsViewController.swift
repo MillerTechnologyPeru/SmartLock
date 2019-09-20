@@ -156,7 +156,7 @@ public final class LockEventsViewController: TableViewController {
                 catch {
                     log("⚠️ Unable to load data from iCloud: \(error.localizedDescription)")
                     #if DEBUG
-                    dump(error)
+                    print(error)
                     #endif
                 }
             }

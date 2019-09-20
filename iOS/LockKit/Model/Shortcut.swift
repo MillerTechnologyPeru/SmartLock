@@ -72,7 +72,7 @@ public extension Store {
             if let error = error {
                 log("⚠️ Donating relevant shortcuts failed. \(error.localizedDescription)")
                 #if DEBUG
-                dump(error)
+                print(error)
                 #endif
             }
         }

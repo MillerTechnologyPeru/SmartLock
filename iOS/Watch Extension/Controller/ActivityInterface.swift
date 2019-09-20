@@ -83,7 +83,7 @@ public extension ActivityInterface where Self: WKInterfaceController {
                     // show error
                     log("⚠️ Error: \(error.localizedDescription)")
                     #if DEBUG
-                    dump(error)
+                    print(error)
                     #endif
                     controller.showError(error.localizedDescription)
                 }

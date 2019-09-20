@@ -36,7 +36,7 @@ internal extension NSPersistentContainer {
             } catch {
                 log("⚠️ Unable to commit changes: \(error.localizedDescription)")
                 #if DEBUG
-                dump(error)
+                print(error)
                 #endif
                 assertionFailure("Core Data error")
                 return

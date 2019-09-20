@@ -76,7 +76,7 @@ public extension FileManager.Lock {
         do { return try jsonDecoder.decode(type, from: data) }
         catch {
             #if DEBUG
-            dump(error)
+            print(error)
             assertionFailure("Could not decode \(type) from \(file.rawValue)")
             #endif
             return nil
@@ -89,7 +89,7 @@ public extension FileManager.Lock {
             do { try fileManager.removeItem(at: url(for: file)) }
             catch {
                 #if DEBUG
-                dump(error)
+                print(error)
                 assertionFailure("Could not remove \(file.rawValue)")
                 #endif
             }
@@ -101,7 +101,7 @@ public extension FileManager.Lock {
             try write(data, to: file)
         } catch {
             #if DEBUG
-            dump(error)
+            print(error)
             assertionFailure("Could not decode \(T.self) from \(file.rawValue)")
             #endif
         }

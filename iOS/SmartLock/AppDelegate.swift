@@ -65,8 +65,8 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
             try R.validate()
             try RLockKit.validate()
         } catch {
-            dump(error)
-            assertionFailure("Could not validate R.swift \(error.localizedDescription)")
+            print(error)
+            assertionFailure("Could not validate R.swift \(error)")
         }
         #endif
         

@@ -109,7 +109,7 @@ final class ExtensionDelegate: NSObject, WKExtensionDelegate {
                         if let error = error {
                             log("⚠️ Donating relevant shortcuts failed. \(error.localizedDescription)")
                             #if DEBUG
-                            dump(error)
+                            print(error)
                             #endif
                         }
                         task.setTaskCompleted(refreshSnapshot: true)

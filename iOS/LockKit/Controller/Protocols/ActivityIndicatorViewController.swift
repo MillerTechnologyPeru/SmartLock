@@ -48,7 +48,7 @@ public extension ActivityIndicatorViewController {
                     // show error
                     log("⚠️ Error: \(error.localizedDescription)")
                     #if DEBUG
-                    dump(error)
+                    print(error)
                     #endif
                     (self as? UIViewController)?.showErrorAlert(error.localizedDescription)
                 }

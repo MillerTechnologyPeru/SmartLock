@@ -31,7 +31,7 @@ public final class Store {
             catch {
                 DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) {
                     #if DEBUG
-                    dump(error)
+                    print(error)
                     #endif
                     log("⚠️ Unable to clear keychain: \(error.localizedDescription)")
                     assertionFailure("Unable to clear keychain")
@@ -46,11 +46,11 @@ public final class Store {
             if let error = error {
                 log("⚠️ Unable to load persistent store: \(error.localizedDescription)")
                 #if DEBUG
-                dump(error)
+                print(error)
                 #endif
                 if let url = store.url {
                     do { try FileManager.default.removeItem(at: url) }
-                    catch { dump(error) }
+                    catch { print(error) }
                 }
                 assertionFailure("Unable to load persistent store")
                 return
@@ -175,7 +175,7 @@ public final class Store {
                 return key
             } catch {
                 #if DEBUG
-                dump(error)
+                print(error)
                 #endif
                 assertionFailure("Unable retrieve value from keychain: \(error)")
                 return nil
@@ -192,7 +192,7 @@ public final class Store {
                 try keychain.set(data, key: identifier.uuidString)
             } catch {
                 #if DEBUG
-                dump(error)
+                print(error)
                 #endif
                 assertionFailure("Unable store value in keychain: \(error)")
             }
