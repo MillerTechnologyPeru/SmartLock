@@ -51,8 +51,12 @@ public final class CloudStore {
     private var keyValueStoreObserver: NSObjectProtocol?
     
     internal lazy var container: CKContainer = .lock
-    
+        
     // MARK: - Methods
+    
+    public func requestPermissions() throws -> CKContainer_Application_PermissionStatus {
+        return try container.requestApplicationPermission([.userDiscoverability])
+    }
     
     public func upload(applicationData: ApplicationData,
                        keys: [UUID: KeyData]) throws {
