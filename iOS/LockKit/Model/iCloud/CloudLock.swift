@@ -18,12 +18,6 @@ public struct CloudLock {
     public let id: ID
     
     public var name: String
-    
-    public var information: LockCache.Information.Cloud
-    
-    public var keys: [Key.Cloud]
-    
-    public var newKeys: [NewKey.Cloud]
 }
 
 public extension CloudLock {
@@ -31,27 +25,11 @@ public extension CloudLock {
     init?(managedObject: LockManagedObject) {
         
         guard let identifier = managedObject.identifier,
-            let name = managedObject.name,
-            let information = managedObject.information
-                .flatMap({ LockCache.Information(managedObject: $0) })
-                .flatMap({ LockCache.Information.Cloud(id: identifier, value: $0) })
+            let name = managedObject.name
             else { return nil }
         
         self.id = .init(rawValue: identifier)
         self.name = name
-        self.information = information
-        self.keys = ((managedObject.keys as? Set<KeyManagedObject>) ?? [])
-            .lazy
-            .compactMap { Key(managedObject: $0) }
-            .lazy
-            .compactMap { Key.Cloud($0) }
-            .sorted(by: { $0.created < $1.created })
-        self.newKeys = ((managedObject.keys as? Set<NewKeyManagedObject>) ?? [])
-            .lazy
-            .compactMap { NewKey(managedObject: $0) }
-            .lazy
-            .compactMap { NewKey.Cloud($0) }
-            .sorted(by: { $0.created < $1.created })
     }
 }
 
@@ -86,5 +64,26 @@ extension CloudLock.ID: CloudKitIdentifier {
     
     public var cloudRecordID: CKRecord.ID {
         return CKRecord.ID(recordName: type(of: self).cloudRecordType + "/" + rawValue.uuidString)
+    }
+}
+
+// MARK: - CloudKit Fetch
+
+public extension CloudStore {
+    
+    func fetchLocks(_ lock: @escaping (CloudLock) throws -> (Bool)) throws {
+        
+        let database = container.privateCloudDatabase
+        
+        let query = CKQuery(
+            recordType: CloudLock.ID.cloudRecordType,
+            predicate: NSPredicate(value: true)
+        )
+        
+        let decoder = CloudKitDecoder(context: database)
+        try database.queryAll(query) { (record) in
+            let value = try decoder.decode(CloudLock.self, from: record)
+            return try lock(value)
+        }
     }
 }

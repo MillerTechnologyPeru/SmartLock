@@ -15,7 +15,14 @@ public struct CloudUser: Codable, Equatable {
     
     public let id: ID
     
+    // Should only be on private DB
     public var applicationData: ApplicationData.Cloud?
+    
+    /// Avatar image
+    //public var avatar: URL?
+    
+    /// Full name
+    //public var name: String?
 }
 
 public extension CloudUser {
@@ -36,7 +43,7 @@ public extension CloudUser {
 public extension CloudUser {
     struct ID: RawRepresentable, Codable, Equatable, Hashable {
         public let rawValue: String
-        public init(rawValue: String = UUID().uuidString) {
+        public init(rawValue: String) {
             self.rawValue = rawValue
         }
     }

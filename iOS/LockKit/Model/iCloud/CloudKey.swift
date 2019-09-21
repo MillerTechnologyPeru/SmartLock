@@ -18,6 +18,9 @@ public extension Key {
         /// The unique identifier of the key.
         public let id: ID
         
+        /// Lock this key belongs to.
+        public let lock: CloudLock.ID
+        
         /// The name of the key.
         public var name: String
         
@@ -25,7 +28,7 @@ public extension Key {
         public let created: Date
         
         /// Key's permissions.
-        public let permissionType: PermissionType.Cloud
+        public let permissionType: PermissionType
         
         /// Key Permission Schedule
         public let schedule: Permission.Schedule.Cloud?
@@ -34,13 +37,14 @@ public extension Key {
 
 public extension Key.Cloud {
     
-    init(_ value: Key) {
+    init(_ value: Key, lock: UUID) {
         self.id = .init(rawValue: value.identifier)
+        self.lock = .init(rawValue: lock)
         self.name = value.name
         self.created = value.created
-        self.permissionType = .init(value.permission.type)
+        self.permissionType = value.permission.type
         if case let .scheduled(schedule) = value.permission {
-            self.schedule = Permission.Schedule.Cloud(id: value.identifier, value: schedule)
+            self.schedule = Permission.Schedule.Cloud(schedule, key: value.identifier, type: .key)
         } else {
             self.schedule = nil
         }
@@ -90,6 +94,9 @@ extension Key.Cloud: CloudKitCodable {
     public var cloudIdentifier: CloudKitIdentifier {
         return id
     }
+    public var parentRecord: CloudKitIdentifier? {
+        return lock
+    }
 }
 
 extension Key.Cloud.ID: CloudKitIdentifier {
@@ -111,129 +118,32 @@ extension Key.Cloud.ID: CloudKitIdentifier {
     }
 }
 
-public extension PermissionType {
-    
-    /// A Key's permission level.
-    enum Cloud: String, Codable {
-        
-        case owner
-        case admin
-        case anytime
-        case scheduled
-    }
-}
+// MARK: - CloudKit Fetch
 
-public extension PermissionType.Cloud {
+public extension CloudStore {
     
-    init(_ value: PermissionType) {
-        self = unsafeBitCast(value, to: PermissionType.Cloud.self)
-    }
-}
-
-public extension PermissionType {
-    
-    init(_ value: PermissionType.Cloud) {
-        self = unsafeBitCast(value, to: PermissionType.self)
-    }
-}
-
-public extension Permission.Schedule {
-    
-    struct Cloud: Codable, Equatable {
+    func fetchKeys(for lock: CloudLock.ID,
+                   result: @escaping (Key.Cloud) throws -> (Bool)) throws {
         
-        /// The unique identifier.
-        public let id: ID
+        let database = container.privateCloudDatabase
         
-        /// The date this permission becomes invalid.
-        public var expiry: Date?
-        
-        // The minute interval range the lock can be unlocked.
-        public var intervalMin: UInt16
-        public var intervalMax: UInt16
-        
-        // weekdays
-        public var sunday: Bool
-        public var monday: Bool
-        public var tuesday: Bool
-        public var wednesday: Bool
-        public var thursday: Bool
-        public var friday: Bool
-        public var saturday: Bool
-    }
-}
-
-internal extension Permission.Schedule.Cloud {
-    
-    init(id: UUID, value: Permission.Schedule) {
-        self.id = .init(rawValue: id)
-        self.expiry = value.expiry
-        self.intervalMin = value.interval.rawValue.lowerBound
-        self.intervalMax = value.interval.rawValue.upperBound
-        self.sunday = value.weekdays.sunday
-        self.monday = value.weekdays.monday
-        self.tuesday = value.weekdays.tuesday
-        self.wednesday = value.weekdays.wednesday
-        self.thursday = value.weekdays.thursday
-        self.friday = value.weekdays.friday
-        self.saturday = value.weekdays.saturday
-    }
-}
-
-internal extension Permission.Schedule {
-    
-    init?(_ cloud: Cloud) {
-        
-        guard let interval = Interval(rawValue: cloud.intervalMin ... cloud.intervalMax)
-            else { return nil }
-        
-        let weekdays = Weekdays(
-            sunday: cloud.sunday,
-            monday: cloud.monday,
-            tuesday: cloud.tuesday,
-            wednesday: cloud.wednesday,
-            thursday: cloud.thursday,
-            friday: cloud.friday,
-            saturday: cloud.saturday
+        let lockReference = CKRecord.Reference(
+            recordID: lock.cloudRecordID,
+            action: .none
         )
         
-        self.init(
-            expiry: cloud.expiry,
-            interval: interval,
-            weekdays: weekdays
+        let query = CKQuery(
+            recordType: Key.Cloud.ID.cloudRecordType,
+            predicate: NSPredicate(format: "%K == %@", "lock", lockReference)
         )
-    }
-}
-
-public extension Permission.Schedule.Cloud {
-    struct ID: RawRepresentable, Codable, Equatable, Hashable {
-        public let rawValue: UUID
-        public init(rawValue: UUID = UUID()) {
-            self.rawValue = rawValue
+        query.sortDescriptors = [
+            .init(key: "created", ascending: false) // \Key.Cloud.created
+        ]
+        
+        let decoder = CloudKitDecoder(context: database)
+        try database.queryAll(query) { (record) in
+            let value = try decoder.decode(Key.Cloud.self, from: record)
+            return try result(value)
         }
-    }
-}
-
-extension Permission.Schedule.Cloud: CloudKitCodable {
-    public var cloudIdentifier: CloudKitIdentifier {
-        return id
-    }
-}
-
-extension Permission.Schedule.Cloud.ID: CloudKitIdentifier {
-    
-    public static var cloudRecordType: CKRecord.RecordType {
-        return "PermissionSchedule"
-    }
-    
-    public init?(cloudRecordID: CKRecord.ID) {
-        let string = cloudRecordID.recordName
-            .replacingOccurrences(of: type(of: self).cloudRecordType + "/", with: "")
-        guard let rawValue = UUID(uuidString: string)
-            else { return nil }
-        self.init(rawValue: rawValue)
-    }
-    
-    public var cloudRecordID: CKRecord.ID {
-        return CKRecord.ID(recordName: type(of: self).cloudRecordType + "/" + rawValue.uuidString)
     }
 }

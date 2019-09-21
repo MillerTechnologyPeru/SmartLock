@@ -16,7 +16,9 @@ import LockKit
 
 final class ExtensionDelegate: NSObject, WKExtensionDelegate {
     
-    var shared: ExtensionDelegate { return WKExtension.shared().delegate as! ExtensionDelegate }
+    var shared: ExtensionDelegate {
+        return WKExtension.shared().delegate as! ExtensionDelegate
+    }
     
     let appLaunch = Date()
 
@@ -107,7 +109,7 @@ final class ExtensionDelegate: NSObject, WKExtensionDelegate {
                         if let error = error {
                             log("⚠️ Donating relevant shortcuts failed. \(error.localizedDescription)")
                             #if DEBUG
-                            dump(error)
+                            print(error)
                             #endif
                         }
                         task.setTaskCompleted(refreshSnapshot: true)

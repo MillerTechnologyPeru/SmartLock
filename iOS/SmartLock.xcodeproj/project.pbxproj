@@ -28,6 +28,7 @@
 		6E15AD8B2318C9060004D1AE /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6E15AD892318C9060004D1AE /* InfoPlist.strings */; };
 		6E3B70B22313E24F00BEB6FF /* ApplicationData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E3B70B12313E24F00BEB6FF /* ApplicationData.swift */; };
 		6E3B70BA2313EF1000BEB6FF /* JSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E3B70B82313E99A00BEB6FF /* JSON.swift */; };
+		6E3D1DF62334BFF4000C6E06 /* NewKeyInvitation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E3D1DF52334BFF4000C6E06 /* NewKeyInvitation.swift */; };
 		6E4051822323624300FE338B /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 6E50B0E323217491001014A8 /* Model.xcdatamodeld */; };
 		6E4051872323624700FE338B /* ManagedObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E50B0E623219EB3001014A8 /* ManagedObject.swift */; };
 		6E4051882323624700FE338B /* LockManagedObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E50B0EB23224293001014A8 /* LockManagedObject.swift */; };
@@ -216,6 +217,7 @@
 		6EE5A1082329F8790000235C /* CloudApplicationData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EE5A1072329F8790000235C /* CloudApplicationData.swift */; };
 		6EE5A10B2329FCA00000235C /* CloudKitCodable in Frameworks */ = {isa = PBXBuildFile; productRef = 6EE5A10A2329FCA00000235C /* CloudKitCodable */; };
 		6EE5A10D2329FD090000235C /* CloudKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EE5A10C2329FD090000235C /* CloudKey.swift */; };
+		6EEACA5323348EFD005820C0 /* CloudPermission.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EEACA5223348EFD005820C0 /* CloudPermission.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -531,6 +533,7 @@
 		6E15AD8C2318C9060004D1AE /* Today_macOS.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Today_macOS.entitlements; sourceTree = "<group>"; };
 		6E3B70B12313E24F00BEB6FF /* ApplicationData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplicationData.swift; sourceTree = "<group>"; };
 		6E3B70B82313E99A00BEB6FF /* JSON.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSON.swift; sourceTree = "<group>"; };
+		6E3D1DF52334BFF4000C6E06 /* NewKeyInvitation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewKeyInvitation.swift; sourceTree = "<group>"; };
 		6E50B0DB2320C344001014A8 /* EventsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventsView.swift; sourceTree = "<group>"; };
 		6E50B0E123216F7E001014A8 /* Events.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Events.storyboard; sourceTree = "<group>"; };
 		6E50B0E423217491001014A8 /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
@@ -668,6 +671,7 @@
 		6EE05B8523331F410014CEE4 /* WatchAssets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = WatchAssets.xcassets; sourceTree = "<group>"; };
 		6EE5A1072329F8790000235C /* CloudApplicationData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudApplicationData.swift; sourceTree = "<group>"; };
 		6EE5A10C2329FD090000235C /* CloudKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudKey.swift; sourceTree = "<group>"; };
+		6EEACA5223348EFD005820C0 /* CloudPermission.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudPermission.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1199,10 +1203,12 @@
 				6E94EF74232F4A790028B745 /* CloudKit.swift */,
 				6EB4B2D9232B5E260077ADD3 /* CloudUser.swift */,
 				6EE5A1072329F8790000235C /* CloudApplicationData.swift */,
+				6E6DB100232D7E8100481C36 /* CloudLock.swift */,
 				6EE5A10C2329FD090000235C /* CloudKey.swift */,
 				6E6DB102232DA10000481C36 /* CloudNewKey.swift */,
-				6E6DB100232D7E8100481C36 /* CloudLock.swift */,
+				6EEACA5223348EFD005820C0 /* CloudPermission.swift */,
 				6E6DB104232DA11100481C36 /* CloudEvent.swift */,
+				6E3D1DF52334BFF4000C6E06 /* NewKeyInvitation.swift */,
 			);
 			path = iCloud;
 			sourceTree = "<group>";
@@ -1255,6 +1261,7 @@
 				6E60000E2121119400787DAA /* Resources */,
 				6E6000492121134700787DAA /* Embed Frameworks */,
 				6E994AF6230E56DD0076DC1B /* Embed App Extensions */,
+				6E3D1DEE2334BC5B000C6E06 /* Build Version */,
 				6ED81FCE2316618400B69520 /* Embed Watch Content */,
 				6E15AD992318CB8A0004D1AE /* Embed macOS Extensions */,
 			);
@@ -1349,6 +1356,7 @@
 				6E994AD2230E56DD0076DC1B /* Sources */,
 				6E994AD3230E56DD0076DC1B /* Frameworks */,
 				6E994AD4230E56DD0076DC1B /* Resources */,
+				6EAD5683233588A30035322A /* Build Version */,
 			);
 			buildRules = (
 			);
@@ -1367,6 +1375,7 @@
 				6E994ADB230E56DD0076DC1B /* Sources */,
 				6E994ADC230E56DD0076DC1B /* Frameworks */,
 				6E994ADD230E56DD0076DC1B /* Resources */,
+				6EAD5684233588B00035322A /* Build Version */,
 			);
 			buildRules = (
 			);
@@ -1387,6 +1396,7 @@
 				6E994B05230E89440076DC1B /* Sources */,
 				6E994B06230E89440076DC1B /* Frameworks */,
 				6E994B07230E89440076DC1B /* Resources */,
+				6EAD5685233588C20035322A /* Build Version */,
 			);
 			buildRules = (
 			);
@@ -1405,6 +1415,7 @@
 				6E994B24230EF6DA0076DC1B /* Sources */,
 				6E994B25230EF6DA0076DC1B /* Frameworks */,
 				6E994B26230EF6DA0076DC1B /* Resources */,
+				6EAD5686233588CD0035322A /* Build Version */,
 			);
 			buildRules = (
 			);
@@ -1422,6 +1433,7 @@
 			buildPhases = (
 				6EA570C223189871008027D4 /* Resources */,
 				6EA570E723189877008027D4 /* Embed App Extensions */,
+				6EAD5688233594ED0035322A /* Build Version */,
 			);
 			buildRules = (
 			);
@@ -1442,6 +1454,7 @@
 				6EA570CE23189874008027D4 /* Resources */,
 				6EA570F423189CE9008027D4 /* Embed Frameworks */,
 				6E81A31E2332E24000F73AFC /* Embed App Extensions */,
+				6E3D1DF42334BDCB000C6E06 /* Build Version */,
 			);
 			buildRules = (
 			);
@@ -1460,6 +1473,7 @@
 				6ED820682316711900B69520 /* Sources */,
 				6ED820692316711900B69520 /* Frameworks */,
 				6ED8206A2316711900B69520 /* Resources */,
+				6EAD5687233588FD0035322A /* Build Version */,
 			);
 			buildRules = (
 			);
@@ -1833,6 +1847,42 @@
 			shellPath = /bin/sh;
 			shellScript = "echo \"Checking configuration to determine whether to copy: CONFIGURATION=$CONFIGURATION\"\nif [ \"$CONFIGURATION\" == \"Debug\" ]; then\ncp -R \"${BUILT_PRODUCTS_DIR}/../Debug/Today.appex\" \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.app/Contents/PlugIns/\"\nrm -rf \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.app/Contents/PlugIns/Contents\"\nelse\necho \"Skipped copying - not required for $CONFIGURATION configuration.\"\nfi\n";
 		};
+		6E3D1DEE2334BC5B000C6E06 /* Build Version */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Build Version";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "#!/bin/bash\n#  update_build_number.sh\n#  Usage: `update_build_number.sh [branch]`\n#  Run this script after the 'Copy Bundle Resources' build phase\n#  Ref: http://tgoode.com/2014/06/05/sensible-way-increment-bundle-version-cfbundleversion-xcode/\nbranch=${1:-'master'}\nbuildNumber=$(expr $(git rev-list $branch --count) - $(git rev-list HEAD..$branch --count))\necho \"Updating build number to $buildNumber using branch '$branch'.\"\n/usr/libexec/PlistBuddy -c \"Set :CFBundleVersion $buildNumber\" \"${TARGET_BUILD_DIR}/${INFOPLIST_PATH}\"\nif [ -f \"${BUILT_PRODUCTS_DIR}/${WRAPPER_NAME}.dSYM/Contents/Info.plist\" ]; then\n  /usr/libexec/PlistBuddy -c \"Set :CFBundleVersion $buildNumber\" \"${BUILT_PRODUCTS_DIR}/${WRAPPER_NAME}.dSYM/Contents/Info.plist\"\nfi\n";
+		};
+		6E3D1DF42334BDCB000C6E06 /* Build Version */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Build Version";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "#!/bin/bash\n\n#  update_build_number.sh\n#  Usage: `update_build_number.sh [branch]`\n#  Run this script after the 'Copy Bundle Resources' build phase\n#  Ref: http://tgoode.com/2014/06/05/sensible-way-increment-bundle-version-cfbundleversion-xcode/\n\nif [ $TRAVIS == \"true\" ]\nthen echo \"Updating build number to TRAVISCI.\"\n/usr/libexec/PlistBuddy -c \"Set :CFBundleVersion TRAVISCI\" \"${TARGET_BUILD_DIR}/${INFOPLIST_PATH}\"\nelse branch=${1:-'master'}\nbuildNumber=$(expr $(git rev-list $branch --count) - $(git rev-list HEAD..$branch --count))\necho \"Updating build number to $buildNumber using branch '$branch'.\"\n/usr/libexec/PlistBuddy -c \"Set :CFBundleVersion $buildNumber\" \"${TARGET_BUILD_DIR}/${INFOPLIST_PATH}\"\nfi\n";
+		};
 		6E806BAC230F68BB00C6FF78 /* R.swift */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -1872,6 +1922,114 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "#\"$SRCROOT/rswift\" generate \"$SRCROOT/R.LockKit.generated.swift\"\n";
+		};
+		6EAD5683233588A30035322A /* Build Version */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Build Version";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "#!/bin/bash\n\n#  update_build_number.sh\n#  Usage: `update_build_number.sh [branch]`\n#  Run this script after the 'Copy Bundle Resources' build phase\n#  Ref: http://tgoode.com/2014/06/05/sensible-way-increment-bundle-version-cfbundleversion-xcode/\n\nif [ $TRAVIS == \"true\" ]\nthen echo \"Updating build number to TRAVISCI.\"\n/usr/libexec/PlistBuddy -c \"Set :CFBundleVersion TRAVISCI\" \"${TARGET_BUILD_DIR}/${INFOPLIST_PATH}\"\nelse branch=${1:-'master'}\nbuildNumber=$(expr $(git rev-list $branch --count) - $(git rev-list HEAD..$branch --count))\necho \"Updating build number to $buildNumber using branch '$branch'.\"\n/usr/libexec/PlistBuddy -c \"Set :CFBundleVersion $buildNumber\" \"${TARGET_BUILD_DIR}/${INFOPLIST_PATH}\"\nfi\n";
+		};
+		6EAD5684233588B00035322A /* Build Version */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Build Version";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "#!/bin/bash\n\n#  update_build_number.sh\n#  Usage: `update_build_number.sh [branch]`\n#  Run this script after the 'Copy Bundle Resources' build phase\n#  Ref: http://tgoode.com/2014/06/05/sensible-way-increment-bundle-version-cfbundleversion-xcode/\n\nif [ $TRAVIS == \"true\" ]\nthen echo \"Updating build number to TRAVISCI.\"\n/usr/libexec/PlistBuddy -c \"Set :CFBundleVersion TRAVISCI\" \"${TARGET_BUILD_DIR}/${INFOPLIST_PATH}\"\nelse branch=${1:-'master'}\nbuildNumber=$(expr $(git rev-list $branch --count) - $(git rev-list HEAD..$branch --count))\necho \"Updating build number to $buildNumber using branch '$branch'.\"\n/usr/libexec/PlistBuddy -c \"Set :CFBundleVersion $buildNumber\" \"${TARGET_BUILD_DIR}/${INFOPLIST_PATH}\"\nfi\n";
+		};
+		6EAD5685233588C20035322A /* Build Version */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Build Version";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "#!/bin/bash\n\n#  update_build_number.sh\n#  Usage: `update_build_number.sh [branch]`\n#  Run this script after the 'Copy Bundle Resources' build phase\n#  Ref: http://tgoode.com/2014/06/05/sensible-way-increment-bundle-version-cfbundleversion-xcode/\n\nif [ $TRAVIS == \"true\" ]\nthen echo \"Updating build number to TRAVISCI.\"\n/usr/libexec/PlistBuddy -c \"Set :CFBundleVersion TRAVISCI\" \"${TARGET_BUILD_DIR}/${INFOPLIST_PATH}\"\nelse branch=${1:-'master'}\nbuildNumber=$(expr $(git rev-list $branch --count) - $(git rev-list HEAD..$branch --count))\necho \"Updating build number to $buildNumber using branch '$branch'.\"\n/usr/libexec/PlistBuddy -c \"Set :CFBundleVersion $buildNumber\" \"${TARGET_BUILD_DIR}/${INFOPLIST_PATH}\"\nfi\n";
+		};
+		6EAD5686233588CD0035322A /* Build Version */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Build Version";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "#!/bin/bash\n\n#  update_build_number.sh\n#  Usage: `update_build_number.sh [branch]`\n#  Run this script after the 'Copy Bundle Resources' build phase\n#  Ref: http://tgoode.com/2014/06/05/sensible-way-increment-bundle-version-cfbundleversion-xcode/\n\nif [ $TRAVIS == \"true\" ]\nthen echo \"Updating build number to TRAVISCI.\"\n/usr/libexec/PlistBuddy -c \"Set :CFBundleVersion TRAVISCI\" \"${TARGET_BUILD_DIR}/${INFOPLIST_PATH}\"\nelse branch=${1:-'master'}\nbuildNumber=$(expr $(git rev-list $branch --count) - $(git rev-list HEAD..$branch --count))\necho \"Updating build number to $buildNumber using branch '$branch'.\"\n/usr/libexec/PlistBuddy -c \"Set :CFBundleVersion $buildNumber\" \"${TARGET_BUILD_DIR}/${INFOPLIST_PATH}\"\nfi\n";
+		};
+		6EAD5687233588FD0035322A /* Build Version */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Build Version";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "#!/bin/bash\n\n#  update_build_number.sh\n#  Usage: `update_build_number.sh [branch]`\n#  Run this script after the 'Copy Bundle Resources' build phase\n#  Ref: http://tgoode.com/2014/06/05/sensible-way-increment-bundle-version-cfbundleversion-xcode/\n\nif [ $TRAVIS == \"true\" ]\nthen echo \"Updating build number to TRAVISCI.\"\n/usr/libexec/PlistBuddy -c \"Set :CFBundleVersion TRAVISCI\" \"${TARGET_BUILD_DIR}/${INFOPLIST_PATH}\"\nelse branch=${1:-'master'}\nbuildNumber=$(expr $(git rev-list $branch --count) - $(git rev-list HEAD..$branch --count))\necho \"Updating build number to $buildNumber using branch '$branch'.\"\n/usr/libexec/PlistBuddy -c \"Set :CFBundleVersion $buildNumber\" \"${TARGET_BUILD_DIR}/${INFOPLIST_PATH}\"\nfi\n";
+		};
+		6EAD5688233594ED0035322A /* Build Version */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Build Version";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "#!/bin/bash\n\n#  update_build_number.sh\n#  Usage: `update_build_number.sh [branch]`\n#  Run this script after the 'Copy Bundle Resources' build phase\n#  Ref: http://tgoode.com/2014/06/05/sensible-way-increment-bundle-version-cfbundleversion-xcode/\n\nif [ $TRAVIS == \"true\" ]\nthen echo \"Updating build number to TRAVISCI.\"\n/usr/libexec/PlistBuddy -c \"Set :CFBundleVersion TRAVISCI\" \"${TARGET_BUILD_DIR}/${INFOPLIST_PATH}\"\nelse branch=${1:-'master'}\nbuildNumber=$(expr $(git rev-list $branch --count) - $(git rev-list HEAD..$branch --count))\necho \"Updating build number to $buildNumber using branch '$branch'.\"\n/usr/libexec/PlistBuddy -c \"Set :CFBundleVersion $buildNumber\" \"${TARGET_BUILD_DIR}/${INFOPLIST_PATH}\"\nfi\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -1940,9 +2098,11 @@
 				6E50B0FA23224428001014A8 /* RemoveKeyEventManagedObject.swift in Sources */,
 				6E806B96230F4F7300C6FF78 /* AppGroup.swift in Sources */,
 				6E50B0E523217491001014A8 /* Model.xcdatamodeld in Sources */,
+				6E3D1DF62334BFF4000C6E06 /* NewKeyInvitation.swift in Sources */,
 				6E806B98230F520400C6FF78 /* FileManager.swift in Sources */,
 				6E50B0FC23224719001014A8 /* LockInformationManagedObject.swift in Sources */,
 				6E83BAF42323831200FBC12E /* LockEventsViewController.swift in Sources */,
+				6EEACA5323348EFD005820C0 /* CloudPermission.swift in Sources */,
 				6E6DB103232DA10000481C36 /* CloudNewKey.swift in Sources */,
 				6E994AB8230DFDB10076DC1B /* Log.swift in Sources */,
 				6E50B0F823224415001014A8 /* ConfirmNewKeyEventManagedObject.swift in Sources */,
@@ -2380,7 +2540,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
@@ -2453,7 +2613,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -2495,6 +2655,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
 				DERIVE_MACCATALYST_PRODUCT_BUNDLE_IDENTIFIER = YES;
 				DEVELOPMENT_TEAM = 4W79SG34MW;
 				ENTITLEMENTS_REQUIRED = YES;
@@ -2521,6 +2682,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
 				DERIVE_MACCATALYST_PRODUCT_BUNDLE_IDENTIFIER = YES;
 				DEVELOPMENT_TEAM = 4W79SG34MW;
 				ENTITLEMENTS_REQUIRED = YES;

@@ -12,6 +12,7 @@ import CoreBluetooth
 import CoreLocation
 import UserNotifications
 import CoreSpotlight
+import CloudKit
 import Bluetooth
 import GATT
 import CoreLock
@@ -65,8 +66,8 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
             try R.validate()
             try RLockKit.validate()
         } catch {
-            dump(error)
-            assertionFailure("Could not validate R.swift \(error.localizedDescription)")
+            print(error)
+            assertionFailure("Could not validate R.swift \(error)")
         }
         #endif
         
@@ -83,7 +84,7 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
         }
         
         // request permissions
-        BeaconController.shared.allowsBackgroundLocationUpdates = true
+        //BeaconController.shared.allowsBackgroundLocationUpdates = true
         BeaconController.shared.requestAlwaysAuthorization()
         if #available(iOS 10.0, *) {
             UserNotificationCenter.shared.requestAuthorization()
@@ -110,6 +111,15 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
             }
         }
         
+        // CloudKit
+        DispatchQueue.app.asyncAfter(deadline: .now() + 3.0) {
+            do {
+                let status = try Store.shared.cloud.requestPermissions()
+                log("☁️ CloudKit permisions \(status == .granted ? "granted" : "not granted")")
+            }
+            catch { log("⚠️ Could not request CloudKit permissions. \(error.localizedDescription)") }
+        }
+        
         #if targetEnvironment(macCatalyst)
         // scan periodically in macOS
         setupBackgroundUpdates()
@@ -117,7 +127,7 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
         // background fetch in iOS
         application.setMinimumBackgroundFetchInterval(60 * 10)
         #endif
-        
+                
         // handle url
         if let url = launchOptions?[.url] as? URL {
             guard open(url: url)

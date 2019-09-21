@@ -27,7 +27,7 @@ public extension CKContainer {
     }
 }
 
-public extension CKContainer {
+internal extension CKContainer {
     
     func fetchUserRecordID() throws -> CKRecord.ID {
         let semaphore = DispatchSemaphore(value: 0)
@@ -46,6 +46,27 @@ public extension CKContainer {
         switch result! {
         case let .success(recordID):
             return recordID
+        case let .failure(error):
+            throw error
+        }
+    }
+    
+    func requestApplicationPermission(_ permissions: CKContainer_Application_Permissions) throws -> CKContainer_Application_PermissionStatus {
+        
+        let semaphore = DispatchSemaphore(value: 0)
+        var result: Result<CKContainer_Application_PermissionStatus, Swift.Error>!
+        requestApplicationPermission(permissions) { (status, error) in
+            defer { semaphore.signal() }
+            if let error = error {
+                result = .failure(error)
+            } else {
+                result = .success(status)
+            }
+        }
+        semaphore.wait()
+        switch result! {
+        case let .success(status):
+            return status
         case let .failure(error):
             throw error
         }

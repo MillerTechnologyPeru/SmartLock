@@ -43,6 +43,7 @@ internal extension NSManagedObjectContext {
         
         assert(concurrencyType == .privateQueueConcurrencyType)
         perform { [unowned self] in
+            self.reset()
             do {
                 try block(self)
                 if self.hasChanges {
@@ -51,7 +52,7 @@ internal extension NSManagedObjectContext {
             } catch {
                 log("⚠️ Unable to commit changes: \(error.localizedDescription)")
                 #if DEBUG
-                dump(error)
+                print(error)
                 #endif
                 assertionFailure("Core Data error")
                 return

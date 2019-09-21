@@ -176,7 +176,7 @@ extension SessionController: WCSessionDelegate {
         if let error = error {
             log?("Activation did not complete: " + error.localizedDescription)
             #if DEBUG
-            dump(error)
+            print(error)
             #endif
         } else {
             log?(activationState.debugDescription)

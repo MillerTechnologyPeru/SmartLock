@@ -50,7 +50,7 @@ public extension WKInterfaceController {
                 if let error = error {
                     log("⚠️ Donating intent failed with error \(error.localizedDescription)")
                     #if DEBUG
-                    dump(error)
+                    print(error)
                     #endif
                 }
             }

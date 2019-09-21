@@ -24,15 +24,6 @@ public enum Permission: Equatable, Hashable {
     case scheduled(Schedule)
 }
 
-/// A Key's permission level.
-public enum PermissionType: UInt8, Codable {
-    
-    case owner
-    case admin
-    case anytime
-    case scheduled
-}
-
 public extension Permission {
     
     /// Byte value of the permission type.
@@ -62,6 +53,42 @@ public extension Permission {
              .scheduled:
             return false
         }
+    }
+}
+
+// MARK: - PermissionType
+
+/// A Key's permission level.
+public enum PermissionType: UInt8, CaseIterable {
+    
+    case owner
+    case admin
+    case anytime
+    case scheduled
+}
+
+internal extension PermissionType {
+    
+    init?(stringValue: String) {
+        guard let value = Swift.type(of: self).allCases.first(where: { $0.stringValue == stringValue })
+            else { return nil }
+        self = value
+    }
+    
+    var stringValue: String {
+        switch self {
+        case .owner: return "owner"
+        case .admin: return "admin"
+        case .anytime: return "anytime"
+        case .scheduled: return "scheduled"
+        }
+    }
+}
+
+extension PermissionType: CustomStringConvertible {
+    
+    public var description: String {
+        return stringValue
     }
 }
 
@@ -325,6 +352,36 @@ extension Permission: Codable {
         case let .scheduled(schedule):
             try container.encode(schedule, forKey: .schedule)
         }
+    }
+}
+
+extension PermissionType: Codable {
+    
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        let rawValue = try container.decode(String.self)
+        guard let value = PermissionType(stringValue: rawValue) else {
+            throw DecodingError.dataCorruptedError(in: container, debugDescription: "Invalid string value \(rawValue)")
+        }
+        self = value
+    }
+    
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.singleValueContainer()
+        try container.encode(stringValue)
+    }
+}
+
+extension PermissionType: TLVCodable {
+    
+    public init?(tlvData: Data) {
+        guard tlvData.count == 1
+            else { return nil }
+        self.init(rawValue: tlvData[0])
+    }
+    
+    public var tlvData: Data {
+        return Data([rawValue])
     }
 }
 

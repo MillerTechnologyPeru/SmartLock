@@ -19,23 +19,25 @@ struct CloudSettingsView: View {
     @ObservedObject
     var preferences: Preferences = Store.shared.preferences
     
+    @State
+    var isCloudUpdating = false
+    
     // MARK: - View
     
     var body: some View {
         List {
-            Section(header: Text(verbatim: "")) {
-                Toggle(isOn: $preferences.isCloudEnabled) {
-                    Text("iCloud Syncronization")
+            Section(header: Text(verbatim: ""), footer: Text(verbatim: "Automatically backup data such as your keys, events and application data.")) {
+                Toggle(isOn: $preferences.isCloudBackupEnabled) {
+                    Text("iCloud Backup")
                 }
             }
-            Section(header: Text(verbatim: "")) {
-                if preferences.isCloudEnabled {
+            Section(header: Text(verbatim: ""),
+                    footer: preferences.lastCloudUpdate
+                        .flatMap { Text("Last successful backup: \($0)") } ?? Text("")) {
+                if preferences.isCloudBackupEnabled {
                     Button(action: { self.backup() }) {
-                        Text("Backup now")
+                        isCloudUpdating ? Text("Backing Up...") : Text("Back Up Now")
                     }
-                    preferences.lastCloudUpdate.flatMap {
-                        Text("Last updated \($0)")
-                    } ?? Text("Never updated")
                 }
             }
         }
@@ -50,7 +52,19 @@ struct CloudSettingsView: View {
 private extension CloudSettingsView {
     
     func backup() {
-        AppDelegate.shared.tabBarController.syncCloud()
+        guard isCloudUpdating == false else { return }
+        isCloudUpdating = true
+        let viewController = AppDelegate.shared.tabBarController
+        AppDelegate.shared.tabBarController.syncCloud {
+            self.isCloudUpdating = false
+            switch $0 {
+            case let .failure(error):
+                log("⚠️ Could not sync iCloud: \(error.localizedDescription)")
+                viewController.showErrorAlert(error.localizedDescription)
+            case .success:
+                break
+            }
+        }
     }
 }
 

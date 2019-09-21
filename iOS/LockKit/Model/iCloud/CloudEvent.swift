@@ -83,7 +83,7 @@ internal extension LockEvent.Cloud {
             self.date = event.date
             self.key = event.key
             self.removedKey = event.removedKey
-            self.removedKeyType = event.type
+            self.removedKeyType = .init(event.type)
             self.newKey = nil
             self.unlockAction = nil
         }
@@ -130,6 +130,9 @@ extension LockEvent.Cloud: CloudKitCodable {
     public var cloudIdentifier: CloudKitIdentifier {
         return id
     }
+    public var parentRecord: CloudKitIdentifier? {
+        return lock
+    }
 }
 
 extension LockEvent.Cloud.ID: CloudKitIdentifier {
@@ -148,5 +151,35 @@ extension LockEvent.Cloud.ID: CloudKitIdentifier {
     
     public var cloudRecordID: CKRecord.ID {
         return CKRecord.ID(recordName: type(of: self).cloudRecordType + "/" + rawValue.uuidString)
+    }
+}
+
+// MARK: - CloudKit Fetch
+
+public extension CloudStore {
+    
+    func fetchEvents(for lock: CloudLock.ID,
+                     event: @escaping (LockEvent.Cloud) throws -> (Bool)) throws {
+        
+        let database = container.privateCloudDatabase
+        
+        let lockReference = CKRecord.Reference(
+            recordID: lock.cloudRecordID,
+            action: .none
+        )
+        
+        let query = CKQuery(
+            recordType: LockEvent.Cloud.ID.cloudRecordType,
+            predicate: NSPredicate(format: "%K == %@", "lock", lockReference)
+        )
+        query.sortDescriptors = [
+            .init(key: "date", ascending: false) // \LockEvent.Cloud.date
+        ]
+        
+        let decoder = CloudKitDecoder(context: database)
+        try database.queryAll(query) { (record) in
+            let value = try decoder.decode(LockEvent.Cloud.self, from: record)
+            return try event(value)
+        }
     }
 }

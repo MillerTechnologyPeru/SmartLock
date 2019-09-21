@@ -31,7 +31,7 @@ public final class Store {
             catch {
                 DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) {
                     #if DEBUG
-                    dump(error)
+                    print(error)
                     #endif
                     log("⚠️ Unable to clear keychain: \(error.localizedDescription)")
                     assertionFailure("Unable to clear keychain")
@@ -46,11 +46,11 @@ public final class Store {
             if let error = error {
                 log("⚠️ Unable to load persistent store: \(error.localizedDescription)")
                 #if DEBUG
-                dump(error)
+                print(error)
                 #endif
                 if let url = store.url {
                     do { try FileManager.default.removeItem(at: url) }
-                    catch { dump(error) }
+                    catch { print(error) }
                 }
                 assertionFailure("Unable to load persistent store")
                 return
@@ -65,12 +65,15 @@ public final class Store {
         
         #if os(iOS)
         // observe iBeacons
-        beaconController.foundBeacon = { [unowned self] (beacon, beacons) in
-            self.beaconFound(beacon, beacons: beacons)
+        beaconController.beaconChanged = { [unowned self] (beacon) in
+            switch beacon.state {
+            case .inside:
+                self.beaconFound(beacon.uuid)
+            case .outside:
+                self.beaconExited(beacon.uuid)
+            }
         }
-        beaconController.lostBeacon = { [unowned self] (beacon) in
-            self.beaconExited(beacon)
-        }
+        
         // observe external cloud changes
         cloud.didChange = { [unowned self] in self.cloudDidChangeExternally() }
         #endif
@@ -175,7 +178,7 @@ public final class Store {
                 return key
             } catch {
                 #if DEBUG
-                dump(error)
+                print(error)
                 #endif
                 assertionFailure("Unable retrieve value from keychain: \(error)")
                 return nil
@@ -192,7 +195,7 @@ public final class Store {
                 try keychain.set(data, key: identifier.uuidString)
             } catch {
                 #if DEBUG
-                dump(error)
+                print(error)
                 #endif
                 assertionFailure("Unable store value in keychain: \(error)")
             }
@@ -288,7 +291,7 @@ public final class Store {
         }
     }
     
-    private func beaconFound(_ beacon: UUID, beacons: [CLBeacon]) {
+    private func beaconFound(_ beacon: UUID) {
         
         if let _ = Store.shared[lock: beacon] {
             DispatchQueue.bluetooth.async { [weak self] in
@@ -304,7 +307,7 @@ public final class Store {
                     log("⚠️ Could not scan: \(error.localizedDescription)")
                 }
             }
-        } else if beacon == .lockNotificationBeacon {
+        } else if beacon == .lockNotificationBeacon { // Entered region event
             log("📶 Lock notification")
             guard preferences.monitorBluetoothNotifications
                 else { return } // ignore notification
@@ -321,7 +324,7 @@ public final class Store {
                 }
                 let visibleLocks = locks.filter { self.device(for: $0) != nil }
                 // queue fetching events
-                DispatchQueue.bluetooth.asyncAfter(deadline: .now() + 5.0) {
+                DispatchQueue.bluetooth.asyncAfter(deadline: .now() + 3.0) {
                     defer { self.beaconController.scanBeacons() } // refresh beacons
                     for lock in visibleLocks {
                         do {
@@ -575,16 +578,17 @@ public extension Store {
         }
         
         #if os(iOS)
-        DispatchQueue.cloud.async { [weak self] in
-            // upload to iCloud
-            do {
-                for event in events {
-                    let value = LockEvent.Cloud(event: event, for: lockIdentifier)
-                    let parent = CloudLock.ID(rawValue: lockIdentifier)
-                    try self?.cloud.upload(value, parent: parent.cloudRecordID)
+        if preferences.isCloudBackupEnabled {
+            DispatchQueue.cloud.async { [weak self] in
+                // upload to iCloud
+                do {
+                    for event in events {
+                        let value = LockEvent.Cloud(event: event, for: lockIdentifier)
+                        try self?.cloud.upload(value)
+                    }
+                } catch {
+                    log("⚠️ Could not upload latest events to iCloud: \(error.localizedDescription)")
                 }
-            } catch {
-                log("⚠️ Could not upload latest events to iCloud: \(error.localizedDescription)")
             }
         }
         #endif
