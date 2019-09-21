@@ -65,12 +65,15 @@ public final class Store {
         
         #if os(iOS)
         // observe iBeacons
-        beaconController.foundBeacon = { [unowned self] (beacon, beacons) in
-            self.beaconFound(beacon, beacons: beacons)
+        beaconController.beaconChanged = { [unowned self] (beacon) in
+            switch beacon.state {
+            case .inside:
+                self.beaconFound(beacon.uuid)
+            case .outside:
+                self.beaconExited(beacon.uuid)
+            }
         }
-        beaconController.lostBeacon = { [unowned self] (beacon) in
-            self.beaconExited(beacon)
-        }
+        
         // observe external cloud changes
         cloud.didChange = { [unowned self] in self.cloudDidChangeExternally() }
         #endif
@@ -288,7 +291,7 @@ public final class Store {
         }
     }
     
-    private func beaconFound(_ beacon: UUID, beacons: [CLBeacon]) {
+    private func beaconFound(_ beacon: UUID) {
         
         if let _ = Store.shared[lock: beacon] {
             DispatchQueue.bluetooth.async { [weak self] in
@@ -304,8 +307,7 @@ public final class Store {
                     log("⚠️ Could not scan: \(error.localizedDescription)")
                 }
             }
-        } else if beacon == .lockNotificationBeacon,
-            beacons.isEmpty { // Entered region event
+        } else if beacon == .lockNotificationBeacon { // Entered region event
             log("📶 Lock notification")
             guard preferences.monitorBluetoothNotifications
                 else { return } // ignore notification

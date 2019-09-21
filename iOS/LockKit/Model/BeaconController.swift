@@ -31,18 +31,14 @@ public final class BeaconController {
     
     private lazy var delegate = Delegate(self)
     
-    public private(set) var beacons = [UUID: CLBeaconRegion]()
+    public private(set) var beacons = [UUID: Beacon]()
     
     public var allowsBackgroundLocationUpdates: Bool {
         get { return locationManager.allowsBackgroundLocationUpdates }
         set { locationManager.allowsBackgroundLocationUpdates = newValue }
     }
     
-    public var foundBeacon: ((UUID, [CLBeacon]) -> ())?
-    
-    public var lostBeacon: ((UUID) -> ())?
-    
-    private var foundBeacons = [UUID: [CLBeacon]]()
+    public var beaconChanged: ((Beacon) -> ())?
     
     // MARK: - Methods
     
@@ -52,20 +48,19 @@ public final class BeaconController {
     
     public func monitor(_ beacon: UUID) {
         
-        let region = CLBeaconRegion(uuid: beacon)
-        region.notifyOnEntry = true
-        region.notifyEntryStateOnDisplay = true
-        region.notifyOnExit = true
-        beacons[beacon] = region
+        let uuid = beacon
+        let beacon = Beacon(uuid: uuid)
+        beacon.didChange = { [weak self] in self?.beaconChanged?(beacon) }
+        beacons[uuid] = beacon
         
         // initiate monitoring and scanning
-        scanBeacons(in: region)
+        scanBeacons(in: beacon.region)
     }
     
     @discardableResult
     public func stopMonitoring(_ beacon: UUID) -> Bool {
         
-        guard let region = beacons[beacon]
+        guard let region = beacons[beacon]?.region
             else { return false }
         
         beacons[beacon] = nil
@@ -88,12 +83,12 @@ public final class BeaconController {
     }
     
     public func scanBeacons() {
-        beacons.values.forEach { scanBeacons(in: $0) }
+        beacons.values.forEach { scanBeacons(in: $0.region) }
     }
     
     @discardableResult
     public func scanBeacon(for identifier: UUID) -> Bool {
-        guard let region = beacons[identifier]
+        guard let region = beacons[identifier]?.region
             else { return false }
         scanBeacons(in: region)
         return true
@@ -200,12 +195,7 @@ private extension BeaconController {
                 else { assertionFailure(); return }
             
             if let beaconRegion = region as? CLBeaconRegion {
-                if let beacon = beaconController.beacons.first(where: { $0.value == region })?.key {
-                    // clear stale beacons
-                    beaconController.foundBeacons[beacon] = nil
-                    // notify upper layer
-                    beaconController.foundBeacon?(beacon, [])
-                }
+                
                 // start ranging beacons
                 if #available(iOS 13, *) {
                     if manager.rangedBeaconConstraints.contains(.init(beaconRegion)) == false {
@@ -218,6 +208,12 @@ private extension BeaconController {
                     }
                     #endif
                 }
+                
+                guard let beacon = beaconController.beacons.first(where: { $0.value.region == region })?.value
+                    else { assertionFailure("Invalid beacon \(beaconRegion.proximityUUID)"); return }
+                
+                // update state
+                beacon.state = .inside
             }
         }
         
@@ -225,6 +221,9 @@ private extension BeaconController {
         public func locationManager(_ manager: CLLocationManager, didExitRegion region: CLRegion) {
             
             log("Exited beacon region \(region.identifier)")
+            
+            guard let beaconController = self.beaconController
+                else { assertionFailure(); return }
             
             if let beaconRegion = region as? CLBeaconRegion {
                 // stop ranging beacons
@@ -239,11 +238,12 @@ private extension BeaconController {
                     }
                     #endif
                 }
-                // notify upper layer
-                if let beacon = beaconController?.beacons.first(where: { $0.value == region })?.key {
-                    self.beaconController?.foundBeacons[beacon] = nil
-                    self.beaconController?.lostBeacon?(beacon)
-                }
+                
+                guard let beacon = beaconController.beacons.first(where: { $0.value.region == region })?.value
+                    else { assertionFailure("Invalid beacon \(beaconRegion.proximityUUID)"); return }
+                
+                // update state
+                beacon.state = .outside
             }
         }
         
@@ -253,26 +253,27 @@ private extension BeaconController {
             log("Determined state \(state.debugDescription) for region \(region.identifier)")
             
             if let beaconRegion = region as? CLBeaconRegion {
-                                
+                
+                let newState: Beacon.State
                 switch state {
                 case .unknown:
                     // start ranging beacons
                     manager.startRangingBeacons(in: beaconRegion.proximityUUID)
+                    newState = .outside
                 case .inside:
                     // start ranging beacons
                     manager.startRangingBeacons(in: beaconRegion.proximityUUID)
+                    newState = .inside
                 case .outside:
                     // stop ranging beacons
                     manager.stopRangingBeacons(in: beaconRegion.proximityUUID)
-                    if let beacon = beaconController?.beacons.first(where: { $0.value == region })?.key {
-                        defer { self.beaconController?.foundBeacons[beacon] = nil }
-                        let oldBeacon = self.beaconController?.foundBeacons[beacon]
-                        if oldBeacon != nil {
-                            self.beaconController?.log?("Cannot find beacon \(beacon)")
-                            self.beaconController?.lostBeacon?(beacon)
-                        }
-                    }
+                    newState = .outside
                 }
+                
+                guard let beacon = beaconController?.beacons.first(where: { $0.value.region == region })?.value
+                    else { assertionFailure("Invalid beacon \(beaconRegion.proximityUUID)"); return }
+                
+                beacon.state = newState
             }
         }
         
@@ -285,27 +286,23 @@ private extension BeaconController {
             
             let manager = beaconController.locationManager
             
-            // is lock iBeacon, make sure the lock is scanned for BLE operations
-            if let beacon = beaconController.beacons.first(where: { $0.value.identifier == uuid.uuidString })?.key {
-                                
-                // stop BLE scanning for iBeacon
+            guard let beacon = beaconController.beacons[uuid] else {
                 manager.stopRangingBeacons(in: uuid)
-                
-                guard beacons.isEmpty == false else {
-                    // make sure we are inside the Beacon region
-                    manager.requestState(for: uuid)
-                    return
-                }
-                
-                let oldBeacon = beaconController.foundBeacons[beacon]
-                beaconController.foundBeacons[beacon] = beacons
-                if oldBeacon == nil {
-                    beaconController.log?("Found beacon \(beacon)")
-                    beaconController.foundBeacon?(beacon, beacons)
-                }
-            } else {
-                manager.stopRangingBeacons(in: uuid)
+                assertionFailure("Invalid beacon \(uuid)")
+                return
             }
+            
+            guard beacons.isEmpty == false else {
+                // make sure we are inside the Beacon region
+                manager.requestState(for: uuid)
+                return
+            }
+            
+            // set state
+            beacon.state = .inside
+            
+            // stop BLE scanning for iBeacon
+            manager.stopRangingBeacons(in: uuid)
         }
         
         @available(iOSApplicationExtension 13.0, *)
@@ -338,7 +335,40 @@ private extension BeaconController {
     }
 }
 
-private extension CLLocationManager {
+// MARK: - Supporting Types
+
+public extension BeaconController {
+    
+    final class Beacon {
+        
+        public let uuid: UUID
+        public fileprivate(set) var state: State = .outside {
+            didSet { if state != oldValue { didChange() } }
+        }
+        internal let region: CLBeaconRegion
+        internal fileprivate(set) var didChange: (() -> ()) = { }
+        
+        init(uuid: UUID) {
+            self.uuid = uuid
+            self.region = CLBeaconRegion(uuid: uuid)
+            region.notifyOnEntry = true
+            region.notifyEntryStateOnDisplay = true
+            region.notifyOnExit = true
+        }
+    }
+}
+
+public extension BeaconController.Beacon {
+    
+    enum State: Equatable, Hashable {
+        case inside
+        case outside
+    }
+}
+
+// MARK: - CoreLocation Extensions
+
+internal extension CLLocationManager {
     
     func requestState(for uuid: UUID) {
         requestState(for: CLBeaconRegion(uuid: uuid))
@@ -365,7 +395,7 @@ private extension CLLocationManager {
     }
 }
 
-private extension CLBeaconRegion {
+internal extension CLBeaconRegion {
     
     convenience init(uuid identifier: UUID) {
         if #available(iOS 13.0, iOSApplicationExtension 13.0, *) {
@@ -377,14 +407,14 @@ private extension CLBeaconRegion {
 }
 
 @available(iOS 13, iOSApplicationExtension 13.0, *)
-private extension CLBeaconIdentityConstraint {
+internal extension CLBeaconIdentityConstraint {
     
     convenience init(_ region: CLBeaconRegion) {
         self.init(uuid: region.uuid)
     }
 }
 
-private extension CLAuthorizationStatus {
+internal extension CLAuthorizationStatus {
     
     var debugDescription: String {
         switch self {
@@ -399,7 +429,7 @@ private extension CLAuthorizationStatus {
     }
 }
 
-private extension CLRegionState {
+internal extension CLRegionState {
     
     var debugDescription: String {
         switch self {
