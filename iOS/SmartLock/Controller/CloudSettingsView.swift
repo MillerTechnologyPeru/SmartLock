@@ -36,7 +36,13 @@ struct CloudSettingsView: View {
                         .flatMap { Text("Last successful backup: \($0)") } ?? Text("")) {
                 if preferences.isCloudBackupEnabled {
                     Button(action: { self.backup() }) {
-                        isCloudUpdating ? Text("Backing Up...") : Text("Back Up Now")
+                        HStack {
+                            isCloudUpdating ? Text("Backing Up...") : Text("Back Up Now")
+                            Spacer()
+                            if isCloudUpdating {
+                                ActivityIndicator()
+                            }
+                        }
                     }
                 }
             }

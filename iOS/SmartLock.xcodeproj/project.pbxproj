@@ -186,6 +186,7 @@
 		6EB4B2DA232B5E260077ADD3 /* CloudUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EB4B2D9232B5E260077ADD3 /* CloudUser.swift */; };
 		6EB59D612313184A00D5EFA7 /* iCloud.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EB59D602313184A00D5EFA7 /* iCloud.swift */; };
 		6EC0412E230A226400357585 /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EC0412D230A226300357585 /* TabBarController.swift */; };
+		6ECD39A52336D369003E4AB4 /* ActivityIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6ECD39A42336D369003E4AB4 /* ActivityIndicator.swift */; };
 		6ECD6AEA23320D2C0007E7DA /* ContextMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6ECD6AE923320D2C0007E7DA /* ContextMenu.swift */; };
 		6ED81F972316292900B69520 /* BackgroundTasks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6ED81F962316292900B69520 /* BackgroundTasks.swift */; };
 		6ED8207D231674E700B69520 /* IntentHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E994AD8230E56DD0076DC1B /* IntentHandler.swift */; };
@@ -650,6 +651,7 @@
 		6EC0412F230A494E00357585 /* UserActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserActivity.swift; sourceTree = "<group>"; };
 		6EC04137230B15AD00357585 /* Unlock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Unlock.swift; sourceTree = "<group>"; };
 		6EC04139230B162F00357585 /* Setup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Setup.swift; sourceTree = "<group>"; };
+		6ECD39A42336D369003E4AB4 /* ActivityIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityIndicator.swift; sourceTree = "<group>"; };
 		6ECD6AE923320D2C0007E7DA /* ContextMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContextMenu.swift; sourceTree = "<group>"; };
 		6ED81F962316292900B69520 /* BackgroundTasks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackgroundTasks.swift; sourceTree = "<group>"; };
 		6ED81FB12316617E00B69520 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Interface.storyboard; sourceTree = "<group>"; };
@@ -803,6 +805,7 @@
 			children = (
 				6E135CBD2319842A00FFA7F7 /* SliderCell.swift */,
 				6E50B0DB2320C344001014A8 /* EventsView.swift */,
+				6ECD39A42336D369003E4AB4 /* ActivityIndicator.swift */,
 			);
 			path = SwiftUI;
 			sourceTree = "<group>";
@@ -2080,6 +2083,7 @@
 				6E994AC5230DFDC60076DC1B /* NewKeyRecieveViewController.swift in Sources */,
 				6E50B0F4232243A2001014A8 /* UnlockEventManagedObject.swift in Sources */,
 				6E08FB8B2316F9F600177026 /* WatchMessage.swift in Sources */,
+				6ECD39A52336D369003E4AB4 /* ActivityIndicator.swift in Sources */,
 				6E806BAB230F67D900C6FF78 /* LogViewController.swift in Sources */,
 				6E994AC1230DFDC60076DC1B /* LockViewController.swift in Sources */,
 				6E994ABB230DFDB60076DC1B /* AdaptiveNavigation.swift in Sources */,
