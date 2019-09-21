@@ -26,7 +26,7 @@ public extension NewKey {
         
         public let expiration: Date
         
-        public let permissionType: PermissionType.Cloud
+        public let permissionType: PermissionType
         
         public let schedule: Permission.Schedule.Cloud?
     }
@@ -40,7 +40,7 @@ public extension NewKey.Cloud {
         self.name = value.name
         self.created = value.created
         self.expiration = value.expiration
-        self.permissionType = .init(value.permission.type)
+        self.permissionType = value.permission.type
         if case let .scheduled(schedule) = value.permission {
             self.schedule = Permission.Schedule.Cloud(schedule, key: value.identifier, type: .newKey)
         } else {

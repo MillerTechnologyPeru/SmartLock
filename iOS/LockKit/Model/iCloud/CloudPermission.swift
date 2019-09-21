@@ -11,32 +11,6 @@ import CloudKit
 import CloudKitCodable
 import CoreLock
 
-public extension PermissionType {
-    
-    /// A Key's permission level.
-    enum Cloud: String, Codable {
-        
-        case owner
-        case admin
-        case anytime
-        case scheduled
-    }
-}
-
-public extension PermissionType.Cloud {
-    
-    init(_ value: PermissionType) {
-        self = unsafeBitCast(value, to: PermissionType.Cloud.self)
-    }
-}
-
-public extension PermissionType {
-    
-    init(_ value: PermissionType.Cloud) {
-        self = unsafeBitCast(value, to: PermissionType.self)
-    }
-}
-
 public extension Permission.Schedule {
     
     struct Cloud: Codable, Equatable {

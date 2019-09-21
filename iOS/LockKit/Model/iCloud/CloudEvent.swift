@@ -83,7 +83,7 @@ internal extension LockEvent.Cloud {
             self.date = event.date
             self.key = event.key
             self.removedKey = event.removedKey
-            self.removedKeyType = event.type
+            self.removedKeyType = .init(event.type)
             self.newKey = nil
             self.unlockAction = nil
         }

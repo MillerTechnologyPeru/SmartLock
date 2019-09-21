@@ -19,10 +19,10 @@ public struct CloudUser: Codable, Equatable {
     public var applicationData: ApplicationData.Cloud?
     
     /// Avatar image
-    public var avatar: URL?
+    //public var avatar: URL?
     
     /// Full name
-    public var name: String?
+    //public var name: String?
 }
 
 public extension CloudUser {
