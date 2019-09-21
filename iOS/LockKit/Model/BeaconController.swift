@@ -196,11 +196,17 @@ private extension BeaconController {
             
             log("Entered region \(region.identifier)")
             
+            guard let beaconController = self.beaconController
+                else { assertionFailure(); return }
+            
             if let beaconRegion = region as? CLBeaconRegion {
-                if let beacon = beaconController?.beacons.first(where: { $0.value == region })?.key {
+                if let beacon = beaconController.beacons.first(where: { $0.value == region })?.key {
                     // clear stale beacons
-                    self.beaconController?.foundBeacons[beacon] = nil
+                    beaconController.foundBeacons[beacon] = nil
+                    // notify upper layer
+                    beaconController.foundBeacon?(beacon, [])
                 }
+                // start ranging beacons
                 if #available(iOS 13, *) {
                     if manager.rangedBeaconConstraints.contains(.init(beaconRegion)) == false {
                         manager.startRangingBeacons(satisfying: .init(beaconRegion))
@@ -221,6 +227,7 @@ private extension BeaconController {
             log("Exited beacon region \(region.identifier)")
             
             if let beaconRegion = region as? CLBeaconRegion {
+                // stop ranging beacons
                 if #available(iOS 13, *) {
                     if manager.rangedBeaconConstraints.contains(.init(beaconRegion)) {
                         manager.stopRangingBeacons(satisfying: .init(beaconRegion))
@@ -232,13 +239,10 @@ private extension BeaconController {
                     }
                     #endif
                 }
+                // notify upper layer
                 if let beacon = beaconController?.beacons.first(where: { $0.value == region })?.key {
-                    defer { self.beaconController?.foundBeacons[beacon] = nil }
-                    let oldBeacon = self.beaconController?.foundBeacons[beacon]
-                    if oldBeacon != nil {
-                        self.beaconController?.log?("Cannot find beacon \(beacon)")
-                        self.beaconController?.lostBeacon?(beacon)
-                    }
+                    self.beaconController?.foundBeacons[beacon] = nil
+                    self.beaconController?.lostBeacon?(beacon)
                 }
             }
         }
@@ -249,12 +253,16 @@ private extension BeaconController {
             log("Determined state \(state.debugDescription) for region \(region.identifier)")
             
             if let beaconRegion = region as? CLBeaconRegion {
-                
+                                
                 switch state {
-                case .inside,
-                     .unknown:
+                case .unknown:
+                    // start ranging beacons
+                    manager.startRangingBeacons(in: beaconRegion.proximityUUID)
+                case .inside:
+                    // start ranging beacons
                     manager.startRangingBeacons(in: beaconRegion.proximityUUID)
                 case .outside:
+                    // stop ranging beacons
                     manager.stopRangingBeacons(in: beaconRegion.proximityUUID)
                     if let beacon = beaconController?.beacons.first(where: { $0.value == region })?.key {
                         defer { self.beaconController?.foundBeacons[beacon] = nil }

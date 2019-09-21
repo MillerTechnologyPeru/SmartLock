@@ -304,7 +304,8 @@ public final class Store {
                     log("⚠️ Could not scan: \(error.localizedDescription)")
                 }
             }
-        } else if beacon == .lockNotificationBeacon {
+        } else if beacon == .lockNotificationBeacon,
+            beacons.isEmpty { // Entered region event
             log("📶 Lock notification")
             guard preferences.monitorBluetoothNotifications
                 else { return } // ignore notification
@@ -321,7 +322,7 @@ public final class Store {
                 }
                 let visibleLocks = locks.filter { self.device(for: $0) != nil }
                 // queue fetching events
-                DispatchQueue.bluetooth.asyncAfter(deadline: .now() + 5.0) {
+                DispatchQueue.bluetooth.asyncAfter(deadline: .now() + 3.0) {
                     defer { self.beaconController.scanBeacons() } // refresh beacons
                     for lock in visibleLocks {
                         do {
