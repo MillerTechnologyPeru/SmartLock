@@ -310,7 +310,7 @@ public extension Store {
         assert(Thread.isMainThread == false)
         
         // make sure iCloud is enabled
-        guard preferences.isCloudEnabled else { return }
+        guard preferences.isCloudBackupEnabled else { return }
         
         // update from filesystem just in case
         loadCache()
@@ -537,7 +537,7 @@ public extension ActivityIndicatorViewController where Self: UIViewController {
         
         assert(Thread.isMainThread)
         
-        guard Store.shared.preferences.isCloudEnabled else { return }
+        guard Store.shared.preferences.isCloudBackupEnabled else { return }
         
         performActivity(showActivity: showActivity, queue: .cloud, { [weak self] in
             try Store.shared.syncCloud(conflicts: { self?.resolveCloudSyncConflicts($0) })
@@ -549,18 +549,29 @@ public extension ActivityIndicatorViewController where Self: UIViewController {
 
 public extension UIViewController {
     
-    func syncCloud() {
+    func syncCloud(completion: @escaping (Result<Void, Error>) -> ()) {
         
         assert(Thread.isMainThread)
         
-        // TODO: check user preferences to prevent iCloud sync
-        DispatchQueue.cloud.async {
+        DispatchQueue.cloud.async { [weak self] in
             do {
                 try Store.shared.syncCloud(conflicts: { [weak self] in
                     self?.resolveCloudSyncConflicts($0)
                 })
+                completion(.success(()))
             }
-            catch { log("⚠️ Could not sync iCloud: \(error.localizedDescription)") }
+            catch { mainQueue { completion(.failure(error)) } }
+        }
+    }
+    
+    func syncCloud() {
+        syncCloud {
+            switch $0 {
+            case let .failure(error):
+                log("⚠️ Could not sync iCloud: \(error.localizedDescription)")
+            case .success:
+                break
+            }
         }
     }
 }

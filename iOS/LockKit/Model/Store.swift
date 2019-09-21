@@ -578,7 +578,7 @@ public extension Store {
         }
         
         #if os(iOS)
-        if preferences.isCloudEnabled {
+        if preferences.isCloudBackupEnabled {
             DispatchQueue.cloud.async { [weak self] in
                 // upload to iCloud
                 do {

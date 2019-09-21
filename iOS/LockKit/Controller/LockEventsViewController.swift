@@ -150,7 +150,7 @@ public final class LockEventsViewController: TableViewController {
         }
         
         // attempt to load data from iCloud
-        if Store.shared.preferences.isCloudEnabled {
+        if Store.shared.preferences.isCloudBackupEnabled {
             DispatchQueue.cloud.async {
                 do { try Store.shared.downloadCloudLocks() }
                 catch {

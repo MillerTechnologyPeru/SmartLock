@@ -76,7 +76,7 @@ public extension Preferences {
         set { self[.isAppInstalled] = newValue }
     }
     
-    var isCloudEnabled: Bool {
+    var isCloudBackupEnabled: Bool {
         get {
             #if os(iOS)
             #if targetEnvironment(macCatalyst) || targetEnvironment(simulator)
@@ -89,9 +89,9 @@ public extension Preferences {
             #else
             let defaultValue = false
             #endif
-            return self[.isCloudEnabled] ?? defaultValue
+            return self[.isCloudBackupEnabled] ?? defaultValue
         }
-        set { self[.isCloudEnabled] = newValue }
+        set { self[.isCloudBackupEnabled] = newValue }
     }
     
     var lastCloudUpdate: Date? {
@@ -142,7 +142,7 @@ public extension Preferences {
     enum Key: String, CaseIterable {
         
         case isAppInstalled
-        case isCloudEnabled
+        case isCloudBackupEnabled
         case lastCloudUpdate
         case lastWatchUpdate
         
