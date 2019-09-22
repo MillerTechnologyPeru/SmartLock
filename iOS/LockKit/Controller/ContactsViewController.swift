@@ -79,7 +79,7 @@ public final class ContactsViewController: TableViewController {
         fetchRequest.fetchBatchSize = 30
         fetchRequest.sortDescriptors = [
             NSSortDescriptor(
-                key: #keyPath(ContactManagedObject.cloudRecord),
+                key: #keyPath(ContactManagedObject.identifier),
                 ascending: false
             )
         ]

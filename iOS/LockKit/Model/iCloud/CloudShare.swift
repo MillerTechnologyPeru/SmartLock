@@ -109,6 +109,7 @@ public extension CloudStore {
     func share(_ invitation: NewKey.Invitation, to user: CloudUser.ID) throws {
         
         // make sure zone is created
+        
                 
         // save invitation
         let cloudInvitation = NewKey.Invitation.Cloud(invitation)

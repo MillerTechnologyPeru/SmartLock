@@ -4,8 +4,14 @@
         <attribute name="pendingKey" attributeType="UUID" usesScalarValueType="NO"/>
     </entity>
     <entity name="Contact" representedClassName=".ContactManagedObject" syncable="YES" codeGenerationType="category">
-        <attribute name="cloudRecord" attributeType="String"/>
         <attribute name="email" optional="YES" attributeType="String"/>
+        <attribute name="familyName" optional="YES" attributeType="String"/>
+        <attribute name="givenName" optional="YES" attributeType="String"/>
+        <attribute name="identifier" attributeType="String" minValueString="1"/>
+        <attribute name="middleName" optional="YES" attributeType="String"/>
+        <attribute name="namePrefix" optional="YES" attributeType="String"/>
+        <attribute name="nameSuffix" optional="YES" attributeType="String"/>
+        <attribute name="nickname" optional="YES" attributeType="String"/>
         <attribute name="phone" optional="YES" attributeType="String"/>
     </entity>
     <entity name="CreateNewKeyEvent" representedClassName=".CreateNewKeyEventManagedObject" parentEntity="Event" syncable="YES" codeGenerationType="category">
@@ -86,6 +92,6 @@
         <element name="Schedule" positionX="-9" positionY="90" width="128" height="223"/>
         <element name="SetupEvent" positionX="-27" positionY="63" width="128" height="43"/>
         <element name="UnlockEvent" positionX="9" positionY="180" width="128" height="58"/>
-        <element name="Contact" positionX="-36" positionY="135" width="128" height="88"/>
+        <element name="Contact" positionX="-36" positionY="135" width="128" height="178"/>
     </elements>
 </model>
