@@ -87,6 +87,53 @@ internal extension CKContainer {
             throw error
         }
     }
+    
+    func discoverUserIdentities(_ userIdentityLookupInfos: [CKUserIdentity.LookupInfo], found: @escaping ((CKUserIdentity, CKUserIdentity.LookupInfo) -> ())) throws {
+        
+        let operation = CKDiscoverUserIdentitiesOperation(userIdentityLookupInfos: userIdentityLookupInfos)
+        var cloudKitError: Swift.Error?
+        let semaphore = DispatchSemaphore(value: 0)
+        operation.userIdentityDiscoveredBlock = found
+        operation.discoverUserIdentitiesCompletionBlock = {
+            cloudKitError = $0
+            semaphore.signal()
+        }
+        add(operation)
+        semaphore.wait()
+        if let error = cloudKitError {
+            throw error
+        }
+    }
+    
+    func fetchShareParticipants(_ userIdentityLookupInfos: [CKUserIdentity.LookupInfo], shareParticipantFetched: @escaping ((CKShare.Participant) -> ())) throws {
+        
+        let operation = CKFetchShareParticipantsOperation(userIdentityLookupInfos: userIdentityLookupInfos)
+        var cloudKitError: Swift.Error?
+        let semaphore = DispatchSemaphore(value: 0)
+        operation.shareParticipantFetchedBlock = shareParticipantFetched
+        operation.fetchShareParticipantsCompletionBlock = {
+            cloudKitError = $0
+            semaphore.signal()
+        }
+        add(operation)
+        semaphore.wait()
+        if let error = cloudKitError {
+            throw error
+        }
+    }
+    
+    func fetchShareParticipant(_ userIdentity: CKUserIdentity.LookupInfo) throws -> CKShare.Participant {
+        
+        var participant: CKShare.Participant?
+        try fetchShareParticipants([userIdentity]) {
+            participant = $0
+        }
+        guard let foundUser = participant else {
+            assertionFailure("Expected a participant")
+            throw CKError(.internalError)
+        }
+        return foundUser
+    }
 }
 
 internal extension CKDatabase {

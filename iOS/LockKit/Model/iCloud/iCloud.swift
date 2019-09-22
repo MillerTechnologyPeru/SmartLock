@@ -149,6 +149,7 @@ public final class CloudStore {
         assert(encodable.cloudIdentifier.cloudRecordID == record.recordID)
         assert(type(of: encodable.cloudIdentifier).cloudRecordType == record.recordType)
         operation.isAtomic = true
+        operation.savePolicy = .changedKeys
         try database.modify(operation)
         return record
     }
