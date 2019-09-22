@@ -186,6 +186,7 @@
 		6EB4B2DA232B5E260077ADD3 /* CloudUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EB4B2D9232B5E260077ADD3 /* CloudUser.swift */; };
 		6EB59D612313184A00D5EFA7 /* iCloud.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EB59D602313184A00D5EFA7 /* iCloud.swift */; };
 		6EC0412E230A226400357585 /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EC0412D230A226300357585 /* TabBarController.swift */; };
+		6EC975902338043D007AA9FB /* Contacts.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6EC9758F2338043D007AA9FB /* Contacts.storyboard */; };
 		6ECD39A52336D369003E4AB4 /* ActivityIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6ECD39A42336D369003E4AB4 /* ActivityIndicator.swift */; };
 		6ECD6AEA23320D2C0007E7DA /* ContextMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6ECD6AE923320D2C0007E7DA /* ContextMenu.swift */; };
 		6ED81F972316292900B69520 /* BackgroundTasks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6ED81F962316292900B69520 /* BackgroundTasks.swift */; };
@@ -654,6 +655,7 @@
 		6EC0412F230A494E00357585 /* UserActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserActivity.swift; sourceTree = "<group>"; };
 		6EC04137230B15AD00357585 /* Unlock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Unlock.swift; sourceTree = "<group>"; };
 		6EC04139230B162F00357585 /* Setup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Setup.swift; sourceTree = "<group>"; };
+		6EC9758F2338043D007AA9FB /* Contacts.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Contacts.storyboard; sourceTree = "<group>"; };
 		6ECD39A42336D369003E4AB4 /* ActivityIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityIndicator.swift; sourceTree = "<group>"; };
 		6ECD6AE923320D2C0007E7DA /* ContextMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContextMenu.swift; sourceTree = "<group>"; };
 		6ED81F962316292900B69520 /* BackgroundTasks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackgroundTasks.swift; sourceTree = "<group>"; };
@@ -1062,6 +1064,7 @@
 				6E05B6FF22CA0029001218D9 /* NewKeyInvitation.storyboard */,
 				6E806B9D230F5F5500C6FF78 /* Logs.storyboard */,
 				6E50B0E123216F7E001014A8 /* Events.storyboard */,
+				6EC9758F2338043D007AA9FB /* Contacts.storyboard */,
 			);
 			path = Storyboards;
 			sourceTree = "<group>";
@@ -1753,6 +1756,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6EC975902338043D007AA9FB /* Contacts.storyboard in Resources */,
 				6E994AA5230DFC770076DC1B /* LockPermissions.storyboard in Resources */,
 				6E994AA6230DFC770076DC1B /* NewKey.storyboard in Resources */,
 				6E994AA7230DFC770076DC1B /* NewKeyInvitation.storyboard in Resources */,

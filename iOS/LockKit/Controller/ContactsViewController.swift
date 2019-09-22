@@ -20,6 +20,8 @@ public final class ContactsViewController: TableViewController {
     
     public lazy var activityIndicator: UIActivityIndicatorView = self.loadActivityIndicatorView()
     
+    private lazy var nameFormatter = PersonNameComponentsFormatter()
+    
     // MARK: - Loading
     
     public override func viewDidLoad() {
@@ -36,7 +38,6 @@ public final class ContactsViewController: TableViewController {
     public override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        tableView.reloadData()
         reloadData()
     }
     
@@ -61,9 +62,7 @@ public final class ContactsViewController: TableViewController {
     
     @IBAction func refresh(_ sender: UIRefreshControl) {
         
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
-            self?.reloadData()
-        }
+        reloadData()
     }
     
     // MARK: - Methods
@@ -88,15 +87,45 @@ public final class ContactsViewController: TableViewController {
             managedObjectContext: context,
             sectionNameKeyPath: nil,
             cacheName: nil) as? NSFetchedResultsController<NSManagedObject>
-        
     }
     
     private func reloadData() {
         
+        // fetch contacts from CloudKit and insert into CoreData
+        performActivity(queue: .app, {
+            try Store.shared.updateContacts()
+        })
+    }
+    
+    private subscript (indexPath: IndexPath) -> ContactManagedObject {
+        return fetchedResultsController.object(at: indexPath) as! ContactManagedObject
+    }
+    
+    private func configure(cell: ContactTableViewCell, at indexPath: IndexPath) {
         
+        let managedObject = self[indexPath]
+        let name: String
+        if let nameComponents = managedObject.nameComponents {
+            name = nameFormatter.string(from: nameComponents)
+        } else {
+            name = "User"
+        }
+        cell.contactTitleLabel.text = name
+        cell.contactDetailLabel.text = nil
+        cell.contactImageView.image = nil
     }
 }
 
 // MARK: - ActivityIndicatorViewController
 
 extension ContactsViewController: TableViewActivityIndicatorViewController { }
+
+// MARK: - Supporting Types
+
+final class ContactTableViewCell: UITableViewCell {
+    
+    @IBOutlet public private(set) weak var contactImageView: UIImageView!
+    @IBOutlet public private(set) weak var contactTitleLabel: UILabel!
+    @IBOutlet public private(set) weak var contactDetailLabel: UILabel!
+    @IBOutlet public private(set) weak var activityIndicatorView: UIActivityIndicatorView!
+}
