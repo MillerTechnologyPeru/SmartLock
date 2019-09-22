@@ -77,11 +77,15 @@ public extension Store {
     #if os(iOS)
     func updateContacts() throws {
         
+        // exclude self
+        let currentUser = try cloud.container.fetchUserRecordID()
+        
         // insert new contacts
         var insertedUsers = Set<String>()
         let context = backgroundContext
         try cloud.container.discoverAllUserIdentities { (user) in
-            guard let userRecordID = user.userRecordID
+            guard let userRecordID = user.userRecordID,
+                userRecordID != currentUser
                 else { return }
             insertedUsers.insert(userRecordID.recordName)
             context.commit { try $0.insert(contact: user) }
