@@ -111,7 +111,7 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
             }
         }
         
-        // CloudKit
+        // CloudKit discoverability
         DispatchQueue.app.asyncAfter(deadline: .now() + 3.0) {
             do {
                 let status = try Store.shared.cloud.requestPermissions()

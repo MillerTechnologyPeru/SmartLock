@@ -71,6 +71,22 @@ internal extension CKContainer {
             throw error
         }
     }
+    
+    func discoverAllUserIdentities(user: @escaping (CKUserIdentity) -> ()) throws {
+        let operation = CKDiscoverAllUserIdentitiesOperation()
+        var cloudKitError: Swift.Error?
+        let semaphore = DispatchSemaphore(value: 0)
+        operation.userIdentityDiscoveredBlock = user
+        operation.discoverAllUserIdentitiesCompletionBlock = {
+            cloudKitError = $0
+            semaphore.signal()
+        }
+        add(operation)
+        semaphore.wait()
+        if let error = cloudKitError {
+            throw error
+        }
+    }
 }
 
 internal extension CKDatabase {
