@@ -134,6 +134,37 @@ internal extension CKContainer {
         }
         return foundUser
     }
+    
+    /// An operation that fetches shared record metadata for one or more shares.
+    func fetchShareMetadata(shareURLs: [URL], shouldFetchRootRecord: Bool = true) throws -> [URL: CKShare.Metadata] {
+        
+        let operation = CKFetchShareMetadataOperation(shareURLs: shareURLs)
+        var cloudKitError: Swift.Error?
+        let semaphore = DispatchSemaphore(value: 0)
+        var shares = [URL: CKShare.Metadata](minimumCapacity: shareURLs.count)
+        operation.shouldFetchRootRecord = shouldFetchRootRecord
+        operation.perShareMetadataBlock = { (url, metadata, error) in
+            if let error = error {
+                operation.cancel()
+                cloudKitError = error
+                semaphore.signal()
+            } else if let metadata = metadata {
+                shares[url] = metadata
+            } else {
+                assertionFailure("Missing share metadata")
+            }
+        }
+        operation.fetchShareMetadataCompletionBlock = {
+            cloudKitError = $0
+            semaphore.signal()
+        }
+        add(operation)
+        semaphore.wait()
+        if let error = cloudKitError {
+            throw error
+        }
+        return shares
+    }
 }
 
 internal extension CKDatabase {
@@ -214,5 +245,14 @@ internal extension CKDatabase {
         while let queryCursor = cursor {
             cursor = try self.query(.init(cursor: queryCursor), record: record)
         }
+    }
+    
+    func queryAll(_ query: CKQuery) throws -> [CKRecord] {
+        var records = [CKRecord]()
+        try queryAll(query) {
+            records.append($0)
+            return true
+        }
+        return records
     }
 }

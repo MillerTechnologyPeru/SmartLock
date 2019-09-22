@@ -18,10 +18,10 @@ public extension NewKey.Invitation {
         public let id: ID
         
         /// Identifier of lock.
-        public let lock: CloudLock.ID
+        public let lock: UUID
         
         /// New Key to create.
-        public let key: NewKey.Cloud
+        public let key: Data // JSON Data
         
         /// Temporary shared secret to accept the key invitation.
         public let secret: KeyData
@@ -30,20 +30,30 @@ public extension NewKey.Invitation {
 
 internal extension NewKey.Invitation.Cloud {
     
+    static let keyEncoder = JSONEncoder()
+    
+    static let keyDecoder = JSONDecoder()
+}
+
+internal extension NewKey.Invitation.Cloud {
+    
     init(_ value: NewKey.Invitation) {
         
         self.id = .init(rawValue: value.key.identifier)
-        self.lock = .init(rawValue: value.lock)
-        self.key = .init(value.key, lock: value.lock)
+        self.lock = value.lock
         self.secret = value.secret
+        self.key = try! NewKey.Invitation.Cloud.keyEncoder.encode(value.key)
     }
 }
 
 internal extension NewKey.Invitation {
     
-    init(_ cloud: NewKey.Invitation.Cloud) {
+    init?(_ cloud: NewKey.Invitation.Cloud) {
         
-        fatalError()
+        guard let key = try? NewKey.Invitation.Cloud.keyDecoder.decode(NewKey.self, from: cloud.key)
+            else { return nil }
+        
+        self.init(lock: cloud.lock, key: key, secret: cloud.secret)
     }
 }
 
@@ -61,7 +71,7 @@ extension NewKey.Invitation.Cloud: CloudKitCodable {
         return id
     }
     public var parentRecord: CloudKitIdentifier? {
-        return lock
+        return nil
     }
 }
 
@@ -80,6 +90,6 @@ extension NewKey.Invitation.Cloud.ID: CloudKitIdentifier {
     }
     
     public var cloudRecordID: CKRecord.ID {
-        return CKRecord.ID(recordName: type(of: self).cloudRecordType + "/" + rawValue.uuidString)
+        return CKRecord.ID(recordName: type(of: self).cloudRecordType + "/" + rawValue.uuidString, zoneID: .lockShared)
     }
 }
