@@ -135,6 +135,7 @@ public extension CloudStore {
         
         // add shared user
         let participant = try container.fetchShareParticipant(.init(userRecordID: user.cloudRecordID))
+        participant.permission = .readWrite
         invitationShare.addParticipant(participant)
         
         // upload share
@@ -155,13 +156,34 @@ public extension CloudStore {
         try upload(publicShare, database: .public)
     }
     
-    func fetchShares() throws {
+    func fetchNewKeyShares() throws -> [NewKey.Invitation] {
         
         // fetch public shares
         let publicShares = try fetchNewKeyPublicShares()
-        // accept and delete public shares
-        let shareURLs = publicShares.map { $0.invitation }
-        let metadata = try container.fetchShareMetadata(shareURLs: shareURLs)
         
+        // accept pending shares
+        let shareURLs = publicShares.map { $0.invitation }
+        let metadata = try container.fetchShareMetadata(for: shareURLs, shouldFetchRootRecord: false)
+        assert(metadata.count == publicShares.count)
+        let pendingShares = metadata.values.filter { $0.participantStatus == .pending }
+        if pendingShares.isEmpty == false {
+            try container.acceptShares(pendingShares)
+        }
+        
+        // delete public share data
+        if publicShares.isEmpty == false {
+            let deletePublicSharesOperation = CKModifyRecordsOperation(
+                recordsToSave: [],
+                recordIDsToDelete: publicShares.map { $0.id.cloudRecordID }
+            )
+            try container.sharedCloudDatabase.modify(deletePublicSharesOperation)
+        }
+        
+        // fetch shared invitations
+        let invitationCloudValues = try fetchSharedNewKeyInvitations()
+        let invitations = invitationCloudValues.compactMap { NewKey.Invitation($0) }
+        assert(invitationCloudValues.count == invitations.count)
+        
+        return invitations
     }
 }

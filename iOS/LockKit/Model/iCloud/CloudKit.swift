@@ -136,7 +136,7 @@ internal extension CKContainer {
     }
     
     /// An operation that fetches shared record metadata for one or more shares.
-    func fetchShareMetadata(shareURLs: [URL], shouldFetchRootRecord: Bool = true) throws -> [URL: CKShare.Metadata] {
+    func fetchShareMetadata(for shareURLs: [URL], shouldFetchRootRecord: Bool = false) throws -> [URL: CKShare.Metadata] {
         
         let operation = CKFetchShareMetadataOperation(shareURLs: shareURLs)
         var cloudKitError: Swift.Error?
@@ -164,6 +164,29 @@ internal extension CKContainer {
             throw error
         }
         return shares
+    }
+    
+    func acceptShares(_ shares: [CKShare.Metadata]) throws {
+        
+        let operation = CKAcceptSharesOperation(shareMetadatas: shares)
+        var cloudKitError: Swift.Error?
+        let semaphore = DispatchSemaphore(value: 0)
+        operation.perShareCompletionBlock = { (metadata, share, error) in
+            if let error = error {
+                operation.cancel()
+                cloudKitError = error
+                semaphore.signal()
+            }
+        }
+        operation.acceptSharesCompletionBlock = {
+            cloudKitError = $0
+            semaphore.signal()
+        }
+        add(operation)
+        semaphore.wait()
+        if let error = cloudKitError {
+            throw error
+        }
     }
 }
 
