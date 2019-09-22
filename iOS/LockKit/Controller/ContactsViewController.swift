@@ -179,4 +179,11 @@ final class ContactTableViewCell: UITableViewCell {
     @IBOutlet public private(set) weak var contactTitleLabel: UILabel!
     @IBOutlet public private(set) weak var contactDetailLabel: UILabel!
     @IBOutlet public private(set) weak var activityIndicatorView: UIActivityIndicatorView!
+    
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        
+        self.contactImageView.layer.cornerRadius = self.contactImageView.frame.size.width / 2
+        self.contactImageView.clipsToBounds = true
+    }
 }
