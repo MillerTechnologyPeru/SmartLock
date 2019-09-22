@@ -3,6 +3,18 @@
     <entity name="ConfirmNewKeyEvent" representedClassName=".ConfirmNewKeyEventManagedObject" parentEntity="Event" syncable="YES" codeGenerationType="category">
         <attribute name="pendingKey" attributeType="UUID" usesScalarValueType="NO"/>
     </entity>
+    <entity name="Contact" representedClassName=".ContactManagedObject" syncable="YES" codeGenerationType="category">
+        <attribute name="email" optional="YES" attributeType="String"/>
+        <attribute name="familyName" optional="YES" attributeType="String"/>
+        <attribute name="givenName" optional="YES" attributeType="String"/>
+        <attribute name="identifier" attributeType="String" minValueString="1"/>
+        <attribute name="image" optional="YES" attributeType="Binary" allowsExternalBinaryDataStorage="YES"/>
+        <attribute name="middleName" optional="YES" attributeType="String"/>
+        <attribute name="namePrefix" optional="YES" attributeType="String"/>
+        <attribute name="nameSuffix" optional="YES" attributeType="String"/>
+        <attribute name="nickname" optional="YES" attributeType="String"/>
+        <attribute name="phone" optional="YES" attributeType="String"/>
+    </entity>
     <entity name="CreateNewKeyEvent" representedClassName=".CreateNewKeyEventManagedObject" parentEntity="Event" syncable="YES" codeGenerationType="category">
         <attribute name="pendingKey" attributeType="UUID" usesScalarValueType="NO"/>
     </entity>
@@ -71,6 +83,7 @@
     </entity>
     <elements>
         <element name="ConfirmNewKeyEvent" positionX="-27" positionY="135" width="128" height="58"/>
+        <element name="Contact" positionX="-36" positionY="135" width="128" height="193"/>
         <element name="CreateNewKeyEvent" positionX="-36" positionY="126" width="128" height="58"/>
         <element name="Event" positionX="-63" positionY="-18" width="128" height="103"/>
         <element name="Key" positionX="-36" positionY="36" width="128" height="133"/>

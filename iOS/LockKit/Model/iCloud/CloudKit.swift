@@ -71,6 +71,123 @@ internal extension CKContainer {
             throw error
         }
     }
+    
+    func discoverAllUserIdentities(user: @escaping (CKUserIdentity) -> ()) throws {
+        let operation = CKDiscoverAllUserIdentitiesOperation()
+        var cloudKitError: Swift.Error?
+        let semaphore = DispatchSemaphore(value: 0)
+        operation.userIdentityDiscoveredBlock = user
+        operation.discoverAllUserIdentitiesCompletionBlock = {
+            cloudKitError = $0
+            semaphore.signal()
+        }
+        add(operation)
+        semaphore.wait()
+        if let error = cloudKitError {
+            throw error
+        }
+    }
+    
+    func discoverUserIdentities(_ userIdentityLookupInfos: [CKUserIdentity.LookupInfo], found: @escaping ((CKUserIdentity, CKUserIdentity.LookupInfo) -> ())) throws {
+        
+        let operation = CKDiscoverUserIdentitiesOperation(userIdentityLookupInfos: userIdentityLookupInfos)
+        var cloudKitError: Swift.Error?
+        let semaphore = DispatchSemaphore(value: 0)
+        operation.userIdentityDiscoveredBlock = found
+        operation.discoverUserIdentitiesCompletionBlock = {
+            cloudKitError = $0
+            semaphore.signal()
+        }
+        add(operation)
+        semaphore.wait()
+        if let error = cloudKitError {
+            throw error
+        }
+    }
+    
+    func fetchShareParticipants(_ userIdentityLookupInfos: [CKUserIdentity.LookupInfo], shareParticipantFetched: @escaping ((CKShare.Participant) -> ())) throws {
+        
+        let operation = CKFetchShareParticipantsOperation(userIdentityLookupInfos: userIdentityLookupInfos)
+        var cloudKitError: Swift.Error?
+        let semaphore = DispatchSemaphore(value: 0)
+        operation.shareParticipantFetchedBlock = shareParticipantFetched
+        operation.fetchShareParticipantsCompletionBlock = {
+            cloudKitError = $0
+            semaphore.signal()
+        }
+        add(operation)
+        semaphore.wait()
+        if let error = cloudKitError {
+            throw error
+        }
+    }
+    
+    func fetchShareParticipant(_ userIdentity: CKUserIdentity.LookupInfo) throws -> CKShare.Participant {
+        
+        var participant: CKShare.Participant?
+        try fetchShareParticipants([userIdentity]) {
+            participant = $0
+        }
+        guard let foundUser = participant else {
+            assertionFailure("Expected a participant")
+            throw CKError(.internalError)
+        }
+        return foundUser
+    }
+    
+    /// An operation that fetches shared record metadata for one or more shares.
+    func fetchShareMetadata(for shareURLs: [URL], shouldFetchRootRecord: Bool = false) throws -> [URL: CKShare.Metadata] {
+        
+        let operation = CKFetchShareMetadataOperation(shareURLs: shareURLs)
+        var cloudKitError: Swift.Error?
+        let semaphore = DispatchSemaphore(value: 0)
+        var shares = [URL: CKShare.Metadata](minimumCapacity: shareURLs.count)
+        operation.shouldFetchRootRecord = shouldFetchRootRecord
+        operation.perShareMetadataBlock = { (url, metadata, error) in
+            if let error = error {
+                operation.cancel()
+                cloudKitError = error
+                semaphore.signal()
+            } else if let metadata = metadata {
+                shares[url] = metadata
+            } else {
+                assertionFailure("Missing share metadata")
+            }
+        }
+        operation.fetchShareMetadataCompletionBlock = {
+            cloudKitError = $0
+            semaphore.signal()
+        }
+        add(operation)
+        semaphore.wait()
+        if let error = cloudKitError {
+            throw error
+        }
+        return shares
+    }
+    
+    func acceptShares(_ shares: [CKShare.Metadata]) throws {
+        
+        let operation = CKAcceptSharesOperation(shareMetadatas: shares)
+        var cloudKitError: Swift.Error?
+        let semaphore = DispatchSemaphore(value: 0)
+        operation.perShareCompletionBlock = { (metadata, share, error) in
+            if let error = error {
+                operation.cancel()
+                cloudKitError = error
+                semaphore.signal()
+            }
+        }
+        operation.acceptSharesCompletionBlock = {
+            cloudKitError = $0
+            semaphore.signal()
+        }
+        add(operation)
+        semaphore.wait()
+        if let error = cloudKitError {
+            throw error
+        }
+    }
 }
 
 internal extension CKDatabase {
@@ -151,5 +268,14 @@ internal extension CKDatabase {
         while let queryCursor = cursor {
             cursor = try self.query(.init(cursor: queryCursor), record: record)
         }
+    }
+    
+    func queryAll(_ query: CKQuery) throws -> [CKRecord] {
+        var records = [CKRecord]()
+        try queryAll(query) {
+            records.append($0)
+            return true
+        }
+        return records
     }
 }

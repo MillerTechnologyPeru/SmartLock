@@ -54,6 +54,7 @@ public final class CloudStore {
         
     // MARK: - Methods
     
+    @discardableResult
     public func requestPermissions() throws -> CKContainer_Application_PermissionStatus {
         return try container.requestApplicationPermission([.userDiscoverability])
     }
@@ -139,16 +140,18 @@ public final class CloudStore {
     }
     
     @discardableResult
-    internal func upload <T: CloudKitEncodable> (_ encodable: T) throws -> CKRecord {
+    internal func upload <T: CloudKitEncodable> (_ encodable: T, database scope: CKDatabase.Scope = .private) throws -> CKRecord {
         
-        let cloudEncoder = CloudKitEncoder(context: container.privateCloudDatabase)
+        let database = container.database(with: scope)
+        let cloudEncoder = CloudKitEncoder(context: database)
         let operation = try cloudEncoder.encode(encodable)
         guard let record = operation.recordsToSave?.first
             else { fatalError() }
         assert(encodable.cloudIdentifier.cloudRecordID == record.recordID)
         assert(type(of: encodable.cloudIdentifier).cloudRecordType == record.recordType)
         operation.isAtomic = true
-        try container.privateCloudDatabase.modify(operation)
+        operation.savePolicy = .changedKeys
+        try database.modify(operation)
         return record
     }
     

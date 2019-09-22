@@ -86,7 +86,7 @@ final class NearbyLocksViewController: UITableViewController {
         
         #if !targetEnvironment(macCatalyst)
         // scan if none is setup
-        if Store.shared.locks.value.isEmpty == true {
+        if Store.shared.locks.value.isEmpty {
             DispatchQueue.main.asyncAfter(deadline: .now() + 1.0,
                                           execute: { [weak self] in self?.scan() })
         }
@@ -104,7 +104,8 @@ final class NearbyLocksViewController: UITableViewController {
         #if targetEnvironment(macCatalyst)
         scan()
         #else
-        if Store.shared.locks.value.isEmpty {
+        if Store.shared.lockManager.central.state == .poweredOn,
+            Store.shared.locks.value.isEmpty || Store.shared.lockInformation.value.isEmpty {
             scan()
         } else {
             // Update beacon status
