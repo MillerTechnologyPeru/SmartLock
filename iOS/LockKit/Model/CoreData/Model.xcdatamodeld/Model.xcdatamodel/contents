@@ -3,6 +3,11 @@
     <entity name="ConfirmNewKeyEvent" representedClassName=".ConfirmNewKeyEventManagedObject" parentEntity="Event" syncable="YES" codeGenerationType="category">
         <attribute name="pendingKey" attributeType="UUID" usesScalarValueType="NO"/>
     </entity>
+    <entity name="Contact" representedClassName=".ContactManagedObject" syncable="YES" codeGenerationType="category">
+        <attribute name="cloudRecord" attributeType="String"/>
+        <attribute name="email" optional="YES" attributeType="String"/>
+        <attribute name="phone" optional="YES" attributeType="String"/>
+    </entity>
     <entity name="CreateNewKeyEvent" representedClassName=".CreateNewKeyEventManagedObject" parentEntity="Event" syncable="YES" codeGenerationType="category">
         <attribute name="pendingKey" attributeType="UUID" usesScalarValueType="NO"/>
     </entity>
@@ -81,5 +86,6 @@
         <element name="Schedule" positionX="-9" positionY="90" width="128" height="223"/>
         <element name="SetupEvent" positionX="-27" positionY="63" width="128" height="43"/>
         <element name="UnlockEvent" positionX="9" positionY="180" width="128" height="58"/>
+        <element name="Contact" positionX="-36" positionY="135" width="128" height="88"/>
     </elements>
 </model>
