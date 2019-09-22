@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import TLVCoding
 
 /// A smart lock key.
 public struct Key: Codable, Equatable, Hashable {
@@ -83,5 +84,20 @@ extension KeyType: Codable {
     public func encode(to encoder: Encoder) throws {
         var container = encoder.singleValueContainer()
         try container.encode(stringValue)
+    }
+}
+
+// MARK: - TLVCodable
+
+extension KeyType: TLVCodable {
+    
+    public init?(tlvData: Data) {
+        guard tlvData.count == 1
+            else { return nil }
+        self.init(rawValue: tlvData[0])
+    }
+    
+    public var tlvData: Data {
+        return Data([rawValue])
     }
 }
