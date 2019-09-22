@@ -114,6 +114,26 @@ public final class ContactsViewController: TableViewController {
         cell.contactDetailLabel.text = nil
         cell.contactImageView.image = nil
     }
+    
+    // MARK: - UITableViewDataSource
+    
+    public override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
+        //guard let cell = tableView.dequeueReusableCell(withIdentifier: R.reuseIdentifier.lockEventTableViewCell, for: indexPath)
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: "ContactTableViewCell", for: indexPath) as? ContactTableViewCell
+            else { fatalError("Unable to dequeue cell") }
+        configure(cell: cell, at: indexPath)
+        return cell
+    }
+    
+    // MARK: - UITableViewDataSource
+    
+    public override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
+        defer { tableView.deselectRow(at: indexPath, animated: true) }
+        
+        
+    }
 }
 
 // MARK: - ActivityIndicatorViewController

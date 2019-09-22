@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14865.1" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="D9D-Do-ihn">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14868" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="D9D-Do-ihn">
     <device id="retina4_0" orientation="portrait" appearance="dark"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14819.2"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14824"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -123,11 +123,11 @@
             </objects>
             <point key="canvasLocation" x="166.875" y="123.59154929577466"/>
         </scene>
-        <!--Events-->
+        <!--Navigation Controller-->
         <scene sceneID="hgy-PC-SfB">
             <objects>
                 <navigationController id="D9D-Do-ihn" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Events" image="list.bullet" catalog="system" selectedImage="list.bullet" id="ZK5-9J-hkU"/>
+                    <tabBarItem key="tabBarItem" selectedImage="list.bullet" catalog="system" systemItem="history" id="ZK5-9J-hkU"/>
                     <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" largeTitles="YES" id="yoM-3J-9U8">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="91"/>
