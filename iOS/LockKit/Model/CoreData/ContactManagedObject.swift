@@ -28,6 +28,33 @@ public final class ContactManagedObject: NSManagedObject {
     }
 }
 
+// MARK: - Computed Properties
+
+public extension ContactManagedObject {
+    
+    var nameComponents: PersonNameComponents? {
+        get {
+            var nameComponents = PersonNameComponents()
+            nameComponents.namePrefix = namePrefix
+            nameComponents.givenName = givenName
+            nameComponents.middleName = middleName
+            nameComponents.familyName = familyName
+            nameComponents.nameSuffix = namePrefix
+            nameComponents.nickname = nickname
+            return nameComponents
+        }
+        set {
+            assert(newValue?.phoneticRepresentation == nil)
+            namePrefix = newValue?.namePrefix
+            givenName = newValue?.givenName
+            middleName = newValue?.middleName
+            familyName = newValue?.familyName
+            nameSuffix = newValue?.namePrefix
+            nickname = newValue?.nickname
+        }
+    }
+}
+
 // MARK: - Fetch
 
 public extension ContactManagedObject {
@@ -90,12 +117,7 @@ internal extension NSManagedObjectContext {
             ?? ContactManagedObject(identifier: identifier, context: self)
         
         // update values
-        managedObject.namePrefix = identity.nameComponents?.namePrefix
-        managedObject.givenName = identity.nameComponents?.givenName
-        managedObject.middleName = identity.nameComponents?.middleName
-        managedObject.familyName = identity.nameComponents?.familyName
-        managedObject.nameSuffix = identity.nameComponents?.namePrefix
-        managedObject.nickname = identity.nameComponents?.nickname
+        managedObject.nameComponents = identity.nameComponents
         
         return managedObject
     }
