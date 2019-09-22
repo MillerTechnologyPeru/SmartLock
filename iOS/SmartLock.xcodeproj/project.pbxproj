@@ -907,11 +907,11 @@
 				6E994AA2230DFC180076DC1B /* Assets.xcassets */,
 				6E60001C2121119500787DAA /* LaunchScreen.storyboard */,
 				6E6000172121119400787DAA /* Main.storyboard */,
+				6E60001F2121119500787DAA /* Info.plist */,
+				6E05B6DC22C9BF85001218D9 /* eKeyDocument.pdf */,
 				6E08FB862316EF4300177026 /* WatchKit */,
 				6E806BA7230F654600C6FF78 /* View */,
 				6E994AA8230DFC8E0076DC1B /* Controller */,
-				6E60001F2121119500787DAA /* Info.plist */,
-				6E05B6DC22C9BF85001218D9 /* eKeyDocument.pdf */,
 			);
 			path = SmartLock;
 			sourceTree = "<group>";

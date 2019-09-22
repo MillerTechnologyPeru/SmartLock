@@ -107,6 +107,11 @@ public extension Store {
     #endif
 }
 
+internal extension ContactManagedObject {
+    
+    static let contactStore = CNContactStore()
+}
+
 internal extension NSManagedObjectContext {
     
     @discardableResult
@@ -122,6 +127,32 @@ internal extension NSManagedObjectContext {
         
         // update values
         managedObject.nameComponents = identity.nameComponents
+        if let email = identity.lookupInfo?.emailAddress {
+            managedObject.email = email
+        }
+        if let phoneNumber = identity.lookupInfo?.phoneNumber {
+            managedObject.phone = phoneNumber
+        }
+        
+        // find contact in address book
+        if CNContactStore.authorizationStatus(for: .contacts) == .authorized {
+            do {
+                let contactStore = ContactManagedObject.contactStore
+                let predicate = CNContact.predicateForContacts(withIdentifiers: identity.contactIdentifiers)
+                let contacts = try contactStore.unifiedContacts(matching: predicate, keysToFetch: [
+                    CNContactThumbnailImageDataKey as NSString,
+                    CNContactEmailAddressesKey as NSString,
+                    CNContactPhoneNumbersKey as NSString
+                ])
+                managedObject.email = contacts.compactMap({ $0.emailAddresses.first?.value as String? }).first
+                managedObject.phone = contacts.compactMap({ $0.phoneNumbers.first?.value.stringValue }).first
+                managedObject.image = contacts.compactMap({ $0.thumbnailImageData }).first
+            } catch {
+                #if DEBUG
+                log("⚠️ Unable to update contact information from address book. \(error)")
+                #endif
+            }
+        }
         
         return managedObject
     }

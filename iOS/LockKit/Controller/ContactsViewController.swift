@@ -11,6 +11,7 @@ import UIKit
 import CoreData
 import CloudKit
 import Contacts
+import ContactsUI
 import CoreLock
 
 /// View controller for displaying all contacts using the application.
@@ -33,11 +34,25 @@ public final class ContactsViewController: TableViewController {
         
         // configure FRC
         configureView()
-    }
-    
-    public override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
         
+        // CloudKit discoverability
+        DispatchQueue.app.async {
+            do {
+                let status = try Store.shared.cloud.requestPermissions()
+                log("☁️ CloudKit permisions \(status == .granted ? "granted" : "not granted")")
+            }
+            catch { log("⚠️ Could not request CloudKit permissions. \(error.localizedDescription)") }
+        }
+        
+        // CloudKit address book access
+        ContactManagedObject.contactStore.requestAccess(for: .contacts) { [weak self] (authorized, error) in
+            if let error = error {
+                log("⚠️ Could not access address book. \(error.localizedDescription)")
+            }
+            mainQueue { self?.reloadData() }
+        }
+        
+        // fetch from server
         reloadData()
     }
     
@@ -62,7 +77,9 @@ public final class ContactsViewController: TableViewController {
     
     @IBAction func refresh(_ sender: UIRefreshControl) {
         
-        reloadData()
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
+            self?.reloadData()
+        }
     }
     
     // MARK: - Methods
@@ -104,15 +121,27 @@ public final class ContactsViewController: TableViewController {
     private func configure(cell: ContactTableViewCell, at indexPath: IndexPath) {
         
         let managedObject = self[indexPath]
+        
         let name: String
         if let nameComponents = managedObject.nameComponents {
             name = nameFormatter.string(from: nameComponents)
         } else {
             name = "User"
         }
+        
+        let detail = managedObject.email ?? managedObject.phone
+        
+        let image: UIImage
+        if let contactImage = managedObject.image.flatMap({ UIImage(data: $0) }) {
+            image = contactImage
+        } else if #available(iOS 13, *), let systemImage = UIImage(systemName: "person.crop.circle.fill") {
+            image = systemImage
+        } else {
+            image = UIImage(permission: .admin)
+        }
         cell.contactTitleLabel.text = name
-        cell.contactDetailLabel.text = nil
-        cell.contactImageView.image = nil
+        cell.contactDetailLabel.text = detail
+        cell.contactImageView.image = image
     }
     
     // MARK: - UITableViewDataSource
@@ -131,6 +160,8 @@ public final class ContactsViewController: TableViewController {
     public override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
         defer { tableView.deselectRow(at: indexPath, animated: true) }
+        
+        let contact = self[indexPath]
         
         
     }

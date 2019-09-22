@@ -111,15 +111,6 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
             }
         }
         
-        // CloudKit discoverability
-        DispatchQueue.app.asyncAfter(deadline: .now() + 3.0) {
-            do {
-                let status = try Store.shared.cloud.requestPermissions()
-                log("☁️ CloudKit permisions \(status == .granted ? "granted" : "not granted")")
-            }
-            catch { log("⚠️ Could not request CloudKit permissions. \(error.localizedDescription)") }
-        }
-        
         #if targetEnvironment(macCatalyst)
         // scan periodically in macOS
         setupBackgroundUpdates()
@@ -186,6 +177,21 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
         log("\(bundle.symbol) Will enter foreground")
         
         BeaconController.shared.scanBeacons()
+        
+        // CloudKit discoverability
+        DispatchQueue.app.asyncAfter(deadline: .now() + 3.0) {
+            do {
+                let status = try Store.shared.cloud.requestPermissions()
+                log("☁️ CloudKit permisions \(status == .granted ? "granted" : "not granted")")
+            }
+            catch { log("⚠️ Could not request CloudKit permissions. \(error.localizedDescription)") }
+        }
+        
+        // CloudKit contacts
+        DispatchQueue.app.async {
+            do { try Store.shared.updateContacts() }
+            catch { log("⚠️ Could not update contacts. \(error.localizedDescription)") }
+        }
     }
 
     func applicationDidBecomeActive(_ application: UIApplication) {

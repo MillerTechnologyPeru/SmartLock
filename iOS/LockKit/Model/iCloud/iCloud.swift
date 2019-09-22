@@ -54,6 +54,7 @@ public final class CloudStore {
         
     // MARK: - Methods
     
+    @discardableResult
     public func requestPermissions() throws -> CKContainer_Application_PermissionStatus {
         return try container.requestApplicationPermission([.userDiscoverability])
     }
