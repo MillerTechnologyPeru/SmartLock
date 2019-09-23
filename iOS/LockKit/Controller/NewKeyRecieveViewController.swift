@@ -27,6 +27,8 @@ public final class NewKeyRecieveViewController: UITableViewController {
         
     public var progressHUD: JGProgressHUD?
     
+    public var completion: (() -> ())?
+    
     // MARK: - Loading
     
     public static func fromStoryboard(with newKey: NewKey.Invitation) -> NewKeyRecieveViewController {
@@ -111,6 +113,7 @@ public final class NewKeyRecieveViewController: UITableViewController {
                     Store.shared[key: newKeyInvitation.key.identifier] = keyData
                     controller.hideActivity(animated: true)
                     controller.dismiss(animated: true, completion: nil)
+                    controller.completion?()
                 }
             }
             
@@ -147,7 +150,7 @@ extension NewKeyRecieveViewController: ProgressHUDViewController { }
 public extension UIViewController {
     
     @discardableResult
-    func open(newKey: NewKey.Invitation) -> Bool {
+    func open(newKey: NewKey.Invitation, completion: (() -> ())? = nil) -> Bool {
         
         // only one key per lock
         guard Store.shared[lock: newKey.lock] == nil else {
@@ -156,6 +159,7 @@ public extension UIViewController {
         }
         
         let newKeyViewController = NewKeyRecieveViewController.fromStoryboard(with: newKey)
+        newKeyViewController.completion = completion
         let navigationController = UINavigationController(rootViewController: newKeyViewController)
         present(navigationController, animated: true, completion: nil)
         return true

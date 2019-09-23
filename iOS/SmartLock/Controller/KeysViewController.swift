@@ -213,9 +213,10 @@ final class KeysViewController: UITableViewController {
         switch item {
         case let .key(identifier, _):
             select(lock: identifier)
-        case let .newKey(_, invitation):
-            // TODO: Delete after key is recieved
-            self.open(newKey: invitation)
+        case let .newKey(url, invitation):
+            self.open(newKey: invitation) { [weak self] in
+                self?.delete(url)
+            }
         }
     }
     
