@@ -39,7 +39,7 @@ public final class UserNotificationCenter {
     
     public func requestAuthorization() {
         
-        notificationCenter.requestAuthorization(options: [.alert]) { [weak self] (didAuthorize, error) in
+        notificationCenter.requestAuthorization(options: [.alert, .sound, .badge]) { [weak self] (didAuthorize, error) in
             self?.log?("Authorization: \(didAuthorize) \(error?.localizedDescription ?? "")")
         }
     }

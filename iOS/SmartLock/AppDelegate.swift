@@ -189,6 +189,7 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
         log("\(bundle.symbol) Did become active")
         
         didBecomeActive = true
+        application.applicationIconBadgeNumber = 0
         
         // update cache if modified by extension
         Store.shared.loadCache()
@@ -391,7 +392,12 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
                     case let querySubcription as CKQueryNotification:
                         if let recordID = querySubcription.recordID, recordID.recordName.contains(CloudShare.NewKey.ID.cloudRecordType) {
                             try Store.shared.fetchCloudNewKeys { (_, invitation) in
-                                UserNotificationCenter.shared.postNewKeyShareNotification(invitation)
+                                mainQueue {
+                                    if application.applicationState == .background {
+                                        UserNotificationCenter.shared.postNewKeyShareNotification(invitation)
+                                        application.applicationIconBadgeNumber += 1
+                                    }
+                                }
                             }
                         }
                     default:
