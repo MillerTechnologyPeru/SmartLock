@@ -1916,7 +1916,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "#\"$SRCROOT/rswift\" generate \"$SRCROOT/R.generated.swift\"\n";
+			shellScript = "\"$SRCROOT/rswift\" generate \"$SRCROOT/R.generated.swift\"\n";
 		};
 		6E806BAD230F6A5C00C6FF78 /* R.swift */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -1936,7 +1936,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "#\"$SRCROOT/rswift\" generate \"$SRCROOT/R.LockKit.generated.swift\"\n";
+			shellScript = "\"$SRCROOT/rswift\" generate \"$SRCROOT/R.LockKit.generated.swift\"\n";
 		};
 		6EAD5683233588A30035322A /* Build Version */ = {
 			isa = PBXShellScriptBuildPhase;

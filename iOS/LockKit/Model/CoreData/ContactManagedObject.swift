@@ -39,7 +39,7 @@ public extension ContactManagedObject {
             nameComponents.givenName = givenName
             nameComponents.middleName = middleName
             nameComponents.familyName = familyName
-            nameComponents.nameSuffix = namePrefix
+            nameComponents.nameSuffix = nameSuffix
             nameComponents.nickname = nickname
             return nameComponents
         }
@@ -49,7 +49,7 @@ public extension ContactManagedObject {
             givenName = newValue?.givenName
             middleName = newValue?.middleName
             familyName = newValue?.familyName
-            nameSuffix = newValue?.namePrefix
+            nameSuffix = newValue?.nameSuffix
             nickname = newValue?.nickname
         }
     }

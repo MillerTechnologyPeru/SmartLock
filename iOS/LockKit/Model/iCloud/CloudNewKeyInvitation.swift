@@ -93,24 +93,3 @@ extension NewKey.Invitation.Cloud.ID: CloudKitIdentifier {
         return CKRecord.ID(recordName: type(of: self).cloudRecordType + "/" + rawValue.uuidString, zoneID: .lockShared)
     }
 }
-
-// MARK: - CloudKit Fetch
-
-internal extension CloudStore {
-    
-    func fetchSharedNewKeyInvitations() throws -> [NewKey.Invitation.Cloud] {
-        
-        typealias CloudValue = NewKey.Invitation.Cloud
-        
-        let database = container.sharedCloudDatabase
-        
-        let query = CKQuery(
-            recordType: CloudValue.ID.cloudRecordType,
-            predicate: NSPredicate(value: true)
-        )
-        
-        let decoder = CloudKitDecoder(context: database)
-        let records = try database.queryAll(query)
-        return try records.map { try decoder.decode(CloudValue.self, from: $0) }
-    }
-}

@@ -211,17 +211,12 @@ internal extension CKDatabase {
         return recordsByRecordID
     }
     
-    @discardableResult
-    func modify(_ operation: CKModifyRecordsOperation) throws -> (saved: [CKRecord], deleted: [CKRecord.ID]) {
+    func modify(_ operation: CKModifyRecordsOperation) throws {
         
         var cloudKitError: Swift.Error?
-        var saved = [CKRecord]()
-        var deleted = [CKRecord.ID]()
         let semaphore = DispatchSemaphore(value: 0)
         operation.modifyRecordsCompletionBlock = { (savedRecords, deletedRecords, error) in
             cloudKitError = error
-            saved = savedRecords ?? []
-            deleted = deletedRecords ?? []
             semaphore.signal()
         }
         add(operation)
@@ -229,7 +224,6 @@ internal extension CKDatabase {
         if let error = cloudKitError {
             throw error
         }
-        return (saved, deleted)
     }
     
     @discardableResult
@@ -262,20 +256,72 @@ internal extension CKDatabase {
     }
     
     func queryAll(_ query: CKQuery,
+                  zone: CKRecordZone.ID? = nil,
                   record: @escaping (CKRecord) throws -> (Bool)) throws {
         
-        var cursor = try self.query(.init(query: query), record: record)
+        var operation = CKQueryOperation(query: query)
+        operation.zoneID = zone
+        var cursor = try self.query(operation, record: record)
         while let queryCursor = cursor {
-            cursor = try self.query(.init(cursor: queryCursor), record: record)
+            operation = .init(cursor: queryCursor)
+            operation.zoneID = zone
+            cursor = try self.query(operation, record: record)
         }
     }
     
-    func queryAll(_ query: CKQuery) throws -> [CKRecord] {
+    func queryAll(_ query: CKQuery, zone: CKRecordZone.ID? = nil) throws -> [CKRecord] {
         var records = [CKRecord]()
-        try queryAll(query) {
+        try queryAll(query, zone: zone) {
             records.append($0)
             return true
         }
         return records
+    }
+    
+    func modifyZones(save: [CKRecordZone]?,
+                     delete: [CKRecordZone.ID]? = nil) throws {
+        
+        let operation = CKModifyRecordZonesOperation(recordZonesToSave: save, recordZoneIDsToDelete: delete)
+        var cloudKitError: Swift.Error?
+        let semaphore = DispatchSemaphore(value: 0)
+        operation.modifyRecordZonesCompletionBlock = { (saved, deleted, error) in
+            cloudKitError = error
+            semaphore.signal()
+        }
+        add(operation)
+        semaphore.wait()
+        if let error = cloudKitError {
+            throw error
+        }
+    }
+    
+    func fetchZones(_ zones: [CKRecordZone.ID]? = nil) throws -> [CKRecordZone.ID: CKRecordZone] {
+        
+        let operation = zones.flatMap { CKFetchRecordZonesOperation(recordZoneIDs: $0) }
+            ?? .fetchAllRecordZonesOperation()
+        var cloudKitError: Swift.Error?
+        var results = [CKRecordZone.ID: CKRecordZone]()
+        let semaphore = DispatchSemaphore(value: 0)
+        operation.fetchRecordZonesCompletionBlock = {
+            results = $0 ?? [:]
+            cloudKitError = $1
+            semaphore.signal()
+        }
+        add(operation)
+        semaphore.wait()
+        if let error = cloudKitError {
+            throw error
+        }
+        return results
+    }
+    
+    func fetchZone(_ zone: CKRecordZone.ID) throws -> CKRecordZone {
+        
+        let zones = try fetchZones([zone])
+        guard let value = zones[zone] else {
+            assertionFailure("Missing zone value")
+            throw CKError(.internalError)
+        }
+        return value
     }
 }

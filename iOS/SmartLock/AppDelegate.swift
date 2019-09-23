@@ -188,7 +188,7 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
         }
         
         // CloudKit contacts
-        DispatchQueue.app.async {
+        DispatchQueue.cloud.async {
             do { try Store.shared.updateContacts() }
             catch { log("⚠️ Could not update contacts. \(error.localizedDescription)") }
         }
