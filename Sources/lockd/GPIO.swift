@@ -9,6 +9,7 @@ import Foundation
 import CoreLock
 import CoreLockGATTServer
 import SwiftyGPIO
+import Dispatch
 
 public protocol LockGPIOController: class, UnlockDelegate {
     
@@ -17,6 +18,10 @@ public protocol LockGPIOController: class, UnlockDelegate {
     var led: GPIOState { get set }
     
     var didPressResetButton: () -> () { get set }
+    
+    var tappedSeconds: UInt { get set }
+    
+    var heldInterval: UInt { get set }
 }
 
 /// GPIO State
@@ -53,10 +58,28 @@ public extension LockHardware {
 
 public final class OrangePiOneGPIO: LockGPIOController {
     
+    public var tappedSeconds: UInt = 0
+    
+    public var heldInterval: UInt = 5
+    
     public init() {
-        self.resetSwitchGPIO.onRaising { [weak self] in
-            if $0.value == 1 {
-                self?.didPressResetButton()
+        DispatchQueue.global(qos: .background).async {
+            while true {
+                
+                usleep(2000)
+                
+                if self.resetSwitchGPIO.value == 1 {
+                    
+                    self.tappedSeconds += 1
+                    
+                    if self.tappedSeconds == 1000 * self.heldInterval {
+                        
+                        self.didPressResetButton()
+                    }
+                } else {
+                    
+                    self.tappedSeconds = 0
+                }
             }
         }
     }
@@ -76,7 +99,7 @@ public final class OrangePiOneGPIO: LockGPIOController {
     }()
     
     internal lazy var resetSwitchGPIO: GPIO = {
-        let gpio = GPIO(sunXi: SunXiGPIO(letter: .G, pin: 7))
+        let gpio = GPIO(sunXi: SunXiGPIO(letter: .D, pin: 14))
         gpio.direction = .IN
         gpio.value = 0
         return gpio
@@ -97,11 +120,28 @@ public final class OrangePiOneGPIO: LockGPIOController {
 
 public final class RaspberryPi3GPIO: LockGPIOController {
     
+    public var tappedSeconds: UInt = 0
+    
+    public var heldInterval: UInt = 5
+    
     public init() {
-        self.resetSwitchGPIO.bounceTime = 10
-        self.resetSwitchGPIO.onRaising { [weak self] in
-            if $0.value == 1 {
-                self?.didPressResetButton()
+        DispatchQueue.global(qos: .background).async {
+            while true {
+                
+                usleep(2000)
+                
+                if self.resetSwitchGPIO.value == 1 {
+                    
+                    self.tappedSeconds += 1
+                    
+                    if self.tappedSeconds == 1000 * self.heldInterval {
+                        
+                        self.didPressResetButton()
+                    }
+                } else {
+                    
+                    self.tappedSeconds = 0
+                }
             }
         }
     }

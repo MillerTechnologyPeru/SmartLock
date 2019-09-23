@@ -109,7 +109,7 @@ func run() throws {
             controller?.lockServiceController.unlockDelegate = gpioController
             gpio = gpioController
             gpioController.didPressResetButton = {
-                print("Press Button \(Date())")
+                print("Reset Button pressed at \(Date())")
                 controller?.lockServiceController.reset()
             }
         }
