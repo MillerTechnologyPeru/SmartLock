@@ -92,6 +92,27 @@ internal extension CloudStore {
     }
 }
 
+// MARK: - CloudKit Subscriptions
+
+public extension CloudStore {
+    
+    func subcribeNewKeyShares() throws {
+        
+        let user = try container.fetchUserRecordID()
+        
+        let subcription = CKQuerySubscription(
+            recordType: CloudShare.NewKey.ID.cloudRecordType,
+            predicate: NSPredicate(format: "%K == %@", "user", user.recordName),
+            options: [.firesOnRecordCreation]
+        )
+        
+        let notificationInfo = CKQuerySubscription.NotificationInfo()
+        notificationInfo.shouldSendContentAvailable = true
+        subcription.notificationInfo = notificationInfo
+        
+        try container.publicCloudDatabase.modify(subscriptions: [subcription])
+    }
+}
 
 // MARK: - CloudKit Zone
 

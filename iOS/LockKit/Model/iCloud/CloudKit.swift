@@ -324,4 +324,23 @@ internal extension CKDatabase {
         }
         return value
     }
+    
+    func modify(subscriptions save: [CKSubscription]?, delete: [CKSubscription.ID]? = nil) throws {
+        
+        let operation = CKModifySubscriptionsOperation(
+            subscriptionsToSave: save,
+            subscriptionIDsToDelete: delete
+        )
+        var cloudKitError: Swift.Error?
+        let semaphore = DispatchSemaphore(value: 0)
+        operation.modifySubscriptionsCompletionBlock = { (_, _, error) in
+            cloudKitError = error
+            semaphore.signal()
+        }
+        add(operation)
+        semaphore.wait()
+        if let error = cloudKitError {
+            throw error
+        }
+    }
 }

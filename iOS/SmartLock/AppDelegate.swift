@@ -89,6 +89,7 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
         if #available(iOS 10.0, *) {
             UserNotificationCenter.shared.requestAuthorization()
         }
+        application.registerForRemoteNotifications()
         
         // handle notifications
         if #available(iOS 10.0, *) {
@@ -177,21 +178,6 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
         log("\(bundle.symbol) Will enter foreground")
         
         BeaconController.shared.scanBeacons()
-        
-        // CloudKit discoverability
-        DispatchQueue.app.asyncAfter(deadline: .now() + 3.0) {
-            do {
-                let status = try Store.shared.cloud.requestPermissions()
-                log("☁️ CloudKit permisions \(status == .granted ? "granted" : "not granted")")
-            }
-            catch { log("⚠️ Could not request CloudKit permissions. \(error.localizedDescription)") }
-        }
-        
-        // CloudKit contacts
-        DispatchQueue.cloud.async {
-            do { try Store.shared.updateContacts() }
-            catch { log("⚠️ Could not update contacts. \(error.localizedDescription)") }
-        }
     }
 
     func applicationDidBecomeActive(_ application: UIApplication) {
@@ -213,6 +199,27 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
                     let _ = try Store.shared.device(for: lock, scanDuration: 1.0)
                 }
             } catch { log("⚠️ Unable to scan: \(error.localizedDescription)") }
+        }
+        
+        // CloudKit discoverability
+        DispatchQueue.cloud.asyncAfter(deadline: .now() + 3.0) {
+            do {
+                let status = try Store.shared.cloud.requestPermissions()
+                log("☁️ CloudKit permisions \(status == .granted ? "granted" : "not granted")")
+            }
+            catch { log("⚠️ Could not request CloudKit permissions. \(error.localizedDescription)") }
+        }
+        
+        // CloudKit push notifications
+        DispatchQueue.cloud.async {
+            do { try Store.shared.cloud.subcribeNewKeyShares() }
+            catch { log("⚠️ Could subscribe to new shares. \(error)") }
+        }
+        
+        // CloudKit contacts
+        DispatchQueue.cloud.async {
+            do { try Store.shared.updateContacts() }
+            catch { log("⚠️ Could not update contacts. \(error.localizedDescription)") }
         }
         
         // attempt to sync with iCloud
@@ -354,6 +361,45 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
         }
         
         return true
+    }
+    
+    func applicationSignificantTimeChange(_ application: UIApplication) {
+        
+        
+    }
+    
+    func application(_ application: UIApplication, userDidAcceptCloudKitShareWith cloudKitShareMetadata: CKShare.Metadata) {
+        
+        
+    }
+    
+    func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
+        
+        log("📲 Recieved push notification\n\((userInfo as NSDictionary).description)")
+        
+        DispatchQueue.app.async {
+            
+            do {
+                if let cloudKitNotification = CKNotification(fromRemoteNotificationDictionary: userInfo) {
+                    
+                    switch cloudKitNotification {
+                    case let querySubcription as CKQueryNotification:
+                        if let recordID = querySubcription.recordID, recordID.recordName.contains(CloudShare.NewKey.ID.cloudRecordType) {
+                            // inform user
+                            //UserNotificationCenter.shared.postUnlockNotification
+                            // load new keys
+                            try Store.shared.fetchCloudNewKeys()
+                        }
+                    default:
+                        break
+                    }
+                }
+            } catch {
+                log("⚠️ Push notification error: \(error.localizedDescription)")
+            }
+            
+            mainQueue { completionHandler(.newData) }
+        }
     }
 }
 

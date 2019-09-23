@@ -88,6 +88,11 @@ public final class UserNotificationCenter {
         notificationCenter.removeDeliveredNotifications(withIdentifiers: identifiers)
     }
     
+    public func postNewKeyShareNotification(delay: TimeInterval = 0.1) {
+        
+        
+    }
+    
     public func removeAllNotfications() {
         
         notificationCenter.removeAllDeliveredNotifications()
