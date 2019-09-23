@@ -108,6 +108,7 @@ public extension CloudStore {
         
         let notificationInfo = CKQuerySubscription.NotificationInfo()
         notificationInfo.shouldSendContentAvailable = true
+        notificationInfo.title = "New key recieved"
         subcription.notificationInfo = notificationInfo
         
         try container.publicCloudDatabase.modify(subscriptions: [subcription])

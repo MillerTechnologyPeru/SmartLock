@@ -9,6 +9,7 @@
 import Foundation
 import UserNotifications
 import MobileCoreServices
+import CoreLock
 
 @available(iOS 10.0, *)
 public final class UserNotificationCenter {
@@ -31,6 +32,8 @@ public final class UserNotificationCenter {
     private lazy var delegate = Delegate(self)
     
     public var handleActivity: ((AppActivity) -> ())?
+    
+    public var handleURL: ((LockURL) -> ())?
     
     // MARK: - Methods
     
@@ -78,23 +81,58 @@ public final class UserNotificationCenter {
     }
     
     public func removeUnlockNotification(for lock: UUID) {
-        
         removeUnlockNotification(for: [lock])
     }
     
     public func removeUnlockNotification(for locks: [UUID]) {
-        
         let identifiers = locks.map { AppActivity.Action.unlock($0).rawValue }
         notificationCenter.removeDeliveredNotifications(withIdentifiers: identifiers)
     }
     
-    public func postNewKeyShareNotification(delay: TimeInterval = 0.1) {
+    public func postNewKeyShareNotification(_ invitation: NewKey.Invitation, delay: TimeInterval = 0.1) {
         
+        // Create Notification content
+        let notificationContent = UNMutableNotificationContent()
+        notificationContent.title = "New key"
+        notificationContent.subtitle = invitation.key.name + " - " + invitation.key.permission.type.localizedText
+        notificationContent.sound = .default
         
+        if let imageURL = AssetExtractor.shared.url(for: invitation.key.permission.type.image),
+            let attachment = try? UNNotificationAttachment(
+                identifier: String(reflecting: invitation.key.permission.type),
+                url: imageURL,
+                options: [UNNotificationAttachmentOptionsTypeHintKey: kUTTypePNG as String]) {
+            
+            notificationContent.attachments = [attachment]
+        }
+        
+        // Create Notification trigger
+        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: delay, repeats: false)
+        
+        // Create a notification request with the above components
+        let request = UNNotificationRequest(
+            identifier: identifier(for: invitation),
+            content: notificationContent,
+            trigger: trigger
+        )
+        
+        // Add this notification to the UserNotificationCenter
+        notificationCenter.add(request) { [weak self] error in
+           self?.log?("Notified "
+            + notificationContent.title + " - " + notificationContent.subtitle
+            + " " + "\(error?.localizedDescription ?? "")")
+        }
+    }
+    
+    private func identifier(for newKey: NewKey.Invitation) -> String {
+        return LockURL.newKey(newKey).rawValue.absoluteString
+    }
+    
+    public func removeUnlockNotification(for newKey: NewKey.Invitation) {
+        notificationCenter.removeDeliveredNotifications(withIdentifiers: [identifier(for: newKey)])
     }
     
     public func removeAllNotfications() {
-        
         notificationCenter.removeAllDeliveredNotifications()
         notificationCenter.removeAllPendingNotificationRequests()
     }
@@ -120,8 +158,8 @@ private extension UserNotificationCenter {
             
             if let action = AppActivity.Action(rawValue: identifier) {
                 notificationCenter?.handleActivity?(.action(action))
-            } else {
-                assertionFailure()
+            } else if let url = URL(string: identifier).flatMap({ LockURL(rawValue: $0) }) {
+                notificationCenter?.handleURL?(url)
             }
             
             completionHandler()

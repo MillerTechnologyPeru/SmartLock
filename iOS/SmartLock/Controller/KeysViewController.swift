@@ -126,13 +126,11 @@ final class KeysViewController: UITableViewController {
                 self?.pendingKeys = pendingKeys
             }
             // fetch from CloudKit
-            try Store.shared.fetchCloudNewKeys()
-            // refresh files
-            return try Store.shared.fileManager.loadInvitations(invalid: { (url, error) in
-                log("⚠️ Unable to load invitation from \(url.path). \(error.localizedDescription)")
-            })
-        }, completion: { (viewController, invitations) in
-            viewController.pendingKeys = invitations
+            try Store.shared.fetchCloudNewKeys { (url, newKey) in
+                mainQueue { [weak self] in
+                    self?.pendingKeys[url] = newKey
+                }
+            }
         })
     }
     
@@ -249,7 +247,7 @@ final class KeysViewController: UITableViewController {
         DispatchQueue.app.async {
             do { try FileManager.default.removeItem(at: url) }
             catch {
-                log("Unable to delete \(url.lastPathComponent)")
+                log("Unable to delete \(url.lastPathComponent). \(error)")
                 assertionFailure("Unable to delete \(url)")
             }
             mainQueue { [weak self] in

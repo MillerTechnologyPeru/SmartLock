@@ -96,6 +96,9 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
             UserNotificationCenter.shared.handleActivity = { [unowned self] (activity) in
                 mainQueue { self.handle(activity: activity) }
             }
+            UserNotificationCenter.shared.handleURL = { [unowned self] (url) in
+                mainQueue { self.handle(url: url) }
+            }
         }
         
         // setup watch
@@ -232,7 +235,6 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
         log("\(bundle.symbol) Will terminate")
         
         BeaconController.shared.scanBeacons()
-
     }
     
     func application(_ application: UIApplication, handleOpen url: URL) -> Bool {
@@ -375,7 +377,10 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
         
-        log("📲 Recieved push notification\n\((userInfo as NSDictionary).description)")
+        log("📲 Recieved push notification")
+        #if DEBUG
+        print((userInfo as NSDictionary).description)
+        #endif
         
         DispatchQueue.app.async {
             
@@ -385,10 +390,9 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
                     switch cloudKitNotification {
                     case let querySubcription as CKQueryNotification:
                         if let recordID = querySubcription.recordID, recordID.recordName.contains(CloudShare.NewKey.ID.cloudRecordType) {
-                            // inform user
-                            //UserNotificationCenter.shared.postUnlockNotification
-                            // load new keys
-                            try Store.shared.fetchCloudNewKeys()
+                            try Store.shared.fetchCloudNewKeys { (_, invitation) in
+                                UserNotificationCenter.shared.postNewKeyShareNotification(invitation)
+                            }
                         }
                     default:
                         break
