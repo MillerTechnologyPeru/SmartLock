@@ -99,20 +99,27 @@ final class KeysViewController: UITableViewController {
     // MARK: - Methods
     
     private subscript (indexPath: IndexPath) -> Item {
-        return data[indexPath.row].items[indexPath.section]
+        return data[indexPath.section].items[indexPath.row]
     }
     
     private func reloadData() {
         
         configureView()
         
-        // load pending keys
+        // load pending keys from CloudKit
         performActivity(queue: .app, {
+            // load local files
+            let pendingKeys = try Store.shared.fileManager.loadInvitations(invalid: { (url, error) in
+                log("⚠️ Unable to load invitation from \(url.path). \(error.localizedDescription)")
+            })
+            mainQueue { [weak self] in
+                self?.pendingKeys = pendingKeys
+            }
             // fetch from CloudKit
             try Store.shared.fetchCloudNewKeys()
-            // load from files
+            // refresh files
             return try Store.shared.fileManager.loadInvitations(invalid: { (url, error) in
-                log("Unable to load invitation from \(url.path). \(error.localizedDescription)")
+                log("⚠️ Unable to load invitation from \(url.path). \(error.localizedDescription)")
             })
         }, completion: { (viewController, invitations) in
             viewController.pendingKeys = invitations
