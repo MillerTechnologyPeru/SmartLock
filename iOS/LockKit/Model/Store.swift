@@ -602,10 +602,13 @@ public extension Store {
 #if os(iOS)
 public extension Store {
     
-    func fetchCloudNewKeys() throws {
+    func fetchCloudNewKeys(_ invitation: (URL, NewKey.Invitation) -> ()) throws {
         
-        try cloud.fetchNewKeyShares { (invitations) in
-            try invitations.forEach { try fileManager.save(invitation: $0) }
+        try cloud.fetchNewKeyShares {
+            try $0.forEach {
+                let url = try fileManager.save(invitation: $0)
+                invitation(url, $0)
+            }
         }
     }
 }

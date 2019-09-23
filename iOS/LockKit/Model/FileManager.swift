@@ -76,7 +76,8 @@ public extension FileManager.Lock {
         set { write(newValue, file: .applicationData) }
     }
     
-    func save(invitation: NewKey.Invitation) throws {
+    @discardableResult
+    func save(invitation: NewKey.Invitation) throws -> URL {
         
         let fileName = "newKey-\(invitation.key.identifier).ekey"
         let data = try jsonEncoder.encode(invitation)
@@ -86,6 +87,7 @@ public extension FileManager.Lock {
             assertionFailure("Could not save file \(fileURL.path)")
             throw CocoaError(.fileWriteUnknown)
         }
+        return fileURL
     }
     
     func loadInvitations(invalid: (URL, Error) -> ()) throws -> [URL: NewKey.Invitation] {
