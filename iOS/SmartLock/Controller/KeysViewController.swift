@@ -255,6 +255,31 @@ final class KeysViewController: UITableViewController {
         }
     }
     
+    private func delete(_ item: Item) {
+        
+        let alert = UIAlertController(title: NSLocalizedString("Confirmation", comment: "DeletionConfirmation"),
+                                      message: "Are you sure you want to delete this key?",
+                                      preferredStyle: .alert)
+        
+        alert.addAction(UIAlertAction(title: NSLocalizedString("Cancel", comment: "Cancel"), style: .cancel, handler: { (UIAlertAction) in
+            alert.dismiss(animated: true, completion: nil)
+        }))
+        
+        alert.addAction(UIAlertAction(title: NSLocalizedString("Delete", comment: "Delete"), style: .destructive, handler: { [unowned self] (UIAlertAction) in
+            
+            switch item {
+            case let .key(identifier, _):
+                Store.shared.remove(identifier)
+            case let .newKey(url, _):
+                self.delete(url)
+            }
+            
+            alert.dismiss(animated: true, completion: nil)
+        }))
+        
+        self.present(alert, animated: true, completion: nil)
+    }
+    
     // MARK: - UITableViewDataSource
     
     override func numberOfSections(in tableView: UITableView) -> Int {
@@ -294,32 +319,10 @@ final class KeysViewController: UITableViewController {
         }
         
         var actions = [UITableViewRowAction]()
-        let item = self[indexPath]
-        
-        let delete = UITableViewRowAction(style: .destructive, title: "Delete") {
-            
+        let delete = UITableViewRowAction(style: .destructive, title: "Delete") { [unowned self] in
             assert($1 == indexPath)
-            let alert = UIAlertController(title: NSLocalizedString("Confirmation", comment: "DeletionConfirmation"),
-                                          message: "Are you sure you want to delete this key?",
-                                          preferredStyle: .alert)
-            
-            alert.addAction(UIAlertAction(title: NSLocalizedString("Cancel", comment: "Cancel"), style: .cancel, handler: { (UIAlertAction) in
-                alert.dismiss(animated: true, completion: nil)
-            }))
-            
-            alert.addAction(UIAlertAction(title: NSLocalizedString("Delete", comment: "Delete"), style: .destructive, handler: { [unowned self] (UIAlertAction) in
-                
-                switch item {
-                case let .key(identifier, _):
-                    Store.shared.remove(identifier)
-                case let .newKey(url, _):
-                    self.delete(url)
-                }
-                
-                alert.dismiss(animated: true, completion: nil)
-            }))
-            
-            self.present(alert, animated: true, completion: nil)
+            let item = self[$1]
+            self.delete(item)
         }
         
         actions.append(delete)
@@ -336,9 +339,17 @@ final class KeysViewController: UITableViewController {
             switch item {
             case let .key(identifier, _):
                 return self?.menu(forLock: identifier)
-            case let .newKey(invitation):
-                // TODO: Delete pending invitation
-                return nil
+            case .newKey:
+                let delete = UIAction(title: "Delete", image: UIImage(systemName: "trash"), attributes: .destructive) { [weak self] (action) in
+                    self?.delete(item)
+                }
+                return UIMenu(
+                    title: "",
+                    image: nil,
+                    identifier: nil,
+                    options: [],
+                    children: [delete]
+                )
             }
         }
     }
