@@ -56,7 +56,8 @@ public extension NewKeyViewController {
                 let newKey = NewKey(
                     identifier: newKeyIdentifier,
                     name: newKeyName,
-                    permission: permission)
+                    permission: permission
+                )
                 
                 let newKeySharedSecret = KeyData()
                 
@@ -155,21 +156,26 @@ public extension UIViewController {
                 
                 // show activity controller
                 let activityController = UIActivityViewController(
-                    activityItems: [URL(fileURLWithPath: filePath)],
-                    applicationActivities: nil
+                    activityItems: [
+                        URL(fileURLWithPath: filePath),
+                        invitation
+                    ],
+                    applicationActivities: [
+                        ShareKeyCloudKitActivity()
+                    ]
                 )
                 
                 activityController.excludedActivityTypes = [.postToTwitter,
                                                             .postToFacebook,
                                                             .postToWeibo,
+                                                            .postToTencentWeibo,
+                                                            .postToFlickr,
+                                                            .postToVimeo,
                                                             .print,
                                                             .copyToPasteboard,
                                                             .assignToContact,
                                                             .saveToCameraRoll,
-                                                            .addToReadingList,
-                                                            .postToFlickr,
-                                                            .postToVimeo,
-                                                            .postToTencentWeibo]
+                                                            .addToReadingList]
                 
                 activityController.completionWithItemsHandler = { (activityType, completed, items, error) in
                     

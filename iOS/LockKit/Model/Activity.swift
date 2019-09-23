@@ -25,7 +25,9 @@ public struct LockActivityItem {
         .assignToContact,
         .postToTencentWeibo,
         .postToWeibo,
-        .openInIBooks]
+        .openInIBooks,
+        .markupAsPDF
+    ]
     
     public let identifier: UUID
     
@@ -56,13 +58,14 @@ public struct LockActivityItem {
 /// `UIActivity` types
 public enum LockActivity: String {
     
-    case newKey = "com.colemancda.lock.activity.newKey"
-    case manageKeys = "com.colemancda.lock.activity.manageKeys"
-    case delete = "com.colemancda.lock.activity.delete"
-    case rename = "com.colemancda.lock.activity.rename"
-    case update = "com.colemancda.lock.activity.update"
-    case homeKitEnable = "com.colemancda.lock.activity.homeKitEnable"
-    case addVoiceShortcut = "com.colemancda.lock.activity.addVoiceShortcut"
+    case newKey =               "com.colemancda.lock.activity.newKey"
+    case manageKeys =           "com.colemancda.lock.activity.manageKeys"
+    case delete =               "com.colemancda.lock.activity.delete"
+    case rename =               "com.colemancda.lock.activity.rename"
+    case update =               "com.colemancda.lock.activity.update"
+    case homeKitEnable =        "com.colemancda.lock.activity.homeKitEnable"
+    case addVoiceShortcut =     "com.colemancda.lock.activity.addVoiceShortcut"
+    case shareKeyCloudKit =     "com.colemancda.lock.activity.shareKeyCloudKit"
     
     var activityType: UIActivity.ActivityType {
         return UIActivity.ActivityType(rawValue: self.rawValue)
@@ -462,6 +465,71 @@ public final class UpdateActivity: UIActivity {
         }))
         
         return alert
+    }
+}
+
+public final class ShareKeyCloudKitActivity: UIActivity {
+    
+    public override class var activityCategory: UIActivity.Category { return .share }
+     
+    internal private(set) var invitation: NewKey.Invitation?
+     
+    public override var activityType: UIActivity.ActivityType? {
+        return LockActivity.shareKeyCloudKit.activityType
+    }
+     
+    public  override var activityTitle: String? {
+         return "Share Key with iCloud"
+     }
+     
+     public override var activityImage: UIImage? {
+         return UIImage(named: "AppIcon")
+     }
+     
+     public override func canPerform(withActivityItems activityItems: [Any]) -> Bool {
+        for case is NewKey.Invitation in activityItems {
+            return true
+        }
+        return false
+     }
+     
+     public override func prepare(withActivityItems activityItems: [Any]) {
+        for case let invitation as NewKey.Invitation in activityItems {
+            self.invitation = invitation
+            return
+        }
+     }
+     
+    public override var activityViewController: UIViewController? {
+        
+        guard let invitation = self.invitation else {
+            assertionFailure()
+            return nil
+        }
+        
+        let viewController = ContactsViewController.fromStoryboard()
+        viewController.didSelect = { (contact) in
+            let progressHUD = JGProgressHUD.currentStyle(for: viewController)
+            progressHUD.show(in: viewController.navigationController?.view ?? viewController.view)
+            DispatchQueue.cloud.async { [weak self] in
+                do {
+                    try Store.shared.cloud.share(invitation, to: contact)
+                    mainQueue {
+                        progressHUD.dismiss(animated: true)
+                        self?.activityDidFinish(true)
+                    }
+                }
+                catch {
+                    mainQueue {
+                        progressHUD.dismiss(animated: false)
+                        viewController.showErrorAlert(error.localizedDescription, okHandler: {
+                            self?.activityDidFinish(false)
+                        })
+                    }
+                }
+            }
+        }
+        return UINavigationController(rootViewController: viewController)
     }
 }
 

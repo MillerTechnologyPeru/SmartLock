@@ -19,7 +19,7 @@ public final class ContactsViewController: TableViewController {
     
     // MARK: - Properties
     
-    public var didSelect: ((ContactManagedObject) -> ())?
+    public var didSelect: ((CloudUser.ID) -> ())?
     
     public lazy var activityIndicator: UIActivityIndicatorView = self.loadActivityIndicatorView()
     
@@ -27,7 +27,7 @@ public final class ContactsViewController: TableViewController {
     
     // MARK: - Loading
     
-    public static func fromStoryboard(didSelect: ((ContactManagedObject) -> ())? = nil) -> ContactsViewController {
+    public static func fromStoryboard(didSelect: ((CloudUser.ID) -> ())? = nil) -> ContactsViewController {
         
         guard let viewController = R.storyboard.contacts.contactsViewController()
             else { fatalError("Could not load \(self) from storyboard") }
@@ -105,8 +105,20 @@ public final class ContactsViewController: TableViewController {
         fetchRequest.fetchBatchSize = 30
         fetchRequest.sortDescriptors = [
             NSSortDescriptor(
+                key: #keyPath(ContactManagedObject.givenName),
+                ascending: true
+            ),
+            NSSortDescriptor(
+                key: #keyPath(ContactManagedObject.familyName),
+                ascending: true
+            ),
+            NSSortDescriptor(
+                key: #keyPath(ContactManagedObject.email),
+                ascending: true
+            ),
+            NSSortDescriptor(
                 key: #keyPath(ContactManagedObject.identifier),
-                ascending: false
+                ascending: true
             )
         ]
         fetchedResultsController = NSFetchedResultsController(
@@ -144,7 +156,8 @@ public final class ContactsViewController: TableViewController {
         let image: UIImage
         if let contactImage = managedObject.image.flatMap({ UIImage(data: $0) }) {
             image = contactImage
-        } else if #available(iOS 13, *), let systemImage = UIImage(systemName: "person.crop.circle.fill") {
+        } else if #available(iOS 13, *),
+            let systemImage = UIImage(systemName: "person.crop.circle.fill") {
             image = systemImage
         } else {
             image = UIImage(permission: .admin)
@@ -158,8 +171,7 @@ public final class ContactsViewController: TableViewController {
     
     public override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        //guard let cell = tableView.dequeueReusableCell(withIdentifier: R.reuseIdentifier.lockEventTableViewCell, for: indexPath)
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: "ContactTableViewCell", for: indexPath) as? ContactTableViewCell
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: R.reuseIdentifier.contactTableViewCell, for: indexPath)
             else { fatalError("Unable to dequeue cell") }
         configure(cell: cell, at: indexPath)
         return cell
@@ -172,8 +184,17 @@ public final class ContactsViewController: TableViewController {
         defer { tableView.deselectRow(at: indexPath, animated: true) }
         
         let contact = self[indexPath]
+        guard let identifier = contact.identifier else {
+            assertionFailure("Invalid contact \(contact)")
+            return
+        }
         
-        
+        if let selection = self.didSelect {
+            selection(.init(rawValue: identifier))
+        } else {
+            // select lock for key sharing
+            
+        }
     }
 }
 
