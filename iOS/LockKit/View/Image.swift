@@ -47,7 +47,7 @@ public final class AssetExtractor {
     @available(iOS 8.0, watchOS 6.0, *)
     public func url(for imageName: String, in bundle: Bundle) -> URL? {
         
-        let fileName = bundle.bundleIdentifier ?? bundle.bundleURL.lastPathComponent + "." + imageName + ".png"
+        let fileName = (bundle.bundleIdentifier ?? bundle.bundleURL.lastPathComponent) + "." + imageName + ".png"
         let url = cachesDirectory.appendingPathComponent(fileName)
         
         if fileManager.fileExists(atPath: url.path) == false {
