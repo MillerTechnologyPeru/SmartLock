@@ -185,6 +185,14 @@ public extension CloudStore {
         // handle invitations
         try invitations(sharedInvitations) // won't delete if error is thrown
         
+        // delete shares
+        let deleteSharesOperation = CKModifyRecordsOperation(
+            recordsToSave: [],
+            recordIDsToDelete: metadata.map { $0.value.rootRecordID }
+        )
+        deleteSharesOperation.isAtomic = true
+        try container.sharedCloudDatabase.modify(deleteSharesOperation)
+        
         // delete public share data
         let deletePublicSharesOperation = CKModifyRecordsOperation(
             recordsToSave: [],
@@ -192,14 +200,5 @@ public extension CloudStore {
         )
         deletePublicSharesOperation.isAtomic = true
         try container.publicCloudDatabase.modify(deletePublicSharesOperation)
-        
-        // delete shares
-        let deleteSharesOperation = CKModifyRecordsOperation(
-            recordsToSave: [],
-            recordIDsToDelete: metadata.map { $0.value.share.recordID }
-                + metadata.map { $0.value.rootRecordID }
-        )
-        deleteSharesOperation.isAtomic = true
-        try container.sharedCloudDatabase.modify(deleteSharesOperation)
     }
 }

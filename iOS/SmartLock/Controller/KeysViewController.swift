@@ -147,13 +147,15 @@ final class KeysViewController: UITableViewController {
             data.append(section)
         }
         
-        data.append(
-            Section(
-                title: data.isEmpty ? nil : "Keys",
-                items: keys
+        if keys.isEmpty == false {
+            data.append(
+                Section(
+                    title: data.isEmpty ? nil : "Keys",
+                    items: keys
+                )
             )
-        )
-                
+        }
+        
         self.data = data
     }
     
