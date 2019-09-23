@@ -10,7 +10,7 @@
         <!--History-->
         <scene sceneID="pPN-2z-pV0">
             <objects>
-                <tableViewController id="fgM-Nz-uya" customClass="LockEventsViewController" customModule="LockKit" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController storyboardIdentifier="LockEventsViewController" id="fgM-Nz-uya" customClass="LockEventsViewController" customModule="LockKit" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="X6a-4G-FZz">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -127,7 +127,7 @@
         <scene sceneID="hgy-PC-SfB">
             <objects>
                 <navigationController id="D9D-Do-ihn" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" selectedImage="list.bullet" catalog="system" systemItem="history" id="ZK5-9J-hkU"/>
+                    <tabBarItem key="tabBarItem" systemItem="history" id="ZK5-9J-hkU"/>
                     <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" largeTitles="YES" id="yoM-3J-9U8">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="91"/>
@@ -142,7 +142,4 @@
             <point key="canvasLocation" x="-752" y="124"/>
         </scene>
     </scenes>
-    <resources>
-        <image name="list.bullet" catalog="system" width="64" height="44"/>
-    </resources>
 </document>

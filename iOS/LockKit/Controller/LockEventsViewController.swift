@@ -48,14 +48,13 @@ public final class LockEventsViewController: TableViewController {
     
     // MARK: - Loading
     
-    /*
     public static func fromStoryboard(with lock: UUID? = nil) -> LockEventsViewController {
         
         guard let viewController = R.storyboard.events.lockEventsViewController()
             else { fatalError("Could not load \(self) from storyboard") }
         viewController.lock = lock
         return viewController
-    }*/
+    }
     
     public override func viewDidLoad() {
         super.viewDidLoad()
@@ -304,8 +303,7 @@ public final class LockEventsViewController: TableViewController {
     
     public override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        //guard let cell = tableView.dequeueReusableCell(withIdentifier: R.reuseIdentifier.lockEventTableViewCell, for: indexPath)
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: "LockEventTableViewCell", for: indexPath) as? LockEventTableViewCell
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: R.reuseIdentifier.lockEventTableViewCell, for: indexPath)
             else { fatalError("Unable to dequeue cell") }
         configure(cell: cell, at: indexPath)
         return cell

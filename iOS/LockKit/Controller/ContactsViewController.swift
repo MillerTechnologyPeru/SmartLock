@@ -19,11 +19,21 @@ public final class ContactsViewController: TableViewController {
     
     // MARK: - Properties
     
+    public var didSelect: ((ContactManagedObject) -> ())?
+    
     public lazy var activityIndicator: UIActivityIndicatorView = self.loadActivityIndicatorView()
     
     private lazy var nameFormatter = PersonNameComponentsFormatter()
     
     // MARK: - Loading
+    
+    public static func fromStoryboard(didSelect: ((ContactManagedObject) -> ())? = nil) -> ContactsViewController {
+        
+        guard let viewController = R.storyboard.contacts.contactsViewController()
+            else { fatalError("Could not load \(self) from storyboard") }
+        viewController.didSelect = didSelect
+        return viewController
+    }
     
     public override func viewDidLoad() {
         super.viewDidLoad()
