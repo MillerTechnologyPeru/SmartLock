@@ -52,7 +52,7 @@ public extension BluetoothHostControllerInterface {
         do { try enableLowEnergyAdvertising(false) }
         catch HCIError.commandDisallowed { }
         
-        let beacon = AppleBeacon(uuid: .lockBeaconNotification, rssi: rssi)
+        let beacon = AppleBeacon(uuid: .lockNotificationBeacon, rssi: rssi)
         let flags: GAPFlags = [.lowEnergyGeneralDiscoverableMode, .notSupportedBREDR]
         try iBeacon(beacon, flags: flags, interval: .min, timeout: commandTimeout)
         
