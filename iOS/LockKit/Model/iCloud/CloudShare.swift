@@ -111,7 +111,7 @@ public extension CloudStore {
         // make sure zone is created
         let zone = CKRecordZone(zoneID: .lockShared)
         try container.privateCloudDatabase.modifyZones(save: [zone])
-                
+        
         // save invitation
         let cloudInvitation = NewKey.Invitation.Cloud(invitation)
         let privateCloudEncoder = CloudKitEncoder(context: container.privateCloudDatabase)
@@ -162,31 +162,36 @@ public extension CloudStore {
         
         // fetch public shares
         let publicShares = try fetchNewKeyPublicShares()
+        guard publicShares.isEmpty == false else { return [] }
         
-        if publicShares.isEmpty == false {
-            // accept pending shares
-            let shareURLs = publicShares.map { $0.invitation }
-            let metadata = try container.fetchShareMetadata(for: shareURLs, shouldFetchRootRecord: false)
-            assert(metadata.count == publicShares.count)
-            let pendingShares = metadata.values.filter { $0.participantStatus == .pending }
-            if pendingShares.isEmpty == false {
-                try container.acceptShares(pendingShares)
-            }
-            
-            // delete public share data
-            if publicShares.isEmpty == false {
-                let deletePublicSharesOperation = CKModifyRecordsOperation(
-                    recordsToSave: [],
-                    recordIDsToDelete: publicShares.map { $0.id.cloudRecordID }
-                )
-                try container.publicCloudDatabase.modify(deletePublicSharesOperation)
-            }
+        // accept pending shares
+        let shareURLs = publicShares.map { $0.invitation }
+        let metadata = try container.fetchShareMetadata(for: shareURLs, shouldFetchRootRecord: true)
+        assert(metadata.count == publicShares.count)
+        let pendingShares = metadata.values.filter { $0.participantStatus == .pending }
+        if pendingShares.isEmpty == false {
+            try container.acceptShares(pendingShares)
         }
         
-        // fetch shared invitations
-        let invitationCloudValues = try fetchSharedNewKeyInvitations()
-        let invitations = invitationCloudValues.compactMap { NewKey.Invitation($0) }
-        assert(invitationCloudValues.count == invitations.count)
+        let sharedRecords = metadata.values.compactMap { $0.rootRecord }
+        assert(sharedRecords.count == metadata.count)
+        
+        let sharedDecoder = CloudKitDecoder(context: container.sharedCloudDatabase)
+        let invitations = try sharedRecords
+            .map { try sharedDecoder.decode(NewKey.Invitation.Cloud.self, from: $0) }
+            .compactMap { NewKey.Invitation($0) }
+        assert(invitations.count == invitations.count)
+        
+        // delete public share data
+        let deletePublicSharesOperation = CKModifyRecordsOperation(
+            recordsToSave: [],
+            recordIDsToDelete: publicShares.map { $0.id.cloudRecordID }
+        )
+        deletePublicSharesOperation.isAtomic = true
+        try container.publicCloudDatabase.modify(deletePublicSharesOperation)
+        
+        // delete shares
+        
         
         return invitations
     }
