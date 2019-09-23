@@ -32,6 +32,16 @@ final class KeysViewController: UITableViewController {
         didSet { configureView() }
     }
     
+    @available(iOS 13.0, *)
+    private lazy var timeFormatter = RelativeDateTimeFormatter()
+    
+    private lazy var dateFormatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateStyle = .short
+        formatter.timeStyle = .short
+        return formatter
+    }()
+    
     private var locksObserver: AnyCancellable?
     
     // MARK: - Loading
@@ -175,8 +185,20 @@ final class KeysViewController: UITableViewController {
         case let .newKey(_, invitation):
             permission = invitation.key.permission
             name = invitation.key.name
-            // TODO: Relative time (e.g. expires in 2 hours)
-            detail = permission.localizedText + " - " + invitation.key.expiration.description
+            let expiration: String
+            let timeRemaining = invitation.key.expiration.timeIntervalSinceNow
+            if timeRemaining > 0 {
+                if #available(iOS 13.0, *) {
+                    let time = timeFormatter.localizedString(fromTimeInterval: timeRemaining)
+                    expiration = "Expires \(time)"
+                } else {
+                    let date = dateFormatter.string(from: invitation.key.expiration)
+                    expiration = "Expires \(date)"
+                }
+            } else {
+                expiration = "Expired"
+            }
+            detail = permission.localizedText + " - " + expiration
         }
         
         cell.lockTitleLabel.text = name
