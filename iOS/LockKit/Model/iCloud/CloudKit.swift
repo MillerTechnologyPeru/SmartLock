@@ -256,17 +256,22 @@ internal extension CKDatabase {
     }
     
     func queryAll(_ query: CKQuery,
+                  zone: CKRecordZone.ID? = nil,
                   record: @escaping (CKRecord) throws -> (Bool)) throws {
         
-        var cursor = try self.query(.init(query: query), record: record)
+        var operation = CKQueryOperation(query: query)
+        operation.zoneID = zone
+        var cursor = try self.query(operation, record: record)
         while let queryCursor = cursor {
-            cursor = try self.query(.init(cursor: queryCursor), record: record)
+            operation = .init(cursor: queryCursor)
+            operation.zoneID = zone
+            cursor = try self.query(operation, record: record)
         }
     }
     
-    func queryAll(_ query: CKQuery) throws -> [CKRecord] {
+    func queryAll(_ query: CKQuery, zone: CKRecordZone.ID? = nil) throws -> [CKRecord] {
         var records = [CKRecord]()
-        try queryAll(query) {
+        try queryAll(query, zone: zone) {
             records.append($0)
             return true
         }

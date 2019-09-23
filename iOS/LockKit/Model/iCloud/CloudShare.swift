@@ -179,7 +179,7 @@ public extension CloudStore {
                     recordsToSave: [],
                     recordIDsToDelete: publicShares.map { $0.id.cloudRecordID }
                 )
-                try container.sharedCloudDatabase.modify(deletePublicSharesOperation)
+                try container.publicCloudDatabase.modify(deletePublicSharesOperation)
             }
         }
         

@@ -110,7 +110,7 @@ internal extension CloudStore {
         )
         
         let decoder = CloudKitDecoder(context: database)
-        let records = try database.queryAll(query)
+        let records = try database.queryAll(query, zone: .lockShared)
         return try records.map { try decoder.decode(CloudValue.self, from: $0) }
     }
 }
