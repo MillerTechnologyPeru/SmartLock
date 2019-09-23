@@ -145,14 +145,16 @@ final class KeysViewController: UITableViewController {
         let keys = applicationData.locks
             .lazy
             .sorted(by: { $0.value.key.created < $1.value.key.created })
-            .map { Item.key($0.key, $0.value) }
+            .map { Item.key($0, $1) }
         
         var data = [Section]()
         
         if showPendingKeys {
             let section = Section(
                 title: "Pending Keys",
-                items: pendingKeys.map { .newKey($0, $1) }
+                items: pendingKeys
+                    .sorted(by: { $0.value.key.created < $1.value.key.created})
+                    .map { .newKey($0, $1) }
             )
             data.append(section)
         }
