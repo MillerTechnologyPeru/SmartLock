@@ -163,22 +163,24 @@ public extension CloudStore {
         // fetch public shares
         let publicShares = try fetchNewKeyPublicShares()
         
-        // accept pending shares
-        let shareURLs = publicShares.map { $0.invitation }
-        let metadata = try container.fetchShareMetadata(for: shareURLs, shouldFetchRootRecord: false)
-        assert(metadata.count == publicShares.count)
-        let pendingShares = metadata.values.filter { $0.participantStatus == .pending }
-        if pendingShares.isEmpty == false {
-            try container.acceptShares(pendingShares)
-        }
-        
-        // delete public share data
         if publicShares.isEmpty == false {
-            let deletePublicSharesOperation = CKModifyRecordsOperation(
-                recordsToSave: [],
-                recordIDsToDelete: publicShares.map { $0.id.cloudRecordID }
-            )
-            try container.sharedCloudDatabase.modify(deletePublicSharesOperation)
+            // accept pending shares
+            let shareURLs = publicShares.map { $0.invitation }
+            let metadata = try container.fetchShareMetadata(for: shareURLs, shouldFetchRootRecord: false)
+            assert(metadata.count == publicShares.count)
+            let pendingShares = metadata.values.filter { $0.participantStatus == .pending }
+            if pendingShares.isEmpty == false {
+                try container.acceptShares(pendingShares)
+            }
+            
+            // delete public share data
+            if publicShares.isEmpty == false {
+                let deletePublicSharesOperation = CKModifyRecordsOperation(
+                    recordsToSave: [],
+                    recordIDsToDelete: publicShares.map { $0.id.cloudRecordID }
+                )
+                try container.sharedCloudDatabase.modify(deletePublicSharesOperation)
+            }
         }
         
         // fetch shared invitations

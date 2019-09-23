@@ -98,7 +98,7 @@ public extension TableViewActivityIndicatorViewController {
     }
 }
 
-internal extension ActivityIndicatorViewController {
+public extension ActivityIndicatorViewController {
     
     func loadActivityIndicatorView() -> UIActivityIndicatorView {
         

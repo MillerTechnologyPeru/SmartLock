@@ -73,6 +73,12 @@
                             </connections>
                         </barButtonItem>
                     </navigationItem>
+                    <refreshControl key="refreshControl" opaque="NO" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" id="SRd-71-OMj">
+                        <autoresizingMask key="autoresizingMask"/>
+                        <connections>
+                            <action selector="refresh:" destination="JRc-fh-odg" eventType="valueChanged" id="bk2-hT-ZUc"/>
+                        </connections>
+                    </refreshControl>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ng6-2g-LNP" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
