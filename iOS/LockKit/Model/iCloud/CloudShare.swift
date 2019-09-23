@@ -188,7 +188,7 @@ public extension CloudStore {
         // delete shares
         let deleteSharesOperation = CKModifyRecordsOperation(
             recordsToSave: [],
-            recordIDsToDelete: metadata.map { $0.value.rootRecordID }
+            recordIDsToDelete: metadata.map { $0.value.share.recordID }
         )
         deleteSharesOperation.isAtomic = true
         try container.sharedCloudDatabase.modify(deleteSharesOperation)
