@@ -28,7 +28,7 @@ final class KeysViewController: UITableViewController {
         didSet { tableView.reloadData() }
     }
     
-    private var pendingKeys = [NewKey.Invitation]() {
+    private var pendingKeys = [URL: NewKey.Invitation]() {
         didSet { configureView() }
     }
     
@@ -107,8 +107,13 @@ final class KeysViewController: UITableViewController {
         configureView()
         
         // load pending keys
-        performActivity({
-            try Store.shared.cloud.fetchNewKeyShares()
+        performActivity(queue: .app, {
+            // fetch from CloudKit
+            try Store.shared.fetchCloudNewKeys()
+            // load from files
+            return try Store.shared.fileManager.loadInvitations(invalid: { (url, error) in
+                log("Unable to load invitation from \(url.path). \(error.localizedDescription)")
+            })
         }, completion: { (viewController, invitations) in
             viewController.pendingKeys = invitations
         })
@@ -125,21 +130,23 @@ final class KeysViewController: UITableViewController {
             .sorted(by: { $0.value.key.created < $1.value.key.created })
             .map { Item.key($0.key, $0.value) }
         
-        var data = [
-            Section(
-                title: showPendingKeys ? "Keys" : nil,
-                items: keys
-            )
-        ]
+        var data = [Section]()
         
         if showPendingKeys {
             let section = Section(
                 title: "Pending Keys",
-                items: pendingKeys.map { .newKey($0) }
+                items: pendingKeys.map { .newKey($0, $1) }
             )
-            data = [section] + data
+            data.append(section)
         }
         
+        data.append(
+            Section(
+                title: data.isEmpty ? nil : "Keys",
+                items: keys
+            )
+        )
+                
         self.data = data
     }
     
@@ -156,7 +163,7 @@ final class KeysViewController: UITableViewController {
             permission = cache.key.permission
             name = cache.name
             detail = permission.localizedText
-        case let .newKey(invitation):
+        case let .newKey(_, invitation):
             permission = invitation.key.permission
             name = invitation.key.name
             // TODO: Relative time (e.g. expires in 2 hours)
@@ -175,7 +182,8 @@ final class KeysViewController: UITableViewController {
         switch item {
         case let .key(identifier, _):
             select(lock: identifier)
-        case let .newKey(invitation):
+        case let .newKey(_, invitation):
+            // TODO: Delete after key is recieved
             self.open(newKey: invitation)
         }
     }
@@ -200,6 +208,20 @@ final class KeysViewController: UITableViewController {
             assertionFailure()
         }
         return lockViewController
+    }
+    
+    private func delete(_ url: URL) {
+        
+        DispatchQueue.app.async {
+            do { try FileManager.default.removeItem(at: url) }
+            catch {
+                log("Unable to delete \(url.lastPathComponent)")
+                assertionFailure("Unable to delete \(url)")
+            }
+            mainQueue { [weak self] in
+                self?.pendingKeys[url] = nil
+            }
+        }
     }
     
     // MARK: - UITableViewDataSource
@@ -254,14 +276,13 @@ final class KeysViewController: UITableViewController {
                 alert.dismiss(animated: true, completion: nil)
             }))
             
-            alert.addAction(UIAlertAction(title: NSLocalizedString("Delete", comment: "Delete"), style: .destructive, handler: { (UIAlertAction) in
+            alert.addAction(UIAlertAction(title: NSLocalizedString("Delete", comment: "Delete"), style: .destructive, handler: { [unowned self] (UIAlertAction) in
                 
                 switch item {
                 case let .key(identifier, _):
                     Store.shared.remove(identifier)
-                case let .newKey(invitation):
-                    // TODO: Delete pending invitation
-                    break
+                case let .newKey(url, _):
+                    self.delete(url)
                 }
                 
                 alert.dismiss(animated: true, completion: nil)
@@ -348,6 +369,6 @@ private extension KeysViewController {
     
     enum Item {
         case key(UUID, LockCache)
-        case newKey(NewKey.Invitation)
+        case newKey(URL, NewKey.Invitation)
     }
 }

@@ -158,11 +158,11 @@ public extension CloudStore {
         try upload(publicShare, database: .public)
     }
     
-    func fetchNewKeyShares() throws -> [NewKey.Invitation] {
+    func fetchNewKeyShares(invitations: ([NewKey.Invitation]) throws -> ()) throws {
         
         // fetch public shares
         let publicShares = try fetchNewKeyPublicShares()
-        guard publicShares.isEmpty == false else { return [] }
+        guard publicShares.isEmpty == false else { return }
         
         // accept pending shares
         let shareURLs = publicShares.map { $0.invitation }
@@ -177,10 +177,13 @@ public extension CloudStore {
         assert(sharedRecords.count == metadata.count)
         
         let sharedDecoder = CloudKitDecoder(context: container.sharedCloudDatabase)
-        let invitations = try sharedRecords
+        let sharedInvitations = try sharedRecords
             .map { try sharedDecoder.decode(NewKey.Invitation.Cloud.self, from: $0) }
             .compactMap { NewKey.Invitation($0) }
-        assert(invitations.count == invitations.count)
+        assert(sharedInvitations.count == sharedRecords.count)
+        
+        // handle invitations
+        try invitations(sharedInvitations) // won't delete if error is thrown
         
         // delete public share data
         let deletePublicSharesOperation = CKModifyRecordsOperation(
@@ -191,8 +194,12 @@ public extension CloudStore {
         try container.publicCloudDatabase.modify(deletePublicSharesOperation)
         
         // delete shares
-        
-        
-        return invitations
+        let deleteSharesOperation = CKModifyRecordsOperation(
+            recordsToSave: [],
+            recordIDsToDelete: metadata.map { $0.value.share.recordID }
+                + metadata.map { $0.value.rootRecordID }
+        )
+        deleteSharesOperation.isAtomic = true
+        try container.sharedCloudDatabase.modify(deleteSharesOperation)
     }
 }

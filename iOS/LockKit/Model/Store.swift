@@ -596,3 +596,17 @@ public extension Store {
         return true
     }
 }
+
+// MARK: - CloudKit Operations
+
+#if os(iOS)
+public extension Store {
+    
+    func fetchCloudNewKeys() throws {
+        
+        try cloud.fetchNewKeyShares { (invitations) in
+            try invitations.forEach { try fileManager.save(invitation: $0) }
+        }
+    }
+}
+#endif
