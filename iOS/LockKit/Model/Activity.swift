@@ -479,7 +479,7 @@ public final class ShareKeyCloudKitActivity: UIActivity {
     }
      
     public  override var activityTitle: String? {
-         return "Share Key with iCloud"
+         return "iCloud"
      }
      
      public override var activityImage: UIImage? {
@@ -511,7 +511,7 @@ public final class ShareKeyCloudKitActivity: UIActivity {
         viewController.didSelect = { (contact) in
             let progressHUD = JGProgressHUD.currentStyle(for: viewController)
             progressHUD.show(in: viewController.navigationController?.view ?? viewController.view)
-            DispatchQueue.cloud.async { [weak self] in
+            DispatchQueue.app.async { [weak self] in
                 do {
                     try Store.shared.cloud.share(invitation, to: contact)
                     mainQueue {

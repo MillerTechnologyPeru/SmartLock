@@ -109,7 +109,8 @@ public extension CloudStore {
     func share(_ invitation: NewKey.Invitation, to user: CloudUser.ID) throws {
         
         // make sure zone is created
-        
+        let zone = CKRecordZone(zoneID: .lockShared)
+        try container.privateCloudDatabase.modifyZones(save: [zone])
                 
         // save invitation
         let cloudInvitation = NewKey.Invitation.Cloud(invitation)
@@ -125,7 +126,7 @@ public extension CloudStore {
         // create private data share
         let invitationShare = CKShare(
             rootRecord: invitationRecord,
-            shareID: CKRecord.ID(recordName: UUID().uuidString, zoneID: .default)
+            shareID: CKRecord.ID(recordName: UUID().uuidString, zoneID: .lockShared)
         )
         invitationShare.publicPermission = .none
         invitationShare[CKShare.SystemFieldKey.title] = "New \(invitation.key.permission.type.localizedText) key"
