@@ -24,7 +24,7 @@ public extension UIAlertController {
             
         case .cancel:
             
-            alertAction = UIAlertAction(title: NSLocalizedString("Cancel", comment: "Cancel"), style: .cancel) { [unowned self] _ in
+            alertAction = UIAlertAction(title: R.string.localizable.alertActionCancel(), style: .cancel) { [unowned self] _ in
                 
                 self.dismiss(animated: true, completion: nil)
             }

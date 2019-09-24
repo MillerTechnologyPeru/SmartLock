@@ -108,8 +108,13 @@
 "Setup.CouldNotLock" = "No pudo encontrar el lock";
 
 // Error Alert
+
 "ErrorAlert.Error" = "Error";
 
 "ErrorAlert.OK" = "Ok";
 
 "ErrorAlert.Retry" = "Volver a intentar";
+
+// Alert Action
+
+"AlertAction.Cancel" = "Cancelar";
