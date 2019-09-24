@@ -6,10 +6,72 @@
   Copyright © 2019 ColemanCDA. All rights reserved.
 */
 
+// MARK: - LockViewController
+
 "LockIdentifier.Title" = "Lock";
 
 "KeyIdentifier.Title" = "Llave";
 
 "Permission.Title" = "Permiso";
 
-"VersionTitle" = "Version";
+"Version.Title" = "Version";
+
+// MARK: - Activity
+
+// LockActivityItem
+
+"LockActivity.Item.Text" = "Yo abri mi puerta %@";
+
+// NewKeyActivity
+
+"NewKeyActivity.Title" = "Compartir Llave";
+
+// ManageKeysActivity
+
+"ManageKeysActivity.Title" = "Administrar";
+
+// DeleteLockActivity
+
+"DeleteLockActivity.Title" = "Eliminar";
+
+// RenameActivity
+
+"RenameActivity.Title" = "Renombrar";
+
+// HomeKitEnableActivity
+
+"HomeKitEnableActivity.Title" = "Modo Hogar";
+
+// UpdateActivity
+
+"UpdateActivity.Title" = "Actualizar";
+
+// ShareKeyCloudKitActivity
+
+"ShareKeyCloudKitActivity.Title" = "iCloud";
+
+// AddVoiceShortcutActivity
+
+"AddVoiceShortcutActivity.Title" = "Agregar a Siri";
+
+// MARK: Alerts
+"DeleteLockActivity.Alert.title" = "Confirmación";
+"DeleteLockActivity.Alert.Message" = "Esta seguro de querer eliminar esta Llave?";
+"DeleteLockActivity.Alert.Cancel" = "Cancelar";
+"DeleteLockActivity.Alert.Delete" = "Eliminar";
+
+"RenameActivity.Alert.title" = "Renombrar";
+"RenameActivity.Alert.Message" = "Ingresé un nombre facil de usar para esta Llave.";
+"RenameActivity.Alert.OK" = "OK";
+"RenameActivity.Alert.Cancel" = "Cancelar";
+
+"HomeKitEnableActivity.Alert.title" = "Modo Hogar";
+"HomeKitEnableActivity.Alert.Message" = "Activar Modo Hogar en este dispositivo?";
+"HomeKitEnableActivity.Alert.Cancel" = "Cancelar";
+"HomeKitEnableActivity.Alert.Yes" = "Si";
+"HomeKitEnableActivity.Alert.No" = "No";
+
+"UpdateActivity.Alert.title" = "Actualizar Lock";
+"UpdateActivity.Alert.Message" = "Esta seguro de querer actualizar el software del Lock?";
+"UpdateActivity.Alert.Cancel" = "Cancelar";
+"UpdateActivity.Alert.Update" = "Actualizar";

@@ -6,10 +6,72 @@
   Copyright © 2019 ColemanCDA. All rights reserved.
 */
 
+// MARK: - LockViewController
+
 "LockIdentifier.Title" = "Lock";
 
 "KeyIdentifier.Title" = "Key";
 
 "Permission.Title" = "Permission";
 
-"VersionTitle" = "Version";
+"Version.Title" = "Version";
+
+// MARK: - Activity
+
+// LockActivityItem
+
+"LockActivity.Item.Text" = "I unlocked my door %@";
+
+// NewKeyActivity
+
+"NewKeyActivity.Title" = "Share Key";
+
+// ManageKeysActivity
+
+"ManageKeysActivity.Title" = "Manage";
+
+// DeleteLockActivity
+
+"DeleteLockActivity.Title" = "Delete";
+
+// RenameActivity
+
+"RenameActivity.Title" = "Rename";
+
+// HomeKitEnableActivity
+
+"HomeKitEnableActivity.Title" = "Home Mode";
+
+// UpdateActivity
+
+"UpdateActivity.Title" = "Update";
+
+// ShareKeyCloudKitActivity
+
+"ShareKeyCloudKitActivity.Title" = "iCloud";
+
+// AddVoiceShortcutActivity
+
+"AddVoiceShortcutActivity.Title" = "Add to Siri";
+
+// MARK: Alerts
+"DeleteLockActivity.Alert.title" = "Confirmation";
+"DeleteLockActivity.Alert.Message" = "Are you sure you want to delete this key?";
+"DeleteLockActivity.Alert.Cancel" = "Cancel";
+"DeleteLockActivity.Alert.Delete" = "Delete";
+
+"RenameActivity.Alert.title" = "Rename";
+"RenameActivity.Alert.Message" = "Type a user friendly name for this lock.";
+"RenameActivity.Alert.OK" = "OK";
+"RenameActivity.Alert.Cancel" = "Cancel";
+
+"HomeKitEnableActivity.Alert.title" = "Home Mode";
+"HomeKitEnableActivity.Alert.Message" = "Enable Home Mode on this device?";
+"HomeKitEnableActivity.Alert.Cancel" = "Cancel";
+"HomeKitEnableActivity.Alert.Yes" = "Yes";
+"HomeKitEnableActivity.Alert.No" = "No";
+
+"UpdateActivity.Alert.title" = "Update Lock";
+"UpdateActivity.Alert.Message" = "Are you sure you want to update the lock's software?";
+"UpdateActivity.Alert.Cancel" = "Cancel";
+"UpdateActivity.Alert.Update" = "Update";
