@@ -86,3 +86,10 @@
 
 "UserActivity.Events.Title" = "Events";
 "UserActivity.Events.Description" = "Display lock history.";
+
+// MARK: - UserNotificationCenter
+
+"UserNotificationCenter.TapToUnlock" = "Tap to unlock";
+
+"UserNotificationCenter.NewKey" = "New key";
+

@@ -51,7 +51,7 @@ public final class UserNotificationCenter {
         // Create Notification content
         let notificationContent = UNMutableNotificationContent()
         notificationContent.title = cache.name
-        notificationContent.subtitle = "Tap to unlock"
+        notificationContent.subtitle = R.string.localizable.userNotificationCenterTapToUnlock()
         
         if let imageURL = AssetExtractor.shared.url(for: cache.key.permission.type.image),
             let attachment = try? UNNotificationAttachment(
@@ -93,7 +93,7 @@ public final class UserNotificationCenter {
         
         // Create Notification content
         let notificationContent = UNMutableNotificationContent()
-        notificationContent.title = "New key"
+        notificationContent.title = R.string.localizable.userNotificationCenterNewKey()
         notificationContent.subtitle = invitation.key.name + " - " + invitation.key.permission.type.localizedText
         notificationContent.sound = .default
         

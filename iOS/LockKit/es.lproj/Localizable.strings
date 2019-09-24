@@ -86,3 +86,9 @@
 
 "UserActivity.Events.Title" = "Eventos";
 "UserActivity.Events.Description" = "Mostrar historial de eventos.";
+
+// MARK: - UserNotificationCenter
+
+"UserNotificationCenter.TapToUnlock" = "Toque para desbloquear";
+
+"UserNotificationCenter.NewKey" = "Nueva llave";
