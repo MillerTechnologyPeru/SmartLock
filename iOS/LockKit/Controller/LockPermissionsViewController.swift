@@ -169,7 +169,7 @@ public final class LockPermissionsViewController: UITableViewController {
         
         switch section {
         case .keys: return nil
-        case .pending: return self[section].isEmpty ? nil : "Pending Keys"
+        case .pending: return self[section].isEmpty ? nil : R.string.localizable.lockPermissionsPendingKeys()
         }
     }
     
@@ -199,20 +199,20 @@ public final class LockPermissionsViewController: UITableViewController {
         
         let keyEntry = self[indexPath]
         
-        let delete = UITableViewRowAction(style: .destructive, title: "Delete") {
+        let delete = UITableViewRowAction(style: .destructive, title: R.string.localizable.lockPermissionsDelete()) {
             
             assert($1 == indexPath)
             
-            let alert = UIAlertController(title: NSLocalizedString("Confirmation", comment: "DeletionConfirmation"),
-                                          message: "Are you sure you want to delete this key?",
+            let alert = UIAlertController(title: R.string.localizable.lockPermissionsAlertTitle(),
+                                          message: R.string.localizable.lockPermissionsAlertMessage(),
                                           preferredStyle: UIAlertController.Style.alert)
             
-            alert.addAction(UIAlertAction(title: NSLocalizedString("Cancel", comment: "Cancel"), style: .cancel, handler: { (UIAlertAction) in
+            alert.addAction(UIAlertAction(title: R.string.localizable.lockPermissionsAlertCancel(), style: .cancel, handler: { (UIAlertAction) in
                 
                 alert.dismiss(animated: true, completion: nil)
             }))
             
-            alert.addAction(UIAlertAction(title: NSLocalizedString("Delete", comment: "Delete"), style: .destructive, handler: { (UIAlertAction) in
+            alert.addAction(UIAlertAction(title: R.string.localizable.lockPermissionsAlertDelete(), style: .destructive, handler: { (UIAlertAction) in
                 
                 alert.dismiss(animated: true) { }
                 

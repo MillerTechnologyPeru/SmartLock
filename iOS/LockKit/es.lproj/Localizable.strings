@@ -60,7 +60,7 @@
 
 // MARK: Alerts
 "DeleteLockActivity.Alert.title" = "Confirmación";
-"DeleteLockActivity.Alert.Message" = "Esta seguro de querer eliminar esta Llave?";
+"DeleteLockActivity.Alert.Message" = "¿Esta seguro de querer eliminar esta Llave?";
 "DeleteLockActivity.Alert.Cancel" = "Cancelar";
 "DeleteLockActivity.Alert.Delete" = "Eliminar";
 
@@ -70,13 +70,13 @@
 "RenameActivity.Alert.Cancel" = "Cancelar";
 
 "HomeKitEnableActivity.Alert.title" = "Modo Hogar";
-"HomeKitEnableActivity.Alert.Message" = "Activar Modo Hogar en este dispositivo?";
+"HomeKitEnableActivity.Alert.Message" = "¿Activar Modo Hogar en este dispositivo?";
 "HomeKitEnableActivity.Alert.Cancel" = "Cancelar";
 "HomeKitEnableActivity.Alert.Yes" = "Si";
 "HomeKitEnableActivity.Alert.No" = "No";
 
 "UpdateActivity.Alert.title" = "Actualizar Lock";
-"UpdateActivity.Alert.Message" = "Esta seguro de querer actualizar el software del Lock?";
+"UpdateActivity.Alert.Message" = "¿Esta seguro de querer actualizar el software del Lock?";
 "UpdateActivity.Alert.Cancel" = "Cancelar";
 "UpdateActivity.Alert.Update" = "Actualizar";
 
@@ -147,3 +147,16 @@
 "NewKeyViewController.NewKey.Message" = "Ingresé un nombre facil de usar para esta Llave.";
 "NewKeyViewController.NewKey.Ok" = "OK";
 "NewKeyViewController.NewKey.Cancel" = "Cancelar";
+
+// MARK: - LockPermissionsViewController
+
+"LockPermissions.PendingKeys" = "Llaves Pendientes";
+
+"LockPermissions.Delete" = "Eliminar";
+
+// MARK: Alert
+
+"LockPermissions.Alert.Title" = "Confirmación";
+"LockPermissions.Alert.Message" = "¿Esta seguro de querer eliminar esta Llave?";
+"LockPermissions.Alert.Cancel" = "Cancel";
+"LockPermissions.Alert.Delete" = "Delete";
