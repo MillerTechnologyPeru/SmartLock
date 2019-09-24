@@ -128,3 +128,18 @@
 "ContextMenu.ShareKey" = "Share Key";
 
 "ContextMenu.Manage" = "Manage";
+
+// MARK: - NewKeyViewController
+
+"NewKeyViewController.Error.RequestNewKey" = "The key for the specified lock has been deleted from the database.";
+
+"NewKeyViewController.Error.LockInRange" = "Lock is not in range.";
+
+"NewKeyViewController.Error.CreateNewKey" = "Could not create new key. %@";
+
+// MARK: Alert
+
+"NewKeyViewController.NewKey.Title" = "New Key";
+"NewKeyViewController.NewKey.Message" = "Type a user friendly name for the new key.";
+"NewKeyViewController.NewKey.Ok" = "OK";
+"NewKeyViewController.NewKey.Cancel" = "Cancel";
