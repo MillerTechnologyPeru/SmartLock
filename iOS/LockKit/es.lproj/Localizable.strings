@@ -160,3 +160,14 @@
 "LockPermissions.Alert.Message" = "¿Esta seguro de querer eliminar esta Llave?";
 "LockPermissions.Alert.Cancel" = "Cancel";
 "LockPermissions.Alert.Delete" = "Delete";
+
+
+// MARK: - NewKeySelectPermissionViewController
+
+"NewKeySelectPermission.Admin" = "Llaves de Administrador, tienen acceso ilimitado y pueden crear nuevas llaves.";
+
+"NewKeySelectPermission.anytime" = "Llaves de Cualquier Momento, tienen acceso ilimitado y no pueden crear nuevas llaves.";
+
+"NewKeySelectPermission.scheduled" = "Llaves Programables, tienen acceso limitado durante horas establecidas. No pueden crear nuevas llaves.";
+
+"NewKeySelectPermission.owner" = "Llave Maestra, solo puedes crearse al momento de instalación.";
