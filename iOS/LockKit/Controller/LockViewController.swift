@@ -18,6 +18,10 @@ public final class LockViewController: UITableViewController {
     // MARK: - IB Outlets
     
     @IBOutlet private(set) weak var unlockButton: UIButton!
+    @IBOutlet private(set) weak var lockIdentifierTitle: UILabel!
+    @IBOutlet private(set) weak var keyIdentifierTitle: UILabel!
+    @IBOutlet private(set) weak var permissionTitle: UILabel!
+    @IBOutlet private(set) weak var versionTitle: UILabel!
     @IBOutlet private(set) weak var lockIdentifierLabel: UILabel!
     @IBOutlet private(set) weak var keyIdentifierLabel: UILabel!
     @IBOutlet private(set) weak var permissionLabel: UILabel!
@@ -204,6 +208,11 @@ public final class LockViewController: UITableViewController {
         case let .scheduled(schedule):
             self.unlockButton.isEnabled = schedule.isValid()
         }
+        
+        self.lockIdentifierTitle.text = R.string.localizable.lockIdentifierTitle()
+        self.keyIdentifierTitle.text = R.string.localizable.keyIdentifierTitle()
+        self.versionTitle.text = R.string.localizable.versionTitle()
+        self.permissionTitle.text = R.string.localizable.permissionTitle()
         
         self.lockIdentifierLabel.text = lockIdentifier!.uuidString
         self.keyIdentifierLabel.text = lockCache.key.identifier.uuidString

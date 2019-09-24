@@ -1,0 +1,12 @@
+
+/* Class = "UILabel"; text = "Interval:"; ObjectID = "8o8-SV-Is2"; */
+"8o8-SV-Is2.text" = "Intervalo:";
+
+/* Class = "UILabel"; text = "Weekdays:"; ObjectID = "G7E-7M-Pbf"; */
+"G7E-7M-Pbf.text" = "Días de semana:";
+
+/* Class = "UINavigationItem"; title = "New Key"; ObjectID = "Ri5-Ey-W9m"; */
+"Ri5-Ey-W9m.title" = "Nueva Llave";
+
+/* Class = "UILabel"; text = "Expiration:"; ObjectID = "seD-fw-Aow"; */
+"seD-fw-Aow.text" = "Vencimiento:";

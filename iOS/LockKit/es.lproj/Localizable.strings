@@ -1,0 +1,15 @@
+/* 
+  Localizable.strings
+  SmartLock
+
+  Created by JurjDev on 9/24/19.
+  Copyright © 2019 ColemanCDA. All rights reserved.
+*/
+
+"LockIdentifier.Title" = "Lock";
+
+"KeyIdentifier.Title" = "Llave";
+
+"Permission.Title" = "Permiso";
+
+"VersionTitle" = "Version";

@@ -1,0 +1,12 @@
+
+/* Class = "UILabel"; text = "Version"; ObjectID = "T1u-Cu-wVq"; */
+"T1u-Cu-wVq.text" = "Version";
+
+/* Class = "UILabel"; text = "Lock"; ObjectID = "c8I-JD-KiX"; */
+"c8I-JD-KiX.text" = "Lock";
+
+/* Class = "UILabel"; text = "Key"; ObjectID = "htN-i0-X3c"; */
+"htN-i0-X3c.text" = "Llave";
+
+/* Class = "UILabel"; text = "Permission"; ObjectID = "yo7-3G-JxV"; */
+"yo7-3G-JxV.text" = "Permiso";
