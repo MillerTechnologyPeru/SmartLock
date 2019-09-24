@@ -16,6 +16,10 @@
 
 "Version.Title" = "Version";
 
+"LockViewController.Error.NoLockNerby" = "Lock no se encuentra cerca.";
+
+"LockViewController.Error.NoKey" = "No llave para lock %@";
+
 // MARK: - Activity
 
 // LockActivityItem

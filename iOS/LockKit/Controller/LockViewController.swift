@@ -175,7 +175,7 @@ public final class LockViewController: UITableViewController {
             
             do {
                 guard let peripheral = try Store.shared.device(for: lockIdentifier, scanDuration: 1.0) else {
-                    mainQueue { controller.showErrorAlert("Lock not nearby.") }
+                    mainQueue { controller.showErrorAlert(R.string.localizable.lockViewControllerErrorNoLockNerby()) }
                     return
                 }
                 try Store.shared.unlock(peripheral)
@@ -233,7 +233,7 @@ public extension UIViewController {
     func view(lock identifier: UUID) -> Bool {
         
         guard Store.shared[lock: identifier] != nil else {
-            self.showErrorAlert("No key for lock \(identifier).")
+            self.showErrorAlert(R.string.localizable.lockViewControllerErrorNoKey(identifier.rawValue))
             return false
         }
         
