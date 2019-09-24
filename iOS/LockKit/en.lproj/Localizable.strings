@@ -95,6 +95,14 @@
 
 // MARK: - ActivityIndicatorViewController
 
+// Unlock
+
 "Unlock.LockNotFound" = "Could not find lock";
 
 "Unlock.UnableToUnlock" = "Unable to unlock";
+
+// Setup
+
+"Setup.InvalidQRCode" = "Invalid QR code";
+
+"Setup.CouldNotLock" = "Could not find lock";

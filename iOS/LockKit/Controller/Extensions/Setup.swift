@@ -40,7 +40,7 @@ public extension ActivityIndicatorViewController where Self: UIViewController {
                 guard let url = URL(string: result.value),
                     let lockURL = LockURL(rawValue: url),
                     case let .setup(_, sharedSecret) = lockURL else {
-                        self.showErrorAlert("Invalid QR code")
+                        self.showErrorAlert(R.string.localizable.setupInvalidQRCode())
                         return
                 }
                 
@@ -67,7 +67,7 @@ public extension ActivityIndicatorViewController where Self: UIViewController {
             return true
         }, completion: { (viewController, foundDevice) in
             if foundDevice == false {
-                viewController.showErrorAlert("Could not lock")
+                viewController.showErrorAlert(R.string.localizable.setupCouldNotLock())
             }
         })
     }
