@@ -75,3 +75,14 @@
 "UpdateActivity.Alert.Message" = "Are you sure you want to update the lock's software?";
 "UpdateActivity.Alert.Cancel" = "Cancel";
 "UpdateActivity.Alert.Update" = "Update";
+
+// MARK: - NSUserActivity
+
+"UserActivity.NearbyLocks.Title" = "Nearby Locks";
+"UserActivity.NearbyLocks.Description" = "Show nearby locks.";
+
+"UserActivity.Keys.Title" = "Keys";
+"UserActivity.Keys.Description" = "Display stored keys.";
+
+"UserActivity.Events.Title" = "Events";
+"UserActivity.Events.Description" = "Display lock history.";
