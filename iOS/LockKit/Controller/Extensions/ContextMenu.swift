@@ -14,12 +14,12 @@ public extension UIViewController {
     
     func menu(forLock lock: UUID) -> UIMenu {
         
-        let rename = UIAction(title: "Rename", image: UIImage(systemName: "square.and.pencil")) { [weak self] (action) in
+        let rename = UIAction(title: R.string.localizable.contextMenuRename(), image: UIImage(systemName: "square.and.pencil")) { [weak self] (action) in
             let alert = RenameActivity.viewController(for: lock) { _ in }
             self?.present(alert, animated: true, completion: nil)
         }
         
-        let delete = UIAction(title: "Delete", image: UIImage(systemName: "trash"), attributes: .destructive) { [weak self] (action) in
+        let delete = UIAction(title: R.string.localizable.contextMenuDelete(), image: UIImage(systemName: "trash"), attributes: .destructive) { [weak self] (action) in
             let alert = DeleteLockActivity.viewController(for: lock) { _ in }
             self?.present(alert, animated: true, completion: nil)
         }
@@ -29,7 +29,7 @@ public extension UIViewController {
         if let cache = Store.shared[lock: lock],
             cache.key.permission.isAdministrator {
             
-            let share = UIAction(title: "Share Key", image: UIImage(systemName: "square.and.arrow.up")) { [weak self] (action) in
+            let share = UIAction(title: R.string.localizable.contextMenuShareKey(), image: UIImage(systemName: "square.and.arrow.up")) { [weak self] (action) in
                 let viewController = NewKeySelectPermissionViewController.fromStoryboard(with: lock)
                 viewController.completion = {
                     guard let (invitation, sender) = $0 else {
@@ -44,7 +44,7 @@ public extension UIViewController {
             
             actions.append(share)
             
-            let manageKeys = UIAction(title: "Manage", image: UIImage(systemName: "list.bullet")) { [weak self] (action) in
+            let manageKeys = UIAction(title: R.string.localizable.contextMenuManage(), image: UIImage(systemName: "list.bullet")) { [weak self] (action) in
                 let viewController = LockPermissionsViewController.fromStoryboard(
                     with: lock,
                     completion: { self?.dismiss(animated: true, completion: nil) }

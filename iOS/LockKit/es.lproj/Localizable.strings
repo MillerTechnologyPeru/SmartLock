@@ -118,3 +118,13 @@
 // Alert Action
 
 "AlertAction.Cancel" = "Cancelar";
+
+// Context Menu
+
+"ContextMenu.Rename" = "Renombrar";
+
+"ContextMenu.Delete" = "Eliminar";
+
+"ContextMenu.ShareKey" = "Compartir Llave";
+
+"ContextMenu.Manage" = "Administrar";
