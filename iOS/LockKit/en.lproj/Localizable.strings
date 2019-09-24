@@ -170,3 +170,7 @@
 "NewKeySelectPermission.scheduled" = "Scheduled keys have limited access during specified hours, and expire at a certain date. New keys cannot be created from this key";
 
 "NewKeySelectPermission.owner" = "Owner keys are created at setup.";
+
+// MARK: - NewKeyRecieveViewController
+
+"NewKeyRecieve.Error" = "You already have a key for lock %@.";

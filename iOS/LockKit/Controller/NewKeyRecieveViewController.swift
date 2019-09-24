@@ -154,7 +154,7 @@ public extension UIViewController {
         
         // only one key per lock
         guard Store.shared[lock: newKey.lock] == nil else {
-            self.showErrorAlert("You already have a key for lock \(newKey.lock).")
+            self.showErrorAlert(R.string.localizable.newKeyRecieveError(newKey.lock.rawValue))
             return false
         }
         

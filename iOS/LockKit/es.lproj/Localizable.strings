@@ -171,3 +171,7 @@
 "NewKeySelectPermission.scheduled" = "Llaves Programables, tienen acceso limitado durante horas establecidas. No pueden crear nuevas llaves.";
 
 "NewKeySelectPermission.owner" = "Llave Maestra, solo puedes crearse al momento de instalación.";
+
+// MARK: - NewKeyRecieveViewController
+
+"NewKeyRecieve.Error" = "Usted ya cuenta con una llave para el lock %@.";
