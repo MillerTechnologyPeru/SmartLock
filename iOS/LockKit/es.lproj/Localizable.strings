@@ -92,3 +92,9 @@
 "UserNotificationCenter.TapToUnlock" = "Toque para desbloquear";
 
 "UserNotificationCenter.NewKey" = "Nueva llave";
+
+// MARK: - ActivityIndicatorViewController
+
+"Unlock.LockNotFound" = "No pudo encontrar el lock";
+
+"Unlock.UnableToUnlock" = "Incapaz de abrir";

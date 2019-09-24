@@ -93,3 +93,8 @@
 
 "UserNotificationCenter.NewKey" = "New key";
 
+// MARK: - ActivityIndicatorViewController
+
+"Unlock.LockNotFound" = "Could not find lock";
+
+"Unlock.UnableToUnlock" = "Unable to unlock";
