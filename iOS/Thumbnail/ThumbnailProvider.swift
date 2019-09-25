@@ -15,7 +15,7 @@ import LockKit
 final class ThumbnailProvider: QLThumbnailProvider {
     
     static let initialize: Void = {
-        Log.shared = .thumbnailProvider
+        Log.shared = .thumbnail
         log("🖼 Loading \(ThumbnailProvider.self)")
     }()
     
@@ -91,7 +91,7 @@ final class ThumbnailProvider: QLThumbnailProvider {
 
 extension Log {
     
-    static var thumbnailProvider: Log {
+    static var thumbnail: Log {
         struct Cache {
             static let log: Log = {
                 do { return try Log.Store.lockAppGroup.create(date: Date(), bundle: .init(for: ThumbnailProvider.self)) }

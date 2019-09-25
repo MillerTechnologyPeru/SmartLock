@@ -127,12 +127,21 @@ public extension Log {
         
         public let folder: URL
         
-        public private(set) var items = [Item]()
+        public private(set) var items: [Item] {
+            get {
+                if cachedItems.isEmpty {
+                    try! self.load()
+                }
+                return cachedItems
+            }
+            set { cachedItems = newValue }
+        }
+        
+        private var cachedItems = [Item]()
         
         internal init(folder: URL) {
             
             self.folder = folder
-            try! self.load()
         }
         
         internal convenience init?(appGroup: AppGroup, subfolder: String? = nil) {
@@ -186,7 +195,7 @@ public extension Log {
                 .lazy
                 .map { $0.url }
             
-            self.items = sorted
+            self.cachedItems = sorted
                 .compactMap { Item(url: $0) }
         }
         

@@ -13,6 +13,7 @@ import GATT
 import CoreLock
 import JGProgressHUD
 
+/// Receive New Key View Controller
 public final class NewKeyRecieveViewController: UITableViewController {
     
     // MARK: - IB Outlets

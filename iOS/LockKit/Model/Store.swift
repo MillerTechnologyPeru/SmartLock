@@ -280,7 +280,9 @@ public final class Store {
     }
     
     private func updateSpotlight() {
-        spotlight.update(locks: locks.value)
+        
+        guard SpotlightController.isSupported else { return }
+        spotlight.reindexAll(locks: locks.value)
     }
     
     private func updateCloud() {
