@@ -188,6 +188,13 @@
 		6EB4B2DA232B5E260077ADD3 /* CloudUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EB4B2D9232B5E260077ADD3 /* CloudUser.swift */; };
 		6EB59D612313184A00D5EFA7 /* iCloud.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EB59D602313184A00D5EFA7 /* iCloud.swift */; };
 		6EC0412E230A226400357585 /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EC0412D230A226300357585 /* TabBarController.swift */; };
+		6ECD3599233B12AF00E49357 /* QuickLook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6ECD3598233B12AF00E49357 /* QuickLook.framework */; };
+		6ECD359C233B12AF00E49357 /* PreviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6ECD359B233B12AF00E49357 /* PreviewViewController.swift */; };
+		6ECD359F233B12AF00E49357 /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6ECD359D233B12AF00E49357 /* MainInterface.storyboard */; };
+		6ECD35A3233B12AF00E49357 /* QuickLook.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 6ECD3597233B12AF00E49357 /* QuickLook.appex */; platformFilter = ios; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		6ECD35B3233B1E5E00E49357 /* QuickLookThumbnailing.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6ECD35B2233B1E5E00E49357 /* QuickLookThumbnailing.framework */; };
+		6ECD35B6233B1E5E00E49357 /* ThumbnailProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6ECD35B5233B1E5E00E49357 /* ThumbnailProvider.swift */; };
+		6ECD35BA233B1E5E00E49357 /* Thumbnail.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 6ECD35B1233B1E5E00E49357 /* Thumbnail.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		6ECD39A52336D369003E4AB4 /* ActivityIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6ECD39A42336D369003E4AB4 /* ActivityIndicator.swift */; };
 		6ECD6AEA23320D2C0007E7DA /* ContextMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6ECD6AE923320D2C0007E7DA /* ContextMenu.swift */; };
 		6ED81F972316292900B69520 /* BackgroundTasks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6ED81F962316292900B69520 /* BackgroundTasks.swift */; };
@@ -403,6 +410,27 @@
 			remoteGlobalIDString = 6ED82085231676AE00B69520;
 			remoteInfo = "LockKit watchOS";
 		};
+		6ECD35A1233B12AF00E49357 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6E6000082121119400787DAA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 6ECD3596233B12AF00E49357;
+			remoteInfo = QuickLook;
+		};
+		6ECD35AB233B130700E49357 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6E6000082121119400787DAA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 6E994A83230DFB6C0076DC1B;
+			remoteInfo = LockKit;
+		};
+		6ECD35B8233B1E5E00E49357 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6E6000082121119400787DAA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 6ECD35B0233B1E5E00E49357;
+			remoteInfo = Thumbnail;
+		};
 		6ED820952316774E00B69520 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 6E60004D2121164B00787DAA /* CoreLock.xcodeproj */;
@@ -451,9 +479,11 @@
 			dstSubfolderSpec = 13;
 			files = (
 				6E994B34230EF6DB0076DC1B /* Today.appex in Embed App Extensions */,
+				6ECD35A3233B12AF00E49357 /* QuickLook.appex in Embed App Extensions */,
 				6E994B17230E89490076DC1B /* Message.appex in Embed App Extensions */,
 				6E994AEF230E56DD0076DC1B /* Intent.appex in Embed App Extensions */,
 				6E994AEC230E56DD0076DC1B /* IntentUI.appex in Embed App Extensions */,
+				6ECD35BA233B1E5E00E49357 /* Thumbnail.appex in Embed App Extensions */,
 			);
 			name = "Embed App Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -669,6 +699,15 @@
 		6EC0412F230A494E00357585 /* UserActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserActivity.swift; sourceTree = "<group>"; };
 		6EC04137230B15AD00357585 /* Unlock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Unlock.swift; sourceTree = "<group>"; };
 		6EC04139230B162F00357585 /* Setup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Setup.swift; sourceTree = "<group>"; };
+		6ECD3597233B12AF00E49357 /* QuickLook.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = QuickLook.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		6ECD3598233B12AF00E49357 /* QuickLook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuickLook.framework; path = System/Library/Frameworks/QuickLook.framework; sourceTree = SDKROOT; };
+		6ECD359B233B12AF00E49357 /* PreviewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewViewController.swift; sourceTree = "<group>"; };
+		6ECD359E233B12AF00E49357 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MainInterface.storyboard; sourceTree = "<group>"; };
+		6ECD35A0233B12AF00E49357 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		6ECD35B1233B1E5E00E49357 /* Thumbnail.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = Thumbnail.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		6ECD35B2233B1E5E00E49357 /* QuickLookThumbnailing.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuickLookThumbnailing.framework; path = System/Library/Frameworks/QuickLookThumbnailing.framework; sourceTree = SDKROOT; };
+		6ECD35B5233B1E5E00E49357 /* ThumbnailProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThumbnailProvider.swift; sourceTree = "<group>"; };
+		6ECD35B7233B1E5E00E49357 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6ECD39A42336D369003E4AB4 /* ActivityIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityIndicator.swift; sourceTree = "<group>"; };
 		6ECD6AE923320D2C0007E7DA /* ContextMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContextMenu.swift; sourceTree = "<group>"; };
 		6ED81F962316292900B69520 /* BackgroundTasks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackgroundTasks.swift; sourceTree = "<group>"; };
@@ -789,6 +828,22 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		6ECD3594233B12AF00E49357 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6ECD3599233B12AF00E49357 /* QuickLook.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6ECD35AE233B1E5E00E49357 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6ECD35B3233B1E5E00E49357 /* QuickLookThumbnailing.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		6ED820692316711900B69520 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -884,6 +939,8 @@
 				6ED8206D2316711900B69520 /* WatchIntent */,
 				6ED82087231676AE00B69520 /* LockKit watchOS */,
 				6E15AD7D2318C9060004D1AE /* Today macOS */,
+				6ECD359A233B12AF00E49357 /* QuickLook */,
+				6ECD35B4233B1E5E00E49357 /* Thumbnail */,
 				6E994AE0230E56DD0076DC1B /* Frameworks */,
 				6E6000112121119400787DAA /* Products */,
 			);
@@ -905,6 +962,8 @@
 				6EA570C423189871008027D4 /* Watch.app */,
 				6EA570D023189874008027D4 /* Watch Extension.appex */,
 				6E15AD7B2318C9060004D1AE /* Today.appex */,
+				6ECD3597233B12AF00E49357 /* QuickLook.appex */,
+				6ECD35B1233B1E5E00E49357 /* Thumbnail.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1115,6 +1174,8 @@
 				6E994AE1230E56DD0076DC1B /* IntentsUI.framework */,
 				6E994B0A230E89440076DC1B /* Messages.framework */,
 				6E994B29230EF6DA0076DC1B /* NotificationCenter.framework */,
+				6ECD3598233B12AF00E49357 /* QuickLook.framework */,
+				6ECD35B2233B1E5E00E49357 /* QuickLookThumbnailing.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -1166,6 +1227,25 @@
 				6E9C96092311B176007C18FE /* ProgressHUD.swift */,
 			);
 			path = View;
+			sourceTree = "<group>";
+		};
+		6ECD359A233B12AF00E49357 /* QuickLook */ = {
+			isa = PBXGroup;
+			children = (
+				6ECD359B233B12AF00E49357 /* PreviewViewController.swift */,
+				6ECD359D233B12AF00E49357 /* MainInterface.storyboard */,
+				6ECD35A0233B12AF00E49357 /* Info.plist */,
+			);
+			path = QuickLook;
+			sourceTree = "<group>";
+		};
+		6ECD35B4233B1E5E00E49357 /* Thumbnail */ = {
+			isa = PBXGroup;
+			children = (
+				6ECD35B5233B1E5E00E49357 /* ThumbnailProvider.swift */,
+				6ECD35B7233B1E5E00E49357 /* Info.plist */,
+			);
+			path = Thumbnail;
 			sourceTree = "<group>";
 		};
 		6ED81FAF2316617E00B69520 /* Watch */ = {
@@ -1303,6 +1383,8 @@
 				6E994AEE230E56DD0076DC1B /* PBXTargetDependency */,
 				6E994B16230E89490076DC1B /* PBXTargetDependency */,
 				6EA570E223189877008027D4 /* PBXTargetDependency */,
+				6ECD35A2233B12AF00E49357 /* PBXTargetDependency */,
+				6ECD35B9233B1E5E00E49357 /* PBXTargetDependency */,
 			);
 			name = SmartLock;
 			packageProductDependencies = (
@@ -1494,6 +1576,41 @@
 			productReference = 6EA570D023189874008027D4 /* Watch Extension.appex */;
 			productType = "com.apple.product-type.watchkit2-extension";
 		};
+		6ECD3596233B12AF00E49357 /* QuickLook */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 6ECD35AA233B12AF00E49357 /* Build configuration list for PBXNativeTarget "QuickLook" */;
+			buildPhases = (
+				6ECD3593233B12AF00E49357 /* Sources */,
+				6ECD3594233B12AF00E49357 /* Frameworks */,
+				6ECD3595233B12AF00E49357 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				6ECD35AC233B130700E49357 /* PBXTargetDependency */,
+			);
+			name = QuickLook;
+			productName = QuickLook;
+			productReference = 6ECD3597233B12AF00E49357 /* QuickLook.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+		6ECD35B0233B1E5E00E49357 /* Thumbnail */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 6ECD35BB233B1E5E00E49357 /* Build configuration list for PBXNativeTarget "Thumbnail" */;
+			buildPhases = (
+				6ECD35AD233B1E5E00E49357 /* Sources */,
+				6ECD35AE233B1E5E00E49357 /* Frameworks */,
+				6ECD35AF233B1E5E00E49357 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Thumbnail;
+			productName = Thumbnail;
+			productReference = 6ECD35B1233B1E5E00E49357 /* Thumbnail.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 		6ED8206B2316711900B69520 /* WatchIntent */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 6ED820742316711900B69520 /* Build configuration list for PBXNativeTarget "WatchIntent" */;
@@ -1629,6 +1746,12 @@
 					6EA570CF23189874008027D4 = {
 						CreatedOnToolsVersion = 11.0;
 					};
+					6ECD3596233B12AF00E49357 = {
+						CreatedOnToolsVersion = 11.0;
+					};
+					6ECD35B0233B1E5E00E49357 = {
+						CreatedOnToolsVersion = 11.0;
+					};
 					6ED8206B2316711900B69520 = {
 						CreatedOnToolsVersion = 11.0;
 					};
@@ -1679,6 +1802,8 @@
 				6E994B08230E89440076DC1B /* Message */,
 				6E994B27230EF6DA0076DC1B /* Today */,
 				6E15AD7A2318C9060004D1AE /* Today macOS */,
+				6ECD3596233B12AF00E49357 /* QuickLook */,
+				6ECD35B0233B1E5E00E49357 /* Thumbnail */,
 				6EA570C323189871008027D4 /* Watch */,
 				6EA570CF23189874008027D4 /* Watch Extension */,
 				6ED8206B2316711900B69520 /* WatchIntent */,
@@ -1838,6 +1963,21 @@
 			files = (
 				6EE05B87233325820014CEE4 /* WatchAssets.xcassets in Resources */,
 				6E9740422318C14800634631 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6ECD3595233B12AF00E49357 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6ECD359F233B12AF00E49357 /* MainInterface.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6ECD35AF233B1E5E00E49357 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2244,6 +2384,22 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		6ECD3593233B12AF00E49357 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6ECD359C233B12AF00E49357 /* PreviewViewController.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6ECD35AD233B1E5E00E49357 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6ECD35B6233B1E5E00E49357 /* ThumbnailProvider.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		6ED820682316711900B69520 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -2401,6 +2557,22 @@
 			target = 6ED82085231676AE00B69520 /* LockKit watchOS */;
 			targetProxy = 6EA570F023189CE9008027D4 /* PBXContainerItemProxy */;
 		};
+		6ECD35A2233B12AF00E49357 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			platformFilter = ios;
+			target = 6ECD3596233B12AF00E49357 /* QuickLook */;
+			targetProxy = 6ECD35A1233B12AF00E49357 /* PBXContainerItemProxy */;
+		};
+		6ECD35AC233B130700E49357 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 6E994A83230DFB6C0076DC1B /* LockKit */;
+			targetProxy = 6ECD35AB233B130700E49357 /* PBXContainerItemProxy */;
+		};
+		6ECD35B9233B1E5E00E49357 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 6ECD35B0233B1E5E00E49357 /* Thumbnail */;
+			targetProxy = 6ECD35B8233B1E5E00E49357 /* PBXContainerItemProxy */;
+		};
 		6ED820962316774E00B69520 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = "CoreLock-watchOS";
@@ -2544,6 +2716,14 @@
 			isa = PBXVariantGroup;
 			children = (
 				6E994B2F230EF6DB0076DC1B /* Base */,
+			);
+			name = MainInterface.storyboard;
+			sourceTree = "<group>";
+		};
+		6ECD359D233B12AF00E49357 /* MainInterface.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				6ECD359E233B12AF00E49357 /* Base */,
 			);
 			name = MainInterface.storyboard;
 			sourceTree = "<group>";
@@ -3221,6 +3401,102 @@
 			};
 			name = Release;
 		};
+		6ECD35A4233B12AF00E49357 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 4W79SG34MW;
+				INFOPLIST_FILE = QuickLook/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.colemancda.Lock.QuickLook;
+				PRODUCT_MODULE_NAME = "Lock$(PRODUCT_NAME:c99extidentifier)";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		6ECD35A5233B12AF00E49357 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 4W79SG34MW;
+				INFOPLIST_FILE = QuickLook/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.colemancda.Lock.QuickLook;
+				PRODUCT_MODULE_NAME = "Lock$(PRODUCT_NAME:c99extidentifier)";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		6ECD35BC233B1E5E00E49357 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 4W79SG34MW;
+				INFOPLIST_FILE = Thumbnail/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.colemancda.Lock.Thumbnail;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		6ECD35BD233B1E5E00E49357 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 4W79SG34MW;
+				INFOPLIST_FILE = Thumbnail/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.colemancda.Lock.Thumbnail;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
 		6ED820752316711900B69520 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -3436,6 +3712,24 @@
 			buildConfigurations = (
 				6EA570E923189877008027D4 /* Debug */,
 				6EA570EA23189877008027D4 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		6ECD35AA233B12AF00E49357 /* Build configuration list for PBXNativeTarget "QuickLook" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6ECD35A4233B12AF00E49357 /* Debug */,
+				6ECD35A5233B12AF00E49357 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		6ECD35BB233B1E5E00E49357 /* Build configuration list for PBXNativeTarget "Thumbnail" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6ECD35BC233B1E5E00E49357 /* Debug */,
+				6ECD35BD233B1E5E00E49357 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
