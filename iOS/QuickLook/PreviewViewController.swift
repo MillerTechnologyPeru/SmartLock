@@ -14,11 +14,13 @@ import LockKit
 
 final class PreviewViewController: UIViewController, QLPreviewingController {
     
+    // MARK: - Loading
+    
     private static let initialize: Void = {
         Log.shared = .quickLook
         log("👁‍🗨 Loading \(PreviewViewController.self)")
     }()
-        
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -27,11 +29,22 @@ final class PreviewViewController: UIViewController, QLPreviewingController {
         
     }
     
+    // MARK: - QLPreviewingController
+    
     func preparePreviewOfSearchableItem(identifier: String, queryString: String?, completionHandler handler: @escaping (Error?) -> Void) {
         // Perform any setup necessary in order to prepare the view.
         log("👁‍🗨 Prepare preview for searchable item \(identifier) \(queryString ?? "")")
         
-        //FileManager.Lock.shared.applicationData
+        guard let viewData = AppActivity.ViewData(rawValue: identifier) else {
+            log("⚠️ Invalid activity identifier: \(identifier)")
+            handler(CocoaError(.validationStringPatternMatching))
+            return
+        }
+        
+        switch viewData {
+        case let .lock(lock):
+            loadLock(lock)
+        }
         
         handler(nil)
     }
@@ -69,11 +82,23 @@ final class PreviewViewController: UIViewController, QLPreviewingController {
     }
 }
 
+// MARK: - Methods
+
 private extension PreviewViewController {
     
     func loadNewKey(_ invitation: NewKey.Invitation) {
         
         let viewController = NewKeyRecieveViewController.fromStoryboard(with: invitation)
+        loadChildViewController(viewController)
+    }
+    
+    func loadLock(_ identifier: UUID) {
+        
+        let viewController = LockViewController.fromStoryboard(with: identifier)
+        loadChildViewController(viewController)
+    }
+    
+    func loadChildViewController(_ viewController: UIViewController) {
         
         viewController.loadViewIfNeeded()
         viewController.view.layoutIfNeeded()
@@ -81,17 +106,17 @@ private extension PreviewViewController {
         view.addSubview(viewController.view)
         viewController.didMove(toParent: self)
         
-        guard let newKeyView = viewController.view else {
+        guard let childView = viewController.view else {
             assertionFailure()
             return
         }
         
-        newKeyView.translatesAutoresizingMaskIntoConstraints = false
+        childView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            newKeyView.leftAnchor.constraint(equalTo: view.leftAnchor),
-            newKeyView.rightAnchor.constraint(equalTo: view.rightAnchor),
-            newKeyView.topAnchor.constraint(equalTo: view.topAnchor),
-            newKeyView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+            childView.leftAnchor.constraint(equalTo: view.leftAnchor),
+            childView.rightAnchor.constraint(equalTo: view.rightAnchor),
+            childView.topAnchor.constraint(equalTo: view.topAnchor),
+            childView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
     }
 }
