@@ -193,7 +193,7 @@ extension NewKeyRecieveViewController: ProgressHUDViewController { }
 
 public extension UIViewController {
     
-    func open(newKey: NewKey.Invitation, completion: (() -> ())? = nil){
+    func open(newKey: NewKey.Invitation, completion: (() -> ())? = nil) {
         
         let newKeyViewController = NewKeyRecieveViewController.fromStoryboard(with: newKey)
         newKeyViewController.completion = completion
