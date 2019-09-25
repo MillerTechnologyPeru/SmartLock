@@ -22,7 +22,13 @@ public func log(_ text: String) {
         let dateString = Log.dateFormatter.string(from: date)
         
         do { try Log.shared.log(dateString + " " + text) }
-        catch { assertionFailure("Could not write log: \(error)"); return }
+        catch CocoaError.fileWriteNoPermission {
+            // unable to write due to permissions
+            if #available(iOS 13, *) {
+                assertionFailure("You don’t have permission to save the log file")
+            }
+        }
+        catch { assertionFailure("Could not write log: \(error)") }
     }
 }
 
