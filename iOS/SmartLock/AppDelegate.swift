@@ -368,7 +368,10 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func applicationSignificantTimeChange(_ application: UIApplication) {
         
+        log("\(bundle.symbol) Significant time change")
         
+        // refresh beacons
+        BeaconController.shared.scanBeacons()
     }
     
     func application(_ application: UIApplication, userDidAcceptCloudKitShareWith cloudKitShareMetadata: CKShare.Metadata) {

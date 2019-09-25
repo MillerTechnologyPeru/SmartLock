@@ -38,6 +38,8 @@
 		<dict>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
+			<key>CFBundleURLIconFile</key>
+			<string>eKeyDocument</string>
 			<key>CFBundleURLName</key>
 			<string>com.colemancda.Lock</string>
 			<key>CFBundleURLSchemes</key>
@@ -57,7 +59,7 @@
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>LSSupportsOpeningDocumentsInPlace</key>
-	<true/>
+	<false/>
 	<key>NSBluetoothAlwaysUsageDescription</key>
 	<string>Bluetooth is used to scan for nearby locks in the background.</string>
 	<key>NSBluetoothPeripheralUsageDescription</key>
