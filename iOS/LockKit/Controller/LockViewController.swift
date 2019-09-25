@@ -233,7 +233,7 @@ public extension UIViewController {
     func view(lock identifier: UUID) -> Bool {
         
         guard Store.shared[lock: identifier] != nil else {
-            self.showErrorAlert(R.string.localizable.lockViewControllerErrorNoKey(identifier.rawValue))
+            self.showErrorAlert(R.string.localizable.lockViewControllerErrorNoKey(identifier.uuidString))
             return false
         }
         
