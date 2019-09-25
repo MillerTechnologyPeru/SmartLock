@@ -125,8 +125,9 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
                 
         // handle url
         if let url = launchOptions?[.url] as? URL {
-            guard open(url: url)
-                else { return false }
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) { [weak self] in
+                self?.open(url: url)
+            }
         }
         
         return true
@@ -239,10 +240,19 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     func application(_ application: UIApplication, handleOpen url: URL) -> Bool {
+        #if DEBUG
+        print(#function, "\n", url)
+        #endif
         return open(url: url)
     }
     
     func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
+        #if DEBUG
+        print(#function, "\n", url)
+        if options.isEmpty == false {
+            print((options as NSDictionary).description)
+        }
+        #endif
         return open(url: url)
     }
     
@@ -486,6 +496,7 @@ private extension AppDelegate {
 
 internal extension AppDelegate {
     
+    @discardableResult
     func open(url: URL) -> Bool {
         
         if url.isFileURL {
@@ -499,7 +510,10 @@ internal extension AppDelegate {
     }
     
     func open(file url: URL) -> Bool {
-                
+        
+        let scopedResource = url.startAccessingSecurityScopedResource()
+        defer { if scopedResource { url.stopAccessingSecurityScopedResource() } }
+        
         do {
             // parse eKey file
             let data = try Data(contentsOf: url)
