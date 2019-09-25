@@ -8,7 +8,7 @@
 
 // MARK: - LockViewController
 
-"LockIdentifier.Title" = "Lock";
+"LockIdentifier.Title" = "Cerradura";
 
 "KeyIdentifier.Title" = "Llave";
 
@@ -16,9 +16,9 @@
 
 "Version.Title" = "Version";
 
-"LockViewController.Error.NoLockNerby" = "Lock no se encuentra cerca.";
+"LockViewController.Error.NoLockNerby" = "Cerradura no se encuentra cerca.";
 
-"LockViewController.Error.NoKey" = "No llave para lock %@";
+"LockViewController.Error.NoKey" = "No llave para cerradura %@";
 
 // MARK: - Activity
 
@@ -75,15 +75,15 @@
 "HomeKitEnableActivity.Alert.Yes" = "Si";
 "HomeKitEnableActivity.Alert.No" = "No";
 
-"UpdateActivity.Alert.title" = "Actualizar Lock";
+"UpdateActivity.Alert.title" = "Actualizar Cerradura";
 "UpdateActivity.Alert.Message" = "¿Esta seguro de querer actualizar el software del Lock?";
 "UpdateActivity.Alert.Cancel" = "Cancelar";
 "UpdateActivity.Alert.Update" = "Actualizar";
 
 // MARK: - NSUserActivity
 
-"UserActivity.NearbyLocks.Title" = "Locks Cercanos";
-"UserActivity.NearbyLocks.Description" = "Mostrar Locks cercanos.";
+"UserActivity.NearbyLocks.Title" = "Cerraduras Cercanas";
+"UserActivity.NearbyLocks.Description" = "Mostrar Cerraduras cercanas.";
 
 "UserActivity.Keys.Title" = "Llaves";
 "UserActivity.Keys.Description" = "Mostrar llaves guardadas.";
@@ -101,7 +101,7 @@
 
 // Unlock
 
-"Unlock.LockNotFound" = "No pudo encontrar el lock";
+"Unlock.LockNotFound" = "No pudo encontrar la cerradura";
 
 "Unlock.UnableToUnlock" = "Incapaz de abrir";
 
@@ -109,7 +109,7 @@
 
 "Setup.InvalidQRCode" = "Codigo QR invalido";
 
-"Setup.CouldNotLock" = "No pudo encontrar el lock";
+"Setup.CouldNotLock" = "No pudo encontrar la cerradura";
 
 // Error Alert
 
@@ -135,9 +135,9 @@
 
 // MARK: - NewKeyViewController
 
-"NewKeyViewController.Error.RequestNewKey" = "La llave para el Lock solicitado, ha sido eliminada de la base de datos.";
+"NewKeyViewController.Error.RequestNewKey" = "La llave para la cerradura solicitada, ha sido eliminada de la base de datos.";
 
-"NewKeyViewController.Error.LockInRange" = "Lock no se encuentra en rango.";
+"NewKeyViewController.Error.LockInRange" = "La cerradura no se encuentra en rango.";
 
 "NewKeyViewController.Error.CreateNewKey" = "No se pudo crear una nueva llave. %@";
 
@@ -174,4 +174,4 @@
 
 // MARK: - NewKeyRecieveViewController
 
-"NewKeyRecieve.Error" = "Usted ya cuenta con una llave para el lock %@.";
+"NewKeyRecieve.Error" = "Usted ya cuenta con una llave para la cerradura %@.";
