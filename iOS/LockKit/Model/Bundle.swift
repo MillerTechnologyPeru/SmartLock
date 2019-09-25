@@ -32,6 +32,8 @@ public extension Bundle {
         case intentUI = "com.colemancda.Lock.IntentUI"
         case message = "com.colemancda.Lock.Message"
         case today = "com.colemancda.Lock.Today"
+        case quickLook = "com.colemancda.Lock.QuickLook"
+        case thumbnail = "com.colemancda.Lock.Thumbnail"
     }
 }
 
@@ -55,6 +57,10 @@ public extension Bundle.Lock {
             return "✉️"
         case .today:
             return "☀️"
+        case .quickLook:
+            return "👁‍🗨"
+        case .thumbnail:
+            return "🖼"
         }
     }
     
@@ -79,6 +85,10 @@ public extension Bundle.Lock {
             return "Message Extension"
         case .today:
             return "Today Extension"
+        case .quickLook:
+            return "QuickLook Extension"
+        case .thumbnail:
+            return "Thumbnail Extension"
         }
     }
 }

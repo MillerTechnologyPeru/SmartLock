@@ -15,7 +15,7 @@ public final class PermissionIconView: UIView {
     
     // MARK: - Properties
     
-    public var permission: PermissionType = .anytime {
+    public var permission: PermissionType = .admin {
         didSet { setNeedsDisplay() }
     }
     
