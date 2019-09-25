@@ -235,7 +235,7 @@ extension WatchController: WCSessionDelegate {
         session.sendMessage(responseMessage, replyHandler: { [weak self] (reply) in
             self?.log?("Reply: \(reply)")
         }, errorHandler: { [weak self] (error) in
-            self?.log?("Unable to respond: \(error.localizedDescription)")
+            self?.log?("⚠️ Unable to respond: \(error.localizedDescription)")
         })
     }
     

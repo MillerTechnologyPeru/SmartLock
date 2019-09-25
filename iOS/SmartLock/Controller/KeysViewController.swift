@@ -247,7 +247,7 @@ final class KeysViewController: UITableViewController {
         DispatchQueue.app.async {
             do { try FileManager.default.removeItem(at: url) }
             catch {
-                log("Unable to delete \(url.lastPathComponent). \(error)")
+                log("⚠️ Unable to delete \(url.lastPathComponent). \(error)")
                 assertionFailure("Unable to delete \(url)")
             }
             mainQueue { [weak self] in
