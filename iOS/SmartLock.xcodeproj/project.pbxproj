@@ -189,6 +189,8 @@
 		6EB4B2DA232B5E260077ADD3 /* CloudUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EB4B2D9232B5E260077ADD3 /* CloudUser.swift */; };
 		6EB59D612313184A00D5EFA7 /* iCloud.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EB59D602313184A00D5EFA7 /* iCloud.swift */; };
 		6EC0412E230A226400357585 /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EC0412D230A226300357585 /* TabBarController.swift */; };
+		6EC6DF6D233B679200E28455 /* IndexRequestHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EC6DF6C233B679200E28455 /* IndexRequestHandler.swift */; };
+		6EC6DF71233B679200E28455 /* Spotlight.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 6EC6DF6A233B679200E28455 /* Spotlight.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		6ECD3599233B12AF00E49357 /* QuickLook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6ECD3598233B12AF00E49357 /* QuickLook.framework */; };
 		6ECD359C233B12AF00E49357 /* PreviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6ECD359B233B12AF00E49357 /* PreviewViewController.swift */; };
 		6ECD359F233B12AF00E49357 /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6ECD359D233B12AF00E49357 /* MainInterface.storyboard */; };
@@ -410,6 +412,20 @@
 			remoteGlobalIDString = 6ED82085231676AE00B69520;
 			remoteInfo = "LockKit watchOS";
 		};
+		6EC6DF6F233B679200E28455 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6E6000082121119400787DAA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 6EC6DF69233B679200E28455;
+			remoteInfo = Spotlight;
+		};
+		6EC6DF79233B6B3300E28455 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6E6000082121119400787DAA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 6E994A83230DFB6C0076DC1B;
+			remoteInfo = LockKit;
+		};
 		6ECD35A1233B12AF00E49357 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 6E6000082121119400787DAA /* Project object */;
@@ -486,6 +502,7 @@
 			dstSubfolderSpec = 13;
 			files = (
 				6E994B34230EF6DB0076DC1B /* Today.appex in Embed App Extensions */,
+				6EC6DF71233B679200E28455 /* Spotlight.appex in Embed App Extensions */,
 				6ECD35A3233B12AF00E49357 /* QuickLook.appex in Embed App Extensions */,
 				6E994B17230E89490076DC1B /* Message.appex in Embed App Extensions */,
 				6E994AEF230E56DD0076DC1B /* Intent.appex in Embed App Extensions */,
@@ -706,6 +723,10 @@
 		6EC0412F230A494E00357585 /* UserActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserActivity.swift; sourceTree = "<group>"; };
 		6EC04137230B15AD00357585 /* Unlock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Unlock.swift; sourceTree = "<group>"; };
 		6EC04139230B162F00357585 /* Setup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Setup.swift; sourceTree = "<group>"; };
+		6EC6DF6A233B679200E28455 /* Spotlight.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = Spotlight.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		6EC6DF6C233B679200E28455 /* IndexRequestHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IndexRequestHandler.swift; sourceTree = "<group>"; };
+		6EC6DF6E233B679200E28455 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		6EC6DF7B233B742B00E28455 /* Spotlight.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Spotlight.entitlements; sourceTree = "<group>"; };
 		6ECD3597233B12AF00E49357 /* QuickLook.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = QuickLook.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		6ECD3598233B12AF00E49357 /* QuickLook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuickLook.framework; path = System/Library/Frameworks/QuickLook.framework; sourceTree = SDKROOT; };
 		6ECD359B233B12AF00E49357 /* PreviewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewViewController.swift; sourceTree = "<group>"; };
@@ -838,6 +859,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		6EC6DF67233B679200E28455 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		6ECD3594233B12AF00E49357 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -951,6 +979,7 @@
 				6E15AD7D2318C9060004D1AE /* Today macOS */,
 				6ECD359A233B12AF00E49357 /* QuickLook */,
 				6ECD35B4233B1E5E00E49357 /* Thumbnail */,
+				6EC6DF6B233B679200E28455 /* Spotlight */,
 				6E994AE0230E56DD0076DC1B /* Frameworks */,
 				6E6000112121119400787DAA /* Products */,
 			);
@@ -974,6 +1003,7 @@
 				6E15AD7B2318C9060004D1AE /* Today.appex */,
 				6ECD3597233B12AF00E49357 /* QuickLook.appex */,
 				6ECD35B1233B1E5E00E49357 /* Thumbnail.appex */,
+				6EC6DF6A233B679200E28455 /* Spotlight.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1239,6 +1269,16 @@
 			path = View;
 			sourceTree = "<group>";
 		};
+		6EC6DF6B233B679200E28455 /* Spotlight */ = {
+			isa = PBXGroup;
+			children = (
+				6EC6DF7B233B742B00E28455 /* Spotlight.entitlements */,
+				6EC6DF6C233B679200E28455 /* IndexRequestHandler.swift */,
+				6EC6DF6E233B679200E28455 /* Info.plist */,
+			);
+			path = Spotlight;
+			sourceTree = "<group>";
+		};
 		6ECD359A233B12AF00E49357 /* QuickLook */ = {
 			isa = PBXGroup;
 			children = (
@@ -1397,6 +1437,7 @@
 				6EA570E223189877008027D4 /* PBXTargetDependency */,
 				6ECD35A2233B12AF00E49357 /* PBXTargetDependency */,
 				6ECD35B9233B1E5E00E49357 /* PBXTargetDependency */,
+				6EC6DF70233B679200E28455 /* PBXTargetDependency */,
 			);
 			name = SmartLock;
 			packageProductDependencies = (
@@ -1588,6 +1629,25 @@
 			productReference = 6EA570D023189874008027D4 /* Watch Extension.appex */;
 			productType = "com.apple.product-type.watchkit2-extension";
 		};
+		6EC6DF69233B679200E28455 /* Spotlight */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 6EC6DF78233B679200E28455 /* Build configuration list for PBXNativeTarget "Spotlight" */;
+			buildPhases = (
+				6EC6DF66233B679200E28455 /* Sources */,
+				6EC6DF67233B679200E28455 /* Frameworks */,
+				6EC6DF68233B679200E28455 /* Resources */,
+				6EC6DF7C233B749B00E28455 /* Build Version */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				6EC6DF7A233B6B3300E28455 /* PBXTargetDependency */,
+			);
+			name = Spotlight;
+			productName = Spotlight;
+			productReference = 6EC6DF6A233B679200E28455 /* Spotlight.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 		6ECD3596233B12AF00E49357 /* QuickLook */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 6ECD35AA233B12AF00E49357 /* Build configuration list for PBXNativeTarget "QuickLook" */;
@@ -1761,6 +1821,9 @@
 					6EA570CF23189874008027D4 = {
 						CreatedOnToolsVersion = 11.0;
 					};
+					6EC6DF69233B679200E28455 = {
+						CreatedOnToolsVersion = 11.0;
+					};
 					6ECD3596233B12AF00E49357 = {
 						CreatedOnToolsVersion = 11.0;
 					};
@@ -1819,6 +1882,7 @@
 				6E15AD7A2318C9060004D1AE /* Today macOS */,
 				6ECD3596233B12AF00E49357 /* QuickLook */,
 				6ECD35B0233B1E5E00E49357 /* Thumbnail */,
+				6EC6DF69233B679200E28455 /* Spotlight */,
 				6EA570C323189871008027D4 /* Watch */,
 				6EA570CF23189874008027D4 /* Watch Extension */,
 				6ED8206B2316711900B69520 /* WatchIntent */,
@@ -1977,6 +2041,13 @@
 			files = (
 				6EE05B87233325820014CEE4 /* WatchAssets.xcassets in Resources */,
 				6E9740422318C14800634631 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6EC6DF68233B679200E28455 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2216,6 +2287,24 @@
 			shellPath = /bin/sh;
 			shellScript = "#!/bin/bash\n\n#  update_build_number.sh\n#  Usage: `update_build_number.sh [branch]`\n#  Run this script after the 'Copy Bundle Resources' build phase\n#  Ref: http://tgoode.com/2014/06/05/sensible-way-increment-bundle-version-cfbundleversion-xcode/\n\nif [ $TRAVIS == \"true\" ]\nthen echo \"Updating build number to TRAVISCI.\"\n/usr/libexec/PlistBuddy -c \"Set :CFBundleVersion TRAVISCI\" \"${TARGET_BUILD_DIR}/${INFOPLIST_PATH}\"\nelse branch=${1:-'master'}\nbuildNumber=$(expr $(git rev-list $branch --count) - $(git rev-list HEAD..$branch --count))\necho \"Updating build number to $buildNumber using branch '$branch'.\"\n/usr/libexec/PlistBuddy -c \"Set :CFBundleVersion $buildNumber\" \"${TARGET_BUILD_DIR}/${INFOPLIST_PATH}\"\nfi\n";
 		};
+		6EC6DF7C233B749B00E28455 /* Build Version */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Build Version";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "#!/bin/bash\n\n#  update_build_number.sh\n#  Usage: `update_build_number.sh [branch]`\n#  Run this script after the 'Copy Bundle Resources' build phase\n#  Ref: http://tgoode.com/2014/06/05/sensible-way-increment-bundle-version-cfbundleversion-xcode/\n\nif [ $TRAVIS == \"true\" ]\nthen echo \"Updating build number to TRAVISCI.\"\n/usr/libexec/PlistBuddy -c \"Set :CFBundleVersion TRAVISCI\" \"${TARGET_BUILD_DIR}/${INFOPLIST_PATH}\"\nelse branch=${1:-'master'}\nbuildNumber=$(expr $(git rev-list $branch --count) - $(git rev-list HEAD..$branch --count))\necho \"Updating build number to $buildNumber using branch '$branch'.\"\n/usr/libexec/PlistBuddy -c \"Set :CFBundleVersion $buildNumber\" \"${TARGET_BUILD_DIR}/${INFOPLIST_PATH}\"\nfi\n";
+		};
 		6ECD35D0233B539200E49357 /* Build Version */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -2435,6 +2524,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		6EC6DF66233B679200E28455 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6EC6DF6D233B679200E28455 /* IndexRequestHandler.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		6ECD3593233B12AF00E49357 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -2607,6 +2704,16 @@
 			isa = PBXTargetDependency;
 			target = 6ED82085231676AE00B69520 /* LockKit watchOS */;
 			targetProxy = 6EA570F023189CE9008027D4 /* PBXContainerItemProxy */;
+		};
+		6EC6DF70233B679200E28455 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 6EC6DF69233B679200E28455 /* Spotlight */;
+			targetProxy = 6EC6DF6F233B679200E28455 /* PBXContainerItemProxy */;
+		};
+		6EC6DF7A233B6B3300E28455 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 6E994A83230DFB6C0076DC1B /* LockKit */;
+			targetProxy = 6EC6DF79233B6B3300E28455 /* PBXContainerItemProxy */;
 		};
 		6ECD35A2233B12AF00E49357 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -3465,6 +3572,55 @@
 			};
 			name = Release;
 		};
+		6EC6DF72233B679200E28455 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = Spotlight/Spotlight.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 4W79SG34MW;
+				INFOPLIST_FILE = Spotlight/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.colemancda.Lock.Spotlight;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		6EC6DF73233B679200E28455 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = Spotlight/Spotlight.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 4W79SG34MW;
+				INFOPLIST_FILE = Spotlight/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.colemancda.Lock.Spotlight;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
 		6ECD35A4233B12AF00E49357 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -3780,6 +3936,15 @@
 			buildConfigurations = (
 				6EA570E923189877008027D4 /* Debug */,
 				6EA570EA23189877008027D4 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		6EC6DF78233B679200E28455 /* Build configuration list for PBXNativeTarget "Spotlight" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6EC6DF72233B679200E28455 /* Debug */,
+				6EC6DF73233B679200E28455 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

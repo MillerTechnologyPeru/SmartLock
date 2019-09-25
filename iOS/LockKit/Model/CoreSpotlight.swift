@@ -17,21 +17,26 @@ public final class SpotlightController {
     
     // MARK: - Initialization
     
-    public static let shared = SpotlightController()
+    public static let shared = SpotlightController(index: .default())
     
-    private init(index: CSSearchableIndex = .default()) {
+    public init(index: CSSearchableIndex) {
         self.index = index
     }
     
     // MARK: - Properties
     
-    private let index: CSSearchableIndex
+    internal let index: CSSearchableIndex
     
     public var log: ((String) -> ())?
     
+    /// Returns a Boolean value that indicates whether indexing is available on the current device.
+    public static var isSupported: Bool {
+        return CSSearchableIndex.isIndexingAvailable()
+    }
+    
     // MARK: - Methods
     
-    public func update(locks: [UUID: LockCache]) {
+    public func reindexAll(locks: [UUID: LockCache], completion: ((Error?) -> ())? = nil) {
         
         let searchableItems = locks
             .lazy
@@ -41,17 +46,67 @@ public final class SpotlightController {
         index.deleteSearchableItems(withDomainIdentifiers: [SearchableLock.searchDomain]) { [weak self] (error) in
             guard let self = self else { return }
             if let error = error {
-                self.log?("Error: \(error.localizedDescription)")
+                self.log?("⚠️ Error deleting: \(error.localizedDescription)")
+                completion?(error)
                 return
             }
-            self.log?("Deleted old locks")
+            self.log?("Deleted old items")
             self.index.indexSearchableItems(Array(searchableItems)) { [weak self] (error) in
                 guard let self = self else { return }
                 if let error = error {
-                    self.log?("Error: \(error.localizedDescription)")
+                    self.log?("⚠️ Error: \(error.localizedDescription)")
+                    completion?(error)
                     return
                 }
-                self.log?("Indexed locks")
+                self.log?("Indexed items")
+                completion?(nil)
+            }
+        }
+    }
+    
+    /// Reindex the searchable items associated with the specified identifiers.
+    public func reindex(_ identifiers: [String],
+                        for locks: [UUID: LockCache],
+                        completion: ((Error?) -> ())? = nil) {
+        
+        for identifier in identifiers {
+            
+            guard let viewData = AppActivity.ViewData(rawValue: identifier) else {
+                log?("Invalid index \(identifier)")
+                continue
+            }
+            
+            var deletedItems = Set<String>()
+            var searchableItems = [CSSearchableItem](reserveCapacity: identifiers.count)
+            switch viewData {
+            case let .lock(lock):
+                let searchIdentifier = SearchableLock.searchIdentifier(for: lock)
+                if let cache = locks[lock] {
+                    let item = SearchableLock(identifier: lock, cache: cache).searchableItem()
+                    searchableItems.append(item)
+                } else {
+                    deletedItems.insert(searchIdentifier)
+                }
+            }
+            
+            index.deleteSearchableItems(withIdentifiers: Array(deletedItems)) { [weak self] (error) in
+                guard let self = self else { return }
+                if let error = error {
+                    self.log?("⚠️ Error deleting: \(error.localizedDescription)")
+                    completion?(error)
+                    return
+                }
+                self.log?("Deleted \(deletedItems.count) old items")
+                self.index.indexSearchableItems(searchableItems) { [weak self] (error) in
+                    guard let self = self else { return }
+                    if let error = error {
+                        self.log?("⚠️ Error indexing: \(error.localizedDescription)")
+                        completion?(error)
+                        return
+                    }
+                    self.log?("Indexed \(searchableItems.count) items")
+                    completion?(nil)
+                }
             }
         }
     }
@@ -100,7 +155,11 @@ extension SearchableLock: CoreSpotlightSearchable {
     public static var searchDomain: String { return "com.colemancda.Lock.LockCache" }
     
     public var searchIdentifier: String {
-        return appActivity.rawValue
+        return type(of: self).searchIdentifier(for: identifier)
+    }
+    
+    public static func searchIdentifier(for lock: UUID) -> String {
+        return AppActivity.ViewData.lock(lock).rawValue
     }
     
     public var appActivity: AppActivity.ViewData {
