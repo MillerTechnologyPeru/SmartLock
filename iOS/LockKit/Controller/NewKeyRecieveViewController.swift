@@ -164,7 +164,7 @@ public final class NewKeyRecieveViewController: UITableViewController {
         } else {
             expiration = "Expired"
         }
-        
+        expirationLabel.text = expiration
     }
 }
 
