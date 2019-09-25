@@ -20,6 +20,8 @@ public final class NewKeyRecieveViewController: UITableViewController {
     @IBOutlet private(set) weak var permissionView: PermissionIconView!
     @IBOutlet private(set) weak var permissionLabel: UILabel!
     @IBOutlet private(set) weak var lockLabel: UILabel!
+    @IBOutlet private(set) weak var nameLabel: UILabel!
+    @IBOutlet private(set) weak var expirationLabel: UILabel!
     
     // MARK: - Properties
     
@@ -28,6 +30,16 @@ public final class NewKeyRecieveViewController: UITableViewController {
     public var progressHUD: JGProgressHUD?
     
     public var completion: (() -> ())?
+    
+    @available(iOS 13.0, *)
+    private lazy var timeFormatter = RelativeDateTimeFormatter()
+    
+    private lazy var dateFormatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateStyle = .short
+        formatter.timeStyle = .short
+        return formatter
+    }()
     
     // MARK: - Loading
     
@@ -77,6 +89,7 @@ public final class NewKeyRecieveViewController: UITableViewController {
             do {
                 
                 // scan lock is neccesary
+                
                 if Store.shared[peripheral: newKeyInvitation.lock] == nil {
                     try Store.shared.scan(duration: 3)
                 }
@@ -136,8 +149,22 @@ public final class NewKeyRecieveViewController: UITableViewController {
         self.navigationItem.title = newKey.key.name
         let permission = newKey.key.permission
         self.lockLabel.text = newKey.lock.rawValue
+        self.nameLabel.text = newKey.key.name
         self.permissionView.permission = permission.type
-        self.permissionLabel.text = permission.localizedText
+        self.permissionLabel.text = permission.type.localizedText
+        
+        let expiration: String
+        let timeRemaining = newKey.key.expiration.timeIntervalSinceNow
+        if timeRemaining > 0 {
+            if #available(iOS 13.0, *) {
+                expiration = timeFormatter.localizedString(fromTimeInterval: timeRemaining)
+            } else {
+                expiration = dateFormatter.string(from: newKey.key.expiration)
+            }
+        } else {
+            expiration = "Expired"
+        }
+        
     }
 }
 

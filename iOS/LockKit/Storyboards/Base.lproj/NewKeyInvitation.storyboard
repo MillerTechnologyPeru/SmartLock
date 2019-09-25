@@ -37,7 +37,7 @@
                         <sections>
                             <tableViewSection id="ow2-mv-Blv">
                                 <cells>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" textLabel="Hp9-7s-Mbv" detailTextLabel="DNR-2Q-cpN" style="IBUITableViewCellStyleValue2" id="SoN-jY-o7F">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" textLabel="Hp9-7s-Mbv" detailTextLabel="DNR-2Q-cpN" style="IBUITableViewCellStyleValue2" id="SoN-jY-o7F">
                                         <rect key="frame" x="0.0" y="151" width="320" height="58"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="SoN-jY-o7F" id="cN5-hg-lmk">
@@ -60,7 +60,7 @@
                                             </subviews>
                                         </tableViewCellContentView>
                                     </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" textLabel="O17-yI-9ge" detailTextLabel="9Ql-Dl-z4b" style="IBUITableViewCellStyleValue2" id="t04-lo-PwK">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" textLabel="O17-yI-9ge" detailTextLabel="9Ql-Dl-z4b" style="IBUITableViewCellStyleValue2" id="t04-lo-PwK">
                                         <rect key="frame" x="0.0" y="209" width="320" height="58"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="t04-lo-PwK" id="ZGI-Fi-WUW">
@@ -83,8 +83,31 @@
                                             </subviews>
                                         </tableViewCellContentView>
                                     </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" textLabel="uKW-vK-pp3" detailTextLabel="vi7-Ox-WN4" style="IBUITableViewCellStyleValue2" id="573-EQ-wiV">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" textLabel="1Qy-US-ekr" detailTextLabel="5kL-dO-0uG" style="IBUITableViewCellStyleValue2" id="0uA-cV-H6F">
                                         <rect key="frame" x="0.0" y="267" width="320" height="58"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="0uA-cV-H6F" id="0xc-Ai-FB8">
+                                            <rect key="frame" x="0.0" y="0.0" width="320" height="58"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Expiration" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="1Qy-US-ekr">
+                                                    <rect key="frame" x="16" y="21" width="91" height="16"/>
+                                                    <autoresizingMask key="autoresizingMask"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                                    <color key="textColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="In 24 hours" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="5kL-dO-0uG">
+                                                    <rect key="frame" x="113" y="21" width="68.5" height="16"/>
+                                                    <autoresizingMask key="autoresizingMask"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" textLabel="uKW-vK-pp3" detailTextLabel="vi7-Ox-WN4" style="IBUITableViewCellStyleValue2" id="573-EQ-wiV">
+                                        <rect key="frame" x="0.0" y="325" width="320" height="58"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="573-EQ-wiV" id="DAa-Ic-w2k">
                                             <rect key="frame" x="0.0" y="0.0" width="320" height="58"/>
@@ -127,7 +150,9 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
+                        <outlet property="expirationLabel" destination="5kL-dO-0uG" id="eDJ-vU-txB"/>
                         <outlet property="lockLabel" destination="vi7-Ox-WN4" id="VCs-2g-IzO"/>
+                        <outlet property="nameLabel" destination="DNR-2Q-cpN" id="UwT-Od-Fyq"/>
                         <outlet property="permissionLabel" destination="9Ql-Dl-z4b" id="YeR-Do-bnU"/>
                         <outlet property="permissionView" destination="2Nz-y8-8yH" id="nnI-5H-h4g"/>
                     </connections>

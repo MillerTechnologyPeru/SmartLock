@@ -62,7 +62,7 @@ final class PreviewViewController: UIViewController, QLPreviewingController {
             }
             
             DispatchQueue.main.async { [weak self] in
-                self?.open(newKey: invitation)
+                self?.loadNewKey(invitation)
                 handler(nil)
             }
         }
