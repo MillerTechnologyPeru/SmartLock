@@ -43,6 +43,7 @@ final class MessagesViewController: MSMessagesAppViewController {
         // setup loading
         LockManager.shared.log = { log("🔒 LockManager: " + $0) }
         BeaconController.shared.log = { log("📶 \(BeaconController.self): " + $0) }
+        SpotlightController.shared.log = { log("🔦 \(SpotlightController.self): " + $0) }
         
         // setup table view
         tableView.register(LockTableViewCell.self)

@@ -34,6 +34,7 @@ public extension Bundle {
         case today = "com.colemancda.Lock.Today"
         case quickLook = "com.colemancda.Lock.QuickLook"
         case thumbnail = "com.colemancda.Lock.Thumbnail"
+        case spotlight = "com.colemancda.Lock.Spotlight"
     }
 }
 
@@ -61,6 +62,8 @@ public extension Bundle.Lock {
             return "👁‍🗨"
         case .thumbnail:
             return "🖼"
+        case .spotlight:
+            return "🔦"
         }
     }
     
@@ -89,6 +92,8 @@ public extension Bundle.Lock {
             return "QuickLook Extension"
         case .thumbnail:
             return "Thumbnail Extension"
+        case .spotlight:
+            return "Spotlight Extension"
         }
     }
 }
