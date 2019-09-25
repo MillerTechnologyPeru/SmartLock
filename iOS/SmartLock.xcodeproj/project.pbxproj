@@ -193,7 +193,7 @@
 		6ECD35A3233B12AF00E49357 /* QuickLook.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 6ECD3597233B12AF00E49357 /* QuickLook.appex */; platformFilter = ios; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		6ECD35B3233B1E5E00E49357 /* QuickLookThumbnailing.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6ECD35B2233B1E5E00E49357 /* QuickLookThumbnailing.framework */; };
 		6ECD35B6233B1E5E00E49357 /* ThumbnailProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6ECD35B5233B1E5E00E49357 /* ThumbnailProvider.swift */; };
-		6ECD35BA233B1E5E00E49357 /* Thumbnail.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 6ECD35B1233B1E5E00E49357 /* Thumbnail.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		6ECD35BA233B1E5E00E49357 /* Thumbnail.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 6ECD35B1233B1E5E00E49357 /* Thumbnail.appex */; platformFilter = ios; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		6ECD35C1233B4CB000E49357 /* NewKeyDocument.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6ECD35C0233B4CB000E49357 /* NewKeyDocument.swift */; };
 		6ECD39A52336D369003E4AB4 /* ActivityIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6ECD39A42336D369003E4AB4 /* ActivityIndicator.swift */; };
 		6ECD6AEA23320D2C0007E7DA /* ContextMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6ECD6AE923320D2C0007E7DA /* ContextMenu.swift */; };
@@ -2620,6 +2620,7 @@
 		};
 		6ECD35B9233B1E5E00E49357 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
+			platformFilter = ios;
 			target = 6ECD35B0233B1E5E00E49357 /* Thumbnail */;
 			targetProxy = 6ECD35B8233B1E5E00E49357 /* PBXContainerItemProxy */;
 		};
@@ -2995,7 +2996,6 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
 				DERIVE_MACCATALYST_PRODUCT_BUNDLE_IDENTIFIER = YES;
 				DEVELOPMENT_TEAM = 4W79SG34MW;
 				ENTITLEMENTS_REQUIRED = YES;
@@ -3022,7 +3022,6 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
 				DERIVE_MACCATALYST_PRODUCT_BUNDLE_IDENTIFIER = YES;
 				DEVELOPMENT_TEAM = 4W79SG34MW;
 				ENTITLEMENTS_REQUIRED = YES;
