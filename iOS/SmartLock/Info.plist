@@ -10,18 +10,14 @@
 	<array>
 		<dict>
 			<key>CFBundleTypeIconFiles</key>
-			<array>
-				<string>eKeyDocument</string>
-			</array>
+			<array/>
 			<key>CFBundleTypeName</key>
-			<string>eKey File</string>
-			<key>CFBundleTypeRole</key>
-			<string>Viewer</string>
+			<string>Key</string>
 			<key>LSHandlerRank</key>
 			<string>Owner</string>
 			<key>LSItemContentTypes</key>
 			<array>
-				<string>com.colemancda.lock.ekey</string>
+				<string>com.colemancda.lock.key</string>
 			</array>
 		</dict>
 	</array>
@@ -42,8 +38,6 @@
 		<dict>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
-			<key>CFBundleURLIconFile</key>
-			<string>eKeyDocument</string>
 			<key>CFBundleURLName</key>
 			<string>com.colemancda.Lock</string>
 			<key>CFBundleURLSchemes</key>
@@ -61,6 +55,8 @@
 	<key>LSApplicationCategoryType</key>
 	<string>public.app-category.utilities</string>
 	<key>LSRequiresIPhoneOS</key>
+	<true/>
+	<key>LSSupportsOpeningDocumentsInPlace</key>
 	<true/>
 	<key>NSBluetoothAlwaysUsageDescription</key>
 	<string>Bluetooth is used to scan for nearby locks in the background.</string>
@@ -114,31 +110,32 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+	<key>UISupportsDocumentBrowser</key>
+	<true/>
 	<key>UTExportedTypeDeclarations</key>
 	<array>
 		<dict>
 			<key>UTTypeConformsTo</key>
 			<array>
 				<string>public.data</string>
+				<string>public.content</string>
 			</array>
 			<key>UTTypeDescription</key>
-			<string>eKey</string>
+			<string>Key File</string>
 			<key>UTTypeIconFiles</key>
-			<array>
-				<string>eKeyDocument</string>
-			</array>
+			<array/>
 			<key>UTTypeIdentifier</key>
-			<string>com.colemancda.lock.ekey</string>
-			<key>UTTypeSize320IconFile</key>
-			<string>eKeyDocument</string>
-			<key>UTTypeSize64IconFile</key>
-			<string>eKeyDocument</string>
+			<string>com.colemancda.lock.key</string>
 			<key>UTTypeTagSpecification</key>
 			<dict>
 				<key>public.filename-extension</key>
-				<string>ekey</string>
+				<array>
+					<string>ekey</string>
+				</array>
 				<key>public.mime-type</key>
-				<string>lock/x-ekey</string>
+				<array>
+					<string>lock/x-ekey</string>
+				</array>
 			</dict>
 		</dict>
 	</array>

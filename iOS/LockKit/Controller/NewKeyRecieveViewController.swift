@@ -80,7 +80,16 @@ public final class NewKeyRecieveViewController: UITableViewController {
     
     @IBAction func save(_ sender: UIBarItem) {
         
-        let newKeyInvitation = self.newKey!
+        guard let newKeyInvitation = self.newKey else {
+            assertionFailure()
+            return
+        }
+        
+        guard FileManager.Lock.shared.applicationData?.locks[newKeyInvitation.lock] == nil else {
+            self.showErrorAlert(R.string.localizable.newKeyRecieveError(newKey.lock.rawValue))
+            return
+        }
+        
         sender.isEnabled = false
         let keyData = KeyData()
         showActivity()
@@ -149,6 +158,11 @@ public final class NewKeyRecieveViewController: UITableViewController {
     
     private func configureView() {
         
+        guard let newKey = self.newKey else {
+            assertionFailure()
+            return
+        }
+        
         self.navigationItem.title = newKey.key.name
         let permission = newKey.key.permission
         self.lockLabel.text = newKey.lock.rawValue
@@ -179,19 +193,11 @@ extension NewKeyRecieveViewController: ProgressHUDViewController { }
 
 public extension UIViewController {
     
-    @discardableResult
-    func open(newKey: NewKey.Invitation, completion: (() -> ())? = nil) -> Bool {
-        
-        // only one key per lock
-        guard Store.shared[lock: newKey.lock] == nil else {
-            self.showErrorAlert(R.string.localizable.newKeyRecieveError(newKey.lock.rawValue))
-            return false
-        }
+    func open(newKey: NewKey.Invitation, completion: (() -> ())? = nil){
         
         let newKeyViewController = NewKeyRecieveViewController.fromStoryboard(with: newKey)
         newKeyViewController.completion = completion
         let navigationController = UINavigationController(rootViewController: newKeyViewController)
         present(navigationController, animated: true, completion: nil)
-        return true
     }
 }

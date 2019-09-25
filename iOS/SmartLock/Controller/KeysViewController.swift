@@ -90,7 +90,7 @@ final class KeysViewController: UITableViewController {
     @IBAction func importFile(_ sender: UIBarButtonItem) {
         
         let documentPicker = UIDocumentPickerViewController(
-            documentTypes: ["com.colemancda.lock.ekey"],
+            documentTypes: ["com.colemancda.lock.key"],
             in: .import
         )
         documentPicker.delegate = self

@@ -15,7 +15,6 @@
 		36FC4C7D233A17C500A5D5B3 /* Contacts.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 36FC4C7F233A17C500A5D5B3 /* Contacts.storyboard */; };
 		36FC4C8B233A1F4800A5D5B3 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 36FC4C8D233A1F4800A5D5B3 /* Localizable.strings */; };
 		36FC4C95233A249500A5D5B3 /* LockDetail.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 36FC4C94233A249500A5D5B3 /* LockDetail.storyboard */; };
-		6E05B6E122C9BF86001218D9 /* eKeyDocument.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 6E05B6DC22C9BF85001218D9 /* eKeyDocument.pdf */; };
 		6E05B6E722C9C159001218D9 /* KeysViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E05B6E622C9C159001218D9 /* KeysViewController.swift */; };
 		6E07C9E523335DF500B7996C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6E994B12230E89490076DC1B /* Assets.xcassets */; };
 		6E08FB832316E64D00177026 /* SessionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E08FB822316E64D00177026 /* SessionController.swift */; };
@@ -554,7 +553,6 @@
 		36FC4C8C233A1F4800A5D5B3 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Localizable.strings; sourceTree = "<group>"; };
 		36FC4C8F233A1F5D00A5D5B3 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		36FC4C94233A249500A5D5B3 /* LockDetail.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = LockDetail.storyboard; sourceTree = "<group>"; };
-		6E05B6DC22C9BF85001218D9 /* eKeyDocument.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = eKeyDocument.pdf; sourceTree = "<group>"; };
 		6E05B6E422C9C11D001218D9 /* LockViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LockViewController.swift; sourceTree = "<group>"; };
 		6E05B6E622C9C159001218D9 /* KeysViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeysViewController.swift; sourceTree = "<group>"; };
 		6E05B6EC22C9E42C001218D9 /* Activity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Activity.swift; sourceTree = "<group>"; };
@@ -982,7 +980,6 @@
 				6E60001C2121119500787DAA /* LaunchScreen.storyboard */,
 				6E6000172121119400787DAA /* Main.storyboard */,
 				6E60001F2121119500787DAA /* Info.plist */,
-				6E05B6DC22C9BF85001218D9 /* eKeyDocument.pdf */,
 				6E08FB862316EF4300177026 /* WatchKit */,
 				6E806BA7230F654600C6FF78 /* View */,
 				6E994AA8230DFC8E0076DC1B /* Controller */,
@@ -1882,7 +1879,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6E05B6E122C9BF86001218D9 /* eKeyDocument.pdf in Resources */,
 				6E60001E2121119500787DAA /* LaunchScreen.storyboard in Resources */,
 				6E994AA3230DFC180076DC1B /* Assets.xcassets in Resources */,
 				6E6000192121119400787DAA /* Main.storyboard in Resources */,

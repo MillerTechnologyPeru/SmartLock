@@ -275,11 +275,9 @@ extension MessagesViewController: LockActivityHandlingViewController {
         switch url {
         case let .newKey(invitation):
             // open invitation
-            let viewController = NewKeyRecieveViewController.fromStoryboard(with: invitation) { [weak self] in
+            open(newKey: invitation) { [weak self] in
                 self?.requestPresentationStyle(.compact)
             }
-            let navigationController = UINavigationController(rootViewController: viewController)
-            self.present(navigationController, animated: true, completion: nil)
             self.requestPresentationStyle(.expanded)
         default:
             // defer to app

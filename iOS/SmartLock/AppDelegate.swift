@@ -496,15 +496,14 @@ internal extension AppDelegate {
     }
     
     func open(file url: URL) -> Bool {
-        
-        
-        
+                
         do {
             // parse eKey file
             let data = try Data(contentsOf: url)
             let newKey = try JSONDecoder().decode(NewKey.Invitation.self, from: data)
             
-            return tabBarController.open(newKey: newKey)
+            tabBarController.open(newKey: newKey)
+            return true
         } catch {
             log("⚠️ Unable to open file: \(error.localizedDescription)")
             #if DEBUG
