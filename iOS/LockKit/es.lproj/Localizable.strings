@@ -1,0 +1,177 @@
+/* 
+  Localizable.strings
+  SmartLock
+
+  Created by JurjDev on 9/24/19.
+  Copyright © 2019 ColemanCDA. All rights reserved.
+*/
+
+// MARK: - LockViewController
+
+"LockIdentifier.Title" = "Lock";
+
+"KeyIdentifier.Title" = "Llave";
+
+"Permission.Title" = "Permiso";
+
+"Version.Title" = "Version";
+
+"LockViewController.Error.NoLockNerby" = "Lock no se encuentra cerca.";
+
+"LockViewController.Error.NoKey" = "No llave para lock %@";
+
+// MARK: - Activity
+
+// LockActivityItem
+
+"LockActivity.Item.Text" = "Yo abri mi puerta %@";
+
+// NewKeyActivity
+
+"NewKeyActivity.Title" = "Compartir Llave";
+
+// ManageKeysActivity
+
+"ManageKeysActivity.Title" = "Administrar";
+
+// DeleteLockActivity
+
+"DeleteLockActivity.Title" = "Eliminar";
+
+// RenameActivity
+
+"RenameActivity.Title" = "Renombrar";
+
+// HomeKitEnableActivity
+
+"HomeKitEnableActivity.Title" = "Modo Hogar";
+
+// UpdateActivity
+
+"UpdateActivity.Title" = "Actualizar";
+
+// ShareKeyCloudKitActivity
+
+"ShareKeyCloudKitActivity.Title" = "iCloud";
+
+// AddVoiceShortcutActivity
+
+"AddVoiceShortcutActivity.Title" = "Agregar a Siri";
+
+// MARK: Alerts
+"DeleteLockActivity.Alert.title" = "Confirmación";
+"DeleteLockActivity.Alert.Message" = "¿Esta seguro de querer eliminar esta Llave?";
+"DeleteLockActivity.Alert.Cancel" = "Cancelar";
+"DeleteLockActivity.Alert.Delete" = "Eliminar";
+
+"RenameActivity.Alert.title" = "Renombrar";
+"RenameActivity.Alert.Message" = "Ingresé un nombre facil de usar para esta Llave.";
+"RenameActivity.Alert.OK" = "OK";
+"RenameActivity.Alert.Cancel" = "Cancelar";
+
+"HomeKitEnableActivity.Alert.title" = "Modo Hogar";
+"HomeKitEnableActivity.Alert.Message" = "¿Activar Modo Hogar en este dispositivo?";
+"HomeKitEnableActivity.Alert.Cancel" = "Cancelar";
+"HomeKitEnableActivity.Alert.Yes" = "Si";
+"HomeKitEnableActivity.Alert.No" = "No";
+
+"UpdateActivity.Alert.title" = "Actualizar Lock";
+"UpdateActivity.Alert.Message" = "¿Esta seguro de querer actualizar el software del Lock?";
+"UpdateActivity.Alert.Cancel" = "Cancelar";
+"UpdateActivity.Alert.Update" = "Actualizar";
+
+// MARK: - NSUserActivity
+
+"UserActivity.NearbyLocks.Title" = "Locks Cercanos";
+"UserActivity.NearbyLocks.Description" = "Mostrar Locks cercanos.";
+
+"UserActivity.Keys.Title" = "Llaves";
+"UserActivity.Keys.Description" = "Mostrar llaves guardadas.";
+
+"UserActivity.Events.Title" = "Eventos";
+"UserActivity.Events.Description" = "Mostrar historial de eventos.";
+
+// MARK: - UserNotificationCenter
+
+"UserNotificationCenter.TapToUnlock" = "Toque para desbloquear";
+
+"UserNotificationCenter.NewKey" = "Nueva llave";
+
+// MARK: - ActivityIndicatorViewController
+
+// Unlock
+
+"Unlock.LockNotFound" = "No pudo encontrar el lock";
+
+"Unlock.UnableToUnlock" = "Incapaz de abrir";
+
+// Setup
+
+"Setup.InvalidQRCode" = "Codigo QR invalido";
+
+"Setup.CouldNotLock" = "No pudo encontrar el lock";
+
+// Error Alert
+
+"ErrorAlert.Error" = "Error";
+
+"ErrorAlert.OK" = "Ok";
+
+"ErrorAlert.Retry" = "Volver a intentar";
+
+// Alert Action
+
+"AlertAction.Cancel" = "Cancelar";
+
+// Context Menu
+
+"ContextMenu.Rename" = "Renombrar";
+
+"ContextMenu.Delete" = "Eliminar";
+
+"ContextMenu.ShareKey" = "Compartir Llave";
+
+"ContextMenu.Manage" = "Administrar";
+
+// MARK: - NewKeyViewController
+
+"NewKeyViewController.Error.RequestNewKey" = "La llave para el Lock solicitado, ha sido eliminada de la base de datos.";
+
+"NewKeyViewController.Error.LockInRange" = "Lock no se encuentra en rango.";
+
+"NewKeyViewController.Error.CreateNewKey" = "No se pudo crear una nueva llave. %@";
+
+// MARK: Alert
+
+"NewKeyViewController.NewKey.Title" = "Nueva Llave";
+"NewKeyViewController.NewKey.Message" = "Ingresé un nombre facil de usar para esta Llave.";
+"NewKeyViewController.NewKey.Ok" = "OK";
+"NewKeyViewController.NewKey.Cancel" = "Cancelar";
+
+// MARK: - LockPermissionsViewController
+
+"LockPermissions.PendingKeys" = "Llaves Pendientes";
+
+"LockPermissions.Delete" = "Eliminar";
+
+// MARK: Alert
+
+"LockPermissions.Alert.Title" = "Confirmación";
+"LockPermissions.Alert.Message" = "¿Esta seguro de querer eliminar esta Llave?";
+"LockPermissions.Alert.Cancel" = "Cancel";
+"LockPermissions.Alert.Delete" = "Delete";
+
+
+// MARK: - NewKeySelectPermissionViewController
+
+"NewKeySelectPermission.Admin" = "Llaves de Administrador, tienen acceso ilimitado y pueden crear nuevas llaves.";
+
+"NewKeySelectPermission.anytime" = "Llaves de Cualquier Momento, tienen acceso ilimitado y no pueden crear nuevas llaves.";
+
+"NewKeySelectPermission.scheduled" = "Llaves Programables, tienen acceso limitado durante horas establecidas. No pueden crear nuevas llaves.";
+
+"NewKeySelectPermission.owner" = "Llave Maestra, solo puedes crearse al momento de instalación.";
+
+// MARK: - NewKeyRecieveViewController
+
+"NewKeyRecieve.Error" = "Usted ya cuenta con una llave para el lock %@.";

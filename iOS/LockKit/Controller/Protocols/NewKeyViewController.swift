@@ -40,7 +40,7 @@ public extension NewKeyViewController {
             
             guard let lockCache = Store.shared[lock: lockIdentifier],
                 let parentKeyData = Store.shared[key: lockCache.key.identifier]
-                else { self.newKeyError("The key for the specified lock has been deleted from the database."); return }
+                else { self.newKeyError(R.string.localizable.newKeyViewControllerErrorRequestNewKey()); return }
             
             let parentKey = KeyCredentials(identifier: lockCache.key.identifier, secret: parentKeyData)
             
@@ -71,7 +71,7 @@ public extension NewKeyViewController {
                     guard let peripheral = try Store.shared.device(for: lockIdentifier, scanDuration: 2.0) else {
                         mainQueue {
                             self.hideActivity(animated: false)
-                            self.newKeyError("Lock is not in range.")
+                            self.newKeyError(R.string.localizable.newKeyViewControllerErrorLockInRange())
                         }
                         return
                     }
@@ -84,7 +84,7 @@ public extension NewKeyViewController {
                 catch {
                     mainQueue {
                         self.hideActivity(animated: false)
-                        self.newKeyError("Could not create new key. (\(error))")
+                        self.newKeyError(R.string.localizable.newKeyViewControllerErrorCreateNewKey(error.localizedDescription))
                     }
                     return
                 }
@@ -98,13 +98,13 @@ public extension NewKeyViewController {
     
     private func requestNewKeyName(_ completion: @escaping (String) -> ()) {
         
-        let alert = UIAlertController(title: "New Key",
-                                      message: "Type a user friendly name for the new key.",
+        let alert = UIAlertController(title: R.string.localizable.newKeyViewControllerNewKeyTitle(),
+                                      message: R.string.localizable.newKeyViewControllerNewKeyMessage(),
                                       preferredStyle: .alert)
         
-        alert.addTextField { $0.text = "New Key" }
+        alert.addTextField { $0.text = R.string.localizable.newKeyViewControllerNewKeyTitle() }
         
-        alert.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: "OK"), style: .`default`, handler: { (UIAlertAction) in
+        alert.addAction(UIAlertAction(title: R.string.localizable.newKeyViewControllerNewKeyOk(), style: .`default`, handler: { (UIAlertAction) in
             
             let name = alert.textFields![0].text ?? ""
             
@@ -114,7 +114,7 @@ public extension NewKeyViewController {
             
         }))
         
-        alert.addAction(UIAlertAction(title: NSLocalizedString("Cancel", comment: "Cancel"), style: .destructive, handler: { (UIAlertAction) in
+        alert.addAction(UIAlertAction(title: R.string.localizable.newKeyViewControllerNewKeyCancel(), style: .destructive, handler: { (UIAlertAction) in
             
             alert.dismiss(animated: true) {  }
         }))
@@ -154,9 +154,12 @@ public extension UIViewController {
             // share new key
             mainQueue {
                 
+                let url = LockURL.newKey(invitation).rawValue
+                
                 // show activity controller
                 let activityController = UIActivityViewController(
                     activityItems: [
+                        url,
                         URL(fileURLWithPath: filePath),
                         invitation
                     ],
@@ -172,7 +175,6 @@ public extension UIViewController {
                                                             .postToFlickr,
                                                             .postToVimeo,
                                                             .print,
-                                                            .copyToPasteboard,
                                                             .assignToContact,
                                                             .saveToCameraRoll,
                                                             .addToReadingList]

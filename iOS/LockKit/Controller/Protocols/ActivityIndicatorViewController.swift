@@ -110,7 +110,9 @@ public extension ActivityIndicatorViewController {
         view.addSubview(activityIndicator)
         
         let barButtonItem = UIBarButtonItem(customView: view)
-        self.navigationItem.rightBarButtonItem = barButtonItem
+        var rightBarButtonItems = self.navigationItem.rightBarButtonItems ?? []
+        rightBarButtonItems.append(barButtonItem)
+        self.navigationItem.rightBarButtonItems = rightBarButtonItems
         return activityIndicator
     }
 }

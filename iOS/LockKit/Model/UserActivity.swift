@@ -209,16 +209,16 @@ public extension NSUserActivity {
             let attributes = CSSearchableItemAttributeSet(itemContentType: screen.rawValue)
             switch screen {
             case .nearbyLocks:
-                self.title = "Nearby Locks"
-                attributes.contentDescription = "Show nearby locks."
+                self.title = R.string.localizable.userActivityNearbyLocksTitle()
+                attributes.contentDescription = R.string.localizable.userActivityNearbyLocksDescription()
                 attributes.thumbnailData = UIImage(lockKit: "activityNear")?.pngData()
             case .keys:
-                self.title = "Keys"
-                attributes.contentDescription = "Display stored keys."
+                self.title = R.string.localizable.userActivityKeysTitle()
+                attributes.contentDescription = R.string.localizable.userActivityKeysDescription()
                 attributes.thumbnailData = UIImage(lockKit: "activityLock")?.pngData()
             case .events:
-                self.title = "Events"
-                attributes.contentDescription = "Display lock history."
+                self.title = R.string.localizable.userActivityEventsTitle()
+                attributes.contentDescription = R.string.localizable.userActivityEventsDescription()
             }
             self.contentAttributeSet = attributes
             #endif

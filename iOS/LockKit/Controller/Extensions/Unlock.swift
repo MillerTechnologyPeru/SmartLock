@@ -19,8 +19,8 @@ public extension ActivityIndicatorViewController where Self: UIViewController {
         
         performActivity(queue: .bluetooth, { () -> String? in
             guard let lockPeripheral = try Store.shared.device(for: identifier, scanDuration: scanDuration)
-                else { return "Could not find lock" }
-            return try Store.shared.unlock(lockPeripheral, action: action) ? nil : "Unable to unlock"
+                else { return R.string.localizable.unlockLockNotFound() }
+            return try Store.shared.unlock(lockPeripheral, action: action) ? nil : R.string.localizable.unlockUnableToUnlock()
         }, completion: { (viewController, errorMessage) in
             if let errorMessage = errorMessage {
                 viewController.showErrorAlert(errorMessage)

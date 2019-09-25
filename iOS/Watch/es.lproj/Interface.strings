@@ -1,0 +1,15 @@
+
+/* Class = "WKInterfaceButton"; title = "Scan"; ObjectID = "8xj-4B-MZP"; */
+"8xj-4B-MZP.title" = "Escanear";
+
+/* Class = "WKInterfaceController"; title = "Keys"; ObjectID = "ShR-W8-Ue9"; */
+"ShR-W8-Ue9.title" = "Llaves";
+
+/* Class = "WKInterfaceLabel"; text = "My Lock"; ObjectID = "TBE-Rf-HgD"; */
+"TBE-Rf-HgD.text" = "Mi Lock";
+
+/* Class = "WKInterfaceController"; title = "Lock Name"; ObjectID = "V2r-of-aqL"; */
+"V2r-of-aqL.title" = "Nombre de Lock";
+
+/* Class = "WKInterfaceController"; title = "Nearby"; ObjectID = "Zjw-i6-u6T"; */
+"Zjw-i6-u6T.title" = "Cercano";

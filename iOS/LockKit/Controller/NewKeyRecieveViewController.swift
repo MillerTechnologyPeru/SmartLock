@@ -20,6 +20,8 @@ public final class NewKeyRecieveViewController: UITableViewController {
     @IBOutlet private(set) weak var permissionView: PermissionIconView!
     @IBOutlet private(set) weak var permissionLabel: UILabel!
     @IBOutlet private(set) weak var lockLabel: UILabel!
+    @IBOutlet private(set) weak var nameLabel: UILabel!
+    @IBOutlet private(set) weak var expirationLabel: UILabel!
     
     // MARK: - Properties
     
@@ -29,12 +31,25 @@ public final class NewKeyRecieveViewController: UITableViewController {
     
     public var completion: (() -> ())?
     
+    @available(iOS 13.0, *)
+    private lazy var timeFormatter = RelativeDateTimeFormatter()
+    
+    private lazy var dateFormatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateStyle = .short
+        formatter.timeStyle = .short
+        return formatter
+    }()
+    
     // MARK: - Loading
     
-    public static func fromStoryboard(with newKey: NewKey.Invitation) -> NewKeyRecieveViewController {
+    public static func fromStoryboard(with newKey: NewKey.Invitation,
+                                      completion: (() -> ())? = nil) -> NewKeyRecieveViewController {
+        
         guard let viewController = R.storyboard.newKeyInvitation.newKeyRecieveViewController()
             else { fatalError("Could not load \(self) from storyboard") }
         viewController.newKey = newKey
+        viewController.completion = completion
         return viewController
     }
     
@@ -65,7 +80,16 @@ public final class NewKeyRecieveViewController: UITableViewController {
     
     @IBAction func save(_ sender: UIBarItem) {
         
-        let newKeyInvitation = self.newKey!
+        guard let newKeyInvitation = self.newKey else {
+            assertionFailure()
+            return
+        }
+        
+        guard FileManager.Lock.shared.applicationData?.locks[newKeyInvitation.lock] == nil else {
+            self.showErrorAlert(R.string.localizable.newKeyRecieveError(newKey.lock.rawValue))
+            return
+        }
+        
         sender.isEnabled = false
         let keyData = KeyData()
         showActivity()
@@ -77,6 +101,7 @@ public final class NewKeyRecieveViewController: UITableViewController {
             do {
                 
                 // scan lock is neccesary
+                
                 if Store.shared[peripheral: newKeyInvitation.lock] == nil {
                     try Store.shared.scan(duration: 3)
                 }
@@ -133,11 +158,30 @@ public final class NewKeyRecieveViewController: UITableViewController {
     
     private func configureView() {
         
+        guard let newKey = self.newKey else {
+            assertionFailure()
+            return
+        }
+        
         self.navigationItem.title = newKey.key.name
         let permission = newKey.key.permission
         self.lockLabel.text = newKey.lock.rawValue
+        self.nameLabel.text = newKey.key.name
         self.permissionView.permission = permission.type
-        self.permissionLabel.text = permission.localizedText
+        self.permissionLabel.text = permission.type.localizedText
+        
+        let expiration: String
+        let timeRemaining = newKey.key.expiration.timeIntervalSinceNow
+        if timeRemaining > 0 {
+            if #available(iOS 13.0, *) {
+                expiration = timeFormatter.localizedString(fromTimeInterval: timeRemaining)
+            } else {
+                expiration = dateFormatter.string(from: newKey.key.expiration)
+            }
+        } else {
+            expiration = "Expired"
+        }
+        expirationLabel.text = expiration
     }
 }
 
@@ -149,19 +193,11 @@ extension NewKeyRecieveViewController: ProgressHUDViewController { }
 
 public extension UIViewController {
     
-    @discardableResult
-    func open(newKey: NewKey.Invitation, completion: (() -> ())? = nil) -> Bool {
-        
-        // only one key per lock
-        guard Store.shared[lock: newKey.lock] == nil else {
-            self.showErrorAlert("You already have a key for lock \(newKey.lock).")
-            return false
-        }
+    func open(newKey: NewKey.Invitation, completion: (() -> ())? = nil){
         
         let newKeyViewController = NewKeyRecieveViewController.fromStoryboard(with: newKey)
         newKeyViewController.completion = completion
         let navigationController = UINavigationController(rootViewController: newKeyViewController)
         present(navigationController, animated: true, completion: nil)
-        return true
     }
 }

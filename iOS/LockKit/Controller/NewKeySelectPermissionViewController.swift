@@ -71,14 +71,14 @@ public final class NewKeySelectPermissionViewController: UITableViewController, 
         
         switch permissionType {
         case .admin:
-            return "Admin keys have unlimited access, and can create new keys."
+            return R.string.localizable.newKeySelectPermissionAdmin()
         case .anytime:
-            return "Anytime keys have unlimited access, but cannot create new keys."
+            return R.string.localizable.newKeySelectPermissionAnytime()
         case .scheduled:
-            return "Scheduled keys have limited access during specified hours, and expire at a certain date. New keys cannot be created from this key"
+            return R.string.localizable.newKeySelectPermissionScheduled()
         case .owner:
             assertionFailure("Cannot create owner keys")
-            return "Owner keys are created at setup."
+            return R.string.localizable.newKeySelectPermissionOwner()
         }
     }
     

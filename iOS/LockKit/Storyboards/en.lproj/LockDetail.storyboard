@@ -175,14 +175,14 @@
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
                     <connections>
                         <outlet property="keyIdentifierLabel" destination="9uO-Zj-tfB" id="CLh-dI-Mwx"/>
-                        <outlet property="keyIdentifierTitle" destination="htN-i0-X3c" id="oDf-Iu-9t9"/>
+                        <outlet property="keyIdentifierTitle" destination="htN-i0-X3c" id="keY-Fe-tOF"/>
                         <outlet property="lockIdentifierLabel" destination="C1Z-vt-Gb9" id="OgD-Ol-MBy"/>
-                        <outlet property="lockIdentifierTitle" destination="c8I-JD-KiX" id="6zk-dh-CzW"/>
+                        <outlet property="lockIdentifierTitle" destination="c8I-JD-KiX" id="HSl-7Y-rhk"/>
                         <outlet property="permissionLabel" destination="Cnp-Ry-683" id="xon-0r-v0P"/>
-                        <outlet property="permissionTitle" destination="yo7-3G-JxV" id="QbK-bw-lIS"/>
+                        <outlet property="permissionTitle" destination="yo7-3G-JxV" id="yU4-Oe-j7c"/>
                         <outlet property="unlockButton" destination="Lf4-kX-ly2" id="aFj-zr-gPg"/>
                         <outlet property="versionLabel" destination="Nim-GK-XFZ" id="Khf-Wp-BGt"/>
-                        <outlet property="versionTitle" destination="T1u-Cu-wVq" id="98F-Qc-Jd4"/>
+                        <outlet property="versionTitle" destination="T1u-Cu-wVq" id="1kG-rO-Cns"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="g0g-bP-wOf" userLabel="First Responder" sceneMemberID="firstResponder"/>
