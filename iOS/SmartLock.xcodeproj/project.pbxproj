@@ -431,6 +431,13 @@
 			remoteGlobalIDString = 6ECD35B0233B1E5E00E49357;
 			remoteInfo = Thumbnail;
 		};
+		6ECD35CA233B51AE00E49357 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6E6000082121119400787DAA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 6E994A83230DFB6C0076DC1B;
+			remoteInfo = LockKit;
+		};
 		6ED820952316774E00B69520 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 6E60004D2121164B00787DAA /* CoreLock.xcodeproj */;
@@ -1609,6 +1616,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				6ECD35CB233B51AE00E49357 /* PBXTargetDependency */,
 			);
 			name = Thumbnail;
 			productName = Thumbnail;
@@ -2576,6 +2584,11 @@
 			isa = PBXTargetDependency;
 			target = 6ECD35B0233B1E5E00E49357 /* Thumbnail */;
 			targetProxy = 6ECD35B8233B1E5E00E49357 /* PBXContainerItemProxy */;
+		};
+		6ECD35CB233B51AE00E49357 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 6E994A83230DFB6C0076DC1B /* LockKit */;
+			targetProxy = 6ECD35CA233B51AE00E49357 /* PBXContainerItemProxy */;
 		};
 		6ED820962316774E00B69520 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
