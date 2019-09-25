@@ -62,8 +62,6 @@
 	<string>public.app-category.utilities</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
-	<key>LSSupportsOpeningDocumentsInPlace</key>
-	<true/>
 	<key>NSBluetoothAlwaysUsageDescription</key>
 	<string>Bluetooth is used to scan for nearby locks in the background.</string>
 	<key>NSBluetoothPeripheralUsageDescription</key>

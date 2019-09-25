@@ -23,10 +23,10 @@ final class ThumbnailProvider: QLThumbnailProvider {
         
         _ = type(of: self).initialize
         
-        log("🖼 Render thumbnail for eKey file \(request.fileURL.path)")
+        log("🖼 Render thumbnail for eKey file \(request.fileURL)")
         
         #if DEBUG
-        log("""
+        print("""
             Maximum size: \(request.maximumSize)
             Minimum size: \(request.minimumSize)
             Scale: \(request.scale)
@@ -42,7 +42,7 @@ final class ThumbnailProvider: QLThumbnailProvider {
             invitation = try decoder.decode(NewKey.Invitation.self, from: data)
             permission = invitation.key.permission
         } catch {
-            log("⚠️ Unable to load eKey file \(request.fileURL.path). \(error)")
+            log("⚠️ Unable to load eKey file \(request.fileURL). \(error)")
             permission = .admin
         }
         
@@ -50,7 +50,6 @@ final class ThumbnailProvider: QLThumbnailProvider {
             request.maximumSize.width,
             request.maximumSize.height
             )
-        //contextWidth *= request.scale
         
         let contextSize = CGSize(
             width: contextWidth,
