@@ -216,8 +216,8 @@ final class MessagesViewController: MSMessagesAppViewController {
         ]
         
         let layout = MSMessageTemplateLayout()
-        layout.image = UIImage(permission: invitation.key.permission)
-        layout.caption = "Shared \(invitation.key.permission.type.localizedText) lock key"
+        layout.mediaFileURL = AssetExtractor.shared.url(for: invitation.key.permission.type.image)
+        layout.caption = "Shared \(invitation.key.permission.type.localizedText) key"
         
         let message = MSMessage(session: activeConversation?.selectedMessage?.session ?? MSSession())
         message.url = components.url!
@@ -272,12 +272,23 @@ extension MessagesViewController: LockActivityHandlingViewController {
     
     func handle(url: LockURL) {
         
-        /// open Lock app
-        extensionContext?.open(url.rawValue, completionHandler: nil)
+        switch url {
+        case let .newKey(invitation):
+            // open invitation
+            let viewController = NewKeyRecieveViewController.fromStoryboard(with: invitation) { [weak self] in
+                self?.requestPresentationStyle(.compact)
+            }
+            let navigationController = UINavigationController(rootViewController: viewController)
+            self.present(navigationController, animated: true, completion: nil)
+            self.requestPresentationStyle(.expanded)
+        default:
+            // defer to app
+            extensionContext?.open(url.rawValue, completionHandler: nil)
+        }
     }
     
     func handle(activity: AppActivity) {
-        assertionFailure()
+        assertionFailure("Cannot handle activity \(activity)")
     }
 }
 

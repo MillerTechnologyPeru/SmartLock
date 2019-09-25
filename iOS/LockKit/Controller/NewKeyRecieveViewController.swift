@@ -43,10 +43,13 @@ public final class NewKeyRecieveViewController: UITableViewController {
     
     // MARK: - Loading
     
-    public static func fromStoryboard(with newKey: NewKey.Invitation) -> NewKeyRecieveViewController {
+    public static func fromStoryboard(with newKey: NewKey.Invitation,
+                                      completion: (() -> ())? = nil) -> NewKeyRecieveViewController {
+        
         guard let viewController = R.storyboard.newKeyInvitation.newKeyRecieveViewController()
             else { fatalError("Could not load \(self) from storyboard") }
         viewController.newKey = newKey
+        viewController.completion = completion
         return viewController
     }
     
