@@ -56,7 +56,7 @@ private extension IndexRequestHandler {
     
     static let initialize: Void = {
         Log.shared = .spotlight
-        log("🖼 Loading \(IndexRequestHandler.self)")
+        log("🔦 Loading \(IndexRequestHandler.self)")
     }()
     
     func controller(for index: CSSearchableIndex) -> SpotlightController {

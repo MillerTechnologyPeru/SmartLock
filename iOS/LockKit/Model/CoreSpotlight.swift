@@ -69,15 +69,16 @@ public final class SpotlightController {
                         for locks: [UUID: LockCache],
                         completion: ((Error?) -> ())? = nil) {
         
+        var deletedItems = Set<String>()
+        var searchableItems = [CSSearchableItem](reserveCapacity: identifiers.count)
+        
         for identifier in identifiers {
             
             guard let viewData = AppActivity.ViewData(rawValue: identifier) else {
-                log?("Invalid index \(identifier)")
+                log?("⚠️ Invalid index \(identifier)")
                 continue
             }
             
-            var deletedItems = Set<String>()
-            var searchableItems = [CSSearchableItem](reserveCapacity: identifiers.count)
             switch viewData {
             case let .lock(lock):
                 let searchIdentifier = SearchableLock.searchIdentifier(for: lock)
@@ -88,25 +89,25 @@ public final class SpotlightController {
                     deletedItems.insert(searchIdentifier)
                 }
             }
-            
-            index.deleteSearchableItems(withIdentifiers: Array(deletedItems)) { [weak self] (error) in
+        }
+        
+        index.deleteSearchableItems(withIdentifiers: Array(deletedItems)) { [weak self] (error) in
+            guard let self = self else { return }
+            if let error = error {
+                self.log?("⚠️ Error deleting: \(error.localizedDescription)")
+                completion?(error)
+                return
+            }
+            self.log?("Deleted \(deletedItems.count) old items")
+            self.index.indexSearchableItems(searchableItems) { [weak self] (error) in
                 guard let self = self else { return }
                 if let error = error {
-                    self.log?("⚠️ Error deleting: \(error.localizedDescription)")
+                    self.log?("⚠️ Error indexing: \(error.localizedDescription)")
                     completion?(error)
                     return
                 }
-                self.log?("Deleted \(deletedItems.count) old items")
-                self.index.indexSearchableItems(searchableItems) { [weak self] (error) in
-                    guard let self = self else { return }
-                    if let error = error {
-                        self.log?("⚠️ Error indexing: \(error.localizedDescription)")
-                        completion?(error)
-                        return
-                    }
-                    self.log?("Indexed \(searchableItems.count) items")
-                    completion?(nil)
-                }
+                self.log?("Indexed \(searchableItems.count) items")
+                completion?(nil)
             }
         }
     }
