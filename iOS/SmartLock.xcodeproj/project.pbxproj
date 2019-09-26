@@ -197,7 +197,7 @@
 		6EB59D612313184A00D5EFA7 /* iCloud.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EB59D602313184A00D5EFA7 /* iCloud.swift */; };
 		6EC0412E230A226400357585 /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EC0412D230A226300357585 /* TabBarController.swift */; };
 		6EC6DF6D233B679200E28455 /* IndexRequestHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EC6DF6C233B679200E28455 /* IndexRequestHandler.swift */; };
-		6EC6DF71233B679200E28455 /* Spotlight.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 6EC6DF6A233B679200E28455 /* Spotlight.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		6EC6DF71233B679200E28455 /* Spotlight.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 6EC6DF6A233B679200E28455 /* Spotlight.appex */; platformFilter = ios; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		6ECD3599233B12AF00E49357 /* QuickLook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6ECD3598233B12AF00E49357 /* QuickLook.framework */; };
 		6ECD359C233B12AF00E49357 /* PreviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6ECD359B233B12AF00E49357 /* PreviewViewController.swift */; };
 		6ECD359F233B12AF00E49357 /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6ECD359D233B12AF00E49357 /* MainInterface.storyboard */; };
@@ -2779,6 +2779,7 @@
 		};
 		6EC6DF70233B679200E28455 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
+			platformFilter = ios;
 			target = 6EC6DF69233B679200E28455 /* Spotlight */;
 			targetProxy = 6EC6DF6F233B679200E28455 /* PBXContainerItemProxy */;
 		};
