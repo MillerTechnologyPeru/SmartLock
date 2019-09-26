@@ -29,11 +29,11 @@ public final class Store {
             preferences.isAppInstalled = true
             do { try keychain.removeAll() }
             catch {
+                log("⚠️ Unable to clear keychain: \(error.localizedDescription)")
                 DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) {
                     #if DEBUG
                     print(error)
                     #endif
-                    log("⚠️ Unable to clear keychain: \(error.localizedDescription)")
                     assertionFailure("Unable to clear keychain")
                 }
             }
@@ -56,8 +56,8 @@ public final class Store {
                 return
             }
             #if DEBUG
+            print("🗄 Loaded persistent store")
             print(store)
-            print("Loaded persistent store")
             #endif
         }
         let didTimeout = semaphore.wait(timeout: .now() + 5.0) == .timedOut
@@ -79,13 +79,11 @@ public final class Store {
         #endif
         
         // observe local cache changes
-        locksObserver = locks.sink(receiveValue: { [unowned self] _ in
-            self.lockCacheChanged()
-        })
+        locksObserver = locks
+            .sink(receiveValue: { [weak self] _ in self?.lockCacheChanged() })
         
         // read from filesystem
         loadCache()
-        updateCoreData()
     }
     
     @available(iOS 13.0, watchOSApplicationExtension 6.0, *)
@@ -294,6 +292,10 @@ public final class Store {
     }
     
     private func beaconFound(_ beacon: UUID) {
+        
+        // Can't do anything because we don't have Bluetooth
+        guard lockManager.central.state == .poweredOn
+            else { return }
         
         if let _ = Store.shared[lock: beacon] {
             DispatchQueue.bluetooth.async { [weak self] in

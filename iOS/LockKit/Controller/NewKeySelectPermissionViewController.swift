@@ -67,18 +67,18 @@ public final class NewKeySelectPermissionViewController: UITableViewController, 
     
     // MARK: - Methods
     
-    private func description(for permissionType: PermissionType) -> String {
+    private func description(for permission: PermissionType) -> String {
         
-        switch permissionType {
+        switch permission {
         case .admin:
-            return R.string.localizable.newKeySelectPermissionAdmin()
+            return R.string.newKeySelectPermissionViewController.adminDescription()
         case .anytime:
-            return R.string.localizable.newKeySelectPermissionAnytime()
+            return R.string.newKeySelectPermissionViewController.anytimeDescription()
         case .scheduled:
-            return R.string.localizable.newKeySelectPermissionScheduled()
+            return R.string.newKeySelectPermissionViewController.scheduledDescription()
         case .owner:
             assertionFailure("Cannot create owner keys")
-            return R.string.localizable.newKeySelectPermissionOwner()
+            return "" // should never show
         }
     }
     

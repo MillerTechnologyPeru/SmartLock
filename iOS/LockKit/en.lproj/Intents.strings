@@ -1,0 +1,38 @@
+"6Y4FZV" = "Which one?";
+
+"FhxgkI" = "Just to confirm, you want to unlock ‘${lock}’?";
+
+"FwuKZ6" = "You have ${count} locks matching ‘${lock}’.";
+
+"J2Ooqg" = "Sorry, I couldn't unlock. ${failureReason}";
+
+"LIsTjU" = "Lock";
+
+"MpDPlI" = "Unlock the specified lock";
+
+"O5ezH4" = "Unlock `${lock}`";
+
+"QdfnKq" = "Unable to unlock. ${failureReason}";
+
+"RZwtL9" = "Failure";
+
+"Tz5jPT" = "Which ${lock} should I unlock?";
+
+"Z5kgSL" = "Lock";
+
+"bvi2l8" = "`${displayName}` is not in range. Please move closer to ${displayName}.";
+
+"claxan" = "Unlocked ‘${lock}‘.";
+
+"dAVo2n" = "Unlock `${lock}`";
+
+"fjnXtW" = "Unlock";
+
+"teoCvx" = "${lock} was successfully unlocked.";
+
+"tnOjCJ" = "Lock";
+
+"vARXDT" = "You do not have a key for `${displayName}`.";
+
+"wkobUh" = "You can only unlock `${displayName}` during the specified schedule.";
+

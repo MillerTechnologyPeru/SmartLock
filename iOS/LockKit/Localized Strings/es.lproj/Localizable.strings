@@ -1,0 +1,99 @@
+/* 
+  Localizable.strings
+  SmartLock
+
+  Created by JurjDev on 9/24/19.
+  Copyright © 2019 ColemanCDA. All rights reserved.
+*/
+
+// MARK: - Miscellaneous
+
+"NewLockName" = "Mi Cerradura";
+
+// MARK: - Permission
+
+"Permission.Owner" = "Dueño";
+"Permission.Admin" = "Administrador";
+"Permission.Anytime" = "Cualquier momento";
+"Permission.Scheduled" = "Programado";
+
+// MARK: - NSUserActivity
+
+"UserActivity.NearbyLocks.Title" = "Cerraduras Cercanas";
+"UserActivity.NearbyLocks.Description" = "Mostrar Cerraduras cercanas.";
+
+"UserActivity.Keys.Title" = "Llaves";
+"UserActivity.Keys.Description" = "Mostrar llaves guardadas.";
+
+"UserActivity.Events.Title" = "Eventos";
+"UserActivity.Events.Description" = "Mostrar historial de eventos.";
+
+// MARK: - UserNotificationCenter
+
+"UserNotificationCenter.TapToUnlock" = "Toque para desbloquear";
+
+"UserNotificationCenter.NewKey" = "Nueva llave";
+
+// MARK: - ActivityIndicatorViewController
+
+// Unlock
+
+"Unlock.LockNotFound" = "No pudo encontrar la cerradura";
+
+"Unlock.UnableToUnlock" = "Incapaz de abrir";
+
+// Setup
+
+"Setup.InvalidQRCode" = "Codigo QR invalido";
+
+"Setup.CouldNotLock" = "No pudo encontrar la cerradura";
+
+// Error Alert
+
+"ErrorAlert.Error" = "Error";
+
+"ErrorAlert.OK" = "Ok";
+
+"ErrorAlert.Retry" = "Volver a intentar";
+
+// MARK: - Alert Action
+
+"AlertAction.Cancel" = "Cancelar";
+
+// MARK: - Context Menu
+
+"ContextMenu.Rename" = "Renombrar";
+
+"ContextMenu.Delete" = "Eliminar";
+
+"ContextMenu.ShareKey" = "Compartir Llave";
+
+"ContextMenu.Manage" = "Administrar";
+
+// MARK: - NewKeyViewController
+
+"NewKeyViewController.Error.RequestNewKey" = "La llave para la cerradura solicitada, ha sido eliminada de la base de datos.";
+
+"NewKeyViewController.Error.LockInRange" = "La cerradura no se encuentra en rango.";
+
+"NewKeyViewController.Error.CreateNewKey" = "No se pudo crear una nueva llave. %@";
+
+// MARK: Alert
+
+"NewKeyViewController.NewKey.Title" = "Nueva Llave";
+"NewKeyViewController.NewKey.Message" = "Ingresé un nombre facil de usar para esta Llave.";
+"NewKeyViewController.NewKey.Ok" = "OK";
+"NewKeyViewController.NewKey.Cancel" = "Cancelar";
+
+// MARK: - LockPermissionsViewController
+
+"LockPermissions.PendingKeys" = "Llaves Pendientes";
+
+"LockPermissions.Delete" = "Eliminar";
+
+// MARK: Alert
+
+"LockPermissions.Alert.Title" = "Confirmación";
+"LockPermissions.Alert.Message" = "¿Esta seguro de querer eliminar esta Llave?";
+"LockPermissions.Alert.Cancel" = "Cancel";
+"LockPermissions.Alert.Delete" = "Delete";

@@ -177,7 +177,7 @@ public final class LockViewController: UITableViewController {
             
             do {
                 guard let peripheral = try Store.shared.device(for: lockIdentifier, scanDuration: 1.0) else {
-                    mainQueue { controller.showErrorAlert(R.string.localizable.lockViewControllerErrorNoLockNerby()) }
+                    mainQueue { controller.showErrorAlert(R.string.lockViewController.errorNotInRange()) }
                     return
                 }
                 try Store.shared.unlock(peripheral)
@@ -211,10 +211,10 @@ public final class LockViewController: UITableViewController {
             self.unlockButton.isEnabled = schedule.isValid()
         }
         
-        self.lockIdentifierTitle.text = R.string.localizable.lockIdentifierTitle()
-        self.keyIdentifierTitle.text = R.string.localizable.keyIdentifierTitle()
-        self.versionTitle.text = R.string.localizable.versionTitle()
-        self.permissionTitle.text = R.string.localizable.permissionTitle()
+        self.lockIdentifierTitle.text = R.string.lockViewController.lockIdentifierTitle()
+        self.keyIdentifierTitle.text = R.string.lockViewController.keyIdentifierTitle()
+        self.versionTitle.text = R.string.lockViewController.versionTitle()
+        self.permissionTitle.text = R.string.lockViewController.permissionTitle()
         
         self.lockIdentifierLabel.text = lockIdentifier!.uuidString
         self.keyIdentifierLabel.text = lockCache.key.identifier.uuidString
@@ -235,7 +235,7 @@ public extension UIViewController {
     func view(lock identifier: UUID) -> Bool {
         
         guard Store.shared[lock: identifier] != nil else {
-            self.showErrorAlert(R.string.localizable.lockViewControllerErrorNoKey(identifier.uuidString))
+            self.showErrorAlert(R.string.lockViewController.errorNoKey())
             return false
         }
         

@@ -1,0 +1,40 @@
+/* 
+  Activity.strings
+  SmartLock
+
+  Created by Alsey Coleman Miller on 9/26/19.
+  Copyright © 2019 ColemanCDA. All rights reserved.
+*/
+
+"LockActivity.Item.Text" = "Yo abri mi puerta %@";
+"NewKeyActivity.Title" = "Compartir Llave";
+"ManageKeysActivity.Title" = "Administrar";
+"DeleteLockActivity.Title" = "Eliminar";
+"RenameActivity.Title" = "Renombrar";
+"HomeKitEnableActivity.Title" = "Modo Hogar";
+"UpdateActivity.Title" = "Actualizar";
+"ShareKeyCloudKitActivity.Title" = "iCloud";
+"AddVoiceShortcutActivity.Title" = "Agregar a Siri";
+
+// MARK: Alerts
+
+"DeleteLockActivity.Alert.title" = "Confirmación";
+"DeleteLockActivity.Alert.Message" = "¿Esta seguro de querer eliminar esta Llave?";
+"DeleteLockActivity.Alert.Cancel" = "Cancelar";
+"DeleteLockActivity.Alert.Delete" = "Eliminar";
+
+"RenameActivity.Alert.title" = "Renombrar";
+"RenameActivity.Alert.Message" = "Ingresé un nombre facil de usar para esta Llave.";
+"RenameActivity.Alert.OK" = "OK";
+"RenameActivity.Alert.Cancel" = "Cancelar";
+
+"HomeKitEnableActivity.Alert.title" = "Modo Hogar";
+"HomeKitEnableActivity.Alert.Message" = "¿Activar Modo Hogar en este dispositivo?";
+"HomeKitEnableActivity.Alert.Cancel" = "Cancelar";
+"HomeKitEnableActivity.Alert.Yes" = "Si";
+"HomeKitEnableActivity.Alert.No" = "No";
+
+"UpdateActivity.Alert.title" = "Actualizar Cerradura";
+"UpdateActivity.Alert.Message" = "¿Esta seguro de querer actualizar el software del Lock?";
+"UpdateActivity.Alert.Cancel" = "Cancelar";
+"UpdateActivity.Alert.Update" = "Actualizar";

@@ -52,7 +52,7 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
         Log.shared = .mainApp
         
         // print app info
-        log("\(bundle.symbol) Launching SmartLock v\(AppVersion) Build \(AppBuild)")
+        log("\(bundle.symbol) Launching SmartLock v\(Bundle.InfoPlist.version) Build \(Bundle.InfoPlist.shortVersion)")
         
         #if DEBUG
         defer { log("\(bundle.symbol) App finished launching in \(String(format: "%.3f", Date().timeIntervalSince(appLaunch)))s") }
@@ -198,12 +198,14 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
         BeaconController.shared.scanBeacons()
         
         // attempt to scan for all known locks if they are not in central cache
-        DispatchQueue.bluetooth.async {
-            do {
-                for lock in Store.shared.locks.value.keys {
-                    let _ = try Store.shared.device(for: lock, scanDuration: 1.0)
-                }
-            } catch { log("⚠️ Unable to scan: \(error.localizedDescription)") }
+        if Store.shared.lockManager.central.state == .poweredOn {
+            DispatchQueue.bluetooth.async {
+                do {
+                    for lock in Store.shared.locks.value.keys {
+                        let _ = try Store.shared.device(for: lock, scanDuration: 1.0)
+                    }
+                } catch { log("⚠️ Unable to scan: \(error.localizedDescription)") }
+            }
         }
         
         // CloudKit discoverability
