@@ -18,7 +18,7 @@ final class SettingsViewController: UITableViewController {
     
     private var data = [Section]()
     
-    internal let version = "v\(AppVersion) (\(AppBuild))"
+    internal let version = "v\(Bundle.InfoPlist.version) (\(Bundle.InfoPlist.shortVersion))"
     
     // MARK: - Loading
     

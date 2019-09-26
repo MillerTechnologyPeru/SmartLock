@@ -182,10 +182,10 @@
 		6EA570F323189CE9008027D4 /* CoreLock.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 6E60005A2121164B00787DAA /* CoreLock.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		6EA570F623189D59008027D4 /* NotificationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6ED81FC32316618100B69520 /* NotificationController.swift */; };
 		6EA570F723189D67008027D4 /* ComplicationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6ED81FC52316618100B69520 /* ComplicationController.swift */; };
-		6EA570F823189DAD008027D4 /* AppVersion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EAADF8B2122664A0074CEDF /* AppVersion.swift */; };
+		6EA570F823189DAD008027D4 /* InfoPlist.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EAADF8B2122664A0074CEDF /* InfoPlist.swift */; };
 		6EA570F923189DCC008027D4 /* ExtensionDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6ED81FC12316618100B69520 /* ExtensionDelegate.swift */; };
 		6EA570FB23189E4D008027D4 /* Interface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6ED81FB02316617E00B69520 /* Interface.storyboard */; };
-		6EAADF8C2122664A0074CEDF /* AppVersion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EAADF8B2122664A0074CEDF /* AppVersion.swift */; };
+		6EAADF8C2122664A0074CEDF /* InfoPlist.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EAADF8B2122664A0074CEDF /* InfoPlist.swift */; };
 		6EB4B2DA232B5E260077ADD3 /* CloudUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EB4B2D9232B5E260077ADD3 /* CloudUser.swift */; };
 		6EB59D612313184A00D5EFA7 /* iCloud.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EB59D602313184A00D5EFA7 /* iCloud.swift */; };
 		6EC0412E230A226400357585 /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EC0412D230A226300357585 /* TabBarController.swift */; };
@@ -718,7 +718,7 @@
 		6EA570C423189871008027D4 /* Watch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Watch.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6EA570D023189874008027D4 /* Watch Extension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "Watch Extension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
 		6EA570ED23189C9F008027D4 /* WatchIntent.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = WatchIntent.entitlements; sourceTree = "<group>"; };
-		6EAADF8B2122664A0074CEDF /* AppVersion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppVersion.swift; sourceTree = "<group>"; };
+		6EAADF8B2122664A0074CEDF /* InfoPlist.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoPlist.swift; sourceTree = "<group>"; };
 		6EAADFB521229CBF0074CEDF /* LockTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LockTableViewCell.xib; sourceTree = "<group>"; };
 		6EAADFB621229CBF0074CEDF /* LockTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LockTableViewCell.swift; sourceTree = "<group>"; };
 		6EB4B2D9232B5E260077ADD3 /* CloudUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudUser.swift; sourceTree = "<group>"; };
@@ -1031,7 +1031,7 @@
 			children = (
 				6E994AF9230E57860076DC1B /* SmartLock.entitlements */,
 				6E6000132121119400787DAA /* AppDelegate.swift */,
-				6EAADF8B2122664A0074CEDF /* AppVersion.swift */,
+				6EAADF8B2122664A0074CEDF /* InfoPlist.swift */,
 				6E806B99230F56B000C6FF78 /* Log.swift */,
 				6E806BB0230F6E8700C6FF78 /* R.generated.swift */,
 				6E994AA2230DFC180076DC1B /* Assets.xcassets */,
@@ -2396,7 +2396,7 @@
 			files = (
 				6E50FC13233B63D5003F3AF7 /* Intents.intentdefinition in Sources */,
 				6E6B78B82325F17500635EEF /* CloudSettingsView.swift in Sources */,
-				6EAADF8C2122664A0074CEDF /* AppVersion.swift in Sources */,
+				6EAADF8C2122664A0074CEDF /* InfoPlist.swift in Sources */,
 				6E994ACC230E034E0076DC1B /* ActivityHandling.swift in Sources */,
 				6E806BA6230F654100C6FF78 /* SettingsIconView.swift in Sources */,
 				6E6B78B72325F17300635EEF /* BluetoothSettingsView.swift in Sources */,
@@ -2556,7 +2556,7 @@
 				6EA570F923189DCC008027D4 /* ExtensionDelegate.swift in Sources */,
 				6EA570F623189D59008027D4 /* NotificationController.swift in Sources */,
 				6EA570F723189D67008027D4 /* ComplicationController.swift in Sources */,
-				6EA570F823189DAD008027D4 /* AppVersion.swift in Sources */,
+				6EA570F823189DAD008027D4 /* InfoPlist.swift in Sources */,
 				6EA570EB2318995C008027D4 /* InterfaceController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

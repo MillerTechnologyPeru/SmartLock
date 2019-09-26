@@ -52,7 +52,7 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
         Log.shared = .mainApp
         
         // print app info
-        log("\(bundle.symbol) Launching SmartLock v\(AppVersion) Build \(AppBuild)")
+        log("\(bundle.symbol) Launching SmartLock v\(Bundle.InfoPlist.version) Build \(Bundle.InfoPlist.shortVersion)")
         
         #if DEBUG
         defer { log("\(bundle.symbol) App finished launching in \(String(format: "%.3f", Date().timeIntervalSince(appLaunch)))s") }
