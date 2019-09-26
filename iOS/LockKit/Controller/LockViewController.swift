@@ -116,7 +116,7 @@ public final class LockViewController: UITableViewController {
             ]
             
             let lockItem = LockActivityItem(identifier: lockIdentifier)
-            let activityItems = [lockItem, lockItem.image] as [Any]
+            let activityItems = [lockItem, lockItem.text, lockItem.image] as [Any]
             let activityViewController = UIActivityViewController(
                 activityItems: activityItems,
                 applicationActivities: activities

@@ -135,55 +135,22 @@ public extension UIViewController {
                sender: PopoverPresentingView,
                completion: @escaping () -> ()) {
         
-        DispatchQueue.app.async {
-            
-            // save invitation file
-            let newKeyData = try! JSONEncoder().encode(invitation)
-            
-            let filePath = try! FileManager.default
-                .url(for: .cachesDirectory,
-                     in: .userDomainMask,
-                     appropriateFor: nil,
-                     create: true)
-                .appendingPathComponent("newKey-\(invitation.key.identifier).ekey")
-                .path
-            
-            guard FileManager.default.createFile(atPath: filePath, contents: newKeyData, attributes: nil)
-                else { assertionFailure("Could not write \(filePath) to disk"); return }
-            
-            // share new key
-            mainQueue {
-                                
-                // show activity controller
-                let activityController = UIActivityViewController(
-                    activityItems: [
-                        URL(fileURLWithPath: filePath),
-                        invitation
-                    ],
-                    applicationActivities: [
-                        ShareKeyCloudKitActivity()
-                    ]
-                )
-                
-                activityController.excludedActivityTypes = [.postToTwitter,
-                                                            .postToFacebook,
-                                                            .postToWeibo,
-                                                            .postToTencentWeibo,
-                                                            .postToFlickr,
-                                                            .postToVimeo,
-                                                            .print,
-                                                            .assignToContact,
-                                                            .saveToCameraRoll,
-                                                            .addToReadingList]
-                
-                activityController.completionWithItemsHandler = { (activityType, completed, items, error) in
-                    
-                    self.dismiss(animated: true, completion: nil)
-                    completion()
-                }
-                
-                self.present(activityController, animated: true, completion: nil, sender: sender)
-            }
+        // show activity controller
+        let activityController = UIActivityViewController(
+            activityItems: [
+                NewKeyFileActivityItem(invitation: invitation),
+                invitation
+            ],
+            applicationActivities: [
+                ShareKeyCloudKitActivity()
+            ]
+        )
+        activityController.excludedActivityTypes = NewKeyFileActivityItem.excludedActivityTypes
+        activityController.completionWithItemsHandler = { (activityType, completed, items, error) in
+            self.dismiss(animated: true, completion: nil)
+            completion()
         }
+        
+        self.present(activityController, animated: true, completion: nil, sender: sender)
     }
 }

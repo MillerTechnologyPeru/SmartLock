@@ -65,70 +65,56 @@ public final class LockActivityItem: NSObject {
     }
 }
 
-// MARK: - UIActivityItemSource
+// MARK: - New Key Activity
 
-extension LockActivityItem: UIActivityItemSource {
+public final class NewKeyFileActivityItem: UIActivityItemProvider {
     
-    public func activityViewControllerPlaceholderItem(_ activityViewController: UIActivityViewController) -> Any {
-        return text
+    public init(invitation: NewKey.Invitation) {
+        self.invitation = invitation
+        let url = type(of: self).url(for: invitation)
+        super.init(placeholderItem: url)
     }
     
-    public func activityViewController(_ activityViewController: UIActivityViewController, itemForActivityType activityType: UIActivity.ActivityType?) -> Any? {
-        
-        // non-nil
-        guard let activityType = activityType else {
-            assertionFailure()
-            return nil
+    private static func url(for invitation: NewKey.Invitation) -> URL {
+        let fileName = invitation.key.name + "." + NewKey.Invitation.fileExtension
+        let fileURL = FileManager.default.temporaryDirectory.appendingPathComponent(fileName)
+        return fileURL
+    }
+    
+    public let invitation: NewKey.Invitation
+    
+    private lazy var encoder = JSONEncoder()
+    
+    /// Generate the actual item.
+    public override var item: Any {
+        // save invitation file
+        let url = type(of: self).url(for: invitation)
+        do {
+            let data = try encoder.encode(invitation)
+            try data.write(to: url, options: [.atomic])
+            return url
+        } catch {
+            assertionFailure("Could create key file: \(error)")
+            return url
         }
-        
-        // not excluded type
-        guard LockActivityItem.excludedActivityTypes.contains(activityType) == false
-            else { return nil }
-        
-        switch activityType {
-        case .mail:
-            return text
-        case .message:
-            return text
-        case .postToFacebook:
-            return text
-        case .postToTwitter:
-            return text
-        default:
-            return text
-        }
-    }
-    
-    public func activityViewController(_ activityViewController: UIActivityViewController, subjectForActivityType activityType: UIActivity.ActivityType?) -> String {
-        
-        return "🔐 Lock"
-    }
-    
-    public func activityViewController(_ activityViewController: UIActivityViewController, thumbnailImageForActivityType activityType: UIActivity.ActivityType?, suggestedSize size: CGSize) -> UIImage? {
-        
-        return image
-    }
-    
-    @available(iOSApplicationExtension 13.0, *)
-    public func activityViewControllerLinkMetadata(_ activityViewController: UIActivityViewController) -> LPLinkMetadata? {
-        
-        guard let lockCache = self.lock else {
-            assertionFailure("Lock not in cache")
-            return nil
-        }
-        
-        let permissionImageURL = AssetExtractor.shared.url(for: lockCache.key.permission.type.image)
-        assert(permissionImageURL != nil, "Missing permission image")
-        let metadata = LPLinkMetadata()
-        metadata.title = text
-        metadata.imageProvider = permissionImageURL.flatMap { NSItemProvider(contentsOf: $0) }
-        return metadata
     }
 }
 
-// MARK: - New Key Activity
-
-
+public extension NewKeyFileActivityItem {
+    
+    static let excludedActivityTypes: [UIActivity.ActivityType] = [.postToTwitter,
+                                                                   .postToFacebook,
+                                                                   .postToWeibo,
+                                                                   .postToTencentWeibo,
+                                                                   .postToFlickr,
+                                                                   .postToVimeo,
+                                                                   .print,
+                                                                   .assignToContact,
+                                                                   .saveToCameraRoll,
+                                                                   .addToReadingList,
+                                                                   .openInIBooks,
+                                                                   .markupAsPDF]
+}
 
 // MARK: - Activity Type
 
