@@ -131,17 +131,17 @@ public final class NewKeyRecieveViewController: UITableViewController {
                 expiration = dateFormatter.string(from: newKey.key.expiration)
             }
         } else {
-            expiration = R.string.localizable.newKeyRecieveExpirationExpired()
+            expiration = R.string.newKeyRecieveViewController.expirationExpired()
         }
         
         var data = [
             Section(
                 title: nil,
                 items: [
-                    .detail(R.string.localizable.newKeyRecieveNameTitle(), keyName),
-                    .detail(R.string.localizable.newKeyRecievePermissionTitle(), permissionDescription),
-                    .detail(R.string.localizable.newKeyRecieveExpirationTitle(), expiration),
-                    .detail(R.string.localizable.newKeyRecieveLockTitle(), lock)
+                    .detail(R.string.newKeyRecieveViewController.nameTitle(), keyName),
+                    .detail(R.string.newKeyRecieveViewController.permissionTitle(), permissionDescription),
+                    .detail(R.string.newKeyRecieveViewController.expirationTitle(), expiration),
+                    .detail(R.string.newKeyRecieveViewController.lockTitle(), lock)
                 ]
             )
         ]
@@ -154,7 +154,7 @@ public final class NewKeyRecieveViewController: UITableViewController {
                 Section(
                     title: nil,
                     items: [
-                        .button(R.string.localizable.newKeyRecieveSaveTitle(), { $0.save() })
+                        .button(R.string.newKeyRecieveViewController.saveTitle(), { $0.save() })
                     ]
                 )
             )
@@ -170,13 +170,12 @@ public final class NewKeyRecieveViewController: UITableViewController {
             return
         }
         
-        guard FileManager.Lock.shared.applicationData?.locks[newKeyInvitation.lock] == nil else {
-            self.showErrorAlert(R.string.localizable.newKeyRecieveErrorExistingKey(newKey.lock.rawValue))
+        guard FileManager.Lock.shared.applicationData?.locks[newKeyInvitation.lock] == nil else {            self.showErrorAlert(R.string.newKeyRecieveViewController.errorExistingKey(newKey.lock.rawValue))
             return
         }
         
         guard newKeyInvitation.key.expiration.timeIntervalSinceNow > 0 else {
-            self.showErrorAlert(R.string.localizable.newKeyRecieveErrorExpired())
+            self.showErrorAlert(R.string.newKeyRecieveViewController.errorExpired())
             return
         }
         

@@ -43,7 +43,7 @@ public struct LockActivityItem {
         guard let lockCache = Store.shared[lock: identifier]
             else { fatalError("Lock not in cache") }
         
-        return R.string.localizable.lockActivityItemText(lockCache.name)
+        return R.string.activity.lockActivityItemText(lockCache.name)
     }
     
     public var image: UIImage {
@@ -84,7 +84,7 @@ public final class NewKeyActivity: UIActivity {
     }
     
     public override var activityTitle: String? {
-        return R.string.localizable.newKeyActivityTitle()
+        return R.string.activity.newKeyActivityTitle()
     }
     
     public override var activityImage: UIImage? {
@@ -136,7 +136,7 @@ public final class ManageKeysActivity: UIActivity {
     }
     
     public override var activityTitle: String? {
-        return R.string.localizable.manageKeysActivityTitle()
+        return R.string.activity.manageKeysActivityTitle()
     }
     
     public override var activityImage: UIImage? {
@@ -189,7 +189,7 @@ public final class DeleteLockActivity: UIActivity {
     }
     
     public override var activityTitle: String? {
-        return R.string.localizable.deleteLockActivityTitle()
+        return R.string.activity.deleteLockActivityTitle()
     }
     
     public override var activityImage: UIImage? {
@@ -215,17 +215,17 @@ public final class DeleteLockActivity: UIActivity {
     public static func viewController(for lock: UUID, completion: @escaping (Bool) -> ()) -> UIAlertController {
         
         let alert = UIAlertController(
-            title: R.string.localizable.deleteLockActivityAlertTitle(),
-            message: R.string.localizable.deleteLockActivityAlertMessage(),
+            title: R.string.activity.deleteLockActivityAlertTitle(),
+            message: R.string.activity.deleteLockActivityAlertMessage(),
             preferredStyle: .alert
         )
         
-        alert.addAction(UIAlertAction(title: R.string.localizable.deleteLockActivityAlertCancel(), style: .cancel, handler: { (UIAlertAction) in
+        alert.addAction(UIAlertAction(title: R.string.activity.deleteLockActivityAlertCancel(), style: .cancel, handler: { (UIAlertAction) in
             
             alert.dismiss(animated: true) { completion(false) }
         }))
         
-        alert.addAction(UIAlertAction(title: R.string.localizable.deleteLockActivityAlertDelete(), style: .destructive, handler: { (UIAlertAction) in
+        alert.addAction(UIAlertAction(title: R.string.activity.deleteLockActivityAlertDelete(), style: .destructive, handler: { (UIAlertAction) in
             
             Store.shared.remove(lock)
             
@@ -250,7 +250,7 @@ public final class RenameActivity: UIActivity {
     }
     
     public override var activityTitle: String? {
-        return R.string.localizable.renameActivityTitle()
+        return R.string.activity.renameActivityTitle()
     }
     
     public override var activityImage: UIImage? {
@@ -274,19 +274,19 @@ public final class RenameActivity: UIActivity {
     public static func viewController(for lock: UUID,
                                       completion: @escaping (Bool) -> ()) -> UIAlertController {
         
-        let alert = UIAlertController(title: R.string.localizable.renameActivityAlertTitle(),
-                                      message: R.string.localizable.renameActivityAlertMessage(),
+        let alert = UIAlertController(title: R.string.activity.renameActivityAlertTitle(),
+                                      message: R.string.activity.renameActivityAlertMessage(),
                                       preferredStyle: .alert)
         
         alert.addTextField { $0.text = Store.shared[lock: lock]?.name }
         
-        alert.addAction(UIAlertAction(title: R.string.localizable.renameActivityAlertOK(), style: .`default`, handler: { (UIAlertAction) in
+        alert.addAction(UIAlertAction(title: R.string.activity.renameActivityAlertOK(), style: .`default`, handler: { (UIAlertAction) in
             
             Store.shared[lock: lock]?.name = alert.textFields?[0].text ?? ""
             alert.dismiss(animated: true) { completion(true) }
         }))
         
-        alert.addAction(UIAlertAction(title: R.string.localizable.renameActivityAlertCancel(), style: .destructive, handler: { (UIAlertAction) in
+        alert.addAction(UIAlertAction(title: R.string.activity.renameActivityAlertCancel(), style: .destructive, handler: { (UIAlertAction) in
             
             alert.dismiss(animated: true) { completion(false) }
         }))
@@ -307,7 +307,7 @@ public final class HomeKitEnableActivity: UIActivity {
     }
     
     public override var activityTitle: String? {
-        return R.string.localizable.homeKitEnableActivityTitle()
+        return R.string.activity.homeKitEnableActivityTitle()
     }
     
     public override var activityImage: UIImage? {
@@ -340,8 +340,8 @@ public final class HomeKitEnableActivity: UIActivity {
         
         let lockItem = self.item!
         
-        let alert = UIAlertController(title: R.string.localizable.homeKitEnableActivityAlertTitle(),
-                                      message: R.string.localizable.homeKitEnableActivityAlertMessage(),
+        let alert = UIAlertController(title: R.string.activity.homeKitEnableActivityAlertTitle(),
+                                      message: R.string.activity.homeKitEnableActivityAlertMessage(),
                                       preferredStyle: .alert)
         
         func enableHomeKit(_ enable: Bool = true) {
@@ -362,17 +362,17 @@ public final class HomeKitEnableActivity: UIActivity {
             }
         }
             
-        alert.addAction(UIAlertAction(title:R.string.localizable.homeKitEnableActivityAlertCancel(), style: .cancel, handler: { (UIAlertAction) in
+        alert.addAction(UIAlertAction(title:R.string.activity.homeKitEnableActivityAlertCancel(), style: .cancel, handler: { (UIAlertAction) in
                         
             alert.dismiss(animated: true) { self.activityDidFinish(false) }
         }))
         
-        alert.addAction(UIAlertAction(title: R.string.localizable.homeKitEnableActivityAlertYes(), style: .`default`, handler: { (UIAlertAction) in
+        alert.addAction(UIAlertAction(title: R.string.activity.homeKitEnableActivityAlertYes(), style: .`default`, handler: { (UIAlertAction) in
             
             enableHomeKit()
         }))
         
-        alert.addAction(UIAlertAction(title: R.string.localizable.homeKitEnableActivityAlertNo(), style: .`default`, handler: { (UIAlertAction) in
+        alert.addAction(UIAlertAction(title: R.string.activity.homeKitEnableActivityAlertNo(), style: .`default`, handler: { (UIAlertAction) in
             
             enableHomeKit(false)
         }))
@@ -392,7 +392,7 @@ public final class UpdateActivity: UIActivity {
     }
     
    public  override var activityTitle: String? {
-        return R.string.localizable.updateActivityTitle()
+        return R.string.activity.updateActivityTitle()
     }
     
     public override var activityImage: UIImage? {
@@ -421,16 +421,16 @@ public final class UpdateActivity: UIActivity {
         
         //let lockItem = self.item!
         
-        let alert = UIAlertController(title: R.string.localizable.updateActivityAlertTitle(),
-                                      message: R.string.localizable.updateActivityAlertMessage(),
+        let alert = UIAlertController(title: R.string.activity.updateActivityAlertTitle(),
+                                      message: R.string.activity.updateActivityAlertMessage(),
                                       preferredStyle: .alert)
         
-        alert.addAction(UIAlertAction(title: R.string.localizable.updateActivityAlertCancel(), style: .cancel, handler: { (UIAlertAction) in
+        alert.addAction(UIAlertAction(title: R.string.activity.updateActivityAlertCancel(), style: .cancel, handler: { (UIAlertAction) in
             
             alert.dismiss(animated: true) { self.activityDidFinish(false) }
         }))
         
-        alert.addAction(UIAlertAction(title: R.string.localizable.updateActivityAlertUpdate(), style: .`default`, handler: { (UIAlertAction) in
+        alert.addAction(UIAlertAction(title: R.string.activity.updateActivityAlertUpdate(), style: .`default`, handler: { (UIAlertAction) in
             /*
             let progressHUD = JGProgressHUD(style: .dark)!
             
@@ -479,7 +479,7 @@ public final class ShareKeyCloudKitActivity: UIActivity {
     }
      
     public  override var activityTitle: String? {
-         return R.string.localizable.shareKeyCloudKitActivityTitle()
+         return R.string.activity.shareKeyCloudKitActivityTitle()
      }
      
      public override var activityImage: UIImage? {
@@ -547,7 +547,7 @@ public final class AddVoiceShortcutActivity: UIActivity {
     }
     
     public  override var activityTitle: String? {
-        return R.string.localizable.addVoiceShortcutActivityTitle()
+        return R.string.activity.addVoiceShortcutActivityTitle()
     }
     
     public override var activityImage: UIImage? {
