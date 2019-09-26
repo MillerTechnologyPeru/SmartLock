@@ -37,7 +37,7 @@ final class MessagesViewController: MSMessagesAppViewController {
         // set global appearance
         UIView.configureLockAppearance()
         
-        // print app info
+        // print extension info
         log("✉️ Loaded \(MessagesViewController.self)")
         
         // setup loading
@@ -276,7 +276,7 @@ extension MessagesViewController: LockActivityHandlingViewController {
         switch url {
         case let .newKey(invitation):
             // open invitation
-            open(newKey: invitation) { [weak self] in
+            open(newKey: invitation) { [weak self] _ in
                 self?.requestPresentationStyle(.compact)
             }
             self.requestPresentationStyle(.expanded)

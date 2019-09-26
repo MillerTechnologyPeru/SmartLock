@@ -154,7 +154,8 @@ public extension UIViewController {
     
     func shareKey(lock identifier: UUID) {
         
-        self.shareKey(lock: identifier) { [unowned self] in
+        self.shareKey(lock: identifier) { [weak self] in
+            guard let self = self else { return }
             guard let (invitation, sender) = $0 else {
                 self.dismiss(animated: true, completion: nil)
                 return

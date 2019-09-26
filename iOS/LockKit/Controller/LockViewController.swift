@@ -57,10 +57,12 @@ public final class LockViewController: UITableViewController {
         guard lockIdentifier != nil
             else { fatalError("Lock identifer not set") }
         
+        /// Setup table view
         tableView.rowHeight = UITableView.automaticDimension
         tableView.estimatedRowHeight = 44
         tableView.tableFooterView = UIView()
         
+        // update UI
         configureView()
     }
     
@@ -127,7 +129,7 @@ public final class LockViewController: UITableViewController {
         
         if shouldScan {
             performActivity(queue: .bluetooth, {
-                try Store.shared.scan(duration: 1)
+                try Store.shared.scan(duration: 1.0)
             }, completion: { (viewController, _) in
                 show()
             })
