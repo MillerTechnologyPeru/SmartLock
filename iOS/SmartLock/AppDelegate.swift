@@ -198,12 +198,14 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
         BeaconController.shared.scanBeacons()
         
         // attempt to scan for all known locks if they are not in central cache
-        DispatchQueue.bluetooth.async {
-            do {
-                for lock in Store.shared.locks.value.keys {
-                    let _ = try Store.shared.device(for: lock, scanDuration: 1.0)
-                }
-            } catch { log("⚠️ Unable to scan: \(error.localizedDescription)") }
+        if Store.shared.lockManager.central.state == .poweredOn {
+            DispatchQueue.bluetooth.async {
+                do {
+                    for lock in Store.shared.locks.value.keys {
+                        let _ = try Store.shared.device(for: lock, scanDuration: 1.0)
+                    }
+                } catch { log("⚠️ Unable to scan: \(error.localizedDescription)") }
+            }
         }
         
         // CloudKit discoverability
