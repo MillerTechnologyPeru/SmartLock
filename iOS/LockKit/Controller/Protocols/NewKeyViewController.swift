@@ -153,13 +153,10 @@ public extension UIViewController {
             
             // share new key
             mainQueue {
-                
-                let url = LockURL.newKey(invitation).rawValue
-                
+                                
                 // show activity controller
                 let activityController = UIActivityViewController(
                     activityItems: [
-                        url,
                         URL(fileURLWithPath: filePath),
                         invitation
                     ],

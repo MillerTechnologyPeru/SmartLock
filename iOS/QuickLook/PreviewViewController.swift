@@ -12,20 +12,28 @@ import QuickLook
 import CoreLock
 import LockKit
 
+/// QuickLook Preview View Controller
 final class PreviewViewController: UIViewController, QLPreviewingController {
     
     // MARK: - Loading
-    
-    private static let initialize: Void = {
-        Log.shared = .quickLook
-        log("👁‍🗨 Loading \(PreviewViewController.self)")
-    }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         // setup logging
-        _ = type(of: self).initialize
+        Log.shared = .quickLook
+        
+        // set global appearance
+        UIView.configureLockAppearance()
+        
+        // log
+        log("👁‍🗨 Loaded \(PreviewViewController.self)")
+        
+        // setup logging
+        LockManager.shared.log = { log("🔒 LockManager: " + $0) }
+        BeaconController.shared.log = { log("📶 \(BeaconController.self): " + $0) }
+        SpotlightController.shared.log = { log("🔦 \(SpotlightController.self): " + $0) }
+        
         
     }
     
@@ -41,6 +49,10 @@ final class PreviewViewController: UIViewController, QLPreviewingController {
             return
         }
         
+        // load updated lock information
+        Store.shared.loadCache()
+        
+        // show UI
         switch viewData {
         case let .lock(lock):
             loadLock(lock)
@@ -94,6 +106,7 @@ private extension PreviewViewController {
     
     func loadLock(_ identifier: UUID) {
         
+        // load view controller
         let viewController = LockViewController.fromStoryboard(with: identifier)
         loadChildViewController(viewController)
     }

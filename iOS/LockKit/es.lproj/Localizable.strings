@@ -174,4 +174,12 @@
 
 // MARK: - NewKeyRecieveViewController
 
-"NewKeyRecieve.Error" = "Usted ya cuenta con una llave para la cerradura %@.";
+"NewKeyRecieve.Error.ExistingKey" = "Usted ya cuenta con una llave para la cerradura %@.";
+"NewKeyRecieve.Error.Expired" = "La llave pendiente expiro.";
+"NewKeyRecieve.Name.Title" = "Nombre";
+"NewKeyRecieve.Lock.Title" = "Cerradura";
+"NewKeyRecieve.Permission.Title" = "Permiso";
+"NewKeyRecieve.Expiration.Title" = "Expiracion";
+"NewKeyRecieve.Expiration.Expired" = "Expirado";
+"NewKeyRecieve.Save.Title" = "Guardar";
+"NewLockName" = "Cerradura";

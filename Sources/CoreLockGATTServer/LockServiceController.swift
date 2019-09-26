@@ -526,7 +526,7 @@ public final class LockServiceController <Peripheral: PeripheralProtocol> : GATT
                 for (index, chunk) in chunks.enumerated() {
                     peripheral[characteristic: keysResponseHandle] = chunk.data
                     print("Sent chunk \(index + 1) for \(notification.key.identifier) (\(chunk.data.count) bytes)")
-                    sleep(1)
+                    usleep(100)
                 }
             }
             
@@ -584,7 +584,7 @@ public final class LockServiceController <Peripheral: PeripheralProtocol> : GATT
                 for (index, chunk) in chunks.enumerated() {
                     peripheral[characteristic: eventsResponseHandle] = chunk.data
                     print("Sent chunk \(index + 1)\(notification.event.flatMap({ " for event \($0.identifier)" }) ?? "") (\(chunk.data.count) bytes)")
-                    sleep(1)
+                    usleep(100)
                 }
             }
             

@@ -37,12 +37,13 @@ final class MessagesViewController: MSMessagesAppViewController {
         // set global appearance
         UIView.configureLockAppearance()
         
-        // print app info
+        // print extension info
         log("✉️ Loaded \(MessagesViewController.self)")
         
         // setup loading
         LockManager.shared.log = { log("🔒 LockManager: " + $0) }
         BeaconController.shared.log = { log("📶 \(BeaconController.self): " + $0) }
+        SpotlightController.shared.log = { log("🔦 \(SpotlightController.self): " + $0) }
         
         // setup table view
         tableView.register(LockTableViewCell.self)
@@ -275,7 +276,7 @@ extension MessagesViewController: LockActivityHandlingViewController {
         switch url {
         case let .newKey(invitation):
             // open invitation
-            open(newKey: invitation) { [weak self] in
+            open(newKey: invitation) { [weak self] _ in
                 self?.requestPresentationStyle(.compact)
             }
             self.requestPresentationStyle(.expanded)

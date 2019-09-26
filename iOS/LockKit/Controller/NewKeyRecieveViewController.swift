@@ -13,30 +13,38 @@ import GATT
 import CoreLock
 import JGProgressHUD
 
+/// Receive New Key View Controller
 public final class NewKeyRecieveViewController: UITableViewController {
     
     // MARK: - IB Outlets
     
     @IBOutlet private(set) weak var permissionView: PermissionIconView!
-    @IBOutlet private(set) weak var permissionLabel: UILabel!
-    @IBOutlet private(set) weak var lockLabel: UILabel!
-    @IBOutlet private(set) weak var nameLabel: UILabel!
-    @IBOutlet private(set) weak var expirationLabel: UILabel!
     
     // MARK: - Properties
     
-    public private(set) var newKey: NewKey.Invitation!
+    public private(set) var newKey: NewKey.Invitation! {
+        didSet { configureView() }
+    }
         
     public var progressHUD: JGProgressHUD?
     
-    public var completion: (() -> ())?
+    public var completion: ((Bool) -> ())?
+    
+    private var data = [Section]() {
+        didSet { tableView.reloadData() }
+    }
+    
+    private var canSave: Bool {
+        return FileManager.Lock.shared.applicationData?.locks[newKey.lock] == nil
+        && newKey.key.expiration.timeIntervalSinceNow > 0 // not expired
+    }
     
     @available(iOS 13.0, *)
     private lazy var timeFormatter = RelativeDateTimeFormatter()
     
     private lazy var dateFormatter: DateFormatter = {
         let formatter = DateFormatter()
-        formatter.dateStyle = .short
+        formatter.dateStyle = .medium
         formatter.timeStyle = .short
         return formatter
     }()
@@ -44,7 +52,7 @@ public final class NewKeyRecieveViewController: UITableViewController {
     // MARK: - Loading
     
     public static func fromStoryboard(with newKey: NewKey.Invitation,
-                                      completion: (() -> ())? = nil) -> NewKeyRecieveViewController {
+                                      completion: ((Bool) -> ())? = nil) -> NewKeyRecieveViewController {
         
         guard let viewController = R.storyboard.newKeyInvitation.newKeyRecieveViewController()
             else { fatalError("Could not load \(self) from storyboard") }
@@ -60,6 +68,13 @@ public final class NewKeyRecieveViewController: UITableViewController {
         
         self.tableView.tableFooterView = UIView()
         
+        // TODO: Observe Bluetooth State
+        if LockManager.shared.central.state != .poweredOn, canSave {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
+                self?.configureView()
+            }
+        }
+        
         configureView()
     }
     
@@ -74,11 +89,81 @@ public final class NewKeyRecieveViewController: UITableViewController {
     // MARK: - Actions
     
     @IBAction func cancel(_ sender: UIBarItem) {
-        
-        dismiss(animated: true, completion: nil)
+        if let completion = self.completion {
+            completion(false)
+        } else {
+            dismiss(animated: true, completion: nil)
+        }
     }
     
-    @IBAction func save(_ sender: UIBarItem) {
+    @IBAction func save(_ sender: UIBarButtonItem) {
+        save()
+    }
+    
+    // MARK: - Methods
+    
+    private subscript (indexPath: IndexPath) -> Item {
+        return data[indexPath.section].items[indexPath.row]
+    }
+    
+    private func configureView() {
+        
+        guard isViewLoaded else { return }
+        
+        guard let newKey = self.newKey else {
+            assertionFailure()
+            return
+        }
+        
+        let permission = newKey.key.permission
+        self.permissionView.permission = permission.type
+        
+        let keyName = newKey.key.name
+        let lock = newKey.lock.uuidString
+        let permissionDescription = permission.type.localizedText
+        
+        let expiration: String
+        let timeRemaining = newKey.key.expiration.timeIntervalSinceNow
+        if timeRemaining > 0 {
+            if #available(iOS 13.0, *) {
+                expiration = timeFormatter.localizedString(fromTimeInterval: timeRemaining)
+            } else {
+                expiration = dateFormatter.string(from: newKey.key.expiration)
+            }
+        } else {
+            expiration = R.string.localizable.newKeyRecieveExpirationExpired()
+        }
+        
+        var data = [
+            Section(
+                title: nil,
+                items: [
+                    .detail(R.string.localizable.newKeyRecieveNameTitle(), keyName),
+                    .detail(R.string.localizable.newKeyRecievePermissionTitle(), permissionDescription),
+                    .detail(R.string.localizable.newKeyRecieveExpirationTitle(), expiration),
+                    .detail(R.string.localizable.newKeyRecieveLockTitle(), lock)
+                ]
+            )
+        ]
+        
+        // add save button if not contained in navigation controller
+        if canSave,
+            LockManager.shared.central.state == .poweredOn,
+            parent is UINavigationController == false {
+            data.append(
+                Section(
+                    title: nil,
+                    items: [
+                        .button(R.string.localizable.newKeyRecieveSaveTitle(), { $0.save() })
+                    ]
+                )
+            )
+        }
+        
+        self.data = data
+    }
+    
+    private func save() {
         
         guard let newKeyInvitation = self.newKey else {
             assertionFailure()
@@ -86,11 +171,17 @@ public final class NewKeyRecieveViewController: UITableViewController {
         }
         
         guard FileManager.Lock.shared.applicationData?.locks[newKeyInvitation.lock] == nil else {
-            self.showErrorAlert(R.string.localizable.newKeyRecieveError(newKey.lock.rawValue))
+            self.showErrorAlert(R.string.localizable.newKeyRecieveErrorExistingKey(newKey.lock.rawValue))
             return
         }
         
-        sender.isEnabled = false
+        guard newKeyInvitation.key.expiration.timeIntervalSinceNow > 0 else {
+            self.showErrorAlert(R.string.localizable.newKeyRecieveErrorExpired())
+            return
+        }
+        
+        assert(canSave)
+        
         let keyData = KeyData()
         showActivity()
         
@@ -100,14 +191,9 @@ public final class NewKeyRecieveViewController: UITableViewController {
             
             do {
                 
-                // scan lock is neccesary
-                
-                if Store.shared[peripheral: newKeyInvitation.lock] == nil {
-                    try Store.shared.scan(duration: 3)
-                }
-                
-                guard let peripheral = Store.shared[peripheral: newKeyInvitation.lock],
-                    let information = Store.shared.lockInformation.value[peripheral]
+                // scan for lock if neccesary
+                guard let device = try Store.shared.device(for: newKeyInvitation.lock, scanDuration: 2.0),
+                    let information = Store.shared.lockInformation.value[device.scanData.peripheral]
                     else { throw CentralError.unknownPeripheral }
                 
                 // recieve new key
@@ -115,8 +201,9 @@ public final class NewKeyRecieveViewController: UITableViewController {
                     identifier: newKeyInvitation.key.identifier,
                     secret: newKeyInvitation.secret
                 )
+                
                 try LockManager.shared.confirmKey(.init(secret: keyData),
-                                                  for: peripheral,
+                                                  for: device.scanData.peripheral,
                                                   with: credentials)
                 
                 // update UI
@@ -130,15 +217,15 @@ public final class NewKeyRecieveViewController: UITableViewController {
                             created: newKeyInvitation.key.created,
                             permission: newKeyInvitation.key.permission
                         ),
-                        name: "Lock",
+                        name: R.string.localizable.newLockName(),
                         information: .init(characteristic: information)
                     )
                     
                     Store.shared[lock: newKeyInvitation.lock] = lockCache
                     Store.shared[key: newKeyInvitation.key.identifier] = keyData
                     controller.hideActivity(animated: true)
-                    controller.dismiss(animated: true, completion: nil)
-                    controller.completion?()
+                    controller.configureView()
+                    controller.completion?(true)
                 }
             }
             
@@ -146,42 +233,64 @@ public final class NewKeyRecieveViewController: UITableViewController {
                 
                 mainQueue {
                     controller.hideActivity(animated: false)
-                    controller.showErrorAlert("\(error.localizedDescription)", okHandler: {
-                        controller.dismiss(animated: true, completion: nil)
+                    controller.showErrorAlert(error.localizedDescription, okHandler: {
+                        controller.completion?(false)
                     })
                 }
             }
         }
     }
     
-    // MARK: - Methods
+    // MARK: - UITableViewDataSource
     
-    private func configureView() {
+    public override func numberOfSections(in tableView: UITableView) -> Int {
         
-        guard let newKey = self.newKey else {
-            assertionFailure()
-            return
+        return data.count
+    }
+    
+    public override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        
+        return data[section].items.count
+    }
+    
+    public override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
+        let item = self[indexPath]
+        
+        switch item {
+        case let .detail(title, detail):
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: R.reuseIdentifier.newKeyDetailTableViewCell, for: indexPath)
+                else { fatalError("Unable to dequeue cell") }
+            cell.textLabel?.text = title
+            cell.detailTextLabel?.text = detail
+            return cell
+        case let .button(title, _):
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: R.reuseIdentifier.newKeyBasicTableViewCell, for: indexPath)
+            else { fatalError("Unable to dequeue cell") }
+            cell.textLabel?.text = title
+            return cell
         }
+    }
+    
+    // MARK: - UITableViewDelegate
+    
+    public override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-        self.navigationItem.title = newKey.key.name
-        let permission = newKey.key.permission
-        self.lockLabel.text = newKey.lock.rawValue
-        self.nameLabel.text = newKey.key.name
-        self.permissionView.permission = permission.type
-        self.permissionLabel.text = permission.type.localizedText
+        defer { tableView.deselectRow(at: indexPath, animated: true) }
         
-        let expiration: String
-        let timeRemaining = newKey.key.expiration.timeIntervalSinceNow
-        if timeRemaining > 0 {
-            if #available(iOS 13.0, *) {
-                expiration = timeFormatter.localizedString(fromTimeInterval: timeRemaining)
-            } else {
-                expiration = dateFormatter.string(from: newKey.key.expiration)
-            }
-        } else {
-            expiration = "Expired"
+        let item = self[indexPath]
+        
+        switch item {
+        case let .button(_, action):
+            action(self)
+        default:
+            break
         }
-        expirationLabel.text = expiration
+    }
+    
+    public override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        
+        return data[section].title
     }
 }
 
@@ -189,15 +298,33 @@ public final class NewKeyRecieveViewController: UITableViewController {
 
 extension NewKeyRecieveViewController: ProgressHUDViewController { }
 
+// MARK: - Supporting Types
+
+private extension NewKeyRecieveViewController {
+    
+    struct Section {
+        let title: String?
+        let items: [Item]
+    }
+    
+    enum Item {
+        case detail(String, String)
+        case button(String, (NewKeyRecieveViewController) -> ())
+    }
+}
+
 // MARK: - View Controller Extensions
 
 public extension UIViewController {
     
-    func open(newKey: NewKey.Invitation, completion: (() -> ())? = nil) {
+    func open(newKey: NewKey.Invitation, completion: ((Bool) -> ())? = nil) {
         
         let newKeyViewController = NewKeyRecieveViewController.fromStoryboard(with: newKey)
-        newKeyViewController.completion = completion
+        newKeyViewController.completion = completion ?? { [weak self] _ in
+            self?.dismiss(animated: true, completion: nil)
+        }
         let navigationController = UINavigationController(rootViewController: newKeyViewController)
         present(navigationController, animated: true, completion: nil)
     }
 }
+

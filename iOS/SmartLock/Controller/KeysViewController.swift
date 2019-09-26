@@ -214,8 +214,11 @@ final class KeysViewController: UITableViewController {
         case let .key(identifier, _):
             select(lock: identifier)
         case let .newKey(url, invitation):
-            self.open(newKey: invitation) { [weak self] in
-                self?.delete(url)
+            self.open(newKey: invitation) { [weak self] (didSave) in
+                if didSave {
+                    self?.delete(url)
+                }
+                self?.dismiss(animated: true, completion: nil)
             }
         }
     }
