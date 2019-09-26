@@ -54,6 +54,13 @@ final class KeysViewController: UITableViewController {
         tableView.rowHeight = UITableView.automaticDimension
         tableView.estimatedRowHeight = 60
         
+        if #available(iOS 13, *) {
+            // enabled
+        } else {
+            // Disable UIDocumentPickerViewController for iOS 12
+            self.navigationItem.rightBarButtonItem = nil
+        }
+        
         // load data
         locksObserver = Store.shared.locks.sink { locks in
             mainQueue { [weak self] in self?.configureView() }
