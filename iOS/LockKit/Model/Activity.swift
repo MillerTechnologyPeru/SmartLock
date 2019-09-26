@@ -71,7 +71,10 @@ public final class NewKeyFileActivityItem: UIActivityItemProvider {
     
     public init(invitation: NewKey.Invitation) {
         self.invitation = invitation
+        
         let url = type(of: self).url(for: invitation)
+        do { try FileManager.default.removeItem(at: url) }
+        catch { } // ignore
         super.init(placeholderItem: url)
     }
     
@@ -82,6 +85,8 @@ public final class NewKeyFileActivityItem: UIActivityItemProvider {
     }
     
     public let invitation: NewKey.Invitation
+    
+    public lazy var fileURL = type(of: self).url(for: invitation)
     
     private lazy var encoder = JSONEncoder()
     
@@ -94,9 +99,32 @@ public final class NewKeyFileActivityItem: UIActivityItemProvider {
             try data.write(to: url, options: [.atomic])
             return url
         } catch {
-            assertionFailure("Could create key file: \(error)")
+            assertionFailure("Could not create key file: \(error)")
             return url
         }
+    }
+    
+    // MARK: - UIActivityItemSource
+    
+    public override func activityViewController(_ activityViewController: UIActivityViewController, subjectForActivityType activityType: UIActivity.ActivityType?) -> String {
+        
+        return invitation.key.name
+    }
+    
+    public override func activityViewController(_ activityViewController: UIActivityViewController, thumbnailImageForActivityType activityType: UIActivity.ActivityType?, suggestedSize size: CGSize) -> UIImage? {
+        
+        return UIImage(permissionType: invitation.key.permission.type)
+    }
+    
+    @available(iOSApplicationExtension 13.0, *)
+    public override func activityViewControllerLinkMetadata(_ activityViewController: UIActivityViewController) -> LPLinkMetadata? {
+        
+        let permissionImageURL = AssetExtractor.shared.url(for: invitation.key.permission.type.image)
+        assert(permissionImageURL != nil, "Missing permission image")
+        let metadata = LPLinkMetadata()
+        metadata.title = invitation.key.name
+        metadata.imageProvider = permissionImageURL.flatMap { NSItemProvider(contentsOf: $0) }
+        return metadata
     }
 }
 
@@ -677,6 +705,5 @@ extension AddVoiceShortcutActivity: INUIAddVoiceShortcutViewControllerDelegate {
         controller.dismiss(animated: true, completion: nil)
     }
 }
-
 
 #endif
