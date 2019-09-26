@@ -54,13 +54,6 @@ final class KeysViewController: UITableViewController {
         tableView.rowHeight = UITableView.automaticDimension
         tableView.estimatedRowHeight = 60
         
-        if #available(iOS 13, *) {
-            // enabled
-        } else {
-            // Disable UIDocumentPickerViewController for iOS 12
-            self.navigationItem.rightBarButtonItem = nil
-        }
-        
         // load data
         locksObserver = Store.shared.locks.sink { locks in
             mainQueue { [weak self] in self?.configureView() }
@@ -95,13 +88,8 @@ final class KeysViewController: UITableViewController {
     // MARK: - Actions
     
     @IBAction func importFile(_ sender: UIBarButtonItem) {
-        
-        let documentPicker = UIDocumentPickerViewController(
-            documentTypes: [NewKey.Invitation.documentType],
-            in: .import
-        )
-        documentPicker.delegate = self
-        self.present(documentPicker, sender: .barButtonItem(sender))
+                
+        presentDocumentPicker(.barButtonItem(sender))
     }
     
     // MARK: - Actions
@@ -292,6 +280,30 @@ final class KeysViewController: UITableViewController {
         self.present(alert, animated: true, completion: nil)
     }
     
+    private func presentDocumentPicker(_ sender: PopoverPresentingView) {
+        
+        // temporarily set Appearence tint color
+        UINavigationBar.appearance().tintColor = .systemBlue
+        
+        // show controller
+        let documentPicker = UIDocumentPickerViewController(
+            documentTypes: [NewKey.Invitation.documentType],
+            in: .import
+        )
+        documentPicker.delegate = self
+        self.present(documentPicker, sender: sender)
+    }
+    
+    private func dismiss(_ controller: UIDocumentPickerViewController) {
+        
+        // restore Lock appearance
+        UIView.configureLockAppearance()
+        view.window?.setNeedsDisplay()
+        
+        // dismiss controller
+        controller.dismiss(animated: true, completion: nil)
+    }
+    
     // MARK: - UITableViewDataSource
     
     override func numberOfSections(in tableView: UITableView) -> Int {
@@ -377,7 +389,7 @@ extension KeysViewController: UIDocumentPickerDelegate {
     
     func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
         
-        controller.dismiss(animated: true, completion: nil)
+        dismiss(controller)
         
         // parse eKey file
         guard let url = urls.first,
@@ -393,7 +405,7 @@ extension KeysViewController: UIDocumentPickerDelegate {
     
     func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentAt url: URL) {
         
-        controller.dismiss(animated: true, completion: nil)
+        dismiss(controller)
         
         // parse eKey file
         guard let data = try? Data(contentsOf: url),
@@ -408,7 +420,7 @@ extension KeysViewController: UIDocumentPickerDelegate {
     
     func documentPickerWasCancelled(_ controller: UIDocumentPickerViewController) {
         
-        controller.dismiss(animated: true, completion: nil)
+        dismiss(controller)
     }
 }
 

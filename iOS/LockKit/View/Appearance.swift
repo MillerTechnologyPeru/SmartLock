@@ -14,14 +14,14 @@ public extension UIView {
     /// Configure the application's UI appearance
     static func configureLockAppearance() {
         
-        UINavigationBar.configureAppearance()
-        UITabBar.configureAppearance()
+        UINavigationBar.appearance().configureLockAppearance()
+        UITabBar.appearance().configureLockAppearance()
     }
 }
 
 internal extension UINavigationBar {
     
-    static func configureAppearance() {
+    func configureLockAppearance() {
         
         let barTintColor = StyleKit.wirelessBlue
         let tintColor: UIColor = .white
@@ -30,7 +30,7 @@ internal extension UINavigationBar {
         ]
         
         if #available(iOSApplicationExtension 11.0, *) {
-            self.appearance().largeTitleTextAttributes = titleTextAttributes
+            self.largeTitleTextAttributes = titleTextAttributes
         }
         
         if #available(iOS 13.0, *) {
@@ -38,22 +38,21 @@ internal extension UINavigationBar {
             appearance.backgroundColor = barTintColor
             appearance.titleTextAttributes = titleTextAttributes
             appearance.largeTitleTextAttributes = titleTextAttributes
-            self.appearance().standardAppearance = appearance
-            self.appearance().compactAppearance = appearance
-            self.appearance().scrollEdgeAppearance = appearance
+            self.standardAppearance = appearance
+            self.compactAppearance = appearance
+            self.scrollEdgeAppearance = appearance
         }
         
-        self.appearance().titleTextAttributes = titleTextAttributes
-        self.appearance().barTintColor = barTintColor
-        self.appearance().tintColor = tintColor
-        
+        self.titleTextAttributes = titleTextAttributes
+        self.barTintColor = barTintColor
+        self.tintColor = tintColor
     }
 }
 
 internal extension UITabBar {
     
-    static func configureAppearance() {
+    func configureLockAppearance() {
         
-        self.appearance().tintColor = StyleKit.wirelessBlue
+        self.tintColor = StyleKit.wirelessBlue
     }
 }
