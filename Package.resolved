@@ -33,7 +33,7 @@
         "repositoryURL": "https://github.com/krzyzanowskim/CryptoSwift",
         "state": {
           "branch": "master",
-          "revision": "c91564cc14c5133cbb2e2009bf59cbd6fbb1bd80",
+          "revision": "5d114736f5a98caa8a0ca1c254526f1ce5688f91",
           "version": null
         }
       },
@@ -42,7 +42,7 @@
         "repositoryURL": "https://github.com/PureSwift/GATT.git",
         "state": {
           "branch": "master",
-          "revision": "f6dcce60af3ac9559856cc123c4f5245973f3653",
+          "revision": "ec10636de5b3cbe83b6687da469074ec766343d5",
           "version": null
         }
       },
@@ -51,7 +51,7 @@
         "repositoryURL": "https://github.com/uraimo/SwiftyGPIO.git",
         "state": {
           "branch": "master",
-          "revision": "b49ec1de7e6829fdbb08af2ff63f1ec9dc4af4b1",
+          "revision": "f7dbe1c706793e98cf99054d54109ae45e0d1f5a",
           "version": null
         }
       },
@@ -60,7 +60,7 @@
         "repositoryURL": "https://github.com/PureSwift/TLVCoding.git",
         "state": {
           "branch": "master",
-          "revision": "129ad84d45d7a25e29a902dd58567ff2fed4fc14",
+          "revision": "ae79b25d192778b00b10cdc6e28f7d734e084fad",
           "version": null
         }
       }

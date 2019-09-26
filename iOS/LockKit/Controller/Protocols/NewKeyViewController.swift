@@ -8,7 +8,6 @@
 
 import Foundation
 import UIKit
-import Foundation
 import CoreLock
 
 public protocol NewKeyViewController: ActivityIndicatorViewController {
@@ -41,23 +40,24 @@ public extension NewKeyViewController {
             
             guard let lockCache = Store.shared[lock: lockIdentifier],
                 let parentKeyData = Store.shared[key: lockCache.key.identifier]
-                else { self.newKeyError("The key for the specified lock has been deleted from the database."); return }
+                else { self.newKeyError(R.string.localizable.newKeyViewControllerErrorRequestNewKey()); return }
             
             let parentKey = KeyCredentials(identifier: lockCache.key.identifier, secret: parentKeyData)
             
             log("Setting up new key for lock \(lockIdentifier)")
             
-            self.showProgressHUD()
+            self.showActivity()
             
             // add new key to lock
-            async { [weak self] in
+            DispatchQueue.bluetooth.async { [weak self] in
                 
                 guard let self = self else { return }
                 
                 let newKey = NewKey(
                     identifier: newKeyIdentifier,
                     name: newKeyName,
-                    permission: permission)
+                    permission: permission
+                )
                 
                 let newKeySharedSecret = KeyData()
                 
@@ -70,20 +70,21 @@ public extension NewKeyViewController {
                 do {
                     guard let peripheral = try Store.shared.device(for: lockIdentifier, scanDuration: 2.0) else {
                         mainQueue {
-                            self.dismissProgressHUD(animated: false)
-                            self.newKeyError("Lock is not in range.")
+                            self.hideActivity(animated: false)
+                            self.newKeyError(R.string.localizable.newKeyViewControllerErrorLockInRange())
                         }
                         return
                     }
-                    try LockManager.shared.createKey(.init(key: newKey, secret: newKeySharedSecret),
-                                                     for: peripheral.scanData.peripheral,
-                                                     with: parentKey)
+                    try LockManager.shared.createKey(
+                        .init(key: newKey, secret: newKeySharedSecret),
+                        for: peripheral.scanData.peripheral,
+                        with: parentKey)
                 }
                     
                 catch {
                     mainQueue {
-                        self.dismissProgressHUD(animated: false)
-                        self.newKeyError("Could not create new key. (\(error))")
+                        self.hideActivity(animated: false)
+                        self.newKeyError(R.string.localizable.newKeyViewControllerErrorCreateNewKey(error.localizedDescription))
                     }
                     return
                 }
@@ -97,13 +98,13 @@ public extension NewKeyViewController {
     
     private func requestNewKeyName(_ completion: @escaping (String) -> ()) {
         
-        let alert = UIAlertController(title: "New Key",
-                                      message: "Type a user friendly name for the new key.",
+        let alert = UIAlertController(title: R.string.localizable.newKeyViewControllerNewKeyTitle(),
+                                      message: R.string.localizable.newKeyViewControllerNewKeyMessage(),
                                       preferredStyle: .alert)
         
-        alert.addTextField { $0.text = "New Key" }
+        alert.addTextField { $0.text = R.string.localizable.newKeyViewControllerNewKeyTitle() }
         
-        alert.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: "OK"), style: .`default`, handler: { (UIAlertAction) in
+        alert.addAction(UIAlertAction(title: R.string.localizable.newKeyViewControllerNewKeyOk(), style: .`default`, handler: { (UIAlertAction) in
             
             let name = alert.textFields![0].text ?? ""
             
@@ -113,7 +114,7 @@ public extension NewKeyViewController {
             
         }))
         
-        alert.addAction(UIAlertAction(title: NSLocalizedString("Cancel", comment: "Cancel"), style: .destructive, handler: { (UIAlertAction) in
+        alert.addAction(UIAlertAction(title: R.string.localizable.newKeyViewControllerNewKeyCancel(), style: .destructive, handler: { (UIAlertAction) in
             
             alert.dismiss(animated: true) {  }
         }))
@@ -134,51 +135,22 @@ public extension UIViewController {
                sender: PopoverPresentingView,
                completion: @escaping () -> ()) {
         
-        async {
-            
-            // save invitation file
-            let newKeyData = try! JSONEncoder().encode(invitation)
-            
-            let filePath = try! FileManager.default
-                .url(for: .cachesDirectory,
-                     in: .userDomainMask,
-                     appropriateFor: nil,
-                     create: true)
-                .appendingPathComponent("newKey-\(invitation.key.identifier).ekey")
-                .path
-            
-            guard FileManager.default.createFile(atPath: filePath, contents: newKeyData, attributes: nil)
-                else { assertionFailure("Could not write \(filePath) to disk"); return }
-            
-            // share new key
-            mainQueue {
-                
-                // show activity controller
-                let activityController = UIActivityViewController(
-                    activityItems: [URL(fileURLWithPath: filePath)],
-                    applicationActivities: nil
-                )
-                
-                activityController.excludedActivityTypes = [.postToTwitter,
-                                                            .postToFacebook,
-                                                            .postToWeibo,
-                                                            .print,
-                                                            .copyToPasteboard,
-                                                            .assignToContact,
-                                                            .saveToCameraRoll,
-                                                            .addToReadingList,
-                                                            .postToFlickr,
-                                                            .postToVimeo,
-                                                            .postToTencentWeibo]
-                
-                activityController.completionWithItemsHandler = { (activityType, completed, items, error) in
-                    
-                    self.dismiss(animated: true, completion: nil)
-                    completion()
-                }
-                
-                self.present(activityController, animated: true, completion: nil, sender: sender)
-            }
+        // show activity controller
+        let activityController = UIActivityViewController(
+            activityItems: [
+                NewKeyFileActivityItem(invitation: invitation),
+                invitation
+            ],
+            applicationActivities: [
+                ShareKeyCloudKitActivity()
+            ]
+        )
+        activityController.excludedActivityTypes = NewKeyFileActivityItem.excludedActivityTypes
+        activityController.completionWithItemsHandler = { (activityType, completed, items, error) in
+            self.dismiss(animated: true, completion: nil)
+            completion()
         }
+        
+        self.present(activityController, animated: true, completion: nil, sender: sender)
     }
 }

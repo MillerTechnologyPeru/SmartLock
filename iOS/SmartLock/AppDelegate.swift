@@ -12,11 +12,13 @@ import CoreBluetooth
 import CoreLocation
 import UserNotifications
 import CoreSpotlight
+import CloudKit
 import Bluetooth
 import GATT
 import CoreLock
 import LockKit
 import JGProgressHUD
+import OpenCombine
 
 @UIApplicationMain
 final class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -39,6 +41,8 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
     private var updateTimer: Timer?
     #endif
     
+    private var locksObserver: OpenCombine.AnyCancellable?
+    
     // MARK: - UIApplicationDelegate
     
     func application(_ application: UIApplication,
@@ -48,7 +52,11 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
         Log.shared = .mainApp
         
         // print app info
-        log("\(bundle.symbol) Launching SmartLock v\(AppVersion) Build \(AppBuild)")
+        log("\(bundle.symbol) Launching SmartLock v\(Bundle.InfoPlist.version) Build \(Bundle.InfoPlist.shortVersion)")
+        
+        #if DEBUG
+        defer { log("\(bundle.symbol) App finished launching in \(String(format: "%.3f", Date().timeIntervalSince(appLaunch)))s") }
+        #endif
         
         // set global appearance
         UIView.configureLockAppearance()
@@ -58,10 +66,13 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
             try R.validate()
             try RLockKit.validate()
         } catch {
-            dump(error)
-            assertionFailure("Could not validate R.swift \(error.localizedDescription)")
+            print(error)
+            assertionFailure("Could not validate R.swift \(error)")
         }
         #endif
+        
+        // load store singleton
+        let _ = Store.shared
         
         // setup logging
         LockManager.shared.log = { log("🔒 LockManager: " + $0) }
@@ -73,16 +84,20 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
         }
         
         // request permissions
-        BeaconController.shared.allowsBackgroundLocationUpdates = true
+        //BeaconController.shared.allowsBackgroundLocationUpdates = true
         BeaconController.shared.requestAlwaysAuthorization()
         if #available(iOS 10.0, *) {
             UserNotificationCenter.shared.requestAuthorization()
         }
+        application.registerForRemoteNotifications()
         
         // handle notifications
         if #available(iOS 10.0, *) {
             UserNotificationCenter.shared.handleActivity = { [unowned self] (activity) in
                 mainQueue { self.handle(activity: activity) }
+            }
+            UserNotificationCenter.shared.handleURL = { [unowned self] (url) in
+                mainQueue { self.handle(url: url) }
             }
         }
         
@@ -93,7 +108,7 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
             WatchController.shared.context = .init(
                 applicationData: Store.shared.applicationData
             )
-            Store.shared.locks.observe { _ in
+            locksObserver = Store.shared.locks.sink { _ in
                 WatchController.shared.context = .init(
                     applicationData: Store.shared.applicationData
                 )
@@ -107,11 +122,10 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
         // background fetch in iOS
         application.setMinimumBackgroundFetchInterval(60 * 10)
         #endif
-        
+                
         // handle url
         if let url = launchOptions?[.url] as? URL {
-            guard open(url: url)
-                else { return false }
+            open(url: url)
         }
         
         return true
@@ -138,7 +152,7 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
         let beaconTask = UIApplication.shared.beginBackgroundTask(withName: bundle.rawValue, expirationHandler: {
             log("\(bundle.symbol) Background task expired")
         })
-        async { [unowned self] in
+        DispatchQueue.bluetooth.async { [unowned self] in
             do {
                 // scan for locks
                 try Store.shared.scan(duration: 3.0)
@@ -146,11 +160,11 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
                 for lock in Store.shared.locks.value.keys {
                     let _ = try Store.shared.device(for: lock, scanDuration: 1.0)
                 }
-            } catch { log("⚠️ Unable to scan: \(error)") }
+            } catch { log("⚠️ Unable to scan: \(error.localizedDescription)") }
             // attempt to sync with iCloud
             DispatchQueue.cloud.async {
                 do { try Store.shared.syncCloud() }
-                catch { log("⚠️ Unable to sync: \(error)") }
+                catch { log("⚠️ Unable to sync: \(error.localizedDescription)") }
                 mainQueue { self.logBackgroundTimeRemaining() }
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
                     log("\(bundle.symbol) Background task ended")
@@ -174,20 +188,43 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
         log("\(bundle.symbol) Did become active")
         
         didBecomeActive = true
+        application.applicationIconBadgeNumber = 0
         
         // update cache if modified by extension
         Store.shared.loadCache()
                         
         BeaconController.shared.scanBeacons()
-
         
         // attempt to scan for all known locks if they are not in central cache
-        async {
+        if Store.shared.lockManager.central.state == .poweredOn {
+            DispatchQueue.bluetooth.async {
+                do {
+                    for lock in Store.shared.locks.value.keys {
+                        let _ = try Store.shared.device(for: lock, scanDuration: 1.0)
+                    }
+                } catch { log("⚠️ Unable to scan: \(error.localizedDescription)") }
+            }
+        }
+        
+        // CloudKit discoverability
+        DispatchQueue.cloud.asyncAfter(deadline: .now() + 3.0) {
             do {
-                for lock in Store.shared.locks.value.keys {
-                    let _ = try Store.shared.device(for: lock, scanDuration: 1.0)
-                }
-            } catch { log("⚠️ Unable to scan: \(error)") }
+                let status = try Store.shared.cloud.requestPermissions()
+                log("☁️ CloudKit permisions \(status == .granted ? "granted" : "not granted")")
+            }
+            catch { log("⚠️ Could not request CloudKit permissions. \(error.localizedDescription)") }
+        }
+        
+        // CloudKit push notifications
+        DispatchQueue.cloud.async {
+            do { try Store.shared.cloud.subcribeNewKeyShares() }
+            catch { log("⚠️ Could subscribe to new shares. \(error)") }
+        }
+        
+        // CloudKit contacts
+        DispatchQueue.cloud.async {
+            do { try Store.shared.updateContacts() }
+            catch { log("⚠️ Could not update contacts. \(error.localizedDescription)") }
         }
         
         // attempt to sync with iCloud
@@ -200,11 +237,22 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
         log("\(bundle.symbol) Will terminate")
         
         BeaconController.shared.scanBeacons()
-
     }
     
     func application(_ application: UIApplication, handleOpen url: URL) -> Bool {
-        
+        #if DEBUG
+        print(#function, "\n", url)
+        #endif
+        return open(url: url)
+    }
+    
+    func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
+        #if DEBUG
+        print(#function, "\n", url)
+        if options.isEmpty == false {
+            print((options as NSDictionary).description)
+        }
+        #endif
         return open(url: url)
     }
     
@@ -218,9 +266,9 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
         
         // 30 sec max background fetch
         var result: UIBackgroundFetchResult = .noData
-        async { [unowned self] in
-            let applicationData = Store.shared.applicationData
-            let information = Array(Store.shared.lockInformation.value.values)
+        let applicationData = Store.shared.applicationData
+        let information = Array(Store.shared.lockInformation.value.values)
+        DispatchQueue.bluetooth.async { [unowned self] in
             do {
                 // scan for locks
                 try Store.shared.scan(duration: 5.0)
@@ -238,14 +286,14 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
                     let _ = try Store.shared.device(for: lock, scanDuration: 1.0)
                 }
             } catch {
-                log("⚠️ Unable to scan: \(error)")
+                log("⚠️ Unable to scan: \(error.localizedDescription)")
                 result = .failed
             }
             // attempt to sync with iCloud
             DispatchQueue.cloud.async {
                 do { try Store.shared.syncCloud() }
                 catch {
-                    log("⚠️ Unable to sync: \(error)")
+                    log("⚠️ Unable to sync: \(error.localizedDescription)")
                     result = .failed
                 }
                 if result != .failed {
@@ -327,6 +375,55 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
         
         return true
     }
+    
+    func applicationSignificantTimeChange(_ application: UIApplication) {
+        
+        log("\(bundle.symbol) Significant time change")
+        
+        // refresh beacons
+        BeaconController.shared.scanBeacons()
+    }
+    
+    func application(_ application: UIApplication, userDidAcceptCloudKitShareWith cloudKitShareMetadata: CKShare.Metadata) {
+        
+        
+    }
+    
+    func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
+        
+        log("📲 Recieved push notification")
+        #if DEBUG
+        print((userInfo as NSDictionary).description)
+        #endif
+        
+        DispatchQueue.app.async {
+            
+            do {
+                if let cloudKitNotification = CKNotification(fromRemoteNotificationDictionary: userInfo) {
+                    
+                    switch cloudKitNotification {
+                    case let querySubcription as CKQueryNotification:
+                        if let recordID = querySubcription.recordID, recordID.recordName.contains(CloudShare.NewKey.ID.cloudRecordType) {
+                            try Store.shared.fetchCloudNewKeys { (_, invitation) in
+                                mainQueue {
+                                    if application.applicationState == .background {
+                                        UserNotificationCenter.shared.postNewKeyShareNotification(invitation)
+                                        application.applicationIconBadgeNumber += 1
+                                    }
+                                }
+                            }
+                        }
+                    default:
+                        break
+                    }
+                }
+            } catch {
+                log("⚠️ Push notification error: \(error.localizedDescription)")
+            }
+            
+            mainQueue { completionHandler(.newData) }
+        }
+    }
 }
 
 extension AppDelegate {
@@ -373,7 +470,7 @@ private extension AppDelegate {
         let bundle = self.bundle
         log("\(bundle.symbol) Will update data")
         
-        async {
+        DispatchQueue.bluetooth.async {
             do {
                 // scan for locks
                 try Store.shared.scan(duration: 3.0)
@@ -381,11 +478,11 @@ private extension AppDelegate {
                 for lock in Store.shared.locks.value.keys {
                     let _ = try Store.shared.device(for: lock, scanDuration: 1.0)
                 }
-            } catch { log("⚠️ Unable to scan: \(error)") }
+            } catch { log("⚠️ Unable to scan: \(error.localizedDescription)") }
             // attempt to sync with iCloud
             DispatchQueue.cloud.async {
                 do { try Store.shared.syncCloud() }
-                catch { log("⚠️ Unable to sync: \(error)") }
+                catch { log("⚠️ Unable to sync: \(error.localizedDescription)") }
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
                     log("\(bundle.symbol) Updated data")
                 }
@@ -399,10 +496,12 @@ private extension AppDelegate {
 
 internal extension AppDelegate {
     
+    @discardableResult
     func open(url: URL) -> Bool {
         
         if url.isFileURL {
-            return open(file: url)
+            open(file: url)
+            return true
         } else if let lockURL = LockURL(rawValue: url) {
             open(url: lockURL)
             return true
@@ -411,18 +510,18 @@ internal extension AppDelegate {
         }
     }
     
-    func open(file url: URL) -> Bool {
+    func open(file url: URL) {
         
-        // parse eKey file
-        guard let data = try? Data(contentsOf: url),
-            let newKey = try? JSONDecoder().decode(NewKey.Invitation.self, from: data)
-            else { return false }
-        
-        return tabBarController.open(newKey: newKey)
+        let document = NewKeyDocument(fileURL: url)
+        document.open { [weak self] _ in
+            assert(Thread.isMainThread)
+            if let invitation = document.invitation {
+                self?.tabBarController.open(newKey: invitation)
+            }
+        }
     }
     
     func open(url: LockURL) {
-        
         tabBarController.handle(url: url)
     }
 }
@@ -432,12 +531,10 @@ internal extension AppDelegate {
 extension AppDelegate: LockActivityHandling {
     
     func handle(url: LockURL) {
-        
         tabBarController.handle(url: url)
     }
     
     func handle(activity: AppActivity) {
-        
         tabBarController.handle(activity: activity)
     }
 }

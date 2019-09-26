@@ -8,28 +8,16 @@
 
 import Foundation
 
+/// Perform task on main queue
+@inline(__always)
 public func mainQueue(_ block: @escaping () -> ()) {
-    
     DispatchQueue.main.async(execute: block)
-}
-
-/// Perform a task on the internal queue.
-public func async(_ block: @escaping () -> ()) {
-    
-    appQueue.async(execute: block)
-}
-
-internal let appQueue = DispatchQueue(label: Bundle.Lock.app.rawValue)
-
-public extension DispatchQueue {
-    
-    static var app: DispatchQueue { return appQueue }
 }
 
 public extension DispatchQueue {
     
     convenience init<T>(for type: T.Type,
-                        in bundle: Bundle.Lock,
+                        in bundle: Bundle.Lock = .app,
                         qualityOfService: DispatchQoS = .default,
                         isConcurrent: Bool = false) {
         
@@ -38,5 +26,54 @@ public extension DispatchQueue {
                   attributes: isConcurrent ? .concurrent : [],
                   autoreleaseFrequency: .inherit,
                   target: nil)
+    }
+}
+
+public extension DispatchQueue {
+    
+    /// Lock App GCD Queue
+    static var app: DispatchQueue {
+        struct Cache {
+            static let queue = DispatchQueue(
+                label: Bundle.Lock.app.rawValue,
+                qos: .userInitiated,
+                attributes: [.concurrent]
+            )
+        }
+        return Cache.queue
+    }
+    
+    /// Lock Bluetooth operations GCD Queue
+    static var bluetooth: DispatchQueue {
+        struct Cache {
+            static let queue = DispatchQueue(
+                label: Bundle.Lock.app.rawValue + ".Bluetooth",
+                qos: .userInitiated
+            )
+        }
+        return Cache.queue
+    }
+    
+    /// Lock Bluetooth operations GCD Queue
+    static var log: DispatchQueue {
+        struct Cache {
+            static let queue = DispatchQueue(
+                for: Log.self,
+                qualityOfService: .utility,
+                isConcurrent: false
+            )
+        }
+        return Cache.queue
+    }
+    
+    /// Lock iCloud GCD Queue
+    static var cloud: DispatchQueue {
+        struct Cache {
+            static let queue = DispatchQueue(
+                label: Bundle.Lock.app.rawValue + ".iCloud",
+                qos: .utility
+            )
+        }
+        return Cache.queue
     }
 }

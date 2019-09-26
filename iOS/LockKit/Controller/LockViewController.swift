@@ -18,6 +18,10 @@ public final class LockViewController: UITableViewController {
     // MARK: - IB Outlets
     
     @IBOutlet private(set) weak var unlockButton: UIButton!
+    @IBOutlet private(set) weak var lockIdentifierTitle: UILabel!
+    @IBOutlet private(set) weak var keyIdentifierTitle: UILabel!
+    @IBOutlet private(set) weak var permissionTitle: UILabel!
+    @IBOutlet private(set) weak var versionTitle: UILabel!
     @IBOutlet private(set) weak var lockIdentifierLabel: UILabel!
     @IBOutlet private(set) weak var keyIdentifierLabel: UILabel!
     @IBOutlet private(set) weak var permissionLabel: UILabel!
@@ -29,7 +33,7 @@ public final class LockViewController: UITableViewController {
         didSet { if self.isViewLoaded { self.configureView() } }
     }
     
-    public lazy var progressHUD: JGProgressHUD = .currentStyle(for: self)
+    public var progressHUD: JGProgressHUD?
     
     @available(iOS 10.0, *)
     private lazy var feedbackGenerator: UIImpactFeedbackGenerator = {
@@ -53,10 +57,12 @@ public final class LockViewController: UITableViewController {
         guard lockIdentifier != nil
             else { fatalError("Lock identifer not set") }
         
+        /// Setup table view
         tableView.rowHeight = UITableView.automaticDimension
         tableView.estimatedRowHeight = 44
         tableView.tableFooterView = UIView()
         
+        // update UI
         configureView()
     }
     
@@ -78,7 +84,9 @@ public final class LockViewController: UITableViewController {
     public override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
-        view.bringSubviewToFront(progressHUD)
+        if let progressHUD = self.progressHUD {
+            view.bringSubviewToFront(progressHUD)
+        }
     }
     
     // MARK: - Actions
@@ -108,46 +116,22 @@ public final class LockViewController: UITableViewController {
             ]
             
             let lockItem = LockActivityItem(identifier: lockIdentifier)
-            
-            let items = [lockItem, lockItem.text, lockItem.image] as [Any]
-            
-            let activityViewController = UIActivityViewController(activityItems: items, applicationActivities: activities)
+            let activityItems = [lockItem, lockItem.text, lockItem.image] as [Any]
+            let activityViewController = UIActivityViewController(
+                activityItems: activityItems,
+                applicationActivities: activities
+            )
             activityViewController.excludedActivityTypes = LockActivityItem.excludedActivityTypes
-            activityViewController.modalPresentationStyle = .popover
-            activityViewController.popoverPresentationController?.barButtonItem = sender
-            
-            self.present(activityViewController, animated: true, completion: nil)
+            self.present(activityViewController, sender: .barButtonItem(sender))
         }
         
         if shouldScan {
-            
-            self.progressHUD.show(in: self.view)
-            
-            async { [weak self] in
-                
-                guard let controller = self else { return }
-                
-                // try to scan if not in range
-                do { try Store.shared.scan(duration: 3) }
-                
-                catch {
-                    
-                    mainQueue {
-                        
-                        controller.progressHUD.dismiss(animated: false)
-                        controller.showErrorAlert("\(error)")
-                    }
-                }
-                
-                mainQueue {
-                    
-                    controller.progressHUD.dismiss()
-                    show()
-                }
-            }
-            
+            performActivity(queue: .bluetooth, {
+                try Store.shared.scan(duration: 1.0)
+            }, completion: { (viewController, _) in
+                show()
+            })
         } else {
-            
             show()
         }
     }
@@ -182,7 +166,7 @@ public final class LockViewController: UITableViewController {
         
         unlockButton.isEnabled = false
         
-        async { [weak self] in
+        DispatchQueue.bluetooth.async { [weak self] in
             
             guard let controller = self else { return }
             
@@ -191,13 +175,13 @@ public final class LockViewController: UITableViewController {
             
             do {
                 guard let peripheral = try Store.shared.device(for: lockIdentifier, scanDuration: 1.0) else {
-                    mainQueue { controller.showErrorAlert("Lock not nearby.") }
+                    mainQueue { controller.showErrorAlert(R.string.localizable.errorNotInRange()) }
                     return
                 }
                 try Store.shared.unlock(peripheral)
             }
             
-            catch { mainQueue { controller.showErrorAlert("\(error)") }; return }
+            catch { mainQueue { controller.showErrorAlert("\(error.localizedDescription)") }; return }
             
             log("Successfully unlocked lock \"\(controller.lockIdentifier!)\"")
         }
@@ -225,12 +209,21 @@ public final class LockViewController: UITableViewController {
             self.unlockButton.isEnabled = schedule.isValid()
         }
         
+        self.lockIdentifierTitle.text = R.string.lockViewController.lockIdentifierTitle()
+        self.keyIdentifierTitle.text = R.string.lockViewController.keyIdentifierTitle()
+        self.versionTitle.text = R.string.lockViewController.versionTitle()
+        self.permissionTitle.text = R.string.lockViewController.permissionTitle()
+        
         self.lockIdentifierLabel.text = lockIdentifier!.uuidString
         self.keyIdentifierLabel.text = lockCache.key.identifier.uuidString
         self.versionLabel.text = lockCache.information.version.description
         self.permissionLabel.text = lockCache.key.permission.localizedText
     }
 }
+
+// MARK: - ProgressHUDViewController
+
+extension LockViewController: ProgressHUDViewController { }
 
 // MARK: - Extensions
 
@@ -240,7 +233,7 @@ public extension UIViewController {
     func view(lock identifier: UUID) -> Bool {
         
         guard Store.shared[lock: identifier] != nil else {
-            self.showErrorAlert("No key for lock \(identifier).")
+            self.showErrorAlert(R.string.localizable.errorNoKey())
             return false
         }
         

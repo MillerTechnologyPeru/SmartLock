@@ -1,0 +1,38 @@
+"6Y4FZV" = "Which one?";
+
+"FhxgkI" = "Just to confirm, you want to unlock ‘${lock}’?";
+
+"FwuKZ6" = "You have ${count} locks matching ‘${lock}’.";
+
+"J2Ooqg" = "Sorry, I couldn't unlock. ${failureReason}";
+
+"LIsTjU" = "Lock";
+
+"MpDPlI" = "Unlock the specified lock";
+
+"O5ezH4" = "Unlock `${lock}`";
+
+"QdfnKq" = "Unable to unlock. ${failureReason}";
+
+"RZwtL9" = "Failure";
+
+"Tz5jPT" = "Which ${lock} should I unlock?";
+
+"Z5kgSL" = "Lock";
+
+"bvi2l8" = "`${displayName}` no esta en rango. Por favor acérquese a ${displayName}.";
+
+"claxan" = "Abrío ‘${lock}‘.";
+
+"dAVo2n" = "Abre `${lock}`";
+
+"fjnXtW" = "Abre";
+
+"teoCvx" = "${lock} se abrió exitosamente.";
+
+"tnOjCJ" = "Cerradura";
+
+"vARXDT" = "Usted no tiene una llave para `${displayName}`.";
+
+"wkobUh" = "Usted solo puede abrir `${displayName}` durante el horario especificado.";
+

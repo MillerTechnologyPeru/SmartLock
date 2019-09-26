@@ -76,9 +76,22 @@ public extension Preferences {
         set { self[.isAppInstalled] = newValue }
     }
     
-    var isCloudEnabled: Bool {
-        get { return self[.isCloudEnabled] ?? false }
-        set { self[.isCloudEnabled] = newValue }
+    var isCloudBackupEnabled: Bool {
+        get {
+            #if os(iOS)
+            #if targetEnvironment(macCatalyst) || targetEnvironment(simulator)
+            let defaultValue = true
+            #else
+            let defaultValue = false
+            #endif
+            #elseif os(tvOS) || os(watchOS) || os(macOS)
+            let defaultValue = true
+            #else
+            let defaultValue = false
+            #endif
+            return self[.isCloudBackupEnabled] ?? defaultValue
+        }
+        set { self[.isCloudBackupEnabled] = newValue }
     }
     
     var lastCloudUpdate: Date? {
@@ -92,12 +105,12 @@ public extension Preferences {
     }
     
     var bluetoothTimeout: TimeInterval {
-        get { return self[.bluetoothTimeout] ?? 30.0 }
+        get { return self[.bluetoothTimeout] ?? 15.0 }
         set { self[.bluetoothTimeout] = newValue }
     }
     
     var scanDuration: TimeInterval {
-        get { return self[.scanDuration] ?? 5.0 }
+        get { return self[.scanDuration] ?? 3.0 }
         set { self[.scanDuration] = newValue }
     }
     
@@ -115,6 +128,11 @@ public extension Preferences {
         get { return self[.showPowerAlert] ?? false }
         set { self[.showPowerAlert] = newValue }
     }
+    
+    var monitorBluetoothNotifications: Bool {
+        get { return self[.monitorBluetoothNotifications] ?? false }
+        set { self[.monitorBluetoothNotifications] = newValue }
+    }
 }
 
 // MARK: - Supporting Types
@@ -124,7 +142,7 @@ public extension Preferences {
     enum Key: String, CaseIterable {
         
         case isAppInstalled
-        case isCloudEnabled
+        case isCloudBackupEnabled
         case lastCloudUpdate
         case lastWatchUpdate
         
@@ -133,5 +151,6 @@ public extension Preferences {
         case showPowerAlert
         case writeWithoutResponseTimeout
         case scanDuration
+        case monitorBluetoothNotifications
     }
 }

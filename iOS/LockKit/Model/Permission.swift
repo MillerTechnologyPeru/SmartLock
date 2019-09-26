@@ -47,6 +47,18 @@ public extension PermissionType {
     
     var localizedText: String {
         
+        #if os(iOS)
+        switch self {
+        case .owner:
+            return R.string.localizable.permissionOwner()
+        case .admin:
+            return R.string.localizable.permissionAdmin()
+        case .anytime:
+            return R.string.localizable.permissionAnytime()
+        case .scheduled:
+            return R.string.localizable.permissionScheduled()
+        }
+        #elseif os(watchOS)
         switch self {
         case .owner:
             return NSLocalizedString("Owner", comment: "Permission.Owner")
@@ -57,6 +69,7 @@ public extension PermissionType {
         case .scheduled:
             return NSLocalizedString("Scheduled", comment: "Permission.Scheduled")
         }
+        #endif
     }
 }
 
@@ -78,7 +91,11 @@ public extension Permission.Schedule {
     var localizedText: String {
         
         // FIXME: Localized schedule
-        return NSLocalizedString("Scheduled", comment: "Permission.Scheduled")
+        #if os(iOS)
+        return R.string.localizable.permissionScheduled()
+        #elseif os(watchOS)
+        return NSLocalizedString("Scheduled", tableName: nil, bundle: .lockKit, value: "Scheduled", comment: "Permission.Scheduled")
+        #endif
     }
 }
 

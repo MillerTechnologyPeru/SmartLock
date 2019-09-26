@@ -176,7 +176,7 @@ extension SessionController: WCSessionDelegate {
         if let error = error {
             log?("Activation did not complete: " + error.localizedDescription)
             #if DEBUG
-            dump(error)
+            print(error)
             #endif
         } else {
             log?(activationState.debugDescription)
@@ -259,11 +259,11 @@ public extension Store {
                  completion: (() -> ())? = nil) {
         
         // activate session
-        async { [weak self] in
+        DispatchQueue.app.async { [weak self] in
             defer { mainQueue { completion?() } }
             guard let self = self else { return }
             do { try session.activate() }
-            catch { log("⚠️ Unable to activate session \(error)") }
+            catch { log("⚠️ Unable to activate session \(error.localizedDescription)") }
             do {
                 let newData = try session.requestApplicationData()
                 let oldApplicationData = self.applicationData
@@ -305,7 +305,7 @@ public extension Store {
                 // store date last updated
                 self.preferences.lastWatchUpdate = Date()
             } catch {
-                log("⚠️ Unable to sync application data \(error)")
+                log("⚠️ Unable to sync application data \(error.localizedDescription)")
             }
         }
     }

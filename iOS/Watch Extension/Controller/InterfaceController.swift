@@ -10,6 +10,7 @@ import Foundation
 import WatchKit
 import CoreLock
 import LockKit
+import OpenCombine
 
 final class InterfaceController: WKInterfaceController {
     
@@ -26,41 +27,26 @@ final class InterfaceController: WKInterfaceController {
     // MARK: - Properties
     
     let activity = NSUserActivity(.screen(.nearbyLocks))
-    
-    let scanDuration: TimeInterval = 3.0
-    
+        
     private var items = [Item]()
     
-    private var peripheralsObserver: Int?
-    private var informationObserver: Int?
-    private var locksObserver: Int?
+    private var peripheralsObserver: AnyCancellable?
+    private var informationObserver: AnyCancellable?
+    private var locksObserver: AnyCancellable?
     
     // MARK: - Loading
-    
-    deinit {
-        
-        if let observer = peripheralsObserver {
-            Store.shared.peripherals.remove(observer: observer)
-        }
-        if let observer = informationObserver {
-            Store.shared.lockInformation.remove(observer: observer)
-        }
-        if let observer = locksObserver {
-            Store.shared.locks.remove(observer: observer)
-        }
-    }
 
     override func awake(withContext context: Any?) {
         super.awake(withContext: context)
         
         // Observe changes
-        peripheralsObserver = Store.shared.peripherals.observe { [weak self] _ in
+        peripheralsObserver = Store.shared.peripherals.sink { [weak self] _ in
             mainQueue { self?.configureView() }
         }
-        informationObserver = Store.shared.lockInformation.observe { [weak self] _ in
+        informationObserver = Store.shared.lockInformation.sink { [weak self] _ in
             mainQueue { self?.configureView() }
         }
-        locksObserver = Store.shared.locks.observe { [weak self] _ in
+        locksObserver = Store.shared.locks.sink { [weak self] _ in
             mainQueue { self?.configureView() }
         }
         
@@ -122,14 +108,9 @@ final class InterfaceController: WKInterfaceController {
         
         activity.becomeCurrent()
         
-        // reset table
-        self.items.removeAll(keepingCapacity: true)
-        
-        let scanDuration = self.scanDuration
-        
         // scan
-        performActivity({
-            try Store.shared.scan(duration: scanDuration)
+        performActivity(queue: .bluetooth, {
+            try Store.shared.scan()
             for peripheral in Store.shared.peripherals.value.values {
                 do { try Store.shared.readInformation(peripheral) }
                 catch { log("⚠️ Could not read information for peripheral \(peripheral.scanData.peripheral)") }
@@ -152,6 +133,10 @@ final class InterfaceController: WKInterfaceController {
                     Item(identifier: information.identifier, cache: $0, peripheral: device)
                 }
             }
+        
+        if items.isEmpty == false {
+            hideActivity()
+        }
         
         self.tableView.setNumberOfRows(items.count, withRowType: LockRowController.rowType)
         
@@ -221,7 +206,7 @@ final class LockRowController: NSObject {
     
     static let rowType = "Lock"
     
-    @IBOutlet weak var imageView: WKInterfaceImage!
+    @IBOutlet private(set) weak var imageView: WKInterfaceImage!
     
-    @IBOutlet weak var label: WKInterfaceLabel!
+    @IBOutlet private(set) weak var label: WKInterfaceLabel!
 }

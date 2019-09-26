@@ -12,7 +12,7 @@ public func log(_ text: String) {
     
     let date = Date()
     
-    Log.queue.async {
+    DispatchQueue.log.async {
         
         // only print for debug builds
         #if DEBUG
@@ -22,14 +22,19 @@ public func log(_ text: String) {
         let dateString = Log.dateFormatter.string(from: date)
         
         do { try Log.shared.log(dateString + " " + text) }
-        catch { assertionFailure("Could not write log: \(error)"); return }
+        catch CocoaError.fileWriteNoPermission {
+            // unable to write due to permissions
+            if #available(iOS 13, *) {
+                assertionFailure("You don’t have permission to save the log file")
+            }
+        }
+        catch { assertionFailure("Could not write log: \(error)") }
     }
 }
 
 fileprivate extension Log {
     
     static var custom: Log?
-    static let queue = DispatchQueue(for: Log.self, in: .app, qualityOfService: .default, isConcurrent: false)
 }
 
 public extension Log {
@@ -128,12 +133,21 @@ public extension Log {
         
         public let folder: URL
         
-        public private(set) var items = [Item]()
+        public private(set) var items: [Item] {
+            get {
+                if cachedItems.isEmpty {
+                    try! self.load()
+                }
+                return cachedItems
+            }
+            set { cachedItems = newValue }
+        }
+        
+        private var cachedItems = [Item]()
         
         internal init(folder: URL) {
             
             self.folder = folder
-            try! self.load()
         }
         
         internal convenience init?(appGroup: AppGroup, subfolder: String? = nil) {
@@ -187,7 +201,7 @@ public extension Log {
                 .lazy
                 .map { $0.url }
             
-            self.items = sorted
+            self.cachedItems = sorted
                 .compactMap { Item(url: $0) }
         }
         

@@ -41,6 +41,7 @@
     {
       "size" : "44x44",
       "idiom" : "watch",
+      "filename" : "Icon-44@2x.png",
       "scale" : "2x",
       "role" : "appLauncher",
       "subtype" : "40mm"
@@ -48,7 +49,7 @@
     {
       "size" : "50x50",
       "idiom" : "watch",
-      "filename" : "Icon-44@2x.png",
+      "filename" : "watch44Home.png",
       "scale" : "2x",
       "role" : "appLauncher",
       "subtype" : "44mm"
@@ -72,13 +73,15 @@
     {
       "size" : "108x108",
       "idiom" : "watch",
+      "filename" : "watch44Short.png",
       "scale" : "2x",
       "role" : "quickLook",
       "subtype" : "44mm"
     },
     {
-      "idiom" : "watch-marketing",
       "size" : "1024x1024",
+      "idiom" : "watch-marketing",
+      "filename" : "Watch Icon.png",
       "scale" : "1x"
     }
   ],

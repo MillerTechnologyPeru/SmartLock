@@ -18,6 +18,8 @@ import DarwinGATT
 import AVFoundation
 import Intents
 import JGProgressHUD
+import OpenCombine
+import Combine
 
 final class NearbyLocksViewController: UITableViewController {
     
@@ -25,11 +27,11 @@ final class NearbyLocksViewController: UITableViewController {
     
     // MARK: - Properties
     
-    private var items = [LockPeripheral<NativeCentral>]()
+    private var items = [LockPeripheral<NativeCentral>]() {
+        didSet { tableView.reloadData() }
+    }
     
-    let scanDuration: TimeInterval = 3.0
-    
-    internal lazy var progressHUD: JGProgressHUD = JGProgressHUD.currentStyle(for: self)
+    internal var progressHUD: JGProgressHUD?
     
     @available(iOS 10.0, *)
     private lazy var selectionFeedbackGenerator: UISelectionFeedbackGenerator = {
@@ -45,24 +47,14 @@ final class NearbyLocksViewController: UITableViewController {
         return feedbackGenerator
     }()
     
-    private var peripheralsObserver: Int?
-    private var informationObserver: Int?
-    private var locksObserver: Int?
+    private var peripheralsObserver: OpenCombine.AnyCancellable?
+    private var informationObserver: OpenCombine.AnyCancellable?
+    private var locksObserver: OpenCombine.AnyCancellable?
+    @available(iOS 13.0, *)
+    private lazy var updateTableViewSubject = Combine.PassthroughSubject<Void, Never>()
+    private var updateTableViewObserver: AnyObject? // AnyCancellable
     
     // MARK: - Loading
-    
-    deinit {
-        
-        if let observer = peripheralsObserver {
-            Store.shared.peripherals.remove(observer: observer)
-        }
-        if let observer = informationObserver {
-            Store.shared.lockInformation.remove(observer: observer)
-        }
-        if let observer = locksObserver {
-            Store.shared.locks.remove(observer: observer)
-        }
-    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -73,14 +65,20 @@ final class NearbyLocksViewController: UITableViewController {
         tableView.estimatedRowHeight = 60
         
         // observe model changes
-        peripheralsObserver = Store.shared.peripherals.observe { [weak self] _ in
-            mainQueue { self?.configureView() }
+        peripheralsObserver = Store.shared.peripherals.sink { [weak self] _ in
+            self?.locksChanged()
         }
-        informationObserver = Store.shared.lockInformation.observe { [weak self] _ in
-            mainQueue { self?.configureView() }
+        informationObserver = Store.shared.lockInformation.sink { [weak self] _ in
+            self?.locksChanged()
         }
-        locksObserver = Store.shared.locks.observe { [weak self] _ in
-            mainQueue { self?.configureView() }
+        locksObserver = Store.shared.locks.sink { [weak self] _ in
+            self?.locksChanged()
+        }
+        
+        if #available(iOS 13.0, *) {
+            updateTableViewObserver = updateTableViewSubject
+                .delay(for: 1.0, scheduler: DispatchQueue.main)
+                .sink(receiveValue: { [weak self] in self?.configureView() })
         }
         
         // Update UI
@@ -88,7 +86,7 @@ final class NearbyLocksViewController: UITableViewController {
         
         #if !targetEnvironment(macCatalyst)
         // scan if none is setup
-        if Store.shared.locks.value.isEmpty == true {
+        if Store.shared.locks.value.isEmpty {
             DispatchQueue.main.asyncAfter(deadline: .now() + 1.0,
                                           execute: { [weak self] in self?.scan() })
         }
@@ -106,13 +104,12 @@ final class NearbyLocksViewController: UITableViewController {
         #if targetEnvironment(macCatalyst)
         scan()
         #else
-        async {
-            if BeaconController.shared.locks.isEmpty {
-                mainQueue { [weak self] in self?.scan() }
-            } else {
-                // Update beacon status
-                BeaconController.shared.scanBeacons()
-            }
+        if Store.shared.lockManager.central.state == .poweredOn,
+            Store.shared.locks.value.isEmpty || Store.shared.lockInformation.value.isEmpty {
+            scan()
+        } else {
+            // Update beacon status
+            BeaconController.shared.scanBeacons()
         }
         #endif
     }
@@ -141,6 +138,14 @@ final class NearbyLocksViewController: UITableViewController {
     
     // MARK: - Methods
     
+    private func locksChanged() {
+        if #available(iOS 13.0, *) {
+            updateTableViewSubject.send()
+        } else {
+            mainQueue { [weak self] in self?.configureView() }
+        }
+    }
+    
     private func scan() {
         
         self.refreshControl?.endRefreshing()
@@ -155,17 +160,16 @@ final class NearbyLocksViewController: UITableViewController {
         // refresh iBeacons in background
         BeaconController.shared.scanBeacons()
         
-        let scanDuration = self.scanDuration
-        
-        // reset table
-        self.items.removeAll(keepingCapacity: true)
-        
         // scan
-        performActivity({
-            try Store.shared.scan(duration: scanDuration)
+        performActivity(queue: .bluetooth, {
+            try Store.shared.scan()
             for peripheral in Store.shared.peripherals.value.values {
                 do { try Store.shared.readInformation(peripheral) }
-                catch { log("⚠️ Could not read information for peripheral \(peripheral.scanData.peripheral)") }
+                catch {
+                    log("⚠️ Could not read information for peripheral \(peripheral.scanData.peripheral)")
+                    // try again
+                    mainQueue { [weak self] in self?.scan() }
+                }
             }
         })
     }
@@ -216,7 +220,6 @@ final class NearbyLocksViewController: UITableViewController {
         // sort by signal
         self.items = Store.shared.peripherals.value.values
             .sorted(by: { $0.scanData.rssi < $1.scanData.rssi })
-        tableView.reloadData()
     }
     
     private func configure(cell: LockTableViewCell, at indexPath: IndexPath) {
@@ -249,7 +252,7 @@ final class NearbyLocksViewController: UITableViewController {
                     detail = lockCache.key.permission.localizedText
                     showDetail = true
                 } else {
-                    title = "Lock"
+                    title = R.string.nearbyLocksViewController.lockTitleDefault() // "Lock"
                     detail = information.identifier.description
                     permission = .anytime
                     showDetail = false
@@ -257,7 +260,7 @@ final class NearbyLocksViewController: UITableViewController {
                 
             case .setup:
                 
-                title = "Setup"
+                title = R.string.nearbyLocksViewController.lockTitleSetup() // "Setup"
                 detail = information.identifier.description
                 permission = .owner
                 showDetail = false
@@ -265,7 +268,7 @@ final class NearbyLocksViewController: UITableViewController {
         } else {
             
             isEnabled = false
-            title = "Loading..."
+            title =  R.string.nearbyLocksViewController.lockTitleLoading() // "Loading..."
             detail = ""
             permission = nil
             showDetail = false
@@ -317,7 +320,7 @@ final class NearbyLocksViewController: UITableViewController {
                 donateUnlockIntent(for: identifier)
                 unlock(lock: lock)
             } else {
-                showErrorAlert("No key for lock.")
+                showErrorAlert(LockError.noKey(lock: identifier).localizedDescription)
             }
         }
     }
@@ -325,4 +328,4 @@ final class NearbyLocksViewController: UITableViewController {
 
 // MARK: - ActivityIndicatorViewController
 
-extension NearbyLocksViewController: ActivityIndicatorViewController { }
+extension NearbyLocksViewController: ProgressHUDViewController { }

@@ -6,24 +6,18 @@
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
 	<string>Lock</string>
-	<key>NSBluetoothAlwaysUsageDescription</key>
-	<string>Bluetooth is used to scan for nearby locks in the background.</string>
 	<key>CFBundleDocumentTypes</key>
 	<array>
 		<dict>
 			<key>CFBundleTypeIconFiles</key>
-			<array>
-				<string>eKeyDocument</string>
-			</array>
+			<array/>
 			<key>CFBundleTypeName</key>
-			<string>eKey File</string>
-			<key>CFBundleTypeRole</key>
-			<string>Viewer</string>
+			<string>Key</string>
 			<key>LSHandlerRank</key>
 			<string>Owner</string>
 			<key>LSItemContentTypes</key>
 			<array>
-				<string>com.colemancda.lock.ekey</string>
+				<string>com.colemancda.lock.key</string>
 			</array>
 		</dict>
 	</array>
@@ -38,12 +32,14 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.0.0</string>
+	<string>$(MARKETING_VERSION)</string>
 	<key>CFBundleURLTypes</key>
 	<array>
 		<dict>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
+			<key>CFBundleURLIconFile</key>
+			<string>eKeyDocument</string>
 			<key>CFBundleURLName</key>
 			<string>com.colemancda.Lock</string>
 			<key>CFBundleURLSchemes</key>
@@ -53,19 +49,31 @@
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>1</string>
+	<string>$(CURRENT_PROJECT_VERSION)</string>
+	<key>CKSharingSupported</key>
+	<true/>
+	<key>ITSAppUsesNonExemptEncryption</key>
+	<false/>
 	<key>LSApplicationCategoryType</key>
 	<string>public.app-category.utilities</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSBluetoothAlwaysUsageDescription</key>
+	<string>Bluetooth is used to scan for nearby locks in the background.</string>
 	<key>NSBluetoothPeripheralUsageDescription</key>
 	<string>Bluetooth is needed to connect to your smart lock.</string>
 	<key>NSCameraUsageDescription</key>
 	<string>Your camera is needed to setup your smart lock.</string>
+	<key>NSContactsUsageDescription</key>
+	<string>Access to your contacts is needed to share keys with friends.</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
 	<string>Your location is needed to find nearby smart locks.</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>Your location is needed to monitor devices in the background.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Your location is needed to find nearby smart locks.</string>
+	<key>NSSiriUsageDescription</key>
+	<string>Siri is used to unlock with voice commands.</string>
 	<key>NSUserActivityTypes</key>
 	<array>
 		<string>UnlockIntent</string>
@@ -77,9 +85,10 @@
 	<array>
 		<string>bluetooth-central</string>
 		<string>fetch</string>
-		<string>location</string>
-		<string>processing</string>
+		<string>remote-notification</string>
 	</array>
+	<key>UIFileSharingEnabled</key>
+	<true/>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
@@ -101,29 +110,32 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+	<key>UISupportsDocumentBrowser</key>
+	<true/>
 	<key>UTExportedTypeDeclarations</key>
 	<array>
 		<dict>
 			<key>UTTypeConformsTo</key>
 			<array>
-				<string>public.json</string>
+				<string>public.data</string>
+				<string>public.content</string>
 			</array>
 			<key>UTTypeDescription</key>
-			<string>eKey</string>
+			<string>Key File</string>
 			<key>UTTypeIconFiles</key>
 			<array/>
 			<key>UTTypeIdentifier</key>
-			<string>com.colemancda.lock.ekey</string>
-			<key>UTTypeSize320IconFile</key>
-			<string>eKeyDocument</string>
-			<key>UTTypeSize64IconFile</key>
-			<string>eKeyDocument</string>
+			<string>com.colemancda.lock.key</string>
 			<key>UTTypeTagSpecification</key>
 			<dict>
 				<key>public.filename-extension</key>
-				<string>ekey</string>
+				<array>
+					<string>ekey</string>
+				</array>
 				<key>public.mime-type</key>
-				<string>lock/x-ekey</string>
+				<array>
+					<string>lock/x-ekey</string>
+				</array>
 			</dict>
 		</dict>
 	</array>

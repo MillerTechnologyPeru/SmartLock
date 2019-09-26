@@ -10,6 +10,7 @@ import Foundation
 import SwiftUI
 import LockKit
 
+/// iCloud Settings View
 @available(iOS 13, *)
 struct CloudSettingsView: View {
     
@@ -18,22 +19,32 @@ struct CloudSettingsView: View {
     @ObservedObject
     var preferences: Preferences = Store.shared.preferences
     
+    @State
+    var isCloudUpdating = false
+    
     // MARK: - View
     
     var body: some View {
         List {
-            Section(header: Text(verbatim: "")) {
-                Toggle(isOn: $preferences.isCloudEnabled) {
-                    Text("iCloud Syncronization")
+            Section(header: Text(verbatim: ""), footer: Text(verbatim: "Automatically backup data such as your keys, events and application data.")) {
+                Toggle(isOn: $preferences.isCloudBackupEnabled) {
+                    Text("iCloud Backup")
                 }
             }
-            if preferences.isCloudEnabled {
-                Button(action: { self.backup() }) {
-                    Text("Backup now")
+            Section(header: Text(verbatim: ""),
+                    footer: preferences.lastCloudUpdate
+                        .flatMap { Text("Last successful backup: \($0)") } ?? Text("")) {
+                if preferences.isCloudBackupEnabled {
+                    Button(action: { self.backup() }) {
+                        HStack {
+                            isCloudUpdating ? Text("Backing Up...") : Text("Back Up Now")
+                            Spacer()
+                            if isCloudUpdating {
+                                ActivityIndicator()
+                            }
+                        }
+                    }
                 }
-                preferences.lastCloudUpdate.flatMap {
-                    Text("Last updated \($0)")
-                } ?? Text("Never updated")
             }
         }
         .listStyle(GroupedListStyle())
@@ -47,7 +58,19 @@ struct CloudSettingsView: View {
 private extension CloudSettingsView {
     
     func backup() {
-        AppDelegate.shared.tabBarController.syncCloud()
+        guard isCloudUpdating == false else { return }
+        isCloudUpdating = true
+        let viewController = AppDelegate.shared.tabBarController
+        AppDelegate.shared.tabBarController.syncCloud {
+            self.isCloudUpdating = false
+            switch $0 {
+            case let .failure(error):
+                log("⚠️ Could not sync iCloud: \(error.localizedDescription)")
+                viewController.showErrorAlert(error.localizedDescription)
+            case .success:
+                break
+            }
+        }
     }
 }
 

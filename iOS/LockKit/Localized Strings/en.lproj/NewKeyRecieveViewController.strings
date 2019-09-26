@@ -1,0 +1,16 @@
+/* 
+  NewKeyRecieveViewController.strings
+  SmartLock
+
+  Created by Alsey Coleman Miller on 9/26/19.
+  Copyright © 2019 ColemanCDA. All rights reserved.
+*/
+
+"Error.ExistingKey" = "You already have a key for lock %@.";
+"Error.Expired" = "Key expired.";
+"Name.Title" = "Name";
+"Lock.Title" = "Lock";
+"Permission.Title" = "Permission";
+"Expiration.Title" = "Expiration";
+"Expiration.Expired" = "Expired";
+"Save.Title" = "Save";

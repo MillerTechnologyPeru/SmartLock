@@ -17,10 +17,10 @@ public extension ActivityIndicatorViewController where Self: UIViewController {
         
         log("Unlock \(identifier)")
         
-        performActivity({ () -> String? in
+        performActivity(queue: .bluetooth, { () -> String? in
             guard let lockPeripheral = try Store.shared.device(for: identifier, scanDuration: scanDuration)
-                else { return "Could not find lock" }
-            return try Store.shared.unlock(lockPeripheral, action: action) ? nil : "Unable to unlock"
+                else { return R.string.localizable.unlockLockNotFound() }
+            return try Store.shared.unlock(lockPeripheral, action: action) ? nil : R.string.localizable.unlockUnableToUnlock()
         }, completion: { (viewController, errorMessage) in
             if let errorMessage = errorMessage {
                 viewController.showErrorAlert(errorMessage)
@@ -31,8 +31,7 @@ public extension ActivityIndicatorViewController where Self: UIViewController {
     }
     
     func unlock(lock: LockPeripheral<NativeCentral>, action: UnlockAction = .default) {
-        
-        performActivity({ try Store.shared.unlock(lock, action: action) })
+        performActivity(queue: .bluetooth, { try Store.shared.unlock(lock, action: action) })
     }
 }
 
@@ -44,15 +43,17 @@ public extension UIViewController {
     func donateUnlockIntent(for lock: UUID) {
         #if targetEnvironment(macCatalyst)
         #else
-        guard let lockCache = Store.shared[lock: lock]
-            else { return}
+        guard let lockCache = Store.shared[lock: lock] else {
+            assertionFailure("Invalid lock \(lock)")
+            return
+        }
         
         if #available(iOS 12, iOSApplicationExtension 12.0, *) {
             let intent = UnlockIntent(identifier: lock, cache: lockCache)
             let interaction = INInteraction(intent: intent, response: nil)
             interaction.donate { error in
                 if let error = error {
-                    log("⚠️ Donating intent failed with error \(error)")
+                    log("⚠️ Donating intent failed with error \(error.localizedDescription)")
                 }
             }
         } else {

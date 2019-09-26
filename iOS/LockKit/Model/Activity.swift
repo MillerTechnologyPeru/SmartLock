@@ -8,10 +8,13 @@
 
 import Foundation
 import UIKit
+import LinkPresentation
 import CoreLock
 import JGProgressHUD
 
-public struct LockActivityItem {
+// MARK: - Lock Item
+
+public final class LockActivityItem: NSObject {
     
     public static let excludedActivityTypes: [UIActivity.ActivityType] = [
         .print,
@@ -25,49 +28,142 @@ public struct LockActivityItem {
         .assignToContact,
         .postToTencentWeibo,
         .postToWeibo,
-        .openInIBooks]
+        .openInIBooks,
+        .markupAsPDF
+    ]
     
     public let identifier: UUID
     
     public init(identifier: UUID) {
-        
         self.identifier = identifier
     }
     
     // MARK: - Activity Values
     
+    public var lock: LockCache? {
+        return Store.shared[lock: identifier]
+    }
+    
     public var text: String {
         
-        guard let lockCache = Store.shared[lock: identifier]
-            else { fatalError("Lock not in cache") }
+        guard let lockCache = self.lock else {
+            assertionFailure("Lock not in cache")
+            return ""
+        }
         
-        return "I unlocked my door \"\(lockCache.name)\""
+        return R.string.activity.lockActivityItemText(lockCache.name)
     }
     
     public var image: UIImage {
         
-        guard let lockCache = Store.shared[lock: identifier]
-            else { fatalError("Lock not in cache") }
+        guard let lockCache = self.lock else {
+            assertionFailure("Lock not in cache")
+            return UIImage(permission: .admin)
+        }
         
         return UIImage(permission: lockCache.key.permission)
     }
 }
 
+// MARK: - New Key Activity
+
+public final class NewKeyFileActivityItem: UIActivityItemProvider {
+    
+    public init(invitation: NewKey.Invitation) {
+        self.invitation = invitation
+        
+        let url = type(of: self).url(for: invitation)
+        do { try FileManager.default.removeItem(at: url) }
+        catch { } // ignore
+        super.init(placeholderItem: url)
+    }
+    
+    private static func url(for invitation: NewKey.Invitation) -> URL {
+        let fileName = invitation.key.name + "." + NewKey.Invitation.fileExtension
+        let fileURL = FileManager.default.temporaryDirectory.appendingPathComponent(fileName)
+        return fileURL
+    }
+    
+    public let invitation: NewKey.Invitation
+    
+    public lazy var fileURL = type(of: self).url(for: invitation)
+    
+    private lazy var encoder = JSONEncoder()
+    
+    /// Generate the actual item.
+    public override var item: Any {
+        // save invitation file
+        let url = type(of: self).url(for: invitation)
+        do {
+            let data = try encoder.encode(invitation)
+            try data.write(to: url, options: [.atomic])
+            return url
+        } catch {
+            assertionFailure("Could not create key file: \(error)")
+            return url
+        }
+    }
+    
+    // MARK: - UIActivityItemSource
+    
+    public override func activityViewController(_ activityViewController: UIActivityViewController, subjectForActivityType activityType: UIActivity.ActivityType?) -> String {
+        
+        return invitation.key.name
+    }
+    
+    public override func activityViewController(_ activityViewController: UIActivityViewController, thumbnailImageForActivityType activityType: UIActivity.ActivityType?, suggestedSize size: CGSize) -> UIImage? {
+        
+        return UIImage(permissionType: invitation.key.permission.type)
+    }
+    
+    @available(iOSApplicationExtension 13.0, *)
+    public override func activityViewControllerLinkMetadata(_ activityViewController: UIActivityViewController) -> LPLinkMetadata? {
+        
+        let permissionImageURL = AssetExtractor.shared.url(for: invitation.key.permission.type.image)
+        assert(permissionImageURL != nil, "Missing permission image")
+        let metadata = LPLinkMetadata()
+        metadata.title = invitation.key.name
+        metadata.imageProvider = permissionImageURL.flatMap { NSItemProvider(contentsOf: $0) }
+        return metadata
+    }
+}
+
+public extension NewKeyFileActivityItem {
+    
+    static let excludedActivityTypes: [UIActivity.ActivityType] = [.postToTwitter,
+                                                                   .postToFacebook,
+                                                                   .postToWeibo,
+                                                                   .postToTencentWeibo,
+                                                                   .postToFlickr,
+                                                                   .postToVimeo,
+                                                                   .print,
+                                                                   .assignToContact,
+                                                                   .saveToCameraRoll,
+                                                                   .addToReadingList,
+                                                                   .openInIBooks,
+                                                                   .markupAsPDF]
+}
+
+// MARK: - Activity Type
+
 /// `UIActivity` types
 public enum LockActivity: String {
     
-    case newKey = "com.colemancda.lock.activity.newKey"
-    case manageKeys = "com.colemancda.lock.activity.manageKeys"
-    case delete = "com.colemancda.lock.activity.delete"
-    case rename = "com.colemancda.lock.activity.rename"
-    case update = "com.colemancda.lock.activity.update"
-    case homeKitEnable = "com.colemancda.lock.activity.homeKitEnable"
-    case addVoiceShortcut = "com.colemancda.lock.activity.addVoiceShortcut"
+    case newKey =               "com.colemancda.lock.activity.newKey"
+    case manageKeys =           "com.colemancda.lock.activity.manageKeys"
+    case delete =               "com.colemancda.lock.activity.delete"
+    case rename =               "com.colemancda.lock.activity.rename"
+    case update =               "com.colemancda.lock.activity.update"
+    case homeKitEnable =        "com.colemancda.lock.activity.homeKitEnable"
+    case addVoiceShortcut =     "com.colemancda.lock.activity.addVoiceShortcut"
+    case shareKeyCloudKit =     "com.colemancda.lock.activity.shareKeyCloudKit"
     
     var activityType: UIActivity.ActivityType {
         return UIActivity.ActivityType(rawValue: self.rawValue)
     }
 }
+
+// MARK: - Activity
 
 /// Activity for sharing a key.
 public final class NewKeyActivity: UIActivity {
@@ -81,7 +177,7 @@ public final class NewKeyActivity: UIActivity {
     }
     
     public override var activityTitle: String? {
-        return "Share Key"
+        return R.string.activity.newKeyActivityTitle()
     }
     
     public override var activityImage: UIImage? {
@@ -90,37 +186,34 @@ public final class NewKeyActivity: UIActivity {
     
     public override func canPerform(withActivityItems activityItems: [Any]) -> Bool {
         
-        guard let lockItem = activityItems.first as? LockActivityItem,
+        guard let lockItem = activityItems.compactMap({ $0 as? LockActivityItem }).first,
             let lockCache = Store.shared[lock: lockItem.identifier],
             Store.shared[peripheral: lockItem.identifier] != nil // Lock must be reachable
             else { return false }
         
-        return lockCache.key.permission.canShareKeys
+        // only owner and admin can share keys
+        return lockCache.key.permission.isAdministrator
     }
     
     public override func prepare(withActivityItems activityItems: [Any]) {
-        
-        self.item = activityItems.first as? LockActivityItem
+        self.item = activityItems.compactMap({ $0 as? LockActivityItem }).first
     }
     
     public override var activityViewController: UIViewController? {
         
-        let navigationController = UIStoryboard(name: "NewKey", bundle: .lockKit).instantiateInitialViewController() as! UINavigationController
-        
-        let destinationViewController = navigationController.viewControllers.first! as! NewKeySelectPermissionViewController
-        destinationViewController.lockIdentifier = item.identifier
-        destinationViewController.completion = { [unowned self] in
+        let viewController = NewKeySelectPermissionViewController.fromStoryboard(with: item.identifier)
+        viewController.completion =  { [unowned self] in
             guard let (invitation, sender) = $0 else {
                 self.activityDidFinish(false)
                 return
             }
             // show share sheet
-            destinationViewController.share(invitation: invitation, sender: sender) { [unowned self] in
+            viewController.share(invitation: invitation, sender: sender) { [unowned self] in
                 self.activityDidFinish(true)
             }
         }
         
-        return navigationController
+        return UINavigationController(rootViewController: viewController)
     }
 }
 
@@ -136,7 +229,7 @@ public final class ManageKeysActivity: UIActivity {
     }
     
     public override var activityTitle: String? {
-        return "Manage"
+        return R.string.activity.manageKeysActivityTitle()
     }
     
     public override var activityImage: UIImage? {
@@ -145,35 +238,26 @@ public final class ManageKeysActivity: UIActivity {
     
     public override func canPerform(withActivityItems activityItems: [Any]) -> Bool {
         
-        guard let lockItem = activityItems.first as? LockActivityItem,
+        guard let lockItem = activityItems.compactMap({ $0 as? LockActivityItem }).first,
             let lockCache = Store.shared[lock: lockItem.identifier],
             Store.shared[peripheral: lockItem.identifier] != nil // Lock must be reachable
             else { return false }
         
-        switch lockCache.key.permission {
-        case .owner,
-             .admin:
-            return true
-        case .anytime,
-             .scheduled:
-            return false
-        }
+        return lockCache.key.permission.isAdministrator
     }
     
     public override func prepare(withActivityItems activityItems: [Any]) {
-        
-        self.item = activityItems.first as? LockActivityItem
+        self.item = activityItems.compactMap({ $0 as? LockActivityItem }).first
     }
     
     public override var activityViewController: UIViewController? {
         
-        let navigationController = UIStoryboard(name: "LockPermissions", bundle: .lockKit).instantiateInitialViewController() as! UINavigationController
+        let viewController = LockPermissionsViewController.fromStoryboard(
+            with: item.identifier,
+            completion: { [weak self] in self?.activityDidFinish(true) }
+        )
         
-        let destinationViewController = navigationController.viewControllers.first! as! LockPermissionsViewController
-        destinationViewController.lockIdentifier = item.identifier
-        destinationViewController.completion = { self.activityDidFinish(true) }
-        
-        return navigationController
+        return UINavigationController(rootViewController: viewController)
     }
 }
 
@@ -198,7 +282,7 @@ public final class DeleteLockActivity: UIActivity {
     }
     
     public override var activityTitle: String? {
-        return "Delete"
+        return R.string.activity.deleteLockActivityTitle()
     }
     
     public override var activityImage: UIImage? {
@@ -206,33 +290,40 @@ public final class DeleteLockActivity: UIActivity {
     }
     
     public override func canPerform(withActivityItems activityItems: [Any]) -> Bool {
-        
-        return activityItems.first as? LockActivityItem != nil
+        return activityItems.compactMap({ $0 as? LockActivityItem }).first != nil
     }
     
     public override func prepare(withActivityItems activityItems: [Any]) {
-        
-        self.item = activityItems.first as? LockActivityItem
+        self.item = activityItems.compactMap({ $0 as? LockActivityItem }).first
     }
     
     public override var activityViewController: UIViewController? {
         
-        let alert = UIAlertController(title: NSLocalizedString("Confirmation", comment: "DeletionConfirmation"),
-                                      message: "Are you sure you want to delete this key?",
-                                      preferredStyle: UIAlertController.Style.alert)
+        return type(of: self).viewController(for: item.identifier, completion: { [weak self] (didDelete) in
+            self?.activityDidFinish(didDelete)
+            if didDelete { self?.completion?() }
+        })
+    }
+    
+    public static func viewController(for lock: UUID, completion: @escaping (Bool) -> ()) -> UIAlertController {
         
-        alert.addAction(UIAlertAction(title: NSLocalizedString("Cancel", comment: "Cancel"), style: .cancel, handler: { (UIAlertAction) in
+        let alert = UIAlertController(
+            title: R.string.activity.deleteLockActivityAlertTitle(),
+            message: R.string.activity.deleteLockActivityAlertMessage(),
+            preferredStyle: .alert
+        )
+        
+        alert.addAction(UIAlertAction(title: R.string.activity.deleteLockActivityAlertCancel(), style: .cancel, handler: { (UIAlertAction) in
             
-            alert.dismiss(animated: true) { self.activityDidFinish(false) }
+            alert.dismiss(animated: true) { completion(false) }
         }))
         
-        alert.addAction(UIAlertAction(title: NSLocalizedString("Delete", comment: "Delete"), style: .destructive, handler: { (UIAlertAction) in
+        alert.addAction(UIAlertAction(title: R.string.activity.deleteLockActivityAlertDelete(), style: .destructive, handler: { (UIAlertAction) in
             
-            Store.shared.remove(self.item.identifier)
+            Store.shared.remove(lock)
             
             alert.dismiss(animated: true) {
-                self.activityDidFinish(true)
-                self.completion?()
+                completion(true)
             }
         }))
         
@@ -252,7 +343,7 @@ public final class RenameActivity: UIActivity {
     }
     
     public override var activityTitle: String? {
-        return "Rename"
+        return R.string.activity.renameActivityTitle()
     }
     
     public override var activityImage: UIImage? {
@@ -260,32 +351,37 @@ public final class RenameActivity: UIActivity {
     }
     
     public override func canPerform(withActivityItems activityItems: [Any]) -> Bool {
-        return activityItems.first as? LockActivityItem != nil
+        return activityItems.compactMap({ $0 as? LockActivityItem }).first != nil
     }
     
     public override func prepare(withActivityItems activityItems: [Any]) {
-        self.item = activityItems.first as? LockActivityItem
+        self.item = activityItems.compactMap({ $0 as? LockActivityItem }).first
     }
     
     public override var activityViewController: UIViewController? {
+        return type(of: self).viewController(for: item.identifier, completion: { [weak self] in
+            self?.activityDidFinish($0)
+        })
+    }
+    
+    public static func viewController(for lock: UUID,
+                                      completion: @escaping (Bool) -> ()) -> UIAlertController {
         
-        let alert = UIAlertController(title: "Rename",
-                                      message: "Type a user friendly name for this lock.",
+        let alert = UIAlertController(title: R.string.activity.renameActivityAlertTitle(),
+                                      message: R.string.activity.renameActivityAlertMessage(),
                                       preferredStyle: .alert)
         
-        alert.addTextField { $0.text = Store.shared[lock: self.item.identifier]!.name }
+        alert.addTextField { $0.text = Store.shared[lock: lock]?.name }
         
-        alert.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: "OK"), style: .`default`, handler: { (UIAlertAction) in
+        alert.addAction(UIAlertAction(title: R.string.activity.renameActivityAlertOK(), style: .`default`, handler: { (UIAlertAction) in
             
-            Store.shared[lock: self.item.identifier]!.name = alert.textFields![0].text ?? ""
-            
-            alert.dismiss(animated: true) { self.activityDidFinish(true) }
-            
+            Store.shared[lock: lock]?.name = alert.textFields?[0].text ?? ""
+            alert.dismiss(animated: true) { completion(true) }
         }))
         
-        alert.addAction(UIAlertAction(title: NSLocalizedString("Cancel", comment: "Cancel"), style: .destructive, handler: { (UIAlertAction) in
+        alert.addAction(UIAlertAction(title: R.string.activity.renameActivityAlertCancel(), style: .destructive, handler: { (UIAlertAction) in
             
-            alert.dismiss(animated: true) { self.activityDidFinish(false) }
+            alert.dismiss(animated: true) { completion(false) }
         }))
         
         return alert
@@ -304,7 +400,7 @@ public final class HomeKitEnableActivity: UIActivity {
     }
     
     public override var activityTitle: String? {
-        return "Home Mode"
+        return R.string.activity.homeKitEnableActivityTitle()
     }
     
     public override var activityImage: UIImage? {
@@ -313,7 +409,7 @@ public final class HomeKitEnableActivity: UIActivity {
     
     public override func canPerform(withActivityItems activityItems: [Any]) -> Bool {
         
-        guard let lockItem = activityItems.first as? LockActivityItem,
+        guard let lockItem = activityItems.compactMap({ $0 as? LockActivityItem }).first,
             let lockCache = Store.shared[lock: lockItem.identifier],
             Store.shared[peripheral: lockItem.identifier] != nil // Lock must be reachable
             else { return false }
@@ -330,15 +426,15 @@ public final class HomeKitEnableActivity: UIActivity {
     
     public override func prepare(withActivityItems activityItems: [Any]) {
         
-        self.item = activityItems.first as? LockActivityItem
+        self.item = activityItems.compactMap({ $0 as? LockActivityItem }).first
     }
     
     public override var activityViewController: UIViewController? {
         
         let lockItem = self.item!
         
-        let alert = UIAlertController(title: "Home Mode",
-                                      message: "Enable Home Mode on this device?",
+        let alert = UIAlertController(title: R.string.activity.homeKitEnableActivityAlertTitle(),
+                                      message: R.string.activity.homeKitEnableActivityAlertMessage(),
                                       preferredStyle: .alert)
         
         func enableHomeKit(_ enable: Bool = true) {
@@ -349,7 +445,7 @@ public final class HomeKitEnableActivity: UIActivity {
                 let peripheral = Store.shared[peripheral: lockItem.identifier] // Lock must be reachable
                 else { alert.dismiss(animated: true) { self.activityDidFinish(false) }; return }
             
-            async {
+            DispatchQueue.bluetooth.async {
                 
                 //do { try LockManager.shared.enableHomeKit(lockItem.identifier, key: (lockCache.keyIdentifier, keyData), enable: enable) }
                 
@@ -359,17 +455,17 @@ public final class HomeKitEnableActivity: UIActivity {
             }
         }
             
-        alert.addAction(UIAlertAction(title: NSLocalizedString("Cancel", comment: "Cancel"), style: .cancel, handler: { (UIAlertAction) in
+        alert.addAction(UIAlertAction(title:R.string.activity.homeKitEnableActivityAlertCancel(), style: .cancel, handler: { (UIAlertAction) in
                         
             alert.dismiss(animated: true) { self.activityDidFinish(false) }
         }))
         
-        alert.addAction(UIAlertAction(title: NSLocalizedString("Yes", comment: "Yes"), style: .`default`, handler: { (UIAlertAction) in
+        alert.addAction(UIAlertAction(title: R.string.activity.homeKitEnableActivityAlertYes(), style: .`default`, handler: { (UIAlertAction) in
             
             enableHomeKit()
         }))
         
-        alert.addAction(UIAlertAction(title: NSLocalizedString("No", comment: "No"), style: .`default`, handler: { (UIAlertAction) in
+        alert.addAction(UIAlertAction(title: R.string.activity.homeKitEnableActivityAlertNo(), style: .`default`, handler: { (UIAlertAction) in
             
             enableHomeKit(false)
         }))
@@ -389,7 +485,7 @@ public final class UpdateActivity: UIActivity {
     }
     
    public  override var activityTitle: String? {
-        return "Update"
+        return R.string.activity.updateActivityTitle()
     }
     
     public override var activityImage: UIImage? {
@@ -398,7 +494,7 @@ public final class UpdateActivity: UIActivity {
     
     public override func canPerform(withActivityItems activityItems: [Any]) -> Bool {
         
-        guard let lockItem = activityItems.first as? LockActivityItem,
+        guard let lockItem = activityItems.compactMap({ $0 as? LockActivityItem }).first,
             let lockCache = Store.shared[lock: lockItem.identifier],
             Store.shared[peripheral: lockItem.identifier] != nil // Lock must be reachable
             else { return false }
@@ -411,23 +507,23 @@ public final class UpdateActivity: UIActivity {
     
     public override func prepare(withActivityItems activityItems: [Any]) {
         
-        self.item = activityItems.first as? LockActivityItem
+        self.item = activityItems.compactMap({ $0 as? LockActivityItem }).first
     }
     
     public override var activityViewController: UIViewController? {
         
-        let lockItem = self.item!
+        //let lockItem = self.item!
         
-        let alert = UIAlertController(title: "Update Lock",
-                                      message: "Are you sure you want to update the lock's software?",
+        let alert = UIAlertController(title: R.string.activity.updateActivityAlertTitle(),
+                                      message: R.string.activity.updateActivityAlertMessage(),
                                       preferredStyle: .alert)
         
-        alert.addAction(UIAlertAction(title: NSLocalizedString("Cancel", comment: "Cancel"), style: .cancel, handler: { (UIAlertAction) in
+        alert.addAction(UIAlertAction(title: R.string.activity.updateActivityAlertCancel(), style: .cancel, handler: { (UIAlertAction) in
             
             alert.dismiss(animated: true) { self.activityDidFinish(false) }
         }))
         
-        alert.addAction(UIAlertAction(title: "Update", style: .`default`, handler: { (UIAlertAction) in
+        alert.addAction(UIAlertAction(title: R.string.activity.updateActivityAlertUpdate(), style: .`default`, handler: { (UIAlertAction) in
             /*
             let progressHUD = JGProgressHUD(style: .dark)!
             
@@ -465,6 +561,71 @@ public final class UpdateActivity: UIActivity {
     }
 }
 
+public final class ShareKeyCloudKitActivity: UIActivity {
+    
+    public override class var activityCategory: UIActivity.Category { return .share }
+     
+    internal private(set) var invitation: NewKey.Invitation?
+     
+    public override var activityType: UIActivity.ActivityType? {
+        return LockActivity.shareKeyCloudKit.activityType
+    }
+     
+    public  override var activityTitle: String? {
+         return R.string.activity.shareKeyCloudKitActivityTitle()
+     }
+     
+     public override var activityImage: UIImage? {
+         return UIImage(named: "AppIcon")
+     }
+     
+     public override func canPerform(withActivityItems activityItems: [Any]) -> Bool {
+        for case is NewKey.Invitation in activityItems {
+            return true
+        }
+        return false
+     }
+     
+     public override func prepare(withActivityItems activityItems: [Any]) {
+        for case let invitation as NewKey.Invitation in activityItems {
+            self.invitation = invitation
+            return
+        }
+     }
+     
+    public override var activityViewController: UIViewController? {
+        
+        guard let invitation = self.invitation else {
+            assertionFailure()
+            return nil
+        }
+        
+        let viewController = ContactsViewController.fromStoryboard()
+        viewController.didSelect = { (contact) in
+            let progressHUD = JGProgressHUD.currentStyle(for: viewController)
+            progressHUD.show(in: viewController.navigationController?.view ?? viewController.view)
+            DispatchQueue.app.async { [weak self] in
+                do {
+                    try Store.shared.cloud.share(invitation, to: contact)
+                    mainQueue {
+                        progressHUD.dismiss(animated: true)
+                        self?.activityDidFinish(true)
+                    }
+                }
+                catch {
+                    mainQueue {
+                        progressHUD.dismiss(animated: false)
+                        viewController.showErrorAlert(error.localizedDescription, okHandler: {
+                            self?.activityDidFinish(false)
+                        })
+                    }
+                }
+            }
+        }
+        return UINavigationController(rootViewController: viewController)
+    }
+}
+
 #if canImport(IntentsUI)
 import IntentsUI
 
@@ -479,7 +640,7 @@ public final class AddVoiceShortcutActivity: UIActivity {
     }
     
     public  override var activityTitle: String? {
-        return "Add to Siri"
+        return R.string.activity.addVoiceShortcutActivityTitle()
     }
     
     public override var activityImage: UIImage? {
@@ -494,7 +655,7 @@ public final class AddVoiceShortcutActivity: UIActivity {
         guard #available(iOS 12, *)
             else { return false }
         
-        guard let lockItem = activityItems.first as? LockActivityItem,
+        guard let lockItem = activityItems.compactMap({ $0 as? LockActivityItem }).first,
             let _ = Store.shared[lock: lockItem.identifier]
             else { return false }
         
@@ -503,8 +664,7 @@ public final class AddVoiceShortcutActivity: UIActivity {
     }
     
     public override func prepare(withActivityItems activityItems: [Any]) {
-        
-        self.item = activityItems.first as? LockActivityItem
+        self.item = activityItems.compactMap({ $0 as? LockActivityItem }).first
     }
     
     public override var activityViewController: UIViewController? {
@@ -545,6 +705,5 @@ extension AddVoiceShortcutActivity: INUIAddVoiceShortcutViewControllerDelegate {
         controller.dismiss(animated: true, completion: nil)
     }
 }
-
 
 #endif

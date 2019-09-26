@@ -87,10 +87,12 @@ final class WatchController: NSObject {
                 else { return }
         }
         
+        guard session.isPaired else { return }
+        
         let message = context?.toMessage() ?? [:]
         do { try session.updateApplicationContext(message) }
         catch {
-            log?("⚠️ Unable to update application context: \(error)")
+            log?("⚠️ Unable to update application context: \(error.localizedDescription)")
             return
         }
         
@@ -188,7 +190,7 @@ extension WatchController: WCSessionDelegate {
         if let error = error {
             log?("Activation did not complete: " + error.localizedDescription)
             #if DEBUG
-            dump(error)
+            print(error)
             #endif
         } else {
             log?(activationState.debugDescription)
@@ -233,7 +235,7 @@ extension WatchController: WCSessionDelegate {
         session.sendMessage(responseMessage, replyHandler: { [weak self] (reply) in
             self?.log?("Reply: \(reply)")
         }, errorHandler: { [weak self] (error) in
-            self?.log?("Unable to respond: \(error)")
+            self?.log?("⚠️ Unable to respond: \(error.localizedDescription)")
         })
     }
     
@@ -242,9 +244,6 @@ extension WatchController: WCSessionDelegate {
     func session(_ session: WCSession, didReceiveMessage message: [String : Any], replyHandler: @escaping ([String : Any]) -> Void) {
         
         log?("Recieved message")
-        #if DEBUG
-        dump(message)
-        #endif
         let response = self.response(for: message)
         let responseMessage = WatchMessage.response(response).toMessage()
         replyHandler(responseMessage)

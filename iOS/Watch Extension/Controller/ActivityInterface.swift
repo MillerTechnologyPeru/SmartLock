@@ -40,7 +40,7 @@ public extension ActivityInterface {
     }
 }
 
-public extension ActivityInterface {
+public extension ActivityInterface where Self: WKInterfaceController {
     
     func performActivity <T> (showActivity: Bool = true,
                               queue: DispatchQueue? = nil,
@@ -75,13 +75,16 @@ public extension ActivityInterface {
                 
                 mainQueue { [weak self] in
                     
-                    guard let controller = self as? (WKInterfaceController & ActivityInterface)
+                    guard let controller = self
                         else { return }
                     
                     if showActivity { controller.hideActivity() }
                     
                     // show error
-                    log("⚠️ Error: \(error)")
+                    log("⚠️ Error: \(error.localizedDescription)")
+                    #if DEBUG
+                    print(error)
+                    #endif
                     controller.showError(error.localizedDescription)
                 }
             }

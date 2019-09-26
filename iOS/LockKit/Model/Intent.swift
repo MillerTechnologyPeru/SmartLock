@@ -28,7 +28,7 @@ public extension UnlockIntent {
         self.init()
         self.lock = IntentLock(identifier: identifier, name: cache.name)
         
-        #if os(iOS)
+        #if os(iOS) && !targetEnvironment(macCatalyst)
         //self.setImage(INImage(uiImage: UIImage(permission: cache.key.permission)), forParameterNamed: \.lock)
         self.__setImage(INImage(uiImage: UIImage(permission: cache.key.permission)), forParameterNamed: #keyPath(lock))
         #endif

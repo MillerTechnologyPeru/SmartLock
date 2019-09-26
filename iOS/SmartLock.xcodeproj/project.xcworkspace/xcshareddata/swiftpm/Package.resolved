@@ -11,11 +11,20 @@
         }
       },
       {
+        "package": "CloudKitCodable",
+        "repositoryURL": "https://github.com/colemancda/CloudKitCodable.git",
+        "state": {
+          "branch": "master",
+          "revision": "598e04c5c6f1162d51fdc45d11c85574d39ee85c",
+          "version": null
+        }
+      },
+      {
         "package": "CryptoSwift",
         "repositoryURL": "https://github.com/krzyzanowskim/CryptoSwift",
         "state": {
           "branch": "master",
-          "revision": "0d1095dcded97315d25e3e69f4700cfb8bf2608b",
+          "revision": "5d114736f5a98caa8a0ca1c254526f1ce5688f91",
           "version": null
         }
       },
@@ -26,6 +35,15 @@
           "branch": "master",
           "revision": "ec10636de5b3cbe83b6687da469074ec766343d5",
           "version": null
+        }
+      },
+      {
+        "package": "GottaGoFast",
+        "repositoryURL": "https://github.com/broadwaylamb/GottaGoFast.git",
+        "state": {
+          "branch": null,
+          "revision": "098e92679419e509d42fd97d3e84292acd53e291",
+          "version": "0.2.0"
         }
       },
       {
@@ -43,6 +61,15 @@
         "state": {
           "branch": "master",
           "revision": "ee878eaeb3efa09753a9e29e8deb8c331b96f3c8",
+          "version": null
+        }
+      },
+      {
+        "package": "OpenCombine",
+        "repositoryURL": "https://github.com/MillerTechnologyPeru/OpenCombine.git",
+        "state": {
+          "branch": "master",
+          "revision": "9b9915bde7bcb5c812a577fdd39c1c982668339e",
           "version": null
         }
       },
@@ -71,6 +98,15 @@
           "branch": "master",
           "revision": "ae79b25d192778b00b10cdc6e28f7d734e084fad",
           "version": null
+        }
+      },
+      {
+        "package": "Yams",
+        "repositoryURL": "https://github.com/jpsim/Yams.git",
+        "state": {
+          "branch": null,
+          "revision": "c947a306d2e80ecb2c0859047b35c73b8e1ca27f",
+          "version": "2.0.0"
         }
       }
     ]

@@ -21,7 +21,7 @@ public final class NewKeySelectPermissionViewController: UITableViewController, 
     
     public var lockIdentifier: UUID!
     
-    public lazy var progressHUD: JGProgressHUD = .currentStyle(for: self)
+    public var progressHUD: JGProgressHUD?
     
     private var permissionTypes: [PermissionType] = [.admin, .anytime]
     
@@ -56,7 +56,9 @@ public final class NewKeySelectPermissionViewController: UITableViewController, 
     public override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
-        view.bringSubviewToFront(progressHUD)
+        if let progressHUD = self.progressHUD {
+            view.bringSubviewToFront(progressHUD)
+        }
     }
     
     // MARK: - Actions
@@ -70,18 +72,18 @@ public final class NewKeySelectPermissionViewController: UITableViewController, 
     
     // MARK: - Methods
     
-    private func description(for permissionType: PermissionType) -> String {
+    private func description(for permission: PermissionType) -> String {
         
-        switch permissionType {
+        switch permission {
         case .admin:
-            return "Admin keys have unlimited access, and can create new keys."
+            return R.string.newKeySelectPermissionViewController.adminDescription()
         case .anytime:
-            return "Anytime keys have unlimited access, but cannot create new keys."
+            return R.string.newKeySelectPermissionViewController.anytimeDescription()
         case .scheduled:
-            return "Scheduled keys have limited access during specified hours, and expire at a certain date. New keys cannot be created from this key"
+            return R.string.newKeySelectPermissionViewController.scheduledDescription()
         case .owner:
             assertionFailure("Cannot create owner keys")
-            return "Owner keys are created at setup."
+            return "" // should never show
         }
     }
     
@@ -147,6 +149,12 @@ public final class NewKeySelectPermissionViewController: UITableViewController, 
     }
 }
 
+// MARK: - ProgressHUDViewController
+
+extension NewKeySelectPermissionViewController: ProgressHUDViewController { }
+
+// MARK: - View Controller Extensions
+
 public extension UIViewController {
     
     func shareKey(lock identifier: UUID, completion: @escaping (((invitation: NewKey.Invitation, sender: PopoverPresentingView)?) -> ())) {
@@ -158,7 +166,8 @@ public extension UIViewController {
     
     func shareKey(lock identifier: UUID) {
         
-        self.shareKey(lock: identifier) { [unowned self] in
+        self.shareKey(lock: identifier) { [weak self] in
+            guard let self = self else { return }
             guard let (invitation, sender) = $0 else {
                 self.dismiss(animated: true, completion: nil)
                 return

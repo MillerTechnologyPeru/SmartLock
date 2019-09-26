@@ -40,7 +40,7 @@ public extension ActivityIndicatorViewController where Self: UIViewController {
                 guard let url = URL(string: result.value),
                     let lockURL = LockURL(rawValue: url),
                     case let .setup(_, sharedSecret) = lockURL else {
-                        self.showErrorAlert("Invalid QR code")
+                        self.showErrorAlert(R.string.localizable.setupInvalidQRCode())
                         return
                 }
                 
@@ -60,20 +60,22 @@ public extension ActivityIndicatorViewController where Self: UIViewController {
     
     func setup(lock identifier: UUID, secret: KeyData, name: String = "Lock", scanDuration: TimeInterval = 2.0) {
         
-        performActivity(showProgressHUD: true, { () -> Bool in
+        performActivity(queue: .bluetooth, { () -> Bool in
             guard let lockPeripheral = try Store.shared.device(for: identifier, scanDuration: scanDuration)
                 else { return false }
             try Store.shared.setup(lockPeripheral, sharedSecret: secret, name: name)
             return true
         }, completion: { (viewController, foundDevice) in
             if foundDevice == false {
-                viewController.showErrorAlert("Could not lock")
+                viewController.showErrorAlert(R.string.localizable.setupCouldNotLock())
             }
         })
     }
     
     func setup(lock: LockPeripheral<NativeCentral>, sharedSecret: KeyData, name: String = "Lock") {
         
-        performActivity({ try Store.shared.setup(lock, sharedSecret: sharedSecret, name: name) })
+        performActivity(queue: .bluetooth, {
+            try Store.shared.setup(lock, sharedSecret: sharedSecret, name: name)
+        })
     }
 }

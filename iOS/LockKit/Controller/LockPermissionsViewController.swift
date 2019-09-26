@@ -13,7 +13,7 @@ import GATT
 import CoreLock
 import JGProgressHUD
 
-public final class LockPermissionsViewController: UITableViewController, ActivityIndicatorViewController {
+public final class LockPermissionsViewController: UITableViewController {
     
     // MARK: - Properties
     
@@ -25,7 +25,7 @@ public final class LockPermissionsViewController: UITableViewController, Activit
         didSet { configureView() }
     }
     
-    public lazy var progressHUD: JGProgressHUD = .currentStyle(for: self)
+    public var progressHUD: JGProgressHUD?
     
     private static let dateFormatter: DateFormatter = {
         let dateFormatter = DateFormatter()
@@ -35,6 +35,15 @@ public final class LockPermissionsViewController: UITableViewController, Activit
     }()
     
     // MARK: - Loading
+    
+    public static func fromStoryboard(with lock: UUID, completion: (() -> ())? = nil) -> LockPermissionsViewController {
+        
+        guard let viewController = R.storyboard.lockPermissions.lockPermissionsViewController()
+            else { fatalError("Unable to load \(self) from storyboard") }
+        viewController.lockIdentifier = lock
+        viewController.completion = completion
+        return viewController
+    }
     
     public override func viewDidLoad() {
         super.viewDidLoad()
@@ -60,40 +69,25 @@ public final class LockPermissionsViewController: UITableViewController, Activit
     public override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
-        view.bringSubviewToFront(progressHUD)
+        if let progressHUD = self.progressHUD {
+            view.bringSubviewToFront(progressHUD)
+        }
     }
     
     // MARK: - Actions
     
     @IBAction func reloadData(_ sender: AnyObject? = nil) {
         
-        self.showProgressHUD()
+        guard let lockIdentifier = self.lockIdentifier
+            else { assertionFailure(); return }
         
-        let lockIdentifier = self.lockIdentifier!
-        
-        guard let lockCache = Store.shared[lock: lockIdentifier],
-            let keyData = Store.shared[key: lockCache.key.identifier]
-            else { fatalError() }
-        
-        async { [weak self] in
-            let key = KeyCredentials(identifier: lockCache.key.identifier, secret: keyData)
-            do {
-                guard let peripheral = Store.shared[peripheral: lockIdentifier]
-                    else { throw CentralError.unknownPeripheral }
-                try LockManager.shared.listKeys(for: peripheral, with: key, notification: { (list, isComplete) in
-                    mainQueue { self?.list = list }
-                })
-                mainQueue { self?.dismissProgressHUD() }
-            }
-            catch {
-                mainQueue {
-                    self?.showErrorAlert("\(error)",
-                        okHandler: { self?.tableView.reloadData() },
-                        retryHandler: { self?.reloadData() })
-                }
-                return
-            }
-        }
+        performActivity(queue: .bluetooth, {
+            guard let peripheral = try Store.shared.device(for: lockIdentifier, scanDuration: 1.0)
+                else { throw CentralError.unknownPeripheral }
+            try Store.shared.listKeys(peripheral, notification: { (list, isComplete) in
+                mainQueue { [weak self] in self?.list = list }
+            })
+        })
     }
     
     @IBAction func newKey(_ sender: AnyObject) {
@@ -175,7 +169,7 @@ public final class LockPermissionsViewController: UITableViewController, Activit
         
         switch section {
         case .keys: return nil
-        case .pending: return self[section].isEmpty ? nil : "Pending Keys"
+        case .pending: return self[section].isEmpty ? nil : R.string.localizable.lockPermissionsPendingKeys()
         }
     }
     
@@ -205,26 +199,26 @@ public final class LockPermissionsViewController: UITableViewController, Activit
         
         let keyEntry = self[indexPath]
         
-        let delete = UITableViewRowAction(style: .destructive, title: "Delete") {
+        let delete = UITableViewRowAction(style: .destructive, title: R.string.localizable.lockPermissionsDelete()) {
             
             assert($1 == indexPath)
             
-            let alert = UIAlertController(title: NSLocalizedString("Confirmation", comment: "DeletionConfirmation"),
-                                          message: "Are you sure you want to delete this key?",
+            let alert = UIAlertController(title: R.string.localizable.lockPermissionsAlertTitle(),
+                                          message: R.string.localizable.lockPermissionsAlertMessage(),
                                           preferredStyle: UIAlertController.Style.alert)
             
-            alert.addAction(UIAlertAction(title: NSLocalizedString("Cancel", comment: "Cancel"), style: .cancel, handler: { (UIAlertAction) in
+            alert.addAction(UIAlertAction(title: R.string.localizable.lockPermissionsAlertCancel(), style: .cancel, handler: { (UIAlertAction) in
                 
                 alert.dismiss(animated: true, completion: nil)
             }))
             
-            alert.addAction(UIAlertAction(title: NSLocalizedString("Delete", comment: "Delete"), style: .destructive, handler: { (UIAlertAction) in
+            alert.addAction(UIAlertAction(title: R.string.localizable.lockPermissionsAlertDelete(), style: .destructive, handler: { (UIAlertAction) in
                 
                 alert.dismiss(animated: true) { }
                 
-                self.showProgressHUD()
+                self.showActivity()
                 
-                async { [weak self] in
+                DispatchQueue.bluetooth.async { [weak self] in
                     
                     do {
                         guard let peripheral = Store.shared[peripheral: lockIdentifier]
@@ -236,13 +230,13 @@ public final class LockPermissionsViewController: UITableViewController, Activit
                     catch {
                         mainQueue {
                             self?.showErrorAlert(error.localizedDescription)
-                            self?.dismissProgressHUD(animated: false)
+                            self?.hideActivity(animated: false)
                         }
                         return
                     }
                     mainQueue {
                         self?.list.remove(keyEntry.identifier, type: keyEntry.type)
-                        self?.dismissProgressHUD(animated: true)
+                        self?.hideActivity(animated: true)
                     }
                 }                
             }))
@@ -256,6 +250,10 @@ public final class LockPermissionsViewController: UITableViewController, Activit
     }
     #endif
 }
+
+// MARK: - ActivityIndicatorViewController
+
+extension LockPermissionsViewController: ProgressHUDViewController { }
 
 // MARK: - Supporting Types
 

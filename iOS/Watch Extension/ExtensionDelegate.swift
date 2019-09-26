@@ -8,6 +8,7 @@
 
 import Foundation
 import WatchKit
+import Intents
 import CoreBluetooth
 import CoreLocation
 import CoreLock
@@ -15,7 +16,9 @@ import LockKit
 
 final class ExtensionDelegate: NSObject, WKExtensionDelegate {
     
-    var shared: ExtensionDelegate { return WKExtension.shared().delegate as! ExtensionDelegate }
+    var shared: ExtensionDelegate {
+        return WKExtension.shared().delegate as! ExtensionDelegate
+    }
     
     let appLaunch = Date()
 
@@ -23,7 +26,7 @@ final class ExtensionDelegate: NSObject, WKExtensionDelegate {
         // Perform any final initialization of your application.
         
         // print app info
-        log("⌚️ Launching SmartLock Watch v\(AppVersion) Build \(AppBuild)")
+        log("⌚️ Launching SmartLock Watch v\(Bundle.InfoPlist.version) Build \(Bundle.InfoPlist.shortVersion)")
         
         // setup logging
         Store.shared.lockManager.log = { log("🔒 LockManager: " + $0) }
@@ -35,7 +38,7 @@ final class ExtensionDelegate: NSObject, WKExtensionDelegate {
         }
         Store.shared.syncApp()
     }
-
+    
     func applicationDidBecomeActive() {
         // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
         
@@ -55,7 +58,7 @@ final class ExtensionDelegate: NSObject, WKExtensionDelegate {
         log("⌚️ Will resign active")
         
         #if DEBUG
-        let updateInterval: TimeInterval = 10
+        let updateInterval: TimeInterval = 30
         #else
         let updateInterval: TimeInterval = 60 * 3
         #endif
@@ -81,7 +84,11 @@ final class ExtensionDelegate: NSObject, WKExtensionDelegate {
             case let snapshotTask as WKSnapshotRefreshBackgroundTask:
                 // Snapshot tasks have a unique completion call, make sure to set your expiration date
                 refresh {
-                    snapshotTask.setTaskCompleted(restoredDefaultState: true, estimatedSnapshotExpiration: Date() + 60, userInfo: nil)
+                    snapshotTask.setTaskCompleted(
+                        restoredDefaultState: true,
+                        estimatedSnapshotExpiration: Date() + 60,
+                        userInfo: nil
+                    )
                 }
             case let connectivityTask as WKWatchConnectivityRefreshBackgroundTask:
                 // Be sure to complete the connectivity task once you’re done.
@@ -96,8 +103,21 @@ final class ExtensionDelegate: NSObject, WKExtensionDelegate {
                 // Be sure to complete the intent-did-run task once you're done.
                 //intentDidRunTask.setTaskCompleted(refreshSnapshot: false)
             default:
-                // make sure to complete unhandled task types
-                refresh { task.setTaskCompleted(refreshSnapshot: true) }
+                if #available(watchOS 5.0, *),
+                    let _ = task as? WKRelevantShortcutRefreshBackgroundTask {
+                    Store.shared.setRelevantShortcuts { (error) in
+                        if let error = error {
+                            log("⚠️ Donating relevant shortcuts failed. \(error.localizedDescription)")
+                            #if DEBUG
+                            print(error)
+                            #endif
+                        }
+                        task.setTaskCompleted(refreshSnapshot: true)
+                    }
+                } else {
+                    // make sure to complete unhandled task types
+                    refresh { task.setTaskCompleted(refreshSnapshot: true) }
+                }
             }
         }
     }
@@ -122,16 +142,10 @@ internal extension ExtensionDelegate {
     func scan(completion: (() -> ())? = nil) {
         
         // scan for locks
-        async {
+        DispatchQueue.bluetooth.async {
             defer { mainQueue { completion?() } }
-            do {
-                // scan for locks
-                try Store.shared.scan(duration: 1.0)
-                // make sure each stored lock is visible
-                for lock in Store.shared.locks.value.keys {
-                    let _ = try Store.shared.device(for: lock, scanDuration: 1.0)
-                }
-            } catch { log("⚠️ Unable to scan: \(error)") }
+            do { try Store.shared.scan() }
+            catch { log("⚠️ Unable to scan: \(error.localizedDescription)") }
         }
     }
 }

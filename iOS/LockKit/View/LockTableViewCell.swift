@@ -31,7 +31,6 @@ public extension UITableView {
     
     /**
      Registers a nib object containing a cell with the table view under a specified identifier.
-
      */
     func register(_ type: LockTableViewCell.Type) {
         register(R.nib.lockTableViewCell)

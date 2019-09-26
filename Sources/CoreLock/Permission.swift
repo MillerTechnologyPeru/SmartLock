@@ -24,15 +24,6 @@ public enum Permission: Equatable, Hashable {
     case scheduled(Schedule)
 }
 
-/// A Key's permission level.
-public enum PermissionType: UInt8, Codable {
-    
-    case owner
-    case admin
-    case anytime
-    case scheduled
-}
-
 public extension Permission {
     
     /// Byte value of the permission type.
@@ -49,8 +40,11 @@ public extension Permission {
 
 public extension Permission {
     
-    /// Whether the permission allows for sharing keys.
-    var canShareKeys: Bool {
+    /// User can administrate the device.
+    ///
+    /// - View and edit keys.
+    /// - View full event history.
+    var isAdministrator: Bool {
         switch self {
         case .owner,
              .admin:
@@ -62,6 +56,42 @@ public extension Permission {
     }
 }
 
+// MARK: - PermissionType
+
+/// A Key's permission level.
+public enum PermissionType: UInt8, CaseIterable {
+    
+    case owner
+    case admin
+    case anytime
+    case scheduled
+}
+
+internal extension PermissionType {
+    
+    init?(stringValue: String) {
+        guard let value = Swift.type(of: self).allCases.first(where: { $0.stringValue == stringValue })
+            else { return nil }
+        self = value
+    }
+    
+    var stringValue: String {
+        switch self {
+        case .owner: return "owner"
+        case .admin: return "admin"
+        case .anytime: return "anytime"
+        case .scheduled: return "scheduled"
+        }
+    }
+}
+
+extension PermissionType: CustomStringConvertible {
+    
+    public var description: String {
+        return stringValue
+    }
+}
+
 // MARK: - Schedule
 
 public extension Permission {
@@ -70,7 +100,7 @@ public extension Permission {
     struct Schedule: Codable, Equatable, Hashable {
         
         /// The date this permission becomes invalid.
-        public var expiry: Date
+        public var expiry: Date?
         
         /// The minute interval range the lock can be unlocked.
         public var interval: Interval
@@ -78,7 +108,7 @@ public extension Permission {
         /// The days of the week the permission is valid
         public var weekdays: Weekdays
         
-        public init(expiry: Date = .distantFuture,
+        public init(expiry: Date? = nil,
                     interval: Interval = .anytime,
                     weekdays: Weekdays = .all) {
             
@@ -90,7 +120,9 @@ public extension Permission {
         /// Verify that the specified date is valid for this schedule.
         public func isValid(for date: Date = Date()) -> Bool {
             
-            guard date < expiry else { return false }
+            if let expiry = self.expiry {
+                guard date < expiry else { return false }
+            }
             
             // need to get hour and minute of day to validate
             let dateComponents = DateComponents(date: date)
@@ -285,7 +317,6 @@ public extension Permission.Schedule.Weekdays {
 extension Permission: Codable {
     
     public enum CodingKeys: String, CodingKey {
-        
         case type
         case schedule
     }
@@ -293,7 +324,6 @@ extension Permission: Codable {
     public init(from decoder: Decoder) throws {
         
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        
         let type = try container.decode(PermissionType.self, forKey: .type)
         
         switch type {
@@ -312,26 +342,52 @@ extension Permission: Codable {
     public func encode(to encoder: Encoder) throws {
         
         var container = encoder.container(keyedBy: CodingKeys.self)
-        
         try container.encode(type, forKey: .type)
         
         switch self {
-            
         case .owner,
              .admin,
              .anytime:
             break
-            
         case let .scheduled(schedule):
             try container.encode(schedule, forKey: .schedule)
         }
     }
 }
 
+extension PermissionType: Codable {
+    
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        let rawValue = try container.decode(String.self)
+        guard let value = PermissionType(stringValue: rawValue) else {
+            throw DecodingError.dataCorruptedError(in: container, debugDescription: "Invalid string value \(rawValue)")
+        }
+        self = value
+    }
+    
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.singleValueContainer()
+        try container.encode(stringValue)
+    }
+}
+
+extension PermissionType: TLVCodable {
+    
+    public init?(tlvData: Data) {
+        guard tlvData.count == 1
+            else { return nil }
+        self.init(rawValue: tlvData[0])
+    }
+    
+    public var tlvData: Data {
+        return Data([rawValue])
+    }
+}
+
 extension Permission.Schedule.Interval: Codable {
     
     public enum CodingKeys: String, CodingKey {
-        
         case max
         case min
     }
@@ -355,12 +411,9 @@ extension Permission.Schedule.Interval: Codable {
 extension Permission.Schedule.Weekdays: TLVCodable {
         
     public init?(tlvData data: Data) {
-        
         guard data.count == 1
             else { return nil }
-        
-        let days = BitMaskOptionSet<Day>(rawValue: data[0])
-        self.init(days: days)
+        self.init(days: .init(rawValue: data[0]))
     }
     
     public var tlvData: Data {

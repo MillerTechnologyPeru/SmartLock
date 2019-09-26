@@ -19,9 +19,7 @@ final class IntentHandler: INExtension {
     
     static let didLaunch: Void = {
         // configure logging
-        #if os(iOS)
         Log.shared = .intent
-        #endif
         // print app info
         log("🎙 Launching Intent")
     }()
@@ -41,6 +39,8 @@ final class IntentHandler: INExtension {
             Store.shared.loadCache()
         }
         
+        log("🎙 Handle intent \(intent.intentDescription ?? intent.identifier ?? intent.description)")
+        
         if #available(watchOSApplicationExtension 5.0, *) {
             return UnlockIntentHandler()
         } else {
@@ -57,7 +57,7 @@ final class UnlockIntentHandler: NSObject, UnlockIntentHandling {
     @available(iOSApplicationExtension 13.0, watchOSApplicationExtension 6.0, *)
     func provideLockOptions(for intent: UnlockIntent, with completion: @escaping ([IntentLock]?, Error?) -> Void) {
         
-        async {
+        DispatchQueue.app.async {
             // load updated lock information
             Store.shared.loadCache()
             
@@ -70,7 +70,7 @@ final class UnlockIntentHandler: NSObject, UnlockIntentHandling {
     @available(iOSApplicationExtension 13.0, watchOSApplicationExtension 6.0, *)
     func resolveLock(for intent: UnlockIntent, with completion: @escaping (UnlockLockResolutionResult) -> Void) {
         
-        async {
+        DispatchQueue.bluetooth.async {
             
             // load updated lock information
             Store.shared.loadCache()
@@ -112,6 +112,7 @@ final class UnlockIntentHandler: NSObject, UnlockIntentHandling {
         }
     }
     
+    @available(iOSApplicationExtension 12.0, *)
     func confirm(intent: UnlockIntent, completion: @escaping (UnlockIntentResponse) -> Void) {
         
         assert(Thread.isMainThread == false, "Should not be main thread")
@@ -134,6 +135,7 @@ final class UnlockIntentHandler: NSObject, UnlockIntentHandling {
         }
     }
     
+    @available(iOSApplicationExtension 12.0, *)
     func handle(intent: UnlockIntent, completion: @escaping (UnlockIntentResponse) -> Void) {
         
         assert(Thread.isMainThread == false, "Should not be main thread")
@@ -160,7 +162,7 @@ final class UnlockIntentHandler: NSObject, UnlockIntentHandling {
                 }
             }
             
-            async {
+            DispatchQueue.bluetooth.async {
                 do {
                     guard let peripheral = try Store.shared.device(for: lockIdentifier, scanDuration: 1.0) else {
                         completion(.failure(failureReason: "Lock not in range. "))
@@ -185,7 +187,6 @@ final class UnlockIntentHandler: NSObject, UnlockIntentHandling {
 
 // MARK: - Logging
 
-#if os(iOS)
 extension Log {
     
     static var intent: Log {
@@ -198,4 +199,3 @@ extension Log {
         return Cache.log
     }
 }
-#endif
