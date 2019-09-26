@@ -98,7 +98,7 @@ public extension FileManager.Lock {
             options: [.skipsHiddenFiles, .skipsSubdirectoryDescendants, .skipsPackageDescendants]
         )
         
-        let invitationURLs = documents.filter { $0.pathExtension == "ekey" }
+        let invitationURLs = documents.filter { $0.pathExtension == NewKey.Invitation.fileExtension }
         guard invitationURLs.isEmpty == false
             else { return [:] }
         

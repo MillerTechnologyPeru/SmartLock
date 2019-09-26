@@ -10,6 +10,7 @@ import Foundation
 import UIKit
 import CoreLock
 
+/// New Key Document
 public final class NewKeyDocument: UIDocument {
     
     // MARK: - Properties
