@@ -125,9 +125,7 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
                 
         // handle url
         if let url = launchOptions?[.url] as? URL {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) { [weak self] in
-                self?.open(url: url)
-            }
+            open(url: url)
         }
         
         return true
@@ -502,7 +500,8 @@ internal extension AppDelegate {
     func open(url: URL) -> Bool {
         
         if url.isFileURL {
-            return open(file: url)
+            open(file: url)
+            return true
         } else if let lockURL = LockURL(rawValue: url) {
             open(url: lockURL)
             return true
@@ -511,25 +510,14 @@ internal extension AppDelegate {
         }
     }
     
-    func open(file url: URL) -> Bool {
+    func open(file url: URL) {
         
-        let scopedResource = url.startAccessingSecurityScopedResource()
-        defer { if scopedResource { url.stopAccessingSecurityScopedResource() } }
-        
-        do {
-            // parse eKey file
-            let data = try Data(contentsOf: url)
-            let newKey = try JSONDecoder().decode(NewKey.Invitation.self, from: data)
-            
-            tabBarController.open(newKey: newKey)
-            return true
-        } catch {
-            log("⚠️ Unable to open file: \(error.localizedDescription)")
-            #if DEBUG
-            print(url)
-            print(error)
-            #endif
-            return false
+        let document = NewKeyDocument(fileURL: url)
+        document.open { [weak self] _ in
+            assert(Thread.isMainThread)
+            if let invitation = document.invitation {
+                self?.tabBarController.open(newKey: invitation)
+            }
         }
     }
     
