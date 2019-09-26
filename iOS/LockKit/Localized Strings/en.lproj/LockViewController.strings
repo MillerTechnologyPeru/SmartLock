@@ -10,7 +10,3 @@
 "KeyIdentifier.Title" = "Key";
 "Permission.Title" = "Permission";
 "Version.Title" = "Version";
-
-// Error
-"Error.NotInRange" = "Lock not in range.";
-"Error.NoKey" = "You don't have a key for this lock.";

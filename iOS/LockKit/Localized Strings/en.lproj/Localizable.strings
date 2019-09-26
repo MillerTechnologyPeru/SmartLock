@@ -8,7 +8,7 @@
 
 // MARK: - Miscellaneous
 
-"NewLockName" = "My Lock";
+"NewLockName" = "My lock";
 
 // MARK: - Permission
 
@@ -16,6 +16,11 @@
 "Permission.Admin" = "Admin";
 "Permission.Anytime" = "Anytime";
 "Permission.Scheduled" = "Scheduled";
+
+// MARK: - Error
+
+"Error.NotInRange" = "Lock not in range.";
+"Error.NoKey" = "You don't have a key for this lock.";
 
 // MARK: - NSUserActivity
 

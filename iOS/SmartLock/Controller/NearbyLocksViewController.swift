@@ -320,7 +320,7 @@ final class NearbyLocksViewController: UITableViewController {
                 donateUnlockIntent(for: identifier)
                 unlock(lock: lock)
             } else {
-                showErrorAlert("No key for lock.")
+                showErrorAlert(LockError.noKey(lock: identifier).localizedDescription)
             }
         }
     }

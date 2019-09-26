@@ -10,7 +10,3 @@
 "KeyIdentifier.Title" = "Llave";
 "Permission.Title" = "Permiso";
 "Version.Title" = "Version";
-
-// Error
-"Error.NotInRange" = "La cerradura no se encuentra cerca.";
-"Error.NoKey" = "No tiene una llave para esta cerradura";

@@ -8,7 +8,7 @@
 
 // MARK: - Miscellaneous
 
-"NewLockName" = "Mi Cerradura";
+"NewLockName" = "Mi cerradura";
 
 // MARK: - Permission
 
@@ -16,6 +16,11 @@
 "Permission.Admin" = "Administrador";
 "Permission.Anytime" = "Cualquier momento";
 "Permission.Scheduled" = "Programado";
+
+// MARK: - Error
+
+"Error.NotInRange" = "La cerradura no se encuentra cerca.";
+"Error.NoKey" = "No tiene una llave para esta cerradura";
 
 // MARK: - NSUserActivity
 
