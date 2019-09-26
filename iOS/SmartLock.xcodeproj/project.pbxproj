@@ -105,6 +105,8 @@
 		6E81A3262332E26800F73AFC /* WatchIntent.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 6ED8206C2316711900B69520 /* WatchIntent.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		6E83BA6D233CBAF400D6BA04 /* Error.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E83BA6C233CBAF400D6BA04 /* Error.swift */; };
 		6E83BA6E233CBAF400D6BA04 /* Error.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E83BA6C233CBAF400D6BA04 /* Error.swift */; };
+		6E83BA74233CBFD900D6BA04 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6E83BA73233CBFD800D6BA04 /* Localizable.strings */; };
+		6E83BA77233CC00B00D6BA04 /* NearbyLocksViewController.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6E83BA79233CC00B00D6BA04 /* NearbyLocksViewController.strings */; };
 		6E83BAF42323831200FBC12E /* LockEventsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E83BAF32323831200FBC12E /* LockEventsViewController.swift */; };
 		6E83BAF62323842500FBC12E /* TableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E83BAF52323842500FBC12E /* TableViewController.swift */; };
 		6E83BAF82323843500FBC12E /* CollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E83BAF72323843500FBC12E /* CollectionViewController.swift */; };
@@ -675,6 +677,9 @@
 		6E806BDA2310FB2C00C6FF78 /* PermissionIconView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionIconView.swift; sourceTree = "<group>"; };
 		6E81B293230CCE3D00783BC5 /* BeaconController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BeaconController.swift; sourceTree = "<group>"; };
 		6E83BA6C233CBAF400D6BA04 /* Error.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Error.swift; sourceTree = "<group>"; };
+		6E83BA73233CBFD800D6BA04 /* Localizable.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; path = Localizable.strings; sourceTree = "<group>"; };
+		6E83BA78233CC00B00D6BA04 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/NearbyLocksViewController.strings; sourceTree = "<group>"; };
+		6E83BA7A233CC00E00D6BA04 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/NearbyLocksViewController.strings; sourceTree = "<group>"; };
 		6E83BAF32323831200FBC12E /* LockEventsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LockEventsViewController.swift; sourceTree = "<group>"; };
 		6E83BAF52323842500FBC12E /* TableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewController.swift; sourceTree = "<group>"; };
 		6E83BAF72323843500FBC12E /* CollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionViewController.swift; sourceTree = "<group>"; };
@@ -1042,6 +1047,8 @@
 				6E6000172121119400787DAA /* Main.storyboard */,
 				6EE99A87233CB0C6001F11A1 /* Info.plist */,
 				6EE99A8C233CB140001F11A1 /* InfoPlist.strings */,
+				6E83BA73233CBFD800D6BA04 /* Localizable.strings */,
+				6E83BA79233CC00B00D6BA04 /* NearbyLocksViewController.strings */,
 				6E08FB862316EF4300177026 /* WatchKit */,
 				6E806BA7230F654600C6FF78 /* View */,
 				6E994AA8230DFC8E0076DC1B /* Controller */,
@@ -1992,8 +1999,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6E83BA74233CBFD900D6BA04 /* Localizable.strings in Resources */,
 				6E60001E2121119500787DAA /* LaunchScreen.storyboard in Resources */,
 				6EE99A8A233CB140001F11A1 /* InfoPlist.strings in Resources */,
+				6E83BA77233CC00B00D6BA04 /* NearbyLocksViewController.strings in Resources */,
 				6E994AA3230DFC180076DC1B /* Assets.xcassets in Resources */,
 				6E6000192121119400787DAA /* Main.storyboard in Resources */,
 			);
@@ -2906,6 +2915,15 @@
 				6E60001D2121119500787DAA /* Base */,
 			);
 			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+		6E83BA79233CC00B00D6BA04 /* NearbyLocksViewController.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				6E83BA78233CC00B00D6BA04 /* en */,
+				6E83BA7A233CC00E00D6BA04 /* es */,
+			);
+			name = NearbyLocksViewController.strings;
 			sourceTree = "<group>";
 		};
 		6E994AE6230E56DD0076DC1B /* MainInterface.storyboard */ = {

@@ -252,7 +252,7 @@ final class NearbyLocksViewController: UITableViewController {
                     detail = lockCache.key.permission.localizedText
                     showDetail = true
                 } else {
-                    title = "Lock"
+                    title = R.string.nearbyLocksViewController.lockTitleDefault() // "Lock"
                     detail = information.identifier.description
                     permission = .anytime
                     showDetail = false
@@ -260,7 +260,7 @@ final class NearbyLocksViewController: UITableViewController {
                 
             case .setup:
                 
-                title = "Setup"
+                title = R.string.nearbyLocksViewController.lockTitleSetup() // "Setup"
                 detail = information.identifier.description
                 permission = .owner
                 showDetail = false
@@ -268,7 +268,7 @@ final class NearbyLocksViewController: UITableViewController {
         } else {
             
             isEnabled = false
-            title = "Loading..."
+            title =  R.string.nearbyLocksViewController.lockTitleLoading() // "Loading..."
             detail = ""
             permission = nil
             showDetail = false
