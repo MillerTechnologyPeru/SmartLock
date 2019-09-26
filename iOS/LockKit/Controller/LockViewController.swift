@@ -116,15 +116,13 @@ public final class LockViewController: UITableViewController {
             ]
             
             let lockItem = LockActivityItem(identifier: lockIdentifier)
-            
-            let items = [lockItem, lockItem.text, lockItem.image] as [Any]
-            
-            let activityViewController = UIActivityViewController(activityItems: items, applicationActivities: activities)
+            let activityItems = [lockItem, lockItem.image] as [Any]
+            let activityViewController = UIActivityViewController(
+                activityItems: activityItems,
+                applicationActivities: activities
+            )
             activityViewController.excludedActivityTypes = LockActivityItem.excludedActivityTypes
-            activityViewController.modalPresentationStyle = .popover
-            activityViewController.popoverPresentationController?.barButtonItem = sender
-            
-            self.present(activityViewController, animated: true, completion: nil)
+            self.present(activityViewController, sender: .barButtonItem(sender))
         }
         
         if shouldScan {

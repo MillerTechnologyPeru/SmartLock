@@ -8,10 +8,13 @@
 
 import Foundation
 import UIKit
+import LinkPresentation
 import CoreLock
 import JGProgressHUD
 
-public struct LockActivityItem {
+// MARK: - Lock Item
+
+public final class LockActivityItem: NSObject {
     
     public static let excludedActivityTypes: [UIActivity.ActivityType] = [
         .print,
@@ -32,28 +35,102 @@ public struct LockActivityItem {
     public let identifier: UUID
     
     public init(identifier: UUID) {
-        
         self.identifier = identifier
     }
     
     // MARK: - Activity Values
     
+    public var lock: LockCache? {
+        return Store.shared[lock: identifier]
+    }
+    
     public var text: String {
         
-        guard let lockCache = Store.shared[lock: identifier]
-            else { fatalError("Lock not in cache") }
+        guard let lockCache = self.lock else {
+            assertionFailure("Lock not in cache")
+            return ""
+        }
         
         return R.string.activity.lockActivityItemText(lockCache.name)
     }
     
     public var image: UIImage {
         
-        guard let lockCache = Store.shared[lock: identifier]
-            else { fatalError("Lock not in cache") }
+        guard let lockCache = self.lock else {
+            assertionFailure("Lock not in cache")
+            return UIImage(permission: .admin)
+        }
         
         return UIImage(permission: lockCache.key.permission)
     }
 }
+
+// MARK: - UIActivityItemSource
+
+extension LockActivityItem: UIActivityItemSource {
+    
+    public func activityViewControllerPlaceholderItem(_ activityViewController: UIActivityViewController) -> Any {
+        return text
+    }
+    
+    public func activityViewController(_ activityViewController: UIActivityViewController, itemForActivityType activityType: UIActivity.ActivityType?) -> Any? {
+        
+        // non-nil
+        guard let activityType = activityType else {
+            assertionFailure()
+            return nil
+        }
+        
+        // not excluded type
+        guard LockActivityItem.excludedActivityTypes.contains(activityType) == false
+            else { return nil }
+        
+        switch activityType {
+        case .mail:
+            return text
+        case .message:
+            return text
+        case .postToFacebook:
+            return text
+        case .postToTwitter:
+            return text
+        default:
+            return text
+        }
+    }
+    
+    public func activityViewController(_ activityViewController: UIActivityViewController, subjectForActivityType activityType: UIActivity.ActivityType?) -> String {
+        
+        return "🔐 Lock"
+    }
+    
+    public func activityViewController(_ activityViewController: UIActivityViewController, thumbnailImageForActivityType activityType: UIActivity.ActivityType?, suggestedSize size: CGSize) -> UIImage? {
+        
+        return image
+    }
+    
+    @available(iOSApplicationExtension 13.0, *)
+    public func activityViewControllerLinkMetadata(_ activityViewController: UIActivityViewController) -> LPLinkMetadata? {
+        
+        guard let lockCache = self.lock else {
+            assertionFailure("Lock not in cache")
+            return nil
+        }
+        
+        let permissionImageURL = AssetExtractor.shared.url(for: lockCache.key.permission.type.image)
+        assert(permissionImageURL != nil, "Missing permission image")
+        let metadata = LPLinkMetadata()
+        metadata.title = text
+        metadata.imageProvider = permissionImageURL.flatMap { NSItemProvider(contentsOf: $0) }
+        return metadata
+    }
+}
+
+// MARK: - New Key Activity
+
+
+
+// MARK: - Activity Type
 
 /// `UIActivity` types
 public enum LockActivity: String {
@@ -71,6 +148,8 @@ public enum LockActivity: String {
         return UIActivity.ActivityType(rawValue: self.rawValue)
     }
 }
+
+// MARK: - Activity
 
 /// Activity for sharing a key.
 public final class NewKeyActivity: UIActivity {
@@ -93,7 +172,7 @@ public final class NewKeyActivity: UIActivity {
     
     public override func canPerform(withActivityItems activityItems: [Any]) -> Bool {
         
-        guard let lockItem = activityItems.first as? LockActivityItem,
+        guard let lockItem = activityItems.compactMap({ $0 as? LockActivityItem }).first,
             let lockCache = Store.shared[lock: lockItem.identifier],
             Store.shared[peripheral: lockItem.identifier] != nil // Lock must be reachable
             else { return false }
@@ -103,7 +182,7 @@ public final class NewKeyActivity: UIActivity {
     }
     
     public override func prepare(withActivityItems activityItems: [Any]) {
-        self.item = activityItems.first as? LockActivityItem
+        self.item = activityItems.compactMap({ $0 as? LockActivityItem }).first
     }
     
     public override var activityViewController: UIViewController? {
@@ -145,7 +224,7 @@ public final class ManageKeysActivity: UIActivity {
     
     public override func canPerform(withActivityItems activityItems: [Any]) -> Bool {
         
-        guard let lockItem = activityItems.first as? LockActivityItem,
+        guard let lockItem = activityItems.compactMap({ $0 as? LockActivityItem }).first,
             let lockCache = Store.shared[lock: lockItem.identifier],
             Store.shared[peripheral: lockItem.identifier] != nil // Lock must be reachable
             else { return false }
@@ -154,7 +233,7 @@ public final class ManageKeysActivity: UIActivity {
     }
     
     public override func prepare(withActivityItems activityItems: [Any]) {
-        self.item = activityItems.first as? LockActivityItem
+        self.item = activityItems.compactMap({ $0 as? LockActivityItem }).first
     }
     
     public override var activityViewController: UIViewController? {
@@ -197,11 +276,11 @@ public final class DeleteLockActivity: UIActivity {
     }
     
     public override func canPerform(withActivityItems activityItems: [Any]) -> Bool {
-        return activityItems.first as? LockActivityItem != nil
+        return activityItems.compactMap({ $0 as? LockActivityItem }).first != nil
     }
     
     public override func prepare(withActivityItems activityItems: [Any]) {
-        self.item = activityItems.first as? LockActivityItem
+        self.item = activityItems.compactMap({ $0 as? LockActivityItem }).first
     }
     
     public override var activityViewController: UIViewController? {
@@ -258,11 +337,11 @@ public final class RenameActivity: UIActivity {
     }
     
     public override func canPerform(withActivityItems activityItems: [Any]) -> Bool {
-        return activityItems.first as? LockActivityItem != nil
+        return activityItems.compactMap({ $0 as? LockActivityItem }).first != nil
     }
     
     public override func prepare(withActivityItems activityItems: [Any]) {
-        self.item = activityItems.first as? LockActivityItem
+        self.item = activityItems.compactMap({ $0 as? LockActivityItem }).first
     }
     
     public override var activityViewController: UIViewController? {
@@ -316,7 +395,7 @@ public final class HomeKitEnableActivity: UIActivity {
     
     public override func canPerform(withActivityItems activityItems: [Any]) -> Bool {
         
-        guard let lockItem = activityItems.first as? LockActivityItem,
+        guard let lockItem = activityItems.compactMap({ $0 as? LockActivityItem }).first,
             let lockCache = Store.shared[lock: lockItem.identifier],
             Store.shared[peripheral: lockItem.identifier] != nil // Lock must be reachable
             else { return false }
@@ -333,7 +412,7 @@ public final class HomeKitEnableActivity: UIActivity {
     
     public override func prepare(withActivityItems activityItems: [Any]) {
         
-        self.item = activityItems.first as? LockActivityItem
+        self.item = activityItems.compactMap({ $0 as? LockActivityItem }).first
     }
     
     public override var activityViewController: UIViewController? {
@@ -401,7 +480,7 @@ public final class UpdateActivity: UIActivity {
     
     public override func canPerform(withActivityItems activityItems: [Any]) -> Bool {
         
-        guard let lockItem = activityItems.first as? LockActivityItem,
+        guard let lockItem = activityItems.compactMap({ $0 as? LockActivityItem }).first,
             let lockCache = Store.shared[lock: lockItem.identifier],
             Store.shared[peripheral: lockItem.identifier] != nil // Lock must be reachable
             else { return false }
@@ -414,7 +493,7 @@ public final class UpdateActivity: UIActivity {
     
     public override func prepare(withActivityItems activityItems: [Any]) {
         
-        self.item = activityItems.first as? LockActivityItem
+        self.item = activityItems.compactMap({ $0 as? LockActivityItem }).first
     }
     
     public override var activityViewController: UIViewController? {
@@ -562,7 +641,7 @@ public final class AddVoiceShortcutActivity: UIActivity {
         guard #available(iOS 12, *)
             else { return false }
         
-        guard let lockItem = activityItems.first as? LockActivityItem,
+        guard let lockItem = activityItems.compactMap({ $0 as? LockActivityItem }).first,
             let _ = Store.shared[lock: lockItem.identifier]
             else { return false }
         
@@ -571,7 +650,7 @@ public final class AddVoiceShortcutActivity: UIActivity {
     }
     
     public override func prepare(withActivityItems activityItems: [Any]) {
-        self.item = activityItems.first as? LockActivityItem
+        self.item = activityItems.compactMap({ $0 as? LockActivityItem }).first
     }
     
     public override var activityViewController: UIViewController? {
