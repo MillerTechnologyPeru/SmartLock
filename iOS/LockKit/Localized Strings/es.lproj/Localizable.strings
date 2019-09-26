@@ -93,7 +93,6 @@
 // MARK: - LockPermissionsViewController
 
 "LockPermissions.PendingKeys" = "Llaves Pendientes";
-
 "LockPermissions.Delete" = "Eliminar";
 
 // MARK: Alert

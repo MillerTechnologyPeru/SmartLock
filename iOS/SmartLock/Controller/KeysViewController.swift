@@ -149,7 +149,7 @@ final class KeysViewController: UITableViewController {
         
         if showPendingKeys {
             let section = Section(
-                title: "Pending Keys",
+                title: R.string.keysViewController.pendingKeysTitle(),
                 items: pendingKeys
                     .sorted(by: { $0.value.key.created < $1.value.key.created})
                     .map { .newKey($0, $1) }
@@ -160,7 +160,7 @@ final class KeysViewController: UITableViewController {
         if keys.isEmpty == false {
             data.append(
                 Section(
-                    title: data.isEmpty ? nil : "Keys",
+                    title: data.isEmpty ? nil : R.string.keysViewController.keysTitle(),
                     items: keys
                 )
             )
@@ -190,13 +190,13 @@ final class KeysViewController: UITableViewController {
             if timeRemaining > 0 {
                 if #available(iOS 13.0, *) {
                     let time = timeFormatter.localizedString(fromTimeInterval: timeRemaining)
-                    expiration = "Expires \(time)"
+                    expiration = R.string.keysViewController.expirationRelative(time) // "Expires \(time)"
                 } else {
                     let date = dateFormatter.string(from: invitation.key.expiration)
-                    expiration = "Expires \(date)"
+                    expiration = R.string.keysViewController.expirationDate(date) // "Expires \(date)"
                 }
             } else {
-                expiration = "Expired"
+                expiration = R.string.keysViewController.expired() // "Expired"
             }
             detail = permission.localizedText + " - " + expiration
         }
@@ -231,6 +231,7 @@ final class KeysViewController: UITableViewController {
             return nil
         }
         
+        // TODO: Use R.swift
         let navigationController = UIStoryboard(name: "LockDetail", bundle: .lockKit).instantiateInitialViewController() as! UINavigationController
         
         let lockViewController = navigationController.topViewController as! LockViewController
