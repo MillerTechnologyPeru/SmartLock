@@ -34,6 +34,10 @@ public final class NewKeyRecieveViewController: UITableViewController {
         didSet { tableView.reloadData() }
     }
     
+    private var canSave: Bool {
+        return FileManager.Lock.shared.applicationData?.locks[newKey.lock] == nil
+    }
+    
     @available(iOS 13.0, *)
     private lazy var timeFormatter = RelativeDateTimeFormatter()
     
@@ -64,7 +68,7 @@ public final class NewKeyRecieveViewController: UITableViewController {
         self.tableView.tableFooterView = UIView()
         
         // TODO: Observe Bluetooth State
-        if LockManager.shared.central.state != .poweredOn {
+        if LockManager.shared.central.state != .poweredOn, canSave {
             DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
                 self?.configureView()
             }
@@ -140,8 +144,6 @@ public final class NewKeyRecieveViewController: UITableViewController {
                 ]
             )
         ]
-        
-        let canSave = FileManager.Lock.shared.applicationData?.locks[newKey.lock] == nil
         
         // add save button if not contained in navigation controller
         if canSave,
