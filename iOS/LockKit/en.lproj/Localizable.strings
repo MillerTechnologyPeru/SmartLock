@@ -170,7 +170,8 @@
 
 // MARK: - NewKeyRecieveViewController
 
-"NewKeyRecieve.Error" = "You already have a key for lock %@.";
+"NewKeyRecieve.Error.ExistingKey" = "You already have a key for lock %@.";
+"NewKeyRecieve.Error.Expired" = "Key expired.";
 "NewKeyRecieve.Name.Title" = "Name";
 "NewKeyRecieve.Lock.Title" = "Lock";
 "NewKeyRecieve.Permission.Title" = "Permission";

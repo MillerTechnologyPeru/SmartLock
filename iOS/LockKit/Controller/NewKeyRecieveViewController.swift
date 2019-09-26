@@ -171,9 +171,16 @@ public final class NewKeyRecieveViewController: UITableViewController {
         }
         
         guard FileManager.Lock.shared.applicationData?.locks[newKeyInvitation.lock] == nil else {
-            self.showErrorAlert(R.string.localizable.newKeyRecieveError(newKey.lock.rawValue))
+            self.showErrorAlert(R.string.localizable.newKeyRecieveErrorExistingKey(newKey.lock.rawValue))
             return
         }
+        
+        guard newKeyInvitation.key.expiration.timeIntervalSinceNow > 0 else {
+            self.showErrorAlert(R.string.localizable.newKeyRecieveErrorExpired())
+            return
+        }
+        
+        assert(canSave)
         
         let keyData = KeyData()
         showActivity()
