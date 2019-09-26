@@ -240,7 +240,7 @@ private extension BeaconController {
                 }
                 
                 guard let beacon = beaconController.beacons.first(where: { $0.value.region == region })?.value
-                    else { assertionFailure("Invalid beacon \(beaconRegion.proximityUUID)"); return }
+                    else { return }
                 
                 // update state
                 beacon.state = .outside
@@ -271,7 +271,7 @@ private extension BeaconController {
                 }
                 
                 guard let beacon = beaconController?.beacons.first(where: { $0.value.region == region })?.value
-                    else { assertionFailure("Invalid beacon \(beaconRegion.proximityUUID)"); return }
+                    else { return }
                 
                 beacon.state = newState
             }

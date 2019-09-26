@@ -36,6 +36,7 @@ public final class NewKeyRecieveViewController: UITableViewController {
     
     private var canSave: Bool {
         return FileManager.Lock.shared.applicationData?.locks[newKey.lock] == nil
+        && newKey.key.expiration.timeIntervalSinceNow > 0 // not expired
     }
     
     @available(iOS 13.0, *)
@@ -216,6 +217,7 @@ public final class NewKeyRecieveViewController: UITableViewController {
                     Store.shared[lock: newKeyInvitation.lock] = lockCache
                     Store.shared[key: newKeyInvitation.key.identifier] = keyData
                     controller.hideActivity(animated: true)
+                    controller.configureView()
                     controller.completion?(true)
                 }
             }
