@@ -14,14 +14,14 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <view key="tableHeaderView" contentMode="scaleToFill" id="gCT-cX-aW4">
-                            <rect key="frame" x="0.0" y="0.0" width="320" height="123"/>
+                            <rect key="frame" x="0.0" y="0.0" width="320" height="171"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <subviews>
                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="2Nz-y8-8yH" customClass="PermissionIconView" customModule="LockKit" customModuleProvider="target">
-                                    <rect key="frame" x="120" y="21.5" width="80" height="80"/>
+                                    <rect key="frame" x="110" y="35.5" width="100" height="100"/>
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     <constraints>
-                                        <constraint firstAttribute="width" constant="80" id="mLS-MK-VCO"/>
+                                        <constraint firstAttribute="width" constant="100" id="mLS-MK-VCO"/>
                                         <constraint firstAttribute="width" secondItem="2Nz-y8-8yH" secondAttribute="height" id="wp7-HK-pNA"/>
                                     </constraints>
                                 </view>
@@ -34,7 +34,7 @@
                         </view>
                         <prototypes>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="NewKeyDetailTableViewCell" textLabel="Hp9-7s-Mbv" detailTextLabel="DNR-2Q-cpN" rowHeight="60" style="IBUITableViewCellStyleValue2" id="SoN-jY-o7F">
-                                <rect key="frame" x="16" y="178.5" width="288" height="60"/>
+                                <rect key="frame" x="16" y="226.5" width="288" height="60"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="SoN-jY-o7F" id="cN5-hg-lmk">
                                     <rect key="frame" x="0.0" y="0.0" width="288" height="60"/>
@@ -57,7 +57,7 @@
                                 </tableViewCellContentView>
                             </tableViewCell>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="NewKeyDetailDisclosureTableViewCell" textLabel="otH-yq-zad" detailTextLabel="gKA-4r-eA3" rowHeight="60" style="IBUITableViewCellStyleValue2" id="AC6-9t-jYu">
-                                <rect key="frame" x="16" y="238.5" width="288" height="60"/>
+                                <rect key="frame" x="16" y="286.5" width="288" height="60"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="AC6-9t-jYu" id="55g-HV-D64">
                                     <rect key="frame" x="0.0" y="0.0" width="261.5" height="60"/>
@@ -80,7 +80,7 @@
                                 </tableViewCellContentView>
                             </tableViewCell>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="NewKeyBasicTableViewCell" textLabel="hAY-6V-ivH" rowHeight="60" style="IBUITableViewCellStyleDefault" id="bgd-G8-T2I">
-                                <rect key="frame" x="16" y="298.5" width="288" height="60"/>
+                                <rect key="frame" x="16" y="346.5" width="288" height="60"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="bgd-G8-T2I" id="jS3-7n-BKg">
                                     <rect key="frame" x="0.0" y="0.0" width="288" height="60"/>
