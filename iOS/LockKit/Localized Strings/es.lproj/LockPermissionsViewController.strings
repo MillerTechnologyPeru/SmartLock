@@ -1,0 +1,14 @@
+/* 
+  LockPermissionsViewController.strings
+  SmartLock
+
+  Created by Alsey Coleman Miller on 9/27/19.
+  Copyright © 2019 ColemanCDA. All rights reserved.
+*/
+
+"Section.Title.PendingKeys" = "Pending Keys";
+
+"Alert.DeleteKey.Title" = "Confirmación";
+"Alert.DeleteKey.Message" = "¿Esta seguro de querer eliminar esta llave?";
+
+"Action.Delete" = "Eliminar";

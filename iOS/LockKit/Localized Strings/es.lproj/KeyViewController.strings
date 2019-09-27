@@ -6,8 +6,6 @@
   Copyright © 2019 ColemanCDA. All rights reserved.
 */
 
-"Error.ExistingKey" = "Usted ya cuenta con una llave para la cerradura %@.";
-"Error.Expired" = "La llave pendiente expiro.";
 "Name.Title" = "Nombre";
 "Lock.Title" = "Cerradura";
 "Permission.Title" = "Permiso";
