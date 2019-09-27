@@ -25,7 +25,7 @@ struct BluetoothSettingsView: View {
         List {
             Section(header: Text(verbatim: "")) {
                 SliderCell(
-                    title: Text(verbatim: "Scan Duration"),
+                    title: Text(R.string.bluetoothSettingsView.bluetoothScanDuration()),
                     value: $preferences.scanDuration,
                     from: 1.0,
                     through: 10.0,
@@ -33,7 +33,7 @@ struct BluetoothSettingsView: View {
                     text: { Text(verbatim: "\(String(format: "%.1f", $0))s") }
                 )
                 SliderCell(
-                    title: Text("Timeout"),
+                    title: Text(R.string.bluetoothSettingsView.bluetoothTimeout()),
                     value: $preferences.bluetoothTimeout,
                     from: 1.0,
                     through: 30.0,
@@ -42,7 +42,7 @@ struct BluetoothSettingsView: View {
                 )
                 /*
                 SliderCell(
-                    title: Text("Write without Response Timeout"),
+                    title: Text(R.string.bluetoothSettingsView.bluetoothWrite()),
                     value: $preferences.writeWithoutResponseTimeout,
                     from: 1.0,
                     through: 30.0,
@@ -51,9 +51,9 @@ struct BluetoothSettingsView: View {
                 )*/
             }
             Section(header: Text(verbatim: "")) {
-                Toggle("Filter Duplicates", isOn: $preferences.filterDuplicates)
+                Toggle(R.string.bluetoothSettingsView.bluetoothFilterDuplicates(), isOn: $preferences.filterDuplicates)
                 #if !targetEnvironment(macCatalyst)
-                Toggle("Monitor Notifications", isOn: $preferences.monitorBluetoothNotifications)
+                Toggle(R.string.bluetoothSettingsView.bluetoothMonitorNotifications(), isOn: $preferences.monitorBluetoothNotifications)
                 #endif
             }
         }

@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		369E2FE3233DFD3900504907 /* SettingsViewController.strings in Resources */ = {isa = PBXBuildFile; fileRef = 369E2FE5233DFD3900504907 /* SettingsViewController.strings */; };
+		369E2FE9233DFDCF00504907 /* CloudSettingsView.strings in Resources */ = {isa = PBXBuildFile; fileRef = 369E2FEB233DFDCF00504907 /* CloudSettingsView.strings */; };
+		369E2FEF233DFDF200504907 /* BluetoothSettingsView.strings in Resources */ = {isa = PBXBuildFile; fileRef = 369E2FF1233DFDF200504907 /* BluetoothSettingsView.strings */; };
 		36FC4C64233A172B00A5D5B3 /* LockPermissions.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 36FC4C66233A172B00A5D5B3 /* LockPermissions.storyboard */; };
 		36FC4C69233A178B00A5D5B3 /* NewKey.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 36FC4C6B233A178B00A5D5B3 /* NewKey.storyboard */; };
 		36FC4C6E233A179E00A5D5B3 /* NewKeyInvitation.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 36FC4C70233A179E00A5D5B3 /* NewKeyInvitation.storyboard */; };
@@ -573,6 +576,12 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		369E2FE4233DFD3900504907 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/SettingsViewController.strings; sourceTree = "<group>"; };
+		369E2FE6233DFD3D00504907 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/SettingsViewController.strings; sourceTree = "<group>"; };
+		369E2FEA233DFDCF00504907 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/CloudSettingsView.strings; sourceTree = "<group>"; };
+		369E2FEC233DFDD100504907 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/CloudSettingsView.strings; sourceTree = "<group>"; };
+		369E2FF0233DFDF200504907 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/BluetoothSettingsView.strings; sourceTree = "<group>"; };
+		369E2FF2233DFDF400504907 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/BluetoothSettingsView.strings; sourceTree = "<group>"; };
 		36FC4C58233A121000A5D5B3 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Main.strings; sourceTree = "<group>"; };
 		36FC4C59233A121000A5D5B3 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/MainInterface.strings; sourceTree = "<group>"; };
 		36FC4C60233A121100A5D5B3 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Interface.strings; sourceTree = "<group>"; };
@@ -1174,6 +1183,9 @@
 				6E83BA81233CC6DD00D6BA04 /* Localizable.strings */,
 				6E83BA79233CC00B00D6BA04 /* NearbyLocksViewController.strings */,
 				6E83BA89233CC7C400D6BA04 /* KeysViewController.strings */,
+				369E2FE5233DFD3900504907 /* SettingsViewController.strings */,
+				369E2FEB233DFDCF00504907 /* CloudSettingsView.strings */,
+				369E2FF1233DFDF200504907 /* BluetoothSettingsView.strings */,
 			);
 			path = "Localizable Strings";
 			sourceTree = "<group>";
@@ -2021,8 +2033,11 @@
 				6EE99A8A233CB140001F11A1 /* InfoPlist.strings in Resources */,
 				6E83BA87233CC7C400D6BA04 /* KeysViewController.strings in Resources */,
 				6E83BA77233CC00B00D6BA04 /* NearbyLocksViewController.strings in Resources */,
+				369E2FE9233DFDCF00504907 /* CloudSettingsView.strings in Resources */,
 				6E994AA3230DFC180076DC1B /* Assets.xcassets in Resources */,
+				369E2FE3233DFD3900504907 /* SettingsViewController.strings in Resources */,
 				6E6000192121119400787DAA /* Main.storyboard in Resources */,
+				369E2FEF233DFDF200504907 /* BluetoothSettingsView.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2823,6 +2838,33 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
+		369E2FE5233DFD3900504907 /* SettingsViewController.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				369E2FE4233DFD3900504907 /* en */,
+				369E2FE6233DFD3D00504907 /* es */,
+			);
+			name = SettingsViewController.strings;
+			sourceTree = "<group>";
+		};
+		369E2FEB233DFDCF00504907 /* CloudSettingsView.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				369E2FEA233DFDCF00504907 /* en */,
+				369E2FEC233DFDD100504907 /* es */,
+			);
+			name = CloudSettingsView.strings;
+			sourceTree = "<group>";
+		};
+		369E2FF1233DFDF200504907 /* BluetoothSettingsView.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				369E2FF0233DFDF200504907 /* en */,
+				369E2FF2233DFDF400504907 /* es */,
+			);
+			name = BluetoothSettingsView.strings;
+			sourceTree = "<group>";
+		};
 		36FC4C66233A172B00A5D5B3 /* LockPermissions.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (

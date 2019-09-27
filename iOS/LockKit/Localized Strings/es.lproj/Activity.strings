@@ -6,7 +6,7 @@
   Copyright © 2019 ColemanCDA. All rights reserved.
 */
 
-"LockActivity.Item.Text" = "Yo abri mi puerta %@";
+"LockActivity.Item.Text" = "Yo abrí mi puerta %@";
 "NewKeyActivity.Title" = "Compartir Llave";
 "ManageKeysActivity.Title" = "Administrar";
 "DeleteLockActivity.Title" = "Eliminar";
