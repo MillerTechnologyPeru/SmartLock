@@ -17,13 +17,17 @@ public struct PermissionScheduleView: View {
     // MARK: - Properties
     
     public init(schedule: Permission.Schedule = .init()) {
-        self.schedule = schedule
+        _schedule = State(initialValue: schedule).projectedValue
+    }
+    
+    public init(schedule: Binding<Permission.Schedule>) {
+        _schedule = schedule
     }
     
     // MARK: - Properties
     
-    @State
-    public var schedule = Permission.Schedule()
+    @Binding
+    public var schedule: Permission.Schedule
     
     @State
     private var defaultExpiration = Date() + (60 * 60 * 24)
@@ -209,29 +213,30 @@ public extension PermissionScheduleView {
     
     struct Modal: View {
         
-        public init(done: ((Permission.Schedule) -> ())? = nil,
-                    cancel: (() -> ())? = nil) {
+        public init(done: @escaping ((Permission.Schedule) -> ()),
+                    cancel: @escaping (() -> ())) {
             self.cancel = cancel
             self.done = done
         }
 
-        public var done: ((Permission.Schedule) -> ())?
+        public var done: ((Permission.Schedule) -> ())
         
-        public var cancel: (() -> ())?
+        public var cancel: (() -> ())
         
-        private var scheduleView = PermissionScheduleView()
+        @State
+        public var schedule = Permission.Schedule()
         
         public var body: some View {
             
             NavigationView {
-                scheduleView
+                PermissionScheduleView(schedule: $schedule)
                 .navigationBarItems(
                     leading: Button(
-                        action: { self.cancel?() },
+                        action: { self.cancel() },
                         label: { Text("Cancel") }
                     ),
                     trailing: Button(
-                        action: { self.done?(self.scheduleView.schedule) },
+                        action: { self.done(self.schedule) },
                         label: { Text("Done") }
                     )
                 )

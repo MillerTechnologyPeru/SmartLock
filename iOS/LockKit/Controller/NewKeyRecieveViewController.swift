@@ -243,12 +243,10 @@ public final class NewKeyRecieveViewController: UITableViewController {
     // MARK: - UITableViewDataSource
     
     public override func numberOfSections(in tableView: UITableView) -> Int {
-        
         return data.count
     }
     
     public override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        
         return data[section].items.count
     }
     
