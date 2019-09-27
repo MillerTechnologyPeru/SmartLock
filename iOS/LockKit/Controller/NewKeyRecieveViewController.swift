@@ -12,6 +12,7 @@ import Bluetooth
 import GATT
 import CoreLock
 import JGProgressHUD
+import SwiftUI
 
 /// Receive New Key View Controller
 public final class NewKeyRecieveViewController: UITableViewController {
@@ -134,12 +135,31 @@ public final class NewKeyRecieveViewController: UITableViewController {
             expiration = R.string.newKeyRecieveViewController.expirationExpired()
         }
         
+        let permissionCell: Item
+        
+        switch permission {
+        case .owner:
+            fatalError("Invalid new key")
+        case .admin,
+             .anytime:
+            permissionCell = .detail(R.string.newKeyRecieveViewController.permissionTitle(), permissionDescription)
+        case let .scheduled(schedule):
+            if #available(iOS 13, *) {
+                permissionCell = .detailDisclosure(R.string.newKeyRecieveViewController.permissionTitle(), permissionDescription, {
+                    let viewController = UIHostingController(rootView: PermissionScheduleView(schedule: schedule))
+                    $0.show(viewController, sender: nil)
+                })
+            } else {
+                permissionCell = .detail(R.string.newKeyRecieveViewController.permissionTitle(), permissionDescription)
+            }
+        }
+        
         var data = [
             Section(
                 title: nil,
                 items: [
                     .detail(R.string.newKeyRecieveViewController.nameTitle(), keyName),
-                    .detail(R.string.newKeyRecieveViewController.permissionTitle(), permissionDescription),
+                    permissionCell,
                     .detail(R.string.newKeyRecieveViewController.expirationTitle(), expiration),
                     .detail(R.string.newKeyRecieveViewController.lockTitle(), lock)
                 ]
@@ -261,6 +281,12 @@ public final class NewKeyRecieveViewController: UITableViewController {
             cell.textLabel?.text = title
             cell.detailTextLabel?.text = detail
             return cell
+        case let .detailDisclosure(title, detail, _):
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: R.reuseIdentifier.newKeyDetailDisclosureTableViewCell, for: indexPath)
+                else { fatalError("Unable to dequeue cell") }
+            cell.textLabel?.text = title
+            cell.detailTextLabel?.text = detail
+            return cell
         case let .button(title, _):
             guard let cell = tableView.dequeueReusableCell(withIdentifier: R.reuseIdentifier.newKeyBasicTableViewCell, for: indexPath)
             else { fatalError("Unable to dequeue cell") }
@@ -280,13 +306,14 @@ public final class NewKeyRecieveViewController: UITableViewController {
         switch item {
         case let .button(_, action):
             action(self)
+        case let .detailDisclosure(_, _, action):
+            action(self)
         default:
             break
         }
     }
     
     public override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        
         return data[section].title
     }
 }
@@ -306,6 +333,7 @@ private extension NewKeyRecieveViewController {
     
     enum Item {
         case detail(String, String)
+        case detailDisclosure(String, String, (NewKeyRecieveViewController) -> ())
         case button(String, (NewKeyRecieveViewController) -> ())
     }
 }
