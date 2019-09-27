@@ -46,6 +46,7 @@ public class KeyViewController: UITableViewController {
         
         guard let viewController = R.storyboard.key.keyViewController()
             else { fatalError("Could not load \(self) from storyboard") }
+        viewController.title = R.string.keyViewController.navigationItemTitleKey()
         viewController.permissionView.permission = key.permission.type
         viewController.data = [
             Section(
@@ -64,6 +65,7 @@ public class KeyViewController: UITableViewController {
         
         guard let viewController = R.storyboard.key.keyViewController()
             else { fatalError("Could not load \(self) from storyboard") }
+        viewController.title = R.string.keyViewController.navigationItemTitleNewKey()
         viewController.permissionView.permission = newKey.permission.type
         viewController.data = [
             Section(
@@ -212,10 +214,10 @@ internal extension KeyViewController {
     
     enum KeyProperty {
         case identifier(UUID)
+        case lock(UUID)
         case name(String)
         case permission(Permission)
         case expiration(Date)
         case created(Date)
-        case lock(UUID)
     }
 }
