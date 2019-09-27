@@ -18,6 +18,7 @@
 		36FC4C7D233A17C500A5D5B3 /* Contacts.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 36FC4C7F233A17C500A5D5B3 /* Contacts.storyboard */; };
 		36FC4C8B233A1F4800A5D5B3 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 36FC4C8D233A1F4800A5D5B3 /* Localizable.strings */; };
 		36FC4C95233A249500A5D5B3 /* LockDetail.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 36FC4C94233A249500A5D5B3 /* LockDetail.storyboard */; };
+		6E026FC0233D92610081F796 /* PermissionScheduleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E83BAA5233D871100D6BA04 /* PermissionScheduleView.swift */; };
 		6E05B6E722C9C159001218D9 /* KeysViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E05B6E622C9C159001218D9 /* KeysViewController.swift */; };
 		6E07C9E523335DF500B7996C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6E994B12230E89490076DC1B /* Assets.xcassets */; };
 		6E08FB832316E64D00177026 /* SessionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E08FB822316E64D00177026 /* SessionController.swift */; };
@@ -113,9 +114,115 @@
 		6E83BA7D233CC2D900D6BA04 /* NewKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E83BA7B233CC2D900D6BA04 /* NewKey.swift */; };
 		6E83BA7F233CC6DD00D6BA04 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6E83BA81233CC6DD00D6BA04 /* Localizable.strings */; };
 		6E83BA87233CC7C400D6BA04 /* KeysViewController.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6E83BA89233CC7C400D6BA04 /* KeysViewController.strings */; };
+		6E83BADD233D906C00D6BA04 /* LockKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 6E994A86230DFB6C0076DC1B /* LockKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		6E83BAE0233D906C00D6BA04 /* Intent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E994AFC230E657A0076DC1B /* Intent.swift */; };
+		6E83BAE1233D906C00D6BA04 /* NewKeyRecieveViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E05B6F522C9F209001218D9 /* NewKeyRecieveViewController.swift */; };
+		6E83BAE2233D906C00D6BA04 /* UnlockEventManagedObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E50B0F3232243A2001014A8 /* UnlockEventManagedObject.swift */; };
+		6E83BAE3233D906C00D6BA04 /* WatchMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E08FB872316EF6000177026 /* WatchMessage.swift */; };
+		6E83BAE4233D906C00D6BA04 /* ActivityIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6ECD39A42336D369003E4AB4 /* ActivityIndicator.swift */; };
+		6E83BAE5233D906C00D6BA04 /* LogViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E806BA9230F67D900C6FF78 /* LogViewController.swift */; };
+		6E83BAE6233D906C00D6BA04 /* LockViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E05B6E422C9C11D001218D9 /* LockViewController.swift */; };
+		6E83BAE7233D906C00D6BA04 /* AdaptiveNavigation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E6000C421211CD400787DAA /* AdaptiveNavigation.swift */; };
+		6E83BAE8233D906C00D6BA04 /* Keychain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E806B93230F4F4700C6FF78 /* Keychain.swift */; };
+		6E83BAE9233D906C00D6BA04 /* ContextMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6ECD6AE923320D2C0007E7DA /* ContextMenu.swift */; };
+		6E83BAEA233D906C00D6BA04 /* CloudLock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E6DB100232D7E8100481C36 /* CloudLock.swift */; };
+		6E83BAEB233D906C00D6BA04 /* ScheduleManagedObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E50B0E92322424B001014A8 /* ScheduleManagedObject.swift */; };
+		6E83BAEC233D906C00D6BA04 /* DeviceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60004A212113DF00787DAA /* DeviceManager.swift */; };
+		6E83BAED233D906C00D6BA04 /* SetupEventManagedObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E50B0F123224396001014A8 /* SetupEventManagedObject.swift */; };
+		6E83BAEE233D906C00D6BA04 /* Error.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E83BA6C233CBAF400D6BA04 /* Error.swift */; };
+		6E83BAEF233D906C00D6BA04 /* CloudEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E6DB104232DA11100481C36 /* CloudEvent.swift */; };
+		6E83BAF0233D906C00D6BA04 /* Shortcut.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EE05B7F233309710014CEE4 /* Shortcut.swift */; };
+		6E83BAF1233D906C00D6BA04 /* NewKeyManagedObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E7374572325E11300EC85B2 /* NewKeyManagedObject.swift */; };
+		6E83BAF2233D906C00D6BA04 /* ErrorAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E6000C321211CD400787DAA /* ErrorAlert.swift */; };
+		6E83BAF3233D906C00D6BA04 /* CollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E83BAF72323843500FBC12E /* CollectionViewController.swift */; };
 		6E83BAF42323831200FBC12E /* LockEventsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E83BAF32323831200FBC12E /* LockEventsViewController.swift */; };
+		6E83BAF4233D906C00D6BA04 /* ContactManagedObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EDDCE2E23376DD900DBA8B6 /* ContactManagedObject.swift */; };
+		6E83BAF5233D906C00D6BA04 /* ActivityIndicatorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E6000BF21211C7400787DAA /* ActivityIndicatorViewController.swift */; };
 		6E83BAF62323842500FBC12E /* TableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E83BAF52323842500FBC12E /* TableViewController.swift */; };
+		6E83BAF6233D906C00D6BA04 /* RemoveKeyEventManagedObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E50B0F923224428001014A8 /* RemoveKeyEventManagedObject.swift */; };
+		6E83BAF7233D906C00D6BA04 /* AppGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E806B95230F4F7300C6FF78 /* AppGroup.swift */; };
 		6E83BAF82323843500FBC12E /* CollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E83BAF72323843500FBC12E /* CollectionViewController.swift */; };
+		6E83BAF8233D906C00D6BA04 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 6E50B0E323217491001014A8 /* Model.xcdatamodeld */; };
+		6E83BAF9233D906C00D6BA04 /* CloudNewKeyInvitation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E3D1DF52334BFF4000C6E06 /* CloudNewKeyInvitation.swift */; };
+		6E83BAFA233D906C00D6BA04 /* FileManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E806B97230F520400C6FF78 /* FileManager.swift */; };
+		6E83BAFB233D906C00D6BA04 /* LockInformationManagedObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E50B0FB23224719001014A8 /* LockInformationManagedObject.swift */; };
+		6E83BAFC233D906C00D6BA04 /* LockEventsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E83BAF32323831200FBC12E /* LockEventsViewController.swift */; };
+		6E83BAFD233D906C00D6BA04 /* CloudPermission.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EEACA5223348EFD005820C0 /* CloudPermission.swift */; };
+		6E83BAFE233D906C00D6BA04 /* NewKeyDocument.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6ECD35C0233B4CB000E49357 /* NewKeyDocument.swift */; };
+		6E83BAFF233D906C00D6BA04 /* CloudNewKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E6DB102232DA10000481C36 /* CloudNewKey.swift */; };
+		6E83BB00233D906C00D6BA04 /* Log.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60F8AC212127890054995D /* Log.swift */; };
+		6E83BB01233D906C00D6BA04 /* ConfirmNewKeyEventManagedObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E50B0F723224415001014A8 /* ConfirmNewKeyEventManagedObject.swift */; };
+		6E83BB02233D906C00D6BA04 /* ManagedObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E50B0E623219EB3001014A8 /* ManagedObject.swift */; };
+		6E83BB03233D906C00D6BA04 /* CloudApplicationData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EE5A1072329F8790000235C /* CloudApplicationData.swift */; };
+		6E83BB04233D906C00D6BA04 /* JSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E3B70B82313E99A00BEB6FF /* JSON.swift */; };
+		6E83BB05233D906C00D6BA04 /* CloudKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E94EF74232F4A790028B745 /* CloudKit.swift */; };
+		6E83BB06233D906C00D6BA04 /* PresentPopover.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E6000C621211CD400787DAA /* PresentPopover.swift */; };
+		6E83BB07233D906C00D6BA04 /* LockPermissionsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E05B6F322C9F206001218D9 /* LockPermissionsViewController.swift */; };
+		6E83BB08233D906C00D6BA04 /* PersistentContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E0A89A02325A2450089E2EC /* PersistentContainer.swift */; };
+		6E83BB09233D906C00D6BA04 /* Queue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E6000CB21211D0B00787DAA /* Queue.swift */; };
+		6E83BB0A233D906C00D6BA04 /* TableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E83BAF52323842500FBC12E /* TableViewController.swift */; };
+		6E83BB0B233D906C00D6BA04 /* CoreSpotlight.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E994A79230DE1700076DC1B /* CoreSpotlight.swift */; };
+		6E83BB0C233D906C00D6BA04 /* BeaconController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E81B293230CCE3D00783BC5 /* BeaconController.swift */; };
+		6E83BB0D233D906C00D6BA04 /* CloudShare.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EDDCE26233727CF00DBA8B6 /* CloudShare.swift */; };
+		6E83BB0E233D906C00D6BA04 /* LogsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E806BA8230F67D900C6FF78 /* LogsViewController.swift */; };
+		6E83BB0F233D906C00D6BA04 /* ActivityHandling.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EC041272309D6CB00357585 /* ActivityHandling.swift */; };
+		6E83BB10233D906C00D6BA04 /* StyleKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E806B9F230F62EB00C6FF78 /* StyleKit.swift */; };
+		6E83BB11233D906C00D6BA04 /* Store.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60F8A62121259F0054995D /* Store.swift */; };
+		6E83BB12233D906C00D6BA04 /* NewKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E83BA7B233CC2D900D6BA04 /* NewKey.swift */; };
+		6E83BB13233D906C00D6BA04 /* SliderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E135CBD2319842A00FFA7F7 /* SliderCell.swift */; };
+		6E83BB14233D906C00D6BA04 /* KeyManagedObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E50B0ED232242CA001014A8 /* KeyManagedObject.swift */; };
+		6E83BB15233D906C00D6BA04 /* CloudUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EB4B2D9232B5E260077ADD3 /* CloudUser.swift */; };
+		6E83BB16233D906C00D6BA04 /* R.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E806BD82310F36E00C6FF78 /* R.swift */; };
+		6E83BB17233D906C00D6BA04 /* LockManagedObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E50B0EB23224293001014A8 /* LockManagedObject.swift */; };
+		6E83BB18233D906C00D6BA04 /* PermissionScheduleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E83BAA5233D871100D6BA04 /* PermissionScheduleView.swift */; };
+		6E83BB19233D906C00D6BA04 /* Activity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E05B6EC22C9E42C001218D9 /* Activity.swift */; };
+		6E83BB1A233D906C00D6BA04 /* Permission.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E994ACF230E05560076DC1B /* Permission.swift */; };
+		6E83BB1B233D906C00D6BA04 /* Unlock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EC04137230B15AD00357585 /* Unlock.swift */; };
+		6E83BB1C233D906C00D6BA04 /* Intents.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = 6E50FC19233B63D5003F3AF7 /* Intents.intentdefinition */; };
+		6E83BB1D233D906C00D6BA04 /* R.LockKit.generated.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E806BB2230F6EC300C6FF78 /* R.LockKit.generated.swift */; };
+		6E83BB1E233D906C00D6BA04 /* CreateNewKeyEventManagedObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E50B0F5232243AE001014A8 /* CreateNewKeyEventManagedObject.swift */; };
+		6E83BB1F233D906C00D6BA04 /* NewKeyScheduleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E05B6F622C9F209001218D9 /* NewKeyScheduleViewController.swift */; };
+		6E83BB20233D906C00D6BA04 /* NewKeySelectPermissionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E05B6F122C9E766001218D9 /* NewKeySelectPermissionViewController.swift */; };
+		6E83BB21233D906C00D6BA04 /* ApplicationData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E3B70B12313E24F00BEB6FF /* ApplicationData.swift */; };
+		6E83BB22233D906C00D6BA04 /* Bundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E994AC9230E01C90076DC1B /* Bundle.swift */; };
+		6E83BB23233D906C00D6BA04 /* LockTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EAADFB621229CBF0074CEDF /* LockTableViewCell.swift */; };
+		6E83BB24233D906C00D6BA04 /* Image.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E994ACD230E05090076DC1B /* Image.swift */; };
+		6E83BB25233D906C00D6BA04 /* CloudKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EE5A10C2329FD090000235C /* CloudKey.swift */; };
+		6E83BB26233D906C00D6BA04 /* PermissionIconView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E806BDA2310FB2C00C6FF78 /* PermissionIconView.swift */; };
+		6E83BB27233D906C00D6BA04 /* Appearance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E806BA1230F638D00C6FF78 /* Appearance.swift */; };
+		6E83BB28233D906C00D6BA04 /* ProgressHUD.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E9C96092311B176007C18FE /* ProgressHUD.swift */; };
+		6E83BB29233D906C00D6BA04 /* UIAlertAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E6000C521211CD400787DAA /* UIAlertAction.swift */; };
+		6E83BB2A233D906C00D6BA04 /* ContactsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EDDCE2C2337672400DBA8B6 /* ContactsViewController.swift */; };
+		6E83BB2B233D906C00D6BA04 /* WatchApplicationContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E7503C22318E78400103EBB /* WatchApplicationContext.swift */; };
+		6E83BB2C233D906C00D6BA04 /* NewKeyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E05B6FD22C9F2A5001218D9 /* NewKeyViewController.swift */; };
+		6E83BB2D233D906C00D6BA04 /* BackgroundTasks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6ED81F962316292900B69520 /* BackgroundTasks.swift */; };
+		6E83BB2E233D906C00D6BA04 /* iCloud.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EB59D602313184A00D5EFA7 /* iCloud.swift */; };
+		6E83BB2F233D906C00D6BA04 /* EventManagedObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E50B0EF232242D7001014A8 /* EventManagedObject.swift */; };
+		6E83BB30233D906C00D6BA04 /* UserActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EC0412F230A494E00357585 /* UserActivity.swift */; };
+		6E83BB31233D906C00D6BA04 /* Setup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EC04139230B162F00357585 /* Setup.swift */; };
+		6E83BB32233D906C00D6BA04 /* Preferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E806B8B230F4F2800C6FF78 /* Preferences.swift */; };
+		6E83BB33233D906C00D6BA04 /* UserNotification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E0F602F230DD05400B013AB /* UserNotification.swift */; };
+		6E83BB34233D906C00D6BA04 /* Event.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E73745E2325EA1600EC85B2 /* Event.swift */; };
+		6E83BB36233D906C00D6BA04 /* Rswift in Frameworks */ = {isa = PBXBuildFile; productRef = 6E83BAD0233D906C00D6BA04 /* Rswift */; };
+		6E83BB37233D906C00D6BA04 /* QRCodeReader in Frameworks */ = {isa = PBXBuildFile; platformFilter = ios; productRef = 6E83BAD6233D906C00D6BA04 /* QRCodeReader */; };
+		6E83BB38233D906C00D6BA04 /* JGProgressHUD in Frameworks */ = {isa = PBXBuildFile; platformFilter = maccatalyst; productRef = 6E83BAD4233D906C00D6BA04 /* JGProgressHUD */; };
+		6E83BB39233D906C00D6BA04 /* OpenCombine in Frameworks */ = {isa = PBXBuildFile; productRef = 6E83BAD8233D906C00D6BA04 /* OpenCombine */; };
+		6E83BB3A233D906C00D6BA04 /* CloudKitCodable in Frameworks */ = {isa = PBXBuildFile; productRef = 6E83BADA233D906C00D6BA04 /* CloudKitCodable */; };
+		6E83BB3B233D906C00D6BA04 /* KeychainAccess in Frameworks */ = {isa = PBXBuildFile; productRef = 6E83BAD2233D906C00D6BA04 /* KeychainAccess */; };
+		6E83BB3D233D906C00D6BA04 /* Contacts.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 36FC4C7F233A17C500A5D5B3 /* Contacts.storyboard */; };
+		6E83BB3E233D906C00D6BA04 /* LockPermissions.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 36FC4C66233A172B00A5D5B3 /* LockPermissions.storyboard */; };
+		6E83BB3F233D906C00D6BA04 /* Activity.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6EE99A70233CA78E001F11A1 /* Activity.strings */; };
+		6E83BB40233D906C00D6BA04 /* NewKeyRecieveViewController.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6EE99A63233CA5B3001F11A1 /* NewKeyRecieveViewController.strings */; };
+		6E83BB41233D906C00D6BA04 /* NewKey.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 36FC4C6B233A178B00A5D5B3 /* NewKey.storyboard */; };
+		6E83BB42233D906C00D6BA04 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 36FC4C8D233A1F4800A5D5B3 /* Localizable.strings */; };
+		6E83BB43233D906C00D6BA04 /* NewKeyInvitation.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 36FC4C70233A179E00A5D5B3 /* NewKeyInvitation.storyboard */; };
+		6E83BB44233D906C00D6BA04 /* LockViewController.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6EE99A69233CA6B6001F11A1 /* LockViewController.strings */; };
+		6E83BB45233D906C00D6BA04 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6E6000D02121224D00787DAA /* Assets.xcassets */; };
+		6E83BB46233D906C00D6BA04 /* NewKeySelectPermissionViewController.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6EE99A7C233CAA06001F11A1 /* NewKeySelectPermissionViewController.strings */; };
+		6E83BB47233D906C00D6BA04 /* Events.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 36FC4C7A233A17BA00A5D5B3 /* Events.storyboard */; };
+		6E83BB48233D906C00D6BA04 /* LockDetail.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 36FC4C94233A249500A5D5B3 /* LockDetail.storyboard */; };
+		6E83BB49233D906C00D6BA04 /* Logs.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 36FC4C75233A17AE00A5D5B3 /* Logs.storyboard */; };
+		6E83BB4A233D906C00D6BA04 /* LockTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6EAADFB521229CBF0074CEDF /* LockTableViewCell.xib */; };
 		6E8772CA231259DE003B9469 /* JGProgressHUD.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6E8772C5231258CD003B9469 /* JGProgressHUD.framework */; platformFilter = ios; };
 		6E8772CB231259DE003B9469 /* JGProgressHUD.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 6E8772C5231258CD003B9469 /* JGProgressHUD.framework */; platformFilter = ios; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		6E94EF75232F4A790028B745 /* CloudKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E94EF74232F4A790028B745 /* CloudKit.swift */; };
@@ -302,6 +409,20 @@
 			proxyType = 2;
 			remoteGlobalIDString = DD75027A1C68FCFC006590AF;
 			remoteInfo = CoreLockTests;
+		};
+		6E83BACD233D906C00D6BA04 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6E8772BB231258CC003B9469 /* JGProgressHUD.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 6BF7DC591AEFCFD9000A0AE0;
+			remoteInfo = "JGProgressHUD-iOS";
+		};
+		6E83BACF233D906C00D6BA04 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6E60004D2121164B00787DAA /* CoreLock.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 52D6D97B1BEFF229002C0205;
+			remoteInfo = "CoreLock-iOS";
 		};
 		6E8772C4231258CD003B9469 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -696,9 +817,14 @@
 		6E83BA82233CC6E000D6BA04 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Localizable.strings; sourceTree = "<group>"; };
 		6E83BA88233CC7C400D6BA04 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/KeysViewController.strings; sourceTree = "<group>"; };
 		6E83BA8A233CC7C500D6BA04 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/KeysViewController.strings; sourceTree = "<group>"; };
+		6E83BA97233D863300D6BA04 /* LockSwiftUI.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LockSwiftUI.h; sourceTree = "<group>"; };
+		6E83BA98233D863300D6BA04 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		6E83BAA5233D871100D6BA04 /* PermissionScheduleView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PermissionScheduleView.swift; sourceTree = "<group>"; };
 		6E83BAF32323831200FBC12E /* LockEventsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LockEventsViewController.swift; sourceTree = "<group>"; };
 		6E83BAF52323842500FBC12E /* TableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewController.swift; sourceTree = "<group>"; };
 		6E83BAF72323843500FBC12E /* CollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionViewController.swift; sourceTree = "<group>"; };
+		6E83BB4E233D906C00D6BA04 /* LockKitSwiftUI.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = LockKitSwiftUI.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		6E83BB4F233D906D00D6BA04 /* LockKit copy-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "LockKit copy-Info.plist"; path = "/Volumes/Transcend/Developer/SmartLock/iOS/LockKit copy-Info.plist"; sourceTree = "<absolute>"; };
 		6E8772BB231258CC003B9469 /* JGProgressHUD.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = JGProgressHUD.xcodeproj; path = ../Carthage/Checkouts/JGProgressHUD/JGProgressHUD.xcodeproj; sourceTree = "<group>"; };
 		6E94EF74232F4A790028B745 /* CloudKit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudKit.swift; sourceTree = "<group>"; };
 		6E9794D323315EA000B5C5C9 /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = Platforms/WatchOS.platform/Developer/SDKs/WatchOS6.0.sdk/System/Library/Frameworks/CloudKit.framework; sourceTree = DEVELOPER_DIR; };
@@ -832,6 +958,19 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6E83BB35233D906C00D6BA04 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6E83BB36233D906C00D6BA04 /* Rswift in Frameworks */,
+				6E83BB37233D906C00D6BA04 /* QRCodeReader in Frameworks */,
+				6E83BB38233D906C00D6BA04 /* JGProgressHUD in Frameworks */,
+				6E83BB39233D906C00D6BA04 /* OpenCombine in Frameworks */,
+				6E83BB3A233D906C00D6BA04 /* CloudKitCodable in Frameworks */,
+				6E83BB3B233D906C00D6BA04 /* KeychainAccess in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1022,8 +1161,10 @@
 				6ECD359A233B12AF00E49357 /* QuickLook */,
 				6ECD35B4233B1E5E00E49357 /* Thumbnail */,
 				6EC6DF6B233B679200E28455 /* Spotlight */,
+				6E83BA96233D863300D6BA04 /* LockSwiftUI */,
 				6E994AE0230E56DD0076DC1B /* Frameworks */,
 				6E6000112121119400787DAA /* Products */,
+				6E83BB4F233D906D00D6BA04 /* LockKit copy-Info.plist */,
 			);
 			sourceTree = "<group>";
 		};
@@ -1046,6 +1187,7 @@
 				6ECD3597233B12AF00E49357 /* QuickLook.appex */,
 				6ECD35B1233B1E5E00E49357 /* Thumbnail.appex */,
 				6EC6DF6A233B679200E28455 /* Spotlight.appex */,
+				6E83BB4E233D906C00D6BA04 /* LockKitSwiftUI.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1188,6 +1330,16 @@
 				369E2FF1233DFDF200504907 /* BluetoothSettingsView.strings */,
 			);
 			path = "Localizable Strings";
+			sourceTree = "<group>";
+		};
+		6E83BA96233D863300D6BA04 /* LockSwiftUI */ = {
+			isa = PBXGroup;
+			children = (
+				6E83BA97233D863300D6BA04 /* LockSwiftUI.h */,
+				6E83BAA5233D871100D6BA04 /* PermissionScheduleView.swift */,
+				6E83BA98233D863300D6BA04 /* Info.plist */,
+			);
+			path = LockSwiftUI;
 			sourceTree = "<group>";
 		};
 		6E8772BC231258CC003B9469 /* Products */ = {
@@ -1447,6 +1599,14 @@
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
+		6E83BADC233D906C00D6BA04 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6E83BADD233D906C00D6BA04 /* LockKit.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		6E994A7F230DFB6C0076DC1B /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
@@ -1535,6 +1695,35 @@
 			productName = SmartLockUITests;
 			productReference = 6E6000242121119500787DAA /* SmartLockUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+		6E83BACB233D906C00D6BA04 /* LockKitSwiftUI */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 6E83BB4B233D906C00D6BA04 /* Build configuration list for PBXNativeTarget "LockKitSwiftUI" */;
+			buildPhases = (
+				6E83BADC233D906C00D6BA04 /* Headers */,
+				6E83BADE233D906C00D6BA04 /* R.swift */,
+				6E83BADF233D906C00D6BA04 /* Sources */,
+				6E83BB35233D906C00D6BA04 /* Frameworks */,
+				6E83BB3C233D906C00D6BA04 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				6E83BACC233D906C00D6BA04 /* PBXTargetDependency */,
+				6E83BACE233D906C00D6BA04 /* PBXTargetDependency */,
+			);
+			name = LockKitSwiftUI;
+			packageProductDependencies = (
+				6E83BAD0233D906C00D6BA04 /* Rswift */,
+				6E83BAD2233D906C00D6BA04 /* KeychainAccess */,
+				6E83BAD4233D906C00D6BA04 /* JGProgressHUD */,
+				6E83BAD6233D906C00D6BA04 /* QRCodeReader */,
+				6E83BAD8233D906C00D6BA04 /* OpenCombine */,
+				6E83BADA233D906C00D6BA04 /* CloudKitCodable */,
+			);
+			productName = LockKit;
+			productReference = 6E83BB4E233D906C00D6BA04 /* LockKitSwiftUI.framework */;
+			productType = "com.apple.product-type.framework";
 		};
 		6E994A83230DFB6C0076DC1B /* LockKit */ = {
 			isa = PBXNativeTarget;
@@ -1957,6 +2146,7 @@
 				6EA570C323189871008027D4 /* Watch */,
 				6EA570CF23189874008027D4 /* Watch Extension */,
 				6ED8206B2316711900B69520 /* WatchIntent */,
+				6E83BACB233D906C00D6BA04 /* LockKitSwiftUI */,
 			);
 		};
 /* End PBXProject section */
@@ -2045,6 +2235,27 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6E83BB3C233D906C00D6BA04 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6E83BB3D233D906C00D6BA04 /* Contacts.storyboard in Resources */,
+				6E83BB3E233D906C00D6BA04 /* LockPermissions.storyboard in Resources */,
+				6E83BB3F233D906C00D6BA04 /* Activity.strings in Resources */,
+				6E83BB40233D906C00D6BA04 /* NewKeyRecieveViewController.strings in Resources */,
+				6E83BB41233D906C00D6BA04 /* NewKey.storyboard in Resources */,
+				6E83BB42233D906C00D6BA04 /* Localizable.strings in Resources */,
+				6E83BB43233D906C00D6BA04 /* NewKeyInvitation.storyboard in Resources */,
+				6E83BB44233D906C00D6BA04 /* LockViewController.strings in Resources */,
+				6E83BB45233D906C00D6BA04 /* Assets.xcassets in Resources */,
+				6E83BB46233D906C00D6BA04 /* NewKeySelectPermissionViewController.strings in Resources */,
+				6E83BB47233D906C00D6BA04 /* Events.storyboard in Resources */,
+				6E83BB48233D906C00D6BA04 /* LockDetail.storyboard in Resources */,
+				6E83BB49233D906C00D6BA04 /* Logs.storyboard in Resources */,
+				6E83BB4A233D906C00D6BA04 /* LockTableViewCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2243,6 +2454,26 @@
 			shellScript = "\"$SRCROOT/rswift\" generate \"$SRCROOT/R.generated.swift\"\n";
 		};
 		6E806BAD230F6A5C00C6FF78 /* R.swift */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"$TEMP_DIR/rswift-lastrun",
+			);
+			name = R.swift;
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				$SRCROOT/R.LockKit.generated.swift,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"$SRCROOT/rswift\" generate \"$SRCROOT/R.LockKit.generated.swift\"\n";
+		};
+		6E83BADE233D906C00D6BA04 /* R.swift */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -2465,6 +2696,98 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		6E83BADF233D906C00D6BA04 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6E83BAE0233D906C00D6BA04 /* Intent.swift in Sources */,
+				6E83BAE1233D906C00D6BA04 /* NewKeyRecieveViewController.swift in Sources */,
+				6E83BAE2233D906C00D6BA04 /* UnlockEventManagedObject.swift in Sources */,
+				6E83BAE3233D906C00D6BA04 /* WatchMessage.swift in Sources */,
+				6E83BAE4233D906C00D6BA04 /* ActivityIndicator.swift in Sources */,
+				6E83BAE5233D906C00D6BA04 /* LogViewController.swift in Sources */,
+				6E83BAE6233D906C00D6BA04 /* LockViewController.swift in Sources */,
+				6E83BAE7233D906C00D6BA04 /* AdaptiveNavigation.swift in Sources */,
+				6E83BAE8233D906C00D6BA04 /* Keychain.swift in Sources */,
+				6E83BAE9233D906C00D6BA04 /* ContextMenu.swift in Sources */,
+				6E83BAEA233D906C00D6BA04 /* CloudLock.swift in Sources */,
+				6E83BAEB233D906C00D6BA04 /* ScheduleManagedObject.swift in Sources */,
+				6E83BAEC233D906C00D6BA04 /* DeviceManager.swift in Sources */,
+				6E83BAED233D906C00D6BA04 /* SetupEventManagedObject.swift in Sources */,
+				6E83BAEE233D906C00D6BA04 /* Error.swift in Sources */,
+				6E83BAEF233D906C00D6BA04 /* CloudEvent.swift in Sources */,
+				6E83BAF0233D906C00D6BA04 /* Shortcut.swift in Sources */,
+				6E83BAF1233D906C00D6BA04 /* NewKeyManagedObject.swift in Sources */,
+				6E83BAF2233D906C00D6BA04 /* ErrorAlert.swift in Sources */,
+				6E83BAF3233D906C00D6BA04 /* CollectionViewController.swift in Sources */,
+				6E83BAF4233D906C00D6BA04 /* ContactManagedObject.swift in Sources */,
+				6E83BAF5233D906C00D6BA04 /* ActivityIndicatorViewController.swift in Sources */,
+				6E83BAF6233D906C00D6BA04 /* RemoveKeyEventManagedObject.swift in Sources */,
+				6E83BAF7233D906C00D6BA04 /* AppGroup.swift in Sources */,
+				6E83BAF8233D906C00D6BA04 /* Model.xcdatamodeld in Sources */,
+				6E83BAF9233D906C00D6BA04 /* CloudNewKeyInvitation.swift in Sources */,
+				6E83BAFA233D906C00D6BA04 /* FileManager.swift in Sources */,
+				6E83BAFB233D906C00D6BA04 /* LockInformationManagedObject.swift in Sources */,
+				6E83BAFC233D906C00D6BA04 /* LockEventsViewController.swift in Sources */,
+				6E83BAFD233D906C00D6BA04 /* CloudPermission.swift in Sources */,
+				6E83BAFE233D906C00D6BA04 /* NewKeyDocument.swift in Sources */,
+				6E83BAFF233D906C00D6BA04 /* CloudNewKey.swift in Sources */,
+				6E83BB00233D906C00D6BA04 /* Log.swift in Sources */,
+				6E83BB01233D906C00D6BA04 /* ConfirmNewKeyEventManagedObject.swift in Sources */,
+				6E83BB02233D906C00D6BA04 /* ManagedObject.swift in Sources */,
+				6E83BB03233D906C00D6BA04 /* CloudApplicationData.swift in Sources */,
+				6E83BB04233D906C00D6BA04 /* JSON.swift in Sources */,
+				6E83BB05233D906C00D6BA04 /* CloudKit.swift in Sources */,
+				6E83BB06233D906C00D6BA04 /* PresentPopover.swift in Sources */,
+				6E83BB07233D906C00D6BA04 /* LockPermissionsViewController.swift in Sources */,
+				6E83BB08233D906C00D6BA04 /* PersistentContainer.swift in Sources */,
+				6E83BB09233D906C00D6BA04 /* Queue.swift in Sources */,
+				6E83BB0A233D906C00D6BA04 /* TableViewController.swift in Sources */,
+				6E83BB0B233D906C00D6BA04 /* CoreSpotlight.swift in Sources */,
+				6E83BB0C233D906C00D6BA04 /* BeaconController.swift in Sources */,
+				6E83BB0D233D906C00D6BA04 /* CloudShare.swift in Sources */,
+				6E83BB0E233D906C00D6BA04 /* LogsViewController.swift in Sources */,
+				6E83BB0F233D906C00D6BA04 /* ActivityHandling.swift in Sources */,
+				6E83BB10233D906C00D6BA04 /* StyleKit.swift in Sources */,
+				6E83BB11233D906C00D6BA04 /* Store.swift in Sources */,
+				6E83BB12233D906C00D6BA04 /* NewKey.swift in Sources */,
+				6E83BB13233D906C00D6BA04 /* SliderCell.swift in Sources */,
+				6E83BB14233D906C00D6BA04 /* KeyManagedObject.swift in Sources */,
+				6E83BB15233D906C00D6BA04 /* CloudUser.swift in Sources */,
+				6E83BB16233D906C00D6BA04 /* R.swift in Sources */,
+				6E83BB17233D906C00D6BA04 /* LockManagedObject.swift in Sources */,
+				6E83BB18233D906C00D6BA04 /* PermissionScheduleView.swift in Sources */,
+				6E83BB19233D906C00D6BA04 /* Activity.swift in Sources */,
+				6E83BB1A233D906C00D6BA04 /* Permission.swift in Sources */,
+				6E83BB1B233D906C00D6BA04 /* Unlock.swift in Sources */,
+				6E83BB1C233D906C00D6BA04 /* Intents.intentdefinition in Sources */,
+				6E83BB1D233D906C00D6BA04 /* R.LockKit.generated.swift in Sources */,
+				6E83BB1E233D906C00D6BA04 /* CreateNewKeyEventManagedObject.swift in Sources */,
+				6E83BB1F233D906C00D6BA04 /* NewKeyScheduleViewController.swift in Sources */,
+				6E83BB20233D906C00D6BA04 /* NewKeySelectPermissionViewController.swift in Sources */,
+				6E83BB21233D906C00D6BA04 /* ApplicationData.swift in Sources */,
+				6E83BB22233D906C00D6BA04 /* Bundle.swift in Sources */,
+				6E83BB23233D906C00D6BA04 /* LockTableViewCell.swift in Sources */,
+				6E83BB24233D906C00D6BA04 /* Image.swift in Sources */,
+				6E83BB25233D906C00D6BA04 /* CloudKey.swift in Sources */,
+				6E83BB26233D906C00D6BA04 /* PermissionIconView.swift in Sources */,
+				6E83BB27233D906C00D6BA04 /* Appearance.swift in Sources */,
+				6E83BB28233D906C00D6BA04 /* ProgressHUD.swift in Sources */,
+				6E83BB29233D906C00D6BA04 /* UIAlertAction.swift in Sources */,
+				6E83BB2A233D906C00D6BA04 /* ContactsViewController.swift in Sources */,
+				6E83BB2B233D906C00D6BA04 /* WatchApplicationContext.swift in Sources */,
+				6E83BB2C233D906C00D6BA04 /* NewKeyViewController.swift in Sources */,
+				6E83BB2D233D906C00D6BA04 /* BackgroundTasks.swift in Sources */,
+				6E83BB2E233D906C00D6BA04 /* iCloud.swift in Sources */,
+				6E83BB2F233D906C00D6BA04 /* EventManagedObject.swift in Sources */,
+				6E83BB30233D906C00D6BA04 /* UserActivity.swift in Sources */,
+				6E83BB31233D906C00D6BA04 /* Setup.swift in Sources */,
+				6E83BB32233D906C00D6BA04 /* Preferences.swift in Sources */,
+				6E83BB33233D906C00D6BA04 /* UserNotification.swift in Sources */,
+				6E83BB34233D906C00D6BA04 /* Event.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		6E994A80230DFB6C0076DC1B /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -2525,6 +2848,7 @@
 				6EB4B2DA232B5E260077ADD3 /* CloudUser.swift in Sources */,
 				6E806BD92310F36E00C6FF78 /* R.swift in Sources */,
 				6E50B0EC23224293001014A8 /* LockManagedObject.swift in Sources */,
+				6E026FC0233D92610081F796 /* PermissionScheduleView.swift in Sources */,
 				6E994AAF230DFDB10076DC1B /* Activity.swift in Sources */,
 				6E994AD0230E05560076DC1B /* Permission.swift in Sources */,
 				6E994AB9230DFDB60076DC1B /* Unlock.swift in Sources */,
@@ -2705,6 +3029,17 @@
 			isa = PBXTargetDependency;
 			target = 6E60000F2121119400787DAA /* SmartLock */;
 			targetProxy = 6E6000252121119500787DAA /* PBXContainerItemProxy */;
+		};
+		6E83BACC233D906C00D6BA04 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "JGProgressHUD-iOS";
+			platformFilter = ios;
+			targetProxy = 6E83BACD233D906C00D6BA04 /* PBXContainerItemProxy */;
+		};
+		6E83BACE233D906C00D6BA04 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "CoreLock-iOS";
+			targetProxy = 6E83BACF233D906C00D6BA04 /* PBXContainerItemProxy */;
 		};
 		6E8772CD23125A70003B9469 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -3375,6 +3710,70 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_TARGET_NAME = SmartLock;
+			};
+			name = Release;
+		};
+		6E83BB4C233D906C00D6BA04 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_STYLE = Automatic;
+				DEFINES_MODULE = YES;
+				DERIVE_MACCATALYST_PRODUCT_BUNDLE_IDENTIFIER = NO;
+				DEVELOPMENT_TEAM = 4W79SG34MW;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = LockKit/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"${BUILT_PRODUCTS_DIR}",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.colemancda.LockKit;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SUPPORTS_MACCATALYST = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		6E83BB4D233D906C00D6BA04 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_STYLE = Automatic;
+				DEFINES_MODULE = YES;
+				DERIVE_MACCATALYST_PRODUCT_BUNDLE_IDENTIFIER = NO;
+				DEVELOPMENT_TEAM = 4W79SG34MW;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = LockKit/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.colemancda.LockKit;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SUPPORTS_MACCATALYST = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
 			};
 			name = Release;
 		};
@@ -4050,6 +4449,15 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
+		6E83BB4B233D906C00D6BA04 /* Build configuration list for PBXNativeTarget "LockKitSwiftUI" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6E83BB4C233D906C00D6BA04 /* Debug */,
+				6E83BB4D233D906C00D6BA04 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		6E994A9B230DFB6D0076DC1B /* Build configuration list for PBXNativeTarget "LockKit" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -4210,6 +4618,54 @@
 				kind = branch;
 			};
 		};
+		6E83BAD1233D906C00D6BA04 /* XCRemoteSwiftPackageReference "R.swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/mac-cain13/R.swift.Library";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
+		6E83BAD3233D906C00D6BA04 /* XCRemoteSwiftPackageReference "KeychainAccess" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/MillerTechnologyPeru/KeychainAccess.git";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
+		6E83BAD5233D906C00D6BA04 /* XCRemoteSwiftPackageReference "JGProgressHUD" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/MillerTechnologyPeru/JGProgressHUD.git";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
+		6E83BAD7233D906C00D6BA04 /* XCRemoteSwiftPackageReference "QRCodeReader.swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/MillerTechnologyPeru/QRCodeReader.swift.git";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
+		6E83BAD9233D906C00D6BA04 /* XCRemoteSwiftPackageReference "OpenCombine" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/MillerTechnologyPeru/OpenCombine.git";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
+		6E83BADB233D906C00D6BA04 /* XCRemoteSwiftPackageReference "CloudKitCodable" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/colemancda/CloudKitCodable.git";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
 		6EE5A1092329FCA00000235C /* XCRemoteSwiftPackageReference "CloudKitCodable" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/colemancda/CloudKitCodable.git";
@@ -4250,6 +4706,36 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 6E64B7F2231247EF002BC0A2 /* XCRemoteSwiftPackageReference "QRCodeReader.swift" */;
 			productName = QRCodeReader;
+		};
+		6E83BAD0233D906C00D6BA04 /* Rswift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6E83BAD1233D906C00D6BA04 /* XCRemoteSwiftPackageReference "R.swift" */;
+			productName = Rswift;
+		};
+		6E83BAD2233D906C00D6BA04 /* KeychainAccess */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6E83BAD3233D906C00D6BA04 /* XCRemoteSwiftPackageReference "KeychainAccess" */;
+			productName = KeychainAccess;
+		};
+		6E83BAD4233D906C00D6BA04 /* JGProgressHUD */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6E83BAD5233D906C00D6BA04 /* XCRemoteSwiftPackageReference "JGProgressHUD" */;
+			productName = JGProgressHUD;
+		};
+		6E83BAD6233D906C00D6BA04 /* QRCodeReader */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6E83BAD7233D906C00D6BA04 /* XCRemoteSwiftPackageReference "QRCodeReader.swift" */;
+			productName = QRCodeReader;
+		};
+		6E83BAD8233D906C00D6BA04 /* OpenCombine */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6E83BAD9233D906C00D6BA04 /* XCRemoteSwiftPackageReference "OpenCombine" */;
+			productName = OpenCombine;
+		};
+		6E83BADA233D906C00D6BA04 /* CloudKitCodable */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6E83BADB233D906C00D6BA04 /* XCRemoteSwiftPackageReference "CloudKitCodable" */;
+			productName = CloudKitCodable;
 		};
 		6ED820992316777A00B69520 /* KeychainAccess */ = {
 			isa = XCSwiftPackageProductDependency;
