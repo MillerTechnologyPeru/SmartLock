@@ -155,11 +155,13 @@ public struct PermissionScheduleView: View {
                 if isCustomSchedule {
                     DatePicker(
                         selection: intervalStart,
+                        in: date(from: 0) ... (intervalEnd.wrappedValue - 1),
                         displayedComponents: [.hourAndMinute],
                         label: { Text("Start") }
                     )
                     DatePicker(
                         selection: intervalEnd,
+                        in: (intervalStart.wrappedValue + 1) ... date(from: 60 * 24),
                         displayedComponents: [.hourAndMinute],
                         label: { Text("End") }
                     )
