@@ -24,10 +24,6 @@ public struct PermissionScheduleView: View {
     @State
     private var defaultInterval: Permission.Schedule.Interval = .default
     
-    private var isAllDaysSelected: Bool {
-        return schedule.weekdays == .all
-    }
-    
     private var expiration: Binding<Date> {
         return Binding(get: {
             return self.schedule.expiry ?? self.defaultExpiration
@@ -39,6 +35,10 @@ public struct PermissionScheduleView: View {
     
     private var doesExpire: Bool {
         return self.schedule.expiry != nil
+    }
+    
+    private var isCustomSchedule: Bool {
+        return self.schedule.interval != .anytime
     }
     
     private var showExpirationPicker: Binding<Bool> {
@@ -53,75 +53,65 @@ public struct PermissionScheduleView: View {
         })
     }
     
-    private static let relativeTimeFormatter = RelativeDateTimeFormatter()
+    private var checkmark: some View {
+        return Image(systemName: "checkmark")
+            .foregroundColor(Color.orange)
+    }
     
-    private func relativeTime(for date: Date) -> Text {
-        return Text(verbatim: type(of: self).relativeTimeFormatter
+    private static let expirationTimeFormatter = RelativeDateTimeFormatter()
+    
+    private func expirationTime(for date: Date) -> Text {
+        return Text(verbatim: type(of: self).expirationTimeFormatter
             .localizedString(for: date, relativeTo: Date()))
     }
+    
+    private static let intervalTimeFormatter: RelativeDateTimeFormatter = {
+        let formatter = RelativeDateTimeFormatter()
+        return formatter
+    }()
     
     // MARK: - View
     
     public var body: some View {
         
         Form {
-            Section(header: Text(verbatim: "Interval")) {
-                Button(action: {
-                    if self.schedule.interval == .anytime {
-                        self.schedule.interval = self.defaultInterval
-                    } else {
-                        self.schedule.interval = .anytime
-                    }
-                }) {
+            
+            Section(header: Text(verbatim: "Time")) {
+                Button(action: { self.schedule.interval = .anytime }) {
                     HStack {
                         if self.schedule.interval == .anytime {
-                            Image(systemName: "checkmark")
-                                .foregroundColor(Color.orange)
+                            self.checkmark
                         }
                         Text(verbatim: "Any time")
                             .foregroundColor(Color.primary)
                     }
                 }
-                Button(action: {
-                    if self.schedule.interval == .anytime {
-                        self.schedule.interval = self.defaultInterval
-                    } else {
-                        self.schedule.interval = .anytime
-                    }
-                }) {
+                Button(action: { self.schedule.interval = self.defaultInterval }) {
                     HStack {
-                        if self.schedule.interval == .anytime {
-                            Image(systemName: "checkmark")
-                                .foregroundColor(Color.orange)
+                        if isCustomSchedule {
+                            self.checkmark
                         }
                         Text(verbatim: "Scheduled")
                             .foregroundColor(Color.primary)
                     }
                 }
-            }
-            
-            Section {
-                Button(action: {
-                    if self.isAllDaysSelected {
-                        self.schedule.weekdays = .none
-                    } else {
-                        self.schedule.weekdays = .all
-                    }
-                }) {
-                    HStack {
-                        if isAllDaysSelected {
-                            Image(systemName: "checkmark")
-                                .foregroundColor(Color.orange)
-                        }
-                        Text(verbatim: "All Days")
-                            .foregroundColor(Color.primary)
-                    }
+                if isCustomSchedule {
+                    DatePicker(
+                        selection: expiration,
+                        displayedComponents: [.hourAndMinute],
+                        label: { Text("Start") }
+                    )
+                    DatePicker(
+                        selection: expiration,
+                        displayedComponents: [.hourAndMinute],
+                        label: { Text("End") }
+                    )
                 }
             }
             
             Section(header: Text(verbatim: "Expires")) {
                 Toggle(isOn: showExpirationPicker) {
-                    schedule.expiry.flatMap({ relativeTime(for: $0) }) ?? Text("Never")
+                    schedule.expiry.flatMap({ expirationTime(for: $0) }) ?? Text("Never")
                 }
                 if showExpirationPicker.wrappedValue {
                     DatePicker(selection: expiration, label: { Text(" ") })
@@ -172,12 +162,6 @@ public struct PermissionScheduleView: View {
         }
         .navigationBarTitle(Text("Schedule"))
     }
-}
-
-@available(iOS 13, *)
-private extension PermissionScheduleView {
-    
-    func
 }
 
 @available(iOS 13, *)
@@ -233,10 +217,25 @@ extension PermissionScheduleView {
 @available(iOS 13, *)
 struct DayViewPreview: PreviewProvider {
     static var previews: some View {
-        NavigationView {
-            PermissionScheduleView()
+        Group {
+            
+            NavigationView {
+                PermissionScheduleView()
+            }
+            .previewDevice("iPhone SE")
+            
+            NavigationView {
+                PermissionScheduleView()
+            }
+            .previewDevice("iPhone SE")
+            .environment(\.colorScheme, .dark)
+            
+            NavigationView {
+                PermissionScheduleView()
+            }
+            .previewDevice("iPhone XR")
+            .environment(\.colorScheme, .dark)
         }
-        .previewDevice("iPhone SE")
     }
 }
 #endif
