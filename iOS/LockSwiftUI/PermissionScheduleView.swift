@@ -16,16 +16,19 @@ public struct PermissionScheduleView: View {
     // MARK: - Properties
     
     @State
-    private var schedule = Permission.Schedule()
-    
-    var isAllDaysSelected: Bool {
-        return schedule.weekdays == .all
-    }
+    public var schedule = Permission.Schedule()
     
     @State
     private var defaultExpiration = Date() + (60 * 60 * 24)
     
-    var expiration: Binding<Date> {
+    @State
+    private var defaultInterval: Permission.Schedule.Interval = .default
+    
+    private var isAllDaysSelected: Bool {
+        return schedule.weekdays == .all
+    }
+    
+    private var expiration: Binding<Date> {
         return Binding(get: {
             return self.schedule.expiry ?? self.defaultExpiration
         }, set: {
@@ -34,11 +37,11 @@ public struct PermissionScheduleView: View {
         })
     }
     
-    var doesExpire: Bool {
+    private var doesExpire: Bool {
         return self.schedule.expiry != nil
     }
     
-    var showExpirationPicker: Binding<Bool> {
+    private var showExpirationPicker: Binding<Bool> {
         return Binding(get: {
             return self.schedule.expiry != nil
         }, set: { (showPicker) in
@@ -52,8 +55,9 @@ public struct PermissionScheduleView: View {
     
     private static let relativeTimeFormatter = RelativeDateTimeFormatter()
     
-    func relativeTime(for date: Date) -> Text {
-        return Text(verbatim: type(of: self).relativeTimeFormatter.localizedString(for: date, relativeTo: Date()))
+    private func relativeTime(for date: Date) -> Text {
+        return Text(verbatim: type(of: self).relativeTimeFormatter
+            .localizedString(for: date, relativeTo: Date()))
     }
     
     // MARK: - View
@@ -61,6 +65,41 @@ public struct PermissionScheduleView: View {
     public var body: some View {
         
         Form {
+            Section(header: Text(verbatim: "Interval")) {
+                Button(action: {
+                    if self.schedule.interval == .anytime {
+                        self.schedule.interval = self.defaultInterval
+                    } else {
+                        self.schedule.interval = .anytime
+                    }
+                }) {
+                    HStack {
+                        if self.schedule.interval == .anytime {
+                            Image(systemName: "checkmark")
+                                .foregroundColor(Color.orange)
+                        }
+                        Text(verbatim: "Any time")
+                            .foregroundColor(Color.primary)
+                    }
+                }
+                Button(action: {
+                    if self.schedule.interval == .anytime {
+                        self.schedule.interval = self.defaultInterval
+                    } else {
+                        self.schedule.interval = .anytime
+                    }
+                }) {
+                    HStack {
+                        if self.schedule.interval == .anytime {
+                            Image(systemName: "checkmark")
+                                .foregroundColor(Color.orange)
+                        }
+                        Text(verbatim: "Scheduled")
+                            .foregroundColor(Color.primary)
+                    }
+                }
+            }
+            
             Section {
                 Button(action: {
                     if self.isAllDaysSelected {
@@ -131,8 +170,14 @@ public struct PermissionScheduleView: View {
                 }
             }
         }
-        .navigationBarTitle(Text("Permission Schedule"))
+        .navigationBarTitle(Text("Schedule"))
     }
+}
+
+@available(iOS 13, *)
+private extension PermissionScheduleView {
+    
+    func
 }
 
 @available(iOS 13, *)

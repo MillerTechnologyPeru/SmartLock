@@ -10,6 +10,14 @@ import Foundation
 import UIKit
 import CoreLock
 
+public extension Permission.Schedule.Interval {
+    
+    /// 9 AM to 5 PM
+    static var `default`: Permission.Schedule.Interval {
+        return Permission.Schedule.Interval(rawValue: 9 * 60 ... (12 + 5) * 60)!
+    }
+}
+
 #if os(iOS)
 import Rswift
 
