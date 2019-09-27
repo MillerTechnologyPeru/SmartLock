@@ -110,7 +110,9 @@ public final class NewKeyRecieveViewController: KeyViewController {
                     .name(invitation.key.name),
                     .permission(invitation.key.permission),
                     .created(invitation.key.created),
-                    .expiration(invitation.key.expiration)
+                    .expiration(invitation.key.expiration),
+                    .identifier(invitation.key.identifier),
+                    .lock(invitation.lock)
                 ])
             )
         ]

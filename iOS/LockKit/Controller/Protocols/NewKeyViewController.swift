@@ -101,7 +101,7 @@ public extension NewKeyViewController {
             preferredStyle: .alert
         )
         
-        alert.addTextField { $0.text = R.string.localizable.newLockName() }
+        alert.addTextField { $0.text = R.string.newKeyViewController.alertNewKeyTitle() }
         
         alert.addAction(UIAlertAction(title: R.string.localizable.alertOk(), style: .`default`, handler: { (UIAlertAction) in
             

@@ -35,7 +35,7 @@ public class KeyViewController: UITableViewController {
     
     private lazy var dateFormatter: DateFormatter = {
         let formatter = DateFormatter()
-        formatter.dateStyle = .medium
+        formatter.dateStyle = .long
         formatter.timeStyle = .short
         return formatter
     }()

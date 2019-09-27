@@ -6,7 +6,7 @@
   Copyright © 2019 ColemanCDA. All rights reserved.
 */
 
-"Section.Title.PendingKeys" = "Llaves Pendientes";
+"Section.Title.PendingKeys" = "Pending Keys";
 
 "Alert.DeleteKey.Title" = "Confirmation";
 "Alert.DeleteKey.Message" = "Are you sure you want to delete this key?";
