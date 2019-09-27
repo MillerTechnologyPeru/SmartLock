@@ -70,6 +70,36 @@ public struct PermissionScheduleView: View {
         return formatter
     }()
     
+    private var intervalStart: Binding<Date> {
+        return Binding(get: {
+            let minutes = self.schedule.interval.rawValue.lowerBound
+            return Permission.Schedule.Interval.date(from: minutes)
+        }, set: {
+            let minutes = Permission.Schedule.Interval.from(date: $0)
+            guard let interval = Permission.Schedule.Interval(rawValue: minutes ... self.schedule.interval.rawValue.upperBound) else {
+                assertionFailure()
+                return
+            }
+            self.schedule.interval = interval
+            self.defaultInterval = interval
+        })
+    }
+    
+    private var intervalEnd: Binding<Date> {
+        return Binding(get: {
+            let minutes = self.schedule.interval.rawValue.upperBound
+            return Permission.Schedule.Interval.date(from: minutes)
+        }, set: {
+            let minutes = Permission.Schedule.Interval.from(date: $0)
+            guard let interval = Permission.Schedule.Interval(rawValue:  self.schedule.interval.rawValue.lowerBound ... minutes) else {
+                assertionFailure()
+                return
+            }
+            self.schedule.interval = interval
+            self.defaultInterval = interval
+        })
+    }
+    
     // MARK: - View
     
     public var body: some View {
@@ -97,12 +127,12 @@ public struct PermissionScheduleView: View {
                 }
                 if isCustomSchedule {
                     DatePicker(
-                        selection: expiration,
+                        selection: intervalStart,
                         displayedComponents: [.hourAndMinute],
                         label: { Text("Start") }
                     )
                     DatePicker(
-                        selection: expiration,
+                        selection: intervalEnd,
                         displayedComponents: [.hourAndMinute],
                         label: { Text("End") }
                     )
@@ -160,6 +190,7 @@ public struct PermissionScheduleView: View {
                 }
             }
         }
+        .listStyle(GroupedListStyle())
         .navigationBarTitle(Text("Schedule"))
     }
 }
