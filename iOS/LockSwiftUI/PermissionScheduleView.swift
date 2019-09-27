@@ -18,9 +18,38 @@ public struct PermissionScheduleView: View {
     @State
     private var schedule = Permission.Schedule()
     
-    func isAllDaysSelected() -> Bool {
-        
+    var isAllDaysSelected: Bool {
         return schedule.weekdays == .all
+    }
+    
+    @State
+    private var defaultExpiration = Date() + (60 * 60 * 24)
+    
+    var expiration: Binding<Date> {
+        return Binding(get: {
+            return self.schedule.expiry ?? self.defaultExpiration
+        }, set: {
+            self.schedule.expiry = $0
+            self.defaultExpiration = $0
+        })
+    }
+    
+    var showExpirationPicker: Binding<Bool> {
+        return Binding(get: {
+            return self.schedule.expiry != nil
+        }, set: { (showPicker) in
+            if showPicker {
+                self.schedule.expiry = self.schedule.expiry ?? self.defaultExpiration
+            } else {
+                self.schedule.expiry = nil
+            }
+        })
+    }
+    
+    private static let relativeTimeFormatter = RelativeDateTimeFormatter()
+    
+    func relativeTime(for date: Date) -> Text {
+        return Text(verbatim: type(of: self).relativeTimeFormatter.localizedString(for: date, relativeTo: Date()))
     }
     
     // MARK: - View
@@ -30,16 +59,14 @@ public struct PermissionScheduleView: View {
         Form {
             Section {
                 Button(action: {
-                    if self.isAllDaysSelected() {
-                        
+                    if self.isAllDaysSelected {
                         self.schedule.weekdays = .none
                     } else {
-                        
                         self.schedule.weekdays = .all
                     }
                 }) {
                     HStack {
-                        if isAllDaysSelected() {
+                        if isAllDaysSelected {
                             Image(systemName: "checkmark")
                                 .foregroundColor(Color.orange)
                         }
@@ -47,10 +74,13 @@ public struct PermissionScheduleView: View {
                             .foregroundColor(Color.primary)
                     }
                 }
-                /*
-                DatePicker(selection: $schedule.expiry, displayedComponents: .hourAndMinute) {
-                    Text(verbatim: "Expiry Date")
-                }*/
+            }
+            
+            Section {
+                Toggle("Expires", isOn: showExpirationPicker)
+                if showExpirationPicker.wrappedValue {
+                    DatePicker(selection: expiration, label: { Text(" ") })
+                }
             }
             
             Section(header: Text(verbatim: "Repeat"), footer: SectionBottom(weekdays: schedule.weekdays)) {
@@ -152,7 +182,10 @@ extension PermissionScheduleView {
 @available(iOS 13, *)
 struct DayViewPreview: PreviewProvider {
     static var previews: some View {
-        PermissionScheduleView()
+        NavigationView {
+            PermissionScheduleView()
+        }
+        .previewDevice("iPhone SE")
     }
 }
 #endif
