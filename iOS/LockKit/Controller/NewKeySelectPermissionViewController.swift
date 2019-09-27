@@ -153,16 +153,17 @@ public final class NewKeySelectPermissionViewController: UITableViewController, 
                 return
             }
             // schedule
-            var scheduleView = PermissionScheduleView()
-            scheduleView.cancel = { [weak self] in
-                self?.dismiss(animated: true, completion: nil)
-            }
-            scheduleView.done = { [weak self] (schedule) in
+            let scheduleView = PermissionScheduleView.Modal(done: { [weak self] (schedule) in
+                #if DEBUG
+                dump(schedule)
+                #endif
                 self?.dismiss(animated: true, completion: nil)
                 self?.newKey(permission: .scheduled(schedule)) { [weak self] in
                     self?.completion?(($0, .view(cell.permissionView)))
                 }
-            }
+            }, cancel: { [weak self] in
+                self?.dismiss(animated: true, completion: nil)
+            })
             let scheduleViewController = UIHostingController(rootView: scheduleView)
             present(scheduleViewController, animated: true, completion: nil)
         }

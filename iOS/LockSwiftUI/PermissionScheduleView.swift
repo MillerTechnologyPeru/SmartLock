@@ -10,14 +10,17 @@ import Foundation
 import SwiftUI
 import CoreLock
 
+/// Permission Schedule View
 @available(iOS 13, *)
 public struct PermissionScheduleView: View {
     
     // MARK: - Properties
     
-    public var done: ((Permission.Schedule) -> ())?
+    public init(schedule: Permission.Schedule = .init()) {
+        self.schedule = schedule
+    }
     
-    public var cancel: (() -> ())?
+    // MARK: - Properties
     
     @State
     public var schedule = Permission.Schedule()
@@ -198,16 +201,42 @@ public struct PermissionScheduleView: View {
         }
         .listStyle(GroupedListStyle())
         .navigationBarTitle(Text("Schedule"))
-        .navigationBarItems(
-            leading: Button(
-                action: { self.cancel?() },
-                label: { Text("Cancel") }
-            ),
-            trailing: Button(
-                action: { self.done?(self.schedule) },
-                label: { Text("Done") }
-            )
-        )
+    }
+}
+
+@available(iOS 13, *)
+public extension PermissionScheduleView {
+    
+    struct Modal: View {
+        
+        public init(done: ((Permission.Schedule) -> ())? = nil,
+                    cancel: (() -> ())? = nil) {
+            self.cancel = cancel
+            self.done = done
+        }
+
+        public var done: ((Permission.Schedule) -> ())?
+        
+        public var cancel: (() -> ())?
+        
+        private var scheduleView = PermissionScheduleView()
+        
+        public var body: some View {
+            
+            NavigationView {
+                scheduleView
+                .navigationBarItems(
+                    leading: Button(
+                        action: { self.cancel?() },
+                        label: { Text("Cancel") }
+                    ),
+                    trailing: Button(
+                        action: { self.done?(self.scheduleView.schedule) },
+                        label: { Text("Done") }
+                    )
+                )
+            }
+        }
     }
 }
 
@@ -215,6 +244,7 @@ public struct PermissionScheduleView: View {
 struct RoundText: ViewModifier {
     
     // MARK: - Properties
+    
     let enabled: Bool
     
     // MARK: - View Modifier
