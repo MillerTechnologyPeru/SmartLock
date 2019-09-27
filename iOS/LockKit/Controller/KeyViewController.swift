@@ -22,11 +22,12 @@ public class KeyViewController: UITableViewController {
     @IBOutlet private(set) weak var permissionView: PermissionIconView!
     
     // MARK: - Properties
-        
-    public var progressHUD: JGProgressHUD?
     
-    private var data = [Section]() {
-        didSet { tableView.reloadData() }
+    internal var data = [Section]() {
+        didSet {
+            loadViewIfNeeded()
+            tableView.reloadData()
+        }
     }
     
     @available(iOS 13.0, *)
@@ -59,7 +60,7 @@ public class KeyViewController: UITableViewController {
         return viewController
     }
     
-    public static func fromStoryboard(with newKey: CoreLock.NewKey) -> KeyViewController {
+    public static func fromStoryboard(with newKey: NewKey) -> KeyViewController {
         
         guard let viewController = R.storyboard.key.keyViewController()
             else { fatalError("Could not load \(self) from storyboard") }
@@ -70,8 +71,8 @@ public class KeyViewController: UITableViewController {
                 items: viewController.map([
                     .name(newKey.name),
                     .permission(newKey.permission),
-                    .expiration(newKey.expiration),
-                    .created(newKey.created)
+                    .created(newKey.created),
+                    .expiration(newKey.expiration)
                 ])
             )
         ]
@@ -84,14 +85,6 @@ public class KeyViewController: UITableViewController {
         self.tableView.tableFooterView = UIView()
     }
     
-    public override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        
-        if let progressHUD = self.progressHUD {
-            view.bringSubviewToFront(progressHUD)
-        }
-    }
-    
     // MARK: - Methods
     
     private subscript (indexPath: IndexPath) -> Item {
@@ -99,11 +92,11 @@ public class KeyViewController: UITableViewController {
     }
     
     internal func map(_ values: [KeyProperty]) -> [Item] {
-        
-        loadViewIfNeeded()
-        
+                
         return values.map {
             switch $0 {
+            case let .identifier(identifier):
+                return .detail(R.string.keyViewController.identifierTitle(), identifier.uuidString)
             case let .name(name):
                 return .detail(R.string.keyViewController.nameTitle(), name)
             case let .permission(permission):
@@ -218,6 +211,7 @@ internal extension KeyViewController {
     }
     
     enum KeyProperty {
+        case identifier(UUID)
         case name(String)
         case permission(Permission)
         case expiration(Date)

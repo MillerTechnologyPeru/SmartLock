@@ -17,9 +17,9 @@ public extension ActivityIndicatorViewController where Self: UIViewController {
         
         log("Unlock \(identifier)")
         
-        performActivity(queue: .bluetooth, {
+        performActivity(queue: DispatchQueue.bluetooth, {
             guard let lockPeripheral = try Store.shared.device(for: identifier, scanDuration: scanDuration)
-                else { return R.string.error.notInRange() }
+                else { throw LockError.notInRange(lock: identifier) }
             try Store.shared.unlock(lockPeripheral, action: action)
         }, completion: { (viewController, _) in
             log("Successfully unlocked lock \"\(identifier)\"")

@@ -15,49 +15,31 @@ import JGProgressHUD
 import SwiftUI
 
 /// Receive New Key View Controller
-public final class NewKeyRecieveViewController: UITableViewController {
-    
-    // MARK: - IB Outlets
-    
-    @IBOutlet private(set) weak var permissionView: PermissionIconView!
+public final class NewKeyRecieveViewController: KeyViewController {
     
     // MARK: - Properties
     
-    public private(set) var newKey: NewKey.Invitation! {
+    public private(set) var invitation: NewKey.Invitation! {
         didSet { configureView() }
     }
-        
+    
     public var progressHUD: JGProgressHUD?
     
     public var completion: ((Bool) -> ())?
     
-    private var data = [Section]() {
-        didSet { tableView.reloadData() }
-    }
-    
     private var canSave: Bool {
-        return FileManager.Lock.shared.applicationData?.locks[newKey.lock] == nil
-        && newKey.key.expiration.timeIntervalSinceNow > 0 // not expired
+        return FileManager.Lock.shared.applicationData?.locks[invitation.lock] == nil
+        && invitation.key.expiration.timeIntervalSinceNow > 0 // not expired
     }
-    
-    @available(iOS 13.0, *)
-    private lazy var timeFormatter = RelativeDateTimeFormatter()
-    
-    private lazy var dateFormatter: DateFormatter = {
-        let formatter = DateFormatter()
-        formatter.dateStyle = .medium
-        formatter.timeStyle = .short
-        return formatter
-    }()
     
     // MARK: - Loading
     
-    public static func fromStoryboard(with newKey: NewKey.Invitation,
+    public static func fromStoryboard(with invitation: NewKey.Invitation,
                                       completion: ((Bool) -> ())? = nil) -> NewKeyRecieveViewController {
         
-        guard let viewController = R.storyboard.newKeyInvitation.newKeyRecieveViewController()
+        guard let viewController = R.storyboard.key.newKeyRecieveViewController()
             else { fatalError("Could not load \(self) from storyboard") }
-        viewController.newKey = newKey
+        viewController.invitation = invitation
         viewController.completion = completion
         return viewController
     }
@@ -65,7 +47,7 @@ public final class NewKeyRecieveViewController: UITableViewController {
     public override func viewDidLoad() {
         super.viewDidLoad()
         
-        assert(newKey != nil)
+        assert(invitation != nil)
         
         self.tableView.tableFooterView = UIView()
         
@@ -111,58 +93,25 @@ public final class NewKeyRecieveViewController: UITableViewController {
         
         guard isViewLoaded else { return }
         
-        guard let newKey = self.newKey else {
+        guard let invitation = self.invitation else {
             assertionFailure()
             return
         }
         
-        let permission = newKey.key.permission
+        // set permission view
+        let permission = invitation.key.permission
         self.permissionView.permission = permission.type
         
-        let keyName = newKey.key.name
-        let lock = newKey.lock.uuidString
-        let permissionDescription = permission.type.localizedText
-        
-        let expiration: String
-        let timeRemaining = newKey.key.expiration.timeIntervalSinceNow
-        if timeRemaining > 0 {
-            if #available(iOS 13.0, *) {
-                expiration = timeFormatter.localizedString(fromTimeInterval: timeRemaining)
-            } else {
-                expiration = dateFormatter.string(from: newKey.key.expiration)
-            }
-        } else {
-            expiration = R.string.newKeyRecieveViewController.expirationExpired()
-        }
-        
-        let permissionCell: Item
-        
-        switch permission {
-        case .owner:
-            fatalError("Invalid new key")
-        case .admin,
-             .anytime:
-            permissionCell = .detail(R.string.newKeyRecieveViewController.permissionTitle(), permissionDescription)
-        case let .scheduled(schedule):
-            if #available(iOS 13, *) {
-                permissionCell = .detailDisclosure(R.string.newKeyRecieveViewController.permissionTitle(), permissionDescription, {
-                    let viewController = UIHostingController(rootView: PermissionScheduleView(schedule: schedule))
-                    $0.show(viewController, sender: nil)
-                })
-            } else {
-                permissionCell = .detail(R.string.newKeyRecieveViewController.permissionTitle(), permissionDescription)
-            }
-        }
-        
+        // load table view
         var data = [
             Section(
                 title: nil,
-                items: [
-                    .detail(R.string.newKeyRecieveViewController.nameTitle(), keyName),
-                    permissionCell,
-                    .detail(R.string.newKeyRecieveViewController.expirationTitle(), expiration),
-                    .detail(R.string.newKeyRecieveViewController.lockTitle(), lock)
-                ]
+                items: map([
+                    .name(invitation.key.name),
+                    .permission(invitation.key.permission),
+                    .created(invitation.key.created),
+                    .expiration(invitation.key.expiration)
+                ])
             )
         ]
         
@@ -174,7 +123,9 @@ public final class NewKeyRecieveViewController: UITableViewController {
                 Section(
                     title: nil,
                     items: [
-                        .button(R.string.newKeyRecieveViewController.saveTitle(), { $0.save() })
+                        .button(R.string.keyViewController.saveTitle(), {
+                            ($0 as? NewKeyRecieveViewController)?.save()
+                        })
                     ]
                 )
             )
@@ -185,17 +136,17 @@ public final class NewKeyRecieveViewController: UITableViewController {
     
     private func save() {
         
-        guard let newKeyInvitation = self.newKey else {
+        guard let newKeyInvitation = self.invitation else {
             assertionFailure()
             return
         }
         
-        guard FileManager.Lock.shared.applicationData?.locks[newKeyInvitation.lock] == nil else {            self.showErrorAlert(R.string.newKeyRecieveViewController.errorExistingKey(newKey.lock.rawValue))
+        guard FileManager.Lock.shared.applicationData?.locks[newKeyInvitation.lock] == nil else {            self.showErrorAlert(R.string.error.existingKey())
             return
         }
         
         guard newKeyInvitation.key.expiration.timeIntervalSinceNow > 0 else {
-            self.showErrorAlert(R.string.newKeyRecieveViewController.errorExpired())
+            self.showErrorAlert(R.string.error.newKeyExpired())
             return
         }
         
@@ -259,84 +210,11 @@ public final class NewKeyRecieveViewController: UITableViewController {
             }
         }
     }
-    
-    // MARK: - UITableViewDataSource
-    
-    public override func numberOfSections(in tableView: UITableView) -> Int {
-        return data.count
-    }
-    
-    public override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return data[section].items.count
-    }
-    
-    public override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
-        let item = self[indexPath]
-        
-        switch item {
-        case let .detail(title, detail):
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: R.reuseIdentifier.newKeyDetailTableViewCell, for: indexPath)
-                else { fatalError("Unable to dequeue cell") }
-            cell.textLabel?.text = title
-            cell.detailTextLabel?.text = detail
-            return cell
-        case let .detailDisclosure(title, detail, _):
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: R.reuseIdentifier.newKeyDetailDisclosureTableViewCell, for: indexPath)
-                else { fatalError("Unable to dequeue cell") }
-            cell.textLabel?.text = title
-            cell.detailTextLabel?.text = detail
-            return cell
-        case let .button(title, _):
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: R.reuseIdentifier.newKeyBasicTableViewCell, for: indexPath)
-            else { fatalError("Unable to dequeue cell") }
-            cell.textLabel?.text = title
-            return cell
-        }
-    }
-    
-    // MARK: - UITableViewDelegate
-    
-    public override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
-        defer { tableView.deselectRow(at: indexPath, animated: true) }
-        
-        let item = self[indexPath]
-        
-        switch item {
-        case let .button(_, action):
-            action(self)
-        case let .detailDisclosure(_, _, action):
-            action(self)
-        default:
-            break
-        }
-    }
-    
-    public override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return data[section].title
-    }
 }
 
-// MARK: - ProgressHUDViewController
+// MARK: - ActivityIndicatorViewController
 
 extension NewKeyRecieveViewController: ProgressHUDViewController { }
-
-// MARK: - Supporting Types
-
-private extension NewKeyRecieveViewController {
-    
-    struct Section {
-        let title: String?
-        let items: [Item]
-    }
-    
-    enum Item {
-        case detail(String, String)
-        case detailDisclosure(String, String, (NewKeyRecieveViewController) -> ())
-        case button(String, (NewKeyRecieveViewController) -> ())
-    }
-}
 
 // MARK: - View Controller Extensions
 

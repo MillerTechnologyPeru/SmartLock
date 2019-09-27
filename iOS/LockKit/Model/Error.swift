@@ -16,6 +16,18 @@ public enum LockError: Error {
     
     /// No key for the specified lock.
     case noKey(lock: UUID)
+    
+    /// Invalid QR code.
+    case invalidQRCode
+    
+    /// Invalid new key file.
+    case invalidNewKeyFile
+    
+    /// You already have a key for this lock.
+    case existingKey(lock: UUID)
+    
+    /// New key expired.
+    case newKeyExpired
 }
 
 
@@ -45,6 +57,15 @@ extension LockError: CustomNSError {
         case let .noKey(lock: lock):
             userInfo[NSLocalizedDescriptionKey] = R.string.error.noKey()
             userInfo[UserInfoKey.lock.rawValue] = lock as NSUUID
+        case .invalidQRCode:
+            userInfo[NSLocalizedDescriptionKey] = R.string.error.invalidQRCode()
+        case .invalidNewKeyFile:
+            userInfo[NSLocalizedDescriptionKey] = R.string.error.invalidNewKeyFile()
+        case let .existingKey(lock: lock):
+            userInfo[NSLocalizedDescriptionKey] = R.string.error.existingKey()
+            userInfo[UserInfoKey.lock.rawValue] = lock as NSUUID
+        case .newKeyExpired:
+            userInfo[NSLocalizedDescriptionKey] = R.string.error.newKeyExpired()
         }
         
         return userInfo
