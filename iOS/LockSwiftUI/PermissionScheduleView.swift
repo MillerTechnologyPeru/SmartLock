@@ -73,9 +73,9 @@ public struct PermissionScheduleView: View {
     private var intervalStart: Binding<Date> {
         return Binding(get: {
             let minutes = self.schedule.interval.rawValue.lowerBound
-            return Permission.Schedule.Interval.date(from: minutes)
+            return self.date(from: minutes)
         }, set: {
-            let minutes = Permission.Schedule.Interval.minutes(from: $0)
+            let minutes = self.minutes(from: $0)
             guard let interval = Permission.Schedule.Interval(rawValue: minutes ... self.schedule.interval.rawValue.upperBound) else {
                 assertionFailure()
                 return
@@ -88,9 +88,9 @@ public struct PermissionScheduleView: View {
     private var intervalEnd: Binding<Date> {
         return Binding(get: {
             let minutes = self.schedule.interval.rawValue.upperBound
-            return Permission.Schedule.Interval.date(from: minutes)
+            return self.date(from: minutes)
         }, set: {
-            let minutes = Permission.Schedule.Interval.minutes(from: $0)
+            let minutes = self.minutes(from: $0)
             guard let interval = Permission.Schedule.Interval(rawValue:  self.schedule.interval.rawValue.lowerBound ... minutes) else {
                 assertionFailure()
                 return
@@ -98,6 +98,22 @@ public struct PermissionScheduleView: View {
             self.schedule.interval = interval
             self.defaultInterval = interval
         })
+    }
+    
+    private func minutes(from date: Date) -> UInt16 {
+        return UInt16(date.timeIntervalSinceNow / TimeInterval(60))
+    }
+    
+    private func date(from minutes: UInt16) -> Date {
+        return Date(timeIntervalSinceReferenceDate: TimeInterval(minutes) * 60)
+    }
+    
+    private func toggle(_ weekday: Permission.Schedule.Weekdays.Day) {
+        
+        var weekdays = schedule.weekdays
+        weekdays[weekday].toggle()
+        guard weekdays != .none else { return }
+        self.schedule.weekdays = weekdays // set new value
     }
     
     // MARK: - View
@@ -144,7 +160,7 @@ public struct PermissionScheduleView: View {
                     schedule.expiry.flatMap({ expirationTime(for: $0) }) ?? Text("Never")
                 }
                 if showExpirationPicker.wrappedValue {
-                    DatePicker(selection: expiration, label: { Text(" ") })
+                    DatePicker(selection: expiration) { Text(verbatim: " ") }
                 }
             }
             
@@ -153,39 +169,25 @@ public struct PermissionScheduleView: View {
                     Spacer()
                     Text(verbatim: "S")
                         .modifier(RoundText(enabled: schedule.weekdays.sunday))
-                        .onTapGesture {
-                            self.schedule.weekdays.sunday.toggle()
-                        }
+                        .onTapGesture { self.toggle(.sunday) }
                     Text(verbatim: "M")
                         .modifier(RoundText(enabled: schedule.weekdays.monday))
-                        .onTapGesture {
-                            self.schedule.weekdays.monday.toggle()
-                        }
+                        .onTapGesture { self.toggle(.monday) }
                     Text(verbatim: "T")
                         .modifier(RoundText(enabled: schedule.weekdays.tuesday))
-                        .onTapGesture {
-                            self.schedule.weekdays.tuesday.toggle()
-                        }
+                        .onTapGesture { self.toggle(.tuesday) }
                     Text(verbatim: "W")
                         .modifier(RoundText(enabled: schedule.weekdays.wednesday))
-                        .onTapGesture {
-                            self.schedule.weekdays.wednesday.toggle()
-                        }
+                        .onTapGesture { self.toggle(.wednesday) }
                     Text(verbatim: "T")
                         .modifier(RoundText(enabled: schedule.weekdays.thursday))
-                        .onTapGesture {
-                            self.schedule.weekdays.thursday.toggle()
-                        }
+                        .onTapGesture { self.toggle(.thursday) }
                     Text(verbatim: "F")
                         .modifier(RoundText(enabled: schedule.weekdays.friday))
-                        .onTapGesture {
-                            self.schedule.weekdays.friday.toggle()
-                        }
+                        .onTapGesture { self.toggle(.friday) }
                     Text(verbatim: "S")
                         .modifier(RoundText(enabled: schedule.weekdays.saturday))
-                        .onTapGesture {
-                            self.schedule.weekdays.saturday.toggle()
-                        }
+                        .onTapGesture { self.toggle(.saturday) }
                     Spacer()
                 }
             }

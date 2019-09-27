@@ -18,19 +18,6 @@ public extension Permission.Schedule.Interval {
     }
 }
 
-internal extension Permission.Schedule.Interval {
-    
-    static func minutes(from date: Date) -> UInt16 {
-        
-        return UInt16(date.timeIntervalSinceNow / TimeInterval(60))
-    }
-    
-    static func date(from minutes: UInt16) -> Date {
-        
-        return Date(timeIntervalSinceReferenceDate: TimeInterval(minutes) * 60)
-    }
-}
-
 #if os(iOS)
 import Rswift
 
