@@ -15,6 +15,10 @@ public struct PermissionScheduleView: View {
     
     // MARK: - Properties
     
+    public var done: ((Permission.Schedule) -> ())?
+    
+    public var cancel: (() -> ())?
+    
     @State
     public var schedule = Permission.Schedule()
     
@@ -101,7 +105,7 @@ public struct PermissionScheduleView: View {
     }
     
     private func minutes(from date: Date) -> UInt16 {
-        return UInt16(date.timeIntervalSinceNow / 60)
+        return UInt16(date.timeIntervalSinceReferenceDate / 60)
     }
     
     private func date(from minutes: UInt16) -> Date {
@@ -194,6 +198,16 @@ public struct PermissionScheduleView: View {
         }
         .listStyle(GroupedListStyle())
         .navigationBarTitle(Text("Schedule"))
+        .navigationBarItems(
+            leading: Button(
+                action: { self.cancel?() },
+                label: { Text("Cancel") }
+            ),
+            trailing: Button(
+                action: { self.done?(self.schedule) },
+                label: { Text("Done") }
+            )
+        )
     }
 }
 

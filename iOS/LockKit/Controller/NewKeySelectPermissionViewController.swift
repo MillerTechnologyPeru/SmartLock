@@ -27,17 +27,6 @@ public final class NewKeySelectPermissionViewController: UITableViewController, 
         didSet { tableView.reloadData() }
     }
     
-    @available(iOS 13, *)
-    private lazy var scheduleViewController: UIHostingController<PermissionScheduleView> = {
-        let viewController = UIHostingController(rootView: PermissionScheduleView())
-        viewController.navigationItem.rightBarButtonItem = UIBarButtonItem(
-            barButtonSystemItem: .done,
-            target: self,
-            action: #selector(schedule)
-        )
-        return viewController
-    }()
-    
     // MARK: - Loading
     
     public static func fromStoryboard(with lock: UUID, completion: (((invitation: NewKey.Invitation, sender: PopoverPresentingView)?) -> ())? = nil) -> NewKeySelectPermissionViewController {
@@ -164,7 +153,18 @@ public final class NewKeySelectPermissionViewController: UITableViewController, 
                 return
             }
             // schedule
-            show(scheduleViewController, sender: nil)
+            var scheduleView = PermissionScheduleView()
+            scheduleView.cancel = { [weak self] in
+                self?.dismiss(animated: true, completion: nil)
+            }
+            scheduleView.done = { [weak self] (schedule) in
+                self?.dismiss(animated: true, completion: nil)
+                self?.newKey(permission: .scheduled(schedule)) { [weak self] in
+                    self?.completion?(($0, .view(cell.permissionView)))
+                }
+            }
+            let scheduleViewController = UIHostingController(rootView: scheduleView)
+            present(scheduleViewController, animated: true, completion: nil)
         }
     }
 }
