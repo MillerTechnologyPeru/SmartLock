@@ -47,10 +47,10 @@ public struct PermissionScheduleView: View {
                             .foregroundColor(Color.primary)
                     }
                 }
-                
+                /*
                 DatePicker(selection: $schedule.expiry, displayedComponents: .hourAndMinute) {
                     Text(verbatim: "Expiry Date")
-                }
+                }*/
             }
             
             Section(header: Text(verbatim: "Repeat"), footer: SectionBottom(weekdays: schedule.weekdays)) {
@@ -99,6 +99,7 @@ public struct PermissionScheduleView: View {
     }
 }
 
+@available(iOS 13, *)
 struct RoundText: ViewModifier {
     
     // MARK: - Properties
@@ -115,6 +116,7 @@ struct RoundText: ViewModifier {
     }
 }
 
+@available(iOS 13, *)
 extension RoundText {
     
     // MARK: - Properties
@@ -123,6 +125,7 @@ extension RoundText {
     }
 }
 
+@available(iOS 13, *)
 public struct SectionBottom: View {
     
     // MARK: - Properties
