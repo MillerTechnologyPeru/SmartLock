@@ -30,17 +30,15 @@ public extension NewKeyViewController {
     func newKey(permission: Permission,
                 completion: @escaping (NewKey.Invitation) -> ()) {
         
-        guard let lockIdentifier = self.lockIdentifier
+        guard let lockIdentifier = self.lockIdentifier,
+            let lockCache = Store.shared[lock: lockIdentifier],
+            let parentKeyData = Store.shared[key: lockCache.key.identifier]
             else { assertionFailure(); return }
         
         // request name
         requestNewKeyName { (newKeyName) in
             
             let newKeyIdentifier = UUID()
-            
-            guard let lockCache = Store.shared[lock: lockIdentifier],
-                let parentKeyData = Store.shared[key: lockCache.key.identifier]
-                else { self.newKeyError(R.string.localizable.newKeyViewControllerErrorRequestNewKey()); return }
             
             let parentKey = KeyCredentials(identifier: lockCache.key.identifier, secret: parentKeyData)
             
@@ -71,7 +69,7 @@ public extension NewKeyViewController {
                     guard let peripheral = try Store.shared.device(for: lockIdentifier, scanDuration: 2.0) else {
                         mainQueue {
                             self.hideActivity(animated: false)
-                            self.newKeyError(R.string.localizable.newKeyViewControllerErrorLockInRange())
+                            self.newKeyError(R.string.error.notInRange())
                         }
                         return
                     }
@@ -80,11 +78,10 @@ public extension NewKeyViewController {
                         for: peripheral.scanData.peripheral,
                         with: parentKey)
                 }
-                    
                 catch {
                     mainQueue {
                         self.hideActivity(animated: false)
-                        self.newKeyError(R.string.localizable.newKeyViewControllerErrorCreateNewKey(error.localizedDescription))
+                        self.newKeyError(error.localizedDescription)
                     }
                     return
                 }
@@ -98,13 +95,15 @@ public extension NewKeyViewController {
     
     private func requestNewKeyName(_ completion: @escaping (String) -> ()) {
         
-        let alert = UIAlertController(title: R.string.localizable.newKeyViewControllerNewKeyTitle(),
-                                      message: R.string.localizable.newKeyViewControllerNewKeyMessage(),
-                                      preferredStyle: .alert)
+        let alert = UIAlertController(
+            title: R.string.newKeyViewController.alertNewKeyTitle(),
+            message: R.string.newKeyViewController.alertNewKeyMessage(),
+            preferredStyle: .alert
+        )
         
-        alert.addTextField { $0.text = R.string.localizable.newKeyViewControllerNewKeyTitle() }
+        alert.addTextField { $0.text = R.string.localizable.newLockName() }
         
-        alert.addAction(UIAlertAction(title: R.string.localizable.newKeyViewControllerNewKeyOk(), style: .`default`, handler: { (UIAlertAction) in
+        alert.addAction(UIAlertAction(title: R.string.localizable.alertOk(), style: .`default`, handler: { (UIAlertAction) in
             
             let name = alert.textFields![0].text ?? ""
             
@@ -114,7 +113,7 @@ public extension NewKeyViewController {
             
         }))
         
-        alert.addAction(UIAlertAction(title: R.string.localizable.newKeyViewControllerNewKeyCancel(), style: .destructive, handler: { (UIAlertAction) in
+        alert.addAction(UIAlertAction(title: R.string.localizable.alertCancel(), style: .destructive, handler: { (UIAlertAction) in
             
             alert.dismiss(animated: true) {  }
         }))

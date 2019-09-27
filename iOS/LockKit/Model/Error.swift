@@ -40,10 +40,10 @@ extension LockError: CustomNSError {
         
         switch self {
         case let .notInRange(lock: lock):
-            userInfo[NSLocalizedDescriptionKey] = R.string.localizable.errorNotInRange()
+            userInfo[NSLocalizedDescriptionKey] = R.string.error.notInRange()
             userInfo[UserInfoKey.lock.rawValue] = lock as NSUUID
         case let .noKey(lock: lock):
-            userInfo[NSLocalizedDescriptionKey] = R.string.localizable.errorNoKey()
+            userInfo[NSLocalizedDescriptionKey] = R.string.error.noKey()
             userInfo[UserInfoKey.lock.rawValue] = lock as NSUUID
         }
         

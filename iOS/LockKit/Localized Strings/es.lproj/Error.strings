@@ -9,6 +9,6 @@
 "NotInRange" = "La cerradura no se encuentra cerca";
 "NoKey" = "No tiene una llave para esta cerradura.";
 "InvalidNewKeyFile" = "Archivo invalido.";
-"ExistingKey" = "Usted ya cuenta con una llave para la cerradura %@.";
+"ExistingKey" = "Usted ya cuenta con una llave para la cerradura.";
 "NewKeyExpired" = "La llave pendiente expiro.";
 "InvalidQRCode" = "El codigo QR es invalido.";

@@ -37,6 +37,6 @@
 
 "Alert.Error" = "Error";
 "Alert.Retry" = "Volver a intentar";
-"Alert.OK" = "Ok";
+"Alert.Ok" = "Ok";
 "Alert.Cancel" = "Cancelar";
 "Alert.Delete" = "Eliminar";

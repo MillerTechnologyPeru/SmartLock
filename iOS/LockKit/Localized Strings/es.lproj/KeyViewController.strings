@@ -6,6 +6,9 @@
   Copyright © 2019 ColemanCDA. All rights reserved.
 */
 
+"NavigationItem.Title.Key" = "Llave";
+"NavigationItem.Title.NewKey" = "Nueva Llave";
+"Identifier.Title" = "Identificador";
 "Name.Title" = "Nombre";
 "Lock.Title" = "Cerradura";
 "Permission.Title" = "Permiso";

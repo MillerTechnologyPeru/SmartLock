@@ -169,7 +169,7 @@ public final class LockPermissionsViewController: UITableViewController {
         
         switch section {
         case .keys: return nil
-        case .pending: return self[section].isEmpty ? nil : R.string.localizable.lockPermissionsPendingKeys()
+        case .pending: return self[section].isEmpty ? nil : R.string.lockPermissionsViewController.sectionTitlePendingKeys()
         }
     }
     
@@ -199,20 +199,22 @@ public final class LockPermissionsViewController: UITableViewController {
         
         let keyEntry = self[indexPath]
         
-        let delete = UITableViewRowAction(style: .destructive, title: R.string.localizable.lockPermissionsDelete()) {
+        let delete = UITableViewRowAction(style: .destructive, title: R.string.lockPermissionsViewController.actionDelete()) {
             
             assert($1 == indexPath)
             
-            let alert = UIAlertController(title: R.string.localizable.lockPermissionsAlertTitle(),
-                                          message: R.string.localizable.lockPermissionsAlertMessage(),
-                                          preferredStyle: UIAlertController.Style.alert)
+            let alert = UIAlertController(
+                title: R.string.lockPermissionsViewController.alertDeleteKeyTitle(),
+                message: R.string.lockPermissionsViewController.alertDeleteKeyMessage(),
+                preferredStyle: UIAlertController.Style.alert
+            )
             
-            alert.addAction(UIAlertAction(title: R.string.localizable.lockPermissionsAlertCancel(), style: .cancel, handler: { (UIAlertAction) in
+            alert.addAction(UIAlertAction(title: R.string.localizable.alertCancel(), style: .cancel, handler: { (UIAlertAction) in
                 
                 alert.dismiss(animated: true, completion: nil)
             }))
             
-            alert.addAction(UIAlertAction(title: R.string.localizable.lockPermissionsAlertDelete(), style: .destructive, handler: { (UIAlertAction) in
+            alert.addAction(UIAlertAction(title: R.string.localizable.alertDelete(), style: .destructive, handler: { (UIAlertAction) in
                 
                 alert.dismiss(animated: true) { }
                 

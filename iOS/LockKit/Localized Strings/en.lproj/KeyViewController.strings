@@ -6,6 +6,9 @@
   Copyright © 2019 ColemanCDA. All rights reserved.
 */
 
+"NavigationItem.Title.Key" = "Key";
+"NavigationItem.Title.NewKey" = "New Key";
+"Identifier.Title" = "Identifier";
 "Name.Title" = "Name";
 "Lock.Title" = "Lock";
 "Permission.Title" = "Permission";
