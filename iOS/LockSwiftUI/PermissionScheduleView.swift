@@ -34,6 +34,10 @@ public struct PermissionScheduleView: View {
         })
     }
     
+    var doesExpire: Bool {
+        return self.schedule.expiry != nil
+    }
+    
     var showExpirationPicker: Binding<Bool> {
         return Binding(get: {
             return self.schedule.expiry != nil
@@ -76,8 +80,10 @@ public struct PermissionScheduleView: View {
                 }
             }
             
-            Section {
-                Toggle("Expires", isOn: showExpirationPicker)
+            Section(header: Text(verbatim: "Expires")) {
+                Toggle(isOn: showExpirationPicker) {
+                    schedule.expiry.flatMap({ relativeTime(for: $0) }) ?? Text("Never")
+                }
                 if showExpirationPicker.wrappedValue {
                     DatePicker(selection: expiration, label: { Text(" ") })
                 }
