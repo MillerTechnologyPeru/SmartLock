@@ -7,3 +7,11 @@
 */
 
 "CFBundleDisplayName" = "Cerradura";
+"NSBluetoothAlwaysUsageDescription" = "Bluetooth es usado para escanear Cerrarudas cercanas en segundo plano.";
+"NSBluetoothPeripheralUsageDescription" = "Se necesita Bluetooth para conectarse a su Cerradura Inteligente.";
+"NSCameraUsageDescription" = "Se necesita la camara para instalar la Cerradura Inteligente.";
+"NSContactsUsageDescription" = "Acesso a sus contactos es necesario para compartir llaves con sus amigos.";
+"NSLocationAlwaysAndWhenInUseUsageDescription" = "Su ubicacion es necesaria para encontrar Cerraduras inteligentes cercanas.";
+"NSLocationAlwaysUsageDescription" = "Su ubicacion es necesaria para monitorear dispositivos en segundo plano.";
+"NSLocationWhenInUseUsageDescription" = "Su ubicacion es necesaria para encontrar Cerraduras inteligentes cercanas.";
+"NSSiriUsageDescription" = "Siri es usado para usar la Cerradura con comandos de voz.";

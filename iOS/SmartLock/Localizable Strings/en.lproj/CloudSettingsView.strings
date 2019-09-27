@@ -1,0 +1,14 @@
+/* 
+  CloudSettingsView.strings
+  SmartLock
+
+  Created by JurjDev on 9/27/19.
+  Copyright © 2019 ColemanCDA. All rights reserved.
+*/
+
+"Cloud.Footer" = "Automatically backup data such as your keys, events and application data.";
+"Cloud.Toggle" = "iCloud Backup";
+"Cloud.LastUpdate" = "Last successful backup:";
+"Cloud.Backup" = "Backing Up...";
+"Cloud.Backup.Now" = "Back Up Now";
+"Cloud.iCloud" = "iCloud";

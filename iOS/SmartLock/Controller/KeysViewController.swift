@@ -222,7 +222,7 @@ final class KeysViewController: UITableViewController {
     internal func select(lock identifier: UUID, animated: Bool = true) -> LockViewController? {
         
         guard Store.shared[lock: identifier] != nil else {
-            showErrorAlert("Invalid lock \(identifier)")
+            showErrorAlert(R.string.keysViewController.errorAlertInvalid(identifier.uuidString))
             return nil
         }
         
@@ -257,15 +257,15 @@ final class KeysViewController: UITableViewController {
     
     private func delete(_ item: Item) {
         
-        let alert = UIAlertController(title: NSLocalizedString("Confirmation", comment: "DeletionConfirmation"),
-                                      message: "Are you sure you want to delete this key?",
+        let alert = UIAlertController(title: R.string.keysViewController.alertTitle(),
+                                      message: R.string.keysViewController.alertMessage(),
                                       preferredStyle: .alert)
         
-        alert.addAction(UIAlertAction(title: NSLocalizedString("Cancel", comment: "Cancel"), style: .cancel, handler: { (UIAlertAction) in
+        alert.addAction(UIAlertAction(title: R.string.keysViewController.alertCancel(), style: .cancel, handler: { (UIAlertAction) in
             alert.dismiss(animated: true, completion: nil)
         }))
         
-        alert.addAction(UIAlertAction(title: NSLocalizedString("Delete", comment: "Delete"), style: .destructive, handler: { [unowned self] (UIAlertAction) in
+        alert.addAction(UIAlertAction(title: R.string.keysViewController.alertDelete(), style: .destructive, handler: { [unowned self] (UIAlertAction) in
             
             switch item {
             case let .key(identifier, _):
@@ -343,7 +343,7 @@ final class KeysViewController: UITableViewController {
         }
         
         var actions = [UITableViewRowAction]()
-        let delete = UITableViewRowAction(style: .destructive, title: "Delete") { [unowned self] in
+        let delete = UITableViewRowAction(style: .destructive, title: R.string.keysViewController.delete()) { [unowned self] in
             assert($1 == indexPath)
             let item = self[$1]
             self.delete(item)
@@ -364,7 +364,7 @@ final class KeysViewController: UITableViewController {
             case let .key(identifier, _):
                 return self?.menu(forLock: identifier)
             case .newKey:
-                let delete = UIAction(title: "Delete", image: UIImage(systemName: "trash"), attributes: .destructive) { [weak self] (action) in
+                let delete = UIAction(title: R.string.keysViewController.delete(), image: UIImage(systemName: "trash"), attributes: .destructive) { [weak self] (action) in
                     self?.delete(item)
                 }
                 return UIMenu(
@@ -396,7 +396,7 @@ extension KeysViewController: UIDocumentPickerDelegate {
             let data = try? Data(contentsOf: url),
             let newKey = try? JSONDecoder().decode(NewKey.Invitation.self, from: data) else {
                 
-                showErrorAlert("Invalid Key file.")
+                showErrorAlert(R.string.keysViewController.errorAlertInvalidFile())
                 return
         }
         
@@ -411,7 +411,7 @@ extension KeysViewController: UIDocumentPickerDelegate {
         guard let data = try? Data(contentsOf: url),
             let newKey = try? JSONDecoder().decode(NewKey.Invitation.self, from: data) else {
                 
-                showErrorAlert("Invalid Key file.")
+                showErrorAlert(R.string.keysViewController.errorAlertInvalidFile())
                 return
         }
         

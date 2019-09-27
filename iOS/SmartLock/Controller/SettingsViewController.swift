@@ -58,13 +58,13 @@ final class SettingsViewController: UITableViewController {
             [
                 Item(
                     icon: .report,
-                    title: "Report",
+                    title: R.string.settingsViewController.settingsReport(),
                     accessory: .none,
                     action: { $0.show(LogsViewController.fromStoryboard(), sender: $1) /* $0.report($1.titleLabel) */ }
                 ),
                 Item(
                     icon: .logs,
-                    title: "Logs",
+                    title: R.string.settingsViewController.settingsLogs(),
                     accessory: .disclosureIndicator,
                     action: { $0.show(LogsViewController.fromStoryboard(), sender: $1) }
                 )
@@ -75,13 +75,13 @@ final class SettingsViewController: UITableViewController {
             let section: Section = [
                 Item(
                     icon: .bluetooth,
-                    title: "Bluetooth",
+                    title: R.string.settingsViewController.settingsBluetooth(),
                     accessory: .disclosureIndicator,
                     action: { $0.show(UIHostingController(rootView: BluetoothSettingsView()), sender: $1) }
                 ),
                 Item(
                     icon: .cloud,
-                    title: "iCloud",
+                    title: R.string.settingsViewController.settingsICloud(),
                     accessory: .disclosureIndicator,
                     action: { $0.show(UIHostingController(rootView: CloudSettingsView()), sender: $1) }
                 )
