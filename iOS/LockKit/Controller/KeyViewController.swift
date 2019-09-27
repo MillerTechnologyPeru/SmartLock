@@ -46,6 +46,7 @@ public class KeyViewController: UITableViewController {
         
         guard let viewController = R.storyboard.key.keyViewController()
             else { fatalError("Could not load \(self) from storyboard") }
+        viewController.loadViewIfNeeded()
         viewController.title = R.string.keyViewController.navigationItemTitleKey()
         viewController.permissionView.permission = key.permission.type
         viewController.data = [
@@ -54,7 +55,8 @@ public class KeyViewController: UITableViewController {
                 items: viewController.map([
                     .name(key.name),
                     .permission(key.permission),
-                    .created(key.created)
+                    .created(key.created),
+                    .identifier(key.identifier)
                 ])
             )
         ]
@@ -65,6 +67,7 @@ public class KeyViewController: UITableViewController {
         
         guard let viewController = R.storyboard.key.keyViewController()
             else { fatalError("Could not load \(self) from storyboard") }
+        viewController.loadViewIfNeeded()
         viewController.title = R.string.keyViewController.navigationItemTitleNewKey()
         viewController.permissionView.permission = newKey.permission.type
         viewController.data = [
@@ -74,7 +77,8 @@ public class KeyViewController: UITableViewController {
                     .name(newKey.name),
                     .permission(newKey.permission),
                     .created(newKey.created),
-                    .expiration(newKey.expiration)
+                    .expiration(newKey.expiration),
+                    .identifier(newKey.identifier)
                 ])
             )
         ]
@@ -103,9 +107,8 @@ public class KeyViewController: UITableViewController {
                 return .detail(R.string.keyViewController.nameTitle(), name)
             case let .permission(permission):
                 switch permission {
-                case .owner:
-                    fatalError("Invalid new key")
-                case .admin,
+                case .owner,
+                     .admin,
                      .anytime:
                     return .detail(R.string.keyViewController.permissionTitle(), permission.type.localizedText)
                 case let .scheduled(schedule):

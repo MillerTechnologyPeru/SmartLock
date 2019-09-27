@@ -58,11 +58,8 @@ public final class LockPermissionsViewController: UITableViewController {
         tableView.rowHeight = UITableView.automaticDimension
         tableView.estimatedRowHeight = 60
         tableView.register(R.nib.lockTableViewCell)
-    }
-    
-    public override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
         
+        // load keys
         self.reloadData()
     }
     
@@ -83,7 +80,7 @@ public final class LockPermissionsViewController: UITableViewController {
         
         performActivity(queue: .bluetooth, {
             guard let peripheral = try Store.shared.device(for: lockIdentifier, scanDuration: 1.0)
-                else { throw CentralError.unknownPeripheral }
+                else { throw LockError.notInRange(lock: lockIdentifier) }
             try Store.shared.listKeys(peripheral, notification: { (list, isComplete) in
                 mainQueue { [weak self] in self?.list = list }
             })
@@ -177,11 +174,16 @@ public final class LockPermissionsViewController: UITableViewController {
         
         tableView.deselectRow(at: indexPath, animated: true)
         
-        // show key info
+        let item = self[indexPath]
         
-        //let key = self[indexPath]
-        
-        // present key detail VC
+        switch item {
+        case let .key(key):
+            let viewController = KeyViewController.fromStoryboard(with: key)
+            self.show(viewController, sender: nil)
+        case let .newKey(newKey):
+            let viewController = KeyViewController.fromStoryboard(with: newKey)
+            self.show(viewController, sender: nil)
+        }
     }
     
     #if !targetEnvironment(macCatalyst)

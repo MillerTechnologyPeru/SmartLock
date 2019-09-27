@@ -356,6 +356,7 @@
 		6EE82A52233E98380062F028 /* NewKeyViewController.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6EE82A54233E98380062F028 /* NewKeyViewController.strings */; };
 		6EE82A58233E988E0062F028 /* LockPermissionsViewController.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6EE82A5A233E988E0062F028 /* LockPermissionsViewController.strings */; };
 		6EE82A60233E9E0E0062F028 /* ContextMenu.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6EE82A62233E9E0E0062F028 /* ContextMenu.strings */; };
+		6EE82A64233EC6C20062F028 /* KeyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EE82A44233E7E770062F028 /* KeyViewController.swift */; };
 		6EE99A61233CA5B3001F11A1 /* KeyViewController.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6EE99A63233CA5B3001F11A1 /* KeyViewController.strings */; };
 		6EE99A67233CA6B6001F11A1 /* LockViewController.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6EE99A69233CA6B6001F11A1 /* LockViewController.strings */; };
 		6EE99A6E233CA78E001F11A1 /* Activity.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6EE99A70233CA78E001F11A1 /* Activity.strings */; };
@@ -2739,6 +2740,7 @@
 				6E83BAED233D906C00D6BA04 /* SetupEventManagedObject.swift in Sources */,
 				6E83BAEE233D906C00D6BA04 /* Error.swift in Sources */,
 				6E83BAEF233D906C00D6BA04 /* CloudEvent.swift in Sources */,
+				6EE82A64233EC6C20062F028 /* KeyViewController.swift in Sources */,
 				6E83BAF0233D906C00D6BA04 /* Shortcut.swift in Sources */,
 				6E83BAF1233D906C00D6BA04 /* NewKeyManagedObject.swift in Sources */,
 				6E83BAF2233D906C00D6BA04 /* ErrorAlert.swift in Sources */,
