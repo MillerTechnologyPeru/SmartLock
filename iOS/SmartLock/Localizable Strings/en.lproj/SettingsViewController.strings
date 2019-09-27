@@ -1,0 +1,12 @@
+/* 
+  SettingsViewController.strings
+  SmartLock
+
+  Created by JurjDev on 9/27/19.
+  Copyright © 2019 ColemanCDA. All rights reserved.
+*/
+
+"Settings.Report" = "Report";
+"Settings.Logs" = "Logs";
+"Settings.Bluetooth" = "Bluetooth";
+"Settings.iCloud" = "iCloud";

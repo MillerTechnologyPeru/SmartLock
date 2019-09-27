@@ -7,3 +7,11 @@
 */
 
 "CFBundleDisplayName" = "Lock";
+"NSBluetoothAlwaysUsageDescription" = "Bluetooth is used to scan for nearby locks in the background.";
+"NSBluetoothPeripheralUsageDescription" = "Bluetooth is needed to connect to your smart lock.";
+"NSCameraUsageDescription" = "Your camera is needed to setup your smart lock.";
+"NSContactsUsageDescription" = "Access to your contacts is needed to share keys with friends.";
+"NSLocationAlwaysAndWhenInUseUsageDescription" = "Your location is needed to find nearby smart locks.";
+"NSLocationAlwaysUsageDescription" = "Your location is needed to monitor devices in the background.";
+"NSLocationWhenInUseUsageDescription" = "Your location is needed to find nearby smart locks.";
+"NSSiriUsageDescription" = "Siri is used to unlock with voice commands.";

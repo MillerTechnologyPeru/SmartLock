@@ -26,18 +26,18 @@ struct CloudSettingsView: View {
     
     var body: some View {
         List {
-            Section(header: Text(verbatim: ""), footer: Text(verbatim: "Automatically backup data such as your keys, events and application data.")) {
+            Section(header: Text(verbatim: ""), footer: Text(R.string.cloudSettingsView.cloudFooter())) {
                 Toggle(isOn: $preferences.isCloudBackupEnabled) {
-                    Text("iCloud Backup")
+                    Text(R.string.cloudSettingsView.cloudToggle())
                 }
             }
             Section(header: Text(verbatim: ""),
-                    footer: preferences.lastCloudUpdate
-                        .flatMap { Text("Last successful backup: \($0)") } ?? Text("")) {
+                    footer: preferences.isCloudBackupEnabled ? preferences.lastCloudUpdate
+                        .flatMap { Text(R.string.cloudSettingsView.cloudLastUpdate()) + Text(" \($0)") } ?? Text("") : Text("")) {
                 if preferences.isCloudBackupEnabled {
                     Button(action: { self.backup() }) {
                         HStack {
-                            isCloudUpdating ? Text("Backing Up...") : Text("Back Up Now")
+                            isCloudUpdating ? Text(R.string.cloudSettingsView.cloudBackup()) : Text(R.string.cloudSettingsView.cloudBackupNow())
                             Spacer()
                             if isCloudUpdating {
                                 ActivityIndicator()
@@ -48,7 +48,7 @@ struct CloudSettingsView: View {
             }
         }
         .listStyle(GroupedListStyle())
-        .navigationBarTitle(Text("iCloud"), displayMode: .large)
+        .navigationBarTitle(Text(R.string.cloudSettingsView.cloudICloud()), displayMode: .large)
     }
 }
 

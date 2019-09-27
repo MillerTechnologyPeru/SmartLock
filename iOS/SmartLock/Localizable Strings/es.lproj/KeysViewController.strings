@@ -11,3 +11,10 @@
 "Expired" = "Expirado";
 "Expiration.Relative" = "Expira %@";
 "Expiration.Date" = "Expira %@";
+"ErrorAlert.Invalid" = "Cerradura %@ Invalida";
+"ErrorAlert.Invalid.File" = "Archive de Llave Invalido.";
+"Alert.Title" = "Confirmación";
+"Alert.Message" = "¿Esta seguro de querer eliminar esta Llave?";
+"Alert.Cancel" = "Cancelar";
+"Alert.Delete" = "Eliminar";
+"Delete" = "Eliminar";
