@@ -101,7 +101,7 @@ public struct PermissionScheduleView: View {
     }
     
     private func minutes(from date: Date) -> UInt16 {
-        return UInt16(date.timeIntervalSinceNow / TimeInterval(60))
+        return UInt16(date.timeIntervalSinceNow / 60)
     }
     
     private func date(from minutes: UInt16) -> Date {
