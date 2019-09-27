@@ -75,7 +75,7 @@ public struct PermissionScheduleView: View {
             let minutes = self.schedule.interval.rawValue.lowerBound
             return Permission.Schedule.Interval.date(from: minutes)
         }, set: {
-            let minutes = Permission.Schedule.Interval.from(date: $0)
+            let minutes = Permission.Schedule.Interval.minutes(from: $0)
             guard let interval = Permission.Schedule.Interval(rawValue: minutes ... self.schedule.interval.rawValue.upperBound) else {
                 assertionFailure()
                 return
@@ -90,7 +90,7 @@ public struct PermissionScheduleView: View {
             let minutes = self.schedule.interval.rawValue.upperBound
             return Permission.Schedule.Interval.date(from: minutes)
         }, set: {
-            let minutes = Permission.Schedule.Interval.from(date: $0)
+            let minutes = Permission.Schedule.Interval.minutes(from: $0)
             guard let interval = Permission.Schedule.Interval(rawValue:  self.schedule.interval.rawValue.lowerBound ... minutes) else {
                 assertionFailure()
                 return
@@ -148,7 +148,7 @@ public struct PermissionScheduleView: View {
                 }
             }
             
-            Section(header: Text(verbatim: "Repeat"), footer: SectionBottom(weekdays: schedule.weekdays)) {
+            Section(header: Text(verbatim: "Days"), footer: SectionBottom(weekdays: schedule.weekdays)) {
                 HStack {
                     Spacer()
                     Text(verbatim: "S")

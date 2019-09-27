@@ -20,20 +20,14 @@ public extension Permission.Schedule.Interval {
 
 internal extension Permission.Schedule.Interval {
     
-    static func from(date: Date) -> UInt16 {
+    static func minutes(from date: Date) -> UInt16 {
         
         return UInt16(date.timeIntervalSinceNow / TimeInterval(60))
     }
     
     static func date(from minutes: UInt16) -> Date {
         
-        var components = DateComponents()
-        components.minute = Int(minutes)
-        assert(components.isValidDate)
-        guard let date = components.date else {
-            fatalError()
-        }
-        return date
+        return Date(timeIntervalSinceReferenceDate: TimeInterval(minutes) * 60)
     }
 }
 
