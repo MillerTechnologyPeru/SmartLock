@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		365BE218233EFC2A00F1FF1D /* LocksEventsViewController.strings in Resources */ = {isa = PBXBuildFile; fileRef = 365BE21A233EFC2A00F1FF1D /* LocksEventsViewController.strings */; };
 		369E2FE3233DFD3900504907 /* SettingsViewController.strings in Resources */ = {isa = PBXBuildFile; fileRef = 369E2FE5233DFD3900504907 /* SettingsViewController.strings */; };
 		369E2FE9233DFDCF00504907 /* CloudSettingsView.strings in Resources */ = {isa = PBXBuildFile; fileRef = 369E2FEB233DFDCF00504907 /* CloudSettingsView.strings */; };
 		369E2FEF233DFDF200504907 /* BluetoothSettingsView.strings in Resources */ = {isa = PBXBuildFile; fileRef = 369E2FF1233DFDF200504907 /* BluetoothSettingsView.strings */; };
@@ -704,6 +705,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		365BE219233EFC2A00F1FF1D /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/LocksEventsViewController.strings; sourceTree = "<group>"; };
+		365BE21C233F0CB900F1FF1D /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/LocksEventsViewController.strings; sourceTree = "<group>"; };
 		369E2FE4233DFD3900504907 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/SettingsViewController.strings; sourceTree = "<group>"; };
 		369E2FE6233DFD3D00504907 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/SettingsViewController.strings; sourceTree = "<group>"; };
 		369E2FEA233DFDCF00504907 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/CloudSettingsView.strings; sourceTree = "<group>"; };
@@ -1611,6 +1614,7 @@
 				6EE82A5A233E988E0062F028 /* LockPermissionsViewController.strings */,
 				6EE82A54233E98380062F028 /* NewKeyViewController.strings */,
 				6EE99A7C233CAA06001F11A1 /* NewKeySelectPermissionViewController.strings */,
+				365BE21A233EFC2A00F1FF1D /* LocksEventsViewController.strings */,
 			);
 			path = "Localized Strings";
 			sourceTree = "<group>";
@@ -2295,6 +2299,7 @@
 				36FC4C6E233A179E00A5D5B3 /* Key.storyboard in Resources */,
 				6EE99A67233CA6B6001F11A1 /* LockViewController.strings in Resources */,
 				6E994AAB230DFDA00076DC1B /* Assets.xcassets in Resources */,
+				365BE218233EFC2A00F1FF1D /* LocksEventsViewController.strings in Resources */,
 				6EE99A7A233CAA06001F11A1 /* NewKeySelectPermissionViewController.strings in Resources */,
 				36FC4C78233A17BA00A5D5B3 /* Events.storyboard in Resources */,
 				36FC4C95233A249500A5D5B3 /* LockDetail.storyboard in Resources */,
@@ -3199,6 +3204,15 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
+		365BE21A233EFC2A00F1FF1D /* LocksEventsViewController.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				365BE219233EFC2A00F1FF1D /* en */,
+				365BE21C233F0CB900F1FF1D /* es */,
+			);
+			name = LocksEventsViewController.strings;
+			sourceTree = "<group>";
+		};
 		369E2FE5233DFD3900504907 /* SettingsViewController.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
