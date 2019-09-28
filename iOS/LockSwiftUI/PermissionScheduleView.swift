@@ -17,7 +17,7 @@ public struct PermissionScheduleView: View {
     // MARK: - Properties
     
     public init(schedule: Permission.Schedule = .init()) {
-        _schedule = State(initialValue: schedule).projectedValue
+        _schedule = Binding(get: { schedule }, set: { _ in }) // read only
     }
     
     public init(schedule: Binding<Permission.Schedule>) {
