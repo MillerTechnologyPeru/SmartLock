@@ -16,10 +16,12 @@ public struct PermissionScheduleView: View {
     
     // MARK: - Properties
     
+    /// Initialize with a read-only schedule.
     public init(schedule: Permission.Schedule = .init()) {
         _schedule = Binding(get: { schedule }, set: { _ in }) // read only
     }
     
+    /// Initialize with a binding to a schedule.
     public init(schedule: Binding<Permission.Schedule>) {
         _schedule = schedule
     }
@@ -27,7 +29,7 @@ public struct PermissionScheduleView: View {
     // MARK: - Properties
     
     @Binding
-    public var schedule: Permission.Schedule
+    internal var schedule: Permission.Schedule
     
     @State
     private var defaultExpiration = Date() + (60 * 60 * 24)

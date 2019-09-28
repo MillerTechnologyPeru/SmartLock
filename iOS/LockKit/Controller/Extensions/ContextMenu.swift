@@ -39,17 +39,23 @@ public extension UIViewController {
         
         if cache.key.permission.isAdministrator {
             
-            let share = UIAction(title: R.string.contextMenu.itemShareKey(), image: UIImage(systemName: "square.and.arrow.up")) { [weak self] (action) in
+            let share = UIAction(title: R.string.contextMenu.itemShareKey(), image: UIImage(systemName: "square.and.arrow.up")) { [unowned self] (action) in
                 let viewController = NewKeySelectPermissionViewController.fromStoryboard(with: lock)
-                viewController.completion = {
-                    guard let (invitation, sender) = $0 else {
+                viewController.completion = { (viewController, invitation) in
+                    // dismiss
+                    guard let invitation = invitation else {
+                        viewController.dismiss(animated: true, completion: nil)
                         return
                     }
-                    // show share sheet
-                    viewController.share(invitation: invitation, sender: sender) { }
+                    // show contacts
+                    let contactsViewController = ContactsViewController.fromStoryboard(share: invitation) { (viewController, didComplete) in
+                        viewController.dismiss(animated: true, completion: nil)
+                    }
+                    // show contacts view controller
+                    viewController.show(contactsViewController, sender: nil)
                 }
                 let navigationController = UINavigationController(rootViewController: viewController)
-                self?.present(navigationController, animated: true, completion: nil)
+                self.present(navigationController, animated: true, completion: nil)
             }
             
             actions.append(share)

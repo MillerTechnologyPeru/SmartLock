@@ -126,30 +126,3 @@ public extension NewKeyViewController {
         self.showErrorAlert(error, okHandler: { self.dismiss(animated: true, completion: nil) }, retryHandler: nil)
     }
 }
-
-public extension UIViewController {
-    
-    /// Share invitation via action sheet
-    func share(invitation: NewKey.Invitation,
-               sender: PopoverPresentingView,
-               completion: @escaping () -> ()) {
-        
-        // show activity controller
-        let activityController = UIActivityViewController(
-            activityItems: [
-                NewKeyFileActivityItem(invitation: invitation),
-                invitation
-            ],
-            applicationActivities: [
-                ShareKeyCloudKitActivity()
-            ]
-        )
-        activityController.excludedActivityTypes = NewKeyFileActivityItem.excludedActivityTypes
-        activityController.completionWithItemsHandler = { (activityType, completed, items, error) in
-            self.dismiss(animated: true, completion: nil)
-            completion()
-        }
-        
-        self.present(activityController, animated: true, completion: nil, sender: sender)
-    }
-}

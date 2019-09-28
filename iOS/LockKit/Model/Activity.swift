@@ -201,19 +201,20 @@ public final class NewKeyActivity: UIActivity {
     
     public override var activityViewController: UIViewController? {
         
-        let viewController = NewKeySelectPermissionViewController.fromStoryboard(with: item.identifier)
-        viewController.completion =  { [unowned self] in
-            guard let (invitation, sender) = $0 else {
+        let newKeyViewController = NewKeySelectPermissionViewController.fromStoryboard(with: item.identifier)
+        newKeyViewController.completion =  { [unowned self] (viewController, invitation) in
+            guard let invitation = invitation else {
                 self.activityDidFinish(false)
                 return
             }
-            // show share sheet
-            viewController.share(invitation: invitation, sender: sender) { [unowned self] in
-                self.activityDidFinish(true)
+            // show contacts
+            let contactsViewController = ContactsViewController.fromStoryboard(share: invitation) { [unowned self] (_, didComplete) in
+                self.activityDidFinish(didComplete)
             }
+            // show contacts view controller
+            newKeyViewController.show(contactsViewController, sender: nil)
         }
-        
-        return UINavigationController(rootViewController: viewController)
+        return UINavigationController(rootViewController: newKeyViewController)
     }
 }
 
@@ -600,8 +601,8 @@ public final class ShareKeyCloudKitActivity: UIActivity {
             return nil
         }
         
-        let viewController = ContactsViewController.fromStoryboard()
-        viewController.didSelect = { (contact) in
+        let contactsViewController = ContactsViewController.fromStoryboard()
+        contactsViewController.didSelect = { (viewController, contact) in
             let progressHUD = JGProgressHUD.currentStyle(for: viewController)
             progressHUD.show(in: viewController.navigationController?.view ?? viewController.view)
             DispatchQueue.app.async { [weak self] in
@@ -622,7 +623,7 @@ public final class ShareKeyCloudKitActivity: UIActivity {
                 }
             }
         }
-        return UINavigationController(rootViewController: viewController)
+        return UINavigationController(rootViewController: contactsViewController)
     }
 }
 
@@ -707,3 +708,33 @@ extension AddVoiceShortcutActivity: INUIAddVoiceShortcutViewControllerDelegate {
 }
 
 #endif
+
+// MARK: - View Controller Extensions
+
+public extension UIViewController {
+    
+    /// Share invitation via action sheet
+    func shareActivity(invitation: NewKey.Invitation,
+                       cloudKit: Bool = false,
+                       sender: PopoverPresentingView,
+                       completion: @escaping (Bool) -> ()) {
+        
+        // show activity controller
+        let activityController = UIActivityViewController(
+            activityItems: [
+                NewKeyFileActivityItem(invitation: invitation),
+                invitation
+            ],
+            applicationActivities: [
+                cloudKit ? ShareKeyCloudKitActivity() : nil
+            ].compactMap { $0 as UIActivity? }
+        )
+        activityController.excludedActivityTypes = NewKeyFileActivityItem.excludedActivityTypes
+        activityController.completionWithItemsHandler = { (activityType, completed, items, error) in
+            activityController.dismiss(animated: true, completion: nil)
+            completion(completed)
+        }
+        
+        self.present(activityController, animated: true, completion: nil, sender: sender)
+    }
+}

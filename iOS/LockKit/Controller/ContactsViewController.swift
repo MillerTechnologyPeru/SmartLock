@@ -13,13 +13,18 @@ import CloudKit
 import Contacts
 import ContactsUI
 import CoreLock
+import JGProgressHUD
 
 /// View controller for displaying all contacts using the application.
 public final class ContactsViewController: TableViewController {
     
     // MARK: - Properties
     
-    public var didSelect: ((CloudUser.ID) -> ())?
+    public var didSelect: ((ContactsViewController, CloudUser.ID) -> ())?
+    
+    public var didCancel: ((ContactsViewController) -> ())?
+    
+    public var didShare: ((ContactsViewController, UIBarButtonItem) -> ())?
     
     public lazy var activityIndicator: UIActivityIndicatorView = self.loadActivityIndicatorView()
     
@@ -27,23 +32,63 @@ public final class ContactsViewController: TableViewController {
     
     // MARK: - Loading
     
-    public static func fromStoryboard(didSelect: ((CloudUser.ID) -> ())? = nil) -> ContactsViewController {
+    public static func fromStoryboard() -> ContactsViewController {
         
         guard let viewController = R.storyboard.contacts.contactsViewController()
             else { fatalError("Could not load \(self) from storyboard") }
-        viewController.didSelect = didSelect
         return viewController
+    }
+    
+    public static func fromStoryboard(share invitation: NewKey.Invitation,
+                                      completion: ((ContactsViewController, Bool) -> ())? = nil) -> ContactsViewController {
+        
+        let contactsViewController = ContactsViewController.fromStoryboard()
+        contactsViewController.didSelect = { (viewController, contact) in
+            let progressHUD = JGProgressHUD.currentStyle(for: viewController)
+            progressHUD.show(in: viewController.navigationController?.view ?? viewController.view)
+            DispatchQueue.app.async { [weak viewController] in
+                do {
+                    try Store.shared.cloud.share(invitation, to: contact)
+                    mainQueue {
+                        progressHUD.dismiss(animated: true)
+                        completion?(contactsViewController, true)
+                    }
+                }
+                catch {
+                    mainQueue {
+                        progressHUD.dismiss(animated: false)
+                        viewController?.showErrorAlert(error.localizedDescription, okHandler: {
+                            completion?(contactsViewController, false)
+                        })
+                    }
+                }
+            }
+        }
+        contactsViewController.didShare = {
+            $0.shareActivity(invitation: invitation, cloudKit: false, sender: .barButtonItem($1)) {
+                completion?(contactsViewController, $0)
+            }
+        }
+        return contactsViewController
     }
     
     public override func viewDidLoad() {
         super.viewDidLoad()
         
         // setup table view
-        tableView.estimatedRowHeight = 60
         tableView.rowHeight = UITableView.automaticDimension
+        tableView.estimatedRowHeight = 60
         
         // configure FRC
         configureView()
+        
+        // configure bar button items
+        if didCancel == nil {
+            navigationItem.leftBarButtonItem = nil
+        }
+        if didShare == nil {
+            navigationItem.rightBarButtonItem = nil
+        }
         
         // CloudKit discoverability
         DispatchQueue.app.async {
@@ -61,9 +106,6 @@ public final class ContactsViewController: TableViewController {
             }
             mainQueue { self?.reloadData() }
         }
-        
-        // fetch from server
-        reloadData()
     }
     
     override public func viewDidAppear(_ animated: Bool) {
@@ -90,6 +132,16 @@ public final class ContactsViewController: TableViewController {
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
             self?.reloadData()
         }
+    }
+    
+    @IBAction func cancel(_ sender: UIBarButtonItem) {
+        
+        self.didCancel?(self)
+    }
+    
+    @IBAction func share(_ sender: UIBarButtonItem) {
+        
+        self.didShare?(self, sender)
     }
     
     // MARK: - Methods
@@ -190,7 +242,8 @@ public final class ContactsViewController: TableViewController {
         }
         
         if let selection = self.didSelect {
-            selection(.init(rawValue: identifier))
+            // selection
+            selection(self, .init(rawValue: identifier))
         } else {
             // select lock for key sharing
             

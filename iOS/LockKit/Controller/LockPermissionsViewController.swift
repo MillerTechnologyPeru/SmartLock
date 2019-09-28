@@ -89,7 +89,27 @@ public final class LockPermissionsViewController: UITableViewController {
     
     @IBAction func newKey(_ sender: AnyObject) {
         
-        self.shareKey(lock: lockIdentifier)
+        guard let lock = self.lockIdentifier else {
+            assertionFailure()
+            return
+        }
+        
+        let viewController = NewKeySelectPermissionViewController.fromStoryboard(with: lock)
+        viewController.completion = { (viewController, invitation) in
+            // dismiss
+            guard let invitation = invitation else {
+                viewController.dismiss(animated: true, completion: nil)
+                return
+            }
+            // show contacts
+            let contactsViewController = ContactsViewController.fromStoryboard(share: invitation) { (viewController, didComplete) in
+                viewController.dismiss(animated: true, completion: nil)
+            }
+            // show contacts view controller
+            viewController.show(contactsViewController, sender: nil)
+        }
+        let navigationController = UINavigationController(rootViewController: viewController)
+        self.present(navigationController, animated: true, completion: nil)
     }
     
     @IBAction func done(_ sender: AnyObject? = nil) {

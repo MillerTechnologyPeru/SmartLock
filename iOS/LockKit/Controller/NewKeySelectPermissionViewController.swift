@@ -17,7 +17,7 @@ public final class NewKeySelectPermissionViewController: UITableViewController, 
     
     // MARK: - Properties
     
-    public var completion: (((invitation: NewKey.Invitation, sender: PopoverPresentingView)?) -> ())?
+    public var completion: ((NewKeySelectPermissionViewController, NewKey.Invitation?) -> ())?
     
     public var lockIdentifier: UUID!
     
@@ -29,7 +29,7 @@ public final class NewKeySelectPermissionViewController: UITableViewController, 
     
     // MARK: - Loading
     
-    public static func fromStoryboard(with lock: UUID, completion: (((invitation: NewKey.Invitation, sender: PopoverPresentingView)?) -> ())? = nil) -> NewKeySelectPermissionViewController {
+    public static func fromStoryboard(with lock: UUID, completion: ((NewKeySelectPermissionViewController, NewKey.Invitation?) -> ())? = nil) -> NewKeySelectPermissionViewController {
         
         guard let viewController = R.storyboard.newKey.newKeySelectPermissionViewController()
             else { fatalError("Could not load \(self) from storyboard") }
@@ -67,15 +67,7 @@ public final class NewKeySelectPermissionViewController: UITableViewController, 
     // MARK: - Actions
     
     @IBAction func cancel(_ sender: AnyObject?) {
-        
-        let completion = self.completion // for ARC
-        
-        self.dismiss(animated: true) { completion?(nil) }
-    }
-    
-    @objc private func schedule() {
-        
-        
+        completion?(self, nil)
     }
     
     // MARK: - Methods
@@ -130,10 +122,8 @@ public final class NewKeySelectPermissionViewController: UITableViewController, 
     
     public override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-        tableView.deselectRow(at: indexPath, animated: true)
-        
-        let cell = tableView.cellForRow(at: indexPath) as! PermissionTypeTableViewCell
-        
+        defer { tableView.deselectRow(at: indexPath, animated: true) }
+                
         let selectedType = self[indexPath]
         
         switch selectedType {
@@ -141,11 +131,13 @@ public final class NewKeySelectPermissionViewController: UITableViewController, 
             assertionFailure("Cannot create owner keys")
         case .admin:
             newKey(permission: .admin) { [weak self] in
-                self?.completion?(($0, .view(cell.permissionView)))
+                guard let self = self else { return }
+                self.completion?(self, $0)
             }
         case .anytime:
             newKey(permission: .anytime) { [weak self] in
-                self?.completion?(($0, .view(cell.permissionView)))
+                guard let self = self else { return }
+                self.completion?(self, $0)
             }
         case .scheduled:
             guard #available(iOSApplicationExtension 13, *) else {
@@ -154,15 +146,17 @@ public final class NewKeySelectPermissionViewController: UITableViewController, 
             }
             // schedule
             let scheduleView = PermissionScheduleView.Modal(done: { [weak self] (schedule) in
+                guard let self = self else { return }
                 #if DEBUG
                 dump(schedule)
                 #endif
-                self?.dismiss(animated: true, completion: nil)
-                self?.newKey(permission: .scheduled(schedule)) { [weak self] in
-                    self?.completion?(($0, .view(cell.permissionView)))
+                self.newKey(permission: .scheduled(schedule)) { [weak self] in
+                    guard let self = self else { return }
+                    self.completion?(self, $0)
                 }
             }, cancel: { [weak self] in
-                self?.dismiss(animated: true, completion: nil)
+                guard let self = self else { return }
+                self.completion?(self, nil)
             })
             let scheduleViewController = UIHostingController(rootView: scheduleView)
             present(scheduleViewController, animated: true, completion: nil)
@@ -170,36 +164,9 @@ public final class NewKeySelectPermissionViewController: UITableViewController, 
     }
 }
 
-// MARK: - ProgressHUDViewController
+// MARK: - ActivityIndicatorViewController
 
 extension NewKeySelectPermissionViewController: ProgressHUDViewController { }
-
-// MARK: - View Controller Extensions
-
-public extension UIViewController {
-    
-    func shareKey(lock identifier: UUID, completion: @escaping (((invitation: NewKey.Invitation, sender: PopoverPresentingView)?) -> ())) {
-        
-        let newKeyViewController = NewKeySelectPermissionViewController.fromStoryboard(with: identifier, completion: completion)
-        let navigationController = UINavigationController(rootViewController: newKeyViewController)
-        self.present(navigationController, animated: true, completion: nil)
-    }
-    
-    func shareKey(lock identifier: UUID) {
-        
-        self.shareKey(lock: identifier) { [weak self] in
-            guard let self = self else { return }
-            guard let (invitation, sender) = $0 else {
-                self.dismiss(animated: true, completion: nil)
-                return
-            }
-            // show share sheet
-            (self.presentedViewController ?? self).share(invitation: invitation, sender: sender) {
-                self.dismiss(animated: true, completion: nil)
-            }
-        }
-    }
-}
 
 // MARK: - Supporting Types
 

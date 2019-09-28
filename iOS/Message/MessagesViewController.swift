@@ -196,14 +196,22 @@ final class MessagesViewController: MSMessagesAppViewController {
         log("Selected \(item.cache.name) \(item.identifier)")
         
         requestPresentationStyle(.expanded)
-        shareKey(lock: item.identifier) { [unowned self] in
-            self.dismiss(animated: true, completion: nil)
+        
+        let lock = item.identifier
+        
+        let viewController = NewKeySelectPermissionViewController.fromStoryboard(with: lock)
+        viewController.completion = { [unowned self] (viewController, invitation) in
+            // dismiss
+            defer { viewController.dismiss(animated: true, completion: nil) }
+            // insert message
             self.requestPresentationStyle(.compact)
-            guard let invitation = $0?.invitation else {
-                return
+            if let invitation = invitation {
+                self.insertMessage(for: invitation)
             }
-            self.insertMessage(for: invitation)
         }
+        // present view controller
+        let navigationController = UINavigationController(rootViewController: viewController)
+        self.present(navigationController, animated: true, completion: nil)
     }
     
     private func insertMessage(for invitation: NewKey.Invitation) {
