@@ -222,14 +222,11 @@ final class KeysViewController: UITableViewController {
     internal func select(lock identifier: UUID, animated: Bool = true) -> LockViewController? {
         
         guard Store.shared[lock: identifier] != nil else {
-            showErrorAlert(R.string.keysViewController.errorAlertInvalid(identifier.uuidString))
+            showErrorAlert(LockError.noKey(lock: identifier).localizedDescription)
             return nil
         }
         
-        // TODO: Use R.swift
-        let navigationController = UIStoryboard(name: "LockDetail", bundle: .lockKit).instantiateInitialViewController() as! UINavigationController
-        
-        let lockViewController = navigationController.topViewController as! LockViewController
+        let lockViewController = LockViewController.fromStoryboard(with: identifier)
         lockViewController.lockIdentifier = identifier
         if animated {
             self.show(lockViewController, sender: self)
@@ -395,12 +392,11 @@ extension KeysViewController: UIDocumentPickerDelegate {
         guard let url = urls.first,
             let data = try? Data(contentsOf: url),
             let newKey = try? JSONDecoder().decode(NewKey.Invitation.self, from: data) else {
-                
-                showErrorAlert(R.string.keysViewController.errorAlertInvalidFile())
+                showErrorAlert(LockError.invalidNewKeyFile.localizedDescription)
                 return
         }
         
-        self.open(newKey: newKey)
+        open(newKey: newKey)
     }
     
     func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentAt url: URL) {
@@ -410,12 +406,11 @@ extension KeysViewController: UIDocumentPickerDelegate {
         // parse eKey file
         guard let data = try? Data(contentsOf: url),
             let newKey = try? JSONDecoder().decode(NewKey.Invitation.self, from: data) else {
-                
-                showErrorAlert(R.string.keysViewController.errorAlertInvalidFile())
+                showErrorAlert(LockError.invalidNewKeyFile.localizedDescription)
                 return
         }
         
-        self.open(newKey: newKey)
+        open(newKey: newKey)
     }
     
     func documentPickerWasCancelled(_ controller: UIDocumentPickerViewController) {

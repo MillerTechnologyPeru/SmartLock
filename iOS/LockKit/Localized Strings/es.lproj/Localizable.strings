@@ -17,11 +17,6 @@
 "Permission.Anytime" = "Cualquier momento";
 "Permission.Scheduled" = "Programado";
 
-// MARK: - Error
-
-"Error.NotInRange" = "La cerradura no se encuentra cerca.";
-"Error.NoKey" = "No tiene una llave para esta cerradura";
-
 // MARK: - NSUserActivity
 
 "UserActivity.NearbyLocks.Title" = "Cerraduras Cercanas";
@@ -36,68 +31,12 @@
 // MARK: - UserNotificationCenter
 
 "UserNotificationCenter.TapToUnlock" = "Toque para desbloquear";
-
 "UserNotificationCenter.NewKey" = "Nueva llave";
 
-// MARK: - ActivityIndicatorViewController
+// MARK: - Alert
 
-// Unlock
-
-"Unlock.LockNotFound" = "No pudo encontrar la cerradura";
-
-"Unlock.UnableToUnlock" = "Incapaz de abrir";
-
-// Setup
-
-"Setup.InvalidQRCode" = "Codigo QR invalido";
-
-"Setup.CouldNotLock" = "No pudo encontrar la cerradura";
-
-// Error Alert
-
-"ErrorAlert.Error" = "Error";
-
-"ErrorAlert.OK" = "Ok";
-
-"ErrorAlert.Retry" = "Volver a intentar";
-
-// MARK: - Alert Action
-
-"AlertAction.Cancel" = "Cancelar";
-
-// MARK: - Context Menu
-
-"ContextMenu.Rename" = "Renombrar";
-
-"ContextMenu.Delete" = "Eliminar";
-
-"ContextMenu.ShareKey" = "Compartir Llave";
-
-"ContextMenu.Manage" = "Administrar";
-
-// MARK: - NewKeyViewController
-
-"NewKeyViewController.Error.RequestNewKey" = "La llave para la cerradura solicitada, ha sido eliminada de la base de datos.";
-
-"NewKeyViewController.Error.LockInRange" = "La cerradura no se encuentra en rango.";
-
-"NewKeyViewController.Error.CreateNewKey" = "No se pudo crear una nueva llave. %@";
-
-// MARK: Alert
-
-"NewKeyViewController.NewKey.Title" = "Nueva Llave";
-"NewKeyViewController.NewKey.Message" = "Ingresé un nombre facil de usar para esta Llave.";
-"NewKeyViewController.NewKey.Ok" = "OK";
-"NewKeyViewController.NewKey.Cancel" = "Cancelar";
-
-// MARK: - LockPermissionsViewController
-
-"LockPermissions.PendingKeys" = "Llaves Pendientes";
-"LockPermissions.Delete" = "Eliminar";
-
-// MARK: Alert
-
-"LockPermissions.Alert.Title" = "Confirmación";
-"LockPermissions.Alert.Message" = "¿Esta seguro de querer eliminar esta Llave?";
-"LockPermissions.Alert.Cancel" = "Cancel";
-"LockPermissions.Alert.Delete" = "Delete";
+"Alert.Error" = "Error";
+"Alert.Retry" = "Volver a intentar";
+"Alert.Ok" = "Ok";
+"Alert.Cancel" = "Cancelar";
+"Alert.Delete" = "Eliminar";

@@ -40,7 +40,7 @@ public extension ActivityIndicatorViewController where Self: UIViewController {
                 guard let url = URL(string: result.value),
                     let lockURL = LockURL(rawValue: url),
                     case let .setup(_, sharedSecret) = lockURL else {
-                        self.showErrorAlert(R.string.localizable.setupInvalidQRCode())
+                        self.showErrorAlert(R.string.error.invalidQRCode())
                         return
                 }
                 
@@ -58,8 +58,9 @@ public extension ActivityIndicatorViewController where Self: UIViewController {
 
 public extension ActivityIndicatorViewController where Self: UIViewController {
     
-    func setup(lock identifier: UUID, secret: KeyData, name: String = "Lock", scanDuration: TimeInterval = 2.0) {
+    func setup(lock identifier: UUID, secret: KeyData, name: String? = nil, scanDuration: TimeInterval = 2.0) {
         
+        let name = name ?? R.string.localizable.newLockName()
         performActivity(queue: .bluetooth, { () -> Bool in
             guard let lockPeripheral = try Store.shared.device(for: identifier, scanDuration: scanDuration)
                 else { return false }
@@ -67,13 +68,14 @@ public extension ActivityIndicatorViewController where Self: UIViewController {
             return true
         }, completion: { (viewController, foundDevice) in
             if foundDevice == false {
-                viewController.showErrorAlert(R.string.localizable.setupCouldNotLock())
+                viewController.showErrorAlert(R.string.error.notInRange())
             }
         })
     }
     
-    func setup(lock: LockPeripheral<NativeCentral>, sharedSecret: KeyData, name: String = "Lock") {
+    func setup(lock: LockPeripheral<NativeCentral>, sharedSecret: KeyData, name: String? = nil) {
         
+        let name = name ?? R.string.localizable.newLockName()
         performActivity(queue: .bluetooth, {
             try Store.shared.setup(lock, sharedSecret: sharedSecret, name: name)
         })

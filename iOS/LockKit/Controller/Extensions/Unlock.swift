@@ -17,16 +17,12 @@ public extension ActivityIndicatorViewController where Self: UIViewController {
         
         log("Unlock \(identifier)")
         
-        performActivity(queue: .bluetooth, { () -> String? in
+        performActivity(queue: DispatchQueue.bluetooth, {
             guard let lockPeripheral = try Store.shared.device(for: identifier, scanDuration: scanDuration)
-                else { return R.string.localizable.unlockLockNotFound() }
-            return try Store.shared.unlock(lockPeripheral, action: action) ? nil : R.string.localizable.unlockUnableToUnlock()
-        }, completion: { (viewController, errorMessage) in
-            if let errorMessage = errorMessage {
-                viewController.showErrorAlert(errorMessage)
-            } else {
-                log("Successfully unlocked lock \"\(identifier)\"")
-            }
+                else { throw LockError.notInRange(lock: identifier) }
+            try Store.shared.unlock(lockPeripheral, action: action)
+        }, completion: { (viewController, _) in
+            log("Successfully unlocked lock \"\(identifier)\"")
         })
     }
     

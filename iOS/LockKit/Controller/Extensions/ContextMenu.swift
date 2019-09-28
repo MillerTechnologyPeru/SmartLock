@@ -14,22 +14,32 @@ public extension UIViewController {
     
     func menu(forLock lock: UUID) -> UIMenu {
         
-        let rename = UIAction(title: R.string.localizable.contextMenuRename(), image: UIImage(systemName: "square.and.pencil")) { [weak self] (action) in
+        guard let cache = Store.shared[lock: lock] else {
+            assertionFailure()
+            return UIMenu(
+                title: "",
+                image: nil,
+                identifier: nil,
+                options: [],
+                children: []
+            )
+        }
+        
+        let rename = UIAction(title: R.string.contextMenu.itemRename(), image: UIImage(systemName: "square.and.pencil")) { [weak self] (action) in
             let alert = RenameActivity.viewController(for: lock) { _ in }
             self?.present(alert, animated: true, completion: nil)
         }
         
-        let delete = UIAction(title: R.string.localizable.contextMenuDelete(), image: UIImage(systemName: "trash"), attributes: .destructive) { [weak self] (action) in
+        let delete = UIAction(title: R.string.contextMenu.itemDelete(), image: UIImage(systemName: "trash"), attributes: .destructive) { [weak self] (action) in
             let alert = DeleteLockActivity.viewController(for: lock) { _ in }
             self?.present(alert, animated: true, completion: nil)
         }
         
         var actions = [UIAction]()
         
-        if let cache = Store.shared[lock: lock],
-            cache.key.permission.isAdministrator {
+        if cache.key.permission.isAdministrator {
             
-            let share = UIAction(title: R.string.localizable.contextMenuShareKey(), image: UIImage(systemName: "square.and.arrow.up")) { [weak self] (action) in
+            let share = UIAction(title: R.string.contextMenu.itemShareKey(), image: UIImage(systemName: "square.and.arrow.up")) { [weak self] (action) in
                 let viewController = NewKeySelectPermissionViewController.fromStoryboard(with: lock)
                 viewController.completion = {
                     guard let (invitation, sender) = $0 else {
@@ -44,7 +54,7 @@ public extension UIViewController {
             
             actions.append(share)
             
-            let manageKeys = UIAction(title: R.string.localizable.contextMenuManage(), image: UIImage(systemName: "list.bullet")) { [weak self] (action) in
+            let manageKeys = UIAction(title: R.string.contextMenu.itemManage(), image: UIImage(systemName: "list.bullet")) { [weak self] (action) in
                 let viewController = LockPermissionsViewController.fromStoryboard(
                     with: lock,
                     completion: { self?.dismiss(animated: true, completion: nil) }
