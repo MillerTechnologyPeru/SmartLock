@@ -16,11 +16,11 @@ public extension UIViewController {
                         okHandler: (() -> ())? = nil,
                         retryHandler: (()-> ())? = nil) {
         
-        let alert = UIAlertController(title: R.string.localizable.errorAlertError(),
+        let alert = UIAlertController(title: R.string.localizable.alertError(),
             message: localizedText,
             preferredStyle: .alert)
         
-        alert.addAction(UIAlertAction(title: R.string.localizable.errorAlertOK(), style: UIAlertAction.Style.`default`, handler: { (UIAlertAction) in
+        alert.addAction(UIAlertAction(title: R.string.localizable.alertOk(), style: UIAlertAction.Style.`default`, handler: { (UIAlertAction) in
             
             okHandler?()
             
@@ -31,7 +31,7 @@ public extension UIViewController {
         
         if let retryHandler = retryHandler {
             
-            alert.addAction(UIAlertAction(title: R.string.localizable.errorAlertRetry(), style: UIAlertAction.Style.`default`, handler: { (UIAlertAction) in
+            alert.addAction(UIAlertAction(title: R.string.localizable.alertRetry(), style: UIAlertAction.Style.`default`, handler: { (UIAlertAction) in
                 
                 retryHandler()
                 

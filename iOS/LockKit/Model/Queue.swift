@@ -58,9 +58,8 @@ public extension DispatchQueue {
     static var log: DispatchQueue {
         struct Cache {
             static let queue = DispatchQueue(
-                for: Log.self,
-                qualityOfService: .utility,
-                isConcurrent: false
+                label: Bundle.Lock.app.rawValue + ".Log",
+                qos: .utility
             )
         }
         return Cache.queue

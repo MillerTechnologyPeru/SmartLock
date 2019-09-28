@@ -18,13 +18,13 @@
 
 // MARK: Alerts
 
-"DeleteLockActivity.Alert.title" = "Confirmación";
-"DeleteLockActivity.Alert.Message" = "¿Esta seguro de querer eliminar esta Llave?";
+"DeleteLockActivity.Alert.Title" = "Confirmación";
+"DeleteLockActivity.Alert.Message" = "¿Esta seguro de querer eliminar esta llave?";
 "DeleteLockActivity.Alert.Cancel" = "Cancelar";
 "DeleteLockActivity.Alert.Delete" = "Eliminar";
 
-"RenameActivity.Alert.title" = "Renombrar";
-"RenameActivity.Alert.Message" = "Ingresé un nombre facil de usar para esta Llave.";
+"RenameActivity.Alert.Title" = "Renombrar";
+"RenameActivity.Alert.Message" = "Ingresé un nombre facil de usar para esta llave.";
 "RenameActivity.Alert.OK" = "OK";
 "RenameActivity.Alert.Cancel" = "Cancelar";
 
@@ -34,7 +34,7 @@
 "HomeKitEnableActivity.Alert.Yes" = "Si";
 "HomeKitEnableActivity.Alert.No" = "No";
 
-"UpdateActivity.Alert.title" = "Actualizar Cerradura";
-"UpdateActivity.Alert.Message" = "¿Esta seguro de querer actualizar el software del Lock?";
+"UpdateActivity.Alert.title" = "Actualizar cerradura";
+"UpdateActivity.Alert.Message" = "¿Esta seguro de querer actualizar el software de la cerradura?";
 "UpdateActivity.Alert.Cancel" = "Cancelar";
 "UpdateActivity.Alert.Update" = "Actualizar";

@@ -1,0 +1,12 @@
+/* 
+  ContextMenu.strings
+  SmartLock
+
+  Created by Alsey Coleman Miller on 9/27/19.
+  Copyright © 2019 ColemanCDA. All rights reserved.
+*/
+
+"Item.Rename" = "Rename";
+"Item.Delete" = "Delete";
+"Item.ShareKey" = "Share Key";
+"Item.Manage" = "Manage";

@@ -11,6 +11,7 @@ import UIKit
 import CoreLock
 import Foundation
 import JGProgressHUD
+import SwiftUI
 
 public final class NewKeySelectPermissionViewController: UITableViewController, NewKeyViewController {
     
@@ -22,7 +23,9 @@ public final class NewKeySelectPermissionViewController: UITableViewController, 
     
     public var progressHUD: JGProgressHUD?
     
-    private let permissionTypes: [PermissionType] = [.admin, .anytime /*, .scheduled */ ]
+    private var permissions: [PermissionType] = [.admin, .anytime] {
+        didSet { tableView.reloadData() }
+    }
     
     // MARK: - Loading
     
@@ -46,6 +49,11 @@ public final class NewKeySelectPermissionViewController: UITableViewController, 
         // setup table view
         self.tableView.estimatedRowHeight = 100
         self.tableView.rowHeight = UITableView.automaticDimension
+        
+        // edit schedule in iOS 13
+        if #available(iOSApplicationExtension 13, *) {
+            permissions.append(.scheduled)
+        }
     }
     
     public override func viewDidLayoutSubviews() {
@@ -65,7 +73,16 @@ public final class NewKeySelectPermissionViewController: UITableViewController, 
         self.dismiss(animated: true) { completion?(nil) }
     }
     
+    @objc private func schedule() {
+        
+        
+    }
+    
     // MARK: - Methods
+    
+    private subscript (indexPath: IndexPath) -> PermissionType {
+        return permissions[indexPath.row]
+    }
     
     private func description(for permission: PermissionType) -> String {
         
@@ -84,7 +101,7 @@ public final class NewKeySelectPermissionViewController: UITableViewController, 
     
     private func configure(cell: PermissionTypeTableViewCell, at indexPath: IndexPath) {
         
-        let permissionType = permissionTypes[indexPath.row]
+        let permissionType = self[indexPath]
         
         cell.permissionView.permission = permissionType
         cell.permissionTypeLabel.text = permissionType.localizedText
@@ -98,7 +115,7 @@ public final class NewKeySelectPermissionViewController: UITableViewController, 
     }
     
     public override func tableView(_ tableView: UITableView, numberOfRowsInSection: Int) -> Int {
-        return permissionTypes.count
+        return permissions.count
     }
     
     public override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -117,13 +134,12 @@ public final class NewKeySelectPermissionViewController: UITableViewController, 
         
         let cell = tableView.cellForRow(at: indexPath) as! PermissionTypeTableViewCell
         
-        let selectedType = permissionTypes[indexPath.row]
+        let selectedType = self[indexPath]
         
         switch selectedType {
         case .owner:
-            fatalError("Cannot create owner keys")
+            assertionFailure("Cannot create owner keys")
         case .admin:
-            // sender: .view(cell.permissionImageView)
             newKey(permission: .admin) { [weak self] in
                 self?.completion?(($0, .view(cell.permissionView)))
             }
@@ -132,7 +148,24 @@ public final class NewKeySelectPermissionViewController: UITableViewController, 
                 self?.completion?(($0, .view(cell.permissionView)))
             }
         case .scheduled:
-            fatalError("Not implemented")
+            guard #available(iOSApplicationExtension 13, *) else {
+                assertionFailure("Only available on iOS 13")
+                return
+            }
+            // schedule
+            let scheduleView = PermissionScheduleView.Modal(done: { [weak self] (schedule) in
+                #if DEBUG
+                dump(schedule)
+                #endif
+                self?.dismiss(animated: true, completion: nil)
+                self?.newKey(permission: .scheduled(schedule)) { [weak self] in
+                    self?.completion?(($0, .view(cell.permissionView)))
+                }
+            }, cancel: { [weak self] in
+                self?.dismiss(animated: true, completion: nil)
+            })
+            let scheduleViewController = UIHostingController(rootView: scheduleView)
+            present(scheduleViewController, animated: true, completion: nil)
         }
     }
 }

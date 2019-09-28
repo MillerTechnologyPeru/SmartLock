@@ -58,11 +58,8 @@ public final class LockPermissionsViewController: UITableViewController {
         tableView.rowHeight = UITableView.automaticDimension
         tableView.estimatedRowHeight = 60
         tableView.register(R.nib.lockTableViewCell)
-    }
-    
-    public override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
         
+        // load keys
         self.reloadData()
     }
     
@@ -83,7 +80,7 @@ public final class LockPermissionsViewController: UITableViewController {
         
         performActivity(queue: .bluetooth, {
             guard let peripheral = try Store.shared.device(for: lockIdentifier, scanDuration: 1.0)
-                else { throw CentralError.unknownPeripheral }
+                else { throw LockError.notInRange(lock: lockIdentifier) }
             try Store.shared.listKeys(peripheral, notification: { (list, isComplete) in
                 mainQueue { [weak self] in self?.list = list }
             })
@@ -169,7 +166,7 @@ public final class LockPermissionsViewController: UITableViewController {
         
         switch section {
         case .keys: return nil
-        case .pending: return self[section].isEmpty ? nil : R.string.localizable.lockPermissionsPendingKeys()
+        case .pending: return self[section].isEmpty ? nil : R.string.lockPermissionsViewController.sectionTitlePendingKeys()
         }
     }
     
@@ -177,11 +174,16 @@ public final class LockPermissionsViewController: UITableViewController {
         
         tableView.deselectRow(at: indexPath, animated: true)
         
-        // show key info
+        let item = self[indexPath]
         
-        //let key = self[indexPath]
-        
-        // present key detail VC
+        switch item {
+        case let .key(key):
+            let viewController = KeyViewController.fromStoryboard(with: key)
+            self.show(viewController, sender: nil)
+        case let .newKey(newKey):
+            let viewController = KeyViewController.fromStoryboard(with: newKey)
+            self.show(viewController, sender: nil)
+        }
     }
     
     #if !targetEnvironment(macCatalyst)
@@ -199,20 +201,22 @@ public final class LockPermissionsViewController: UITableViewController {
         
         let keyEntry = self[indexPath]
         
-        let delete = UITableViewRowAction(style: .destructive, title: R.string.localizable.lockPermissionsDelete()) {
+        let delete = UITableViewRowAction(style: .destructive, title: R.string.lockPermissionsViewController.actionDelete()) {
             
             assert($1 == indexPath)
             
-            let alert = UIAlertController(title: R.string.localizable.lockPermissionsAlertTitle(),
-                                          message: R.string.localizable.lockPermissionsAlertMessage(),
-                                          preferredStyle: UIAlertController.Style.alert)
+            let alert = UIAlertController(
+                title: R.string.lockPermissionsViewController.alertDeleteKeyTitle(),
+                message: R.string.lockPermissionsViewController.alertDeleteKeyMessage(),
+                preferredStyle: UIAlertController.Style.alert
+            )
             
-            alert.addAction(UIAlertAction(title: R.string.localizable.lockPermissionsAlertCancel(), style: .cancel, handler: { (UIAlertAction) in
+            alert.addAction(UIAlertAction(title: R.string.localizable.alertCancel(), style: .cancel, handler: { (UIAlertAction) in
                 
                 alert.dismiss(animated: true, completion: nil)
             }))
             
-            alert.addAction(UIAlertAction(title: R.string.localizable.lockPermissionsAlertDelete(), style: .destructive, handler: { (UIAlertAction) in
+            alert.addAction(UIAlertAction(title: R.string.localizable.alertDelete(), style: .destructive, handler: { (UIAlertAction) in
                 
                 alert.dismiss(animated: true) { }
                 
