@@ -1,0 +1,17 @@
+/* 
+  LocksEventsViewController.strings
+  SmartLock
+
+  Created by JurjDev on 9/27/19.
+  Copyright © 2019 ColemanCDA. All rights reserved.
+*/
+
+"Events.Setup" = "Configurar";
+"Events.Unlocked" = "Abrir";
+"Events.Shared" = "Llave compartida";
+"Events.Shared.Named" = "Llave \"%@\" compartida";
+"Events.Created" = "Llave \"%@\" %@ creada";
+"Events.Created.Named" = "Llave creada";
+"Events.SharedBy" = "Comparido por \"%@\"";
+"Events.Removed.Named" = "Llave \"%@\" eliminada";
+"Events.Removed" = "Llave eliminada";
