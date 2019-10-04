@@ -26,7 +26,7 @@ final class ExtensionDelegate: NSObject, WKExtensionDelegate {
         // Perform any final initialization of your application.
         
         // print app info
-        log("⌚️ Launching SmartLock Watch v\(Bundle.InfoPlist.version) Build \(Bundle.InfoPlist.shortVersion)")
+        log("⌚️ Launching SmartLock Watch v\(Bundle.InfoPlist.shortVersion) Build \(Bundle.InfoPlist.version)")
         
         // setup logging
         Store.shared.lockManager.log = { log("🔒 LockManager: " + $0) }

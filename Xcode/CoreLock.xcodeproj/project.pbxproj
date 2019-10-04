@@ -12,6 +12,10 @@
 		6E0A32D722D8FCFB002EF9DE /* URL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E0A32D422D8FCFB002EF9DE /* URL.swift */; };
 		6E0A32D822D8FCFB002EF9DE /* URL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E0A32D422D8FCFB002EF9DE /* URL.swift */; };
 		6E0A32DA22D91E1D002EF9DE /* URLTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E0A32D922D91E1D002EF9DE /* URLTests.swift */; };
+		6E621244234721FF007D49BF /* Bluetooth in Frameworks */ = {isa = PBXBuildFile; productRef = 6E621243234721FF007D49BF /* Bluetooth */; };
+		6E62124823472217007D49BF /* Bluetooth in Frameworks */ = {isa = PBXBuildFile; productRef = 6E62124723472217007D49BF /* Bluetooth */; };
+		6E621266234723ED007D49BF /* Bluetooth in Frameworks */ = {isa = PBXBuildFile; productRef = 6E621265234723ED007D49BF /* Bluetooth */; };
+		6E62126A23472400007D49BF /* Bluetooth in Frameworks */ = {isa = PBXBuildFile; productRef = 6E62126923472400007D49BF /* Bluetooth */; };
 		6E93D354231C624300119F65 /* Notification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E93D351231C623B00119F65 /* Notification.swift */; };
 		6E93D355231C624300119F65 /* Notification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E93D351231C623B00119F65 /* Notification.swift */; };
 		6E93D356231C624300119F65 /* Notification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E93D351231C623B00119F65 /* Notification.swift */; };
@@ -282,6 +286,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6E621244234721FF007D49BF /* Bluetooth in Frameworks */,
 				6E9C95ED231149A5007C18FE /* GATT in Frameworks */,
 				6E9C95EA23114962007C18FE /* CryptoSwift in Frameworks */,
 				6E9C95EF231149A5007C18FE /* DarwinGATT in Frameworks */,
@@ -293,6 +298,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6E621266234723ED007D49BF /* Bluetooth in Frameworks */,
 				6ED81FED231662F100B69520 /* GATT in Frameworks */,
 				6ED81FE9231662F100B69520 /* CryptoSwift in Frameworks */,
 				6ED81FEB231662F100B69520 /* DarwinGATT in Frameworks */,
@@ -304,6 +310,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6E62126A23472400007D49BF /* Bluetooth in Frameworks */,
 				6ED81FF5231662FB00B69520 /* GATT in Frameworks */,
 				6ED81FF1231662FB00B69520 /* CryptoSwift in Frameworks */,
 				6ED81FF3231662FB00B69520 /* DarwinGATT in Frameworks */,
@@ -315,6 +322,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6E62124823472217007D49BF /* Bluetooth in Frameworks */,
 				6ED81FE5231662E200B69520 /* GATT in Frameworks */,
 				6ED81FE1231662E200B69520 /* CryptoSwift in Frameworks */,
 				6ED81FE3231662E200B69520 /* DarwinGATT in Frameworks */,
@@ -531,6 +539,7 @@
 				6E9C95EC231149A5007C18FE /* GATT */,
 				6E9C95EE231149A5007C18FE /* DarwinGATT */,
 				6E9C95F1231149F5007C18FE /* TLVCoding */,
+				6E621243234721FF007D49BF /* Bluetooth */,
 			);
 			productName = SmartLock;
 			productReference = 52D6D97C1BEFF229002C0205 /* CoreLock.framework */;
@@ -555,6 +564,7 @@
 				6ED81FEA231662F100B69520 /* DarwinGATT */,
 				6ED81FEC231662F100B69520 /* GATT */,
 				6ED81FEE231662F100B69520 /* TLVCoding */,
+				6E621265234723ED007D49BF /* Bluetooth */,
 			);
 			productName = "SmartLock-watchOS";
 			productReference = 52D6D9E21BEFFF6E002C0205 /* CoreLock.framework */;
@@ -579,6 +589,7 @@
 				6ED81FF2231662FB00B69520 /* DarwinGATT */,
 				6ED81FF4231662FB00B69520 /* GATT */,
 				6ED81FF6231662FB00B69520 /* TLVCoding */,
+				6E62126923472400007D49BF /* Bluetooth */,
 			);
 			productName = "SmartLock-tvOS";
 			productReference = 52D6D9F01BEFFFBE002C0205 /* CoreLock.framework */;
@@ -603,6 +614,7 @@
 				6ED81FE2231662E200B69520 /* DarwinGATT */,
 				6ED81FE4231662E200B69520 /* GATT */,
 				6ED81FE6231662E200B69520 /* TLVCoding */,
+				6E62124723472217007D49BF /* Bluetooth */,
 			);
 			productName = "SmartLock-macOS";
 			productReference = 52D6DA0F1BF000BD002C0205 /* CoreLock.framework */;
@@ -671,6 +683,7 @@
 				6E9C95E823114962007C18FE /* XCRemoteSwiftPackageReference "CryptoSwift" */,
 				6E9C95EB231149A5007C18FE /* XCRemoteSwiftPackageReference "GATT" */,
 				6E9C95F0231149F5007C18FE /* XCRemoteSwiftPackageReference "TLVCoding" */,
+				6E621242234721FF007D49BF /* XCRemoteSwiftPackageReference "Bluetooth" */,
 			);
 			productRefGroup = 52D6D97D1BEFF229002C0205 /* Products */;
 			projectDirPath = "";
@@ -1372,6 +1385,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		6E621242234721FF007D49BF /* XCRemoteSwiftPackageReference "Bluetooth" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/PureSwift/Bluetooth.git";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
 		6E9C95E823114962007C18FE /* XCRemoteSwiftPackageReference "CryptoSwift" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/krzyzanowskim/CryptoSwift";
@@ -1399,6 +1420,26 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		6E621243234721FF007D49BF /* Bluetooth */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6E621242234721FF007D49BF /* XCRemoteSwiftPackageReference "Bluetooth" */;
+			productName = Bluetooth;
+		};
+		6E62124723472217007D49BF /* Bluetooth */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6E621242234721FF007D49BF /* XCRemoteSwiftPackageReference "Bluetooth" */;
+			productName = Bluetooth;
+		};
+		6E621265234723ED007D49BF /* Bluetooth */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6E621242234721FF007D49BF /* XCRemoteSwiftPackageReference "Bluetooth" */;
+			productName = Bluetooth;
+		};
+		6E62126923472400007D49BF /* Bluetooth */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6E621242234721FF007D49BF /* XCRemoteSwiftPackageReference "Bluetooth" */;
+			productName = Bluetooth;
+		};
 		6E9C95E923114962007C18FE /* CryptoSwift */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 6E9C95E823114962007C18FE /* XCRemoteSwiftPackageReference "CryptoSwift" */;

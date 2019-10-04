@@ -6,7 +6,7 @@
   Copyright © 2019 ColemanCDA. All rights reserved.
 */
 
-"CFBundleDisplayName" = "Cerradura";
+"CFBundleDisplayName" = "Lock";
 "NSBluetoothAlwaysUsageDescription" = "Bluetooth es usado para escanear Cerrarudas cercanas en segundo plano.";
 "NSBluetoothPeripheralUsageDescription" = "Se necesita Bluetooth para conectarse a su Cerradura Inteligente.";
 "NSCameraUsageDescription" = "Se necesita la camara para instalar la Cerradura Inteligente.";

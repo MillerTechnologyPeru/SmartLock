@@ -223,41 +223,41 @@ public final class LockEventsViewController: TableViewController {
         }
         switch managedObject {
         case is SetupEventManagedObject:
-            action = "Setup"
+            action = R.string.locksEventsViewController.eventsSetup()
             keyName = key?.name ?? ""
         case is UnlockEventManagedObject:
-            action = "Unlocked"
+            action = R.string.locksEventsViewController.eventsUnlocked()
             keyName = key?.name ?? ""
         case let event as CreateNewKeyEventManagedObject:
             if let newKey = try! event.confirmKeyEvent(in: context)?.key(in: context)?.name {
-                action = "Shared \"\(newKey)\" key"
+                action = R.string.locksEventsViewController.eventsSharedNamed(newKey)
             } else if let newKey = try! event.newKey(in: context)?.name {
-                action = "Shared \"\(newKey)\" key"
+                action = R.string.locksEventsViewController.eventsSharedNamed(newKey)
             } else {
-                action = "Shared key"
+                action = R.string.locksEventsViewController.eventsShared()
                 needsKeys.insert(lock)
             }
             keyName = key?.name ?? ""
         case let event as ConfirmNewKeyEventManagedObject:
             if let key = key,
                 let permission = PermissionType(rawValue: numericCast(key.permission)) {
-                action = "Created \"\(key.name ?? "")\" \(permission.localizedText) key"
+                action = R.string.locksEventsViewController.eventsCreated(key.name ?? "", permission.localizedText)
                 if let parentKey = try! event.createKeyEvent(in: context)?.key(in: context) {
-                    keyName = "Shared by \"\(parentKey.name ?? "")\""
+                    keyName = R.string.locksEventsViewController.eventsSharedBy(parentKey.name ?? "")
                 } else {
                     keyName = ""
                     needsKeys.insert(lock)
                 }
             } else {
-                action = "Created key"
+                action = R.string.locksEventsViewController.eventsCreatedNamed()
                 keyName = ""
                 needsKeys.insert(lock)
             }
         case let event as RemoveKeyEventManagedObject:
             if let removedKey = try! event.removedKey(in: context)?.name {
-                action = "Removed \"\(removedKey)\" key"
+                action = R.string.locksEventsViewController.eventsRemovedNamed(removedKey)
             } else {
-                action = "Removed key"
+                action = R.string.locksEventsViewController.eventsRemoved()
                 needsKeys.insert(lock)
             }
             keyName = key?.name ?? ""

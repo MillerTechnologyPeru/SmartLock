@@ -6,7 +6,6 @@
   Copyright © 2019 ColemanCDA. All rights reserved.
 */
 
-"CFBundleDisplayName" = "Lock";
 "NSBluetoothAlwaysUsageDescription" = "Bluetooth is used to scan for nearby locks in the background.";
 "NSBluetoothPeripheralUsageDescription" = "Bluetooth is needed to connect to your smart lock.";
 "NSCameraUsageDescription" = "Your camera is needed to setup your smart lock.";
