@@ -460,7 +460,7 @@ private extension AppDelegate {
         }
         
         // CloudKit push notifications
-        DispatchQueue.cloud.async {
+        DispatchQueue.app.async {
             do { try Store.shared.cloud.subcribeNewKeyShares() }
             catch { log("⚠️ Could subscribe to new shares. \(error)") }
         }

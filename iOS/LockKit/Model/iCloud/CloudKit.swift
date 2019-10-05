@@ -76,6 +76,9 @@ internal extension CKContainer {
         let operation = CKDiscoverAllUserIdentitiesOperation()
         var cloudKitError: Swift.Error?
         let semaphore = DispatchSemaphore(value: 0)
+        operation.configuration.isLongLived = false
+        operation.configuration.allowsCellularAccess = true
+        operation.configuration.qualityOfService = .userInitiated
         operation.userIdentityDiscoveredBlock = user
         operation.discoverAllUserIdentitiesCompletionBlock = {
             cloudKitError = $0
@@ -93,6 +96,9 @@ internal extension CKContainer {
         let operation = CKDiscoverUserIdentitiesOperation(userIdentityLookupInfos: userIdentityLookupInfos)
         var cloudKitError: Swift.Error?
         let semaphore = DispatchSemaphore(value: 0)
+        operation.configuration.isLongLived = false
+        operation.configuration.allowsCellularAccess = true
+        operation.configuration.qualityOfService = .userInitiated
         operation.userIdentityDiscoveredBlock = found
         operation.discoverUserIdentitiesCompletionBlock = {
             cloudKitError = $0
@@ -110,6 +116,9 @@ internal extension CKContainer {
         let operation = CKFetchShareParticipantsOperation(userIdentityLookupInfos: userIdentityLookupInfos)
         var cloudKitError: Swift.Error?
         let semaphore = DispatchSemaphore(value: 0)
+        operation.configuration.isLongLived = false
+        operation.configuration.allowsCellularAccess = true
+        operation.configuration.qualityOfService = .userInitiated
         operation.shareParticipantFetchedBlock = shareParticipantFetched
         operation.fetchShareParticipantsCompletionBlock = {
             cloudKitError = $0
@@ -142,6 +151,9 @@ internal extension CKContainer {
         var cloudKitError: Swift.Error?
         let semaphore = DispatchSemaphore(value: 0)
         var shares = [URL: CKShare.Metadata](minimumCapacity: shareURLs.count)
+        operation.configuration.isLongLived = false
+        operation.configuration.allowsCellularAccess = true
+        operation.configuration.qualityOfService = .userInitiated
         operation.shouldFetchRootRecord = shouldFetchRootRecord
         operation.perShareMetadataBlock = { (url, metadata, error) in
             if let error = error {
@@ -171,6 +183,9 @@ internal extension CKContainer {
         let operation = CKAcceptSharesOperation(shareMetadatas: shares)
         var cloudKitError: Swift.Error?
         let semaphore = DispatchSemaphore(value: 0)
+        operation.configuration.isLongLived = false
+        operation.configuration.allowsCellularAccess = true
+        operation.configuration.qualityOfService = .userInitiated
         operation.perShareCompletionBlock = { (metadata, share, error) in
             if let error = error {
                 operation.cancel()
@@ -198,6 +213,9 @@ internal extension CKDatabase {
         var cloudKitError: Swift.Error?
         var recordsByRecordID = [CKRecord.ID: CKRecord]()
         let semaphore = DispatchSemaphore(value: 0)
+        operation.configuration.isLongLived = false
+        operation.configuration.allowsCellularAccess = true
+        operation.configuration.qualityOfService = .userInitiated
         operation.fetchRecordsCompletionBlock = {
             recordsByRecordID = $0 ?? [:]
             cloudKitError = $1
@@ -215,6 +233,9 @@ internal extension CKDatabase {
         
         var cloudKitError: Swift.Error?
         let semaphore = DispatchSemaphore(value: 0)
+        operation.configuration.isLongLived = false
+        operation.configuration.allowsCellularAccess = true
+        operation.configuration.qualityOfService = .userInitiated
         operation.modifyRecordsCompletionBlock = { (savedRecords, deletedRecords, error) in
             cloudKitError = error
             semaphore.signal()
@@ -233,6 +254,9 @@ internal extension CKDatabase {
         var cursor: CKQueryOperation.Cursor?
         var cloudKitError: Swift.Error?
         let semaphore = DispatchSemaphore(value: 0)
+        operation.configuration.isLongLived = false
+        operation.configuration.allowsCellularAccess = true
+        operation.configuration.qualityOfService = .userInitiated
         operation.queryCompletionBlock = {
             cursor = $0
             cloudKitError = $1
@@ -261,6 +285,9 @@ internal extension CKDatabase {
         
         var operation = CKQueryOperation(query: query)
         operation.zoneID = zone
+        operation.configuration.isLongLived = false
+        operation.configuration.allowsCellularAccess = true
+        operation.configuration.qualityOfService = .userInitiated
         var cursor = try self.query(operation, record: record)
         while let queryCursor = cursor {
             operation = .init(cursor: queryCursor)
@@ -284,6 +311,9 @@ internal extension CKDatabase {
         let operation = CKModifyRecordZonesOperation(recordZonesToSave: save, recordZoneIDsToDelete: delete)
         var cloudKitError: Swift.Error?
         let semaphore = DispatchSemaphore(value: 0)
+        operation.configuration.isLongLived = false
+        operation.configuration.allowsCellularAccess = true
+        operation.configuration.qualityOfService = .userInitiated
         operation.modifyRecordZonesCompletionBlock = { (saved, deleted, error) in
             cloudKitError = error
             semaphore.signal()
@@ -302,6 +332,9 @@ internal extension CKDatabase {
         var cloudKitError: Swift.Error?
         var results = [CKRecordZone.ID: CKRecordZone]()
         let semaphore = DispatchSemaphore(value: 0)
+        operation.configuration.isLongLived = false
+        operation.configuration.allowsCellularAccess = true
+        operation.configuration.qualityOfService = .userInitiated
         operation.fetchRecordZonesCompletionBlock = {
             results = $0 ?? [:]
             cloudKitError = $1
@@ -331,6 +364,9 @@ internal extension CKDatabase {
             subscriptionsToSave: save,
             subscriptionIDsToDelete: delete
         )
+        operation.configuration.isLongLived = false
+        operation.configuration.allowsCellularAccess = true
+        operation.configuration.qualityOfService = .userInitiated
         var cloudKitError: Swift.Error?
         let semaphore = DispatchSemaphore(value: 0)
         operation.modifySubscriptionsCompletionBlock = { (_, _, error) in
