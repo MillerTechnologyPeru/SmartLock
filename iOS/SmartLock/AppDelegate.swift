@@ -128,6 +128,8 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
             open(url: url)
         }
         
+        queueDidLaunchOperations()
+        
         return true
     }
 
@@ -195,24 +197,9 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
         // Called as part of the transition from the background to the active state; here you can undo many of the changes made on entering the background.
         
         log("\(bundle.symbol) Will enter foreground")
-        
-        // scan for iBeacons
-        BeaconController.shared.scanBeacons()
-    }
-
-    func applicationDidBecomeActive(_ application: UIApplication) {
-        // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
-        
-        log("\(bundle.symbol) Did become active")
-        
-        didBecomeActive = true
-        application.applicationIconBadgeNumber = 0
-        
+                
         // update cache if modified by extension
         Store.shared.loadCache()
-                        
-        // scan for iBeacons
-        BeaconController.shared.scanBeacons()
         
         // save energy
         guard ProcessInfo.processInfo.isLowPowerModeEnabled == false else { return }
@@ -234,21 +221,21 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
                 }
             }
         }
+    }
+
+    func applicationDidBecomeActive(_ application: UIApplication) {
+        // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
         
-        // CloudKit discoverability
-        DispatchQueue.cloud.asyncAfter(deadline: .now() + 3.0) {
-            do {
-                let status = try Store.shared.cloud.requestPermissions()
-                log("☁️ CloudKit permisions \(status == .granted ? "granted" : "not granted")")
-            }
-            catch { log("⚠️ Could not request CloudKit permissions. \(error.localizedDescription)") }
-        }
+        log("\(bundle.symbol) Did become active")
         
-        // CloudKit push notifications
-        DispatchQueue.cloud.async {
-            do { try Store.shared.cloud.subcribeNewKeyShares() }
-            catch { log("⚠️ Could subscribe to new shares. \(error)") }
-        }
+        didBecomeActive = true
+        application.applicationIconBadgeNumber = 0
+                        
+        // scan for iBeacons
+        BeaconController.shared.scanBeacons()
+        
+        // save energy
+        guard ProcessInfo.processInfo.isLowPowerModeEnabled == false else { return }
         
         // attempt to sync with iCloud
         tabBarController.syncCloud()
@@ -259,6 +246,7 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
         
         log("\(bundle.symbol) Will terminate")
         
+        // scan for iBeacons
         BeaconController.shared.scanBeacons()
     }
     
@@ -455,6 +443,27 @@ extension AppDelegate {
         guard let tabBarController = window?.rootViewController as? TabBarController
             else { fatalError() }
         return tabBarController
+    }
+}
+
+private extension AppDelegate {
+    
+    func queueDidLaunchOperations() {
+        
+        // CloudKit discoverability
+        DispatchQueue.cloud.asyncAfter(deadline: .now() + 3.0) {
+            do {
+                let status = try Store.shared.cloud.requestPermissions()
+                log("☁️ CloudKit permisions \(status == .granted ? "granted" : "not granted")")
+            }
+            catch { log("⚠️ Could not request CloudKit permissions. \(error.localizedDescription)") }
+        }
+        
+        // CloudKit push notifications
+        DispatchQueue.cloud.async {
+            do { try Store.shared.cloud.subcribeNewKeyShares() }
+            catch { log("⚠️ Could subscribe to new shares. \(error)") }
+        }
     }
 }
 
