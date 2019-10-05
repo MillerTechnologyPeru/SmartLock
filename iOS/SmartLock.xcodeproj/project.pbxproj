@@ -38,6 +38,8 @@
 		6E15AD842318C9060004D1AE /* TodayViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6E15AD822318C9060004D1AE /* TodayViewController.xib */; };
 		6E15AD872318C9060004D1AE /* ListRowViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6E15AD852318C9060004D1AE /* ListRowViewController.xib */; };
 		6E15AD8B2318C9060004D1AE /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6E15AD892318C9060004D1AE /* InfoPlist.strings */; };
+		6E1B33AA234861840083CC82 /* NetworkMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E1B33A9234861840083CC82 /* NetworkMonitor.swift */; };
+		6E1B33AB234861840083CC82 /* NetworkMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E1B33A9234861840083CC82 /* NetworkMonitor.swift */; };
 		6E3B70B22313E24F00BEB6FF /* ApplicationData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E3B70B12313E24F00BEB6FF /* ApplicationData.swift */; };
 		6E3B70BA2313EF1000BEB6FF /* JSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E3B70B82313E99A00BEB6FF /* JSON.swift */; };
 		6E3D1DF62334BFF4000C6E06 /* CloudNewKeyInvitation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E3D1DF52334BFF4000C6E06 /* CloudNewKeyInvitation.swift */; };
@@ -788,6 +790,7 @@
 		6E15AD882318C9060004D1AE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6E15AD8A2318C9060004D1AE /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		6E15AD8C2318C9060004D1AE /* Today_macOS.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Today_macOS.entitlements; sourceTree = "<group>"; };
+		6E1B33A9234861840083CC82 /* NetworkMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkMonitor.swift; sourceTree = "<group>"; };
 		6E3B70B12313E24F00BEB6FF /* ApplicationData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplicationData.swift; sourceTree = "<group>"; };
 		6E3B70B82313E99A00BEB6FF /* JSON.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSON.swift; sourceTree = "<group>"; };
 		6E3D1DF52334BFF4000C6E06 /* CloudNewKeyInvitation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudNewKeyInvitation.swift; sourceTree = "<group>"; };
@@ -1351,6 +1354,7 @@
 				6ECD35C0233B4CB000E49357 /* NewKeyDocument.swift */,
 				6E83BA7B233CC2D900D6BA04 /* NewKey.swift */,
 				6E83BA6C233CBAF400D6BA04 /* Error.swift */,
+				6E1B33A9234861840083CC82 /* NetworkMonitor.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -2951,6 +2955,7 @@
 				6E994AC2230DFDC60076DC1B /* LockPermissionsViewController.swift in Sources */,
 				6E0A89A12325A2450089E2EC /* PersistentContainer.swift in Sources */,
 				6E994AAD230DFDB10076DC1B /* Queue.swift in Sources */,
+				6E1B33AA234861840083CC82 /* NetworkMonitor.swift in Sources */,
 				6E83BAF62323842500FBC12E /* TableViewController.swift in Sources */,
 				6E994AB4230DFDB10076DC1B /* CoreSpotlight.swift in Sources */,
 				6E994AB1230DFDB10076DC1B /* BeaconController.swift in Sources */,
@@ -3120,6 +3125,7 @@
 				6EE05B81233309710014CEE4 /* Shortcut.swift in Sources */,
 				6E4051902323624700FE338B /* ConfirmNewKeyEventManagedObject.swift in Sources */,
 				6E4051912323624700FE338B /* RemoveKeyEventManagedObject.swift in Sources */,
+				6E1B33AB234861840083CC82 /* NetworkMonitor.swift in Sources */,
 				6E08FB9523171F9300177026 /* AnimatedButtonController.swift in Sources */,
 				6ED820A72316780100B69520 /* FileManager.swift in Sources */,
 				6ED820A0231677C000B69520 /* Image.swift in Sources */,
