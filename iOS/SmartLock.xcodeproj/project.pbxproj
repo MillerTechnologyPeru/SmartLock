@@ -78,36 +78,6 @@
 		6E6000192121119400787DAA /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6E6000172121119400787DAA /* Main.storyboard */; };
 		6E60001E2121119500787DAA /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6E60001C2121119500787DAA /* LaunchScreen.storyboard */; };
 		6E6000292121119500787DAA /* SmartLockUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E6000282121119500787DAA /* SmartLockUITests.swift */; };
-		6E62124D23472282007D49BF /* DarwinGATT in Frameworks */ = {isa = PBXBuildFile; productRef = 6E62124C23472282007D49BF /* DarwinGATT */; };
-		6E62124E23472282007D49BF /* DarwinGATT in Embed Frameworks */ = {isa = PBXBuildFile; productRef = 6E62124C23472282007D49BF /* DarwinGATT */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
-		6E62125023472282007D49BF /* GATT in Frameworks */ = {isa = PBXBuildFile; productRef = 6E62124F23472282007D49BF /* GATT */; };
-		6E62125123472282007D49BF /* GATT in Embed Frameworks */ = {isa = PBXBuildFile; productRef = 6E62124F23472282007D49BF /* GATT */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
-		6E6212572347228E007D49BF /* DarwinGATT in Frameworks */ = {isa = PBXBuildFile; productRef = 6E6212562347228E007D49BF /* DarwinGATT */; };
-		6E62125A2347228F007D49BF /* GATT in Frameworks */ = {isa = PBXBuildFile; productRef = 6E6212592347228F007D49BF /* GATT */; };
-		6E62125F23472305007D49BF /* Bluetooth in Frameworks */ = {isa = PBXBuildFile; productRef = 6E62125E23472305007D49BF /* Bluetooth */; };
-		6E62126023472305007D49BF /* Bluetooth in Embed Frameworks */ = {isa = PBXBuildFile; productRef = 6E62125E23472305007D49BF /* Bluetooth */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
-		6E6212632347235C007D49BF /* TLVCoding in Frameworks */ = {isa = PBXBuildFile; productRef = 6E6212622347235C007D49BF /* TLVCoding */; };
-		6E6212642347235C007D49BF /* TLVCoding in Embed Frameworks */ = {isa = PBXBuildFile; productRef = 6E6212622347235C007D49BF /* TLVCoding */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
-		6E62126E23472476007D49BF /* DarwinGATT in Frameworks */ = {isa = PBXBuildFile; productRef = 6E62126D23472476007D49BF /* DarwinGATT */; };
-		6E62127123472476007D49BF /* GATT in Frameworks */ = {isa = PBXBuildFile; productRef = 6E62127023472476007D49BF /* GATT */; };
-		6E621274234724C5007D49BF /* DarwinGATT in Frameworks */ = {isa = PBXBuildFile; productRef = 6E621273234724C5007D49BF /* DarwinGATT */; };
-		6E621277234724C5007D49BF /* GATT in Frameworks */ = {isa = PBXBuildFile; productRef = 6E621276234724C5007D49BF /* GATT */; };
-		6E62127B23472517007D49BF /* DarwinGATT in Frameworks */ = {isa = PBXBuildFile; productRef = 6E62127A23472517007D49BF /* DarwinGATT */; };
-		6E62127C23472517007D49BF /* DarwinGATT in Embed Frameworks */ = {isa = PBXBuildFile; productRef = 6E62127A23472517007D49BF /* DarwinGATT */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
-		6E62127E23472517007D49BF /* GATT in Frameworks */ = {isa = PBXBuildFile; productRef = 6E62127D23472517007D49BF /* GATT */; };
-		6E62127F23472517007D49BF /* GATT in Embed Frameworks */ = {isa = PBXBuildFile; productRef = 6E62127D23472517007D49BF /* GATT */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
-		6E62128123472517007D49BF /* Bluetooth in Frameworks */ = {isa = PBXBuildFile; productRef = 6E62128023472517007D49BF /* Bluetooth */; };
-		6E62128223472517007D49BF /* Bluetooth in Embed Frameworks */ = {isa = PBXBuildFile; productRef = 6E62128023472517007D49BF /* Bluetooth */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
-		6E62128423472517007D49BF /* TLVCoding in Frameworks */ = {isa = PBXBuildFile; productRef = 6E62128323472517007D49BF /* TLVCoding */; };
-		6E62128523472517007D49BF /* TLVCoding in Embed Frameworks */ = {isa = PBXBuildFile; productRef = 6E62128323472517007D49BF /* TLVCoding */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
-		6E62128723472569007D49BF /* DarwinGATT in Frameworks */ = {isa = PBXBuildFile; productRef = 6E62128623472569007D49BF /* DarwinGATT */; };
-		6E62128A23472569007D49BF /* GATT in Frameworks */ = {isa = PBXBuildFile; productRef = 6E62128923472569007D49BF /* GATT */; };
-		6E62128E23472579007D49BF /* DarwinGATT in Frameworks */ = {isa = PBXBuildFile; productRef = 6E62128D23472579007D49BF /* DarwinGATT */; };
-		6E62129123472579007D49BF /* GATT in Frameworks */ = {isa = PBXBuildFile; productRef = 6E62129023472579007D49BF /* GATT */; };
-		6E6212952347258D007D49BF /* DarwinGATT in Frameworks */ = {isa = PBXBuildFile; productRef = 6E6212942347258D007D49BF /* DarwinGATT */; };
-		6E6212982347258D007D49BF /* GATT in Frameworks */ = {isa = PBXBuildFile; productRef = 6E6212972347258D007D49BF /* GATT */; };
-		6E62129C234725A8007D49BF /* DarwinGATT in Frameworks */ = {isa = PBXBuildFile; productRef = 6E62129B234725A8007D49BF /* DarwinGATT */; };
-		6E62129F234725A8007D49BF /* GATT in Frameworks */ = {isa = PBXBuildFile; productRef = 6E62129E234725A8007D49BF /* GATT */; };
 		6E64B7EA231236E5002BC0A2 /* Rswift in Frameworks */ = {isa = PBXBuildFile; productRef = 6E64B7E9231236E5002BC0A2 /* Rswift */; };
 		6E64B7ED23123846002BC0A2 /* KeychainAccess in Frameworks */ = {isa = PBXBuildFile; productRef = 6E64B7EC23123846002BC0A2 /* KeychainAccess */; };
 		6E64B7F1231240CC002BC0A2 /* JGProgressHUD in Frameworks */ = {isa = PBXBuildFile; platformFilter = maccatalyst; productRef = 6E64B7F0231240CC002BC0A2 /* JGProgressHUD */; };
@@ -655,13 +625,9 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				6E62125123472282007D49BF /* GATT in Embed Frameworks */,
 				6E9C95FD23114D07007C18FE /* CoreLock.framework in Embed Frameworks */,
 				6E9C95FF23114D60007C18FE /* LockKit.framework in Embed Frameworks */,
-				6E6212642347235C007D49BF /* TLVCoding in Embed Frameworks */,
-				6E62126023472305007D49BF /* Bluetooth in Embed Frameworks */,
 				6E8772CB231259DE003B9469 /* JGProgressHUD.framework in Embed Frameworks */,
-				6E62124E23472282007D49BF /* DarwinGATT in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -711,12 +677,8 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				6E62128223472517007D49BF /* Bluetooth in Embed Frameworks */,
-				6E62128523472517007D49BF /* TLVCoding in Embed Frameworks */,
-				6E62127F23472517007D49BF /* GATT in Embed Frameworks */,
 				6EA570F323189CE9008027D4 /* CoreLock.framework in Embed Frameworks */,
 				6EA570EF23189CE9008027D4 /* LockKit.framework in Embed Frameworks */,
-				6E62127C23472517007D49BF /* DarwinGATT in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -997,13 +959,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6E62125023472282007D49BF /* GATT in Frameworks */,
 				6E9C95FC23114D07007C18FE /* CoreLock.framework in Frameworks */,
 				6E9C95FE23114D60007C18FE /* LockKit.framework in Frameworks */,
-				6E6212632347235C007D49BF /* TLVCoding in Frameworks */,
-				6E62125F23472305007D49BF /* Bluetooth in Frameworks */,
 				6E8772CA231259DE003B9469 /* JGProgressHUD.framework in Frameworks */,
-				6E62124D23472282007D49BF /* DarwinGATT in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1032,10 +990,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				6E64B7EA231236E5002BC0A2 /* Rswift in Frameworks */,
-				6E6212572347228E007D49BF /* DarwinGATT in Frameworks */,
 				6E64B7F4231247EF002BC0A2 /* QRCodeReader in Frameworks */,
 				6E64B7F1231240CC002BC0A2 /* JGProgressHUD in Frameworks */,
-				6E62125A2347228F007D49BF /* GATT in Frameworks */,
 				6E5DF8B32319E3A50070787B /* OpenCombine in Frameworks */,
 				6EE5A10B2329FCA00000235C /* CloudKitCodable in Frameworks */,
 				6E64B7ED23123846002BC0A2 /* KeychainAccess in Frameworks */,
@@ -1054,9 +1010,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6E62128A23472569007D49BF /* GATT in Frameworks */,
 				6E9794CC23315E2E00B5C5C9 /* CloudKit.framework in Frameworks */,
-				6E62128723472569007D49BF /* DarwinGATT in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1073,10 +1027,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6E62129123472579007D49BF /* GATT in Frameworks */,
 				6E994B0B230E89440076DC1B /* Messages.framework in Frameworks */,
 				6E9794D123315E7400B5C5C9 /* CloudKit.framework in Frameworks */,
-				6E62128E23472579007D49BF /* DarwinGATT in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1084,10 +1036,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6E62129F234725A8007D49BF /* GATT in Frameworks */,
 				6E994B2A230EF6DA0076DC1B /* NotificationCenter.framework in Frameworks */,
 				6E9794D223315E8100B5C5C9 /* CloudKit.framework in Frameworks */,
-				6E62129C234725A8007D49BF /* DarwinGATT in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1095,13 +1045,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6E62127E23472517007D49BF /* GATT in Frameworks */,
 				6E9794D423315EA000B5C5C9 /* CloudKit.framework in Frameworks */,
 				6EA570F223189CE9008027D4 /* CoreLock.framework in Frameworks */,
-				6E62128423472517007D49BF /* TLVCoding in Frameworks */,
-				6E62128123472517007D49BF /* Bluetooth in Frameworks */,
 				6EA570EE23189CE9008027D4 /* LockKit.framework in Frameworks */,
-				6E62127B23472517007D49BF /* DarwinGATT in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1116,9 +1062,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6E6212982347258D007D49BF /* GATT in Frameworks */,
 				6ECD3599233B12AF00E49357 /* QuickLook.framework in Frameworks */,
-				6E6212952347258D007D49BF /* DarwinGATT in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1134,10 +1078,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6E621277234724C5007D49BF /* GATT in Frameworks */,
 				6ED820B22316795D00B69520 /* LockKit.framework in Frameworks */,
 				6E9794D523315EB000B5C5C9 /* CloudKit.framework in Frameworks */,
-				6E621274234724C5007D49BF /* DarwinGATT in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1145,11 +1087,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6E62127123472476007D49BF /* GATT in Frameworks */,
 				6ED8209A2316777A00B69520 /* KeychainAccess in Frameworks */,
 				6E5DF8C32319EB020070787B /* OpenCombine in Frameworks */,
 				6ED82092231676C100B69520 /* CoreLock.framework in Frameworks */,
-				6E62126E23472476007D49BF /* DarwinGATT in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1750,10 +1690,6 @@
 			);
 			name = SmartLock;
 			packageProductDependencies = (
-				6E62124C23472282007D49BF /* DarwinGATT */,
-				6E62124F23472282007D49BF /* GATT */,
-				6E62125E23472305007D49BF /* Bluetooth */,
-				6E6212622347235C007D49BF /* TLVCoding */,
 			);
 			productName = SmartLock;
 			productReference = 6E6000102121119400787DAA /* SmartLock.app */;
@@ -1830,8 +1766,6 @@
 				6E64B7F3231247EF002BC0A2 /* QRCodeReader */,
 				6E5DF8B22319E3A50070787B /* OpenCombine */,
 				6EE5A10A2329FCA00000235C /* CloudKitCodable */,
-				6E6212562347228E007D49BF /* DarwinGATT */,
-				6E6212592347228F007D49BF /* GATT */,
 			);
 			productName = LockKit;
 			productReference = 6E994A84230DFB6C0076DC1B /* LockKit.framework */;
@@ -1872,8 +1806,6 @@
 			);
 			name = Intent;
 			packageProductDependencies = (
-				6E62128623472569007D49BF /* DarwinGATT */,
-				6E62128923472569007D49BF /* GATT */,
 			);
 			productName = Intent;
 			productReference = 6E994AD6230E56DD0076DC1B /* Intent.appex */;
@@ -1916,8 +1848,6 @@
 			);
 			name = Message;
 			packageProductDependencies = (
-				6E62128D23472579007D49BF /* DarwinGATT */,
-				6E62129023472579007D49BF /* GATT */,
 			);
 			productName = Message;
 			productReference = 6E994B09230E89440076DC1B /* Message.appex */;
@@ -1939,8 +1869,6 @@
 			);
 			name = Today;
 			packageProductDependencies = (
-				6E62129B234725A8007D49BF /* DarwinGATT */,
-				6E62129E234725A8007D49BF /* GATT */,
 			);
 			productName = Today;
 			productReference = 6E994B28230EF6DA0076DC1B /* Today.appex */;
@@ -1982,10 +1910,6 @@
 			);
 			name = "Watch Extension";
 			packageProductDependencies = (
-				6E62127A23472517007D49BF /* DarwinGATT */,
-				6E62127D23472517007D49BF /* GATT */,
-				6E62128023472517007D49BF /* Bluetooth */,
-				6E62128323472517007D49BF /* TLVCoding */,
 			);
 			productName = "Watch Extension";
 			productReference = 6EA570D023189874008027D4 /* Watch Extension.appex */;
@@ -2026,8 +1950,6 @@
 			);
 			name = QuickLook;
 			packageProductDependencies = (
-				6E6212942347258D007D49BF /* DarwinGATT */,
-				6E6212972347258D007D49BF /* GATT */,
 			);
 			productName = QuickLook;
 			productReference = 6ECD3597233B12AF00E49357 /* QuickLook.appex */;
@@ -2068,8 +1990,6 @@
 			);
 			name = WatchIntent;
 			packageProductDependencies = (
-				6E621273234724C5007D49BF /* DarwinGATT */,
-				6E621276234724C5007D49BF /* GATT */,
 			);
 			productName = WatchIntent;
 			productReference = 6ED8206C2316711900B69520 /* WatchIntent.appex */;
@@ -2093,8 +2013,6 @@
 			packageProductDependencies = (
 				6ED820992316777A00B69520 /* KeychainAccess */,
 				6E5DF8C22319EB020070787B /* OpenCombine */,
-				6E62126D23472476007D49BF /* DarwinGATT */,
-				6E62127023472476007D49BF /* GATT */,
 			);
 			productName = "LockKit watchOS";
 			productReference = 6ED82086231676AE00B69520 /* LockKit.framework */;
@@ -2225,9 +2143,6 @@
 				6E64B7F2231247EF002BC0A2 /* XCRemoteSwiftPackageReference "QRCodeReader.swift" */,
 				6E5DF8B12319E3A50070787B /* XCRemoteSwiftPackageReference "OpenCombine" */,
 				6EE5A1092329FCA00000235C /* XCRemoteSwiftPackageReference "CloudKitCodable" */,
-				6E62124B23472282007D49BF /* XCRemoteSwiftPackageReference "GATT" */,
-				6E62125D23472305007D49BF /* XCRemoteSwiftPackageReference "Bluetooth" */,
-				6E6212612347235C007D49BF /* XCRemoteSwiftPackageReference "TLVCoding" */,
 			);
 			productRefGroup = 6E6000112121119400787DAA /* Products */;
 			projectDirPath = "";
@@ -4754,30 +4669,6 @@
 				kind = branch;
 			};
 		};
-		6E62124B23472282007D49BF /* XCRemoteSwiftPackageReference "GATT" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/PureSwift/GATT.git";
-			requirement = {
-				branch = master;
-				kind = branch;
-			};
-		};
-		6E62125D23472305007D49BF /* XCRemoteSwiftPackageReference "Bluetooth" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/PureSwift/Bluetooth.git";
-			requirement = {
-				branch = master;
-				kind = branch;
-			};
-		};
-		6E6212612347235C007D49BF /* XCRemoteSwiftPackageReference "TLVCoding" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/PureSwift/TLVCoding.git";
-			requirement = {
-				branch = master;
-				kind = branch;
-			};
-		};
 		6E64B7E8231236E5002BC0A2 /* XCRemoteSwiftPackageReference "R.swift" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/mac-cain13/R.swift.Library";
@@ -4878,116 +4769,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 6E5DF8B12319E3A50070787B /* XCRemoteSwiftPackageReference "OpenCombine" */;
 			productName = OpenCombine;
-		};
-		6E62124C23472282007D49BF /* DarwinGATT */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 6E62124B23472282007D49BF /* XCRemoteSwiftPackageReference "GATT" */;
-			productName = DarwinGATT;
-		};
-		6E62124F23472282007D49BF /* GATT */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 6E62124B23472282007D49BF /* XCRemoteSwiftPackageReference "GATT" */;
-			productName = GATT;
-		};
-		6E6212562347228E007D49BF /* DarwinGATT */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 6E62124B23472282007D49BF /* XCRemoteSwiftPackageReference "GATT" */;
-			productName = DarwinGATT;
-		};
-		6E6212592347228F007D49BF /* GATT */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 6E62124B23472282007D49BF /* XCRemoteSwiftPackageReference "GATT" */;
-			productName = GATT;
-		};
-		6E62125E23472305007D49BF /* Bluetooth */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 6E62125D23472305007D49BF /* XCRemoteSwiftPackageReference "Bluetooth" */;
-			productName = Bluetooth;
-		};
-		6E6212622347235C007D49BF /* TLVCoding */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 6E6212612347235C007D49BF /* XCRemoteSwiftPackageReference "TLVCoding" */;
-			productName = TLVCoding;
-		};
-		6E62126D23472476007D49BF /* DarwinGATT */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 6E62124B23472282007D49BF /* XCRemoteSwiftPackageReference "GATT" */;
-			productName = DarwinGATT;
-		};
-		6E62127023472476007D49BF /* GATT */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 6E62124B23472282007D49BF /* XCRemoteSwiftPackageReference "GATT" */;
-			productName = GATT;
-		};
-		6E621273234724C5007D49BF /* DarwinGATT */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 6E62124B23472282007D49BF /* XCRemoteSwiftPackageReference "GATT" */;
-			productName = DarwinGATT;
-		};
-		6E621276234724C5007D49BF /* GATT */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 6E62124B23472282007D49BF /* XCRemoteSwiftPackageReference "GATT" */;
-			productName = GATT;
-		};
-		6E62127A23472517007D49BF /* DarwinGATT */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 6E62124B23472282007D49BF /* XCRemoteSwiftPackageReference "GATT" */;
-			productName = DarwinGATT;
-		};
-		6E62127D23472517007D49BF /* GATT */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 6E62124B23472282007D49BF /* XCRemoteSwiftPackageReference "GATT" */;
-			productName = GATT;
-		};
-		6E62128023472517007D49BF /* Bluetooth */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 6E62125D23472305007D49BF /* XCRemoteSwiftPackageReference "Bluetooth" */;
-			productName = Bluetooth;
-		};
-		6E62128323472517007D49BF /* TLVCoding */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 6E6212612347235C007D49BF /* XCRemoteSwiftPackageReference "TLVCoding" */;
-			productName = TLVCoding;
-		};
-		6E62128623472569007D49BF /* DarwinGATT */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 6E62124B23472282007D49BF /* XCRemoteSwiftPackageReference "GATT" */;
-			productName = DarwinGATT;
-		};
-		6E62128923472569007D49BF /* GATT */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 6E62124B23472282007D49BF /* XCRemoteSwiftPackageReference "GATT" */;
-			productName = GATT;
-		};
-		6E62128D23472579007D49BF /* DarwinGATT */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 6E62124B23472282007D49BF /* XCRemoteSwiftPackageReference "GATT" */;
-			productName = DarwinGATT;
-		};
-		6E62129023472579007D49BF /* GATT */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 6E62124B23472282007D49BF /* XCRemoteSwiftPackageReference "GATT" */;
-			productName = GATT;
-		};
-		6E6212942347258D007D49BF /* DarwinGATT */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 6E62124B23472282007D49BF /* XCRemoteSwiftPackageReference "GATT" */;
-			productName = DarwinGATT;
-		};
-		6E6212972347258D007D49BF /* GATT */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 6E62124B23472282007D49BF /* XCRemoteSwiftPackageReference "GATT" */;
-			productName = GATT;
-		};
-		6E62129B234725A8007D49BF /* DarwinGATT */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 6E62124B23472282007D49BF /* XCRemoteSwiftPackageReference "GATT" */;
-			productName = DarwinGATT;
-		};
-		6E62129E234725A8007D49BF /* GATT */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 6E62124B23472282007D49BF /* XCRemoteSwiftPackageReference "GATT" */;
-			productName = GATT;
 		};
 		6E64B7E9231236E5002BC0A2 /* Rswift */ = {
 			isa = XCSwiftPackageProductDependency;

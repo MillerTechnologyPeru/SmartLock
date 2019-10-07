@@ -6,7 +6,7 @@
         "repositoryURL": "https://github.com/PureSwift/Bluetooth.git",
         "state": {
           "branch": "master",
-          "revision": "10a9242f640c4ca773d434fb0c04f466ee240937",
+          "revision": "b03524c7a0c7eca048133a9df9dc4bbe727b38e0",
           "version": null
         }
       },
@@ -24,7 +24,7 @@
         "repositoryURL": "https://github.com/krzyzanowskim/CryptoSwift",
         "state": {
           "branch": "master",
-          "revision": "5d114736f5a98caa8a0ca1c254526f1ce5688f91",
+          "revision": "68060e53825e40d8830a0492903b8d15924263e0",
           "version": null
         }
       },
@@ -33,7 +33,7 @@
         "repositoryURL": "https://github.com/PureSwift/GATT.git",
         "state": {
           "branch": "master",
-          "revision": "801f7060cc4860aa3aed22528b4e434683be44db",
+          "revision": "955a19b2030e08666154f2ee52d7955f56bb6ff5",
           "version": null
         }
       },
@@ -96,7 +96,7 @@
         "repositoryURL": "https://github.com/PureSwift/TLVCoding.git",
         "state": {
           "branch": "master",
-          "revision": "cf4fa0042ca96eff3237d8e3e48d9c1d9b3f2fca",
+          "revision": "8c41d0fd48f6fc00c429aad025c114a941aad764",
           "version": null
         }
       },

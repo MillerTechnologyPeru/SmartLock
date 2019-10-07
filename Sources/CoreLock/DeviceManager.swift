@@ -298,10 +298,7 @@ public final class LockManager <Central: CentralProtocol> {
         
         log?("List keys for \(peripheral)")
         typealias Notification = KeysCharacteristic
-        var keysList = KeysList(
-            keys: .init(reserveCapacity: 2),
-            newKeys: .init(reserveCapacity: 1)
-        )
+        var keysList = KeysList()
         try list(write: ListKeysCharacteristic(
             identifier: key.identifier,
             authentication: Authentication(key: key.secret)
@@ -337,7 +334,8 @@ public final class LockManager <Central: CentralProtocol> {
         
         log?("List events for \(peripheral)")
         typealias Notification = EventsCharacteristic
-        var events = EventsList(reserveCapacity: fetchRequest?.limit.flatMap({ Int($0) }) ?? 1)
+        var events = EventsList()
+        events.reserveCapacity(fetchRequest?.limit.flatMap({ Int($0) }) ?? 1)
         try list(write: ListEventsCharacteristic(
             identifier: key.identifier,
             authentication: Authentication(key: key.secret),
