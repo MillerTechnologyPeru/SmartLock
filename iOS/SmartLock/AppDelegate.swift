@@ -123,12 +123,22 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
         application.setMinimumBackgroundFetchInterval(UIApplication.backgroundFetchIntervalMinimum)
         #endif
                 
+        // queue post-app initialization loading
+        DispatchQueue.main.async { [unowned self] in
+            
+            // load reachability
+            if #available(iOS 12.0, *) {
+                let _ = NetworkMonitor.shared
+            }
+            
+            // subscribe to push notifications
+            self.queueDidLaunchOperations()
+        }
+        
         // handle url
         if let url = launchOptions?[.url] as? URL {
             open(url: url)
         }
-        
-        queueDidLaunchOperations()
         
         return true
     }
