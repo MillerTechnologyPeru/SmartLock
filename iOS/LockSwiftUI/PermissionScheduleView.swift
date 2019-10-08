@@ -74,8 +74,15 @@ public struct PermissionScheduleView: View {
     private static let expirationTimeFormatter = RelativeDateTimeFormatter()
     
     private func expirationTime(for date: Date) -> Text {
-        return Text(verbatim: type(of: self).expirationTimeFormatter
-            .localizedString(for: date, relativeTo: Date()))
+        let expiration: String
+        let timeRemaining = date.timeIntervalSinceNow
+        if timeRemaining > 0 {
+            let timeFormatter = type(of: self).expirationTimeFormatter
+            expiration = timeFormatter.localizedString(fromTimeInterval: timeRemaining)
+        } else {
+            expiration = "Expired" // TODO: Localize
+        }
+        return Text(verbatim: expiration)
     }
     
     private static let intervalTimeFormatter: RelativeDateTimeFormatter = {

@@ -9,6 +9,7 @@
 import Foundation
 import SwiftUI
 import LockKit
+import Network
 
 /// iCloud Settings View
 @available(iOS 13, *)
@@ -18,6 +19,9 @@ struct CloudSettingsView: View {
     
     @ObservedObject
     var preferences: Preferences = Store.shared.preferences
+    
+    @ObservedObject
+    var networkMonitor: NetworkMonitor = .shared
     
     @State
     var isCloudUpdating = false
@@ -34,7 +38,7 @@ struct CloudSettingsView: View {
             Section(header: Text(verbatim: ""),
                     footer: preferences.isCloudBackupEnabled ? preferences.lastCloudUpdate
                         .flatMap { Text(R.string.cloudSettingsView.cloudLastUpdate()) + Text(" \($0)") } ?? Text("") : Text("")) {
-                if preferences.isCloudBackupEnabled {
+                if preferences.isCloudBackupEnabled && networkMonitor.path.status != .unsatisfied {
                     Button(action: { self.backup() }) {
                         HStack {
                             isCloudUpdating ? Text(R.string.cloudSettingsView.cloudBackup()) : Text(R.string.cloudSettingsView.cloudBackupNow())

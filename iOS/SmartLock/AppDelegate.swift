@@ -42,7 +42,7 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
     #endif
     
     private var locksObserver: OpenCombine.AnyCancellable?
-    
+        
     // MARK: - UIApplicationDelegate
     
     func application(_ application: UIApplication,
@@ -120,9 +120,21 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
         setupBackgroundUpdates()
         #else
         // background fetch in iOS
-        application.setMinimumBackgroundFetchInterval(60 * 10)
+        application.setMinimumBackgroundFetchInterval(UIApplication.backgroundFetchIntervalMinimum)
         #endif
                 
+        // queue post-app initialization loading
+        DispatchQueue.main.async { [unowned self] in
+            
+            // load reachability
+            if #available(iOS 12.0, *) {
+                let _ = NetworkMonitor.shared
+            }
+            
+            // subscribe to push notifications
+            self.queueDidLaunchOperations()
+        }
+        
         // handle url
         if let url = launchOptions?[.url] as? URL {
             open(url: url)
@@ -148,28 +160,45 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
         
         // update beacons
         BeaconController.shared.scanBeacons()
+        
+        // only scan and sync in background when low power mode is disabled.
+        guard ProcessInfo.processInfo.isLowPowerModeEnabled == false else { return }
+        
         // scan in background
-        let beaconTask = UIApplication.shared.beginBackgroundTask(withName: bundle.rawValue, expirationHandler: {
+        if Store.shared.lockManager.central.state == .poweredOn {
+            let bluetoothTask = application.beginBackgroundTask(withName: "BluetoothScan", expirationHandler: {
+                log("\(bundle.symbol) Background task expired")
+            })
+            DispatchQueue.bluetooth.async { [unowned self] in
+                // scan for nearby devices
+                do { try Store.shared.scan(duration: 3.0) }
+                catch { log("⚠️ Unable to scan: \(error.localizedDescription)") }
+                // read information characteristic
+                for device in Store.shared.peripherals.value.values {
+                    guard Store.shared.lockInformation.value[device.scanData.peripheral] == nil
+                        else { continue }
+                    do { try Store.shared.readInformation(device) }
+                    catch { log("⚠️ Unable to read information: \(error.localizedDescription)") }
+                }
+                DispatchQueue.main.async { [weak self] in
+                    self?.logBackgroundTimeRemaining()
+                    log("\(bundle.symbol) Bluetooth background task ended")
+                    application.endBackgroundTask(bluetoothTask)
+                }
+            }
+        }
+        
+        // attempt to sync with iCloud in background
+        let cloudTask = application.beginBackgroundTask(withName: "iCloudSync", expirationHandler: {
             log("\(bundle.symbol) Background task expired")
         })
-        DispatchQueue.bluetooth.async { [unowned self] in
-            do {
-                // scan for locks
-                try Store.shared.scan(duration: 3.0)
-                // make sure each stored lock is visible
-                for lock in Store.shared.locks.value.keys {
-                    let _ = try Store.shared.device(for: lock, scanDuration: 1.0)
-                }
-            } catch { log("⚠️ Unable to scan: \(error.localizedDescription)") }
-            // attempt to sync with iCloud
-            DispatchQueue.cloud.async {
-                do { try Store.shared.syncCloud() }
-                catch { log("⚠️ Unable to sync: \(error.localizedDescription)") }
-                mainQueue { self.logBackgroundTimeRemaining() }
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                    log("\(bundle.symbol) Background task ended")
-                    UIApplication.shared.endBackgroundTask(beaconTask)
-                }
+        DispatchQueue.cloud.async {
+            do { try Store.shared.syncCloud() }
+            catch { log("⚠️ Unable to sync: \(error.localizedDescription)") }
+            DispatchQueue.main.async { [weak self] in
+                self?.logBackgroundTimeRemaining()
+                log("\(bundle.symbol) iCloud background task ended")
+                application.endBackgroundTask(cloudTask)
             }
         }
     }
@@ -178,8 +207,30 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
         // Called as part of the transition from the background to the active state; here you can undo many of the changes made on entering the background.
         
         log("\(bundle.symbol) Will enter foreground")
+                
+        // update cache if modified by extension
+        Store.shared.loadCache()
         
-        BeaconController.shared.scanBeacons()
+        // save energy
+        guard ProcessInfo.processInfo.isLowPowerModeEnabled == false else { return }
+        
+        // attempt to scan for all known locks if they are not in central cache
+        if Store.shared.lockManager.central.state == .poweredOn {
+            DispatchQueue.bluetooth.async {
+                let locks = Store.shared.locks.value.keys
+                guard locks.contains(where: { Store.shared.device(for: $0) == nil }) else { return }
+                // scan for nearby devices
+                do { try Store.shared.scan(duration: 3.0) }
+                catch { log("⚠️ Unable to scan: \(error.localizedDescription)") }
+                // read information characteristic
+                for device in Store.shared.peripherals.value.values {
+                    guard Store.shared.lockInformation.value[device.scanData.peripheral] == nil
+                        else { continue }
+                    do { try Store.shared.readInformation(device) }
+                    catch { log("⚠️ Unable to read information: \(error.localizedDescription)") }
+                }
+            }
+        }
     }
 
     func applicationDidBecomeActive(_ application: UIApplication) {
@@ -189,53 +240,23 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
         
         didBecomeActive = true
         application.applicationIconBadgeNumber = 0
-        
-        // update cache if modified by extension
-        Store.shared.loadCache()
                         
+        // scan for iBeacons
         BeaconController.shared.scanBeacons()
         
-        // attempt to scan for all known locks if they are not in central cache
-        if Store.shared.lockManager.central.state == .poweredOn {
-            DispatchQueue.bluetooth.async {
-                do {
-                    for lock in Store.shared.locks.value.keys {
-                        let _ = try Store.shared.device(for: lock, scanDuration: 1.0)
-                    }
-                } catch { log("⚠️ Unable to scan: \(error.localizedDescription)") }
-            }
-        }
-        
-        // CloudKit discoverability
-        DispatchQueue.cloud.asyncAfter(deadline: .now() + 3.0) {
-            do {
-                let status = try Store.shared.cloud.requestPermissions()
-                log("☁️ CloudKit permisions \(status == .granted ? "granted" : "not granted")")
-            }
-            catch { log("⚠️ Could not request CloudKit permissions. \(error.localizedDescription)") }
-        }
-        
-        // CloudKit push notifications
-        DispatchQueue.cloud.async {
-            do { try Store.shared.cloud.subcribeNewKeyShares() }
-            catch { log("⚠️ Could subscribe to new shares. \(error)") }
-        }
-        
-        // CloudKit contacts
-        DispatchQueue.cloud.async {
-            do { try Store.shared.updateContacts() }
-            catch { log("⚠️ Could not update contacts. \(error.localizedDescription)") }
-        }
+        // save energy
+        guard ProcessInfo.processInfo.isLowPowerModeEnabled == false else { return }
         
         // attempt to sync with iCloud
         tabBarController.syncCloud()
     }
-
+    
     func applicationWillTerminate(_ application: UIApplication) {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
         
         log("\(bundle.symbol) Will terminate")
         
+        // scan for iBeacons
         BeaconController.shared.scanBeacons()
     }
     
@@ -432,6 +453,27 @@ extension AppDelegate {
         guard let tabBarController = window?.rootViewController as? TabBarController
             else { fatalError() }
         return tabBarController
+    }
+}
+
+private extension AppDelegate {
+    
+    func queueDidLaunchOperations() {
+        
+        // CloudKit discoverability
+        DispatchQueue.cloud.asyncAfter(deadline: .now() + 3.0) {
+            do {
+                let status = try Store.shared.cloud.requestPermissions()
+                log("☁️ CloudKit permisions \(status == .granted ? "granted" : "not granted")")
+            }
+            catch { log("⚠️ Could not request CloudKit permissions. \(error.localizedDescription)") }
+        }
+        
+        // CloudKit push notifications
+        DispatchQueue.app.async {
+            do { try Store.shared.cloud.subcribeNewKeyShares() }
+            catch { log("⚠️ Could subscribe to new shares. \(error)") }
+        }
     }
 }
 

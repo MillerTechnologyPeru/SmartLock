@@ -82,7 +82,8 @@ extension LockURL: RawRepresentable {
     public var rawValue: URL {
         
         let type = self.type
-        var path = [String](reserveCapacity: type.componentsCount)
+        var path = [String]()
+        path.reserveCapacity(type.componentsCount)
         path.append(type.rawValue)
         switch self {
         case let .setup(lock: lockIdentifier, secret: secretData):

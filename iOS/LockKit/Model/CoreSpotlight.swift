@@ -70,7 +70,8 @@ public final class SpotlightController {
                         completion: ((Error?) -> ())? = nil) {
         
         var deletedItems = Set<String>()
-        var searchableItems = [CSSearchableItem](reserveCapacity: identifiers.count)
+        var searchableItems = [CSSearchableItem]()
+        searchableItems.reserveCapacity(identifiers.count)
         
         for identifier in identifiers {
             

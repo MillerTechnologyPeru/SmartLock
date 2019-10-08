@@ -184,7 +184,11 @@ public final class ContactsViewController: TableViewController {
         
         // fetch contacts from CloudKit and insert into CoreData
         performActivity(queue: .app, {
-            try Store.shared.updateContacts()
+            do { try Store.shared.updateContacts() }
+            // ignore common errors
+            catch CKError.networkUnavailable { }
+            catch CKError.networkFailure { }
+            catch CKError.requestRateLimited { }
         })
     }
     

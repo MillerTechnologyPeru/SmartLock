@@ -15,6 +15,7 @@ import CoreLock
 import LockKit
 import JGProgressHUD
 import OpenCombine
+import CloudKit
 
 final class KeysViewController: UITableViewController {
     
@@ -58,8 +59,6 @@ final class KeysViewController: UITableViewController {
         locksObserver = Store.shared.locks.sink { locks in
             mainQueue { [weak self] in self?.configureView() }
         }
-        
-        reloadData()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -121,11 +120,17 @@ final class KeysViewController: UITableViewController {
                 self?.pendingKeys = pendingKeys
             }
             // fetch from CloudKit
-            try Store.shared.fetchCloudNewKeys { (url, newKey) in
-                mainQueue { [weak self] in
-                    self?.pendingKeys[url] = newKey
+            do {
+                try Store.shared.fetchCloudNewKeys { (url, newKey) in
+                    mainQueue { [weak self] in
+                        self?.pendingKeys[url] = newKey
+                    }
                 }
             }
+            // ignore common errors
+            catch CKError.networkUnavailable { }
+            catch CKError.networkFailure { }
+            catch CKError.requestRateLimited { }
         })
     }
     

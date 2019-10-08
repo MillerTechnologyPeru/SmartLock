@@ -391,11 +391,10 @@ extension Store: Combine.ObservableObject { }
 public extension Store {
     
     func device(for identifier: UUID,
-                scanDuration: TimeInterval? = nil) throws -> LockPeripheral<NativeCentral>? {
+                scanDuration: TimeInterval) throws -> LockPeripheral<NativeCentral>? {
         
         assert(Thread.isMainThread == false)
         
-        let scanDuration = scanDuration ?? preferences.scanDuration
         if let lock = device(for: identifier) {
             return lock
         } else {
