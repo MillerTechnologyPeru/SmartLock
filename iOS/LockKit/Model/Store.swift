@@ -286,7 +286,11 @@ public final class Store {
     private func updateCloud() {
         
         DispatchQueue.cloud.async { [weak self] in
-            do { try self?.syncCloud() }
+            guard let self = self else { return }
+            do {
+                guard try self.cloud.accountStatus() == .available else { return }
+                try self.syncCloud()
+            }
             catch { log("⚠️ Unable to sync iCloud: \(error.localizedDescription)") }
         }
     }

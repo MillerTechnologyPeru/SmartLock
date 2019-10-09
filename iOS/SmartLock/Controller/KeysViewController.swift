@@ -120,17 +120,19 @@ final class KeysViewController: UITableViewController {
                 self?.pendingKeys = pendingKeys
             }
             // fetch from CloudKit
-            do {
-                try Store.shared.fetchCloudNewKeys { (url, newKey) in
-                    mainQueue { [weak self] in
-                        self?.pendingKeys[url] = newKey
+            if (try? Store.shared.cloud.accountStatus()) == .available {
+                do {
+                    try Store.shared.fetchCloudNewKeys { (url, newKey) in
+                        mainQueue { [weak self] in
+                            self?.pendingKeys[url] = newKey
+                        }
                     }
                 }
+                // ignore common errors
+                catch CKError.networkUnavailable { }
+                catch CKError.networkFailure { }
+                catch CKError.requestRateLimited { }
             }
-            // ignore common errors
-            catch CKError.networkUnavailable { }
-            catch CKError.networkFailure { }
-            catch CKError.requestRateLimited { }
         })
     }
     
