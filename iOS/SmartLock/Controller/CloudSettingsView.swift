@@ -10,6 +10,7 @@ import Foundation
 import SwiftUI
 import LockKit
 import Network
+import CloudKit
 
 /// iCloud Settings View
 @available(iOS 13, *)
@@ -23,8 +24,8 @@ struct CloudSettingsView: View {
     @ObservedObject
     var networkMonitor: NetworkMonitor = .shared
     
-    @State
-    var isCloudUpdating = false
+    @ObservedObject
+    var cloudCache: CloudCache = .shared
     
     // MARK: - View
     
@@ -38,12 +39,14 @@ struct CloudSettingsView: View {
             Section(header: Text(verbatim: ""),
                     footer: preferences.isCloudBackupEnabled ? preferences.lastCloudUpdate
                         .flatMap { Text(R.string.cloudSettingsView.cloudLastUpdate()) + Text(" \($0)") } ?? Text("") : Text("")) {
-                if preferences.isCloudBackupEnabled && networkMonitor.path.status != .unsatisfied {
-                    Button(action: { self.backup() }) {
+                if preferences.isCloudBackupEnabled
+                    && networkMonitor.path.status != .unsatisfied
+                    && cloudCache.status == .available {
+                    Button(action: { self.cloudCache.backup() }) {
                         HStack {
-                            isCloudUpdating ? Text(R.string.cloudSettingsView.cloudBackup()) : Text(R.string.cloudSettingsView.cloudBackupNow())
+                            cloudCache.isCloudUpdating ? Text(R.string.cloudSettingsView.cloudBackup()) : Text(R.string.cloudSettingsView.cloudBackupNow())
                             Spacer()
-                            if isCloudUpdating {
+                            if cloudCache.isCloudUpdating {
                                 ActivityIndicator()
                             }
                         }
@@ -53,30 +56,64 @@ struct CloudSettingsView: View {
         }
         .listStyle(GroupedListStyle())
         .navigationBarTitle(Text(R.string.cloudSettingsView.cloudICloud()), displayMode: .large)
+        .onAppear { self.cloudCache.refreshStatus() }
     }
 }
 
-// MARK: - Methods
+// MARK: - Supporting Types
 
 @available(iOS 13, *)
-private extension CloudSettingsView {
+internal extension CloudSettingsView {
     
-    func backup() {
-        guard isCloudUpdating == false else { return }
-        isCloudUpdating = true
-        let viewController = AppDelegate.shared.tabBarController
-        AppDelegate.shared.tabBarController.syncCloud {
-            self.isCloudUpdating = false
-            switch $0 {
-            case let .failure(error):
-                log("⚠️ Could not sync iCloud: \(error.localizedDescription)")
-                viewController.showErrorAlert(error.localizedDescription)
-            case .success:
-                break
+    final class CloudCache: ObservableObject {
+        
+        static let shared = CloudCache()
+        
+        let cloudStore: CloudStore = .shared
+        
+        @Published
+        var status: CKAccountStatus = .couldNotDetermine
+        
+        @Published
+        var isCloudUpdating = false
+        
+        func refreshStatus() {
+            
+            DispatchQueue.app.async { [weak self] in
+                guard let self = self else { return }
+                do {
+                    let status = try self.cloudStore.accountStatus()
+                    DispatchQueue.main.async { [weak self] in
+                        self?.status = status
+                    }
+                }
+                catch { log("⚠️ Could load iCloud account: \(error.localizedDescription)") }
+            }
+        }
+        
+        func backup() {
+            
+            guard isCloudUpdating == false else { return }
+            isCloudUpdating = true
+            let viewController = AppDelegate.shared.tabBarController
+            viewController.syncCloud { (result) in
+                DispatchQueue.main.async { [weak self] in
+                    guard let self = self else { return }
+                    self.isCloudUpdating = false
+                    switch result {
+                    case let .failure(error):
+                        log("⚠️ Could not sync iCloud: \(error.localizedDescription)")
+                        viewController.showErrorAlert(error.localizedDescription)
+                    case .success:
+                        break
+                    }
+                }
             }
         }
     }
 }
+
+// MARK: - Preview
 
 #if DEBUG
 @available(iOS 13.0.0, *)
