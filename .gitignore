@@ -65,3 +65,7 @@ fastlane/test_output
 
 # SPM Generated
 /*.xcodeproj
+
+# R.swift
+*.generated.swift
+iOS/rswift

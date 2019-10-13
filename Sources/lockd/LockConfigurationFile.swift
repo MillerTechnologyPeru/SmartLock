@@ -24,14 +24,12 @@ public final class LockConfigurationFile: LockConfigurationStore {
     // MARK: - Initialization
     
     public init(url: URL) throws {
-        
         self.file = try JSONFile(url: url, defaultValue: LockConfiguration())
     }
     
     // MARK: - Methods
     
     public func update(_ configuration: LockConfiguration) throws {
-        
         try file.write(configuration)
     }
 }

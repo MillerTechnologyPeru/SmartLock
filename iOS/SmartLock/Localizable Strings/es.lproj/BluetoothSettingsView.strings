@@ -1,0 +1,14 @@
+/* 
+  BluetoothSettingsView.strings
+  SmartLock
+
+  Created by JurjDev on 9/27/19.
+  Copyright © 2019 ColemanCDA. All rights reserved.
+*/
+
+"Bluetooth.ScanDuration" = "Duración del escaneo";
+"Bluetooth.Timeout" = "Tiempo de espera";
+"Bluetooth.Write" = "Escribir sin tiempo de espera";
+"Bluetooth.FilterDuplicates" = "Filtrar Duplicados";
+"Bluetooth.MonitorNotifications" = "Supervisar Notificaciones";
+"Bluetooth" = "Bluetooth";

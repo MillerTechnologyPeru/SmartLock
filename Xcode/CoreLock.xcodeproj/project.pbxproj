@@ -3,10 +3,55 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 47;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
+		6E0A32D522D8FCFB002EF9DE /* URL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E0A32D422D8FCFB002EF9DE /* URL.swift */; };
+		6E0A32D622D8FCFB002EF9DE /* URL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E0A32D422D8FCFB002EF9DE /* URL.swift */; };
+		6E0A32D722D8FCFB002EF9DE /* URL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E0A32D422D8FCFB002EF9DE /* URL.swift */; };
+		6E0A32D822D8FCFB002EF9DE /* URL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E0A32D422D8FCFB002EF9DE /* URL.swift */; };
+		6E0A32DA22D91E1D002EF9DE /* URLTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E0A32D922D91E1D002EF9DE /* URLTests.swift */; };
+		6E621244234721FF007D49BF /* Bluetooth in Frameworks */ = {isa = PBXBuildFile; productRef = 6E621243234721FF007D49BF /* Bluetooth */; };
+		6E62124823472217007D49BF /* Bluetooth in Frameworks */ = {isa = PBXBuildFile; productRef = 6E62124723472217007D49BF /* Bluetooth */; };
+		6E621266234723ED007D49BF /* Bluetooth in Frameworks */ = {isa = PBXBuildFile; productRef = 6E621265234723ED007D49BF /* Bluetooth */; };
+		6E62126A23472400007D49BF /* Bluetooth in Frameworks */ = {isa = PBXBuildFile; productRef = 6E62126923472400007D49BF /* Bluetooth */; };
+		6E93D354231C624300119F65 /* Notification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E93D351231C623B00119F65 /* Notification.swift */; };
+		6E93D355231C624300119F65 /* Notification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E93D351231C623B00119F65 /* Notification.swift */; };
+		6E93D356231C624300119F65 /* Notification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E93D351231C623B00119F65 /* Notification.swift */; };
+		6E93D357231C624300119F65 /* Notification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E93D351231C623B00119F65 /* Notification.swift */; };
+		6E93D358231C624300119F65 /* ListEventsCharacteristic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E93D352231C623E00119F65 /* ListEventsCharacteristic.swift */; };
+		6E93D359231C624300119F65 /* ListEventsCharacteristic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E93D352231C623E00119F65 /* ListEventsCharacteristic.swift */; };
+		6E93D35A231C624300119F65 /* ListEventsCharacteristic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E93D352231C623E00119F65 /* ListEventsCharacteristic.swift */; };
+		6E93D35B231C624300119F65 /* ListEventsCharacteristic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E93D352231C623E00119F65 /* ListEventsCharacteristic.swift */; };
+		6E93D35C231C624300119F65 /* EventsCharacteristic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E93D353231C624000119F65 /* EventsCharacteristic.swift */; };
+		6E93D35D231C624300119F65 /* EventsCharacteristic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E93D353231C624000119F65 /* EventsCharacteristic.swift */; };
+		6E93D35E231C624300119F65 /* EventsCharacteristic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E93D353231C624000119F65 /* EventsCharacteristic.swift */; };
+		6E93D35F231C624300119F65 /* EventsCharacteristic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E93D353231C624000119F65 /* EventsCharacteristic.swift */; };
+		6E9794C423301FC400B5C5C9 /* UUID.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E9794C323301FC400B5C5C9 /* UUID.swift */; };
+		6E9794C523301FC400B5C5C9 /* UUID.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E9794C323301FC400B5C5C9 /* UUID.swift */; };
+		6E9794C623301FC400B5C5C9 /* UUID.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E9794C323301FC400B5C5C9 /* UUID.swift */; };
+		6E9794C723301FC400B5C5C9 /* UUID.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E9794C323301FC400B5C5C9 /* UUID.swift */; };
+		6E9C95EA23114962007C18FE /* CryptoSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 6E9C95E923114962007C18FE /* CryptoSwift */; };
+		6E9C95ED231149A5007C18FE /* GATT in Frameworks */ = {isa = PBXBuildFile; productRef = 6E9C95EC231149A5007C18FE /* GATT */; };
+		6E9C95EF231149A5007C18FE /* DarwinGATT in Frameworks */ = {isa = PBXBuildFile; productRef = 6E9C95EE231149A5007C18FE /* DarwinGATT */; };
+		6E9C95F2231149F5007C18FE /* TLVCoding in Frameworks */ = {isa = PBXBuildFile; productRef = 6E9C95F1231149F5007C18FE /* TLVCoding */; };
+		6EACDA99231B353A000CF82A /* Event.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EACDA98231B3539000CF82A /* Event.swift */; };
+		6EACDA9A231B353A000CF82A /* Event.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EACDA98231B3539000CF82A /* Event.swift */; };
+		6EACDA9B231B353A000CF82A /* Event.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EACDA98231B3539000CF82A /* Event.swift */; };
+		6EACDA9C231B353A000CF82A /* Event.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EACDA98231B3539000CF82A /* Event.swift */; };
+		6ED81FE1231662E200B69520 /* CryptoSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 6ED81FE0231662E200B69520 /* CryptoSwift */; };
+		6ED81FE3231662E200B69520 /* DarwinGATT in Frameworks */ = {isa = PBXBuildFile; productRef = 6ED81FE2231662E200B69520 /* DarwinGATT */; };
+		6ED81FE5231662E200B69520 /* GATT in Frameworks */ = {isa = PBXBuildFile; productRef = 6ED81FE4231662E200B69520 /* GATT */; };
+		6ED81FE7231662E200B69520 /* TLVCoding in Frameworks */ = {isa = PBXBuildFile; productRef = 6ED81FE6231662E200B69520 /* TLVCoding */; };
+		6ED81FE9231662F100B69520 /* CryptoSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 6ED81FE8231662F100B69520 /* CryptoSwift */; };
+		6ED81FEB231662F100B69520 /* DarwinGATT in Frameworks */ = {isa = PBXBuildFile; productRef = 6ED81FEA231662F100B69520 /* DarwinGATT */; };
+		6ED81FED231662F100B69520 /* GATT in Frameworks */ = {isa = PBXBuildFile; productRef = 6ED81FEC231662F100B69520 /* GATT */; };
+		6ED81FEF231662F100B69520 /* TLVCoding in Frameworks */ = {isa = PBXBuildFile; productRef = 6ED81FEE231662F100B69520 /* TLVCoding */; };
+		6ED81FF1231662FB00B69520 /* CryptoSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 6ED81FF0231662FB00B69520 /* CryptoSwift */; };
+		6ED81FF3231662FB00B69520 /* DarwinGATT in Frameworks */ = {isa = PBXBuildFile; productRef = 6ED81FF2231662FB00B69520 /* DarwinGATT */; };
+		6ED81FF5231662FB00B69520 /* GATT in Frameworks */ = {isa = PBXBuildFile; productRef = 6ED81FF4231662FB00B69520 /* GATT */; };
+		6ED81FF7231662FB00B69520 /* TLVCoding in Frameworks */ = {isa = PBXBuildFile; productRef = 6ED81FF6231662FB00B69520 /* TLVCoding */; };
 		6EF1C65522C9AC9F005E9818 /* SetupCharacteristic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF1C62E22C9AC9D005E9818 /* SetupCharacteristic.swift */; };
 		6EF1C65622C9AC9F005E9818 /* SetupCharacteristic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF1C62E22C9AC9D005E9818 /* SetupCharacteristic.swift */; };
 		6EF1C65722C9AC9F005E9818 /* SetupCharacteristic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF1C62E22C9AC9D005E9818 /* SetupCharacteristic.swift */; };
@@ -181,16 +226,17 @@
 		52D6D9E21BEFFF6E002C0205 /* CoreLock.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = CoreLock.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		52D6D9F01BEFFFBE002C0205 /* CoreLock.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = CoreLock.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		52D6DA0F1BF000BD002C0205 /* CoreLock.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = CoreLock.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		6E0A32D422D8FCFB002EF9DE /* URL.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URL.swift; sourceTree = "<group>"; };
+		6E0A32D922D91E1D002EF9DE /* URLTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLTests.swift; sourceTree = "<group>"; };
 		6E60FF532121041400787DAA /* CryptoTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CryptoTests.swift; sourceTree = "<group>"; };
 		6E60FF542121041400787DAA /* GATTProfileTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GATTProfileTests.swift; sourceTree = "<group>"; };
 		6E60FF552121041400787DAA /* LinuxMain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinuxMain.swift; sourceTree = "<group>"; };
 		6E60FF572121041400787DAA /* ServerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServerTests.swift; sourceTree = "<group>"; };
-		6E60FF5A2121041400787DAA /* LockServiceController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LockServiceController.swift; sourceTree = "<group>"; };
-		6E60FF5B2121041400787DAA /* Error.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Error.swift; sourceTree = "<group>"; };
-		6E60FF5C2121041400787DAA /* GATTServiceController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GATTServiceController.swift; sourceTree = "<group>"; };
-		6E60FF5D2121041400787DAA /* LockController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LockController.swift; sourceTree = "<group>"; };
-		6E60FF5E2121041400787DAA /* DeviceInformationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceInformationService.swift; sourceTree = "<group>"; };
-		6E60FF602121041400787DAA /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
+		6E93D351231C623B00119F65 /* Notification.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Notification.swift; sourceTree = "<group>"; };
+		6E93D352231C623E00119F65 /* ListEventsCharacteristic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListEventsCharacteristic.swift; sourceTree = "<group>"; };
+		6E93D353231C624000119F65 /* EventsCharacteristic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventsCharacteristic.swift; sourceTree = "<group>"; };
+		6E9794C323301FC400B5C5C9 /* UUID.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UUID.swift; sourceTree = "<group>"; };
+		6EACDA98231B3539000CF82A /* Event.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Event.swift; sourceTree = "<group>"; };
 		6EF1C62E22C9AC9D005E9818 /* SetupCharacteristic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SetupCharacteristic.swift; sourceTree = "<group>"; };
 		6EF1C62F22C9AC9D005E9818 /* LockConfiguration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LockConfiguration.swift; sourceTree = "<group>"; };
 		6EF1C63022C9AC9D005E9818 /* EncryptedData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EncryptedData.swift; sourceTree = "<group>"; };
@@ -240,6 +286,11 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6E621244234721FF007D49BF /* Bluetooth in Frameworks */,
+				6E9C95ED231149A5007C18FE /* GATT in Frameworks */,
+				6E9C95EA23114962007C18FE /* CryptoSwift in Frameworks */,
+				6E9C95EF231149A5007C18FE /* DarwinGATT in Frameworks */,
+				6E9C95F2231149F5007C18FE /* TLVCoding in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -247,6 +298,11 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6E621266234723ED007D49BF /* Bluetooth in Frameworks */,
+				6ED81FED231662F100B69520 /* GATT in Frameworks */,
+				6ED81FE9231662F100B69520 /* CryptoSwift in Frameworks */,
+				6ED81FEB231662F100B69520 /* DarwinGATT in Frameworks */,
+				6ED81FEF231662F100B69520 /* TLVCoding in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -254,6 +310,11 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6E62126A23472400007D49BF /* Bluetooth in Frameworks */,
+				6ED81FF5231662FB00B69520 /* GATT in Frameworks */,
+				6ED81FF1231662FB00B69520 /* CryptoSwift in Frameworks */,
+				6ED81FF3231662FB00B69520 /* DarwinGATT in Frameworks */,
+				6ED81FF7231662FB00B69520 /* TLVCoding in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -261,6 +322,11 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6E62124823472217007D49BF /* Bluetooth in Frameworks */,
+				6ED81FE5231662E200B69520 /* GATT in Frameworks */,
+				6ED81FE1231662E200B69520 /* CryptoSwift in Frameworks */,
+				6ED81FE3231662E200B69520 /* DarwinGATT in Frameworks */,
+				6ED81FE7231662E200B69520 /* TLVCoding in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -282,6 +348,7 @@
 				6E60FF512121041400787DAA /* Tests */,
 				52D6D99C1BEFF38C002C0205 /* Configs */,
 				52D6D97D1BEFF229002C0205 /* Products */,
+				6ED81FDF231662E200B69520 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -322,6 +389,7 @@
 			children = (
 				6E60FF532121041400787DAA /* CryptoTests.swift */,
 				6E60FF542121041400787DAA /* GATTProfileTests.swift */,
+				6E0A32D922D91E1D002EF9DE /* URLTests.swift */,
 			);
 			path = CoreLockTests;
 			sourceTree = "<group>";
@@ -337,32 +405,10 @@
 		6E60FF582121041400787DAA /* Sources */ = {
 			isa = PBXGroup;
 			children = (
-				6E60FF592121041400787DAA /* CoreLockGATTServer */,
-				6E60FF5F2121041400787DAA /* lockd */,
 				6E60FF612121041400787DAA /* CoreLock */,
 			);
 			name = Sources;
 			path = ../Sources;
-			sourceTree = "<group>";
-		};
-		6E60FF592121041400787DAA /* CoreLockGATTServer */ = {
-			isa = PBXGroup;
-			children = (
-				6E60FF5A2121041400787DAA /* LockServiceController.swift */,
-				6E60FF5B2121041400787DAA /* Error.swift */,
-				6E60FF5C2121041400787DAA /* GATTServiceController.swift */,
-				6E60FF5D2121041400787DAA /* LockController.swift */,
-				6E60FF5E2121041400787DAA /* DeviceInformationService.swift */,
-			);
-			path = CoreLockGATTServer;
-			sourceTree = "<group>";
-		};
-		6E60FF5F2121041400787DAA /* lockd */ = {
-			isa = PBXGroup;
-			children = (
-				6E60FF602121041400787DAA /* main.swift */,
-			);
-			path = lockd;
 			sourceTree = "<group>";
 		};
 		6E60FF612121041400787DAA /* CoreLock */ = {
@@ -389,6 +435,9 @@
 				6EF1C63E22C9AC9E005E9818 /* Key.swift */,
 				6EF1C63722C9AC9D005E9818 /* KeysCharacteristic.swift */,
 				6EF1C63322C9AC9D005E9818 /* ListKeysCharacteristic.swift */,
+				6E93D353231C624000119F65 /* EventsCharacteristic.swift */,
+				6E93D352231C623E00119F65 /* ListEventsCharacteristic.swift */,
+				6E93D351231C623B00119F65 /* Notification.swift */,
 				6EF1C62F22C9AC9D005E9818 /* LockConfiguration.swift */,
 				6EF1C65222C9AC9F005E9818 /* LockHardware.swift */,
 				6EF1C64822C9AC9E005E9818 /* LockInformationCharacteristic.swift */,
@@ -407,8 +456,18 @@
 				6EF1C65322C9AC9F005E9818 /* UnlockAction.swift */,
 				6EF1C64722C9AC9E005E9818 /* UnlockCharacteristic.swift */,
 				6EF1C64922C9AC9E005E9818 /* Version.swift */,
+				6E0A32D422D8FCFB002EF9DE /* URL.swift */,
+				6EACDA98231B3539000CF82A /* Event.swift */,
+				6E9794C323301FC400B5C5C9 /* UUID.swift */,
 			);
 			path = CoreLock;
+			sourceTree = "<group>";
+		};
+		6ED81FDF231662E200B69520 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 		DD7502721C68FC1B006590AF /* Frameworks */ = {
@@ -475,6 +534,13 @@
 			dependencies = (
 			);
 			name = "CoreLock-iOS";
+			packageProductDependencies = (
+				6E9C95E923114962007C18FE /* CryptoSwift */,
+				6E9C95EC231149A5007C18FE /* GATT */,
+				6E9C95EE231149A5007C18FE /* DarwinGATT */,
+				6E9C95F1231149F5007C18FE /* TLVCoding */,
+				6E621243234721FF007D49BF /* Bluetooth */,
+			);
 			productName = SmartLock;
 			productReference = 52D6D97C1BEFF229002C0205 /* CoreLock.framework */;
 			productType = "com.apple.product-type.framework";
@@ -493,6 +559,13 @@
 			dependencies = (
 			);
 			name = "CoreLock-watchOS";
+			packageProductDependencies = (
+				6ED81FE8231662F100B69520 /* CryptoSwift */,
+				6ED81FEA231662F100B69520 /* DarwinGATT */,
+				6ED81FEC231662F100B69520 /* GATT */,
+				6ED81FEE231662F100B69520 /* TLVCoding */,
+				6E621265234723ED007D49BF /* Bluetooth */,
+			);
 			productName = "SmartLock-watchOS";
 			productReference = 52D6D9E21BEFFF6E002C0205 /* CoreLock.framework */;
 			productType = "com.apple.product-type.framework";
@@ -511,6 +584,13 @@
 			dependencies = (
 			);
 			name = "CoreLock-tvOS";
+			packageProductDependencies = (
+				6ED81FF0231662FB00B69520 /* CryptoSwift */,
+				6ED81FF2231662FB00B69520 /* DarwinGATT */,
+				6ED81FF4231662FB00B69520 /* GATT */,
+				6ED81FF6231662FB00B69520 /* TLVCoding */,
+				6E62126923472400007D49BF /* Bluetooth */,
+			);
 			productName = "SmartLock-tvOS";
 			productReference = 52D6D9F01BEFFFBE002C0205 /* CoreLock.framework */;
 			productType = "com.apple.product-type.framework";
@@ -529,6 +609,13 @@
 			dependencies = (
 			);
 			name = "CoreLock-macOS";
+			packageProductDependencies = (
+				6ED81FE0231662E200B69520 /* CryptoSwift */,
+				6ED81FE2231662E200B69520 /* DarwinGATT */,
+				6ED81FE4231662E200B69520 /* GATT */,
+				6ED81FE6231662E200B69520 /* TLVCoding */,
+				6E62124723472217007D49BF /* Bluetooth */,
+			);
 			productName = "SmartLock-macOS";
 			productReference = 52D6DA0F1BF000BD002C0205 /* CoreLock.framework */;
 			productType = "com.apple.product-type.framework";
@@ -579,12 +666,12 @@
 					};
 					DD7502791C68FCFC006590AF = {
 						CreatedOnToolsVersion = 7.2.1;
-						LastSwiftMigration = 0800;
+						LastSwiftMigration = 1020;
 					};
 				};
 			};
 			buildConfigurationList = 52D6D9761BEFF229002C0205 /* Build configuration list for PBXProject "CoreLock" */;
-			compatibilityVersion = "Xcode 6.3";
+			compatibilityVersion = "Xcode 11.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -592,6 +679,12 @@
 				Base,
 			);
 			mainGroup = 52D6D9721BEFF229002C0205;
+			packageReferences = (
+				6E9C95E823114962007C18FE /* XCRemoteSwiftPackageReference "CryptoSwift" */,
+				6E9C95EB231149A5007C18FE /* XCRemoteSwiftPackageReference "GATT" */,
+				6E9C95F0231149F5007C18FE /* XCRemoteSwiftPackageReference "TLVCoding" */,
+				6E621242234721FF007D49BF /* XCRemoteSwiftPackageReference "Bluetooth" */,
+			);
 			productRefGroup = 52D6D97D1BEFF229002C0205 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -655,6 +748,7 @@
 				6EF1C6E122C9AC9F005E9818 /* DateComponents.swift in Sources */,
 				6EF1C6CD22C9AC9F005E9818 /* TLV.swift in Sources */,
 				6EF1C6D922C9AC9F005E9818 /* Integer.swift in Sources */,
+				6E93D358231C624300119F65 /* ListEventsCharacteristic.swift in Sources */,
 				6EF1C69922C9AC9F005E9818 /* RemoveKeyCharacteristic.swift in Sources */,
 				6EF1C6A522C9AC9F005E9818 /* LockModel.swift in Sources */,
 				6EF1C69122C9AC9F005E9818 /* ConfirmNewKeyCharacteristic.swift in Sources */,
@@ -663,6 +757,7 @@
 				6EF1C69D22C9AC9F005E9818 /* Crypto.swift in Sources */,
 				6EF1C6E522C9AC9F005E9818 /* LockHardware.swift in Sources */,
 				6EF1C6B522C9AC9F005E9818 /* GATTError.swift in Sources */,
+				6E0A32D522D8FCFB002EF9DE /* URL.swift in Sources */,
 				6EF1C6A922C9AC9F005E9818 /* GATTProfile.swift in Sources */,
 				6EF1C6BD22C9AC9F005E9818 /* LockInformationCharacteristic.swift in Sources */,
 				6EF1C66122C9AC9F005E9818 /* SecureData.swift in Sources */,
@@ -676,14 +771,18 @@
 				6EF1C68122C9AC9F005E9818 /* Central.swift in Sources */,
 				6EF1C6C522C9AC9F005E9818 /* Status.swift in Sources */,
 				6EF1C6C122C9AC9F005E9818 /* Version.swift in Sources */,
+				6EACDA99231B353A000CF82A /* Event.swift in Sources */,
+				6E93D35C231C624300119F65 /* EventsCharacteristic.swift in Sources */,
 				6EF1C65D22C9AC9F005E9818 /* EncryptedData.swift in Sources */,
 				6EF1C65522C9AC9F005E9818 /* SetupCharacteristic.swift in Sources */,
 				6EF1C6A122C9AC9F005E9818 /* UIDevice.swift in Sources */,
 				6EF1C67D22C9AC9F005E9818 /* Chunk.swift in Sources */,
+				6E9794C423301FC400B5C5C9 /* UUID.swift in Sources */,
 				6EF1C6E922C9AC9F005E9818 /* UnlockAction.swift in Sources */,
 				6EF1C6AD22C9AC9F005E9818 /* LockState.swift in Sources */,
 				6EF1C66522C9AC9F005E9818 /* AuthenticationError.swift in Sources */,
 				6EF1C66922C9AC9F005E9818 /* ListKeysCharacteristic.swift in Sources */,
+				6E93D354231C624300119F65 /* Notification.swift in Sources */,
 				6EF1C6B922C9AC9F005E9818 /* UnlockCharacteristic.swift in Sources */,
 				6EF1C65922C9AC9F005E9818 /* LockConfiguration.swift in Sources */,
 				6EF1C6D522C9AC9F005E9818 /* Permission.swift in Sources */,
@@ -701,6 +800,7 @@
 				6EF1C6E322C9AC9F005E9818 /* DateComponents.swift in Sources */,
 				6EF1C6CF22C9AC9F005E9818 /* TLV.swift in Sources */,
 				6EF1C6DB22C9AC9F005E9818 /* Integer.swift in Sources */,
+				6E93D35A231C624300119F65 /* ListEventsCharacteristic.swift in Sources */,
 				6EF1C69B22C9AC9F005E9818 /* RemoveKeyCharacteristic.swift in Sources */,
 				6EF1C6A722C9AC9F005E9818 /* LockModel.swift in Sources */,
 				6EF1C69322C9AC9F005E9818 /* ConfirmNewKeyCharacteristic.swift in Sources */,
@@ -709,6 +809,7 @@
 				6EF1C69F22C9AC9F005E9818 /* Crypto.swift in Sources */,
 				6EF1C6E722C9AC9F005E9818 /* LockHardware.swift in Sources */,
 				6EF1C6B722C9AC9F005E9818 /* GATTError.swift in Sources */,
+				6E0A32D722D8FCFB002EF9DE /* URL.swift in Sources */,
 				6EF1C6AB22C9AC9F005E9818 /* GATTProfile.swift in Sources */,
 				6EF1C6BF22C9AC9F005E9818 /* LockInformationCharacteristic.swift in Sources */,
 				6EF1C66322C9AC9F005E9818 /* SecureData.swift in Sources */,
@@ -722,14 +823,18 @@
 				6EF1C68322C9AC9F005E9818 /* Central.swift in Sources */,
 				6EF1C6C722C9AC9F005E9818 /* Status.swift in Sources */,
 				6EF1C6C322C9AC9F005E9818 /* Version.swift in Sources */,
+				6EACDA9B231B353A000CF82A /* Event.swift in Sources */,
+				6E93D35E231C624300119F65 /* EventsCharacteristic.swift in Sources */,
 				6EF1C65F22C9AC9F005E9818 /* EncryptedData.swift in Sources */,
 				6EF1C65722C9AC9F005E9818 /* SetupCharacteristic.swift in Sources */,
 				6EF1C6A322C9AC9F005E9818 /* UIDevice.swift in Sources */,
 				6EF1C67F22C9AC9F005E9818 /* Chunk.swift in Sources */,
+				6E9794C623301FC400B5C5C9 /* UUID.swift in Sources */,
 				6EF1C6EB22C9AC9F005E9818 /* UnlockAction.swift in Sources */,
 				6EF1C6AF22C9AC9F005E9818 /* LockState.swift in Sources */,
 				6EF1C66722C9AC9F005E9818 /* AuthenticationError.swift in Sources */,
 				6EF1C66B22C9AC9F005E9818 /* ListKeysCharacteristic.swift in Sources */,
+				6E93D356231C624300119F65 /* Notification.swift in Sources */,
 				6EF1C6BB22C9AC9F005E9818 /* UnlockCharacteristic.swift in Sources */,
 				6EF1C65B22C9AC9F005E9818 /* LockConfiguration.swift in Sources */,
 				6EF1C6D722C9AC9F005E9818 /* Permission.swift in Sources */,
@@ -747,6 +852,7 @@
 				6EF1C6E422C9AC9F005E9818 /* DateComponents.swift in Sources */,
 				6EF1C6D022C9AC9F005E9818 /* TLV.swift in Sources */,
 				6EF1C6DC22C9AC9F005E9818 /* Integer.swift in Sources */,
+				6E93D35B231C624300119F65 /* ListEventsCharacteristic.swift in Sources */,
 				6EF1C69C22C9AC9F005E9818 /* RemoveKeyCharacteristic.swift in Sources */,
 				6EF1C6A822C9AC9F005E9818 /* LockModel.swift in Sources */,
 				6EF1C69422C9AC9F005E9818 /* ConfirmNewKeyCharacteristic.swift in Sources */,
@@ -755,6 +861,7 @@
 				6EF1C6A022C9AC9F005E9818 /* Crypto.swift in Sources */,
 				6EF1C6E822C9AC9F005E9818 /* LockHardware.swift in Sources */,
 				6EF1C6B822C9AC9F005E9818 /* GATTError.swift in Sources */,
+				6E0A32D822D8FCFB002EF9DE /* URL.swift in Sources */,
 				6EF1C6AC22C9AC9F005E9818 /* GATTProfile.swift in Sources */,
 				6EF1C6C022C9AC9F005E9818 /* LockInformationCharacteristic.swift in Sources */,
 				6EF1C66422C9AC9F005E9818 /* SecureData.swift in Sources */,
@@ -768,14 +875,18 @@
 				6EF1C68422C9AC9F005E9818 /* Central.swift in Sources */,
 				6EF1C6C822C9AC9F005E9818 /* Status.swift in Sources */,
 				6EF1C6C422C9AC9F005E9818 /* Version.swift in Sources */,
+				6EACDA9C231B353A000CF82A /* Event.swift in Sources */,
+				6E93D35F231C624300119F65 /* EventsCharacteristic.swift in Sources */,
 				6EF1C66022C9AC9F005E9818 /* EncryptedData.swift in Sources */,
 				6EF1C65822C9AC9F005E9818 /* SetupCharacteristic.swift in Sources */,
 				6EF1C6A422C9AC9F005E9818 /* UIDevice.swift in Sources */,
 				6EF1C68022C9AC9F005E9818 /* Chunk.swift in Sources */,
+				6E9794C723301FC400B5C5C9 /* UUID.swift in Sources */,
 				6EF1C6EC22C9AC9F005E9818 /* UnlockAction.swift in Sources */,
 				6EF1C6B022C9AC9F005E9818 /* LockState.swift in Sources */,
 				6EF1C66822C9AC9F005E9818 /* AuthenticationError.swift in Sources */,
 				6EF1C66C22C9AC9F005E9818 /* ListKeysCharacteristic.swift in Sources */,
+				6E93D357231C624300119F65 /* Notification.swift in Sources */,
 				6EF1C6BC22C9AC9F005E9818 /* UnlockCharacteristic.swift in Sources */,
 				6EF1C65C22C9AC9F005E9818 /* LockConfiguration.swift in Sources */,
 				6EF1C6D822C9AC9F005E9818 /* Permission.swift in Sources */,
@@ -793,6 +904,7 @@
 				6EF1C6E222C9AC9F005E9818 /* DateComponents.swift in Sources */,
 				6EF1C6CE22C9AC9F005E9818 /* TLV.swift in Sources */,
 				6EF1C6DA22C9AC9F005E9818 /* Integer.swift in Sources */,
+				6E93D359231C624300119F65 /* ListEventsCharacteristic.swift in Sources */,
 				6EF1C69A22C9AC9F005E9818 /* RemoveKeyCharacteristic.swift in Sources */,
 				6EF1C6A622C9AC9F005E9818 /* LockModel.swift in Sources */,
 				6EF1C69222C9AC9F005E9818 /* ConfirmNewKeyCharacteristic.swift in Sources */,
@@ -801,6 +913,7 @@
 				6EF1C69E22C9AC9F005E9818 /* Crypto.swift in Sources */,
 				6EF1C6E622C9AC9F005E9818 /* LockHardware.swift in Sources */,
 				6EF1C6B622C9AC9F005E9818 /* GATTError.swift in Sources */,
+				6E0A32D622D8FCFB002EF9DE /* URL.swift in Sources */,
 				6EF1C6AA22C9AC9F005E9818 /* GATTProfile.swift in Sources */,
 				6EF1C6BE22C9AC9F005E9818 /* LockInformationCharacteristic.swift in Sources */,
 				6EF1C66222C9AC9F005E9818 /* SecureData.swift in Sources */,
@@ -814,14 +927,18 @@
 				6EF1C68222C9AC9F005E9818 /* Central.swift in Sources */,
 				6EF1C6C622C9AC9F005E9818 /* Status.swift in Sources */,
 				6EF1C6C222C9AC9F005E9818 /* Version.swift in Sources */,
+				6EACDA9A231B353A000CF82A /* Event.swift in Sources */,
+				6E93D35D231C624300119F65 /* EventsCharacteristic.swift in Sources */,
 				6EF1C65E22C9AC9F005E9818 /* EncryptedData.swift in Sources */,
 				6EF1C65622C9AC9F005E9818 /* SetupCharacteristic.swift in Sources */,
 				6EF1C6A222C9AC9F005E9818 /* UIDevice.swift in Sources */,
 				6EF1C67E22C9AC9F005E9818 /* Chunk.swift in Sources */,
+				6E9794C523301FC400B5C5C9 /* UUID.swift in Sources */,
 				6EF1C6EA22C9AC9F005E9818 /* UnlockAction.swift in Sources */,
 				6EF1C6AE22C9AC9F005E9818 /* LockState.swift in Sources */,
 				6EF1C66622C9AC9F005E9818 /* AuthenticationError.swift in Sources */,
 				6EF1C66A22C9AC9F005E9818 /* ListKeysCharacteristic.swift in Sources */,
+				6E93D355231C624300119F65 /* Notification.swift in Sources */,
 				6EF1C6BA22C9AC9F005E9818 /* UnlockCharacteristic.swift in Sources */,
 				6EF1C65A22C9AC9F005E9818 /* LockConfiguration.swift in Sources */,
 				6EF1C6D622C9AC9F005E9818 /* Permission.swift in Sources */,
@@ -832,6 +949,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6E0A32DA22D91E1D002EF9DE /* URLTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -896,7 +1014,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				INFOPLIST_FILE = Configs/CoreLock.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
-				MACOSX_DEPLOYMENT_TARGET = 10.12;
+				MACOSX_DEPLOYMENT_TARGET = 10.11;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.colemancda.CoreLock;
@@ -956,7 +1074,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				INFOPLIST_FILE = Configs/CoreLock.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
-				MACOSX_DEPLOYMENT_TARGET = 10.12;
+				MACOSX_DEPLOYMENT_TARGET = 10.11;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = com.colemancda.CoreLock;
 				PRODUCT_NAME = CoreLock;
@@ -975,57 +1093,65 @@
 		52D6D9911BEFF229002C0205 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				APPLICATION_EXTENSION_API_ONLY = NO;
+				APPLICATION_EXTENSION_API_ONLY = YES;
 				CLANG_ENABLE_MODULES = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				FRAMEWORK_SEARCH_PATHS = $SRCROOT/../Carthage/Build/iOS;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
 				SKIP_INSTALL = YES;
+				SUPPORTS_MACCATALYST = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
 		};
 		52D6D9921BEFF229002C0205 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				APPLICATION_EXTENSION_API_ONLY = NO;
+				APPLICATION_EXTENSION_API_ONLY = YES;
 				CLANG_ENABLE_MODULES = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				FRAMEWORK_SEARCH_PATHS = $SRCROOT/../Carthage/Build/iOS;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
 				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 5.0;
+				SUPPORTS_MACCATALYST = YES;
 			};
 			name = Release;
 		};
 		52D6D9E81BEFFF6E002C0205 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				APPLICATION_EXTENSION_API_ONLY = NO;
+				APPLICATION_EXTENSION_API_ONLY = YES;
 				CLANG_ENABLE_MODULES = YES;
 				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				FRAMEWORK_SEARCH_PATHS = $SRCROOT/../Carthage/Build/watchOS;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 4;
 			};
 			name = Debug;
@@ -1033,19 +1159,21 @@
 		52D6D9E91BEFFF6E002C0205 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				APPLICATION_EXTENSION_API_ONLY = NO;
+				APPLICATION_EXTENSION_API_ONLY = YES;
 				CLANG_ENABLE_MODULES = YES;
 				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				FRAMEWORK_SEARCH_PATHS = $SRCROOT/../Carthage/Build/watchOS;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 4;
 			};
 			name = Release;
@@ -1053,20 +1181,22 @@
 		52D6DA021BEFFFBE002C0205 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				APPLICATION_EXTENSION_API_ONLY = NO;
+				APPLICATION_EXTENSION_API_ONLY = YES;
 				CLANG_ENABLE_MODULES = YES;
 				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				FRAMEWORK_SEARCH_PATHS = $SRCROOT/../Carthage/Build/tvOS;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
 				SDKROOT = appletvos;
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 3;
 			};
 			name = Debug;
@@ -1074,19 +1204,21 @@
 		52D6DA031BEFFFBE002C0205 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				APPLICATION_EXTENSION_API_ONLY = NO;
+				APPLICATION_EXTENSION_API_ONLY = YES;
 				CLANG_ENABLE_MODULES = YES;
 				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				FRAMEWORK_SEARCH_PATHS = $SRCROOT/../Carthage/Build/tvOS;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
 				SDKROOT = appletvos;
 				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 3;
 			};
 			name = Release;
@@ -1094,7 +1226,7 @@
 		52D6DA211BF000BD002C0205 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				APPLICATION_EXTENSION_API_ONLY = NO;
+				APPLICATION_EXTENSION_API_ONLY = YES;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "-";
 				COMBINE_HIDPI_IMAGES = YES;
@@ -1102,21 +1234,23 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				FRAMEWORK_SEARCH_PATHS = $SRCROOT/../Carthage/Build/Mac;
 				FRAMEWORK_VERSION = A;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/Frameworks",
+				);
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
 		};
 		52D6DA221BF000BD002C0205 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				APPLICATION_EXTENSION_API_ONLY = NO;
+				APPLICATION_EXTENSION_API_ONLY = YES;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "-";
 				COMBINE_HIDPI_IMAGES = YES;
@@ -1124,13 +1258,15 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				FRAMEWORK_SEARCH_PATHS = $SRCROOT/../Carthage/Build/Mac;
 				FRAMEWORK_VERSION = A;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/Frameworks",
+				);
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
 		};
@@ -1138,15 +1274,21 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "-";
 				COMBINE_HIDPI_IMAGES = YES;
-				FRAMEWORK_SEARCH_PATHS = $SRCROOT/../Carthage/Build/Mac;
-				INFOPLIST_FILE = Configs/SmartLockTests.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks $FRAMEWORK_SEARCH_PATHS";
+				INFOPLIST_FILE = Configs/CoreLockTests.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+					$FRAMEWORK_SEARCH_PATHS,
+				);
 				MACOSX_DEPLOYMENT_TARGET = 10.11;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.SmartLock.SmartLock-macOS-Tests";
+				PRODUCT_BUNDLE_IDENTIFIER = com.colemancda.CoreLockTests;
 				PRODUCT_NAME = CoreLockTests;
 				SDKROOT = macosx;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
 		};
@@ -1154,16 +1296,22 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "-";
 				COMBINE_HIDPI_IMAGES = YES;
-				FRAMEWORK_SEARCH_PATHS = $SRCROOT/../Carthage/Build/Mac;
-				INFOPLIST_FILE = Configs/SmartLockTests.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks $FRAMEWORK_SEARCH_PATHS";
+				INFOPLIST_FILE = Configs/CoreLockTests.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+					$FRAMEWORK_SEARCH_PATHS,
+				);
 				MACOSX_DEPLOYMENT_TARGET = 10.11;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.SmartLock.SmartLock-macOS-Tests";
+				PRODUCT_BUNDLE_IDENTIFIER = com.colemancda.CoreLockTests;
 				PRODUCT_NAME = CoreLockTests;
 				SDKROOT = macosx;
-				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
 			};
 			name = Release;
 		};
@@ -1225,6 +1373,144 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		6E621242234721FF007D49BF /* XCRemoteSwiftPackageReference "Bluetooth" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/PureSwift/Bluetooth.git";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
+		6E9C95E823114962007C18FE /* XCRemoteSwiftPackageReference "CryptoSwift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/krzyzanowskim/CryptoSwift";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
+		6E9C95EB231149A5007C18FE /* XCRemoteSwiftPackageReference "GATT" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/PureSwift/GATT.git";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
+		6E9C95F0231149F5007C18FE /* XCRemoteSwiftPackageReference "TLVCoding" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/PureSwift/TLVCoding.git";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		6E621243234721FF007D49BF /* Bluetooth */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6E621242234721FF007D49BF /* XCRemoteSwiftPackageReference "Bluetooth" */;
+			productName = Bluetooth;
+		};
+		6E62124723472217007D49BF /* Bluetooth */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6E621242234721FF007D49BF /* XCRemoteSwiftPackageReference "Bluetooth" */;
+			productName = Bluetooth;
+		};
+		6E621265234723ED007D49BF /* Bluetooth */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6E621242234721FF007D49BF /* XCRemoteSwiftPackageReference "Bluetooth" */;
+			productName = Bluetooth;
+		};
+		6E62126923472400007D49BF /* Bluetooth */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6E621242234721FF007D49BF /* XCRemoteSwiftPackageReference "Bluetooth" */;
+			productName = Bluetooth;
+		};
+		6E9C95E923114962007C18FE /* CryptoSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6E9C95E823114962007C18FE /* XCRemoteSwiftPackageReference "CryptoSwift" */;
+			productName = CryptoSwift;
+		};
+		6E9C95EC231149A5007C18FE /* GATT */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6E9C95EB231149A5007C18FE /* XCRemoteSwiftPackageReference "GATT" */;
+			productName = GATT;
+		};
+		6E9C95EE231149A5007C18FE /* DarwinGATT */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6E9C95EB231149A5007C18FE /* XCRemoteSwiftPackageReference "GATT" */;
+			productName = DarwinGATT;
+		};
+		6E9C95F1231149F5007C18FE /* TLVCoding */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6E9C95F0231149F5007C18FE /* XCRemoteSwiftPackageReference "TLVCoding" */;
+			productName = TLVCoding;
+		};
+		6ED81FE0231662E200B69520 /* CryptoSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6E9C95E823114962007C18FE /* XCRemoteSwiftPackageReference "CryptoSwift" */;
+			productName = CryptoSwift;
+		};
+		6ED81FE2231662E200B69520 /* DarwinGATT */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6E9C95EB231149A5007C18FE /* XCRemoteSwiftPackageReference "GATT" */;
+			productName = DarwinGATT;
+		};
+		6ED81FE4231662E200B69520 /* GATT */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6E9C95EB231149A5007C18FE /* XCRemoteSwiftPackageReference "GATT" */;
+			productName = GATT;
+		};
+		6ED81FE6231662E200B69520 /* TLVCoding */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6E9C95F0231149F5007C18FE /* XCRemoteSwiftPackageReference "TLVCoding" */;
+			productName = TLVCoding;
+		};
+		6ED81FE8231662F100B69520 /* CryptoSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6E9C95E823114962007C18FE /* XCRemoteSwiftPackageReference "CryptoSwift" */;
+			productName = CryptoSwift;
+		};
+		6ED81FEA231662F100B69520 /* DarwinGATT */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6E9C95EB231149A5007C18FE /* XCRemoteSwiftPackageReference "GATT" */;
+			productName = DarwinGATT;
+		};
+		6ED81FEC231662F100B69520 /* GATT */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6E9C95EB231149A5007C18FE /* XCRemoteSwiftPackageReference "GATT" */;
+			productName = GATT;
+		};
+		6ED81FEE231662F100B69520 /* TLVCoding */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6E9C95F0231149F5007C18FE /* XCRemoteSwiftPackageReference "TLVCoding" */;
+			productName = TLVCoding;
+		};
+		6ED81FF0231662FB00B69520 /* CryptoSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6E9C95E823114962007C18FE /* XCRemoteSwiftPackageReference "CryptoSwift" */;
+			productName = CryptoSwift;
+		};
+		6ED81FF2231662FB00B69520 /* DarwinGATT */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6E9C95EB231149A5007C18FE /* XCRemoteSwiftPackageReference "GATT" */;
+			productName = DarwinGATT;
+		};
+		6ED81FF4231662FB00B69520 /* GATT */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6E9C95EB231149A5007C18FE /* XCRemoteSwiftPackageReference "GATT" */;
+			productName = GATT;
+		};
+		6ED81FF6231662FB00B69520 /* TLVCoding */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6E9C95F0231149F5007C18FE /* XCRemoteSwiftPackageReference "TLVCoding" */;
+			productName = TLVCoding;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 52D6D9731BEFF229002C0205 /* Project object */;
 }

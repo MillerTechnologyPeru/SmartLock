@@ -1,0 +1,42 @@
+/* 
+  Localizable.strings
+  SmartLock
+
+  Created by JurjDev on 9/24/19.
+  Copyright © 2019 ColemanCDA. All rights reserved.
+*/
+
+// MARK: - Miscellaneous
+
+"NewLockName" = "Mi cerradura";
+
+// MARK: - Permission
+
+"Permission.Owner" = "Dueño";
+"Permission.Admin" = "Administrador";
+"Permission.Anytime" = "Cualquier momento";
+"Permission.Scheduled" = "Programado";
+
+// MARK: - NSUserActivity
+
+"UserActivity.NearbyLocks.Title" = "Cerraduras Cercanas";
+"UserActivity.NearbyLocks.Description" = "Mostrar Cerraduras cercanas.";
+
+"UserActivity.Keys.Title" = "Llaves";
+"UserActivity.Keys.Description" = "Mostrar llaves guardadas.";
+
+"UserActivity.Events.Title" = "Eventos";
+"UserActivity.Events.Description" = "Mostrar historial de eventos.";
+
+// MARK: - UserNotificationCenter
+
+"UserNotificationCenter.TapToUnlock" = "Toque para desbloquear";
+"UserNotificationCenter.NewKey" = "Nueva llave";
+
+// MARK: - Alert
+
+"Alert.Error" = "Error";
+"Alert.Retry" = "Volver a intentar";
+"Alert.Ok" = "Ok";
+"Alert.Cancel" = "Cancelar";
+"Alert.Delete" = "Eliminar";

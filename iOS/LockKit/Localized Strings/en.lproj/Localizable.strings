@@ -1,0 +1,42 @@
+/* 
+  Localizable.strings
+  SmartLock
+
+  Created by JurjDev on 9/24/19.
+  Copyright © 2019 ColemanCDA. All rights reserved.
+*/
+
+// MARK: - Miscellaneous
+
+"NewLockName" = "My lock";
+
+// MARK: - Permission
+
+"Permission.Owner" = "Owner";
+"Permission.Admin" = "Admin";
+"Permission.Anytime" = "Anytime";
+"Permission.Scheduled" = "Scheduled";
+
+// MARK: - NSUserActivity
+
+"UserActivity.NearbyLocks.Title" = "Nearby Locks";
+"UserActivity.NearbyLocks.Description" = "Show nearby locks.";
+
+"UserActivity.Keys.Title" = "Keys";
+"UserActivity.Keys.Description" = "Display stored keys.";
+
+"UserActivity.Events.Title" = "Events";
+"UserActivity.Events.Description" = "Display lock history.";
+
+// MARK: - UserNotificationCenter
+
+"UserNotificationCenter.TapToUnlock" = "Tap to unlock";
+"UserNotificationCenter.NewKey" = "New key";
+
+// MARK: - Alert
+
+"Alert.Error" = "Error";
+"Alert.Retry" = "Retry";
+"Alert.Ok" = "Ok";
+"Alert.Cancel" = "Cancel";
+"Alert.Delete" = "Delete";

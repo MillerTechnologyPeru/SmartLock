@@ -40,6 +40,8 @@ public final class LockManager <Central: CentralProtocol> {
                      filterDuplicates: Bool = false,
                      event: @escaping ((LockPeripheral<Central>) -> ())) throws {
         
+        log?("Scanning for \(String(format: "%.2f", duration))s")
+        
         try central.scan(duration: duration, filterDuplicates: filterDuplicates) { (scanData) in
             
             // filter peripheral
@@ -59,6 +61,8 @@ public final class LockManager <Central: CentralProtocol> {
     public func scan(filterDuplicates: Bool = false,
                      event: @escaping ((LockPeripheral<Central>) -> ())) throws {
         
+        log?("Scanning...")
+        
         try self.central.scan(filterDuplicates: filterDuplicates) { (scanData) in
             
             // filter peripheral
@@ -72,6 +76,8 @@ public final class LockManager <Central: CentralProtocol> {
     /// Read the lock's information characteristic.
     public func readInformation(for peripheral: Peripheral,
                                 timeout: TimeInterval = .gattDefaultTimeout) throws -> LockInformationCharacteristic {
+        
+        log?("Read information for \(peripheral)")
         
         let timeout = Timeout(timeout: timeout)
         
@@ -92,6 +98,8 @@ public final class LockManager <Central: CentralProtocol> {
                       for peripheral: Peripheral,
                       sharedSecret: KeyData,
                       timeout: TimeInterval = .gattDefaultTimeout) throws -> LockInformationCharacteristic {
+        
+        log?("Setup \(peripheral)")
         
         let timeout = Timeout(timeout: timeout)
         
@@ -120,6 +128,8 @@ public final class LockManager <Central: CentralProtocol> {
                        with key: KeyCredentials,
                        timeout: TimeInterval = .gattDefaultTimeout) throws {
         
+        log?("Unlock \(peripheral) with action \(action)")
+        
         let timeout = Timeout(timeout: timeout)
         
         try central.device(for: peripheral, timeout: timeout) { [unowned self] (cache) in
@@ -138,6 +148,8 @@ public final class LockManager <Central: CentralProtocol> {
                           for peripheral: Peripheral,
                           with key: KeyCredentials,
                           timeout: TimeInterval = .gattDefaultTimeout) throws {
+        
+        log?("Create \(newKey.permission.type) key \"\(newKey.name)\" \(newKey.identifier)")
         
         let timeout = Timeout(timeout: timeout)
         
@@ -160,6 +172,8 @@ public final class LockManager <Central: CentralProtocol> {
                            with key: KeyCredentials,
                            timeout: TimeInterval = .gattDefaultTimeout) throws {
         
+        log?("Confirm key \(key.identifier)")
+        
         let timeout = Timeout(timeout: timeout)
         
         try central.device(for: peripheral, timeout: timeout) { [unowned self] (cache) in
@@ -175,107 +189,14 @@ public final class LockManager <Central: CentralProtocol> {
         }
     }
     
-    /// Retreive a list of all keys on device.
-    public func listKeys(for peripheral: Peripheral,
-                         with key: KeyCredentials,
-                         timeout: TimeInterval = .gattDefaultTimeout) throws -> KeysList {
-        
-        var keys = KeysList()
-        try listKeys(for: peripheral,
-                     with: key,
-                     notification: { (newValue, _) in keys = newValue },
-                     timeout: timeout)
-        return keys
-    }
-    
-    /// Retreive a list of all keys on device.
-    public func listKeys(for peripheral: Peripheral,
-                         with key: KeyCredentials,
-                         notification: @escaping (KeysList, Bool) -> (),
-                         timeout: TimeInterval = .gattDefaultTimeout) throws {
-        
-        typealias Notification = KeysCharacteristic
-        
-        let timeout = Timeout(timeout: timeout)
-        
-        try central.device(for: peripheral, timeout: timeout) { [unowned self] (cache) in
-            
-            let semaphore = Semaphore(timeout: timeout.timeout)
-            
-            var chunks = [Chunk]()
-            chunks.reserveCapacity(2)
-            var lastKeyNotification: KeyListNotification?
-            var keysList = KeysList(
-                keys: .init(reserveCapacity: 2),
-                newKeys: .init(reserveCapacity: 1)
-            )
-            
-            // notify
-            try self.central.notify(Notification.self, for: cache, timeout: timeout) { (response) in
-                
-                switch response {
-                case let .error(error):
-                    semaphore.stopWaiting(error)
-                case let .value(value):
-                    let chunk = value.chunk
-                    self.log?("Received chunk \(chunks.count + 1) (\(chunk.bytes.count) bytes)")
-                    chunks.append(chunk)
-                    assert(chunks.isEmpty == false)
-                    guard chunks.length >= chunk.total
-                        else { return }// wait for more chunks
-                    do {
-                        let notificationValue = try KeysCharacteristic.from(chunks: chunks, secret: key.secret)
-                        chunks.removeAll(keepingCapacity: true)
-                        lastKeyNotification = notificationValue
-                        keysList.append(notificationValue.key)
-                        self.log?("Recieved key \(notificationValue.key.identifier)")
-                        notification(keysList, notificationValue.isLast)
-                        if notificationValue.isLast {
-                            semaphore.stopWaiting()
-                        }
-                    } catch {
-                        semaphore.stopWaiting(error)
-                    }
-                }
-            }
-            
-            let characteristicValue = ListKeysCharacteristic(
-                identifier: key.identifier,
-                authentication: Authentication(key: key.secret)
-            )
-            
-            // Write data to characteristic
-            try self.central.write(characteristicValue, for: cache, timeout: timeout)
-            
-            // handle disconnect
-            self.central.didDisconnect = {
-                guard $0 == cache.peripheral else { return }
-                semaphore.stopWaiting(CentralError.disconnected)
-            }
-            
-            /// Wait for all pending notifications
-            while (lastKeyNotification?.isLast ?? false) == false {
-                try semaphore.wait() // wait for notification
-            }
-            
-            assert(keysList.isEmpty == false)
-            assert(lastKeyNotification != nil)
-            assert(lastKeyNotification?.isLast ?? true, "Invalid last notification")
-            
-            // ignore disconnection
-            central.didDisconnect = nil
-            
-            // stop notifications
-            try self.central.notify(Notification.self, for: cache, timeout: Timeout(timeout: timeout.timeout), notification: nil)
-        }
-    }
-    
     /// Remove the specified key. 
     public func removeKey(_ identifier: UUID,
                           type: KeyType = .key,
                           for peripheral: Peripheral,
                           with key: KeyCredentials,
                           timeout: TimeInterval = .gattDefaultTimeout) throws {
+        
+        log?("Remove \(type) \(identifier)")
         
         let timeout = Timeout(timeout: timeout)
         
@@ -290,11 +211,197 @@ public final class LockManager <Central: CentralProtocol> {
             try self.central.write(characteristicValue, for: cache, timeout: timeout)
         }
     }
+    
+    internal func list <Write, Notify> (write: @autoclosure () -> (Write),
+                                        notify: Notify.Type,
+                                        for peripheral: Peripheral,
+                                        with key: KeyCredentials,
+                                        timeout: TimeInterval,
+                                        notification: @escaping (Notify.Notification) -> ()) throws
+        where Write: GATTCharacteristic, Notify: GATTEncryptedNotification {
+        
+        let timeout = Timeout(timeout: timeout)
+        try central.device(for: peripheral, timeout: timeout) { [unowned self] (cache) in
+            let semaphore = Semaphore(timeout: timeout.timeout)
+            var chunks = [Chunk]()
+            chunks.reserveCapacity(2)
+            var lastNotification: Notify.Notification?
+            // notify
+            try self.central.notify(Notify.self, for: cache, timeout: timeout) { (response) in
+                switch response {
+                case let .error(error):
+                    semaphore.stopWaiting(error)
+                case let .value(value):
+                    let chunk = value.chunk
+                    self.log?("Received chunk \(chunks.count + 1) (\(chunk.bytes.count) bytes)")
+                    chunks.append(chunk)
+                    assert(chunks.isEmpty == false)
+                    guard chunks.length >= chunk.total
+                        else { return }// wait for more chunks
+                    do {
+                        let notificationValue = try Notify.from(chunks: chunks, secret: key.secret)
+                        chunks.removeAll(keepingCapacity: true)
+                        lastNotification = notificationValue
+                        notification(notificationValue)
+                        if notificationValue.isLast {
+                            semaphore.stopWaiting()
+                        }
+                    } catch {
+                        semaphore.stopWaiting(error)
+                    }
+                }
+            }
+            
+            // Write data to characteristic
+            try self.central.write(write(), for: cache, timeout: timeout)
+            
+            // handle disconnect
+            self.central.didDisconnect = {
+                guard $0 == cache.peripheral else { return }
+                semaphore.stopWaiting(CentralError.disconnected)
+            }
+            
+            /// Wait for all pending notifications
+            while (lastNotification?.isLast ?? false) == false {
+                try semaphore.wait() // wait for notification
+            }
+            
+            assert(lastNotification != nil)
+            assert(lastNotification?.isLast ?? true, "Invalid last notification")
+            
+            // ignore disconnection
+            central.didDisconnect = nil
+            
+            // stop notifications
+            try self.central.notify(Notify.self, for: cache, timeout: Timeout(timeout: timeout.timeout), notification: nil)
+        }
+    }
+    
+    /// Retreive a list of all keys on device.
+    public func listKeys(for peripheral: Peripheral,
+                         with key: KeyCredentials,
+                         timeout: TimeInterval = .gattDefaultTimeout) throws -> KeysList {
+        
+        var list = KeysList()
+        try listKeys(for: peripheral,
+                     with: key,
+                     timeout: timeout,
+                     notification: { (newValue, isLast) in if isLast { list = newValue } })
+        return list
+    }
+    
+    /// Retreive a list of all keys on device.
+    public func listKeys(for peripheral: Peripheral,
+                         with key: KeyCredentials,
+                         timeout: TimeInterval = .gattDefaultTimeout,
+                         notification: @escaping (KeysList, Bool) -> ()) throws {
+        
+        log?("List keys for \(peripheral)")
+        typealias Notification = KeysCharacteristic
+        var keysList = KeysList()
+        try list(write: ListKeysCharacteristic(
+            identifier: key.identifier,
+            authentication: Authentication(key: key.secret)
+        ), notify: Notification.self, for: peripheral, with: key, timeout: timeout) { [unowned self] (notificationValue) in
+            keysList.append(notificationValue.key)
+            self.log?("Recieved key \(notificationValue.key.identifier)")
+            notification(keysList, notificationValue.isLast)
+        }
+        assert(keysList.isEmpty == false)
+    }
+    
+    /// Retreive a list of events on device.
+    public func listEvents(fetchRequest: ListEventsCharacteristic.FetchRequest? = nil,
+                           for peripheral: Peripheral,
+                           with key: KeyCredentials,
+                           timeout: TimeInterval = .gattDefaultTimeout) throws -> EventsList {
+        
+        var list = EventsList()
+        try listEvents(fetchRequest: fetchRequest,
+                       for: peripheral,
+                       with: key,
+                       timeout: timeout,
+                       notification: { (newValue, isLast) in if isLast { list = newValue } })
+        return list
+    }
+    
+    /// Retreive a list of events on device.
+    public func listEvents(fetchRequest: ListEventsCharacteristic.FetchRequest? = nil,
+                           for peripheral: Peripheral,
+                           with key: KeyCredentials,
+                           timeout: TimeInterval = .gattDefaultTimeout,
+                           notification: @escaping (EventsList, Bool) -> ()) throws {
+        
+        log?("List events for \(peripheral)")
+        typealias Notification = EventsCharacteristic
+        var events = EventsList()
+        events.reserveCapacity(fetchRequest?.limit.flatMap({ Int($0) }) ?? 1)
+        try list(write: ListEventsCharacteristic(
+            identifier: key.identifier,
+            authentication: Authentication(key: key.secret),
+            fetchRequest: fetchRequest
+        ), notify: Notification.self, for: peripheral, with: key, timeout: timeout) { [unowned self] (notificationValue) in
+            if let event = notificationValue.event {
+                events.append(event)
+                self.log?("Recieved event \(event.identifier)")
+            }
+            notification(events, notificationValue.isLast)
+        }
+    }
 }
+
+#if canImport(DarwinGATT)
+import DarwinGATT
+
+public extension LockManager where Central == DarwinCentral {
+    
+    /// Scans for nearby devices.
+    ///
+    /// - Parameter duration: The duration of the scan.
+    ///
+    /// - Parameter event: Callback for a found device.
+    func scanLocks(filterDuplicates: Bool = false,
+                   event: @escaping (LockPeripheral<Central>) -> ()) throws {
+        
+        log?("Scanning...")
+        
+        try central.scan(filterDuplicates: filterDuplicates, with: [LockService.uuid]) { (scanData) in
+            
+            // filter peripheral
+            guard let lock = LockPeripheral<Central>(scanData)
+                else { return }
+            
+            event(lock)
+        }
+    }
+    
+    /// Scans for peripherals that are advertising services for the specified time interval.
+    func scanLocks(duration: TimeInterval,
+                   filterDuplicates: Bool = false,
+                   event: @escaping (LockPeripheral<Central>) -> ()) throws {
+        
+        log?("Scanning for \(String(format: "%.2f", duration))s")
+        
+        var didThrow = false
+        DispatchQueue.global().asyncAfter(deadline: .now() + duration) { [weak self] in
+            if didThrow == false {
+                self?.central.stopScan()
+            }
+        }
+        
+        do { try scanLocks(filterDuplicates: filterDuplicates, event: event) }
+        catch {
+            didThrow = true
+            throw error
+        }
+    }
+}
+
+#endif
 
 // MARK: - Supporting Types
 
-public struct LockPeripheral <Central: CentralProtocol> {
+public struct LockPeripheral <Central: CentralProtocol>: Equatable {
     
     /// Scan Data
     public let scanData: ScanData<Central.Peripheral, Central.Advertisement>

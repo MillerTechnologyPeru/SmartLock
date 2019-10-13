@@ -10,14 +10,16 @@ import Foundation
 import Bluetooth
 import GATT
 import CoreLock
-    
-#if os(iOS)
+import LockKit
+
 import UIKit
+import CoreBluetooth
 import DarwinGATT
 import AVFoundation
-import QRCodeReader
+import Intents
 import JGProgressHUD
-#endif
+import OpenCombine
+import Combine
 
 final class NearbyLocksViewController: UITableViewController {
     
@@ -25,124 +27,168 @@ final class NearbyLocksViewController: UITableViewController {
     
     // MARK: - Properties
     
-    private var items = [LockPeripheral<NativeCentral>]()
+    private var items = [LockPeripheral<NativeCentral>]() {
+        didSet { tableView.reloadData() }
+    }
     
-    private var loadedInformation = Set<NativeCentral.Peripheral>()
-    private var loading = Set<NativeCentral.Peripheral>()
+    internal var progressHUD: JGProgressHUD?
     
-    let scanDuration: TimeInterval = 3.0
-    
-    #if os(iOS)
-    
-    internal lazy var progressHUD: JGProgressHUD = JGProgressHUD(style: .dark)
-    
-    private lazy var readerViewController: QRCodeReaderViewController = {
-        let builder = QRCodeReaderViewControllerBuilder {
-            $0.reader = QRCodeReader(metadataObjectTypes: [.qr], captureDevicePosition: .back)
-        }
-        return QRCodeReaderViewController(builder: builder)
+    @available(iOS 10.0, *)
+    private lazy var selectionFeedbackGenerator: UISelectionFeedbackGenerator = {
+        let feedbackGenerator = UISelectionFeedbackGenerator()
+        feedbackGenerator.prepare()
+        return feedbackGenerator
     }()
     
-    #endif
+    @available(iOS 10.0, *)
+    private lazy var impactFeedbackGenerator: UIImpactFeedbackGenerator = {
+        let feedbackGenerator = UIImpactFeedbackGenerator(style: .medium)
+        feedbackGenerator.prepare()
+        return feedbackGenerator
+    }()
     
-    private var peripheralsObserver: Int?
-    private var informationObserver: Int?
-    private var locksObserver: Int?
+    private var peripheralsObserver: OpenCombine.AnyCancellable?
+    private var informationObserver: OpenCombine.AnyCancellable?
+    private var locksObserver: OpenCombine.AnyCancellable?
+    @available(iOS 13.0, *)
+    private lazy var updateTableViewSubject = Combine.PassthroughSubject<Void, Never>()
+    private var updateTableViewObserver: AnyObject? // AnyCancellable
     
     // MARK: - Loading
-    
-    deinit {
-        
-        if let observer = peripheralsObserver {
-            Store.shared.peripherals.remove(observer: observer)
-        }
-        if let observer = informationObserver {
-            Store.shared.lockInformation.remove(observer: observer)
-        }
-    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
         // register cell
-        tableView.register(LockTableViewCell.nib, forCellReuseIdentifier: LockTableViewCell.reuseIdentifier)
-        tableView.rowHeight = UITableViewAutomaticDimension
+        tableView.register(LockTableViewCell.self)
+        tableView.rowHeight = UITableView.automaticDimension
         tableView.estimatedRowHeight = 60
         
         // observe model changes
-        peripheralsObserver = Store.shared.peripherals.observe { [weak self] _ in
-            mainQueue { self?.configureView() }
+        peripheralsObserver = Store.shared.peripherals.sink { [weak self] _ in
+            self?.locksChanged()
         }
-        informationObserver = Store.shared.lockInformation.observe { [weak self] _ in
-            mainQueue { self?.configureView() }
+        informationObserver = Store.shared.lockInformation.sink { [weak self] _ in
+            self?.locksChanged()
         }
-        informationObserver = Store.shared.locks.observe { [weak self] _ in
-            mainQueue { self?.configureView() }
+        locksObserver = Store.shared.locks.sink { [weak self] _ in
+            self?.locksChanged()
+        }
+        
+        if #available(iOS 13.0, *) {
+            updateTableViewObserver = updateTableViewSubject
+                .delay(for: 1.0, scheduler: DispatchQueue.main)
+                .sink(receiveValue: { [weak self] in self?.configureView() })
         }
         
         // Update UI
         configureView()
         
-        // try to scan
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0,
-                                      execute: { [weak self] in self?.scan() })
+        #if !targetEnvironment(macCatalyst)
+        // scan if none is setup
+        if Store.shared.locks.value.isEmpty {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0,
+                                          execute: { [weak self] in self?.scan() })
+        }
+        #endif
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        if items.isEmpty {
-            scan()
+        if #available(iOS 10.0, *) {
+            selectionFeedbackGenerator.prepare()
+            impactFeedbackGenerator.prepare()
         }
+        
+        #if targetEnvironment(macCatalyst)
+        scan()
+        #else
+        if Store.shared.lockManager.central.state == .poweredOn,
+            Store.shared.locks.value.isEmpty || Store.shared.lockInformation.value.isEmpty {
+            scan()
+        } else {
+            // Update beacon status
+            BeaconController.shared.scanBeacons()
+        }
+        #endif
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        userActivity = NSUserActivity(.screen(.nearbyLocks))
+        userActivity?.becomeCurrent()
+        
+        #if targetEnvironment(macCatalyst)
+        syncCloud()
+        #endif
     }
     
     // MARK: - Actions
     
-    @IBAction func scan(_ sender: Any? = nil) {
+    @IBAction func scan(_ sender: NSObject) {
+        
+        if #available(iOS 10.0, *) {
+            impactFeedbackGenerator.impactOccurred()
+        }
+        
+        scan()
+    }
+    
+    // MARK: - Methods
+    
+    private func locksChanged() {
+        if #available(iOS 13.0, *) {
+            updateTableViewSubject.send()
+        } else {
+            mainQueue { [weak self] in self?.configureView() }
+        }
+    }
+    
+    private func scan() {
         
         self.refreshControl?.endRefreshing()
         
         /// ignore if off or not authorized
-        #if os(iOS)
         guard LockManager.shared.central.state == .poweredOn
             else { return } // cannot scan
-        #endif
         
-        let scanDuration = self.scanDuration
+        userActivity = NSUserActivity(.screen(.nearbyLocks))
+        userActivity?.becomeCurrent()
         
-        // reset table
-        self.items.removeAll(keepingCapacity: true)
-        self.loadedInformation.removeAll(keepingCapacity: true)
+        // refresh iBeacons in background
+        BeaconController.shared.scanBeacons()
         
         // scan
-        performActivity({ try Store.shared.scan(duration: scanDuration) }) { (viewController, _) in
-            if viewController.items.isEmpty { viewController.scan() } // scan again
-        }
+        performActivity(queue: .bluetooth, {
+            try Store.shared.scan()
+            for peripheral in Store.shared.peripherals.value.values {
+                do { try Store.shared.readInformation(peripheral) }
+                catch {
+                    log("⚠️ Could not read information for peripheral \(peripheral.scanData.peripheral)")
+                    // try again
+                    mainQueue { [weak self] in self?.scan() }
+                }
+            }
+        })
     }
     
     // MARK: - UITableViewDataSource
     
     override func numberOfSections(in tableView: UITableView) -> Int {
-        
         return 1
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        
         return items.count
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        let cell = tableView.dequeueReusableCell(withIdentifier: LockTableViewCell.reuseIdentifier, for: indexPath) as! LockTableViewCell
-        
-        // read information
-        let lock = self[indexPath]
-        loadLockInformation(lock)
-        
-        // configure cell
+        guard let cell = tableView.dequeueReusableCell(LockTableViewCell.self, for: indexPath)
+            else { fatalError("Could not dequeue reusable cell \(LockTableViewCell.self)") }
         configure(cell: cell, at: indexPath)
-        
         return cell
     }
     
@@ -151,36 +197,40 @@ final class NearbyLocksViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
         defer { tableView.deselectRow(at: indexPath, animated: true) }
-        
         let item = self[indexPath]
-        
         select(item)
+    }
+    
+    override func tableView(_ tableView: UITableView, accessoryButtonTappedForRowWith indexPath: IndexPath) {
+        
+        let lock = self[indexPath]
+        guard let information = Store.shared.lockInformation.value[lock.scanData.peripheral]
+            else { assertionFailure(); return }
+        view(lock: information.identifier)
     }
     
     // MARK: - Private Methods
     
     private subscript (indexPath: IndexPath) -> LockPeripheral<NativeCentral> {
-        
         return items[indexPath.row]
     }
     
     private func configureView() {
         
         // sort by signal
-        self.items = Store.shared.peripherals.value.values.sorted(by: { $0.scanData.rssi < $1.scanData.rssi })
-        
-        tableView.reloadData()
+        self.items = Store.shared.peripherals.value.values
+            .sorted(by: { $0.scanData.rssi < $1.scanData.rssi })
     }
     
     private func configure(cell: LockTableViewCell, at indexPath: IndexPath) {
         
         let lock = self[indexPath]
-        let peripheral = lock.scanData.peripheral
         
         let title: String
         let detail: String
-        let image: UIImage?
+        let permission: PermissionType?
         let isEnabled: Bool
+        let showDetail: Bool
         
         if let information = Store.shared.lockInformation.value[lock.scanData.peripheral] {
             
@@ -197,47 +247,31 @@ final class NearbyLocksViewController: UITableViewController {
                 
                 // known lock
                 if let lockCache = Store.shared[lock: information.identifier] {
-                    
-                    let permission = lockCache.key.permission
-                    let permissionImage: UIImage
-                    let permissionText: String
-                    
-                    switch permission {
-                    case .owner:
-                        permissionImage = #imageLiteral(resourceName: "permissionBadgeOwner")
-                        permissionText = "Owner"
-                    case .admin:
-                        permissionImage = #imageLiteral(resourceName: "permissionBadgeAdmin")
-                        permissionText = "Admin"
-                    case .anytime:
-                        permissionImage = #imageLiteral(resourceName: "permissionBadgeAnytime")
-                        permissionText = "Anytime"
-                    case .scheduled:
-                        permissionImage = #imageLiteral(resourceName: "permissionBadgeScheduled")
-                        permissionText = "Scheduled" // FIXME: Localized Schedule text
-                    }
-                    
+                    permission = lockCache.key.permission.type
                     title = lockCache.name
-                    detail = permissionText
-                    image = permissionImage
+                    detail = lockCache.key.permission.localizedText
+                    showDetail = true
                 } else {
-                    title = "Lock"
+                    title = R.string.nearbyLocksViewController.lockTitleDefault() // "Lock"
                     detail = information.identifier.description
-                    image = #imageLiteral(resourceName: "permissionBadgeAnytime")
+                    permission = .anytime
+                    showDetail = false
                 }
                 
             case .setup:
                 
-                title = "Setup"
+                title = R.string.nearbyLocksViewController.lockTitleSetup() // "Setup"
                 detail = information.identifier.description
-                image = #imageLiteral(resourceName: "permissionBadgeOwner")
+                permission = .owner
+                showDetail = false
             }
         } else {
             
             isEnabled = false
-            title = "Loading..."
+            title =  R.string.nearbyLocksViewController.lockTitleLoading() // "Loading..."
             detail = ""
-            image = nil
+            permission = nil
+            showDetail = false
             
             if cell.activityIndicatorView.isHidden {
                 cell.activityIndicatorView.isHidden = false
@@ -249,102 +283,49 @@ final class NearbyLocksViewController: UITableViewController {
         
         cell.lockTitleLabel.text = title
         cell.lockDetailLabel.text = detail
-        cell.lockImageView.image = image
+        if let permission = permission {
+            cell.permissionView.permission = permission
+        }
         
         // hide image if loading
-        cell.lockImageView.isHidden = image == nil
-        
+        cell.permissionView.isHidden = permission == nil
         cell.selectionStyle = isEnabled ? .default : .none
+        cell.accessoryType = showDetail ? .detailDisclosureButton : .none
     }
     
     private func select(_ lock: LockPeripheral<NativeCentral>) {
         
-        log("Selected peripheral \(lock.scanData.peripheral)")
-        
         guard let information = Store.shared.lockInformation.value[lock.scanData.peripheral]
             else { return }
         
+        let identifier = information.identifier
+        
+        log("Selected lock \(identifier)")
+        
+        if #available(iOS 10.0, *) {
+            selectionFeedbackGenerator.selectionChanged()
+        }
+        
         switch information.status {
         case .setup:
-            setup(lock)
+            #if targetEnvironment(macCatalyst)
+            showErrorAlert("Cannot setup on macOS.")
+            #elseif targetEnvironment(simulator)
+            showErrorAlert("Cannot setup in iOS simulator")
+            #else
+            setup(lock: lock)
+            #endif
         case .unlock:
-            unlock(lock)
-        }
-    }
-    
-    private func loadLockInformation(_ lock: LockPeripheral<NativeCentral>) {
-        
-        let peripheral = lock.scanData.peripheral
-        guard self.loadedInformation.contains(peripheral) == false,
-            self.loading.contains(peripheral) == false
-            else { return }
-        
-        self.loading.insert(peripheral)
-        
-        async {
-            
-            do { try Store.shared.readInformation(lock) }
-            catch { log("Could not read information for peripheral \(peripheral): \(error)") }
-            mainQueue {
-                self.loadedInformation.insert(peripheral)
-                self.loading.remove(peripheral)
+            if let _ = Store.shared[lock: identifier] {
+                donateUnlockIntent(for: identifier)
+                unlock(lock: lock)
+            } else {
+                showErrorAlert(LockError.noKey(lock: identifier).localizedDescription)
             }
         }
-    }
-    
-    private func unlock(_ lock: LockPeripheral<NativeCentral>) {
-        
-        guard let information = Store.shared.lockInformation.value[lock.scanData.peripheral],
-            let lockCache = Store.shared[lock: information.identifier],
-            let keyData = Store.shared[key: lockCache.key.identifier]
-            else { return }
-        
-        let key = KeyCredentials(
-            identifier: lockCache.key.identifier,
-            secret: keyData
-        )
-        
-        performActivity({ try LockManager.shared.unlock(.default,
-                                                        for: lock.scanData.peripheral,
-                                                        with: key,
-                                                        timeout: .gattDefaultTimeout) })
-    }
-    
-    private func setup(_ lock: LockPeripheral<NativeCentral>) {
-        
-        // scan QR code
-        assert(QRCodeReader.isAvailable())
-        
-        readerViewController.completionBlock = { [unowned self] (result: QRCodeReaderResult?) in
-            
-            self.readerViewController.dismiss(animated: true, completion: {
-                
-                // did not scan
-                guard let result = result else { return }
-                
-                guard let data = Data(base64Encoded: result.value),
-                    let sharedSecret = KeyData(data: data) else {
-                    
-                    self.showErrorAlert("Invalid QR code")
-                    return
-                }
-                
-                // perform BLE request
-                self.setupLock(lock, sharedSecret: sharedSecret)
-            })
-        }
-        
-        // Presents the readerVC as modal form sheet
-        readerViewController.modalPresentationStyle = .formSheet
-        present(readerViewController, animated: true, completion: nil)
-    }
-    
-    private func setupLock(_ lock: LockPeripheral<NativeCentral>, sharedSecret: KeyData, name: String = "Lock") {
-        
-        performActivity({ try Store.shared.setup(lock, sharedSecret: sharedSecret, name: name) })
     }
 }
 
 // MARK: - ActivityIndicatorViewController
 
-extension NearbyLocksViewController: ActivityIndicatorViewController { }
+extension NearbyLocksViewController: ProgressHUDViewController { }
