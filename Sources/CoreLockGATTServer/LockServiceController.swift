@@ -147,6 +147,12 @@ public final class LockServiceController <Peripheral: PeripheralProtocol> : GATT
     
     // MARK: - Methods
     
+    public func reset() {
+        
+        try? authorization.removeAll()
+        updateInformation()
+    }
+    
     public func willRead(_ request: GATTReadRequest<Peripheral.Central>) -> ATT.Error? {
         
         return nil
@@ -619,6 +625,8 @@ public protocol LockAuthorizationStore {
     
     func removeNewKey(_ identifier: UUID) throws
     
+    func removeAll() throws
+    
     var list: KeysList { get }
 }
 
@@ -716,6 +724,12 @@ public final class InMemoryLockAuthorization: LockAuthorizationStore {
     public func removeNewKey(_ identifier: UUID) throws {
         
         newKeys.removeAll(where: { $0.newKey.identifier == identifier })
+    }
+    
+    public func removeAll() throws {
+        
+        keys.removeAll()
+        newKeys.removeAll()
     }
     
     public var list: KeysList {
