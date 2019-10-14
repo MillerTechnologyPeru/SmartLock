@@ -6,10 +6,10 @@
 //
 
 import Foundation
+import Dispatch
 import CoreLock
 import CoreLockGATTServer
 import SwiftyGPIO
-import Dispatch
 
 public protocol LockGPIOController: class, UnlockDelegate {
     
@@ -18,10 +18,6 @@ public protocol LockGPIOController: class, UnlockDelegate {
     var led: GPIOState { get set }
     
     var didPressResetButton: () -> () { get set }
-    
-    var tappedSeconds: UInt { get set }
-    
-    var heldInterval: UInt { get set }
 }
 
 /// GPIO State
@@ -41,13 +37,15 @@ public extension LockGPIOController {
     }
 }
 
-public extension LockHardware {
+internal extension LockHardware {
     
     func gpioController() -> LockGPIOController? {
         
         switch model {
         case .orangePiOne:
             return OrangePiOneGPIO()
+        case .orangePiZero:
+            return OrangePiZeroGPIO()
         case .raspberryPi3:
             return RaspberryPi3GPIO()
         default:
@@ -56,28 +54,22 @@ public extension LockHardware {
     }
 }
 
-public final class OrangePiOneGPIO: LockGPIOController {
+public class OrangePiOneGPIO: LockGPIOController {
     
-    public var tappedSeconds: UInt = 0
+    private var tappedSeconds: UInt = 0
     
     public var heldInterval: UInt = 5
     
     public init() {
         DispatchQueue.global(qos: .background).async {
             while true {
-                
                 usleep(2000)
-                
                 if self.resetSwitchGPIO.value == 1 {
-                    
                     self.tappedSeconds += 1
-                    
                     if self.tappedSeconds == 1000 * self.heldInterval {
-                        
                         self.didPressResetButton()
                     }
                 } else {
-                    
                     self.tappedSeconds = 0
                 }
             }
@@ -118,49 +110,34 @@ public final class OrangePiOneGPIO: LockGPIOController {
     public var didPressResetButton: () -> () = { }
 }
 
+public final class OrangePiZeroGPIO: OrangePiOneGPIO { }
+
 public final class RaspberryPi3GPIO: LockGPIOController {
     
-    public var tappedSeconds: UInt = 0
-    
-    public var heldInterval: UInt = 5
-    
     public init() {
-        DispatchQueue.global(qos: .background).async {
-            while true {
-                
-                usleep(2000)
-                
-                if self.resetSwitchGPIO.value == 1 {
-                    
-                    self.tappedSeconds += 1
-                    
-                    if self.tappedSeconds == 1000 * self.heldInterval {
-                        
-                        self.didPressResetButton()
-                    }
-                } else {
-                    
-                    self.tappedSeconds = 0
-                }
+        self.resetSwitchGPIO.bounceTime = 10
+        self.resetSwitchGPIO.onRaising { [weak self] in
+            if $0.value == 1 {
+                self?.didPressResetButton()
             }
         }
     }
     
-    internal lazy var relayGPIO: GPIO = {
+    internal lazy var relayGPIO: RaspberryGPIO = {
         let gpio = RaspberryGPIO(name:"GPIO23", id:23, baseAddr:0x3F000000)
         gpio.direction = .OUT
         gpio.value = 0
         return gpio
     }()
     
-    internal lazy var ledGPIO: GPIO = {
+    internal lazy var ledGPIO: RaspberryGPIO = {
         let gpio = RaspberryGPIO(name:"GPIO16", id:16, baseAddr:0x3F000000)
         gpio.direction = .OUT
         gpio.value = 0
         return gpio
     }()
     
-    internal lazy var resetSwitchGPIO: GPIO = {
+    internal lazy var resetSwitchGPIO: RaspberryGPIO = {
         let gpio = RaspberryGPIO(name:"GPIO12", id:12, baseAddr:0x3F000000)
         gpio.direction = .IN
         gpio.value = 0

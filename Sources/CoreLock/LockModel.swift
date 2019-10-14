@@ -45,6 +45,8 @@ public extension LockModel {
     
     static let orangePiOne: LockModel = "OrangePiOne"
     
+    static let orangePiZero: LockModel = "OrangePiZero"
+    
     static let raspberryPi3: LockModel = "RaspberryPi3"
 }
 
