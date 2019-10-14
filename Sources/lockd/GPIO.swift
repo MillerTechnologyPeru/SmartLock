@@ -23,17 +23,17 @@ public protocol LockGPIOController: class, UnlockDelegate {
 /// GPIO State
 public enum GPIOState: Int {
     
-    case off = 0
-    case on = 1
+    case low = 0
+    case high = 1
 }
 
 public extension LockGPIOController {
     
     func unlock(_ action: UnlockAction) throws {
         
-        relay = .on
+        relay = .low
         sleep(1)
-        relay = .off
+        relay = .high
     }
 }
 
@@ -79,32 +79,27 @@ public class OrangePiOneGPIO: LockGPIOController {
     internal lazy var relayGPIO: GPIO = {
         let gpio = GPIO(sunXi: SunXiGPIO(letter: .A, pin: 6))
         gpio.direction = .OUT
-        gpio.value = 0
         return gpio
     }()
     
     internal lazy var ledGPIO: GPIO = {
         let gpio = GPIO(sunXi: SunXiGPIO(letter: .A, pin: 1))
         gpio.direction = .OUT
-        gpio.value = 0
         return gpio
     }()
     
     internal lazy var resetSwitchGPIO: GPIO = {
         let gpio = GPIO(sunXi: SunXiGPIO(letter: .D, pin: 14))
         gpio.direction = .IN
-        gpio.value = 0
         return gpio
     }()
     
-    public var relay: GPIOState {
-        get { return GPIOState(rawValue: relayGPIO.value) ?? .off }
-        set { relayGPIO.value = newValue.rawValue }
+    public var relay: GPIOState = .low {
+        didSet { relayGPIO.value = relay.rawValue }
     }
-        
-    public var led: GPIOState {
-        get { return GPIOState(rawValue: ledGPIO.value) ?? .off }
-        set { ledGPIO.value = newValue.rawValue }
+    
+    public var led: GPIOState = .low {
+        didSet { ledGPIO.value = led.rawValue }
     }
     
     public var didPressResetButton: () -> () = { }
@@ -126,32 +121,27 @@ public final class RaspberryPi3GPIO: LockGPIOController {
     internal lazy var relayGPIO: RaspberryGPIO = {
         let gpio = RaspberryGPIO(name:"GPIO23", id:23, baseAddr:0x3F000000)
         gpio.direction = .OUT
-        gpio.value = 0
         return gpio
     }()
     
     internal lazy var ledGPIO: RaspberryGPIO = {
         let gpio = RaspberryGPIO(name:"GPIO16", id:16, baseAddr:0x3F000000)
         gpio.direction = .OUT
-        gpio.value = 0
         return gpio
     }()
     
     internal lazy var resetSwitchGPIO: RaspberryGPIO = {
         let gpio = RaspberryGPIO(name:"GPIO12", id:12, baseAddr:0x3F000000)
         gpio.direction = .IN
-        gpio.value = 0
         return gpio
     }()
     
-    public var relay: GPIOState {
-        get { return GPIOState(rawValue: relayGPIO.value) ?? .off }
-        set { relayGPIO.value = newValue.rawValue }
+    public var relay: GPIOState = .low {
+        didSet { relayGPIO.value = relay.rawValue }
     }
     
-    public var led: GPIOState {
-        get { return GPIOState(rawValue: ledGPIO.value) ?? .off }
-        set { ledGPIO.value = newValue.rawValue }
+    public var led: GPIOState = .low {
+        didSet { ledGPIO.value = led.rawValue }
     }
     
     public var didPressResetButton: () -> () = { }
