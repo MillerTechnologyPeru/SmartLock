@@ -60,7 +60,7 @@ let package = Package(
         .target(
             name: "CoreLock",
             dependencies: [
-                "GATT",
+                nativeGATT,
                 "TLVCoding",
                 "CryptoSwift"
             ]
