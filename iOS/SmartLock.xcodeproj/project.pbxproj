@@ -777,7 +777,7 @@
 		6E50B0FB23224719001014A8 /* LockInformationManagedObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LockInformationManagedObject.swift; sourceTree = "<group>"; };
 		6E50FC18233B63D5003F3AF7 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.intentdefinition; name = Base; path = Base.lproj/Intents.intentdefinition; sourceTree = "<group>"; };
 		6E50FC1F233B63DA003F3AF7 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Intents.strings; sourceTree = "<group>"; };
-		6E6000102121119400787DAA /* SmartLock.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SmartLock.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		6E6000102121119400787DAA /* Cerradura.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Cerradura.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6E6000132121119400787DAA /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		6E6000152121119400787DAA /* NearbyLocksViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NearbyLocksViewController.swift; sourceTree = "<group>"; };
 		6E6000182121119400787DAA /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -1188,7 +1188,7 @@
 		6E6000112121119400787DAA /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				6E6000102121119400787DAA /* SmartLock.app */,
+				6E6000102121119400787DAA /* Cerradura.app */,
 				6E6000242121119500787DAA /* SmartLockUITests.xctest */,
 				6E994A84230DFB6C0076DC1B /* LockKit.framework */,
 				6E994A8C230DFB6D0076DC1B /* LockKitTests.xctest */,
@@ -1700,7 +1700,7 @@
 			packageProductDependencies = (
 			);
 			productName = SmartLock;
-			productReference = 6E6000102121119400787DAA /* SmartLock.app */;
+			productReference = 6E6000102121119400787DAA /* Cerradura.app */;
 			productType = "com.apple.product-type.application";
 		};
 		6E6000232121119500787DAA /* SmartLockUITests */ = {
@@ -3740,7 +3740,8 @@
 					"@executable_path/Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.colemancda.Lock;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_MODULE_NAME = "$(TARGET_NAME:c99extidentifier)";
+				PRODUCT_NAME = Cerradura;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
 				SUPPORTS_MACCATALYST = YES;
@@ -3766,7 +3767,8 @@
 					"@executable_path/Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.colemancda.Lock;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_MODULE_NAME = "$(TARGET_NAME:c99extidentifier)";
+				PRODUCT_NAME = Cerradura;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
 				SUPPORTS_MACCATALYST = YES;
