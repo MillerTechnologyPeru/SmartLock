@@ -1,0 +1,10 @@
+Package: lockd
+Version: 0.0.1
+Architecture: armhf
+Essential: no
+Section: dev
+Priority: required
+Depends: clang, python, uuid-dev, libicu-dev, icu-devtools, libedit-dev, libxml2-dev, libsqlite3-dev, swig, libpython-dev, systemtap-sdt-dev, tzdata, rsync
+Maintainer: Alsey Coleman Miller
+Installed-Size: 90000
+Description: Lock Deamon
