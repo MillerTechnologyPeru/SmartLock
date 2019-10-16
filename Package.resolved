@@ -69,7 +69,7 @@
         "repositoryURL": "https://github.com/PureSwift/Bonjour.git",
         "state": {
           "branch": "master",
-          "revision": "0a7ec9056b8ea308566e789f24d16fd94944c953",
+          "revision": "b3d28cc68b7fac11811848613633c90c8dd2e058",
           "version": null
         }
       },
@@ -87,7 +87,7 @@
         "repositoryURL": "https://github.com/krzyzanowskim/CryptoSwift",
         "state": {
           "branch": "master",
-          "revision": "4ccfe9034a07af4b153657ba1cdac702ffcf8f2f",
+          "revision": "7c94c0bc9d222f9c88d9f6ed8f71926f372d30a8",
           "version": null
         }
       },
