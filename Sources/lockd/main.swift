@@ -31,6 +31,8 @@ var controller: LockController<DarwinPeripheral>?
 #endif
 
 var gpio: LockGPIOController?
+var advertiseTimer: Timer?
+let backgroundQueue = DispatchQueue(label: "com.colemancda.lockd")
 
 func run() throws {
     
@@ -40,10 +42,6 @@ func run() throws {
     let address = try hostController.readDeviceAddress()
     
     print("Bluetooth Controller: \(address)")
-    
-    func peripheralLog(_ message: String) {
-        print("Peripheral:", message)
-    }
     
     #if os(Linux)
     let serverSocket = try L2CAPSocket.lowEnergyServer(
@@ -69,7 +67,7 @@ func run() throws {
     print("Initialized \(String(reflecting: type(of: peripheral))) with options:")
     dump(peripheral.options)
     
-    peripheral.log = peripheralLog
+    peripheral.log = { print("Peripheral:", $0) }
     
     #if os(macOS)
     // wait until XPC connection to blued is established and hardware is on
@@ -97,7 +95,7 @@ func run() throws {
     ).sharedSecret
     controller?.lockServiceController.events = LockEventsFile(
         url: URL(fileURLWithPath: "/opt/colemancda/lockd/events.json")
-     )
+    )
     
     // setup controller
     if let hardware = try? JSONDecoder().decode(LockHardware.self, from: URL(fileURLWithPath: "/opt/colemancda/lockd/hardware.json")) {
@@ -129,7 +127,7 @@ func run() throws {
     
     // change advertisment for notifications
     controller?.lockServiceController.lockChanged = {
-        DispatchQueue.global(qos: .userInteractive).asyncAfter(deadline: .now() + 2) {
+        backgroundQueue.asyncAfter(deadline: .now() + 2) {
             do {
                 try hostController.setNotificationAdvertisement(rssi: 30) // FIXME: RSSI
                 sleep(5)
@@ -138,6 +136,20 @@ func run() throws {
             catch {
                 print("Unable to change advertising")
                 dump(error)
+            }
+        }
+    }
+    
+    // make sure the device is always discoverable
+    if #available(macOS 10.12, *) {
+        advertiseTimer = .scheduledTimer(withTimeInterval: 30, repeats: true) { _ in
+            backgroundQueue.async {
+                do { try hostController.enableLowEnergyAdvertising() }
+                catch HCIError.commandDisallowed { } // already enabled
+                catch {
+                    print("Unable to enable advertising")
+                    dump(error)
+                }
             }
         }
     }
