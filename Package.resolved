@@ -2,6 +2,24 @@
   "object": {
     "pins": [
       {
+        "package": "BigInt",
+        "repositoryURL": "https://github.com/Boilertalk/BigInt.swift.git",
+        "state": {
+          "branch": null,
+          "revision": "fd9b2ebff53e7fd211a7d2b2ea682db300a8571b",
+          "version": "1.0.0"
+        }
+      },
+      {
+        "package": "Cryptor",
+        "repositoryURL": "https://github.com/IBM-Swift/BlueCryptor.git",
+        "state": {
+          "branch": null,
+          "revision": "12d2bf3ec7207ec3cd004b9582f69ef5fae1da3b",
+          "version": "1.0.32"
+        }
+      },
+      {
         "package": "Socket",
         "repositoryURL": "https://github.com/IBM-Swift/BlueSocket.git",
         "state": {
@@ -47,6 +65,15 @@
         }
       },
       {
+        "package": "Cdns_sd",
+        "repositoryURL": "https://github.com/Bouke/Cdns_sd.git",
+        "state": {
+          "branch": null,
+          "revision": "b6dce342895400d0cd86726ad0fcdcad7abc6137",
+          "version": "2.0.0"
+        }
+      },
+      {
         "package": "CryptoSwift",
         "repositoryURL": "https://github.com/krzyzanowskim/CryptoSwift",
         "state": {
@@ -56,12 +83,39 @@
         }
       },
       {
+        "package": "Evergreen",
+        "repositoryURL": "https://github.com/Bouke/Evergreen.git",
+        "state": {
+          "branch": null,
+          "revision": "4d9d17d6efca12398de2b0a4c9c5a4eacc556e03",
+          "version": "2.0.0"
+        }
+      },
+      {
         "package": "GATT",
         "repositoryURL": "https://github.com/PureSwift/GATT.git",
         "state": {
           "branch": "master",
           "revision": "955a19b2030e08666154f2ee52d7955f56bb6ff5",
           "version": null
+        }
+      },
+      {
+        "package": "HAP",
+        "repositoryURL": "https://github.com/Bouke/HAP.git",
+        "state": {
+          "branch": "master",
+          "revision": "4104c73e94f9a9657ed5bcb660fdd7e02641cca4",
+          "version": null
+        }
+      },
+      {
+        "package": "HKDF",
+        "repositoryURL": "https://github.com/Bouke/HKDF.git",
+        "state": {
+          "branch": null,
+          "revision": "9b9e521b49e5b529c33f4abe35a00e144af51e00",
+          "version": "3.1.0"
         }
       },
       {
@@ -110,12 +164,57 @@
         }
       },
       {
+        "package": "NetService",
+        "repositoryURL": "https://github.com/Bouke/NetService.git",
+        "state": {
+          "branch": null,
+          "revision": "ade5b7bac667f91da62dfbbdb918aa748ce06bc0",
+          "version": "0.7.0"
+        }
+      },
+      {
+        "package": "Regex",
+        "repositoryURL": "https://github.com/crossroadlabs/Regex.git",
+        "state": {
+          "branch": null,
+          "revision": "166728756082a9cac6e4aed3ebbce8e41cb3a945",
+          "version": "1.2.0"
+        }
+      },
+      {
+        "package": "SRP",
+        "repositoryURL": "https://github.com/Bouke/SRP.git",
+        "state": {
+          "branch": null,
+          "revision": "9f3d77de5dbaac52d30b1d51d75e853fabb8fa8b",
+          "version": "3.1.0"
+        }
+      },
+      {
         "package": "swift-log",
         "repositoryURL": "https://github.com/apple/swift-log.git",
         "state": {
           "branch": null,
           "revision": "e8aabbe95db22e064ad42f1a4a9f8982664c70ed",
           "version": "1.1.1"
+        }
+      },
+      {
+        "package": "swift-nio",
+        "repositoryURL": "https://github.com/apple/swift-nio.git",
+        "state": {
+          "branch": null,
+          "revision": "ba7970fe396e8198b84c6c1b44b38a1d4e2eb6bd",
+          "version": "1.14.1"
+        }
+      },
+      {
+        "package": "swift-nio-zlib-support",
+        "repositoryURL": "https://github.com/apple/swift-nio-zlib-support.git",
+        "state": {
+          "branch": null,
+          "revision": "37760e9a52030bb9011972c5213c3350fa9d41fd",
+          "version": "1.0.0"
         }
       },
       {

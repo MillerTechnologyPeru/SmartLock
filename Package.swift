@@ -49,6 +49,14 @@ let package = Package(
         .package(
             url: "https://github.com/IBM-Swift/Kitura.git",
             from: "2.8.1"
+        ),
+        .package(
+            url: "https://github.com/Bouke/HAP.git",
+            .branch("master")
+        ),
+        .package(
+            url: "https://github.com/Bouke/NetService.git",
+            from: "0.7.0"
         )
     ],
     targets: [
@@ -59,6 +67,7 @@ let package = Package(
                 nativeGATT,
                 "CoreLockGATTServer",
                 "SwiftyGPIO",
+                "HAP",
                 "CoreLockWebServer"
             ]
         ),
@@ -91,3 +100,7 @@ let package = Package(
         )
     ]
 )
+
+#if os(Linux)
+package.targets.first(where: { $0.name == "CoreLockWebServer" })?.dependencies.append("NetService")
+#endif
