@@ -142,6 +142,8 @@ public final class Store {
     public lazy var beaconController: BeaconController = .shared
     
     public lazy var spotlight: SpotlightController = .shared
+    
+    public lazy var netServiceClient: LockNetServiceClient = .shared
     #endif
     
     // BLE cache

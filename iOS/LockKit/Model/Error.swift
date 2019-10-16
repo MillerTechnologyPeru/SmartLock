@@ -17,6 +17,9 @@ public enum LockError: Error {
     /// No key for the specified lock.
     case noKey(lock: UUID)
     
+    /// Must be an administrator for the specified lock.
+    case notAdmin(lock: UUID)
+    
     /// Invalid QR code.
     case invalidQRCode
     
@@ -56,6 +59,9 @@ extension LockError: CustomNSError {
             userInfo[UserInfoKey.lock.rawValue] = lock as NSUUID
         case let .noKey(lock: lock):
             userInfo[NSLocalizedDescriptionKey] = R.string.error.noKey()
+            userInfo[UserInfoKey.lock.rawValue] = lock as NSUUID
+        case let .notAdmin(lock: lock):
+            userInfo[NSLocalizedDescriptionKey] = R.string.error.notAdmin()
             userInfo[UserInfoKey.lock.rawValue] = lock as NSUUID
         case .invalidQRCode:
             userInfo[NSLocalizedDescriptionKey] = R.string.error.invalidQRCode()
