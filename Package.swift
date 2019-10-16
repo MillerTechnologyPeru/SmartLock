@@ -45,6 +45,22 @@ let package = Package(
         .package(
             url: "https://github.com/PureSwift/BluetoothDarwin.git",
             .branch("master")
+        ),
+        .package(
+            url: "https://github.com/IBM-Swift/Kitura.git",
+            from: "2.8.1"
+        ),
+        .package(
+            url: "https://github.com/Bouke/HAP.git",
+            .branch("master")
+        ),
+        .package(
+            url: "https://github.com/Bouke/NetService.git",
+            from: "0.7.0"
+        ),
+        .package(
+            url: "https://github.com/PureSwift/Bonjour.git",
+            .branch("master")
         )
     ],
     targets: [
@@ -54,7 +70,9 @@ let package = Package(
                 nativeBluetooth,
                 nativeGATT,
                 "CoreLockGATTServer",
-                "SwiftyGPIO"
+                "SwiftyGPIO",
+                "HAP",
+                "CoreLockWebServer"
             ]
         ),
         .target(
@@ -62,12 +80,20 @@ let package = Package(
             dependencies: [
                 nativeGATT,
                 "TLVCoding",
-                "CryptoSwift"
+                "CryptoSwift",
+                "Bonjour"
             ]
         ),
         .target(
             name: "CoreLockGATTServer",
             dependencies: ["CoreLock"]
+        ),
+        .target(
+            name: "CoreLockWebServer",
+            dependencies: [
+                "CoreLock",
+                "Kitura"
+            ]
         ),
         .testTarget(
             name: "CoreLockTests",
@@ -79,3 +105,7 @@ let package = Package(
         )
     ]
 )
+
+#if os(Linux)
+package.targets.first(where: { $0.name == "CoreLockWebServer" })?.dependencies.append("NetService")
+#endif

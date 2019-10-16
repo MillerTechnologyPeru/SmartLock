@@ -29,7 +29,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "6E60000F2121119400787DAA"
-               BuildableName = "SmartLock.app"
+               BuildableName = "Cerradura.app"
                BlueprintName = "SmartLock"
                ReferencedContainer = "container:SmartLock.xcodeproj">
             </BuildableReference>
