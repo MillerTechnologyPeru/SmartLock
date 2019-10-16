@@ -78,7 +78,7 @@ public final class LockPermissionsViewController: UITableViewController {
         guard let lockIdentifier = self.lockIdentifier
             else { assertionFailure(); return }
                 
-        performActivity(queue: .app, { () -> KeysList? in
+        performActivity(queue: .app, {
             
             // get lock key
             guard let lockCache = Store.shared[lock: lockIdentifier]
@@ -97,34 +97,26 @@ public final class LockPermissionsViewController: UITableViewController {
                 secret: keyData
             )
             
-            do {
-                let servers = try Store.shared.netServiceClient.discover(duration: 2.0, timeout: 3.0)
-                guard let netService = servers.first(where: { $0.identifier == lockIdentifier })
-                    else { return nil }
-                let keysList = try Store.shared.netServiceClient.listKeys(
+            // attempt to load via Bonjour
+            let servers = (try? Store.shared.netServiceClient.discover(duration: 1.0, timeout: 3.0)) ?? []
+            if let netService = servers.first(where: { $0.identifier == lockIdentifier }) {
+                let list = try Store.shared.netServiceClient.listKeys(
                     for: netService,
                     with: key,
                     timeout: 30.0
                 )
-                return keysList
-            } catch {
-                log("⚠️ Unable to list keys via Bonjour. \(error.localizedDescription)")
-                return nil
-            }
-        }, completion: { (viewController, list) in
-            // show keys
-            if let list = list {
-                self.list = list
+                mainQueue { [weak self] in
+                    self?.list = list
+                }
             } else {
-                // attempt via Bluetooth
-                viewController.performActivity(queue: .bluetooth, {
-                    // try via Bluetooth
+                // attempt to load via Bluetooth
+                try DispatchQueue.bluetooth.sync {
                     guard let peripheral = try Store.shared.device(for: lockIdentifier, scanDuration: 1.0)
                         else { throw LockError.notInRange(lock: lockIdentifier) }
                     try Store.shared.listKeys(peripheral, notification: { (list, isComplete) in
                         mainQueue { [weak self] in self?.list = list }
                     })
-                })
+                }
             }
         })
     }
