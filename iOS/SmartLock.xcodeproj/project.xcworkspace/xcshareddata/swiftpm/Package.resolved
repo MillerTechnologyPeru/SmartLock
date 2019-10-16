@@ -11,6 +11,15 @@
         }
       },
       {
+        "package": "Bonjour",
+        "repositoryURL": "git@github.com:PureSwift/Bonjour.git",
+        "state": {
+          "branch": "master",
+          "revision": "0a7ec9056b8ea308566e789f24d16fd94944c953",
+          "version": null
+        }
+      },
+      {
         "package": "CloudKitCodable",
         "repositoryURL": "https://github.com/colemancda/CloudKitCodable.git",
         "state": {

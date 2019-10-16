@@ -57,6 +57,10 @@ let package = Package(
         .package(
             url: "https://github.com/Bouke/NetService.git",
             from: "0.7.0"
+        ),
+        .package(
+            url: "https://github.com/PureSwift/Bonjour.git",
+            .branch("master")
         )
     ],
     targets: [
@@ -76,7 +80,8 @@ let package = Package(
             dependencies: [
                 nativeGATT,
                 "TLVCoding",
-                "CryptoSwift"
+                "CryptoSwift",
+                "Bonjour"
             ]
         ),
         .target(
