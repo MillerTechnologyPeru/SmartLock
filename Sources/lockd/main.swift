@@ -43,6 +43,10 @@ func run() throws {
     
     print("Bluetooth Controller: \(address)")
     
+    func peripheralLog(_ message: String) {
+        print("Peripheral:", message)
+    }
+    
     #if os(Linux)
     let serverSocket = try L2CAPSocket.lowEnergyServer(
         controllerAddress: address,
@@ -67,7 +71,7 @@ func run() throws {
     print("Initialized \(String(reflecting: type(of: peripheral))) with options:")
     dump(peripheral.options)
     
-    peripheral.log = { print("Peripheral:", $0) }
+    peripheral.log = peripheralLog
     
     #if os(macOS)
     // wait until XPC connection to blued is established and hardware is on
