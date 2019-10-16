@@ -17,7 +17,14 @@ public struct LockNetService: Equatable, Hashable {
 
 public extension LockNetService {
     
-    final class Client <Client: NetServiceClientProtocol> {
+    var url: URL {
+        return URL(string: "http://" + address.description)!
+    }
+}
+
+public extension LockNetService {
+    
+    final class Client <NetServiceClient: NetServiceClientProtocol> {
         
         // MARK: - Properties
         
@@ -25,14 +32,25 @@ public extension LockNetService {
         public var log: ((String) -> ())?
         
         /// Bonjour Client
-        public let bonjour: Client
+        public let bonjour: NetServiceClient
         
+        /// URL Session
+        public let urlSession: URLSession
+        
+        /// Whether the client is discovering net services.
         private(set) var isDiscovering = false
+        
+        internal lazy var jsonDecoder = JSONDecoder()
+        
+        internal lazy var jsonEncoder = JSONEncoder()
         
         // MARK: - Initialization
         
-        public init(bonjour: Client) {
+        public init(bonjour: NetServiceClient,
+                    urlSession: URLSession = .shared) {
+            
             self.bonjour = bonjour
+            self.urlSession = urlSession
         }
         
         // MARK: - Methods
@@ -79,7 +97,6 @@ public extension LockNetService {
             return locks
         }
         
-        
     }
 }
 
@@ -95,34 +112,10 @@ public extension LockNetService {
 
 public extension LockNetService {
     
-    struct LockInformation: Equatable, Codable {
+    enum Error: Swift.Error {
         
-        /// Lock identifier
-        public let identifier: UUID
-        
-        /// Firmware build number
-        public let buildVersion: LockBuildVersion
-        
-        /// Firmware version
-        public let version: LockVersion
-        
-        /// Device state
-        public var status: LockStatus
-        
-        /// Supported lock actions
-        public let unlockActions: Set<UnlockAction>
-        
-        public init(identifier: UUID,
-                    buildVersion: LockBuildVersion = .current,
-                    version: LockVersion = .current,
-                    status: LockStatus,
-                    unlockActions: Set<UnlockAction> = [.default]) {
-            
-            self.identifier = identifier
-            self.buildVersion = buildVersion
-            self.version = version
-            self.status = status
-            self.unlockActions = unlockActions
-        }
+        case invalidURL
+        case statusCode(Int)
+        case invalidResponse
     }
 }
