@@ -19,6 +19,8 @@ internal extension LockWebServer {
     
     func getLockInformation(completion: (LockNetService.LockInformation?, RequestError?) -> ()) {
         
+        log?("Requested lock information")
+        
         let status: LockStatus = authorization.isEmpty ? .setup : .unlock
         
         let identifier = configurationStore.configuration.identifier

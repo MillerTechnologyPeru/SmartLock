@@ -16,6 +16,8 @@ public final class LockWebServer {
     
     // MARK: - Properties
     
+    public var log: ((String) -> ())?
+    
     public var port: Int = 8080
     
     public var hardware: LockHardware = .empty
@@ -43,6 +45,7 @@ public final class LockWebServer {
     
     public func run() {
         
+        log?("Started HTTP Server")
         httpServer = Kitura.addHTTPServer(onPort: port, with: router)
         Kitura.run()
     }

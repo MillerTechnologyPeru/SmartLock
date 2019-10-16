@@ -109,6 +109,7 @@ func run() throws {
     // configure web server
     webServer.authorization = authorization
     webServer.configurationStore = configurationStore
+    webServer.log = { print("Web Server:", $0) }
     
     // load hardware configuration
     if let hardware = try? JSONDecoder().decode(LockHardware.self, from: URL(fileURLWithPath: "/opt/colemancda/lockd/hardware.json")) {

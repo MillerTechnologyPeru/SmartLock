@@ -29,12 +29,12 @@ public final class LockGATTServiceController <Peripheral: PeripheralProtocol> : 
     public var configurationStore: LockConfigurationStore = InMemoryLockConfigurationStore() {
         didSet { updateInformation() }
     }
-    
-    public var setupSecret: KeyData = KeyData()
-    
+        
     public var authorization: LockAuthorizationStore = InMemoryLockAuthorization() {
         didSet { updateInformation() }
     }
+    
+    public var setupSecret: KeyData = KeyData()
     
     public var unlockDelegate: UnlockDelegate = UnlockSimulator()
     
