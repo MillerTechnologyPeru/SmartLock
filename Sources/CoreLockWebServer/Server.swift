@@ -26,6 +26,8 @@ public final class LockWebServer {
     
     public var authorization: LockAuthorizationStore = InMemoryLockAuthorization()
     
+    public var authorizationTimeout: TimeInterval = 10.0
+    
     internal let router = Router()
     
     private var httpServer: HTTPServer?
@@ -41,6 +43,7 @@ public final class LockWebServer {
     private func setupRouter() {
         
         addLockInformationRoute()
+        addPermissionsRoute()
     }
     
     public func run() {

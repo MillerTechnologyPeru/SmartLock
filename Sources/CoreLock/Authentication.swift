@@ -21,7 +21,6 @@ public struct Authentication: Equatable, Codable {
     }
     
     public func isAuthenticated(with key: KeyData) -> Bool {
-        
         return signedData.isAuthenticated(with: key, message: message)
     }
 }
