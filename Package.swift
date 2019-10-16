@@ -45,6 +45,10 @@ let package = Package(
         .package(
             url: "https://github.com/PureSwift/BluetoothDarwin.git",
             .branch("master")
+        ),
+        .package(
+            url: "https://github.com/IBM-Swift/Kitura.git",
+            from: "2.7.0"
         )
     ],
     targets: [
@@ -54,7 +58,8 @@ let package = Package(
                 nativeBluetooth,
                 nativeGATT,
                 "CoreLockGATTServer",
-                "SwiftyGPIO"
+                "SwiftyGPIO",
+                "CoreLockWebServer"
             ]
         ),
         .target(
@@ -68,6 +73,13 @@ let package = Package(
         .target(
             name: "CoreLockGATTServer",
             dependencies: ["CoreLock"]
+        ),
+        .target(
+            name: "CoreLockWebServer",
+            dependencies: [
+                "CoreLock",
+                "Kitura"
+            ]
         ),
         .testTarget(
             name: "CoreLockTests",

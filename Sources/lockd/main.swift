@@ -22,13 +22,16 @@ import Bluetooth
 import GATT
 import CoreLock
 import CoreLockGATTServer
+import CoreLockWebServer
 
 #if os(Linux)
 typealias LinuxPeripheral = GATTPeripheral<BluetoothLinux.HostController, BluetoothLinux.L2CAPSocket>
-var controller: LockController<LinuxPeripheral>?
+var controller: LockGATTController<LinuxPeripheral>?
 #elseif os(macOS)
-var controller: LockController<DarwinPeripheral>?
+var controller: LockGATTController<DarwinPeripheral>?
 #endif
+
+let webServer = LockWebServer()
 
 var gpio: LockGPIOController?
 var advertiseTimer: Timer?
@@ -74,36 +77,43 @@ func run() throws {
     while peripheral.state != .poweredOn { sleep(1) }
     #endif
     
+    // load files
     let configurationStore = try LockConfigurationFile(
         url: URL(fileURLWithPath: "/opt/colemancda/lockd/config.json")
+    )
+    let authorization = try AuthorizationStoreFile(
+        url: URL(fileURLWithPath: "/opt/colemancda/lockd/data.json")
+    )
+    let events = LockEventsFile(
+        url: URL(fileURLWithPath: "/opt/colemancda/lockd/events.json")
+    )
+    let setupSecret = try LockSetupSecretFile(
+        createdAt: URL(fileURLWithPath: "/opt/colemancda/lockd/sharedSecret")
     )
     
     let lockIdentifier = configurationStore.configuration.identifier
     
     print("🔒 Lock \(lockIdentifier)")
     
-    // Intialize Smart Connect BLE Controller
-    controller = try LockController(peripheral: peripheral)
-    
-    // load files
+    // configure Smart Connect BLE Controller
+    controller = try LockGATTController(peripheral: peripheral)
     controller?.lockServiceController.configurationStore = configurationStore
-    controller?.lockServiceController.authorization = try AuthorizationStoreFile(
-        url: URL(fileURLWithPath: "/opt/colemancda/lockd/data.json")
-    )
-    controller?.lockServiceController.setupSecret = try LockSetupSecretFile(
-        createdAt: URL(fileURLWithPath: "/opt/colemancda/lockd/sharedSecret")
-    ).sharedSecret
-    controller?.lockServiceController.events = LockEventsFile(
-        url: URL(fileURLWithPath: "/opt/colemancda/lockd/events.json")
-    )
+    controller?.lockServiceController.authorization = authorization
+    controller?.lockServiceController.events = events
+    controller?.lockServiceController.setupSecret = setupSecret.sharedSecret
     
-    // setup controller
+    // configure web server
+    webServer.authorization = authorization
+    webServer.configurationStore = configurationStore
+    
+    // load hardware configuration
     if let hardware = try? JSONDecoder().decode(LockHardware.self, from: URL(fileURLWithPath: "/opt/colemancda/lockd/hardware.json")) {
         
         print("Running on hardware:")
         dump(hardware)
         
         controller?.hardware = hardware
+        webServer.hardware = hardware
         
         // load GPIO
         if let gpioController = hardware.gpioController() {
@@ -152,6 +162,11 @@ func run() throws {
                 }
             }
         }
+    }
+    
+    // start web server
+    DispatchQueue.global(qos: .userInitiated).async {
+        webServer.run()
     }
     
     // run main loop
