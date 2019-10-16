@@ -14,6 +14,11 @@ public final class LockNetService {
 
 public extension LockNetService {
     
+    static let serviceType = "_lock._tcp."
+}
+
+public extension LockNetService {
+    
     struct LockInformation: Equatable, Codable {
         
         /// Lock identifier

@@ -11,6 +11,10 @@ import CoreLock
 import Kitura
 import KituraNet
 
+#if os(Linux)
+import NetService
+#endif
+
 /// Lock Web Server
 public final class LockWebServer {
     
@@ -32,6 +36,8 @@ public final class LockWebServer {
     
     private var httpServer: HTTPServer?
     
+    private var netService: NetService?
+    
     // MARK: - Initialization
     
     public init() {
@@ -48,8 +54,17 @@ public final class LockWebServer {
     
     public func run() {
         
-        log?("Started HTTP Server")
+        // Bonjour
+        netService = NetService(domain: "local.",
+                                type: LockNetService.serviceType,
+                                name: configurationStore.configuration.identifier.uuidString,
+                                port: Int32(port))
+        
+        netService?.publish(options: [])
+        
+        // Kiture
         httpServer = Kitura.addHTTPServer(onPort: port, with: router)
+        log?("Started HTTP Server on port \(port)")
         Kitura.run()
     }
 }
