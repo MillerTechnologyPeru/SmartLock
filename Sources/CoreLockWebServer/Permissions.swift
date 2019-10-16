@@ -23,8 +23,15 @@ internal extension LockWebServer {
     func getKeys(request: RouterRequest, response: RouterResponse) throws {
         
         // authenticate
-        guard let key = try authenticate(request: request) else {
+        guard let (key, secret) = try authenticate(request: request) else {
             response.status(.unauthorized)
+            return
+        }
+        
+        // enforce permission
+        guard key.permission.isAdministrator else {
+            log?("Only lock owner and admins can view list of keys")
+            response.status(.forbidden)
             return
         }
         
@@ -33,7 +40,10 @@ internal extension LockWebServer {
         // get list
         let list = authorization.list
         
+        // encrypt
+        let keysResponse = try KeysResponse(encrypt: list, with: secret, encoder: jsonEncoder)
+        
         // respond
-        response.send(list)
+        response.send(keysResponse)
     }
 }

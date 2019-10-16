@@ -76,6 +76,10 @@
 		6ED81FF3231662FB00B69520 /* DarwinGATT in Frameworks */ = {isa = PBXBuildFile; productRef = 6ED81FF2231662FB00B69520 /* DarwinGATT */; };
 		6ED81FF5231662FB00B69520 /* GATT in Frameworks */ = {isa = PBXBuildFile; productRef = 6ED81FF4231662FB00B69520 /* GATT */; };
 		6ED81FF7231662FB00B69520 /* TLVCoding in Frameworks */ = {isa = PBXBuildFile; productRef = 6ED81FF6231662FB00B69520 /* TLVCoding */; };
+		6EE1D6E12357C639004DD856 /* KeysResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EE1D6E02357C639004DD856 /* KeysResponse.swift */; };
+		6EE1D6E22357C639004DD856 /* KeysResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EE1D6E02357C639004DD856 /* KeysResponse.swift */; };
+		6EE1D6E32357C639004DD856 /* KeysResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EE1D6E02357C639004DD856 /* KeysResponse.swift */; };
+		6EE1D6E42357C639004DD856 /* KeysResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EE1D6E02357C639004DD856 /* KeysResponse.swift */; };
 		6EF1C65522C9AC9F005E9818 /* SetupCharacteristic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF1C62E22C9AC9D005E9818 /* SetupCharacteristic.swift */; };
 		6EF1C65622C9AC9F005E9818 /* SetupCharacteristic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF1C62E22C9AC9D005E9818 /* SetupCharacteristic.swift */; };
 		6EF1C65722C9AC9F005E9818 /* SetupCharacteristic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF1C62E22C9AC9D005E9818 /* SetupCharacteristic.swift */; };
@@ -266,6 +270,7 @@
 		6EBA70FD2357A7040005BEB7 /* URLSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLSession.swift; sourceTree = "<group>"; };
 		6EBA71022357A7B40005BEB7 /* LockInformationRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LockInformationRequest.swift; sourceTree = "<group>"; };
 		6EBA71072357A9870005BEB7 /* LockInformationResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LockInformationResponse.swift; sourceTree = "<group>"; };
+		6EE1D6E02357C639004DD856 /* KeysResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeysResponse.swift; sourceTree = "<group>"; };
 		6EF1C62E22C9AC9D005E9818 /* SetupCharacteristic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SetupCharacteristic.swift; sourceTree = "<group>"; };
 		6EF1C62F22C9AC9D005E9818 /* LockConfiguration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LockConfiguration.swift; sourceTree = "<group>"; };
 		6EF1C63022C9AC9D005E9818 /* EncryptedData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EncryptedData.swift; sourceTree = "<group>"; };
@@ -480,6 +485,7 @@
 				6EBA71022357A7B40005BEB7 /* LockInformationRequest.swift */,
 				6EBA71072357A9870005BEB7 /* LockInformationResponse.swift */,
 				6E87864A2357ACAB008624C1 /* KeysRequest.swift */,
+				6EE1D6E02357C639004DD856 /* KeysResponse.swift */,
 				6EF1C64422C9AC9E005E9818 /* LockState.swift */,
 				6EF1C63422C9AC9D005E9818 /* NewKey.swift */,
 				6EF1C64E22C9AC9F005E9818 /* Permission.swift */,
@@ -819,6 +825,7 @@
 				6EF1C68122C9AC9F005E9818 /* Central.swift in Sources */,
 				6EF1C6C522C9AC9F005E9818 /* Status.swift in Sources */,
 				6EF1C6C122C9AC9F005E9818 /* Version.swift in Sources */,
+				6EE1D6E12357C639004DD856 /* KeysResponse.swift in Sources */,
 				6EACDA99231B353A000CF82A /* Event.swift in Sources */,
 				6E93D35C231C624300119F65 /* EventsCharacteristic.swift in Sources */,
 				6EF1C65D22C9AC9F005E9818 /* EncryptedData.swift in Sources */,
@@ -876,6 +883,7 @@
 				6EF1C68322C9AC9F005E9818 /* Central.swift in Sources */,
 				6EF1C6C722C9AC9F005E9818 /* Status.swift in Sources */,
 				6EF1C6C322C9AC9F005E9818 /* Version.swift in Sources */,
+				6EE1D6E32357C639004DD856 /* KeysResponse.swift in Sources */,
 				6EACDA9B231B353A000CF82A /* Event.swift in Sources */,
 				6E93D35E231C624300119F65 /* EventsCharacteristic.swift in Sources */,
 				6EF1C65F22C9AC9F005E9818 /* EncryptedData.swift in Sources */,
@@ -933,6 +941,7 @@
 				6EF1C68422C9AC9F005E9818 /* Central.swift in Sources */,
 				6EF1C6C822C9AC9F005E9818 /* Status.swift in Sources */,
 				6EF1C6C422C9AC9F005E9818 /* Version.swift in Sources */,
+				6EE1D6E42357C639004DD856 /* KeysResponse.swift in Sources */,
 				6EACDA9C231B353A000CF82A /* Event.swift in Sources */,
 				6E93D35F231C624300119F65 /* EventsCharacteristic.swift in Sources */,
 				6EF1C66022C9AC9F005E9818 /* EncryptedData.swift in Sources */,
@@ -990,6 +999,7 @@
 				6EF1C68222C9AC9F005E9818 /* Central.swift in Sources */,
 				6EF1C6C622C9AC9F005E9818 /* Status.swift in Sources */,
 				6EF1C6C222C9AC9F005E9818 /* Version.swift in Sources */,
+				6EE1D6E22357C639004DD856 /* KeysResponse.swift in Sources */,
 				6EACDA9A231B353A000CF82A /* Event.swift in Sources */,
 				6E93D35D231C624300119F65 /* EventsCharacteristic.swift in Sources */,
 				6EF1C65E22C9AC9F005E9818 /* EncryptedData.swift in Sources */,

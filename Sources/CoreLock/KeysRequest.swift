@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import CryptoSwift
 
 public struct KeysRequest: Equatable {
     
@@ -59,9 +60,10 @@ public extension LockNetService.Client {
             else { throw LockNetService.Error.statusCode(httpResponse.statusCode) }
         
         guard let jsonData = data,
-            let response = try? jsonDecoder.decode(KeysList.self, from: jsonData)
+            let response = try? jsonDecoder.decode(KeysResponse.self, from: jsonData)
             else { throw LockNetService.Error.invalidResponse }
         
-        return response
+        let keys = try response.decrypt(with: key.secret, decoder: jsonDecoder)
+        return keys
     }
 }

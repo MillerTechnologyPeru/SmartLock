@@ -32,12 +32,16 @@ public final class LockWebServer {
     
     public var authorizationTimeout: TimeInterval = 10.0
     
+    internal lazy var jsonEncoder = JSONEncoder()
+    
+    internal lazy var jsonDecoder = JSONDecoder()
+    
     internal let router = Router()
     
     private var httpServer: HTTPServer?
     
     private var netService: NetService?
-    
+        
     // MARK: - Initialization
     
     public init() {

@@ -24,7 +24,7 @@ internal extension LockNetService.Authorization {
 
 internal extension LockWebServer {
     
-    func authenticate(request: RouterRequest) throws -> Key? {
+    func authenticate(request: RouterRequest) throws -> (Key, KeyData)? {
         
         // authenticate
         guard let authorization = LockNetService.Authorization(request: request) else {
@@ -53,6 +53,6 @@ internal extension LockWebServer {
             return nil
         }
         
-        return key
+        return (key, secret)
     }
 }
