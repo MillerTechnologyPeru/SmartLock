@@ -602,6 +602,13 @@
 			remoteGlobalIDString = 6E994A83230DFB6C0076DC1B;
 			remoteInfo = LockKit;
 		};
+		6ECDD09A234D8B3400178B25 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6E8772BB231258CC003B9469 /* JGProgressHUD.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 6BF7DC591AEFCFD9000A0AE0;
+			remoteInfo = "JGProgressHUD-iOS";
+		};
 		6ED820952316774E00B69520 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 6E60004D2121164B00787DAA /* CoreLock.xcodeproj */;
@@ -770,7 +777,7 @@
 		6E50B0FB23224719001014A8 /* LockInformationManagedObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LockInformationManagedObject.swift; sourceTree = "<group>"; };
 		6E50FC18233B63D5003F3AF7 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.intentdefinition; name = Base; path = Base.lproj/Intents.intentdefinition; sourceTree = "<group>"; };
 		6E50FC1F233B63DA003F3AF7 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Intents.strings; sourceTree = "<group>"; };
-		6E6000102121119400787DAA /* SmartLock.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SmartLock.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		6E6000102121119400787DAA /* Cerradura.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Cerradura.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6E6000132121119400787DAA /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		6E6000152121119400787DAA /* NearbyLocksViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NearbyLocksViewController.swift; sourceTree = "<group>"; };
 		6E6000182121119400787DAA /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -1181,7 +1188,7 @@
 		6E6000112121119400787DAA /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				6E6000102121119400787DAA /* SmartLock.app */,
+				6E6000102121119400787DAA /* Cerradura.app */,
 				6E6000242121119500787DAA /* SmartLockUITests.xctest */,
 				6E994A84230DFB6C0076DC1B /* LockKit.framework */,
 				6E994A8C230DFB6D0076DC1B /* LockKitTests.xctest */,
@@ -1677,6 +1684,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				6ECDD09B234D8B3400178B25 /* PBXTargetDependency */,
 				6E9C960123114D60007C18FE /* PBXTargetDependency */,
 				6E15AD962318CA4B0004D1AE /* PBXTargetDependency */,
 				6E994B33230EF6DB0076DC1B /* PBXTargetDependency */,
@@ -1692,7 +1700,7 @@
 			packageProductDependencies = (
 			);
 			productName = SmartLock;
-			productReference = 6E6000102121119400787DAA /* SmartLock.app */;
+			productReference = 6E6000102121119400787DAA /* Cerradura.app */;
 			productType = "com.apple.product-type.application";
 		};
 		6E6000232121119500787DAA /* SmartLockUITests */ = {
@@ -2025,7 +2033,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 1100;
-				LastUpgradeCheck = 1100;
+				LastUpgradeCheck = 1110;
 				ORGANIZATIONNAME = ColemanCDA;
 				TargetAttributes = {
 					6E15AD7A2318C9060004D1AE = {
@@ -3198,6 +3206,12 @@
 			target = 6E994A83230DFB6C0076DC1B /* LockKit */;
 			targetProxy = 6ECD35CA233B51AE00E49357 /* PBXContainerItemProxy */;
 		};
+		6ECDD09B234D8B3400178B25 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "JGProgressHUD-iOS";
+			platformFilter = ios;
+			targetProxy = 6ECDD09A234D8B3400178B25 /* PBXContainerItemProxy */;
+		};
 		6ED820962316774E00B69520 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = "CoreLock-watchOS";
@@ -3523,6 +3537,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = 4W79SG34MW;
+				ENABLE_HARDENED_RUNTIME = YES;
 				INFOPLIST_FILE = "Today macOS/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -3548,6 +3563,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = 4W79SG34MW;
+				ENABLE_HARDENED_RUNTIME = YES;
 				INFOPLIST_FILE = "Today macOS/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -3620,7 +3636,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				MACOSX_DEPLOYMENT_TARGET = 10.15;
-				MARKETING_VERSION = 1.0.0;
+				MARKETING_VERSION = 1.0.1;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = (
@@ -3688,7 +3704,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				MACOSX_DEPLOYMENT_TARGET = 10.15;
-				MARKETING_VERSION = 1.0.0;
+				MARKETING_VERSION = 1.0.1;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				OTHER_LDFLAGS = (
 					"-weak_framework",
@@ -3724,7 +3740,8 @@
 					"@executable_path/Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.colemancda.Lock;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_MODULE_NAME = "$(TARGET_NAME:c99extidentifier)";
+				PRODUCT_NAME = Cerradura;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
 				SUPPORTS_MACCATALYST = YES;
@@ -3750,7 +3767,8 @@
 					"@executable_path/Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.colemancda.Lock;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_MODULE_NAME = "$(TARGET_NAME:c99extidentifier)";
+				PRODUCT_NAME = Cerradura;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
 				SUPPORTS_MACCATALYST = YES;

@@ -29,9 +29,7 @@ internal extension timeval {
         let (integerValue, decimalValue) = modf(timeInterval)
         
         let million: Double = 1000000.0
-        
         let microseconds = decimalValue * million
-        
         self.init(tv_sec: Int(integerValue), tv_usec: POSIXMicroseconds(microseconds))
     }
     
@@ -100,9 +98,7 @@ internal extension tm {
     internal func modf(value: Double) -> (Double, Double) {
         
         var integerValue: Double = 0
-        
         let decimalValue = modf(value, &integerValue)
-        
         return (decimalValue, integerValue)
     }
     

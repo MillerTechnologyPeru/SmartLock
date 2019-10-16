@@ -151,7 +151,10 @@ public final class LockEventsViewController: TableViewController {
         // attempt to load data from iCloud
         if Store.shared.preferences.isCloudBackupEnabled {
             DispatchQueue.cloud.async {
-                do { try Store.shared.downloadCloudLocks() }
+                do {
+                    guard try Store.shared.cloud.accountStatus() == .available else { return }
+                    try Store.shared.downloadCloudLocks()
+                }
                 catch {
                     log("⚠️ Unable to load data from iCloud: \(error.localizedDescription)")
                     #if DEBUG

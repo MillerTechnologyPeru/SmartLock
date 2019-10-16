@@ -59,6 +59,10 @@ public final class CloudStore {
         return try container.requestApplicationPermission([.userDiscoverability])
     }
     
+    public func accountStatus() throws -> CKAccountStatus {
+        return try container.accountStatus()
+    }
+    
     public func upload(applicationData: ApplicationData,
                        keys: [UUID: KeyData]) throws {
         
@@ -313,7 +317,9 @@ public extension Store {
         assert(Thread.isMainThread == false)
         
         // make sure iCloud is enabled
-        guard preferences.isCloudBackupEnabled else { return }
+        guard preferences.isCloudBackupEnabled,
+            try Store.shared.cloud.accountStatus() == .available
+            else { return }
         
         // update from filesystem just in case
         loadCache()

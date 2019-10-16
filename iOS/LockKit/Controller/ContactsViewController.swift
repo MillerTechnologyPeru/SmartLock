@@ -30,6 +30,8 @@ public final class ContactsViewController: TableViewController {
     
     private lazy var nameFormatter = PersonNameComponentsFormatter()
     
+    private var applicationPermissionStatus: CKContainer_Application_PermissionStatus = .initialState
+    
     // MARK: - Loading
     
     public static func fromStoryboard() -> ContactsViewController {
@@ -81,6 +83,12 @@ public final class ContactsViewController: TableViewController {
         
         // configure FRC
         configureView()
+    }
+    
+    override public func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        userActivity?.becomeCurrent()
         
         // configure bar button items
         if didCancel == nil {
@@ -91,27 +99,30 @@ public final class ContactsViewController: TableViewController {
         }
         
         // CloudKit discoverability
-        DispatchQueue.app.async {
-            do {
-                let status = try Store.shared.cloud.requestPermissions()
-                log("☁️ CloudKit permisions \(status == .granted ? "granted" : "not granted")")
+        if applicationPermissionStatus != .granted {
+            DispatchQueue.app.async {
+                do {
+                    guard try Store.shared.cloud.accountStatus() == .available else { return }
+                    let status = try Store.shared.cloud.requestPermissions()
+                    log("☁️ CloudKit permisions \(status == .granted ? "granted" : "not granted")")
+                    mainQueue { [weak self] in
+                        self?.applicationPermissionStatus = status
+                        self?.reloadData()
+                    }
+                }
+                catch { log("⚠️ Could not request CloudKit permissions. \(error.localizedDescription)") }
             }
-            catch { log("⚠️ Could not request CloudKit permissions. \(error.localizedDescription)") }
         }
         
-        // CloudKit address book access
-        ContactManagedObject.contactStore.requestAccess(for: .contacts) { [weak self] (authorized, error) in
-            if let error = error {
-                log("⚠️ Could not access address book. \(error.localizedDescription)")
+        if CNContactStore.authorizationStatus(for: .contacts) != .authorized {
+            // request contacts permissions
+            ContactManagedObject.contactStore.requestAccess(for: .contacts) { [weak self] (authorized, error) in
+                if let error = error {
+                    log("⚠️ Could not access address book. \(error.localizedDescription)")
+                }
+                mainQueue { self?.reloadData() }
             }
-            mainQueue { self?.reloadData() }
         }
-    }
-    
-    override public func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        
-        userActivity?.becomeCurrent()
     }
     
     public override func viewDidDisappear(_ animated: Bool) {
@@ -184,6 +195,9 @@ public final class ContactsViewController: TableViewController {
         
         // fetch contacts from CloudKit and insert into CoreData
         performActivity(queue: .app, {
+            // make sure iCloud account is available.
+            guard (try? Store.shared.cloud.accountStatus()) == .available else { return }
+            // fetch contacts
             do { try Store.shared.updateContacts() }
             // ignore common errors
             catch CKError.networkUnavailable { }

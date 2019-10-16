@@ -29,6 +29,26 @@ public extension CKContainer {
 
 internal extension CKContainer {
     
+    func accountStatus() throws -> CKAccountStatus {
+        let semaphore = DispatchSemaphore(value: 0)
+        var result: Result<CKAccountStatus, Swift.Error>!
+        accountStatus { (status, error) in
+            defer { semaphore.signal() }
+            if let error = error {
+                result = .failure(error)
+            } else {
+                result = .success(status)
+            }
+        }
+        semaphore.wait()
+        switch result! {
+        case let .success(status):
+            return status
+        case let .failure(error):
+            throw error
+        }
+    }
+    
     func fetchUserRecordID() throws -> CKRecord.ID {
         let semaphore = DispatchSemaphore(value: 0)
         var result: Result<CKRecord.ID, Swift.Error>!

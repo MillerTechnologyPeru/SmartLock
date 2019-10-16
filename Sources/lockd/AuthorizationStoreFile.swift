@@ -84,6 +84,14 @@ public final class AuthorizationStoreFile: LockAuthorizationStore {
         try write { $0.newKeys.removeAll(where: { $0.newKey.identifier == identifier }) }
     }
     
+    public func removeAll() throws {
+        
+        try write {
+            $0.keys.removeAll()
+            $0.newKeys.removeAll()
+        }
+    }
+    
     public var list: KeysList {
         
         return KeysList(

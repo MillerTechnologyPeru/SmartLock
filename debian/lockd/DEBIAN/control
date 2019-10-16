@@ -4,7 +4,7 @@ Architecture: armhf
 Essential: no
 Section: dev
 Priority: required
-Depends: clang
+Depends: swift5
 Maintainer: Alsey Coleman Miller
-Installed-Size: 900000
+Installed-Size: 90000
 Description: Lock Deamon

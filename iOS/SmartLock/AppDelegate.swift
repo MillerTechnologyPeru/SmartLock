@@ -463,6 +463,7 @@ private extension AppDelegate {
         // CloudKit discoverability
         DispatchQueue.cloud.asyncAfter(deadline: .now() + 3.0) {
             do {
+                guard try Store.shared.cloud.accountStatus() == .available else { return }
                 let status = try Store.shared.cloud.requestPermissions()
                 log("☁️ CloudKit permisions \(status == .granted ? "granted" : "not granted")")
             }
@@ -471,7 +472,10 @@ private extension AppDelegate {
         
         // CloudKit push notifications
         DispatchQueue.app.async {
-            do { try Store.shared.cloud.subcribeNewKeyShares() }
+            do {
+                guard try Store.shared.cloud.accountStatus() == .available else { return }
+                try Store.shared.cloud.subcribeNewKeyShares()
+            }
             catch { log("⚠️ Could subscribe to new shares. \(error)") }
         }
     }

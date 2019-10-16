@@ -30,11 +30,9 @@ public final class LockServiceController <Peripheral: PeripheralProtocol> : GATT
         didSet { updateInformation() }
     }
     
-    // data source / delegate
-    
     public var setupSecret: KeyData = KeyData()
     
-    public var authorization: LockAuthorizationStore = InMemoryLockAuthorization()  {
+    public var authorization: LockAuthorizationStore = InMemoryLockAuthorization() {
         didSet { updateInformation() }
     }
     
@@ -43,6 +41,8 @@ public final class LockServiceController <Peripheral: PeripheralProtocol> : GATT
     public var events: LockEventStore = InMemoryLockEvents()
     
     public var lockChanged: (() -> ())?
+    
+    public var authorizationTimeout: TimeInterval = 10.0
     
     // handles
     internal let serviceHandle: UInt16
@@ -146,6 +146,12 @@ public final class LockServiceController <Peripheral: PeripheralProtocol> : GATT
     }
     
     // MARK: - Methods
+    
+    public func reset() {
+        
+        try? authorization.removeAll()
+        updateInformation()
+    }
     
     public func willRead(_ request: GATTReadRequest<Peripheral.Central>) -> ATT.Error? {
         
@@ -280,8 +286,8 @@ public final class LockServiceController <Peripheral: PeripheralProtocol> : GATT
             // guard against replay attacks
             let timestamp = setup.encryptedData.authentication.message.date
             let now = Date()
-            guard timestamp <= now + 5, // cannot be used later for replay attacks
-                timestamp > now - 5.0 // only valid for 5 seconds
+            guard timestamp <= now + authorizationTimeout, // cannot be used later for replay attacks
+                timestamp > now - authorizationTimeout // only valid for 5 seconds
                 else { print("Authentication expired \(timestamp) < \(now)"); return }
             
             // decrypt request
@@ -323,8 +329,8 @@ public final class LockServiceController <Peripheral: PeripheralProtocol> : GATT
             // guard against replay attacks
             let timestamp = unlock.authentication.message.date
             let now = Date()
-            guard timestamp <= now + 5, // cannot be used later for replay attacks
-                timestamp > now - 5.0 // only valid for 5 seconds
+            guard timestamp <= now + authorizationTimeout, // cannot be used later for replay attacks
+                timestamp > now - authorizationTimeout // only valid for 5 seconds
                 else { print("Authentication expired \(timestamp) < \(now)"); return }
             
             // enforce schedule
@@ -363,8 +369,8 @@ public final class LockServiceController <Peripheral: PeripheralProtocol> : GATT
             // guard against replay attacks
             let timestamp = characteristic.encryptedData.authentication.message.date
             let now = Date()
-            guard timestamp <= now + 5, // cannot be used later for replay attacks
-                timestamp > now - 5.0 // only valid for 5 seconds
+            guard timestamp <= now + authorizationTimeout, // cannot be used later for replay attacks
+                timestamp > now - authorizationTimeout // only valid for 5 seconds
                 else { print("Authentication expired \(timestamp) < \(now)"); return }
             
             // enforce permission
@@ -406,8 +412,8 @@ public final class LockServiceController <Peripheral: PeripheralProtocol> : GATT
             // guard against replay attacks
             let timestamp = characteristic.encryptedData.authentication.message.date
             let now = Date()
-            guard timestamp <= now + 5, // cannot be used later for replay attacks
-                timestamp > now - 5.0 // only valid for 5 seconds
+            guard timestamp <= now + authorizationTimeout, // cannot be used later for replay attacks
+                timestamp > now - authorizationTimeout // only valid for 5 seconds
                 else { print("Authentication expired \(timestamp) < \(now)"); return }
             
             // decrypt
@@ -452,8 +458,8 @@ public final class LockServiceController <Peripheral: PeripheralProtocol> : GATT
             // guard against replay attacks
             let timestamp = characteristic.authentication.message.date
             let now = Date()
-            guard timestamp <= now + 5, // cannot be used later for replay attacks
-                timestamp > now - 5.0 // only valid for 5 seconds
+            guard timestamp <= now + authorizationTimeout, // cannot be used later for replay attacks
+                timestamp > now - authorizationTimeout // only valid for 5 seconds
                 else { print("Authentication expired"); return }
             
             // enforce permission
@@ -502,8 +508,8 @@ public final class LockServiceController <Peripheral: PeripheralProtocol> : GATT
             // guard against replay attacks
             let timestamp = characteristic.authentication.message.date
             let now = Date()
-            guard timestamp <= now + 5, // cannot be used later for replay attacks
-                timestamp > now - 5.0 // only valid for 5 seconds
+            guard timestamp <= now + authorizationTimeout, // cannot be used later for replay attacks
+                timestamp > now - authorizationTimeout // only valid for 5 seconds
                 else { print("Authentication expired \(timestamp) < \(now)"); return }
             
             // enforce permission
@@ -553,8 +559,8 @@ public final class LockServiceController <Peripheral: PeripheralProtocol> : GATT
             // guard against replay attacks
             let timestamp = characteristic.authentication.message.date
             let now = Date()
-            guard timestamp <= now + 5, // cannot be used later for replay attacks
-                timestamp > now - 5.0 // only valid for 5 seconds
+            guard timestamp <= now + authorizationTimeout, // cannot be used later for replay attacks
+                timestamp > now - authorizationTimeout // only valid for 5 seconds
                 else { print("Authentication expired \(timestamp) < \(now)"); return }
                         
             print("Key \(key.identifier) \(key.name) requested events list")
@@ -618,6 +624,8 @@ public protocol LockAuthorizationStore {
     func removeKey(_ identifier: UUID) throws
     
     func removeNewKey(_ identifier: UUID) throws
+    
+    func removeAll() throws
     
     var list: KeysList { get }
 }
@@ -716,6 +724,12 @@ public final class InMemoryLockAuthorization: LockAuthorizationStore {
     public func removeNewKey(_ identifier: UUID) throws {
         
         newKeys.removeAll(where: { $0.newKey.identifier == identifier })
+    }
+    
+    public func removeAll() throws {
+        
+        keys.removeAll()
+        newKeys.removeAll()
     }
     
     public var list: KeysList {
