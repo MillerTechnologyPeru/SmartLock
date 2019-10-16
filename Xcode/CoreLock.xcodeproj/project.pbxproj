@@ -20,6 +20,10 @@
 		6E62124823472217007D49BF /* Bluetooth in Frameworks */ = {isa = PBXBuildFile; productRef = 6E62124723472217007D49BF /* Bluetooth */; };
 		6E621266234723ED007D49BF /* Bluetooth in Frameworks */ = {isa = PBXBuildFile; productRef = 6E621265234723ED007D49BF /* Bluetooth */; };
 		6E62126A23472400007D49BF /* Bluetooth in Frameworks */ = {isa = PBXBuildFile; productRef = 6E62126923472400007D49BF /* Bluetooth */; };
+		6E87864B2357ACAB008624C1 /* KeysRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E87864A2357ACAB008624C1 /* KeysRequest.swift */; };
+		6E87864C2357ACAB008624C1 /* KeysRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E87864A2357ACAB008624C1 /* KeysRequest.swift */; };
+		6E87864D2357ACAB008624C1 /* KeysRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E87864A2357ACAB008624C1 /* KeysRequest.swift */; };
+		6E87864E2357ACAB008624C1 /* KeysRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E87864A2357ACAB008624C1 /* KeysRequest.swift */; };
 		6E93D354231C624300119F65 /* Notification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E93D351231C623B00119F65 /* Notification.swift */; };
 		6E93D355231C624300119F65 /* Notification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E93D351231C623B00119F65 /* Notification.swift */; };
 		6E93D356231C624300119F65 /* Notification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E93D351231C623B00119F65 /* Notification.swift */; };
@@ -253,6 +257,7 @@
 		6E60FF542121041400787DAA /* GATTProfileTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GATTProfileTests.swift; sourceTree = "<group>"; };
 		6E60FF552121041400787DAA /* LinuxMain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinuxMain.swift; sourceTree = "<group>"; };
 		6E60FF572121041400787DAA /* ServerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServerTests.swift; sourceTree = "<group>"; };
+		6E87864A2357ACAB008624C1 /* KeysRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeysRequest.swift; sourceTree = "<group>"; };
 		6E93D351231C623B00119F65 /* Notification.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Notification.swift; sourceTree = "<group>"; };
 		6E93D352231C623E00119F65 /* ListEventsCharacteristic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListEventsCharacteristic.swift; sourceTree = "<group>"; };
 		6E93D353231C624000119F65 /* EventsCharacteristic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventsCharacteristic.swift; sourceTree = "<group>"; };
@@ -474,6 +479,7 @@
 				6E23151F23576F7E00C363EC /* LockNetService.swift */,
 				6EBA71022357A7B40005BEB7 /* LockInformationRequest.swift */,
 				6EBA71072357A9870005BEB7 /* LockInformationResponse.swift */,
+				6E87864A2357ACAB008624C1 /* KeysRequest.swift */,
 				6EF1C64422C9AC9E005E9818 /* LockState.swift */,
 				6EF1C63422C9AC9D005E9818 /* NewKey.swift */,
 				6EF1C64E22C9AC9F005E9818 /* Permission.swift */,
@@ -789,6 +795,7 @@
 				6E23152023576F7E00C363EC /* LockNetService.swift in Sources */,
 				6EF1C69922C9AC9F005E9818 /* RemoveKeyCharacteristic.swift in Sources */,
 				6EF1C6A522C9AC9F005E9818 /* LockModel.swift in Sources */,
+				6E87864B2357ACAB008624C1 /* KeysRequest.swift in Sources */,
 				6EF1C69122C9AC9F005E9818 /* ConfirmNewKeyCharacteristic.swift in Sources */,
 				6EBA70FE2357A7040005BEB7 /* URLSession.swift in Sources */,
 				6EF1C68522C9AC9F005E9818 /* GitCommits.swift in Sources */,
@@ -845,6 +852,7 @@
 				6E23152223576F7E00C363EC /* LockNetService.swift in Sources */,
 				6EF1C69B22C9AC9F005E9818 /* RemoveKeyCharacteristic.swift in Sources */,
 				6EF1C6A722C9AC9F005E9818 /* LockModel.swift in Sources */,
+				6E87864D2357ACAB008624C1 /* KeysRequest.swift in Sources */,
 				6EF1C69322C9AC9F005E9818 /* ConfirmNewKeyCharacteristic.swift in Sources */,
 				6EBA71002357A7040005BEB7 /* URLSession.swift in Sources */,
 				6EF1C68722C9AC9F005E9818 /* GitCommits.swift in Sources */,
@@ -901,6 +909,7 @@
 				6E23152323576F7E00C363EC /* LockNetService.swift in Sources */,
 				6EF1C69C22C9AC9F005E9818 /* RemoveKeyCharacteristic.swift in Sources */,
 				6EF1C6A822C9AC9F005E9818 /* LockModel.swift in Sources */,
+				6E87864E2357ACAB008624C1 /* KeysRequest.swift in Sources */,
 				6EF1C69422C9AC9F005E9818 /* ConfirmNewKeyCharacteristic.swift in Sources */,
 				6EBA71012357A7040005BEB7 /* URLSession.swift in Sources */,
 				6EF1C68822C9AC9F005E9818 /* GitCommits.swift in Sources */,
@@ -957,6 +966,7 @@
 				6E23152123576F7E00C363EC /* LockNetService.swift in Sources */,
 				6EF1C69A22C9AC9F005E9818 /* RemoveKeyCharacteristic.swift in Sources */,
 				6EF1C6A622C9AC9F005E9818 /* LockModel.swift in Sources */,
+				6E87864C2357ACAB008624C1 /* KeysRequest.swift in Sources */,
 				6EF1C69222C9AC9F005E9818 /* ConfirmNewKeyCharacteristic.swift in Sources */,
 				6EBA70FF2357A7040005BEB7 /* URLSession.swift in Sources */,
 				6EF1C68622C9AC9F005E9818 /* GitCommits.swift in Sources */,

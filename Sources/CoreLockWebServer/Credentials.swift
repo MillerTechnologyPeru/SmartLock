@@ -9,44 +9,12 @@ import Foundation
 import CoreLock
 import Kitura
 
-/// Lock  authorization for Web API
-public struct LockWebAuthorization: Equatable, Codable {
-    
-    /// Identifier of key making request.
-    public let key: UUID
-    
-    /// HMAC of key and nonce, and HMAC message
-    public let authentication: Authentication
-}
-
-public extension LockWebAuthorization {
-    
-    private static let jsonDecoder = JSONDecoder()
-    
-    private static let jsonEncoder = JSONEncoder()
-    
-    init?(header: String) {
-        
-        guard let data = Data(base64Encoded: header),
-            let authorization = try? type(of: self).jsonDecoder.decode(LockWebAuthorization.self, from: data)
-            else { return nil }
-        
-        self = authorization
-    }
-    
-    var header: String {
-        let data = try! type(of: self).jsonEncoder.encode(self)
-        let base64 = data.base64EncodedString()
-        return base64
-    }
-}
-
-internal extension LockWebAuthorization {
+internal extension LockNetService.Authorization {
     
     init?(request: RouterRequest) {
         
-        guard let authorizationHeader = request.headers["Authorization"],
-            let authorization = LockWebAuthorization(header: authorizationHeader) else {
+        guard let authorizationHeader = request.headers[LockNetService.Authorization.headerField],
+            let authorization = LockNetService.Authorization(header: authorizationHeader) else {
             return nil
         }
         
@@ -59,7 +27,7 @@ internal extension LockWebServer {
     func authenticate(request: RouterRequest) throws -> Key? {
         
         // authenticate
-        guard let authorization = LockWebAuthorization(request: request) else {
+        guard let authorization = LockNetService.Authorization(request: request) else {
             log?("\(request.urlURL.path) Missing authentication")
             return nil
         }

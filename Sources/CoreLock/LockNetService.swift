@@ -119,3 +119,40 @@ public extension LockNetService {
         case invalidResponse
     }
 }
+
+public extension LockNetService {
+    
+    /// Lock  authorization for Web API
+    struct Authorization: Equatable, Codable {
+        
+        /// Identifier of key making request.
+        public let key: UUID
+        
+        /// HMAC of key and nonce, and HMAC message
+        public let authentication: Authentication
+    }
+}
+
+public extension LockNetService.Authorization {
+    
+    private static let jsonDecoder = JSONDecoder()
+    
+    private static let jsonEncoder = JSONEncoder()
+    
+    static let headerField: String = "Authorization"
+    
+    init?(header: String) {
+        
+        guard let data = Data(base64Encoded: header),
+            let authorization = try? type(of: self).jsonDecoder.decode(LockNetService.Authorization.self, from: data)
+            else { return nil }
+        
+        self = authorization
+    }
+    
+    var header: String {
+        let data = try! type(of: self).jsonEncoder.encode(self)
+        let base64 = data.base64EncodedString()
+        return base64
+    }
+}

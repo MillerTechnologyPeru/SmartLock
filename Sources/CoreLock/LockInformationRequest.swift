@@ -35,7 +35,7 @@ public extension LockNetService.Client {
     func readInformation(for server: LockNetService,
                          timeout: TimeInterval = 30) throws -> LockNetService.LockInformation {
         
-        log?("Read information for \(server.identifier)")
+        log?("Read information for \(server.address)")
         
         let request = LockInformationRequest(server: server.url).urlRequest()
         
