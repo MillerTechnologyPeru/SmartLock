@@ -48,7 +48,7 @@ let package = Package(
         ),
         .package(
             url: "https://github.com/IBM-Swift/Kitura.git",
-            from: "2.7.0"
+            from: "2.8.1"
         )
     ],
     targets: [
