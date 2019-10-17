@@ -103,6 +103,9 @@ public extension NewKeyViewController {
                 }
                 catch {
                     mainQueue {
+                        #if DEBUG
+                        dump(error)
+                        #endif
                         self.hideActivity(animated: false)
                         self.newKeyError(error.localizedDescription)
                     }

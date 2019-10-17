@@ -8,36 +8,52 @@
 import Foundation
 import CoreLock
 import Kitura
+import KituraNet
 import KituraContracts
 
 internal extension LockWebServer {
     
     func addPermissionsRoute() {
-        
-        router.get("/keys") { [unowned self] (request, response, next) in
-            try self.getKeys(request: request, response: response)
+                
+        router.post("/keys") { [unowned self] (request, response, next) in
+            do {
+                let statusCode = try self.createKey(request: request, response: response)
+                _ = response.send(status: statusCode)
+            }
+            catch {
+                self.log?("\(request.urlURL.path) Internal server error. \(error.localizedDescription)")
+                dump(error)
+                _ = response.send(status: .internalServerError)
+            }
             try response.end()
         }
         
-        router.post("/keys") { [unowned self] (request, response, next) in
-            try self.createKey(request: request, response: response)
+        router.get("/keys") { [unowned self] (request, response, next) in
+            do {
+                if let statusCode = try self.getKeys(request: request, response: response) {
+                    _ = response.send(status: statusCode)
+                }
+            }
+            catch {
+                self.log?("\(request.urlURL.path) Internal server error. \(error.localizedDescription)")
+                dump(error)
+                _ = response.send(status: .internalServerError)
+            }
             try response.end()
         }
     }
     
-    func getKeys(request: RouterRequest, response: RouterResponse) throws {
+    func getKeys(request: RouterRequest, response: RouterResponse) throws -> HTTPStatusCode? {
         
         // authenticate
         guard let (key, secret) = try authenticate(request: request) else {
-            _ = response.send(status: .unauthorized)
-            return
+            return .unauthorized
         }
         
         // enforce permission
         guard key.permission.isAdministrator else {
             log?("Only lock owner and admins can view list of keys")
-            _ = response.send(status: .forbidden)
-            return
+            return .forbidden
         }
         
         log?("Key \(key.identifier) \(key.name) requested keys list")
@@ -50,21 +66,20 @@ internal extension LockWebServer {
         
         // respond
         response.send(keysResponse)
+        return nil
     }
     
-    func createKey(request: RouterRequest, response: RouterResponse) throws {
+    func createKey(request: RouterRequest, response: RouterResponse) throws -> HTTPStatusCode {
         
         // authenticate
         guard let (key, secret) = try authenticate(request: request) else {
-            _ = response.send(status: .unauthorized)
-            return
+            return .unauthorized
         }
         
         // enforce permission
         guard key.permission.isAdministrator else {
             log?("Only lock owner and admins can view list of keys")
-            _ = response.send(status: .forbidden)
-            return
+            return .forbidden
         }
         
         // parse body
@@ -84,6 +99,6 @@ internal extension LockWebServer {
         
         lockChanged?()
         
-        _ = response.send(status: .created)
+        return .created
     }
 }
