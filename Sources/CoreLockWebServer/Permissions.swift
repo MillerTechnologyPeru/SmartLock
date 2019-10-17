@@ -83,7 +83,9 @@ internal extension LockWebServer {
         }
         
         // parse body
-        let encryptedData = try request.read(as: LockNetService.EncryptedData.self)
+        var data = Data()
+        _ = try request.read(into: &data)
+        let encryptedData = try jsonDecoder.decode(LockNetService.EncryptedData.self, from: data)
         let newKeyRequest = try CreateNewKeyNetServiceRequest.decrypt(
             encryptedData,
             with: secret,
