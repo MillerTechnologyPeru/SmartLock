@@ -21,6 +21,24 @@ public struct CreateNewKeyNetServiceRequest: Equatable {
     public let encryptedData: LockNetService.EncryptedData
 }
 
+// MARK: - URL Request
+
+public extension CreateNewKeyNetServiceRequest {
+    
+    func urlRequest(encoder: JSONEncoder = JSONEncoder()) -> URLRequest {
+        
+        // http://localhost:8080/keys
+        let url = server.appendingPathComponent("keys")
+        var urlRequest = URLRequest(url: url)
+        urlRequest.addValue(authorization.header, forHTTPHeaderField: LockNetService.Authorization.headerField)
+        urlRequest.httpMethod = "POST"
+        urlRequest.httpBody = try! encoder.encode(encryptedData)
+        return urlRequest
+    }
+}
+
+// MARK: - Encryption
+
 public extension CreateNewKeyNetServiceRequest {
     
     init(server: URL,
@@ -40,5 +58,31 @@ public extension CreateNewKeyNetServiceRequest {
         
         let jsonData = try encryptedData.decrypt(with: key)
         return try decoder.decode(CreateNewKeyRequest.self, from: jsonData)
+    }
+}
+
+// MARK: - Client
+
+public extension LockNetService.Client {
+    
+    /// Create new key.
+    func createKey(_ newKey: CreateNewKeyRequest,
+                   for server: LockNetService,
+                   with key: KeyCredentials,
+                   timeout: TimeInterval = 30.0) throws {
+        
+        log?("Create \(newKey.permission.type) key \"\(newKey.name)\" \(newKey.identifier)")
+        
+        let request = try CreateNewKeyNetServiceRequest(
+            server: server.url,
+            encrypt: newKey,
+            with: key,
+            encoder: jsonEncoder
+        )
+        
+        let (httpResponse, _) = try urlSession.synchronousDataTask(with: request.urlRequest())
+        
+        guard httpResponse.statusCode == 202
+            else { throw LockNetService.Error.statusCode(httpResponse.statusCode) }
     }
 }

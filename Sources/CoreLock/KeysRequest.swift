@@ -25,6 +25,8 @@ public struct KeysNetServiceRequest: Equatable {
     }
 }
 
+// MARK: - URL Request
+
 public extension KeysNetServiceRequest {
     
     func urlRequest() -> URLRequest {
@@ -36,6 +38,8 @@ public extension KeysNetServiceRequest {
         return urlRequest
     }
 }
+
+// MARK: - Client
 
 public extension LockNetService.Client {
     

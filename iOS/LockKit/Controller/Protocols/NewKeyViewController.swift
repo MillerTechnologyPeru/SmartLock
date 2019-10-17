@@ -65,18 +65,39 @@ public extension NewKeyViewController {
                     secret: newKeySharedSecret
                 )
                 
+                let newKeyRequest = CreateNewKeyRequest(key: newKey, secret: newKeySharedSecret)
+                
                 do {
-                    guard let peripheral = try Store.shared.device(for: lockIdentifier, scanDuration: 2.0) else {
+                    // first try via BLE
+                    if Store.shared.lockManager.central.state == .poweredOn,
+                        let peripheral = try Store.shared.device(for: lockIdentifier, scanDuration: 2.0) {
+                        
+                        try LockManager.shared.createKey(
+                            newKeyRequest,
+                            for: peripheral.scanData.peripheral,
+                            with: parentKey,
+                            timeout: 30.0
+                        )
+                        
+                    } else if let netService = try Store.shared.netServiceClient.discover(duration: 2.0, timeout: 10.0).first(where: { $0.identifier == lockIdentifier }) {
+                        
+                        // try via Bonjour
+                        try Store.shared.netServiceClient.createKey(
+                            newKeyRequest,
+                            for: netService,
+                            with: parentKey,
+                            timeout: 30.0
+                        )
+                        
+                    } else {
+                        // not in range
                         mainQueue {
                             self.hideActivity(animated: false)
                             self.newKeyError(R.string.error.notInRange())
                         }
                         return
                     }
-                    try LockManager.shared.createKey(
-                        .init(key: newKey, secret: newKeySharedSecret),
-                        for: peripheral.scanData.peripheral,
-                        with: parentKey)
+                    
                 }
                 catch {
                     mainQueue {
@@ -123,6 +144,7 @@ public extension NewKeyViewController {
     
     private func newKeyError(_ error: String) {
         
+        log("⚠️ Unable to share key. \(error)")
         self.showErrorAlert(error, okHandler: { self.dismiss(animated: true, completion: nil) }, retryHandler: nil)
     }
 }

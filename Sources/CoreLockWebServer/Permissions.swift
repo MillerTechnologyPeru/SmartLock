@@ -63,7 +63,7 @@ internal extension LockWebServer {
         // enforce permission
         guard key.permission.isAdministrator else {
             log?("Only lock owner and admins can view list of keys")
-            _ = response.send(status:.forbidden)
+            _ = response.send(status: .forbidden)
             return
         }
         
