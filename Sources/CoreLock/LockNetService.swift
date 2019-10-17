@@ -8,6 +8,10 @@
 import Foundation
 import Bonjour
 
+#if canImport(FoundationNetworking)
+import FoundationNetworking
+#endif
+
 public struct LockNetService: Equatable, Hashable {
     
     public let identifier: UUID
@@ -110,6 +114,8 @@ public extension LockNetService {
     static let serviceType = "_lock._tcp."
 }
 
+// MARK: - Supporting Types
+
 public extension LockNetService {
     
     enum Error: Swift.Error {
@@ -135,6 +141,14 @@ public extension LockNetService {
 
 public extension LockNetService.Authorization {
     
+    init(key: KeyCredentials) {
+        
+        self.init(key: key.identifier, authentication: Authentication(key: key.secret))
+    }
+}
+
+public extension LockNetService.Authorization {
+    
     private static let jsonDecoder = JSONDecoder()
     
     private static let jsonEncoder = JSONEncoder()
@@ -154,5 +168,37 @@ public extension LockNetService.Authorization {
         let data = try! type(of: self).jsonEncoder.encode(self)
         let base64 = data.base64EncodedString()
         return base64
+    }
+}
+
+public extension LockNetService {
+    
+    struct EncryptedData: Equatable, Codable {
+        
+        /// Crypto IV
+        public let initializationVector: InitializationVector
+        
+        /// Encrypted data
+        public let encryptedData: Data
+    }
+}
+
+extension LockNetService.EncryptedData {
+    
+    init(encrypt data: Data, with key: KeyData) throws {
+        
+        do {
+            let (encryptedData, iv) = try CoreLock.encrypt(key: key.data, data: data)
+            self.initializationVector = iv
+            self.encryptedData = encryptedData
+        }
+        catch { throw AuthenticationError.encryptionError(error) }
+    }
+    
+    func decrypt(with key: KeyData) throws -> Data {
+        
+        // attempt to decrypt
+        do { return try CoreLock.decrypt(key: key.data, iv: initializationVector, data: encryptedData) }
+        catch { throw AuthenticationError.decryptionError(error) }
     }
 }

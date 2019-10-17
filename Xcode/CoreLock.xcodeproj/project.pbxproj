@@ -80,6 +80,18 @@
 		6EE1D6E22357C639004DD856 /* KeysResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EE1D6E02357C639004DD856 /* KeysResponse.swift */; };
 		6EE1D6E32357C639004DD856 /* KeysResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EE1D6E02357C639004DD856 /* KeysResponse.swift */; };
 		6EE1D6E42357C639004DD856 /* KeysResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EE1D6E02357C639004DD856 /* KeysResponse.swift */; };
+		6EE1D6EA2357F1E9004DD856 /* CreateNewKeyRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EE1D6E92357F1E9004DD856 /* CreateNewKeyRequest.swift */; };
+		6EE1D6EB2357F1E9004DD856 /* CreateNewKeyRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EE1D6E92357F1E9004DD856 /* CreateNewKeyRequest.swift */; };
+		6EE1D6EC2357F1E9004DD856 /* CreateNewKeyRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EE1D6E92357F1E9004DD856 /* CreateNewKeyRequest.swift */; };
+		6EE1D6ED2357F1E9004DD856 /* CreateNewKeyRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EE1D6E92357F1E9004DD856 /* CreateNewKeyRequest.swift */; };
+		6EE1D6EF2357FAF3004DD856 /* URLSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EE1D6EE2357FAF2004DD856 /* URLSession.swift */; };
+		6EE1D6F02357FAF3004DD856 /* URLSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EE1D6EE2357FAF2004DD856 /* URLSession.swift */; };
+		6EE1D6F12357FAF3004DD856 /* URLSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EE1D6EE2357FAF2004DD856 /* URLSession.swift */; };
+		6EE1D6F22357FAF3004DD856 /* URLSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EE1D6EE2357FAF2004DD856 /* URLSession.swift */; };
+		6EE1D79F235801BF004DD856 /* EventStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EE1D79E235801BF004DD856 /* EventStore.swift */; };
+		6EE1D7A0235801BF004DD856 /* EventStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EE1D79E235801BF004DD856 /* EventStore.swift */; };
+		6EE1D7A1235801BF004DD856 /* EventStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EE1D79E235801BF004DD856 /* EventStore.swift */; };
+		6EE1D7A2235801BF004DD856 /* EventStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EE1D79E235801BF004DD856 /* EventStore.swift */; };
 		6EF1C65522C9AC9F005E9818 /* SetupCharacteristic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF1C62E22C9AC9D005E9818 /* SetupCharacteristic.swift */; };
 		6EF1C65622C9AC9F005E9818 /* SetupCharacteristic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF1C62E22C9AC9D005E9818 /* SetupCharacteristic.swift */; };
 		6EF1C65722C9AC9F005E9818 /* SetupCharacteristic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF1C62E22C9AC9D005E9818 /* SetupCharacteristic.swift */; };
@@ -271,6 +283,9 @@
 		6EBA71022357A7B40005BEB7 /* LockInformationRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LockInformationRequest.swift; sourceTree = "<group>"; };
 		6EBA71072357A9870005BEB7 /* LockInformationResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LockInformationResponse.swift; sourceTree = "<group>"; };
 		6EE1D6E02357C639004DD856 /* KeysResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeysResponse.swift; sourceTree = "<group>"; };
+		6EE1D6E92357F1E9004DD856 /* CreateNewKeyRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateNewKeyRequest.swift; sourceTree = "<group>"; };
+		6EE1D6EE2357FAF2004DD856 /* URLSession.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = URLSession.swift; sourceTree = "<group>"; };
+		6EE1D79E235801BF004DD856 /* EventStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventStore.swift; sourceTree = "<group>"; };
 		6EF1C62E22C9AC9D005E9818 /* SetupCharacteristic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SetupCharacteristic.swift; sourceTree = "<group>"; };
 		6EF1C62F22C9AC9D005E9818 /* LockConfiguration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LockConfiguration.swift; sourceTree = "<group>"; };
 		6EF1C63022C9AC9D005E9818 /* EncryptedData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EncryptedData.swift; sourceTree = "<group>"; };
@@ -486,6 +501,7 @@
 				6EBA71072357A9870005BEB7 /* LockInformationResponse.swift */,
 				6E87864A2357ACAB008624C1 /* KeysRequest.swift */,
 				6EE1D6E02357C639004DD856 /* KeysResponse.swift */,
+				6EE1D6E92357F1E9004DD856 /* CreateNewKeyRequest.swift */,
 				6EF1C64422C9AC9E005E9818 /* LockState.swift */,
 				6EF1C63422C9AC9D005E9818 /* NewKey.swift */,
 				6EF1C64E22C9AC9F005E9818 /* Permission.swift */,
@@ -500,8 +516,10 @@
 				6EF1C65322C9AC9F005E9818 /* UnlockAction.swift */,
 				6EF1C64722C9AC9E005E9818 /* UnlockCharacteristic.swift */,
 				6EF1C64922C9AC9E005E9818 /* Version.swift */,
-				6E0A32D422D8FCFB002EF9DE /* URL.swift */,
 				6EACDA98231B3539000CF82A /* Event.swift */,
+				6EE1D79E235801BF004DD856 /* EventStore.swift */,
+				6E0A32D422D8FCFB002EF9DE /* URL.swift */,
+				6EE1D6EE2357FAF2004DD856 /* URLSession.swift */,
 				6E9794C323301FC400B5C5C9 /* UUID.swift */,
 			);
 			path = CoreLock;
@@ -809,6 +827,7 @@
 				6EBA71032357A7B40005BEB7 /* LockInformationRequest.swift in Sources */,
 				6EF1C69D22C9AC9F005E9818 /* Crypto.swift in Sources */,
 				6EF1C6E522C9AC9F005E9818 /* LockHardware.swift in Sources */,
+				6EE1D6EF2357FAF3004DD856 /* URLSession.swift in Sources */,
 				6EF1C6B522C9AC9F005E9818 /* GATTError.swift in Sources */,
 				6E0A32D522D8FCFB002EF9DE /* URL.swift in Sources */,
 				6EF1C6A922C9AC9F005E9818 /* GATTProfile.swift in Sources */,
@@ -818,6 +837,7 @@
 				6EF1C6C922C9AC9F005E9818 /* DeviceManager.swift in Sources */,
 				6EF1C6D122C9AC9F005E9818 /* Authentication.swift in Sources */,
 				6EF1C66D22C9AC9F005E9818 /* NewKey.swift in Sources */,
+				6EE1D6EA2357F1E9004DD856 /* CreateNewKeyRequest.swift in Sources */,
 				6EF1C67922C9AC9F005E9818 /* KeysCharacteristic.swift in Sources */,
 				6EBA71082357A9870005BEB7 /* LockInformationResponse.swift in Sources */,
 				6EF1C69522C9AC9F005E9818 /* Key.swift in Sources */,
@@ -826,6 +846,7 @@
 				6EF1C6C522C9AC9F005E9818 /* Status.swift in Sources */,
 				6EF1C6C122C9AC9F005E9818 /* Version.swift in Sources */,
 				6EE1D6E12357C639004DD856 /* KeysResponse.swift in Sources */,
+				6EE1D79F235801BF004DD856 /* EventStore.swift in Sources */,
 				6EACDA99231B353A000CF82A /* Event.swift in Sources */,
 				6E93D35C231C624300119F65 /* EventsCharacteristic.swift in Sources */,
 				6EF1C65D22C9AC9F005E9818 /* EncryptedData.swift in Sources */,
@@ -867,6 +888,7 @@
 				6EBA71052357A7B40005BEB7 /* LockInformationRequest.swift in Sources */,
 				6EF1C69F22C9AC9F005E9818 /* Crypto.swift in Sources */,
 				6EF1C6E722C9AC9F005E9818 /* LockHardware.swift in Sources */,
+				6EE1D6F12357FAF3004DD856 /* URLSession.swift in Sources */,
 				6EF1C6B722C9AC9F005E9818 /* GATTError.swift in Sources */,
 				6E0A32D722D8FCFB002EF9DE /* URL.swift in Sources */,
 				6EF1C6AB22C9AC9F005E9818 /* GATTProfile.swift in Sources */,
@@ -876,6 +898,7 @@
 				6EF1C6CB22C9AC9F005E9818 /* DeviceManager.swift in Sources */,
 				6EF1C6D322C9AC9F005E9818 /* Authentication.swift in Sources */,
 				6EF1C66F22C9AC9F005E9818 /* NewKey.swift in Sources */,
+				6EE1D6EC2357F1E9004DD856 /* CreateNewKeyRequest.swift in Sources */,
 				6EF1C67B22C9AC9F005E9818 /* KeysCharacteristic.swift in Sources */,
 				6EBA710A2357A9870005BEB7 /* LockInformationResponse.swift in Sources */,
 				6EF1C69722C9AC9F005E9818 /* Key.swift in Sources */,
@@ -884,6 +907,7 @@
 				6EF1C6C722C9AC9F005E9818 /* Status.swift in Sources */,
 				6EF1C6C322C9AC9F005E9818 /* Version.swift in Sources */,
 				6EE1D6E32357C639004DD856 /* KeysResponse.swift in Sources */,
+				6EE1D7A1235801BF004DD856 /* EventStore.swift in Sources */,
 				6EACDA9B231B353A000CF82A /* Event.swift in Sources */,
 				6E93D35E231C624300119F65 /* EventsCharacteristic.swift in Sources */,
 				6EF1C65F22C9AC9F005E9818 /* EncryptedData.swift in Sources */,
@@ -925,6 +949,7 @@
 				6EBA71062357A7B40005BEB7 /* LockInformationRequest.swift in Sources */,
 				6EF1C6A022C9AC9F005E9818 /* Crypto.swift in Sources */,
 				6EF1C6E822C9AC9F005E9818 /* LockHardware.swift in Sources */,
+				6EE1D6F22357FAF3004DD856 /* URLSession.swift in Sources */,
 				6EF1C6B822C9AC9F005E9818 /* GATTError.swift in Sources */,
 				6E0A32D822D8FCFB002EF9DE /* URL.swift in Sources */,
 				6EF1C6AC22C9AC9F005E9818 /* GATTProfile.swift in Sources */,
@@ -934,6 +959,7 @@
 				6EF1C6CC22C9AC9F005E9818 /* DeviceManager.swift in Sources */,
 				6EF1C6D422C9AC9F005E9818 /* Authentication.swift in Sources */,
 				6EF1C67022C9AC9F005E9818 /* NewKey.swift in Sources */,
+				6EE1D6ED2357F1E9004DD856 /* CreateNewKeyRequest.swift in Sources */,
 				6EF1C67C22C9AC9F005E9818 /* KeysCharacteristic.swift in Sources */,
 				6EBA710B2357A9870005BEB7 /* LockInformationResponse.swift in Sources */,
 				6EF1C69822C9AC9F005E9818 /* Key.swift in Sources */,
@@ -942,6 +968,7 @@
 				6EF1C6C822C9AC9F005E9818 /* Status.swift in Sources */,
 				6EF1C6C422C9AC9F005E9818 /* Version.swift in Sources */,
 				6EE1D6E42357C639004DD856 /* KeysResponse.swift in Sources */,
+				6EE1D7A2235801BF004DD856 /* EventStore.swift in Sources */,
 				6EACDA9C231B353A000CF82A /* Event.swift in Sources */,
 				6E93D35F231C624300119F65 /* EventsCharacteristic.swift in Sources */,
 				6EF1C66022C9AC9F005E9818 /* EncryptedData.swift in Sources */,
@@ -983,6 +1010,7 @@
 				6EBA71042357A7B40005BEB7 /* LockInformationRequest.swift in Sources */,
 				6EF1C69E22C9AC9F005E9818 /* Crypto.swift in Sources */,
 				6EF1C6E622C9AC9F005E9818 /* LockHardware.swift in Sources */,
+				6EE1D6F02357FAF3004DD856 /* URLSession.swift in Sources */,
 				6EF1C6B622C9AC9F005E9818 /* GATTError.swift in Sources */,
 				6E0A32D622D8FCFB002EF9DE /* URL.swift in Sources */,
 				6EF1C6AA22C9AC9F005E9818 /* GATTProfile.swift in Sources */,
@@ -992,6 +1020,7 @@
 				6EF1C6CA22C9AC9F005E9818 /* DeviceManager.swift in Sources */,
 				6EF1C6D222C9AC9F005E9818 /* Authentication.swift in Sources */,
 				6EF1C66E22C9AC9F005E9818 /* NewKey.swift in Sources */,
+				6EE1D6EB2357F1E9004DD856 /* CreateNewKeyRequest.swift in Sources */,
 				6EF1C67A22C9AC9F005E9818 /* KeysCharacteristic.swift in Sources */,
 				6EBA71092357A9870005BEB7 /* LockInformationResponse.swift in Sources */,
 				6EF1C69622C9AC9F005E9818 /* Key.swift in Sources */,
@@ -1000,6 +1029,7 @@
 				6EF1C6C622C9AC9F005E9818 /* Status.swift in Sources */,
 				6EF1C6C222C9AC9F005E9818 /* Version.swift in Sources */,
 				6EE1D6E22357C639004DD856 /* KeysResponse.swift in Sources */,
+				6EE1D7A0235801BF004DD856 /* EventStore.swift in Sources */,
 				6EACDA9A231B353A000CF82A /* Event.swift in Sources */,
 				6E93D35D231C624300119F65 /* EventsCharacteristic.swift in Sources */,
 				6EF1C65E22C9AC9F005E9818 /* EncryptedData.swift in Sources */,

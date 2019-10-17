@@ -9,7 +9,7 @@
 import Foundation
 
 /// Lock Information Web Request
-public struct LockInformationRequest: Equatable {
+public struct LockInformationNetServiceRequest: Equatable {
     
     /// Lock server
     public let server: URL
@@ -19,7 +19,7 @@ public struct LockInformationRequest: Equatable {
     }
 }
 
-public extension LockInformationRequest {
+public extension LockInformationNetServiceRequest {
     
     func urlRequest() -> URLRequest {
         
@@ -37,7 +37,7 @@ public extension LockNetService.Client {
         
         log?("Read information for \(server.address)")
         
-        let request = LockInformationRequest(server: server.url).urlRequest()
+        let request = LockInformationNetServiceRequest(server: server.url).urlRequest()
         
         let (httpResponse, data) = try urlSession.synchronousDataTask(with: request)
         

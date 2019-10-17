@@ -321,8 +321,8 @@ public final class Store {
             log("📶 Lock notification")
             guard preferences.monitorBluetoothNotifications
                 else { return } // ignore notification
-            typealias FetchRequest = ListEventsCharacteristic.FetchRequest
-            typealias Predicate = ListEventsCharacteristic.Predicate
+            typealias FetchRequest = LockEvent.FetchRequest
+            typealias Predicate = LockEvent.Predicate
             let context = Store.shared.backgroundContext
             DispatchQueue.bluetooth.async {
                 // scan for all locks
@@ -558,7 +558,7 @@ public extension Store {
     
     @discardableResult
     func listEvents(_ lock: LockPeripheral<NativeCentral>,
-                    fetchRequest: ListEventsCharacteristic.FetchRequest? = nil,
+                    fetchRequest: LockEvent.FetchRequest? = nil,
                     notification: @escaping ((EventsList, Bool) -> ()) = { _,_ in }) throws -> Bool {
         
         // get lock key

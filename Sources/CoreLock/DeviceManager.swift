@@ -311,7 +311,7 @@ public final class LockManager <Central: CentralProtocol> {
     }
     
     /// Retreive a list of events on device.
-    public func listEvents(fetchRequest: ListEventsCharacteristic.FetchRequest? = nil,
+    public func listEvents(fetchRequest: LockEvent.FetchRequest? = nil,
                            for peripheral: Peripheral,
                            with key: KeyCredentials,
                            timeout: TimeInterval = .gattDefaultTimeout) throws -> EventsList {
@@ -326,7 +326,7 @@ public final class LockManager <Central: CentralProtocol> {
     }
     
     /// Retreive a list of events on device.
-    public func listEvents(fetchRequest: ListEventsCharacteristic.FetchRequest? = nil,
+    public func listEvents(fetchRequest: LockEvent.FetchRequest? = nil,
                            for peripheral: Peripheral,
                            with key: KeyCredentials,
                            timeout: TimeInterval = .gattDefaultTimeout,

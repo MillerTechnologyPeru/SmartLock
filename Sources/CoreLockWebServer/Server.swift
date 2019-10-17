@@ -32,6 +32,10 @@ public final class LockWebServer {
     
     public var authorizationTimeout: TimeInterval = 10.0
     
+    public var events: LockEventStore = InMemoryLockEvents()
+    
+    public var lockChanged: (() -> ())?
+    
     internal lazy var jsonEncoder = JSONEncoder()
     
     internal lazy var jsonDecoder = JSONDecoder()

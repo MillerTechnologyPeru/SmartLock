@@ -140,8 +140,8 @@ public final class LockEventsViewController: TableViewController {
     
     private func reloadData() {
         
-        typealias FetchRequest = ListEventsCharacteristic.FetchRequest
-        typealias Predicate = ListEventsCharacteristic.Predicate
+        typealias FetchRequest = LockEvent.FetchRequest
+        typealias Predicate = LockEvent.Predicate
         
         // load keys if neccesary
         if needsKeys.isEmpty == false {

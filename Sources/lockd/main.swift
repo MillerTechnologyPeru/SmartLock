@@ -109,6 +109,7 @@ func run() throws {
     // configure web server
     webServer.authorization = authorization
     webServer.configurationStore = configurationStore
+    webServer.events = events
     webServer.log = { print("Web Server:", $0) }
     
     // load hardware configuration
@@ -141,7 +142,7 @@ func run() throws {
     try hostController.writeLocalName("Lock")
     
     // change advertisment for notifications
-    controller?.lockServiceController.lockChanged = {
+    func lockChanged() {
         backgroundQueue.asyncAfter(deadline: .now() + 2) {
             do {
                 try hostController.setNotificationAdvertisement(rssi: 30) // FIXME: RSSI
@@ -154,6 +155,9 @@ func run() throws {
             }
         }
     }
+    
+    controller?.lockServiceController.lockChanged = lockChanged
+    webServer.lockChanged = lockChanged
     
     // make sure the device is always discoverable
     if #available(macOS 10.12, *) {

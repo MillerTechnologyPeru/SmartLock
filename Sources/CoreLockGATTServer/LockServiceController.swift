@@ -600,13 +600,6 @@ public final class LockGATTServiceController <Peripheral: PeripheralProtocol> : 
     }
 }
 
-public protocol LockEventStore {
-    
-    func fetch(_ fetchRequest: ListEventsCharacteristic.FetchRequest) throws -> [LockEvent]
-    
-    func save(_ event: LockEvent) throws
-}
-
 /// Lock unlock manager
 public protocol UnlockDelegate {
     
@@ -618,18 +611,5 @@ public struct UnlockSimulator: UnlockDelegate {
     public func unlock(_ action: UnlockAction) throws {
         
         print("Simulate unlock with action \(action)")
-    }
-}
-
-public final class InMemoryLockEvents: LockEventStore {
-    
-    public private(set) var events = [LockEvent]()
-    
-    public func fetch(_ fetchRequest: ListEventsCharacteristic.FetchRequest) throws -> [LockEvent] {
-        return events.fetch(fetchRequest)
-    }
-    
-    public func save(_ event: LockEvent) throws {
-        events.append(event)
     }
 }

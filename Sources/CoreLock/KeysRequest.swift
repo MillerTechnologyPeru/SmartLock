@@ -9,7 +9,7 @@
 import Foundation
 import CryptoSwift
 
-public struct KeysRequest: Equatable {
+public struct KeysNetServiceRequest: Equatable {
     
     /// Lock server
     public let server: URL
@@ -25,7 +25,7 @@ public struct KeysRequest: Equatable {
     }
 }
 
-public extension KeysRequest {
+public extension KeysNetServiceRequest {
     
     func urlRequest() -> URLRequest {
         
@@ -46,7 +46,7 @@ public extension LockNetService.Client {
         
         log?("List keys for \(server.address)")
         
-        let request = KeysRequest(
+        let request = KeysNetServiceRequest(
             server: server.url,
             authorization: LockNetService.Authorization(
                 key: key.identifier,
