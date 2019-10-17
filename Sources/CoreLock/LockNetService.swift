@@ -175,6 +175,12 @@ public extension LockNetService {
     
     struct EncryptedData: Equatable, Codable {
         
+        internal enum CodingKeys: String, CodingKey {
+            
+            case initializationVector = "iv"
+            case encryptedData = "data"
+        }
+        
         /// Crypto IV
         public let initializationVector: InitializationVector
         
