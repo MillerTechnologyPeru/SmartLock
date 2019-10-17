@@ -85,7 +85,7 @@ public extension LockNetService.Client {
         
         let (httpResponse, _) = try urlSession.synchronousDataTask(with: request)
         
-        guard httpResponse.statusCode == 202
+        guard httpResponse.statusCode == 201
             else { throw LockNetService.Error.statusCode(httpResponse.statusCode) }
     }
 }
