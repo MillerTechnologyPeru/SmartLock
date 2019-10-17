@@ -81,9 +81,9 @@ public extension LockNetService.Client {
             encrypt: newKey,
             with: key,
             encoder: jsonEncoder
-        )
+        ).urlRequest(encoder: jsonEncoder)
         
-        let (httpResponse, _) = try urlSession.synchronousDataTask(with: request.urlRequest())
+        let (httpResponse, _) = try urlSession.synchronousDataTask(with: request)
         
         guard httpResponse.statusCode == 202
             else { throw LockNetService.Error.statusCode(httpResponse.statusCode) }

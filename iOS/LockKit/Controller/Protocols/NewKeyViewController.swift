@@ -47,7 +47,7 @@ public extension NewKeyViewController {
             self.showActivity()
             
             // add new key to lock
-            DispatchQueue.bluetooth.async { [weak self] in
+            DispatchQueue.app.async { [weak self] in
                 
                 guard let self = self else { return }
                 
@@ -70,16 +70,18 @@ public extension NewKeyViewController {
                 do {
                     // first try via BLE
                     if Store.shared.lockManager.central.state == .poweredOn,
-                        let peripheral = try Store.shared.device(for: lockIdentifier, scanDuration: 2.0) {
+                        let peripheral = try DispatchQueue.bluetooth.sync(execute: { try Store.shared.device(for: lockIdentifier, scanDuration: 2.0) }) {
                         
-                        try LockManager.shared.createKey(
-                            newKeyRequest,
-                            for: peripheral.scanData.peripheral,
-                            with: parentKey,
-                            timeout: 30.0
-                        )
+                        try DispatchQueue.bluetooth.sync {
+                            try Store.shared.lockManager.createKey(
+                                newKeyRequest,
+                                for: peripheral.scanData.peripheral,
+                                with: parentKey,
+                                timeout: 30.0
+                            )
+                        }
                         
-                    } else if let netService = try Store.shared.netServiceClient.discover(duration: 2.0, timeout: 10.0).first(where: { $0.identifier == lockIdentifier }) {
+                    } else if let netService = try Store.shared.netServiceClient.discover(duration: 1.0, timeout: 10.0).first(where: { $0.identifier == lockIdentifier }) {
                         
                         // try via Bonjour
                         try Store.shared.netServiceClient.createKey(
