@@ -155,7 +155,13 @@ public final class LockGATTServiceController <Peripheral: PeripheralProtocol> : 
     
     public func willRead(_ request: GATTReadRequest<Peripheral.Central>) -> ATT.Error? {
         
-        return nil
+        switch request.handle {
+        case informationHandle:
+            print("Requested lock information")
+            return nil
+        default:
+            return nil
+        }
     }
     
     public func willWrite(_ request: GATTWriteRequest<Peripheral.Central>) -> ATT.Error? {

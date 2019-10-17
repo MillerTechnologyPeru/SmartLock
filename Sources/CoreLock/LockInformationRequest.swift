@@ -8,6 +8,10 @@
 
 import Foundation
 
+#if canImport(FoundationNetworking)
+import FoundationNetworking
+#endif
+
 /// Lock Information Web Request
 public struct LockInformationNetServiceRequest: Equatable {
     

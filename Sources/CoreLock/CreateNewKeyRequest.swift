@@ -7,7 +7,10 @@
 //
 
 import Foundation
-import CryptoSwift
+
+#if canImport(FoundationNetworking)
+import FoundationNetworking
+#endif
 
 public struct CreateNewKeyNetServiceRequest: Equatable {
     
