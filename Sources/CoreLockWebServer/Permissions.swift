@@ -144,7 +144,7 @@ internal extension LockWebServer {
     private func deleteKey(_ identifier: UUID, type: KeyType, request: RouterRequest, response: RouterResponse) throws -> HTTPStatusCode {
         
         // authenticate
-        guard let (key, secret) = try authenticate(request: request) else {
+        guard let (key, _) = try authenticate(request: request) else {
             return .unauthorized
         }
         
@@ -167,7 +167,7 @@ internal extension LockWebServer {
             try authorization.removeNewKey(removeKey.identifier)
         }
         
-        print("Key \(key.identifier) \(key.name) removed \(type) \(identifier)")
+        log?("Key \(key.identifier) \(key.name) removed \(type) \(identifier)")
         
         try events.save(.removeKey(.init(key: key.identifier, removedKey: identifier, type: type)))
         
