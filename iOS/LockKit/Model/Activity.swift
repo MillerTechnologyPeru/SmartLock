@@ -187,8 +187,7 @@ public final class NewKeyActivity: UIActivity {
     public override func canPerform(withActivityItems activityItems: [Any]) -> Bool {
         
         guard let lockItem = activityItems.compactMap({ $0 as? LockActivityItem }).first,
-            let lockCache = Store.shared[lock: lockItem.identifier],
-            Store.shared[peripheral: lockItem.identifier] != nil // Lock must be reachable
+            let lockCache = Store.shared[lock: lockItem.identifier]
             else { return false }
         
         // only owner and admin can share keys
@@ -239,8 +238,7 @@ public final class ManageKeysActivity: UIActivity {
     public override func canPerform(withActivityItems activityItems: [Any]) -> Bool {
         
         guard let lockItem = activityItems.compactMap({ $0 as? LockActivityItem }).first,
-            let lockCache = Store.shared[lock: lockItem.identifier],
-            Store.shared[peripheral: lockItem.identifier] != nil // Lock must be reachable
+            let lockCache = Store.shared[lock: lockItem.identifier]
             else { return false }
         
         return lockCache.key.permission.isAdministrator
@@ -388,92 +386,6 @@ public final class RenameActivity: UIActivity {
     }
 }
 
-/// Activity for enabling HomeKit.
-public final class HomeKitEnableActivity: UIActivity {
-    
-    public override class var activityCategory: UIActivity.Category { return .action }
-    
-    private var item: LockActivityItem!
-    
-    public override var activityType: UIActivity.ActivityType? {
-        return LockActivity.homeKitEnable.activityType
-    }
-    
-    public override var activityTitle: String? {
-        return R.string.activity.homeKitEnableActivityTitle()
-    }
-    
-    public override var activityImage: UIImage? {
-        return R.image.activityHomeKit()
-    }
-    
-    public override func canPerform(withActivityItems activityItems: [Any]) -> Bool {
-        
-        guard let lockItem = activityItems.compactMap({ $0 as? LockActivityItem }).first,
-            let lockCache = Store.shared[lock: lockItem.identifier],
-            Store.shared[peripheral: lockItem.identifier] != nil // Lock must be reachable
-            else { return false }
-        
-        guard lockCache.key.permission == .owner
-            else { return false }
-        
-        #if DEBUG
-        return true
-        #else
-        return false
-        #endif
-    }
-    
-    public override func prepare(withActivityItems activityItems: [Any]) {
-        
-        self.item = activityItems.compactMap({ $0 as? LockActivityItem }).first
-    }
-    
-    public override var activityViewController: UIViewController? {
-        
-        let lockItem = self.item!
-        
-        let alert = UIAlertController(title: R.string.activity.homeKitEnableActivityAlertTitle(),
-                                      message: R.string.activity.homeKitEnableActivityAlertMessage(),
-                                      preferredStyle: .alert)
-        
-        func enableHomeKit(_ enable: Bool = true) {
-            
-            guard let lockItem = self.item,
-                let lockCache = Store.shared[lock: lockItem.identifier],
-                let keyData = Store.shared[key: lockCache.key.identifier],
-                let peripheral = Store.shared[peripheral: lockItem.identifier] // Lock must be reachable
-                else { alert.dismiss(animated: true) { self.activityDidFinish(false) }; return }
-            
-            DispatchQueue.bluetooth.async {
-                
-                //do { try LockManager.shared.enableHomeKit(lockItem.identifier, key: (lockCache.keyIdentifier, keyData), enable: enable) }
-                
-                //catch { mainQueue { alert.showErrorAlert("\(error)"); self.activityDidFinish(false) }; return }
-                
-                mainQueue { alert.dismiss(animated: true) { self.activityDidFinish(true) } }
-            }
-        }
-            
-        alert.addAction(UIAlertAction(title:R.string.activity.homeKitEnableActivityAlertCancel(), style: .cancel, handler: { (UIAlertAction) in
-                        
-            alert.dismiss(animated: true) { self.activityDidFinish(false) }
-        }))
-        
-        alert.addAction(UIAlertAction(title: R.string.activity.homeKitEnableActivityAlertYes(), style: .`default`, handler: { (UIAlertAction) in
-            
-            enableHomeKit()
-        }))
-        
-        alert.addAction(UIAlertAction(title: R.string.activity.homeKitEnableActivityAlertNo(), style: .`default`, handler: { (UIAlertAction) in
-            
-            enableHomeKit(false)
-        }))
-        
-        return alert
-    }
-}
-
 public final class UpdateActivity: UIActivity {
     
     public override class var activityCategory: UIActivity.Category { return .action }
@@ -495,8 +407,7 @@ public final class UpdateActivity: UIActivity {
     public override func canPerform(withActivityItems activityItems: [Any]) -> Bool {
         
         guard let lockItem = activityItems.compactMap({ $0 as? LockActivityItem }).first,
-            let lockCache = Store.shared[lock: lockItem.identifier],
-            Store.shared[peripheral: lockItem.identifier] != nil // Lock must be reachable
+            let lockCache = Store.shared[lock: lockItem.identifier]
             else { return false }
         
         guard lockCache.key.permission == .owner
@@ -512,7 +423,7 @@ public final class UpdateActivity: UIActivity {
     
     public override var activityViewController: UIViewController? {
         
-        //let lockItem = self.item!
+        let lockItem = self.item!
         
         let alert = UIAlertController(title: R.string.activity.updateActivityAlertTitle(),
                                       message: R.string.activity.updateActivityAlertMessage(),
@@ -524,8 +435,8 @@ public final class UpdateActivity: UIActivity {
         }))
         
         alert.addAction(UIAlertAction(title: R.string.activity.updateActivityAlertUpdate(), style: .`default`, handler: { (UIAlertAction) in
-            /*
-            let progressHUD = JGProgressHUD(style: .dark)!
+            
+            let progressHUD = JGProgressHUD(style: .dark)
             
             func showProgressHUD() {
                 
@@ -542,19 +453,40 @@ public final class UpdateActivity: UIActivity {
             }
             
             // fetch cache
-            guard let (lockCache, keyData) = Store.shared[lockItem.identifier]
+            guard let lockCache = Store.shared[lock: lockItem.identifier],
+                let keyData = Store.shared[key: lockCache.key.identifier]
                 else { alert.dismiss(animated: true) { self.activityDidFinish(false) }; return }
+            
+            let key = KeyCredentials(identifier: lockCache.key.identifier, secret: keyData)
             
             showProgressHUD()
             
-            async {
+            DispatchQueue.app.async {
                 
-                do { try LockManager.shared.update(lockItem.identifier, key: (lockCache.keyIdentifier, keyData)) }
+                let client = Store.shared.netServiceClient
+                
+                do {
+                    guard let netService = try client.discover(duration: 1.0, timeout: 10.0).first(where: { $0.identifier == lockItem.identifier })
+                        else { throw LockError.notInRange(lock: lockItem.identifier) }
                     
-                catch { mainQueue { dismissProgressHUD(false); alert.showErrorAlert("\(error)"); self.activityDidFinish(false) }; return }
+                    try client.update(for: netService, with: key, timeout: 30.0)
+                }
+                    
+                catch {
+                    mainQueue {
+                        dismissProgressHUD(false)
+                        alert.showErrorAlert("\(error)")
+                        self.activityDidFinish(false)
+                    }
+                    return
+                }
                 
-                mainQueue { dismissProgressHUD(); alert.dismiss(animated: true) { self.activityDidFinish(true) } }
-            }*/
+                mainQueue {
+                    dismissProgressHUD()
+                    self.activityDidFinish(true)
+                    alert.dismiss(animated: true) { }
+                }
+            }
         }))
         
         return alert

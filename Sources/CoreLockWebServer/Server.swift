@@ -36,6 +36,8 @@ public final class LockWebServer {
     
     public var lockChanged: (() -> ())?
     
+    public var update: (() -> ())?
+    
     internal lazy var jsonEncoder = JSONEncoder()
     
     internal lazy var jsonDecoder = JSONDecoder()
@@ -58,6 +60,7 @@ public final class LockWebServer {
         
         addLockInformationRoute()
         addPermissionsRoute()
+        addUpdateRoute()
     }
     
     public func run() {

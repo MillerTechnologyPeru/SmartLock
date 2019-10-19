@@ -111,6 +111,13 @@ func run() throws {
     webServer.configurationStore = configurationStore
     webServer.events = events
     webServer.log = { print("Web Server:", $0) }
+    webServer.update = {
+        #if os(Linux)
+        system("/opt/colemancda/lockd/update.sh")
+        #else
+        print("Simulate software update")
+        #endif
+    }
     
     // load hardware configuration
     if let hardware = try? JSONDecoder().decode(LockHardware.self, from: URL(fileURLWithPath: "/opt/colemancda/lockd/hardware.json")) {

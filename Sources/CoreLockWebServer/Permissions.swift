@@ -42,7 +42,7 @@ internal extension LockWebServer {
         }
     }
     
-    func getKeys(request: RouterRequest, response: RouterResponse) throws -> HTTPStatusCode? {
+    private func getKeys(request: RouterRequest, response: RouterResponse) throws -> HTTPStatusCode? {
         
         // authenticate
         guard let (key, secret) = try authenticate(request: request) else {
@@ -68,7 +68,7 @@ internal extension LockWebServer {
         return nil
     }
     
-    func createKey(request: RouterRequest, response: RouterResponse) throws -> HTTPStatusCode {
+    private func createKey(request: RouterRequest, response: RouterResponse) throws -> HTTPStatusCode {
         
         // authenticate
         guard let (key, secret) = try authenticate(request: request) else {

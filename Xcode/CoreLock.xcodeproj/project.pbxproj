@@ -16,6 +16,10 @@
 		6E23152123576F7E00C363EC /* LockNetService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E23151F23576F7E00C363EC /* LockNetService.swift */; };
 		6E23152223576F7E00C363EC /* LockNetService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E23151F23576F7E00C363EC /* LockNetService.swift */; };
 		6E23152323576F7E00C363EC /* LockNetService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E23151F23576F7E00C363EC /* LockNetService.swift */; };
+		6E4729EB235AE7B4007CBC07 /* UpdateRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E4729EA235AE7B3007CBC07 /* UpdateRequest.swift */; };
+		6E4729EC235AE7B4007CBC07 /* UpdateRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E4729EA235AE7B3007CBC07 /* UpdateRequest.swift */; };
+		6E4729ED235AE7B4007CBC07 /* UpdateRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E4729EA235AE7B3007CBC07 /* UpdateRequest.swift */; };
+		6E4729EE235AE7B4007CBC07 /* UpdateRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E4729EA235AE7B3007CBC07 /* UpdateRequest.swift */; };
 		6E621244234721FF007D49BF /* Bluetooth in Frameworks */ = {isa = PBXBuildFile; productRef = 6E621243234721FF007D49BF /* Bluetooth */; };
 		6E62124823472217007D49BF /* Bluetooth in Frameworks */ = {isa = PBXBuildFile; productRef = 6E62124723472217007D49BF /* Bluetooth */; };
 		6E621266234723ED007D49BF /* Bluetooth in Frameworks */ = {isa = PBXBuildFile; productRef = 6E621265234723ED007D49BF /* Bluetooth */; };
@@ -269,6 +273,7 @@
 		6E0A32D422D8FCFB002EF9DE /* URL.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URL.swift; sourceTree = "<group>"; };
 		6E0A32D922D91E1D002EF9DE /* URLTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLTests.swift; sourceTree = "<group>"; };
 		6E23151F23576F7E00C363EC /* LockNetService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LockNetService.swift; sourceTree = "<group>"; };
+		6E4729EA235AE7B3007CBC07 /* UpdateRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UpdateRequest.swift; sourceTree = "<group>"; };
 		6E60FF532121041400787DAA /* CryptoTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CryptoTests.swift; sourceTree = "<group>"; };
 		6E60FF542121041400787DAA /* GATTProfileTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GATTProfileTests.swift; sourceTree = "<group>"; };
 		6E60FF552121041400787DAA /* LinuxMain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinuxMain.swift; sourceTree = "<group>"; };
@@ -521,6 +526,7 @@
 				6E0A32D422D8FCFB002EF9DE /* URL.swift */,
 				6EE1D6EE2357FAF2004DD856 /* URLSession.swift */,
 				6E9794C323301FC400B5C5C9 /* UUID.swift */,
+				6E4729EA235AE7B3007CBC07 /* UpdateRequest.swift */,
 			);
 			path = CoreLock;
 			sourceTree = "<group>";
@@ -833,6 +839,7 @@
 				6EF1C6A922C9AC9F005E9818 /* GATTProfile.swift in Sources */,
 				6EF1C6BD22C9AC9F005E9818 /* LockInformationCharacteristic.swift in Sources */,
 				6EF1C66122C9AC9F005E9818 /* SecureData.swift in Sources */,
+				6E4729EB235AE7B4007CBC07 /* UpdateRequest.swift in Sources */,
 				6EF1C67122C9AC9F005E9818 /* Advertisement.swift in Sources */,
 				6EF1C6C922C9AC9F005E9818 /* DeviceManager.swift in Sources */,
 				6EF1C6D122C9AC9F005E9818 /* Authentication.swift in Sources */,
@@ -894,6 +901,7 @@
 				6EF1C6AB22C9AC9F005E9818 /* GATTProfile.swift in Sources */,
 				6EF1C6BF22C9AC9F005E9818 /* LockInformationCharacteristic.swift in Sources */,
 				6EF1C66322C9AC9F005E9818 /* SecureData.swift in Sources */,
+				6E4729ED235AE7B4007CBC07 /* UpdateRequest.swift in Sources */,
 				6EF1C67322C9AC9F005E9818 /* Advertisement.swift in Sources */,
 				6EF1C6CB22C9AC9F005E9818 /* DeviceManager.swift in Sources */,
 				6EF1C6D322C9AC9F005E9818 /* Authentication.swift in Sources */,
@@ -955,6 +963,7 @@
 				6EF1C6AC22C9AC9F005E9818 /* GATTProfile.swift in Sources */,
 				6EF1C6C022C9AC9F005E9818 /* LockInformationCharacteristic.swift in Sources */,
 				6EF1C66422C9AC9F005E9818 /* SecureData.swift in Sources */,
+				6E4729EE235AE7B4007CBC07 /* UpdateRequest.swift in Sources */,
 				6EF1C67422C9AC9F005E9818 /* Advertisement.swift in Sources */,
 				6EF1C6CC22C9AC9F005E9818 /* DeviceManager.swift in Sources */,
 				6EF1C6D422C9AC9F005E9818 /* Authentication.swift in Sources */,
@@ -1016,6 +1025,7 @@
 				6EF1C6AA22C9AC9F005E9818 /* GATTProfile.swift in Sources */,
 				6EF1C6BE22C9AC9F005E9818 /* LockInformationCharacteristic.swift in Sources */,
 				6EF1C66222C9AC9F005E9818 /* SecureData.swift in Sources */,
+				6E4729EC235AE7B4007CBC07 /* UpdateRequest.swift in Sources */,
 				6EF1C67222C9AC9F005E9818 /* Advertisement.swift in Sources */,
 				6EF1C6CA22C9AC9F005E9818 /* DeviceManager.swift in Sources */,
 				6EF1C6D222C9AC9F005E9818 /* Authentication.swift in Sources */,

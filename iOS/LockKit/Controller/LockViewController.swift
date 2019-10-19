@@ -106,7 +106,6 @@ public final class LockViewController: UITableViewController {
             let activities = [
                 NewKeyActivity(),
                 ManageKeysActivity(),
-                HomeKitEnableActivity(),
                 RenameActivity(),
                 UpdateActivity(),
                 DeleteLockActivity { [unowned self] in

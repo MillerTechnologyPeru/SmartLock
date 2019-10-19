@@ -17,7 +17,7 @@ internal extension LockWebServer {
         router.get("/info", handler: getLockInformation)
     }
     
-    func getLockInformation(completion: (LockNetService.LockInformation?, RequestError?) -> ()) {
+    private func getLockInformation(completion: (LockNetService.LockInformation?, RequestError?) -> ()) {
         
         log?("Requested lock information")
         

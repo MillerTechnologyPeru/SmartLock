@@ -59,12 +59,14 @@ public extension NewKeyViewController {
                 
                 let newKeySharedSecret = KeyData()
                 
+                // file for sharing
                 let newKeyInvitation = NewKey.Invitation(
                     lock: lockIdentifier,
                     key: newKey,
                     secret: newKeySharedSecret
                 )
                 
+                // for BLE / HTTP request
                 let newKeyRequest = CreateNewKeyRequest(key: newKey, secret: newKeySharedSecret)
                 
                 do {
