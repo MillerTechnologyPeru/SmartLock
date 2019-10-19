@@ -14,7 +14,7 @@ internal extension LockWebServer {
     
     func addPermissionsRoute() {
                 
-        router.post("/keys") { [unowned self] (request, response, next) in
+        router.post("/key") { [unowned self] (request, response, next) in
             do {
                 let statusCode = try self.createKey(request: request, response: response)
                 _ = response.send(status: statusCode)
@@ -27,11 +27,49 @@ internal extension LockWebServer {
             try response.end()
         }
         
-        router.get("/keys") { [unowned self] (request, response, next) in
+        router.get("/key") { [unowned self] (request, response, next) in
             do {
                 if let statusCode = try self.getKeys(request: request, response: response) {
                     _ = response.send(status: statusCode)
                 }
+            }
+            catch {
+                self.log?("\(request.urlURL.path) Internal server error. \(error.localizedDescription)")
+                dump(error)
+                _ = response.send(status: .internalServerError)
+            }
+            try response.end()
+        }
+        
+        router.delete("/key/:id") { [unowned self] (request, response, next) in
+            guard let identifierString = request.parameters["id"],
+                let identifier = UUID(uuidString: identifierString) else {
+                _ = response.send(status: .notFound)
+                try response.end()
+                    return
+            }
+            do {
+                let statusCode = try self.deleteKey(identifier, type: .key, request: request, response: response)
+                _ = response.send(status: statusCode)
+            }
+            catch {
+                self.log?("\(request.urlURL.path) Internal server error. \(error.localizedDescription)")
+                dump(error)
+                _ = response.send(status: .internalServerError)
+            }
+            try response.end()
+        }
+        
+        router.delete("/newKey/:id") { [unowned self] (request, response, next) in
+            guard let identifierString = request.parameters["id"],
+                let identifier = UUID(uuidString: identifierString) else {
+                _ = response.send(status: .notFound)
+                try response.end()
+                    return
+            }
+            do {
+                let statusCode = try self.deleteKey(identifier, type: .newKey, request: request, response: response)
+                _ = response.send(status: statusCode)
             }
             catch {
                 self.log?("\(request.urlURL.path) Internal server error. \(error.localizedDescription)")
@@ -101,5 +139,40 @@ internal extension LockWebServer {
         lockChanged?()
         
         return .created
+    }
+    
+    private func deleteKey(_ identifier: UUID, type: KeyType, request: RouterRequest, response: RouterResponse) throws -> HTTPStatusCode {
+        
+        // authenticate
+        guard let (key, secret) = try authenticate(request: request) else {
+            return .unauthorized
+        }
+        
+        // enforce permission
+        guard key.permission.isAdministrator else {
+            log?("Only lock owner and admins can remove keys")
+            return .forbidden
+        }
+        
+        switch type {
+        case .key:
+            guard let (removeKey, _) = try authorization.key(for: identifier)
+                else { log?("Key \(identifier) does not exist"); return .notFound }
+            assert(removeKey.identifier == identifier)
+            try authorization.removeKey(removeKey.identifier)
+        case .newKey:
+            guard let (removeKey, _) = try authorization.newKey(for: identifier)
+                else { log?("New Key \(identifier) does not exist"); return .notFound }
+            assert(removeKey.identifier == identifier)
+            try authorization.removeNewKey(removeKey.identifier)
+        }
+        
+        print("Key \(key.identifier) \(key.name) removed \(type) \(identifier)")
+        
+        try events.save(.removeKey(.init(key: key.identifier, removedKey: identifier, type: type)))
+        
+        lockChanged?()
+        
+        return .OK
     }
 }

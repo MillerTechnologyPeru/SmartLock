@@ -17,10 +17,6 @@ public struct LockInformationNetServiceRequest: Equatable {
     
     /// Lock server
     public let server: URL
-    
-    public init(server: URL) {
-        self.server = server
-    }
 }
 
 public extension LockInformationNetServiceRequest {
@@ -37,7 +33,7 @@ public extension LockNetService.Client {
     
     /// Read the lock's information characteristic.
     func readInformation(for server: LockNetService,
-                         timeout: TimeInterval = 30) throws -> LockNetService.LockInformation {
+                         timeout: TimeInterval = LockNetService.defaultTimeout) throws -> LockNetService.LockInformation {
         
         log?("Read information for \(server.url.absoluteString)")
         

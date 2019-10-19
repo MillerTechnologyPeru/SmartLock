@@ -31,7 +31,7 @@ public extension CreateNewKeyNetServiceRequest {
     func urlRequest(encoder: JSONEncoder = JSONEncoder()) -> URLRequest {
         
         // http://localhost:8080/keys
-        let url = server.appendingPathComponent("keys")
+        let url = server.appendingPathComponent("key")
         var urlRequest = URLRequest(url: url)
         urlRequest.addValue(authorization.header, forHTTPHeaderField: LockNetService.Authorization.headerField)
         urlRequest.httpMethod = "POST"
@@ -72,7 +72,7 @@ public extension LockNetService.Client {
     func createKey(_ newKey: CreateNewKeyRequest,
                    for server: LockNetService,
                    with key: KeyCredentials,
-                   timeout: TimeInterval = 30.0) throws {
+                   timeout: TimeInterval = LockNetService.defaultTimeout) throws {
         
         log?("Create \(newKey.permission.type) key \"\(newKey.name)\" \(newKey.identifier) for \(server.url.absoluteString)")
         

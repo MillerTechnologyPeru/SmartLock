@@ -123,6 +123,8 @@ public extension NetServiceType {
 public extension LockNetService {
     
     static let serviceType = "_lock._tcp."
+    
+    static var defaultTimeout: TimeInterval = 30.0
 }
 
 // MARK: - Supporting Types

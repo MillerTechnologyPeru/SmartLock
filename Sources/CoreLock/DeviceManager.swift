@@ -148,7 +148,7 @@ public final class LockManager <Central: CentralProtocol> {
                           with key: KeyCredentials,
                           timeout: TimeInterval = .gattDefaultTimeout) throws {
         
-        log?("Create \(newKey.permission.type) key \"\(newKey.name)\" \(newKey.identifier)")
+        log?("Create \(newKey.permission.type) key \"\(newKey.name)\" \(newKey.identifier) for \(peripheral)")
         
         let timeout = Timeout(timeout: timeout)
         
@@ -171,7 +171,7 @@ public final class LockManager <Central: CentralProtocol> {
                            with key: KeyCredentials,
                            timeout: TimeInterval = .gattDefaultTimeout) throws {
         
-        log?("Confirm key \(key.identifier)")
+        log?("Confirm key \(key.identifier) for \(peripheral)")
         
         let timeout = Timeout(timeout: timeout)
         
@@ -195,7 +195,7 @@ public final class LockManager <Central: CentralProtocol> {
                           with key: KeyCredentials,
                           timeout: TimeInterval = .gattDefaultTimeout) throws {
         
-        log?("Remove \(type) \(identifier)")
+        log?("Remove \(type) \(identifier) for \(peripheral)")
         
         let timeout = Timeout(timeout: timeout)
         

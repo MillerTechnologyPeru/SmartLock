@@ -19,11 +19,6 @@ public struct UpdateNetServiceRequest: Equatable {
     
     /// Authorization header
     public let authorization: LockNetService.Authorization
-    
-    public init(server: URL, authorization: LockNetService.Authorization) {
-        self.server = server
-        self.authorization = authorization
-    }
 }
 
 // MARK: - URL Request
@@ -48,7 +43,7 @@ public extension LockNetService.Client {
     /// Create new key.
     func update(for server: LockNetService,
                 with key: KeyCredentials,
-                timeout: TimeInterval = 30.0) throws {
+                timeout: TimeInterval = LockNetService.defaultTimeout) throws {
         
         log?("Update software for \(server.url.absoluteString)")
         

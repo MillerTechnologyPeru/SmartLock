@@ -20,13 +20,6 @@ public struct KeysNetServiceRequest: Equatable {
     
     /// Authorization header
     public let authorization: LockNetService.Authorization
-    
-    public init(server: URL,
-                authorization: LockNetService.Authorization) {
-        
-        self.server = server
-        self.authorization = authorization
-    }
 }
 
 // MARK: - URL Request
@@ -36,7 +29,7 @@ public extension KeysNetServiceRequest {
     func urlRequest() -> URLRequest {
         
         // http://localhost:8080/keys
-        let url = server.appendingPathComponent("keys")
+        let url = server.appendingPathComponent("key")
         var urlRequest = URLRequest(url: url)
         urlRequest.addValue(authorization.header, forHTTPHeaderField: LockNetService.Authorization.headerField)
         return urlRequest
@@ -50,7 +43,7 @@ public extension LockNetService.Client {
     /// Retreive a list of all keys on device.
     func listKeys(for server: LockNetService,
                   with key: KeyCredentials,
-                  timeout: TimeInterval = 30) throws -> KeysList {
+                  timeout: TimeInterval = LockNetService.defaultTimeout) throws -> KeysList {
         
         log?("List keys for \(server.url.absoluteString)")
         
