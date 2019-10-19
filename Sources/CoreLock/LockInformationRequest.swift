@@ -39,7 +39,7 @@ public extension LockNetService.Client {
     func readInformation(for server: LockNetService,
                          timeout: TimeInterval = 30) throws -> LockNetService.LockInformation {
         
-        log?("Read information for \(server.address)")
+        log?("Read information for \(server.url.absoluteString)")
         
         let request = LockInformationNetServiceRequest(server: server.url).urlRequest()
         

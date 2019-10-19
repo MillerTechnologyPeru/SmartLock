@@ -52,7 +52,7 @@ public extension LockNetService.Client {
                   with key: KeyCredentials,
                   timeout: TimeInterval = 30) throws -> KeysList {
         
-        log?("List keys for \(server.address)")
+        log?("List keys for \(server.url.absoluteString)")
         
         let request = KeysNetServiceRequest(
             server: server.url,

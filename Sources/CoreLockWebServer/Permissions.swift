@@ -9,7 +9,6 @@ import Foundation
 import CoreLock
 import Kitura
 import KituraNet
-import KituraContracts
 
 internal extension LockWebServer {
     

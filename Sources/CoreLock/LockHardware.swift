@@ -34,8 +34,7 @@ public extension LockHardware {
     
     /// Empty / Null Lock Hardware information.
     static var empty: LockHardware {
-        
-        return LockHardware(model: "", hardwareRevision: "", serialNumber: "")
+        return .init(model: "", hardwareRevision: "", serialNumber: "")
     }
 }
 

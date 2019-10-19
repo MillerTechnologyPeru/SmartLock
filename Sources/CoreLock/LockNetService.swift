@@ -16,13 +16,18 @@ public struct LockNetService: Equatable, Hashable {
     
     public let identifier: UUID
     
-    public let address: NetServiceAddress
+    public let url: URL
 }
 
-public extension LockNetService {
+internal extension LockNetService {
     
-    var url: URL {
-        return URL(string: "http://" + address.description)!
+    init(identifier: UUID, address: NetServiceAddress) {
+        
+        guard let url = URL(string: "http://" + address.description)
+            else { fatalError("Could not create URL from \(address)") }
+        
+        self.identifier = identifier
+        self.url = url
     }
 }
 
@@ -85,7 +90,12 @@ public extension LockNetService {
             for (identifier, service) in foundServices {
                 
                 guard let addresses = try? bonjour.resolve(service, timeout: timeout),
-                    let address = addresses.first
+                    let address = addresses.filter({
+                        switch $0.address {
+                        case .ipv4: return true
+                        case .ipv6: return false
+                        }
+                    }).first
                     else { continue }
                 
                 let lock = LockNetService(
@@ -100,9 +110,10 @@ public extension LockNetService {
             
             return locks
         }
-        
     }
 }
+
+// MARK: - Extensions
 
 public extension NetServiceType {
         

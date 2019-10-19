@@ -19,7 +19,6 @@ public final class LockManager <Central: CentralProtocol> {
     // MARK: - Initialization
     
     public init(central: Central) {
-        
         self.central = central
     }
     
