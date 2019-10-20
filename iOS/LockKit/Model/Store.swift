@@ -220,6 +220,14 @@ public final class Store {
         return true
     }
     
+    /// Get credentials from Keychain to authorize requests.
+    public func credentials(for lock: UUID) -> KeyCredentials? {
+        guard let cache = self[lock: lock],
+            let keyData = self[key: cache.key.identifier]
+            else { return nil }
+        return .init(identifier: lock, secret: keyData)
+    }
+    
     /// Forceably load cache.
     public func loadCache() {
         
