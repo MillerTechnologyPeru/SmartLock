@@ -33,12 +33,6 @@ public extension UnlockIntent {
         self.__setImage(INImage(uiImage: UIImage(permission: cache.key.permission)), forParameterNamed: #keyPath(lock))
         #endif
     }
-    
-    static var any: UnlockIntent {
-        let intent = UnlockIntent()
-        intent.suggestedInvocationPhrase = "Unlock"
-        return intent
-    }
 }
 
 @available(iOS 12, iOSApplicationExtension 12.0, watchOS 5.0, *)
@@ -48,3 +42,22 @@ public extension IntentLock {
         self.init(identifier: identifier.uuidString, display: name, pronunciationHint: name)
     }
 }
+
+#if canImport(IntentsUI)
+import IntentsUI
+
+@available(iOSApplicationExtension 12.0, *)
+public extension INUIAddVoiceShortcutViewController {
+    
+    convenience init(unlock lock: UUID,
+                     cache: LockCache,
+                     delegate: INUIAddVoiceShortcutViewControllerDelegate) {
+        
+        let intent = UnlockIntent(identifier: lock, cache: cache)
+        self.init(shortcut: .intent(intent))
+        self.modalPresentationStyle = .formSheet
+        self.delegate = delegate
+    }
+}
+
+#endif

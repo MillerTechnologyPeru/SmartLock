@@ -8,6 +8,7 @@
 
 import Foundation
 import UIKit
+import IntentsUI
 import Bluetooth
 import DarwinGATT
 import GATT
@@ -386,6 +387,21 @@ final class KeysViewController: UITableViewController {
 // MARK: - ActivityIndicatorViewController
 
 extension KeysViewController: TableViewActivityIndicatorViewController { }
+
+// MARK: - INUIAddVoiceShortcutViewControllerDelegate
+
+@available(iOS 12, *)
+extension KeysViewController: INUIAddVoiceShortcutViewControllerDelegate {
+    
+    public func addVoiceShortcutViewController(_ controller: INUIAddVoiceShortcutViewController, didFinishWith voiceShortcut: INVoiceShortcut?, error: Error?) {
+        
+        controller.dismiss(animated: true, completion: nil)
+    }
+    
+    public func addVoiceShortcutViewControllerDidCancel(_ controller: INUIAddVoiceShortcutViewController) {
+        controller.dismiss(animated: true, completion: nil)
+    }
+}
 
 // MARK: - UIDocumentPickerDelegate
 

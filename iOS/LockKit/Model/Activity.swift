@@ -561,11 +561,11 @@ public final class ShareKeyCloudKitActivity: UIActivity {
 #if canImport(IntentsUI)
 import IntentsUI
 
-public final class AddVoiceShortcutActivity: UIActivity {
+public final class AddSiriShortcutActivity: UIActivity {
     
     public override class var activityCategory: UIActivity.Category { return .action }
     
-    private var item: LockActivityItem!
+    private var item: LockActivityItem?
     
     public override var activityType: UIActivity.ActivityType? {
         return LockActivity.addVoiceShortcut.activityType
@@ -608,17 +608,16 @@ public final class AddVoiceShortcutActivity: UIActivity {
             else { return nil }
         
         guard let lockItem = self.item
-            else { fatalError() }
+            else { assertionFailure(); return nil }
         
         guard let lockCache = Store.shared[lock: lockItem.identifier]
             else { assertionFailure("Invalid lock"); return nil }
         
-        let intent = UnlockIntent(identifier: lockItem.identifier, cache: lockCache)
-        let shortcut = INShortcut.intent(intent)
-        let viewController = INUIAddVoiceShortcutViewController(shortcut: shortcut)
-        viewController.modalPresentationStyle = .formSheet
-        viewController.delegate = self
-        return viewController
+        return INUIAddVoiceShortcutViewController(
+            unlock: lockItem.identifier,
+            cache: lockCache,
+            delegate: self
+        )
         #endif
     }
 }
@@ -626,7 +625,7 @@ public final class AddVoiceShortcutActivity: UIActivity {
 // MARK: - INUIAddVoiceShortcutViewControllerDelegate
 
 @available(iOS 12, *)
-extension AddVoiceShortcutActivity: INUIAddVoiceShortcutViewControllerDelegate {
+extension AddSiriShortcutActivity: INUIAddVoiceShortcutViewControllerDelegate {
     
     public func addVoiceShortcutViewController(_ controller: INUIAddVoiceShortcutViewController, didFinishWith voiceShortcut: INVoiceShortcut?, error: Error?) {
         

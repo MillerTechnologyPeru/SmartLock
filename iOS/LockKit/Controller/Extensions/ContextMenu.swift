@@ -8,6 +8,7 @@
 
 import Foundation
 import UIKit
+import IntentsUI
 
 @available(iOSApplicationExtension 13.0, *)
 public extension UIViewController {
@@ -24,17 +25,7 @@ public extension UIViewController {
                 children: []
             )
         }
-        
-        let rename = UIAction(title: R.string.contextMenu.itemRename(), image: UIImage(systemName: "square.and.pencil")) { [weak self] (action) in
-            let alert = RenameActivity.viewController(for: lock) { _ in }
-            self?.present(alert, animated: true, completion: nil)
-        }
-        
-        let delete = UIAction(title: R.string.contextMenu.itemDelete(), image: UIImage(systemName: "trash"), attributes: .destructive) { [weak self] (action) in
-            let alert = DeleteLockActivity.viewController(for: lock) { _ in }
-            self?.present(alert, animated: true, completion: nil)
-        }
-        
+                
         var actions = [UIAction]()
         
         if cache.key.permission.isAdministrator {
@@ -66,7 +57,32 @@ public extension UIViewController {
             actions.append(manageKeys)
         }
         
+        if let delegate = self as? INUIAddVoiceShortcutViewControllerDelegate {
+            
+            let siri = UIAction(title: R.string.contextMenu.itemSiriShortcut(), image: UIImage(systemName: "mic.fill")) { [weak self] (action) in
+                let siriViewController = INUIAddVoiceShortcutViewController(
+                    unlock: lock,
+                    cache: cache,
+                    delegate: delegate
+                )
+                self?.present(siriViewController, animated: true, completion: nil)
+            }
+            
+            actions.append(siri)
+        }
+        
+        let rename = UIAction(title: R.string.contextMenu.itemRename(), image: UIImage(systemName: "square.and.pencil")) { [weak self] (action) in
+            let alert = RenameActivity.viewController(for: lock) { _ in }
+            self?.present(alert, animated: true, completion: nil)
+        }
+        
         actions.append(rename)
+        
+        let delete = UIAction(title: R.string.contextMenu.itemDelete(), image: UIImage(systemName: "trash"), attributes: .destructive) { [weak self] (action) in
+            let alert = DeleteLockActivity.viewController(for: lock) { _ in }
+            self?.present(alert, animated: true, completion: nil)
+        }
+        
         actions.append(delete)
         
         return UIMenu(
