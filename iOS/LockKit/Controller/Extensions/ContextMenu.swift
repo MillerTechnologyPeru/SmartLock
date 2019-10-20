@@ -81,7 +81,17 @@ public extension UIViewController {
         
         actions.append(rename)
         
-    let delete = UIAction(title: R.string.contextMenu.itemDelete(), image: UIImage(systemSymbol: .trash), attributes: .destructive) { [weak self] (action) in
+        if cache.key.permission.isAdministrator,
+            let viewController = self as? (UIViewController & ActivityIndicatorViewController) {
+            
+            let update = UIAction(title: R.string.activity.updateActivityTitle(), image: UIImage(systemSymbol: .squareAndArrowDown)) { (action) in
+                viewController.update(lock: lock)
+            }
+            
+            actions.append(update)
+        }
+        
+        let delete = UIAction(title: R.string.contextMenu.itemDelete(), image: UIImage(systemSymbol: .trash), attributes: .destructive) { [weak self] (action) in
             let alert = DeleteLockActivity.viewController(for: lock) { _ in }
             self?.present(alert, animated: true, completion: nil)
         }

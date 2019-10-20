@@ -393,7 +393,7 @@ public final class UpdateActivity: UIActivity {
     private var item: LockActivityItem!
     
     public override var activityType: UIActivity.ActivityType? {
-        return LockActivity.homeKitEnable.activityType
+        return LockActivity.update.activityType
     }
     
    public  override var activityTitle: String? {
@@ -410,7 +410,7 @@ public final class UpdateActivity: UIActivity {
             let lockCache = Store.shared[lock: lockItem.identifier]
             else { return false }
         
-        guard lockCache.key.permission == .owner
+        guard lockCache.key.permission.isAdministrator
             else { return false }
         
         return true
