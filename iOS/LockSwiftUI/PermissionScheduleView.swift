@@ -9,6 +9,7 @@
 import Foundation
 import SwiftUI
 import CoreLock
+import SFSafeSymbols
 
 /// Permission Schedule View
 @available(iOS 13, *)
@@ -65,7 +66,7 @@ public struct PermissionScheduleView: View {
     }
     
     private var checkmark: some View {
-        return Image(systemName: "checkmark")
+        return Image(systemSymbol: .checkmark)
             .foregroundColor(Color.orange)
     }
     

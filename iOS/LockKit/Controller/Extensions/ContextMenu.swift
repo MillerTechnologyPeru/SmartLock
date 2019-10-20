@@ -61,7 +61,7 @@ public extension UIViewController {
         #if canImport(IntentsUI) && !targetEnvironment(macCatalyst)
         if let delegate = self as? INUIAddVoiceShortcutViewControllerDelegate {
             
-            let siri = UIAction(title: R.string.contextMenu.itemSiriShortcut(), image: UIImage(systemSymbol: "mic.fill")) { [weak self] (action) in
+            let siri = UIAction(title: R.string.contextMenu.itemSiriShortcut(), image: UIImage(systemSymbol: .micFill)) { [weak self] (action) in
                 let siriViewController = INUIAddVoiceShortcutViewController(
                     unlock: lock,
                     cache: cache,
