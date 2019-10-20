@@ -225,7 +225,7 @@ public final class Store {
         guard let cache = self[lock: lock],
             let keyData = self[key: cache.key.identifier]
             else { return nil }
-        return .init(identifier: lock, secret: keyData)
+        return .init(identifier: cache.key.identifier, secret: keyData)
     }
     
     /// Forceably load cache.
