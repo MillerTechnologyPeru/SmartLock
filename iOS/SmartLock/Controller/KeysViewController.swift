@@ -17,6 +17,7 @@ import LockKit
 import JGProgressHUD
 import OpenCombine
 import CloudKit
+import SFSafeSymbols
 
 final class KeysViewController: UITableViewController {
     
@@ -369,7 +370,7 @@ final class KeysViewController: UITableViewController {
             case let .key(identifier, _):
                 return self?.menu(forLock: identifier)
             case .newKey:
-                let delete = UIAction(title: R.string.keysViewController.delete(), image: UIImage(systemName: "trash"), attributes: .destructive) { [weak self] (action) in
+                let delete = UIAction(title: R.string.keysViewController.delete(), image: UIImage(systemSymbol: .trash), attributes: .destructive) { [weak self] (action) in
                     self?.delete(item)
                 }
                 return UIMenu(

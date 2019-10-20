@@ -171,9 +171,8 @@ public final class ContactsViewController: TableViewController {
         let image: UIImage
         if let contactImage = managedObject.image.flatMap({ UIImage(data: $0) }) {
             image = contactImage
-        } else if #available(iOS 13, *),
-            let systemImage = UIImage(systemName: "person.crop.circle.fill") {
-            image = systemImage
+        } else if #available(iOS 13, *) {
+            image = UIImage(systemSymbol: .personCropCircleFill)
         } else {
             image = UIImage(permission: .admin)
         }

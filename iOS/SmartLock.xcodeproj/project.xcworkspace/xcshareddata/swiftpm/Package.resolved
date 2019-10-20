@@ -101,6 +101,15 @@
         }
       },
       {
+        "package": "SFSafeSymbols",
+        "repositoryURL": "https://github.com/piknotech/SFSafeSymbols.git",
+        "state": {
+          "branch": null,
+          "revision": "d63bbbd0e70182362d33f108549968b69d0b859a",
+          "version": "1.0.0"
+        }
+      },
+      {
         "package": "TLVCoding",
         "repositoryURL": "https://github.com/PureSwift/TLVCoding.git",
         "state": {

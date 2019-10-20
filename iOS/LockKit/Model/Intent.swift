@@ -43,7 +43,7 @@ public extension IntentLock {
     }
 }
 
-#if canImport(IntentsUI)
+#if canImport(IntentsUI) && !targetEnvironment(macCatalyst)
 import IntentsUI
 
 @available(iOSApplicationExtension 12.0, *)

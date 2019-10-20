@@ -322,6 +322,7 @@
 		6ECD35C1233B4CB000E49357 /* NewKeyDocument.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6ECD35C0233B4CB000E49357 /* NewKeyDocument.swift */; };
 		6ECD39A52336D369003E4AB4 /* ActivityIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6ECD39A42336D369003E4AB4 /* ActivityIndicator.swift */; };
 		6ECD6AEA23320D2C0007E7DA /* ContextMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6ECD6AE923320D2C0007E7DA /* ContextMenu.swift */; };
+		6ED44E44235C4406002E8F54 /* SFSafeSymbols in Frameworks */ = {isa = PBXBuildFile; productRef = 6ED44E43235C4406002E8F54 /* SFSafeSymbols */; };
 		6ED81F972316292900B69520 /* BackgroundTasks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6ED81F962316292900B69520 /* BackgroundTasks.swift */; };
 		6ED8207D231674E700B69520 /* IntentHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E994AD8230E56DD0076DC1B /* IntentHandler.swift */; };
 		6ED82092231676C100B69520 /* CoreLock.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6E60005A2121164B00787DAA /* CoreLock.framework */; };
@@ -1001,6 +1002,7 @@
 				6E64B7EA231236E5002BC0A2 /* Rswift in Frameworks */,
 				6E64B7F4231247EF002BC0A2 /* QRCodeReader in Frameworks */,
 				6E64B7F1231240CC002BC0A2 /* JGProgressHUD in Frameworks */,
+				6ED44E44235C4406002E8F54 /* SFSafeSymbols in Frameworks */,
 				6E5DF8B32319E3A50070787B /* OpenCombine in Frameworks */,
 				6EE5A10B2329FCA00000235C /* CloudKitCodable in Frameworks */,
 				6E64B7ED23123846002BC0A2 /* KeychainAccess in Frameworks */,
@@ -1777,6 +1779,7 @@
 				6E64B7F3231247EF002BC0A2 /* QRCodeReader */,
 				6E5DF8B22319E3A50070787B /* OpenCombine */,
 				6EE5A10A2329FCA00000235C /* CloudKitCodable */,
+				6ED44E43235C4406002E8F54 /* SFSafeSymbols */,
 			);
 			productName = LockKit;
 			productReference = 6E994A84230DFB6C0076DC1B /* LockKit.framework */;
@@ -2154,6 +2157,7 @@
 				6E64B7F2231247EF002BC0A2 /* XCRemoteSwiftPackageReference "QRCodeReader.swift" */,
 				6E5DF8B12319E3A50070787B /* XCRemoteSwiftPackageReference "OpenCombine" */,
 				6EE5A1092329FCA00000235C /* XCRemoteSwiftPackageReference "CloudKitCodable" */,
+				6ED44E3C235C43EE002E8F54 /* XCRemoteSwiftPackageReference "SFSafeSymbols" */,
 			);
 			productRefGroup = 6E6000112121119400787DAA /* Products */;
 			projectDirPath = "";
@@ -4771,6 +4775,14 @@
 				kind = branch;
 			};
 		};
+		6ED44E3C235C43EE002E8F54 /* XCRemoteSwiftPackageReference "SFSafeSymbols" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/piknotech/SFSafeSymbols.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.0;
+			};
+		};
 		6EE5A1092329FCA00000235C /* XCRemoteSwiftPackageReference "CloudKitCodable" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/colemancda/CloudKitCodable.git";
@@ -4841,6 +4853,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 6E83BADB233D906C00D6BA04 /* XCRemoteSwiftPackageReference "CloudKitCodable" */;
 			productName = CloudKitCodable;
+		};
+		6ED44E43235C4406002E8F54 /* SFSafeSymbols */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6ED44E3C235C43EE002E8F54 /* XCRemoteSwiftPackageReference "SFSafeSymbols" */;
+			productName = SFSafeSymbols;
 		};
 		6ED820992316777A00B69520 /* KeychainAccess */ = {
 			isa = XCSwiftPackageProductDependency;
