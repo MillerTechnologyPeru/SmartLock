@@ -14,13 +14,8 @@ public extension ActivityIndicatorViewController where Self: UIViewController {
     
     func update(lock identifier: UUID) {
         
-        guard let lockCache = Store.shared[lock: identifier],
-            let keyData = Store.shared[key: lockCache.key.identifier]
+        guard let key = Store.shared.credentials(for: identifier)
             else { assertionFailure(); return }
-        
-        assert(lockCache.key.permission.isAdministrator, "Must be owner or admin to update")
-        
-        let key = KeyCredentials(identifier: lockCache.key.identifier, secret: keyData)
         
         let alert = UIAlertController(title: R.string.activity.updateActivityAlertTitle(),
                                       message: R.string.activity.updateActivityAlertMessage(),

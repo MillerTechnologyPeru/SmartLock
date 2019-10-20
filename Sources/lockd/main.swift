@@ -112,11 +112,13 @@ func run() throws {
     webServer.events = events
     webServer.log = { print("Web Server:", $0) }
     webServer.update = {
-        #if os(Linux)
-        system("/opt/colemancda/lockd/update.sh")
-        #else
-        print("Simulate software update")
-        #endif
+        DispatchQueue.global(qos: .userInitiated).async {
+            #if os(Linux)
+            system("/opt/colemancda/lockd/update.sh")
+            #else
+            print("Simulate software update")
+            #endif
+        }
     }
     
     // load hardware configuration
