@@ -13,9 +13,6 @@ public final class LockTableViewCell: UITableViewCell {
     
     // MARK: - IB Outlets
     
-    @available(*, deprecated, message: "Use `permissionView` instead")
-    @IBOutlet public private(set) weak var lockImageView: UIImageView!
-    
     @IBOutlet public private(set) weak var permissionView: PermissionIconView!
     
     @IBOutlet public private(set) weak var lockTitleLabel: UILabel!

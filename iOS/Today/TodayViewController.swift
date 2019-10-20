@@ -18,11 +18,7 @@ import LockKit
 import OpenCombine
 import Combine
 
-final class TodayViewController: UIViewController, NCWidgetProviding {
-    
-    // MARK: - IB Outlets
-    
-    @IBOutlet private(set) weak var tableView: UITableView!
+final class TodayViewController: UITableViewController {
     
     // MARK: - Properties
     
@@ -30,7 +26,9 @@ final class TodayViewController: UIViewController, NCWidgetProviding {
         didSet { tableView.reloadData() }
     }
     
-    private(set) var isScanning = true
+    private(set) var isScanning = true {
+        didSet { configureView() }
+    }
     
     @available(iOS 10.0, *)
     private lazy var selectionFeedbackGenerator: UISelectionFeedbackGenerator = {
@@ -102,39 +100,32 @@ final class TodayViewController: UIViewController, NCWidgetProviding {
         }
     }
     
-    // MARK: - NCWidgetProviding
-        
-    func widgetPerformUpdate(completionHandler: (@escaping (NCUpdateResult) -> Void)) {
-        
-        log("☀️ Update Widget Data")
-        
-        // load updated lock information
-        Store.shared.loadCache()
-        
-        if #available(iOS 10.0, *) {
-            selectionFeedbackGenerator.prepare()
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransition(to: size, with: coordinator)
+
+        let updatedVisibleCellCount = cellsToDisplay
+        let currentVisibleCellCount = self.tableView.visibleCells.count
+        let cellCountDifference = updatedVisibleCellCount - currentVisibleCellCount
+
+        // If the number of visible cells has changed, animate them in/out along with the resize animation.
+        if cellCountDifference != 0 {
+            coordinator.animate(alongsideTransition: { [unowned self] (UIViewControllerTransitionCoordinatorContext) in
+                self.tableView.performBatchUpdates({ [unowned self] in
+                    // Build an array of IndexPath objects representing the rows to be inserted or deleted.
+                    let range = (1...abs(cellCountDifference))
+                    let indexPaths = range.map { IndexPath(row: $0, section: 0) }
+                    
+                    // Animate the insertion or deletion of the rows.
+                    if cellCountDifference > 0 {
+                        self.tableView.insertRows(at: indexPaths, with: .fade)
+                    } else {
+                        self.tableView.deleteRows(at: indexPaths, with: .fade)
+                    }
+                }, completion: nil)
+            }, completion: nil)
         }
-        
-        // Perform any setup necessary in order to update the view.
-        
-        // If an error is encountered, use NCUpdateResult.Failed
-        // If there's no update required, use NCUpdateResult.NoData
-        // If there's an update, use NCUpdateResult.NewData
-        
-        scan { completionHandler($0 ? .newData : .failed) }
     }
-    
-    @available(iOSApplicationExtension 10.0, *)
-    func widgetActiveDisplayModeDidChange(_ activeDisplayMode: NCWidgetDisplayMode, withMaximumSize maxSize: CGSize) {
-        
-        log("☀️ Widget Display Mode changed \(activeDisplayMode.debugDescription) \(maxSize)")
-        
-        
-    }
-    
-    func widgetMarginInsets(forProposedMarginInsets defaultMarginInsets: UIEdgeInsets) -> UIEdgeInsets {
-        return .zero
-    }
+
     
     // MARK: - Methods
     
@@ -177,13 +168,14 @@ final class TodayViewController: UIViewController, NCWidgetProviding {
     
     private func scan(_ completion: ((Bool) -> ())? = nil) {
         
-        self.items = [.loading]
+        self.isScanning = true
         
         // scan beacons
         BeaconController.shared.scanBeacons()
         
         // scan for devices
         DispatchQueue.bluetooth.async {
+            defer { mainQueue { self.isScanning = false } }
             do { try Store.shared.scan(duration: 1.0) }
             catch {
                 log("⚠️ Could not scan: \(error.localizedDescription)")
@@ -228,6 +220,14 @@ final class TodayViewController: UIViewController, NCWidgetProviding {
         }
     }
     
+    private var cellsToDisplay: Int {
+        if extensionContext?.widgetActiveDisplayMode == .compact {
+            return 1
+        } else {
+            return items.count
+        }
+    }
+    
     private func select(_ item: Item) {
         
         if #available(iOSApplicationExtension 10.0, *) {
@@ -257,17 +257,17 @@ final class TodayViewController: UIViewController, NCWidgetProviding {
 
 // MARK: - UITableViewDataSource
 
-extension TodayViewController: UITableViewDataSource {
+extension TodayViewController {
     
-    func numberOfSections(in tableView: UITableView) -> Int {
+    override func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
     
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return items.count
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return min(cellsToDisplay, items.count)
     }
     
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         guard let cell = tableView.dequeueReusableCell(LockTableViewCell.self, for: indexPath)
             else { fatalError("Could not dequeue resusable cell \(LockTableViewCell.self)") }
@@ -278,22 +278,79 @@ extension TodayViewController: UITableViewDataSource {
 
 // MARK: - UITableViewDelegate
 
-extension TodayViewController: UITableViewDelegate {
+extension TodayViewController {
     
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
         defer { tableView.deselectRow(at: indexPath, animated: true) }
         let item = self[indexPath]
         select(item)
     }
     
-    func tableView(_ tableView: UITableView, accessoryButtonTappedForRowWith indexPath: IndexPath) {
+    override func tableView(_ tableView: UITableView, accessoryButtonTappedForRowWith indexPath: IndexPath) {
         
         let item = self[indexPath]
         guard case let .lock(identifier, _) = item
             else { assertionFailure(); return }
         let url = LockURL.unlock(lock: identifier)
         self.extensionContext?.open(url.rawValue, completionHandler: nil)
+    }
+    
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        
+        let activeDisplayMode = extensionContext?.widgetActiveDisplayMode ?? .compact
+        switch activeDisplayMode {
+        case .compact:
+            return LockTableViewCell.todayCellHeight
+        case .expanded:
+            return LockTableViewCell.standardCellHeight
+        @unknown default:
+            assertionFailure("Unexpected value \(activeDisplayMode.rawValue) for activeDisplayMode.")
+            return LockTableViewCell.todayCellHeight
+        }
+    }
+}
+
+// MARK: - NCWidgetProviding
+
+extension TodayViewController: NCWidgetProviding {
+    
+    func widgetPerformUpdate(completionHandler: (@escaping (NCUpdateResult) -> Void)) {
+        
+        log("☀️ Update Widget Data")
+        
+        // load updated lock information
+        Store.shared.loadCache()
+        
+        if #available(iOS 10.0, *) {
+            selectionFeedbackGenerator.prepare()
+        }
+        
+        // Perform any setup necessary in order to update the view.
+        
+        // If an error is encountered, use NCUpdateResult.Failed
+        // If there's no update required, use NCUpdateResult.NoData
+        // If there's an update, use NCUpdateResult.NewData
+        
+        scan { completionHandler($0 ? .newData : .failed) }
+    }
+    
+    @available(iOSApplicationExtension 10.0, *)
+    func widgetActiveDisplayModeDidChange(_ activeDisplayMode: NCWidgetDisplayMode, withMaximumSize maxSize: CGSize) {
+        
+        log("☀️ Widget Display Mode changed \(activeDisplayMode.debugDescription) \(maxSize)")
+        
+        switch activeDisplayMode {
+        case .compact:
+            // The compact view is a fixed size.
+            preferredContentSize = maxSize
+        case .expanded:
+            // Dynamically calculate the height of the cells for the extended height.
+            let height = CGFloat(items.count) * LockTableViewCell.standardCellHeight
+            preferredContentSize = CGSize(width: maxSize.width, height: min(height, maxSize.height))
+        @unknown default:
+            assertionFailure("Unexpected value \(activeDisplayMode.rawValue) for activeDisplayMode.")
+        }
     }
 }
 
@@ -307,6 +364,15 @@ extension TodayViewController {
         case noNearbyLocks
         case lock(UUID, LockCache)
     }
+}
+
+// MARK: - Extensions
+
+internal extension LockTableViewCell {
+    
+    // Heights for the two styles of cell display.
+    static let todayCellHeight: CGFloat = 110
+    static let standardCellHeight: CGFloat = 75
 }
 
 @available(iOSApplicationExtension 10.0, *)
