@@ -186,14 +186,18 @@ public final class Store {
         }
         
         set {
-                        
+            let key = identifier.uuidString
             do {
                 guard let data = newValue?.data else {
-                    try keychain.remove(identifier.uuidString)
+                    try keychain.remove(key)
                     return
                 }
-                try keychain.set(data, key: identifier.uuidString)
-            } catch {
+                if try keychain.contains(key) {
+                    try keychain.remove(key)
+                }
+                try keychain.set(data, key: key)
+            }
+            catch {
                 #if DEBUG
                 print(error)
                 #endif
