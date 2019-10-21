@@ -9,11 +9,11 @@
 	<key>INIntentDefinitionNamespace</key>
 	<string>9Yc029</string>
 	<key>INIntentDefinitionSystemVersion</key>
-	<string>18G87</string>
+	<string>19A602</string>
 	<key>INIntentDefinitionToolsBuildVersion</key>
-	<string>11M392q</string>
+	<string>11A1027</string>
 	<key>INIntentDefinitionToolsVersion</key>
-	<string>11.0</string>
+	<string>11.1</string>
 	<key>INIntents</key>
 	<array>
 		<dict>
@@ -38,7 +38,7 @@
 					<key>INIntentParameterCombinationSupportsBackgroundExecution</key>
 					<true/>
 					<key>INIntentParameterCombinationTitle</key>
-					<string>Unlock `${lock}`</string>
+					<string>Unlock ${lock}</string>
 					<key>INIntentParameterCombinationTitleID</key>
 					<string>O5ezH4</string>
 					<key>INIntentParameterCombinationUpdatesLinked</key>
@@ -53,10 +53,14 @@
 				<dict>
 					<key>INIntentParameterCombinationIsPrimary</key>
 					<true/>
+					<key>INIntentParameterCombinationSubtitle</key>
+					<string>Unlock the specified lock.</string>
+					<key>INIntentParameterCombinationSubtitleID</key>
+					<string>bJj0q0</string>
 					<key>INIntentParameterCombinationSupportsBackgroundExecution</key>
 					<true/>
 					<key>INIntentParameterCombinationTitle</key>
-					<string>Unlock `${lock}`</string>
+					<string>Unlock ${lock}</string>
 					<key>INIntentParameterCombinationTitleID</key>
 					<string>dAVo2n</string>
 				</dict>
@@ -94,7 +98,7 @@
 							<key>INIntentParameterPromptDialogCustom</key>
 							<true/>
 							<key>INIntentParameterPromptDialogFormatString</key>
-							<string>You have ${count} locks matching ‘${lock}’.</string>
+							<string>You have ${count} locks matching ${lock}.</string>
 							<key>INIntentParameterPromptDialogFormatStringID</key>
 							<string>FwuKZ6</string>
 							<key>INIntentParameterPromptDialogType</key>
@@ -112,7 +116,7 @@
 							<key>INIntentParameterPromptDialogCustom</key>
 							<true/>
 							<key>INIntentParameterPromptDialogFormatString</key>
-							<string>Just to confirm, you want to unlock ‘${lock}’?</string>
+							<string>Just to confirm, you want to unlock ${lock}?</string>
 							<key>INIntentParameterPromptDialogFormatStringID</key>
 							<string>FhxgkI</string>
 							<key>INIntentParameterPromptDialogType</key>
@@ -135,7 +139,7 @@
 							<key>INIntentParameterUnsupportedReasonCustom</key>
 							<true/>
 							<key>INIntentParameterUnsupportedReasonFormatString</key>
-							<string>`${displayName}` is not in range. Please move closer to ${displayName}.</string>
+							<string>${displayName} is not in range. Please move closer to ${displayName}.</string>
 							<key>INIntentParameterUnsupportedReasonFormatStringID</key>
 							<string>bvi2l8</string>
 						</dict>
@@ -145,7 +149,7 @@
 							<key>INIntentParameterUnsupportedReasonCustom</key>
 							<true/>
 							<key>INIntentParameterUnsupportedReasonFormatString</key>
-							<string>You do not have a key for `${displayName}`.</string>
+							<string>You do not have a key for ${displayName}.</string>
 							<key>INIntentParameterUnsupportedReasonFormatStringID</key>
 							<string>vARXDT</string>
 						</dict>
@@ -155,7 +159,7 @@
 							<key>INIntentParameterUnsupportedReasonCustom</key>
 							<true/>
 							<key>INIntentParameterUnsupportedReasonFormatString</key>
-							<string>You can only unlock `${displayName}` during the specified schedule.</string>
+							<string>You can only unlock ${displayName} during the specified schedule.</string>
 							<key>INIntentParameterUnsupportedReasonFormatStringID</key>
 							<string>wkobUh</string>
 						</dict>
