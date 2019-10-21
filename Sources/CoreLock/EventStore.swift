@@ -64,9 +64,7 @@ public extension LockEvent {
         public var start: Date?
         
         public var end: Date?
-        
-        public static var empty: Predicate { return .init(keys: nil, start: nil, end: nil) }
-        
+                
         public init(keys: [UUID]?,
                     start: Date? = nil,
                     end: Date? = nil) {
@@ -76,6 +74,11 @@ public extension LockEvent {
             self.end = end
         }
     }
+}
+
+public extension LockEvent.Predicate {
+    
+    static var empty: LockEvent.Predicate { return .init(keys: nil, start: nil, end: nil) }
 }
 
 public extension Collection where Self.Element == LockEvent {

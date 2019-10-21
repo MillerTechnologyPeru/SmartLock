@@ -72,6 +72,14 @@
 		6EBA71092357A9870005BEB7 /* LockInformationResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EBA71072357A9870005BEB7 /* LockInformationResponse.swift */; };
 		6EBA710A2357A9870005BEB7 /* LockInformationResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EBA71072357A9870005BEB7 /* LockInformationResponse.swift */; };
 		6EBA710B2357A9870005BEB7 /* LockInformationResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EBA71072357A9870005BEB7 /* LockInformationResponse.swift */; };
+		6EBDB5CB235D5E3200F38CB0 /* EventsRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EBDB5CA235D5E3200F38CB0 /* EventsRequest.swift */; };
+		6EBDB5CC235D5E3200F38CB0 /* EventsRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EBDB5CA235D5E3200F38CB0 /* EventsRequest.swift */; };
+		6EBDB5CD235D5E3200F38CB0 /* EventsRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EBDB5CA235D5E3200F38CB0 /* EventsRequest.swift */; };
+		6EBDB5CE235D5E3200F38CB0 /* EventsRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EBDB5CA235D5E3200F38CB0 /* EventsRequest.swift */; };
+		6EBDB5D0235D7FF900F38CB0 /* EventsResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EBDB5CF235D7FF900F38CB0 /* EventsResponse.swift */; };
+		6EBDB5D1235D7FF900F38CB0 /* EventsResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EBDB5CF235D7FF900F38CB0 /* EventsResponse.swift */; };
+		6EBDB5D2235D7FF900F38CB0 /* EventsResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EBDB5CF235D7FF900F38CB0 /* EventsResponse.swift */; };
+		6EBDB5D3235D7FF900F38CB0 /* EventsResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EBDB5CF235D7FF900F38CB0 /* EventsResponse.swift */; };
 		6ED81FE1231662E200B69520 /* CryptoSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 6ED81FE0231662E200B69520 /* CryptoSwift */; };
 		6ED81FE3231662E200B69520 /* DarwinGATT in Frameworks */ = {isa = PBXBuildFile; productRef = 6ED81FE2231662E200B69520 /* DarwinGATT */; };
 		6ED81FE5231662E200B69520 /* GATT in Frameworks */ = {isa = PBXBuildFile; productRef = 6ED81FE4231662E200B69520 /* GATT */; };
@@ -292,6 +300,8 @@
 		6EBA70FD2357A7040005BEB7 /* URLSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLSession.swift; sourceTree = "<group>"; };
 		6EBA71022357A7B40005BEB7 /* LockInformationRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LockInformationRequest.swift; sourceTree = "<group>"; };
 		6EBA71072357A9870005BEB7 /* LockInformationResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LockInformationResponse.swift; sourceTree = "<group>"; };
+		6EBDB5CA235D5E3200F38CB0 /* EventsRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventsRequest.swift; sourceTree = "<group>"; };
+		6EBDB5CF235D7FF900F38CB0 /* EventsResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventsResponse.swift; sourceTree = "<group>"; };
 		6EE1D6E02357C639004DD856 /* KeysResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeysResponse.swift; sourceTree = "<group>"; };
 		6EE1D6E92357F1E9004DD856 /* CreateNewKeyRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateNewKeyRequest.swift; sourceTree = "<group>"; };
 		6EE1D6EE2357FAF2004DD856 /* URLSession.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = URLSession.swift; sourceTree = "<group>"; };
@@ -501,6 +511,8 @@
 				6EF1C63322C9AC9D005E9818 /* ListKeysCharacteristic.swift */,
 				6E93D353231C624000119F65 /* EventsCharacteristic.swift */,
 				6E93D352231C623E00119F65 /* ListEventsCharacteristic.swift */,
+				6EBDB5CA235D5E3200F38CB0 /* EventsRequest.swift */,
+				6EBDB5CF235D7FF900F38CB0 /* EventsResponse.swift */,
 				6E93D351231C623B00119F65 /* Notification.swift */,
 				6EF1C62F22C9AC9D005E9818 /* LockConfiguration.swift */,
 				6EF1C65222C9AC9F005E9818 /* LockHardware.swift */,
@@ -861,6 +873,7 @@
 				6EF1C6C122C9AC9F005E9818 /* Version.swift in Sources */,
 				6EE1D6E12357C639004DD856 /* KeysResponse.swift in Sources */,
 				6EE1D79F235801BF004DD856 /* EventStore.swift in Sources */,
+				6EBDB5D0235D7FF900F38CB0 /* EventsResponse.swift in Sources */,
 				6EACDA99231B353A000CF82A /* Event.swift in Sources */,
 				6E93D35C231C624300119F65 /* EventsCharacteristic.swift in Sources */,
 				6EF1C65D22C9AC9F005E9818 /* EncryptedData.swift in Sources */,
@@ -873,6 +886,7 @@
 				6EF1C66522C9AC9F005E9818 /* AuthenticationError.swift in Sources */,
 				6EF1C66922C9AC9F005E9818 /* ListKeysCharacteristic.swift in Sources */,
 				6E93D354231C624300119F65 /* Notification.swift in Sources */,
+				6EBDB5CB235D5E3200F38CB0 /* EventsRequest.swift in Sources */,
 				6EF1C6B922C9AC9F005E9818 /* UnlockCharacteristic.swift in Sources */,
 				6EF1C65922C9AC9F005E9818 /* LockConfiguration.swift in Sources */,
 				6EF1C6D522C9AC9F005E9818 /* Permission.swift in Sources */,
@@ -924,6 +938,7 @@
 				6EF1C6C322C9AC9F005E9818 /* Version.swift in Sources */,
 				6EE1D6E32357C639004DD856 /* KeysResponse.swift in Sources */,
 				6EE1D7A1235801BF004DD856 /* EventStore.swift in Sources */,
+				6EBDB5D2235D7FF900F38CB0 /* EventsResponse.swift in Sources */,
 				6EACDA9B231B353A000CF82A /* Event.swift in Sources */,
 				6E93D35E231C624300119F65 /* EventsCharacteristic.swift in Sources */,
 				6EF1C65F22C9AC9F005E9818 /* EncryptedData.swift in Sources */,
@@ -936,6 +951,7 @@
 				6EF1C66722C9AC9F005E9818 /* AuthenticationError.swift in Sources */,
 				6EF1C66B22C9AC9F005E9818 /* ListKeysCharacteristic.swift in Sources */,
 				6E93D356231C624300119F65 /* Notification.swift in Sources */,
+				6EBDB5CD235D5E3200F38CB0 /* EventsRequest.swift in Sources */,
 				6EF1C6BB22C9AC9F005E9818 /* UnlockCharacteristic.swift in Sources */,
 				6EF1C65B22C9AC9F005E9818 /* LockConfiguration.swift in Sources */,
 				6EF1C6D722C9AC9F005E9818 /* Permission.swift in Sources */,
@@ -987,6 +1003,7 @@
 				6EF1C6C422C9AC9F005E9818 /* Version.swift in Sources */,
 				6EE1D6E42357C639004DD856 /* KeysResponse.swift in Sources */,
 				6EE1D7A2235801BF004DD856 /* EventStore.swift in Sources */,
+				6EBDB5D3235D7FF900F38CB0 /* EventsResponse.swift in Sources */,
 				6EACDA9C231B353A000CF82A /* Event.swift in Sources */,
 				6E93D35F231C624300119F65 /* EventsCharacteristic.swift in Sources */,
 				6EF1C66022C9AC9F005E9818 /* EncryptedData.swift in Sources */,
@@ -999,6 +1016,7 @@
 				6EF1C66822C9AC9F005E9818 /* AuthenticationError.swift in Sources */,
 				6EF1C66C22C9AC9F005E9818 /* ListKeysCharacteristic.swift in Sources */,
 				6E93D357231C624300119F65 /* Notification.swift in Sources */,
+				6EBDB5CE235D5E3200F38CB0 /* EventsRequest.swift in Sources */,
 				6EF1C6BC22C9AC9F005E9818 /* UnlockCharacteristic.swift in Sources */,
 				6EF1C65C22C9AC9F005E9818 /* LockConfiguration.swift in Sources */,
 				6EF1C6D822C9AC9F005E9818 /* Permission.swift in Sources */,
@@ -1050,6 +1068,7 @@
 				6EF1C6C222C9AC9F005E9818 /* Version.swift in Sources */,
 				6EE1D6E22357C639004DD856 /* KeysResponse.swift in Sources */,
 				6EE1D7A0235801BF004DD856 /* EventStore.swift in Sources */,
+				6EBDB5D1235D7FF900F38CB0 /* EventsResponse.swift in Sources */,
 				6EACDA9A231B353A000CF82A /* Event.swift in Sources */,
 				6E93D35D231C624300119F65 /* EventsCharacteristic.swift in Sources */,
 				6EF1C65E22C9AC9F005E9818 /* EncryptedData.swift in Sources */,
@@ -1062,6 +1081,7 @@
 				6EF1C66622C9AC9F005E9818 /* AuthenticationError.swift in Sources */,
 				6EF1C66A22C9AC9F005E9818 /* ListKeysCharacteristic.swift in Sources */,
 				6E93D355231C624300119F65 /* Notification.swift in Sources */,
+				6EBDB5CC235D5E3200F38CB0 /* EventsRequest.swift in Sources */,
 				6EF1C6BA22C9AC9F005E9818 /* UnlockCharacteristic.swift in Sources */,
 				6EF1C65A22C9AC9F005E9818 /* LockConfiguration.swift in Sources */,
 				6EF1C6D622C9AC9F005E9818 /* Permission.swift in Sources */,
