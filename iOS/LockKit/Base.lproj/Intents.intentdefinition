@@ -172,7 +172,7 @@
 				<array>
 					<dict>
 						<key>INIntentResponseCodeConciseFormatString</key>
-						<string>Unlocked ‘${lock}‘.</string>
+						<string>Unlocked ${lock}.</string>
 						<key>INIntentResponseCodeConciseFormatStringID</key>
 						<string>claxan</string>
 						<key>INIntentResponseCodeFormatString</key>
