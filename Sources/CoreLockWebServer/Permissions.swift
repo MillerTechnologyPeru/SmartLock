@@ -8,7 +8,6 @@
 import Foundation
 import CoreLock
 import Kitura
-import KituraNet
 
 internal extension LockWebServer {
     

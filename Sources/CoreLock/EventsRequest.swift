@@ -43,7 +43,7 @@ public extension EventsNetServiceRequest {
     }
 }
 
-internal extension LockEvent.FetchRequest {
+public extension LockEvent.FetchRequest {
     
     init?(queryItems: [URLQueryItem]) {
         guard let offset = queryItems.first(.offset).flatMap(UInt8.init)

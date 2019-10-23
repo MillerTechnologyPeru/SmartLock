@@ -618,6 +618,59 @@ public extension Store {
     }
 }
 
+// MARK: - Bonjour Requests
+
+#if os(iOS)
+
+public extension Store {
+    
+    @discardableResult
+    func listEvents(_ lock: LockNetService,
+                    fetchRequest: LockEvent.FetchRequest? = nil) throws -> Bool {
+        
+        // get lock key
+        guard let lockCache = self[lock: lock.identifier],
+            let keyData = self[key: lockCache.key.identifier]
+            else { return false }
+        
+        let key = KeyCredentials(
+            identifier: lockCache.key.identifier,
+            secret: keyData
+        )
+        
+        let events = try netServiceClient.listEvents(
+            fetchRequest: fetchRequest,
+            for: lock,
+            with: key,
+            timeout: 30
+        )
+        
+        backgroundContext.commit { (context) in
+            try context.insert(events, for: lock.identifier)
+        }
+        
+        #if os(iOS)
+        if preferences.isCloudBackupEnabled {
+            DispatchQueue.cloud.async { [weak self] in
+                // upload to iCloud
+                do {
+                    for event in events {
+                        let value = LockEvent.Cloud(event: event, for: lock.identifier)
+                        try self?.cloud.upload(value)
+                    }
+                } catch {
+                    log("⚠️ Could not upload latest events to iCloud: \(error.localizedDescription)")
+                }
+            }
+        }
+        #endif
+        
+        return true
+    }
+}
+
+#endif
+
 // MARK: - CloudKit Operations
 
 #if os(iOS)

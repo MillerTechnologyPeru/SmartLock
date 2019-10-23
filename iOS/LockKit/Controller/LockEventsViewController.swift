@@ -167,42 +167,46 @@ public final class LockEventsViewController: TableViewController {
         let locks = self.locks
         let context = Store.shared.backgroundContext
         
-        if Store.shared.lockManager.central.state == .poweredOn {
-            performActivity(queue: .bluetooth, { [weak self] in
-                for lock in locks {
-                    guard let device = try Store.shared.device(for: lock, scanDuration: 1.0) else {
-                        if self?.lock == nil {
-                            continue
-                        } else {
-                            throw CentralError.unknownPeripheral
-                        }
-                    }
-                    let lastEventDate = try context.performErrorBlockAndWait {
-                        try context.find(identifier: lock, type: LockManagedObject.self)
-                            .flatMap { try $0.lastEvent(in: context)?.date }
-                    }
-                    let fetchRequest = FetchRequest(
-                        offset: 0,
-                        limit: nil,
-                        predicate: Predicate(
-                            keys: nil,
-                            start: lastEventDate,
-                            end: nil
-                        )
-                    )
-                    do { try Store.shared.listEvents(device, fetchRequest: fetchRequest) }
-                    catch {
-                        if self?.lock == nil {
-                            continue
-                        } else {
-                            throw error
-                        }
-                    }
+        performActivity(queue: .app, { [weak self] in
+            guard let self = self else { return }
+            let expectsLock = self.lock != nil
+            for lock in locks {
+                
+                // fetch request
+                let lastEventDate = try context.performErrorBlockAndWait {
+                    try context.find(identifier: lock, type: LockManagedObject.self)
+                        .flatMap { try $0.lastEvent(in: context)?.date }
                 }
-            }, completion: { (viewController, _) in
-                viewController.needsKeys.removeAll()
-            })
-        }
+                let fetchRequest = FetchRequest(
+                    offset: 0,
+                    limit: nil,
+                    predicate: Predicate(
+                        keys: nil,
+                        start: lastEventDate,
+                        end: nil
+                    )
+                )
+                // first try via Bonjour
+                if let netService = try Store.shared.netServiceClient.discover(duration: 1.0, timeout: 10.0).first(where: { $0.identifier == lock }) {
+                    
+                    try Store.shared.listEvents(netService, fetchRequest: fetchRequest)
+                    
+                } else if Store.shared.lockManager.central.state == .poweredOn,
+                    let device = try DispatchQueue.bluetooth.sync(execute: { try Store.shared.device(for: lock, scanDuration: 2.0) }) {
+                    
+                    try DispatchQueue.bluetooth.sync {
+                        _ = try Store.shared.listEvents(device, fetchRequest: fetchRequest)
+                    }
+                    
+                } else if expectsLock {
+                    throw LockError.notInRange(lock: lock)
+                } else {
+                    continue
+                }
+            }
+        }, completion: { (viewController, _) in
+            viewController.needsKeys.removeAll()
+        })
     }
     
     private subscript (indexPath: IndexPath) -> EventManagedObject {

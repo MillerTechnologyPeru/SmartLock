@@ -60,6 +60,7 @@ public final class LockWebServer {
         
         addLockInformationRoute()
         addPermissionsRoute()
+        addEventsRoute()
         addUpdateRoute()
     }
     
