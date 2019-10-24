@@ -40,7 +40,6 @@ public extension EncryptedData {
         
         // attempt to decrypt
         do { return try CoreLock.decrypt(key: key.data, iv: initializationVector, data: encryptedData) }
-            
         catch { throw AuthenticationError.decryptionError(error) }
     }
 }

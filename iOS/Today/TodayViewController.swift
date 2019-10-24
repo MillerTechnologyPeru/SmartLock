@@ -16,20 +16,19 @@ import DarwinGATT
 import CoreLock
 import LockKit
 import OpenCombine
+import Combine
 
-final class TodayViewController: UIViewController, NCWidgetProviding {
-    
-    // MARK: - IB Outlets
-    
-    @IBOutlet private(set) weak var tableView: UITableView!
+final class TodayViewController: UITableViewController {
     
     // MARK: - Properties
     
-    private(set) var items: [Item] = [.noNearbyLocks]
+    private(set) var items: [Item] = [.loading] {
+        didSet { tableView.reloadData() }
+    }
     
-    private var peripheralsObserver: AnyCancellable?
-    private var informationObserver: AnyCancellable?
-    private var locksObserver: AnyCancellable?
+    private(set) var isScanning = true {
+        didSet { configureView() }
+    }
     
     @available(iOS 10.0, *)
     private lazy var selectionFeedbackGenerator: UISelectionFeedbackGenerator = {
@@ -37,6 +36,13 @@ final class TodayViewController: UIViewController, NCWidgetProviding {
         feedbackGenerator.prepare()
         return feedbackGenerator
     }()
+    
+    private var peripheralsObserver: OpenCombine.AnyCancellable?
+    private var informationObserver: OpenCombine.AnyCancellable?
+    private var locksObserver: OpenCombine.AnyCancellable?
+    @available(iOS 13.0, *)
+    private lazy var updateTableViewSubject = Combine.PassthroughSubject<Void, Never>()
+    private var updateTableViewObserver: AnyObject? // Combine.AnyCancellable
     
     // MARK: - Loading
         
@@ -55,34 +61,31 @@ final class TodayViewController: UIViewController, NCWidgetProviding {
         tableView.register(LockTableViewCell.self)
         tableView.rowHeight = UITableView.automaticDimension
         tableView.estimatedRowHeight = 60
+        tableView.tableFooterView = UIView()
         
         // Set Logging
         LockManager.shared.log = { log("🔒 LockManager: " + $0) }
         BeaconController.shared.log = { log("📶 \(BeaconController.self): " + $0) }
         
-        // scan beacons
-        BeaconController.shared.scanBeacons()
-        
-        // Observe changes
+        // observe model changes
         peripheralsObserver = Store.shared.peripherals.sink { [weak self] _ in
-            mainQueue { self?.configureView() }
+            self?.locksChanged()
         }
         informationObserver = Store.shared.lockInformation.sink { [weak self] _ in
-            mainQueue { self?.configureView() }
+            self?.locksChanged()
         }
         locksObserver = Store.shared.locks.sink { [weak self] _ in
-            mainQueue { self?.configureView() }
+            self?.locksChanged()
+        }
+        
+        if #available(iOS 13.0, *) {
+            updateTableViewObserver = updateTableViewSubject
+                .delay(for: 1.0, scheduler: DispatchQueue.main)
+                .sink(receiveValue: { [weak self] in self?.configureView() })
         }
         
         // update UI
         configureView()
-        
-        // scan for locks
-        if Store.shared.lockInformation.value.isEmpty {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
-                self?.scan()
-            }
-        }
         
         if #available(iOS 10.0, *) {
             selectionFeedbackGenerator.prepare()
@@ -97,8 +100,221 @@ final class TodayViewController: UIViewController, NCWidgetProviding {
         }
     }
     
-    // MARK: - NCWidgetProviding
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransition(to: size, with: coordinator)
+
+        let updatedVisibleCellCount = cellsToDisplay
+        let currentVisibleCellCount = self.tableView.visibleCells.count
+        let cellCountDifference = updatedVisibleCellCount - currentVisibleCellCount
+
+        // If the number of visible cells has changed, animate them in/out along with the resize animation.
+        if cellCountDifference != 0 {
+            coordinator.animate(alongsideTransition: { [unowned self] (UIViewControllerTransitionCoordinatorContext) in
+                self.tableView.performBatchUpdates({ [unowned self] in
+                    // Build an array of IndexPath objects representing the rows to be inserted or deleted.
+                    let range = (1...abs(cellCountDifference))
+                    let indexPaths = range.map { IndexPath(row: $0, section: 0) }
+                    
+                    // Animate the insertion or deletion of the rows.
+                    if cellCountDifference > 0 {
+                        self.tableView.insertRows(at: indexPaths, with: .fade)
+                    } else {
+                        self.tableView.deleteRows(at: indexPaths, with: .fade)
+                    }
+                }, completion: nil)
+            }, completion: nil)
+        }
+    }
+
+    
+    // MARK: - Methods
+    
+    private subscript (indexPath: IndexPath) -> Item {
         
+        @inline(__always)
+        get { return items[indexPath.row] }
+    }
+    
+    private func locksChanged() {
+        if #available(iOS 13.0, *) {
+            updateTableViewSubject.send()
+        } else {
+            mainQueue { [weak self] in self?.configureView() }
+        }
+    }
+    
+    private func configureView() {
+        
+        let locks = Store.shared.peripherals.value.values
+            .lazy
+            .sorted { $0.scanData.rssi < $1.scanData.rssi }
+            .lazy
+            .compactMap { Store.shared.lockInformation.value[$0.scanData.peripheral] }
+            .lazy
+            .compactMap { information in
+                Store.shared[lock: information.identifier]
+                    .flatMap { (identifier: information.identifier, cache: $0) }
+        }
+        
+        if locks.isEmpty {
+            items = [isScanning ? .loading : .noNearbyLocks]
+        } else {
+            items = locks.map { .lock($0.identifier, $0.cache) }
+        }
+        
+        // Show expanded view for multiple devices
+        extensionContext?.widgetLargestAvailableDisplayMode = items.count > 1 ? .expanded : .compact
+    }
+    
+    private func scan(_ completion: ((Bool) -> ())? = nil) {
+        
+        self.isScanning = true
+        
+        // scan beacons
+        BeaconController.shared.scanBeacons()
+        
+        // scan for devices
+        DispatchQueue.bluetooth.async {
+            defer { mainQueue { self.isScanning = false } }
+            do { try Store.shared.scan(duration: 1.0) }
+            catch {
+                log("⚠️ Could not scan: \(error.localizedDescription)")
+                mainQueue { completion?(false) }
+                return
+            }
+            mainQueue { completion?(true) }
+        }
+    }
+    
+    private func configure(cell: LockTableViewCell, at indexPath: IndexPath) {
+        
+        let item = self[indexPath]
+        
+        switch item {
+        case .loading:
+            cell.lockTitleLabel.text = "Loading..."
+            cell.lockDetailLabel.text = nil
+            cell.activityIndicatorView.isHidden = false
+            if cell.activityIndicatorView.isAnimating == false {
+                cell.activityIndicatorView.startAnimating()
+            }
+            cell.permissionView.isHidden = true
+            cell.selectionStyle = .none
+            cell.accessoryType = .none
+        case .noNearbyLocks:
+            cell.lockTitleLabel.text = "No Nearby Locks"
+            cell.lockDetailLabel.text = nil
+            cell.activityIndicatorView.isHidden = true
+            cell.permissionView.isHidden = true
+            cell.selectionStyle = .none
+            cell.accessoryType = .none
+        case let .lock(_, cache):
+            let permission = cache.key.permission
+            cell.lockTitleLabel.text = cache.name
+            cell.lockDetailLabel.text = permission.localizedText
+            cell.permissionView.permission = permission.type
+            cell.activityIndicatorView.isHidden = true
+            cell.permissionView.isHidden = false
+            cell.selectionStyle = .default
+            cell.accessoryType = .detailButton
+        }
+    }
+    
+    private var cellsToDisplay: Int {
+        if extensionContext?.widgetActiveDisplayMode == .compact {
+            return 1
+        } else {
+            return items.count
+        }
+    }
+    
+    private func select(_ item: Item) {
+        
+        if #available(iOSApplicationExtension 10.0, *) {
+            selectionFeedbackGenerator.selectionChanged()
+        }
+        
+        switch item {
+        case .loading:
+            break
+        case .noNearbyLocks:
+            scan()
+        case let .lock(identifier, cache):
+            // unlock
+            DispatchQueue.bluetooth.async {
+                log("Unlock \(cache.name) \(identifier)")
+                do {
+                    guard let peripheral = Store.shared.device(for: identifier)
+                        else { assertionFailure("Peripheral not found"); return }
+                    try Store.shared.unlock(peripheral)
+                } catch {
+                    log("⚠️ Could not unlock: \(error.localizedDescription)")
+                }
+            }
+        }
+    }
+}
+
+// MARK: - UITableViewDataSource
+
+extension TodayViewController {
+    
+    override func numberOfSections(in tableView: UITableView) -> Int {
+        return 1
+    }
+    
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return min(cellsToDisplay, items.count)
+    }
+    
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
+        guard let cell = tableView.dequeueReusableCell(LockTableViewCell.self, for: indexPath)
+            else { fatalError("Could not dequeue resusable cell \(LockTableViewCell.self)") }
+        configure(cell: cell, at: indexPath)
+        return cell
+    }
+}
+
+// MARK: - UITableViewDelegate
+
+extension TodayViewController {
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
+        defer { tableView.deselectRow(at: indexPath, animated: true) }
+        let item = self[indexPath]
+        select(item)
+    }
+    
+    override func tableView(_ tableView: UITableView, accessoryButtonTappedForRowWith indexPath: IndexPath) {
+        
+        let item = self[indexPath]
+        guard case let .lock(identifier, _) = item
+            else { assertionFailure(); return }
+        let url = LockURL.unlock(lock: identifier)
+        self.extensionContext?.open(url.rawValue, completionHandler: nil)
+    }
+    
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        
+        let activeDisplayMode = extensionContext?.widgetActiveDisplayMode ?? .compact
+        switch activeDisplayMode {
+        case .compact:
+            return LockTableViewCell.todayCellHeight
+        case .expanded:
+            return LockTableViewCell.standardCellHeight
+        @unknown default:
+            assertionFailure("Unexpected value \(activeDisplayMode.rawValue) for activeDisplayMode.")
+            return LockTableViewCell.todayCellHeight
+        }
+    }
+}
+
+// MARK: - NCWidgetProviding
+
+extension TodayViewController: NCWidgetProviding {
+    
     func widgetPerformUpdate(completionHandler: (@escaping (NCUpdateResult) -> Void)) {
         
         log("☀️ Update Widget Data")
@@ -124,158 +340,17 @@ final class TodayViewController: UIViewController, NCWidgetProviding {
         
         log("☀️ Widget Display Mode changed \(activeDisplayMode.debugDescription) \(maxSize)")
         
-        
-    }
-    
-    func widgetMarginInsets(forProposedMarginInsets defaultMarginInsets: UIEdgeInsets) -> UIEdgeInsets {
-        return .zero
-    }
-    
-    // MARK: - Methods
-    
-    private subscript (indexPath: IndexPath) -> Item {
-        
-        @inline(__always)
-        get { return items[indexPath.row] }
-    }
-    
-    private func configureView() {
-        
-        // load updated lock information
-        Store.shared.loadCache()
-        
-        let locks = Store.shared.peripherals.value.values
-            .lazy
-            .sorted { $0.scanData.rssi < $1.scanData.rssi }
-            .lazy
-            .compactMap { Store.shared.lockInformation.value[$0.scanData.peripheral] }
-            .lazy
-            .compactMap { information in
-                Store.shared[lock: information.identifier]
-                    .flatMap { (identifier: information.identifier, cache: $0) }
+        switch activeDisplayMode {
+        case .compact:
+            // The compact view is a fixed size.
+            preferredContentSize = maxSize
+        case .expanded:
+            // Dynamically calculate the height of the cells for the extended height.
+            let height = CGFloat(items.count) * LockTableViewCell.standardCellHeight
+            preferredContentSize = CGSize(width: maxSize.width, height: min(height, maxSize.height))
+        @unknown default:
+            assertionFailure("Unexpected value \(activeDisplayMode.rawValue) for activeDisplayMode.")
         }
-        
-        let oldItems = self.items
-        if locks.isEmpty {
-            items = [.noNearbyLocks]
-        } else {
-            items = locks.map { .lock($0.identifier, $0.cache) }
-        }
-        
-        // reload table view
-        if oldItems != items {
-            tableView.reloadData()
-        }
-    }
-    
-    private func scan(_ completion: ((Bool) -> ())? = nil) {
-        
-        // load updated lock information
-        Store.shared.loadCache()
-        
-        // scan beacons
-        BeaconController.shared.scanBeacons()
-        
-        // scan for devices
-        DispatchQueue.bluetooth.async {
-            do { try Store.shared.scan(duration: 1.0) }
-            catch {
-                log("⚠️ Could not scan: \(error.localizedDescription)")
-                mainQueue { completion?(false) }
-                return
-            }
-            mainQueue { completion?(true) }
-        }
-    }
-    
-    private func configure(cell: LockTableViewCell, at indexPath: IndexPath) {
-        
-        let item = self[indexPath]
-        
-        switch item {
-        case .noNearbyLocks:
-            cell.lockTitleLabel.text = "No Nearby Locks"
-            cell.lockDetailLabel.text = nil
-            cell.activityIndicatorView.isHidden = true
-            cell.permissionView.isHidden = true
-            cell.selectionStyle = .none
-            cell.accessoryType = .none
-        case let .lock(_, cache):
-            let permission = cache.key.permission
-            cell.lockTitleLabel.text = cache.name
-            cell.lockDetailLabel.text = permission.localizedText
-            cell.permissionView.permission = permission.type
-            cell.activityIndicatorView.isHidden = true
-            cell.permissionView.isHidden = false
-            cell.selectionStyle = .default
-            cell.accessoryType = .detailButton
-        }
-    }
-    
-    private func select(_ item: Item) {
-        
-        if #available(iOSApplicationExtension 10.0, *) {
-            selectionFeedbackGenerator.selectionChanged()
-        }
-        
-        switch item {
-        case .noNearbyLocks:
-            scan()
-        case let .lock(identifier, cache):
-            // unlock
-            DispatchQueue.bluetooth.async {
-                log("Unlock \(cache.name) \(identifier)")
-                do {
-                    guard let peripheral = Store.shared.device(for: identifier)
-                        else { assertionFailure("Peripheral not found"); return }
-                    try Store.shared.unlock(peripheral)
-                } catch {
-                    log("⚠️ Could not unlock: \(error.localizedDescription)")
-                }
-            }
-        }
-    }
-}
-
-// MARK: - UITableViewDataSource
-
-extension TodayViewController: UITableViewDataSource {
-    
-    func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
-    }
-    
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return items.count
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
-        guard let cell = tableView.dequeueReusableCell(LockTableViewCell.self, for: indexPath)
-            else { fatalError("Could not dequeue resusable cell \(LockTableViewCell.self)") }
-        configure(cell: cell, at: indexPath)
-        return cell
-    }
-}
-
-// MARK: - UITableViewDelegate
-
-extension TodayViewController: UITableViewDelegate {
-    
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
-        defer { tableView.deselectRow(at: indexPath, animated: true) }
-        let item = self[indexPath]
-        select(item)
-    }
-    
-    func tableView(_ tableView: UITableView, accessoryButtonTappedForRowWith indexPath: IndexPath) {
-        
-        let item = self[indexPath]
-        guard case let .lock(identifier, _) = item
-            else { assertionFailure(); return }
-        let url = LockURL.unlock(lock: identifier)
-        self.extensionContext?.open(url.rawValue, completionHandler: nil)
     }
 }
 
@@ -285,9 +360,19 @@ extension TodayViewController {
     
     enum Item: Equatable {
         
+        case loading
         case noNearbyLocks
         case lock(UUID, LockCache)
     }
+}
+
+// MARK: - Extensions
+
+internal extension LockTableViewCell {
+    
+    // Heights for the two styles of cell display.
+    static let todayCellHeight: CGFloat = 110
+    static let standardCellHeight: CGFloat = 75
 }
 
 @available(iOSApplicationExtension 10.0, *)

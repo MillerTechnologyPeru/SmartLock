@@ -7,45 +7,47 @@
 //
 
 import Foundation
+import CryptoSwift
 
-public struct KeysRequest: Equatable {
+#if canImport(FoundationNetworking)
+import FoundationNetworking
+#endif
+
+public struct KeysNetServiceRequest: Equatable {
     
     /// Lock server
     public let server: URL
     
     /// Authorization header
     public let authorization: LockNetService.Authorization
-    
-    public init(server: URL,
-                authorization: LockNetService.Authorization) {
-        
-        self.server = server
-        self.authorization = authorization
-    }
 }
 
-public extension KeysRequest {
+// MARK: - URL Request
+
+public extension KeysNetServiceRequest {
     
     func urlRequest() -> URLRequest {
         
         // http://localhost:8080/keys
-        let url = server.appendingPathComponent("keys")
+        let url = server.appendingPathComponent("key")
         var urlRequest = URLRequest(url: url)
         urlRequest.addValue(authorization.header, forHTTPHeaderField: LockNetService.Authorization.headerField)
         return urlRequest
     }
 }
 
+// MARK: - Client
+
 public extension LockNetService.Client {
     
     /// Retreive a list of all keys on device.
     func listKeys(for server: LockNetService,
                   with key: KeyCredentials,
-                  timeout: TimeInterval = 30) throws -> KeysList {
+                  timeout: TimeInterval = LockNetService.defaultTimeout) throws -> KeysList {
         
-        log?("List keys for \(server.address)")
+        log?("List keys for \(server.url.absoluteString)")
         
-        let request = KeysRequest(
+        let request = KeysNetServiceRequest(
             server: server.url,
             authorization: LockNetService.Authorization(
                 key: key.identifier,
@@ -59,9 +61,10 @@ public extension LockNetService.Client {
             else { throw LockNetService.Error.statusCode(httpResponse.statusCode) }
         
         guard let jsonData = data,
-            let response = try? jsonDecoder.decode(KeysList.self, from: jsonData)
+            let response = try? jsonDecoder.decode(KeysResponse.self, from: jsonData)
             else { throw LockNetService.Error.invalidResponse }
         
-        return response
+        let keys = try response.decrypt(with: key.secret, decoder: jsonDecoder)
+        return keys
     }
 }

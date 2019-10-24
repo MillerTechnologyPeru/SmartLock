@@ -8,17 +8,26 @@
 import Foundation
 import Bonjour
 
+#if canImport(FoundationNetworking)
+import FoundationNetworking
+#endif
+
 public struct LockNetService: Equatable, Hashable {
     
     public let identifier: UUID
     
-    public let address: NetServiceAddress
+    public let url: URL
 }
 
-public extension LockNetService {
+internal extension LockNetService {
     
-    var url: URL {
-        return URL(string: "http://" + address.description)!
+    init(identifier: UUID, address: NetServiceAddress) {
+        
+        guard let url = URL(string: "http://" + address.description)
+            else { fatalError("Could not create URL from \(address)") }
+        
+        self.identifier = identifier
+        self.url = url
     }
 }
 
@@ -81,7 +90,12 @@ public extension LockNetService {
             for (identifier, service) in foundServices {
                 
                 guard let addresses = try? bonjour.resolve(service, timeout: timeout),
-                    let address = addresses.first
+                    let address = addresses.filter({
+                        switch $0.address {
+                        case .ipv4: return true
+                        case .ipv6: return false
+                        }
+                    }).first
                     else { continue }
                 
                 let lock = LockNetService(
@@ -96,9 +110,10 @@ public extension LockNetService {
             
             return locks
         }
-        
     }
 }
+
+// MARK: - Extensions
 
 public extension NetServiceType {
         
@@ -108,7 +123,11 @@ public extension NetServiceType {
 public extension LockNetService {
     
     static let serviceType = "_lock._tcp."
+    
+    static var defaultTimeout: TimeInterval = 30.0
 }
+
+// MARK: - Supporting Types
 
 public extension LockNetService {
     
@@ -135,6 +154,14 @@ public extension LockNetService {
 
 public extension LockNetService.Authorization {
     
+    init(key: KeyCredentials) {
+        
+        self.init(key: key.identifier, authentication: Authentication(key: key.secret))
+    }
+}
+
+public extension LockNetService.Authorization {
+    
     private static let jsonDecoder = JSONDecoder()
     
     private static let jsonEncoder = JSONEncoder()
@@ -154,5 +181,43 @@ public extension LockNetService.Authorization {
         let data = try! type(of: self).jsonEncoder.encode(self)
         let base64 = data.base64EncodedString()
         return base64
+    }
+}
+
+public extension LockNetService {
+    
+    struct EncryptedData: Equatable, Codable {
+        
+        internal enum CodingKeys: String, CodingKey {
+            
+            case initializationVector = "iv"
+            case encryptedData = "data"
+        }
+        
+        /// Crypto IV
+        public let initializationVector: InitializationVector
+        
+        /// Encrypted data
+        public let encryptedData: Data
+    }
+}
+
+extension LockNetService.EncryptedData {
+    
+    init(encrypt data: Data, with key: KeyData) throws {
+        
+        do {
+            let (encryptedData, iv) = try CoreLock.encrypt(key: key.data, data: data)
+            self.initializationVector = iv
+            self.encryptedData = encryptedData
+        }
+        catch { throw AuthenticationError.encryptionError(error) }
+    }
+    
+    func decrypt(with key: KeyData) throws -> Data {
+        
+        // attempt to decrypt
+        do { return try CoreLock.decrypt(key: key.data, iv: initializationVector, data: encryptedData) }
+        catch { throw AuthenticationError.decryptionError(error) }
     }
 }

@@ -186,14 +186,18 @@ public final class Store {
         }
         
         set {
-                        
+            let key = identifier.uuidString
             do {
                 guard let data = newValue?.data else {
-                    try keychain.remove(identifier.uuidString)
+                    try keychain.remove(key)
                     return
                 }
-                try keychain.set(data, key: identifier.uuidString)
-            } catch {
+                if try keychain.contains(key) {
+                    try keychain.remove(key)
+                }
+                try keychain.set(data, key: key)
+            }
+            catch {
                 #if DEBUG
                 print(error)
                 #endif
@@ -218,6 +222,14 @@ public final class Store {
         self[key: lockCache.key.identifier] = nil
         
         return true
+    }
+    
+    /// Get credentials from Keychain to authorize requests.
+    public func credentials(for lock: UUID) -> KeyCredentials? {
+        guard let cache = self[lock: lock],
+            let keyData = self[key: cache.key.identifier]
+            else { return nil }
+        return .init(identifier: cache.key.identifier, secret: keyData)
     }
     
     /// Forceably load cache.
@@ -321,8 +333,8 @@ public final class Store {
             log("📶 Lock notification")
             guard preferences.monitorBluetoothNotifications
                 else { return } // ignore notification
-            typealias FetchRequest = ListEventsCharacteristic.FetchRequest
-            typealias Predicate = ListEventsCharacteristic.Predicate
+            typealias FetchRequest = LockEvent.FetchRequest
+            typealias Predicate = LockEvent.Predicate
             let context = Store.shared.backgroundContext
             DispatchQueue.bluetooth.async {
                 // scan for all locks
@@ -558,7 +570,7 @@ public extension Store {
     
     @discardableResult
     func listEvents(_ lock: LockPeripheral<NativeCentral>,
-                    fetchRequest: ListEventsCharacteristic.FetchRequest? = nil,
+                    fetchRequest: LockEvent.FetchRequest? = nil,
                     notification: @escaping ((EventsList, Bool) -> ()) = { _,_ in }) throws -> Bool {
         
         // get lock key
@@ -605,6 +617,59 @@ public extension Store {
         return true
     }
 }
+
+// MARK: - Bonjour Requests
+
+#if os(iOS)
+
+public extension Store {
+    
+    @discardableResult
+    func listEvents(_ lock: LockNetService,
+                    fetchRequest: LockEvent.FetchRequest? = nil) throws -> Bool {
+        
+        // get lock key
+        guard let lockCache = self[lock: lock.identifier],
+            let keyData = self[key: lockCache.key.identifier]
+            else { return false }
+        
+        let key = KeyCredentials(
+            identifier: lockCache.key.identifier,
+            secret: keyData
+        )
+        
+        let events = try netServiceClient.listEvents(
+            fetchRequest: fetchRequest,
+            for: lock,
+            with: key,
+            timeout: 30
+        )
+        
+        backgroundContext.commit { (context) in
+            try context.insert(events, for: lock.identifier)
+        }
+        
+        #if os(iOS)
+        if preferences.isCloudBackupEnabled {
+            DispatchQueue.cloud.async { [weak self] in
+                // upload to iCloud
+                do {
+                    for event in events {
+                        let value = LockEvent.Cloud(event: event, for: lock.identifier)
+                        try self?.cloud.upload(value)
+                    }
+                } catch {
+                    log("⚠️ Could not upload latest events to iCloud: \(error.localizedDescription)")
+                }
+            }
+        }
+        #endif
+        
+        return true
+    }
+}
+
+#endif
 
 // MARK: - CloudKit Operations
 

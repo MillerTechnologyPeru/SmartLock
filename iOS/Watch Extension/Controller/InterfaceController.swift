@@ -159,7 +159,6 @@ final class InterfaceController: WKInterfaceController {
         
         log("Selected lock \(item.identifier)")
         
-        donateUnlockIntent(for: item.identifier)
         unlock(lock: item.identifier, peripheral: item.peripheral)
     }
     

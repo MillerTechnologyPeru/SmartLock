@@ -109,7 +109,17 @@ func run() throws {
     // configure web server
     webServer.authorization = authorization
     webServer.configurationStore = configurationStore
+    webServer.events = events
     webServer.log = { print("Web Server:", $0) }
+    webServer.update = {
+        DispatchQueue.global(qos: .userInitiated).async {
+            #if os(Linux)
+            system("/opt/colemancda/lockd/update.sh")
+            #else
+            print("Simulate software update")
+            #endif
+        }
+    }
     
     // load hardware configuration
     if let hardware = try? JSONDecoder().decode(LockHardware.self, from: URL(fileURLWithPath: "/opt/colemancda/lockd/hardware.json")) {
@@ -141,7 +151,7 @@ func run() throws {
     try hostController.writeLocalName("Lock")
     
     // change advertisment for notifications
-    controller?.lockServiceController.lockChanged = {
+    func lockChanged() {
         backgroundQueue.asyncAfter(deadline: .now() + 2) {
             do {
                 try hostController.setNotificationAdvertisement(rssi: 30) // FIXME: RSSI
@@ -154,6 +164,9 @@ func run() throws {
             }
         }
     }
+    
+    controller?.lockServiceController.lockChanged = lockChanged
+    webServer.lockChanged = lockChanged
     
     // make sure the device is always discoverable
     if #available(macOS 10.12, *) {

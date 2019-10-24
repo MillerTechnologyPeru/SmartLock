@@ -8,18 +8,18 @@
 
 import Foundation
 
+#if canImport(FoundationNetworking)
+import FoundationNetworking
+#endif
+
 /// Lock Information Web Request
-public struct LockInformationRequest: Equatable {
+public struct LockInformationNetServiceRequest: Equatable {
     
     /// Lock server
     public let server: URL
-    
-    public init(server: URL) {
-        self.server = server
-    }
 }
 
-public extension LockInformationRequest {
+public extension LockInformationNetServiceRequest {
     
     func urlRequest() -> URLRequest {
         
@@ -33,11 +33,11 @@ public extension LockNetService.Client {
     
     /// Read the lock's information characteristic.
     func readInformation(for server: LockNetService,
-                         timeout: TimeInterval = 30) throws -> LockNetService.LockInformation {
+                         timeout: TimeInterval = LockNetService.defaultTimeout) throws -> LockNetService.LockInformation {
         
-        log?("Read information for \(server.address)")
+        log?("Read information for \(server.url.absoluteString)")
         
-        let request = LockInformationRequest(server: server.url).urlRequest()
+        let request = LockInformationNetServiceRequest(server: server.url).urlRequest()
         
         let (httpResponse, data) = try urlSession.synchronousDataTask(with: request)
         

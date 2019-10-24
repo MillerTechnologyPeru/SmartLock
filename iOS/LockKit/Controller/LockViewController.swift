@@ -106,17 +106,16 @@ public final class LockViewController: UITableViewController {
             let activities = [
                 NewKeyActivity(),
                 ManageKeysActivity(),
-                HomeKitEnableActivity(),
                 RenameActivity(),
                 UpdateActivity(),
                 DeleteLockActivity { [unowned self] in
                     self.navigationController?.popViewController(animated: true)
                 },
-                AddVoiceShortcutActivity()
+                AddSiriShortcutActivity()
             ]
             
             let lockItem = LockActivityItem(identifier: lockIdentifier)
-            let activityItems = [lockItem, lockItem.text, lockItem.image] as [Any]
+            let activityItems = [lockItem] as [Any]
             let activityViewController = UIActivityViewController(
                 activityItems: activityItems,
                 applicationActivities: activities
