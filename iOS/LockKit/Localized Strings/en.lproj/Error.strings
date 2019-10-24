@@ -8,6 +8,7 @@
 
 "NotInRange" = "Lock not in range.";
 "NoKey" = "You don't have a key for this lock.";
+"NotAdmin" = "You don't have administrator permissions for this lock.";
 "InvalidNewKeyFile" = "Invalid key file.";
 "ExistingKey" = "You already have a key for this lock.";
 "NewKeyExpired" = "Key expired.";

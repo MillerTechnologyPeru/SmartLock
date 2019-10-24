@@ -9,8 +9,8 @@ import Foundation
 import CoreLock
 import CoreLockGATTServer
 
-/// Stores the lock evets in a JSON file.
-public struct LockEventsFile: LockEventStore {
+/// Stores the lock events in a JSON file.
+public final class LockEventsFile: LockEventStore {
     
     typealias Events = [LockEvent]
     
@@ -29,7 +29,7 @@ public struct LockEventsFile: LockEventStore {
     
     // MARK: - Methods
     
-    public func fetch(_ fetchRequest: ListEventsCharacteristic.FetchRequest) throws -> [LockEvent] {
+    public func fetch(_ fetchRequest: LockEvent.FetchRequest) throws -> [LockEvent] {
         return try load { $0.fetch(fetchRequest) }
     }
     

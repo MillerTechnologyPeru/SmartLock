@@ -10,7 +10,7 @@ import Bluetooth
 import GATT
 import CoreLock
 
-public final class LockServiceController <Peripheral: PeripheralProtocol> : GATTServiceController {
+public final class LockGATTServiceController <Peripheral: PeripheralProtocol> : GATTServiceController {
     
     public static var service: BluetoothUUID { return Service.uuid }
     
@@ -21,7 +21,7 @@ public final class LockServiceController <Peripheral: PeripheralProtocol> : GATT
     // MARK: - Properties
     
     public let peripheral: Peripheral
-    
+        
     public var hardware: LockHardware = .empty  {
         didSet { updateInformation() }
     }
@@ -29,12 +29,12 @@ public final class LockServiceController <Peripheral: PeripheralProtocol> : GATT
     public var configurationStore: LockConfigurationStore = InMemoryLockConfigurationStore() {
         didSet { updateInformation() }
     }
-    
-    public var setupSecret: KeyData = KeyData()
-    
+        
     public var authorization: LockAuthorizationStore = InMemoryLockAuthorization() {
         didSet { updateInformation() }
     }
+    
+    public var setupSecret: KeyData = KeyData()
     
     public var unlockDelegate: UnlockDelegate = UnlockSimulator()
     
@@ -155,7 +155,13 @@ public final class LockServiceController <Peripheral: PeripheralProtocol> : GATT
     
     public func willRead(_ request: GATTReadRequest<Peripheral.Central>) -> ATT.Error? {
         
-        return nil
+        switch request.handle {
+        case informationHandle:
+            print("Requested lock information")
+            return nil
+        default:
+            return nil
+        }
     }
     
     public func willWrite(_ request: GATTWriteRequest<Peripheral.Central>) -> ATT.Error? {
@@ -600,60 +606,10 @@ public final class LockServiceController <Peripheral: PeripheralProtocol> : GATT
     }
 }
 
-/// Lock Configuration Storage
-public protocol LockConfigurationStore {
-    
-    var configuration: LockConfiguration { get }
-    
-    func update(_ configuration: LockConfiguration) throws
-}
-
-/// Lock Authorization Store
-public protocol LockAuthorizationStore {
-    
-    var isEmpty: Bool { get }
-    
-    func add(_ key: Key, secret: KeyData) throws
-    
-    func key(for identifier: UUID) throws -> (key: Key, secret: KeyData)?
-    
-    func add(_ key: NewKey, secret: KeyData) throws
-    
-    func newKey(for identifier: UUID) throws -> (newKey: NewKey, secret: KeyData)?
-    
-    func removeKey(_ identifier: UUID) throws
-    
-    func removeNewKey(_ identifier: UUID) throws
-    
-    func removeAll() throws
-    
-    var list: KeysList { get }
-}
-
-public protocol LockEventStore {
-    
-    func fetch(_ fetchRequest: ListEventsCharacteristic.FetchRequest) throws -> [LockEvent]
-    
-    func save(_ event: LockEvent) throws
-}
-
 /// Lock unlock manager
 public protocol UnlockDelegate {
     
     func unlock(_ action: UnlockAction) throws
-}
-
-public final class InMemoryLockConfigurationStore: LockConfigurationStore {
-    
-    public private(set) var configuration: LockConfiguration
-    
-    public init(configuration: LockConfiguration = LockConfiguration()) {
-        self.configuration = configuration
-    }
-    
-    public func update(_ configuration: LockConfiguration) throws {
-        self.configuration = configuration
-    }
 }
 
 public struct UnlockSimulator: UnlockDelegate {
@@ -661,99 +617,5 @@ public struct UnlockSimulator: UnlockDelegate {
     public func unlock(_ action: UnlockAction) throws {
         
         print("Simulate unlock with action \(action)")
-    }
-}
-
-public final class InMemoryLockEvents: LockEventStore {
-    
-    public private(set) var events = [LockEvent]()
-    
-    public func fetch(_ fetchRequest: ListEventsCharacteristic.FetchRequest) throws -> [LockEvent] {
-        return events.fetch(fetchRequest)
-    }
-    
-    public func save(_ event: LockEvent) throws {
-        events.append(event)
-    }
-}
-
-public final class InMemoryLockAuthorization: LockAuthorizationStore {
-    
-    public init() { }
-    
-    private var keys = [KeyEntry]()
-    
-    private var newKeys = [NewKeyEntry]()
-    
-    public var isEmpty: Bool {
-        
-        return keys.isEmpty && newKeys.isEmpty
-    }
-    
-    public func add(_ key: Key, secret: KeyData) throws {
-        
-        keys.append(KeyEntry(key: key, secret: secret))
-    }
-    
-    public func key(for identifier: UUID) throws -> (key: Key, secret: KeyData)? {
-        
-        guard let keyEntry = keys.first(where: { $0.key.identifier == identifier })
-            else { return nil }
-        
-        return (keyEntry.key, keyEntry.secret)
-    }
-    
-    public func add(_ key: NewKey, secret: KeyData) throws {
-        
-        newKeys.append(NewKeyEntry(newKey: key, secret: secret))
-    }
-    
-    public func newKey(for identifier: UUID) throws -> (newKey: NewKey, secret: KeyData)? {
-        
-        guard let keyEntry = newKeys.first(where: { $0.newKey.identifier == identifier })
-            else { return nil }
-        
-        return (keyEntry.newKey, keyEntry.secret)
-    }
-    
-    public func removeKey(_ identifier: UUID) throws {
-        
-        keys.removeAll(where: { $0.key.identifier == identifier })
-    }
-    
-    public func removeNewKey(_ identifier: UUID) throws {
-        
-        newKeys.removeAll(where: { $0.newKey.identifier == identifier })
-    }
-    
-    public func removeAll() throws {
-        
-        keys.removeAll()
-        newKeys.removeAll()
-    }
-    
-    public var list: KeysList {
-        
-        return KeysList(
-            keys: keys.map { $0.key },
-            newKeys: newKeys.map { $0.newKey }
-        )
-    }
-}
-
-private extension InMemoryLockAuthorization {
-    
-    struct KeyEntry {
-        
-        let key: Key
-        
-        let secret: KeyData
-    }
-    
-    struct NewKeyEntry {
-        
-        let newKey: NewKey
-        
-        let secret: KeyData
     }
 }

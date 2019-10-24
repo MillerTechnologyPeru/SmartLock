@@ -76,6 +76,7 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
         
         // setup logging
         LockManager.shared.log = { log("🔒 LockManager: " + $0) }
+        LockNetServiceClient.shared.log = { log("🌐 NetService: " + $0) }
         BeaconController.shared.log = { log("📶 \(BeaconController.self): " + $0) }
         SpotlightController.shared.log = { log("🔦 \(SpotlightController.self): " + $0) }
         WatchController.shared.log = { log("⌚️ \(WatchController.self): " + $0) }

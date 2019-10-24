@@ -14,7 +14,6 @@ public struct LockModel: RawRepresentable, Equatable, Hashable {
     public let rawValue: String
     
     public init(rawValue: String) {
-        
         self.rawValue = rawValue
     }
 }
@@ -24,7 +23,6 @@ public struct LockModel: RawRepresentable, Equatable, Hashable {
 extension LockModel: CustomStringConvertible {
     
     public var description: String {
-        
         return rawValue
     }
 }
@@ -34,7 +32,6 @@ extension LockModel: CustomStringConvertible {
 extension LockModel: ExpressibleByStringLiteral {
     
     public init(stringLiteral value: String) {
-        
         self.init(rawValue: value)
     }
 }
@@ -53,15 +50,14 @@ public extension LockModel {
 // MARK: - Darwin
 
 #if os(macOS)
+
+public extension LockModel {
     
-    public extension LockModel {
-        
-        static var currentMac: LockModel {
-            
-            return LockModel(rawValue: UIDevice.current.model)
-        }
+    static var currentMac: LockModel {
+        return LockModel(rawValue: UIDevice.current.model)
     }
-    
+}
+
 #endif
 
 // MARK: - Codable

@@ -33,27 +33,3 @@ public extension ActivityInterface where Self: WKInterfaceController {
     }
 }
 
-public extension WKInterfaceController {
-    
-    /// Donate Siri Shortcut to unlock the specified lock.
-    func donateUnlockIntent(for lock: UUID) {
-        
-        guard let lockCache = Store.shared[lock: lock] else {
-            assertionFailure("Invalid lock \(lock)")
-            return
-        }
-        
-        if #available(watchOS 5.0, *) {
-            let intent = UnlockIntent(identifier: lock, cache: lockCache)
-            let interaction = INInteraction(intent: intent, response: nil)
-            interaction.donate { error in
-                if let error = error {
-                    log("⚠️ Donating intent failed with error \(error.localizedDescription)")
-                    #if DEBUG
-                    print(error)
-                    #endif
-                }
-            }
-        }
-    }
-}

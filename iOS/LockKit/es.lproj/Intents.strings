@@ -20,11 +20,11 @@
 
 "Z5kgSL" = "Lock";
 
-"bvi2l8" = "`${displayName}` no esta en rango. Por favor acérquese a ${displayName}.";
+"bvi2l8" = "${displayName} no esta en rango. Por favor acérquese a ${displayName}.";
 
-"claxan" = "Abrío ‘${lock}‘.";
+"claxan" = "Abrío ${lock}.";
 
-"dAVo2n" = "Abre `${lock}`";
+"dAVo2n" = "Abre ${lock}";
 
 "fjnXtW" = "Abre";
 
@@ -32,7 +32,7 @@
 
 "tnOjCJ" = "Cerradura";
 
-"vARXDT" = "Usted no tiene una llave para `${displayName}`.";
+"vARXDT" = "Usted no tiene una llave para ${displayName}.";
 
-"wkobUh" = "Usted solo puede abrir `${displayName}` durante el horario especificado.";
+"wkobUh" = "Usted solo puede abrir ${displayName} durante el horario especificado.";
 

@@ -77,13 +77,47 @@ public final class LockPermissionsViewController: UITableViewController {
         
         guard let lockIdentifier = self.lockIdentifier
             else { assertionFailure(); return }
-        
-        performActivity(queue: .bluetooth, {
-            guard let peripheral = try Store.shared.device(for: lockIdentifier, scanDuration: 1.0)
-                else { throw LockError.notInRange(lock: lockIdentifier) }
-            try Store.shared.listKeys(peripheral, notification: { (list, isComplete) in
-                mainQueue { [weak self] in self?.list = list }
-            })
+                
+        performActivity(queue: .app, {
+            
+            // get lock key
+            guard let lockCache = Store.shared[lock: lockIdentifier]
+                else { throw LockError.noKey(lock: lockIdentifier) }
+            
+            guard lockCache.key.permission.isAdministrator
+                else { throw LockError.notAdmin(lock: lockIdentifier) }
+            
+            guard let keyData = Store.shared[key: lockCache.key.identifier] else {
+                assertionFailure("Missing from Keychain")
+                throw LockError.noKey(lock: lockIdentifier)
+            }
+            
+            let key = KeyCredentials(
+                identifier: lockCache.key.identifier,
+                secret: keyData
+            )
+            
+            // attempt to load via Bonjour
+            let servers = (try? Store.shared.netServiceClient.discover(duration: 1.0, timeout: 3.0)) ?? []
+            if let netService = servers.first(where: { $0.identifier == lockIdentifier }) {
+                let list = try Store.shared.netServiceClient.listKeys(
+                    for: netService,
+                    with: key,
+                    timeout: 30.0
+                )
+                mainQueue { [weak self] in
+                    self?.list = list
+                }
+            } else {
+                // attempt to load via Bluetooth
+                try DispatchQueue.bluetooth.sync {
+                    guard let peripheral = try Store.shared.device(for: lockIdentifier, scanDuration: 1.0)
+                        else { throw LockError.notInRange(lock: lockIdentifier) }
+                    try Store.shared.listKeys(peripheral, notification: { (list, isComplete) in
+                        mainQueue { [weak self] in self?.list = list }
+                    })
+                }
+            }
         })
     }
     
@@ -216,33 +250,42 @@ public final class LockPermissionsViewController: UITableViewController {
                 alert.dismiss(animated: true, completion: nil)
             }))
             
-            alert.addAction(UIAlertAction(title: R.string.localizable.alertDelete(), style: .destructive, handler: { (UIAlertAction) in
+            alert.addAction(UIAlertAction(title: R.string.localizable.alertDelete(), style: .destructive, handler: { [weak self] (UIAlertAction) in
                 
                 alert.dismiss(animated: true) { }
                 
-                self.showActivity()
-                
-                DispatchQueue.bluetooth.async { [weak self] in
+                self?.performActivity(queue: .app, {
                     
-                    do {
-                        guard let peripheral = Store.shared[peripheral: lockIdentifier]
-                            else { return }
+                    // first try via BLE
+                    if Store.shared.lockManager.central.state == .poweredOn,
+                        let device = try DispatchQueue.bluetooth.sync(execute: { try Store.shared.device(for: lockIdentifier, scanDuration: 2.0) }) {
                         
-                        try LockManager.shared.removeKey(keyEntry.identifier, type: keyEntry.type, for: peripheral, with: key)
-                        
-                    }
-                    catch {
-                        mainQueue {
-                            self?.showErrorAlert(error.localizedDescription)
-                            self?.hideActivity(animated: false)
+                        try DispatchQueue.bluetooth.sync {
+                            try Store.shared.lockManager.removeKey(
+                                keyEntry.identifier,
+                                type: keyEntry.type,
+                                for: device.scanData.peripheral,
+                                with: key
+                            )
                         }
-                        return
+                        
+                    } else if let netService = try Store.shared.netServiceClient.discover(duration: 1.0, timeout: 10.0).first(where: { $0.identifier == lockIdentifier }) {
+                        
+                        // try via Bonjour
+                        try Store.shared.netServiceClient.removeKey(
+                            keyEntry.identifier,
+                            type: keyEntry.type,
+                            for: netService,
+                            with: key,
+                            timeout: 30.0
+                        )
+                        
+                    } else {
+                        throw LockError.notInRange(lock: lockIdentifier)
                     }
-                    mainQueue {
-                        self?.list.remove(keyEntry.identifier, type: keyEntry.type)
-                        self?.hideActivity(animated: true)
-                    }
-                }                
+                }, completion: { (viewController, _) in
+                    viewController.list.remove(keyEntry.identifier, type: keyEntry.type)
+                })
             }))
             
             self.present(alert, animated: true, completion: nil)

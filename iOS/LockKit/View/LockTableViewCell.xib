@@ -1,78 +1,96 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14865.1" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="15400" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES">
     <device id="retina4_0" orientation="portrait" appearance="dark"/>
     <dependencies>
-        <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14819.2"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15404"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="LockTableViewCell" rowHeight="80" id="lyJ-26-041" customClass="LockTableViewCell" customModule="LockKit" customModuleProvider="target">
-            <rect key="frame" x="0.0" y="0.0" width="320" height="80"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="LockTableViewCell" rowHeight="153" id="lyJ-26-041" customClass="LockTableViewCell" customModule="LockKit" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="153"/>
             <autoresizingMask key="autoresizingMask"/>
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="lyJ-26-041" id="ViR-ve-Wnx">
-                <rect key="frame" x="0.0" y="0.0" width="320" height="80"/>
+                <rect key="frame" x="0.0" y="0.0" width="320" height="153"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Anytime" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xdG-uQ-Fad">
-                        <rect key="frame" x="74" y="43" width="231" height="17"/>
-                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                        <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                        <nil key="highlightedColor"/>
-                    </label>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Lock Name" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HtH-Ax-ubI" userLabel="Lock Name Label">
-                        <rect key="frame" x="74" y="12" width="231" height="23"/>
-                        <fontDescription key="fontDescription" type="system" pointSize="19"/>
-                        <nil key="textColor"/>
-                        <nil key="highlightedColor"/>
-                    </label>
-                    <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="ugV-rn-Ig8">
-                        <rect key="frame" x="15" y="14.5" width="51" height="51"/>
-                        <constraints>
-                            <constraint firstAttribute="width" secondItem="ugV-rn-Ig8" secondAttribute="height" multiplier="1:1" id="2o1-oe-qcz"/>
-                            <constraint firstAttribute="width" constant="51" id="x0A-Ae-LrP"/>
-                        </constraints>
-                    </imageView>
-                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Qax-zc-WDt" customClass="PermissionIconView" customModule="LockKit" customModuleProvider="target">
-                        <rect key="frame" x="15" y="14.5" width="51" height="51"/>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="N5N-4J-QBX">
+                        <rect key="frame" x="15" y="11" width="290" height="131"/>
+                        <subviews>
+                            <stackView opaque="NO" contentMode="scaleToFill" alignment="center" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="bh7-Q6-CHF">
+                                <rect key="frame" x="0.0" y="0.0" width="290" height="131"/>
+                                <subviews>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Oq4-Z1-4CN" userLabel="Icon">
+                                        <rect key="frame" x="0.0" y="40" width="51" height="51"/>
+                                        <subviews>
+                                            <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="large" translatesAutoresizingMaskIntoConstraints="NO" id="ivU-ts-nqH">
+                                                <rect key="frame" x="7" y="7" width="37" height="37"/>
+                                            </activityIndicatorView>
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="PeV-WJ-96r" customClass="PermissionIconView" customModule="LockKit" customModuleProvider="target">
+                                                <rect key="frame" x="0.0" y="0.0" width="51" height="51"/>
+                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" secondItem="PeV-WJ-96r" secondAttribute="height" multiplier="1:1" id="Eg1-se-6ru"/>
+                                                    <constraint firstAttribute="width" constant="51" id="L6k-Zo-OiJ"/>
+                                                </constraints>
+                                            </view>
+                                        </subviews>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="51" id="5Ep-uD-el3"/>
+                                            <constraint firstItem="ivU-ts-nqH" firstAttribute="centerX" secondItem="Oq4-Z1-4CN" secondAttribute="centerX" id="GN6-zs-xC2"/>
+                                            <constraint firstItem="PeV-WJ-96r" firstAttribute="centerY" secondItem="Oq4-Z1-4CN" secondAttribute="centerY" id="U0v-FH-6t4"/>
+                                            <constraint firstItem="ivU-ts-nqH" firstAttribute="centerY" secondItem="Oq4-Z1-4CN" secondAttribute="centerY" id="Uhb-IX-oNw"/>
+                                            <constraint firstAttribute="width" constant="51" id="lDB-IX-u5Z"/>
+                                            <constraint firstItem="PeV-WJ-96r" firstAttribute="centerX" secondItem="Oq4-Z1-4CN" secondAttribute="centerX" id="lvI-Uv-2o4"/>
+                                        </constraints>
+                                    </view>
+                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="RjQ-53-w9N">
+                                        <rect key="frame" x="59" y="41.5" width="231" height="48"/>
+                                        <subviews>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Lock Name" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="81I-ZE-6Bg" userLabel="Lock Name Label">
+                                                <rect key="frame" x="0.0" y="0.0" width="96" height="23"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="19"/>
+                                                <nil key="textColor"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Anytime" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="BGK-yk-Dsj">
+                                                <rect key="frame" x="0.0" y="31" width="53" height="17"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                <color key="textColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                        </subviews>
+                                    </stackView>
+                                </subviews>
+                            </stackView>
+                        </subviews>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstAttribute="trailing" secondItem="bh7-Q6-CHF" secondAttribute="trailing" id="UJ6-aU-5Sj"/>
+                            <constraint firstItem="bh7-Q6-CHF" firstAttribute="top" secondItem="N5N-4J-QBX" secondAttribute="top" id="UPi-U9-sM8"/>
+                            <constraint firstAttribute="bottom" secondItem="bh7-Q6-CHF" secondAttribute="bottom" id="aqH-qP-UE0"/>
+                            <constraint firstItem="bh7-Q6-CHF" firstAttribute="leading" secondItem="N5N-4J-QBX" secondAttribute="leading" id="kyM-wR-cFy"/>
+                        </constraints>
                     </view>
-                    <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="VER-Zq-zSD">
-                        <rect key="frame" x="22" y="21.5" width="37" height="37"/>
-                        <color key="color" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                    </activityIndicatorView>
                 </subviews>
                 <constraints>
-                    <constraint firstItem="Qax-zc-WDt" firstAttribute="height" secondItem="ugV-rn-Ig8" secondAttribute="height" id="1SJ-GE-wqe"/>
-                    <constraint firstItem="VER-Zq-zSD" firstAttribute="centerY" secondItem="ugV-rn-Ig8" secondAttribute="centerY" id="4HY-yB-aBV"/>
-                    <constraint firstItem="Qax-zc-WDt" firstAttribute="width" secondItem="ugV-rn-Ig8" secondAttribute="width" id="4Pz-Uu-Anc"/>
-                    <constraint firstAttribute="trailingMargin" secondItem="HtH-Ax-ubI" secondAttribute="trailing" id="HxB-dj-YIF"/>
-                    <constraint firstItem="HtH-Ax-ubI" firstAttribute="leading" secondItem="xdG-uQ-Fad" secondAttribute="leading" id="NjE-YR-Fba"/>
-                    <constraint firstItem="ugV-rn-Ig8" firstAttribute="centerY" secondItem="ViR-ve-Wnx" secondAttribute="centerY" id="SE3-uV-p76"/>
-                    <constraint firstItem="Qax-zc-WDt" firstAttribute="centerY" secondItem="ugV-rn-Ig8" secondAttribute="centerY" id="SfF-lZ-16b"/>
-                    <constraint firstItem="ugV-rn-Ig8" firstAttribute="top" relation="greaterThanOrEqual" secondItem="ViR-ve-Wnx" secondAttribute="top" constant="8" id="WfO-VU-IXe"/>
-                    <constraint firstItem="xdG-uQ-Fad" firstAttribute="top" secondItem="HtH-Ax-ubI" secondAttribute="bottom" constant="8" id="X7i-Ol-cei"/>
-                    <constraint firstItem="ugV-rn-Ig8" firstAttribute="leading" secondItem="ViR-ve-Wnx" secondAttribute="leadingMargin" id="Y5r-55-DCb"/>
-                    <constraint firstItem="VER-Zq-zSD" firstAttribute="centerX" secondItem="ugV-rn-Ig8" secondAttribute="centerX" id="aiS-d8-M8k"/>
-                    <constraint firstItem="HtH-Ax-ubI" firstAttribute="leading" secondItem="ugV-rn-Ig8" secondAttribute="trailing" constant="8" id="gPS-zr-gXo"/>
-                    <constraint firstItem="HtH-Ax-ubI" firstAttribute="trailing" secondItem="xdG-uQ-Fad" secondAttribute="trailing" id="qN5-yL-5Bf"/>
-                    <constraint firstItem="Qax-zc-WDt" firstAttribute="centerX" secondItem="ugV-rn-Ig8" secondAttribute="centerX" id="qzl-ol-b3V"/>
-                    <constraint firstItem="ugV-rn-Ig8" firstAttribute="width" secondItem="ugV-rn-Ig8" secondAttribute="height" multiplier="1:1" id="r5B-XR-wWM"/>
-                    <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="xdG-uQ-Fad" secondAttribute="bottom" constant="12" id="uPf-o2-ykU"/>
-                    <constraint firstItem="HtH-Ax-ubI" firstAttribute="top" secondItem="ViR-ve-Wnx" secondAttribute="top" constant="12" id="xRq-I6-c5O"/>
+                    <constraint firstItem="N5N-4J-QBX" firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="ViR-ve-Wnx" secondAttribute="bottomMargin" id="IF5-NA-ux6"/>
+                    <constraint firstItem="N5N-4J-QBX" firstAttribute="trailing" secondItem="ViR-ve-Wnx" secondAttribute="trailingMargin" id="XLA-Kj-cBj"/>
+                    <constraint firstItem="N5N-4J-QBX" firstAttribute="top" relation="greaterThanOrEqual" secondItem="ViR-ve-Wnx" secondAttribute="topMargin" id="bFP-tR-wBU"/>
+                    <constraint firstItem="N5N-4J-QBX" firstAttribute="centerY" secondItem="ViR-ve-Wnx" secondAttribute="centerY" id="z1V-kp-vh2"/>
+                    <constraint firstItem="N5N-4J-QBX" firstAttribute="leading" secondItem="ViR-ve-Wnx" secondAttribute="leadingMargin" id="zeQ-49-eHb"/>
                 </constraints>
             </tableViewCellContentView>
             <inset key="separatorInset" minX="74" minY="0.0" maxX="0.0" maxY="0.0"/>
             <connections>
-                <outlet property="activityIndicatorView" destination="VER-Zq-zSD" id="JnQ-A2-yBx"/>
-                <outlet property="lockDetailLabel" destination="xdG-uQ-Fad" id="6I0-Ve-QjA"/>
-                <outlet property="lockImageView" destination="ugV-rn-Ig8" id="8yB-Lr-YgB"/>
-                <outlet property="lockTitleLabel" destination="HtH-Ax-ubI" id="0JH-DV-B90"/>
-                <outlet property="permissionView" destination="Qax-zc-WDt" id="vgV-Jt-hm9"/>
+                <outlet property="activityIndicatorView" destination="ivU-ts-nqH" id="l57-eq-ylH"/>
+                <outlet property="lockDetailLabel" destination="BGK-yk-Dsj" id="PDe-g5-PQJ"/>
+                <outlet property="lockTitleLabel" destination="81I-ZE-6Bg" id="lY5-Ze-Y7d"/>
+                <outlet property="permissionView" destination="PeV-WJ-96r" id="Gn4-yW-r9y"/>
             </connections>
-            <point key="canvasLocation" x="58.125" y="45.422535211267608"/>
+            <point key="canvasLocation" x="58.125" y="82.922535211267601"/>
         </tableViewCell>
     </objects>
 </document>

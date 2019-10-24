@@ -17,7 +17,7 @@ import GATT
 import CoreLock
 
 /// Smart Lock GATT Server controller.
-public final class LockController <Peripheral: PeripheralProtocol> {
+public final class LockGATTController <Peripheral: PeripheralProtocol> {
     
     // MARK: - Properties
     
@@ -25,11 +25,10 @@ public final class LockController <Peripheral: PeripheralProtocol> {
     
     public let deviceInformationController: GATTDeviceInformationServiceController<Peripheral>
     
-    public let lockServiceController: LockServiceController<Peripheral>
+    public let lockServiceController: LockGATTServiceController<Peripheral>
     
     // Lock hardware model
     public var hardware: LockHardware = .empty {
-        
         didSet {
             self.lockServiceController.hardware = hardware
             self.deviceInformationController.hardware = hardware
@@ -44,7 +43,7 @@ public final class LockController <Peripheral: PeripheralProtocol> {
         
         // load services
         self.deviceInformationController = try GATTDeviceInformationServiceController(peripheral: peripheral)
-        self.lockServiceController = try LockServiceController(peripheral: peripheral)
+        self.lockServiceController = try LockGATTServiceController(peripheral: peripheral)
         
         // set callbacks
         self.peripheral.willRead = { [unowned self] in self.willRead($0) }
@@ -57,15 +56,10 @@ public final class LockController <Peripheral: PeripheralProtocol> {
     private func willRead(_ request: GATTReadRequest<Peripheral.Central>) -> ATT.Error? {
         
         if lockServiceController.supportsCharacteristic(request.uuid) {
-            
             return lockServiceController.willRead(request)
-            
         } else if deviceInformationController.supportsCharacteristic(request.uuid) {
-            
             return deviceInformationController.willRead(request)
-            
         } else {
-            
             return nil
         }
     }
@@ -73,15 +67,10 @@ public final class LockController <Peripheral: PeripheralProtocol> {
     private func willWrite(_ request: GATTWriteRequest<Peripheral.Central>) -> ATT.Error? {
         
         if lockServiceController.supportsCharacteristic(request.uuid) {
-            
             return lockServiceController.willWrite(request)
-            
         } else if deviceInformationController.supportsCharacteristic(request.uuid) {
-            
             return deviceInformationController.willWrite(request)
-            
         } else {
-            
             return nil
         }
     }
@@ -89,11 +78,8 @@ public final class LockController <Peripheral: PeripheralProtocol> {
     private func didWrite(_ confirmation: GATTWriteConfirmation<Peripheral.Central>) {
         
         if lockServiceController.supportsCharacteristic(confirmation.uuid) {
-            
             lockServiceController.didWrite(confirmation)
-            
         } else if deviceInformationController.supportsCharacteristic(confirmation.uuid) {
-            
             deviceInformationController.didWrite(confirmation)
         }
     }
@@ -102,7 +88,6 @@ public final class LockController <Peripheral: PeripheralProtocol> {
 private extension GATTServiceController {
     
     func supportsCharacteristic(_ characteristicUUID: BluetoothUUID) -> Bool {
-        
         return characteristics.contains(characteristicUUID)
     }
 }

@@ -19,7 +19,6 @@ public final class LockManager <Central: CentralProtocol> {
     // MARK: - Initialization
     
     public init(central: Central) {
-        
         self.central = central
     }
     
@@ -149,7 +148,7 @@ public final class LockManager <Central: CentralProtocol> {
                           with key: KeyCredentials,
                           timeout: TimeInterval = .gattDefaultTimeout) throws {
         
-        log?("Create \(newKey.permission.type) key \"\(newKey.name)\" \(newKey.identifier)")
+        log?("Create \(newKey.permission.type) key \"\(newKey.name)\" \(newKey.identifier) for \(peripheral)")
         
         let timeout = Timeout(timeout: timeout)
         
@@ -172,7 +171,7 @@ public final class LockManager <Central: CentralProtocol> {
                            with key: KeyCredentials,
                            timeout: TimeInterval = .gattDefaultTimeout) throws {
         
-        log?("Confirm key \(key.identifier)")
+        log?("Confirm key \(key.identifier) for \(peripheral)")
         
         let timeout = Timeout(timeout: timeout)
         
@@ -196,7 +195,7 @@ public final class LockManager <Central: CentralProtocol> {
                           with key: KeyCredentials,
                           timeout: TimeInterval = .gattDefaultTimeout) throws {
         
-        log?("Remove \(type) \(identifier)")
+        log?("Remove \(type) \(identifier) for \(peripheral)")
         
         let timeout = Timeout(timeout: timeout)
         
@@ -311,7 +310,7 @@ public final class LockManager <Central: CentralProtocol> {
     }
     
     /// Retreive a list of events on device.
-    public func listEvents(fetchRequest: ListEventsCharacteristic.FetchRequest? = nil,
+    public func listEvents(fetchRequest: LockEvent.FetchRequest? = nil,
                            for peripheral: Peripheral,
                            with key: KeyCredentials,
                            timeout: TimeInterval = .gattDefaultTimeout) throws -> EventsList {
@@ -326,7 +325,7 @@ public final class LockManager <Central: CentralProtocol> {
     }
     
     /// Retreive a list of events on device.
-    public func listEvents(fetchRequest: ListEventsCharacteristic.FetchRequest? = nil,
+    public func listEvents(fetchRequest: LockEvent.FetchRequest? = nil,
                            for peripheral: Peripheral,
                            with key: KeyCredentials,
                            timeout: TimeInterval = .gattDefaultTimeout,

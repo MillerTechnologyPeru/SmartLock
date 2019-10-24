@@ -47,7 +47,7 @@ public extension NewKeyViewController {
             self.showActivity()
             
             // add new key to lock
-            DispatchQueue.bluetooth.async { [weak self] in
+            DispatchQueue.app.async { [weak self] in
                 
                 guard let self = self else { return }
                 
@@ -59,27 +59,55 @@ public extension NewKeyViewController {
                 
                 let newKeySharedSecret = KeyData()
                 
+                // file for sharing
                 let newKeyInvitation = NewKey.Invitation(
                     lock: lockIdentifier,
                     key: newKey,
                     secret: newKeySharedSecret
                 )
                 
+                // for BLE / HTTP request
+                let newKeyRequest = CreateNewKeyRequest(key: newKey, secret: newKeySharedSecret)
+                
                 do {
-                    guard let peripheral = try Store.shared.device(for: lockIdentifier, scanDuration: 2.0) else {
+                    // first try via BLE
+                    if Store.shared.lockManager.central.state == .poweredOn,
+                        let peripheral = try DispatchQueue.bluetooth.sync(execute: { try Store.shared.device(for: lockIdentifier, scanDuration: 2.0) }) {
+                        
+                        try DispatchQueue.bluetooth.sync {
+                            try Store.shared.lockManager.createKey(
+                                newKeyRequest,
+                                for: peripheral.scanData.peripheral,
+                                with: parentKey,
+                                timeout: 30.0
+                            )
+                        }
+                        
+                    } else if let netService = try Store.shared.netServiceClient.discover(duration: 1.0, timeout: 10.0).first(where: { $0.identifier == lockIdentifier }) {
+                        
+                        // try via Bonjour
+                        try Store.shared.netServiceClient.createKey(
+                            newKeyRequest,
+                            for: netService,
+                            with: parentKey,
+                            timeout: 30.0
+                        )
+                        
+                    } else {
+                        // not in range
                         mainQueue {
                             self.hideActivity(animated: false)
                             self.newKeyError(R.string.error.notInRange())
                         }
                         return
                     }
-                    try LockManager.shared.createKey(
-                        .init(key: newKey, secret: newKeySharedSecret),
-                        for: peripheral.scanData.peripheral,
-                        with: parentKey)
+                    
                 }
                 catch {
                     mainQueue {
+                        #if DEBUG
+                        dump(error)
+                        #endif
                         self.hideActivity(animated: false)
                         self.newKeyError(error.localizedDescription)
                     }
@@ -123,6 +151,7 @@ public extension NewKeyViewController {
     
     private func newKeyError(_ error: String) {
         
+        log("⚠️ Unable to share key. \(error)")
         self.showErrorAlert(error, okHandler: { self.dismiss(animated: true, completion: nil) }, retryHandler: nil)
     }
 }

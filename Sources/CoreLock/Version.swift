@@ -27,7 +27,7 @@ public struct LockVersion: Equatable, Hashable {
 
 public extension LockVersion {
     
-    static var current: LockVersion { return LockVersion(major: 0, minor: 0, patch: 1) }
+    static var current: LockVersion { return LockVersion(major: 1, minor: 0, patch: 1) }
 }
 
 // MARK: - RawRepresentable

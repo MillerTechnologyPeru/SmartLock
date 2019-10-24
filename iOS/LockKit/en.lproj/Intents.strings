@@ -20,11 +20,11 @@
 
 "Z5kgSL" = "Lock";
 
-"bvi2l8" = "`${displayName}` is not in range. Please move closer to ${displayName}.";
+"bvi2l8" = "${displayName} is not in range. Please move closer to ${displayName}.";
 
-"claxan" = "Unlocked ‘${lock}‘.";
+"claxan" = "Unlocked ${lock}.";
 
-"dAVo2n" = "Unlock `${lock}`";
+"dAVo2n" = "Unlock ${lock}";
 
 "fjnXtW" = "Unlock";
 
@@ -32,7 +32,7 @@
 
 "tnOjCJ" = "Lock";
 
-"vARXDT" = "You do not have a key for `${displayName}`.";
+"vARXDT" = "You do not have a key for ${displayName}.";
 
-"wkobUh" = "You can only unlock `${displayName}` during the specified schedule.";
+"wkobUh" = "You can only unlock ${displayName} during the specified schedule.";
 
