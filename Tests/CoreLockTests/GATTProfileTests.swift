@@ -35,7 +35,7 @@ final class GATTProfileTests: XCTestCase {
             let characteristic = try UnlockCharacteristic(request: request, using: key.secret, id: key.id)
             guard let decodedCharacteristic = UnlockCharacteristic(data: characteristic.data)
                 else { XCTFail("Could not parse bytes"); return }
-            let decodedRequest = try decodedCharacteristic.decrypt(with: key.secret)
+            let decodedRequest = try decodedCharacteristic.decrypt(using: key.secret)
             XCTAssertEqual(decodedRequest, request)
             XCTAssertEqual(characteristic, decodedCharacteristic)
             XCTAssert(decodedCharacteristic.encryptedData.authentication.isAuthenticated(using: key.secret))
