@@ -24,12 +24,12 @@ jobs:
     - name: Build (Release)
       run: swift build -c release
 
-  test-linux:
-    name: Test Linux
+  test:
+    name: Test
     strategy:
       matrix:
         swift: [5.6.3, 5.7]
-        os: [ubuntu-20.04]
+        os: [ubuntu-20.04, macos-latest]
     runs-on: ${{ matrix.os }}
     steps:
     - name: Install Swift
@@ -46,16 +46,3 @@ jobs:
       run: swift test --configuration release -Xswiftc -enable-testing --enable-code-coverage
     - name: Coverage Report
       uses: maxep/spm-lcov-action@0.3.1
-
-  test-macOS:
-    name: Test macOS
-    runs-on: macos-latest
-    steps:
-    - name: Checkout
-      uses: actions/checkout@v2
-    - name: Swift Version
-      run: swift --version
-    - name: Test (Debug)
-      run: swift test --configuration debug --enable-code-coverage
-    - name: Test (Release)
-      run: swift test --configuration release -Xswiftc -enable-testing --enable-code-coverage
