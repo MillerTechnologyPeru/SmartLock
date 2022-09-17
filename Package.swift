@@ -60,11 +60,10 @@ let package = Package(
                 .product(name: "Bluetooth", package: "Bluetooth"),
             ]
         ),
-        /*
         .target(
             name: "CoreLockGATTServer",
             dependencies: ["CoreLock"]
-        ),*/
+        ),
         .testTarget(
             name: "CoreLockTests",
             dependencies: ["CoreLock"]

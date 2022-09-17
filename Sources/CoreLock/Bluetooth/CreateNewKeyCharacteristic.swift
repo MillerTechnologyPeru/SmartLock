@@ -31,7 +31,7 @@ public struct CreateNewKeyCharacteristic: TLVEncryptedCharacteristic, Codable, E
         self.encryptedData = try EncryptedData(encrypt: requestData, using: key, id: id)
     }
     
-    public func decrypt(with sharedSecret: KeyData) throws -> CreateNewKeyRequest {
+    public  func decrypt(using sharedSecret: KeyData) throws -> CreateNewKeyRequest {
         
         let data = try encryptedData.decrypt(using: sharedSecret)
         guard let value = try? type(of: self).decoder.decode(CreateNewKeyRequest.self, from: data)

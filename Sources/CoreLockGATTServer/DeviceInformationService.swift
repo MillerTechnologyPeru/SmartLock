@@ -10,7 +10,7 @@ import Bluetooth
 import GATT
 import CoreLock
 
-public final class GATTDeviceInformationServiceController <Peripheral: PeripheralProtocol> : GATTServiceController {
+public final class GATTDeviceInformationServiceController <Peripheral: PeripheralManager> : GATTServiceController {
     
     public static var service: BluetoothUUID { return .deviceInformation }
     
@@ -20,9 +20,7 @@ public final class GATTDeviceInformationServiceController <Peripheral: Periphera
     
     public let peripheral: Peripheral
     
-    public var hardware: LockHardware = .empty {
-        didSet { updateInformation() }
-    }
+    public private(set) var hardware: LockHardware = .empty
     
     public let manufacturerName: GATTManufacturerNameString = "Miller Technology"
     
@@ -30,17 +28,11 @@ public final class GATTDeviceInformationServiceController <Peripheral: Periphera
     
     public let softwareRevision = GATTSoftwareRevisionString(rawValue: "\(LockVersion.current)")
     
-    public private(set) var modelNumber: GATTModelNumber = "" {
-        didSet { peripheral[characteristic: modelNumberHandle] = modelNumber.data }
-    }
+    public private(set) var modelNumber: GATTModelNumber = ""
     
-    public private(set) var serialNumber: GATTSerialNumberString = "" {
-        didSet { peripheral[characteristic: serialNumberHandle] = serialNumber.data }
-    }
+    public private(set) var serialNumber: GATTSerialNumberString = ""
     
-    public private(set) var hardwareRevision: GATTHardwareRevisionString = "" {
-        didSet { peripheral[characteristic: hardwareRevisionHandle] = hardwareRevision.data }
-    }
+    public private(set) var hardwareRevision: GATTHardwareRevisionString = ""
     
     internal let serviceHandle: UInt16
     
@@ -53,7 +45,7 @@ public final class GATTDeviceInformationServiceController <Peripheral: Periphera
     
     // MARK: - Initialization
     
-    public init(peripheral: Peripheral) throws {
+    public init(peripheral: Peripheral) async throws {
         
         self.peripheral = peripheral
         
@@ -63,41 +55,41 @@ public final class GATTDeviceInformationServiceController <Peripheral: Periphera
         let serviceUUID = type(of: self).service
         #endif
         
-        let descriptors: [GATT.Descriptor] = []
+        let descriptors: [GATTAttribute.Descriptor] = []
         
         let characteristics = [
             
-            GATT.Characteristic(uuid: type(of: manufacturerName).uuid,
+            GATTAttribute.Characteristic(uuid: type(of: manufacturerName).uuid,
                                 value: manufacturerName.data,
                                 permissions: [.read],
                                 properties: [.read],
                                 descriptors: descriptors),
             
-            GATT.Characteristic(uuid: type(of: modelNumber).uuid,
+            GATTAttribute.Characteristic(uuid: type(of: modelNumber).uuid,
                                 value: modelNumber.data,
                                 permissions: [.read],
                                 properties: [.read],
                                 descriptors: descriptors),
             
-            GATT.Characteristic(uuid: type(of: serialNumber).uuid,
+            GATTAttribute.Characteristic(uuid: type(of: serialNumber).uuid,
                                 value: serialNumber.data,
                                 permissions: [.read],
                                 properties: [.read],
                                 descriptors: descriptors),
             
-            GATT.Characteristic(uuid: type(of: firmwareRevision).uuid,
+            GATTAttribute.Characteristic(uuid: type(of: firmwareRevision).uuid,
                                 value: firmwareRevision.data,
                                 permissions: [.read],
                                 properties: [.read],
                                 descriptors: descriptors),
             
-            GATT.Characteristic(uuid: type(of: softwareRevision).uuid,
+            GATTAttribute.Characteristic(uuid: type(of: softwareRevision).uuid,
                                 value: softwareRevision.data,
                                 permissions: [.read],
                                 properties: [.read],
                                 descriptors: descriptors),
             
-            GATT.Characteristic(uuid: type(of: hardwareRevision).uuid,
+            GATTAttribute.Characteristic(uuid: type(of: hardwareRevision).uuid,
                                 value: hardwareRevision.data,
                                 permissions: [.read],
                                 properties: [.read],
@@ -106,31 +98,48 @@ public final class GATTDeviceInformationServiceController <Peripheral: Periphera
         
         self.characteristics = Set(characteristics.map { $0.uuid })
         
-        let service = GATT.Service(uuid: serviceUUID,
-                                   primary: true,
-                                   characteristics: characteristics)
+        let service = GATTAttribute.Service(
+            uuid: serviceUUID,
+            primary: true,
+            characteristics: characteristics
+        )
         
-        self.serviceHandle = try peripheral.add(service: service)
+        self.serviceHandle = try await peripheral.add(service: service)
         
-        self.modelNumberHandle = peripheral.characteristics(for: type(of: modelNumber).uuid)[0]
-        self.serialNumberHandle = peripheral.characteristics(for: type(of: serialNumber).uuid)[0]
-        self.manufacturerNameHandle = peripheral.characteristics(for: type(of: manufacturerName).uuid)[0]
-        self.firmwareRevisionHandle = peripheral.characteristics(for: type(of: firmwareRevision).uuid)[0]
-        self.softwareRevisionHandle = peripheral.characteristics(for: type(of: softwareRevision).uuid)[0]
-        self.hardwareRevisionHandle = peripheral.characteristics(for: type(of: hardwareRevision).uuid)[0]
-    }
-    
-    deinit {
-        
-        self.peripheral.remove(service: serviceHandle)
+        self.modelNumberHandle = await peripheral.characteristics(for: type(of: modelNumber).uuid)[0]
+        self.serialNumberHandle = await peripheral.characteristics(for: type(of: serialNumber).uuid)[0]
+        self.manufacturerNameHandle = await peripheral.characteristics(for: type(of: manufacturerName).uuid)[0]
+        self.firmwareRevisionHandle = await peripheral.characteristics(for: type(of: firmwareRevision).uuid)[0]
+        self.softwareRevisionHandle = await peripheral.characteristics(for: type(of: softwareRevision).uuid)[0]
+        self.hardwareRevisionHandle = await peripheral.characteristics(for: type(of: hardwareRevision).uuid)[0]
     }
     
     // MARK: - Methods
     
-    private func updateInformation() {
+    func supportsCharacteristic(_ characteristicUUID: BluetoothUUID) -> Bool {
+        let characteristics: [GATTCharacteristic.Type] = [
+            GATTManufacturerNameString.self,
+            GATTFirmwareRevisionString.self,
+            GATTSoftwareRevisionString.self,
+            GATTSerialNumberString.self,
+            GATTModelNumber.self,
+            GATTHardwareRevisionString.self,
+        ]
+        return characteristics.contains(where: { $0.uuid == characteristicUUID })
+    }
+    
+    public func setHardware(_ newValue: LockHardware) async {
+        self.hardware = newValue
+        await updateInformation()
+    }
+    
+    private func updateInformation() async {
         
-        self.modelNumber = GATTModelNumber(rawValue: hardware.model.rawValue)
-        self.serialNumber = GATTSerialNumberString(rawValue: hardware.serialNumber)
-        self.hardwareRevision = GATTHardwareRevisionString(rawValue: hardware.hardwareRevision)
+        modelNumber = GATTModelNumber(rawValue: hardware.model.rawValue)
+        await peripheral.write(modelNumber.data, forCharacteristic: modelNumberHandle)
+        serialNumber = GATTSerialNumberString(rawValue: hardware.serialNumber)
+        await peripheral.write(serialNumber.data, forCharacteristic: serialNumberHandle)
+        hardwareRevision = GATTHardwareRevisionString(rawValue: hardware.hardwareRevision)
+        await peripheral.write(hardwareRevision.data, forCharacteristic: hardwareRevisionHandle)
     }
 }

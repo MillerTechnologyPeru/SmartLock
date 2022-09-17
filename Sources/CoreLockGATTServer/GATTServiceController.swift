@@ -8,33 +8,32 @@
 import Foundation
 import Bluetooth
 import GATT
+import CoreLock
 
 public protocol GATTServiceController: AnyObject {
     
-    associatedtype Peripheral: PeripheralProtocol
+    associatedtype Peripheral: PeripheralManager
     
     static var service: BluetoothUUID { get }
     
-    var characteristics: Set<BluetoothUUID> { get }
-    
     var peripheral: Peripheral { get }
     
-    init(peripheral: Peripheral) throws
+    init(peripheral: Peripheral) async throws
     
-    func willRead(_ request: GATTReadRequest<Peripheral.Central>) -> ATT.Error?
+    func willRead(_ request: GATTReadRequest<Peripheral.Central>) -> ATTError?
     
-    func willWrite(_ request: GATTWriteRequest<Peripheral.Central>) -> ATT.Error?
+    func willWrite(_ request: GATTWriteRequest<Peripheral.Central>) -> ATTError?
     
-    func didWrite(_ request: GATTWriteConfirmation<Peripheral.Central>)
+    func didWrite(_ request: GATTWriteConfirmation<Peripheral.Central>) async
 }
 
 public extension GATTServiceController {
     
-    func willRead(_ request: GATTReadRequest<Peripheral.Central>) -> ATT.Error? {
+    func willRead(_ request: GATTReadRequest<Peripheral.Central>) -> ATTError? {
         return nil
     }
     
-    func willWrite(_ request: GATTWriteRequest<Peripheral.Central>) -> ATT.Error? {
+    func willWrite(_ request: GATTWriteRequest<Peripheral.Central>) -> ATTError? {
         return nil
     }
     

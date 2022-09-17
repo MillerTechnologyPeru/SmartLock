@@ -30,7 +30,7 @@ public struct ListEventsCharacteristic: TLVEncryptedCharacteristic, Codable, Equ
         self.encryptedData = try EncryptedData(encrypt: requestData, using: key, id: id)
     }
     
-    public func decrypt(with key: KeyData) throws -> ListEventsRequest {
+    public  func decrypt(using key: KeyData) throws -> ListEventsRequest {
         
         let data = try encryptedData.decrypt(using: key)
         guard let value = try? type(of: self).decoder.decode(ListEventsRequest.self, from: data)

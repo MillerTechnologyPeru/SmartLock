@@ -38,7 +38,7 @@ public extension KeysResponse {
         self.encryptedData = try .init(encrypt: data, with: key)
     }
     
-    func decrypt(with key: KeyData,
+     func decrypt(using key: KeyData,
                  decoder: JSONDecoder = JSONDecoder()) throws -> KeysList {
         
         let data = try encryptedData.decrypt(using: key)

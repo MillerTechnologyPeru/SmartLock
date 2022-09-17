@@ -214,7 +214,7 @@ extension LockNetService.EncryptedData {
         catch { throw AuthenticationError.encryptionError(error) }
     }
     
-    func decrypt(with key: KeyData) throws -> Data {
+     func decrypt(using key: KeyData) throws -> Data {
         
         // attempt to decrypt
         do { return try CoreLock.decrypt(key: key.data, iv: initializationVector, data: encryptedData) }

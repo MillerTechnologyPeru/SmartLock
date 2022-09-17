@@ -30,7 +30,7 @@ public struct UnlockCharacteristic: TLVEncryptedCharacteristic, Codable, Equatab
         self.encryptedData = try EncryptedData(encrypt: requestData, using: key, id: id)
     }
     
-    public func decrypt(with sharedSecret: KeyData) throws -> UnlockRequest {
+    public  func decrypt(using sharedSecret: KeyData) throws -> UnlockRequest {
         
         let data = try encryptedData.decrypt(using: sharedSecret)
         guard let value = try? type(of: self).decoder.decode(UnlockRequest.self, from: data)
