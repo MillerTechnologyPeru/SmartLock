@@ -13,8 +13,8 @@ public extension CentralManager {
     
     func connection<T>(
         for peripheral: Peripheral,
-        _ connection: (GATTConnection<Self>
-        ) async throws -> (T)) async throws -> T {
+        _ connection: (GATTConnection<Self>) async throws -> (T)
+    ) async throws -> T {
                 
         // connect first
         try await self.connect(to: peripheral)
@@ -47,8 +47,8 @@ public extension CentralManager {
 
 public struct GATTConnection <Central: CentralManager> {
     
-    internal let central: Central
-        
+    internal unowned let central: Central
+    
     public let maximumTransmissionUnit: GATT.MaximumTransmissionUnit
     
     internal let characteristics: [BluetoothUUID: [Characteristic<Central.Peripheral, Central.AttributeID>]]

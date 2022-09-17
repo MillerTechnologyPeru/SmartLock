@@ -44,3 +44,45 @@ public extension GATTEncryptedNotification {
         return chunk.data
     }
 }
+
+internal extension GATTConnection {
+    
+    func list<Write, ChunkNotification>(
+        _ write: @autoclosure () throws -> (Write),
+        _ notify: ChunkNotification.Type,
+        key: KeyCredentials,
+        log: ((String) -> ())? = nil
+    ) async throws -> AsyncThrowingStream<ChunkNotification.Notification, Error> where Write: GATTProfileCharacteristic, ChunkNotification: GATTEncryptedNotification {
+        let stream = try await self.notify(ChunkNotification.self)
+        let writeValue = try write()
+        try await self.write(writeValue)
+        return AsyncThrowingStream(ChunkNotification.Notification.self, bufferingPolicy: .unbounded) { continuation in
+            Task.detached {
+                do {
+                    var chunks = [Chunk]()
+                    chunks.reserveCapacity(2)
+                    for try await chunkNotification in stream {
+                        let chunk = chunkNotification.chunk
+                        log?("Received chunk \(chunks.count + 1) (\(chunk.bytes.count) bytes)")
+                        chunks.append(chunk)
+                        assert(chunks.isEmpty == false)
+                        guard chunks.length >= chunk.total else {
+                            continue // wait for more chunks
+                        }
+                        let notificationValue = try ChunkNotification.from(chunks: chunks, using: key.secret)
+                        chunks.removeAll(keepingCapacity: true)
+                        continuation.yield(notificationValue)
+                        guard notificationValue.isLast else {
+                            continue // wait for final value
+                        }
+                        stream.stop()
+                    }
+                    continuation.finish()
+                } catch {
+                    stream.stop()
+                    continuation.finish(throwing: error)
+                }
+            }
+        }
+    }
+}

@@ -25,3 +25,48 @@ public struct ListKeysCharacteristic: TLVCharacteristic, Codable, Equatable {
         self.authentication = authentication
     }
 }
+
+// MARK: - Central
+/*
+public extension CentralManager {
+    
+    /// Retreive a list of all keys on device.
+    func listKeys(
+        using key: KeyCredentials,
+        for peripheral: Peripheral,
+        notification: ((KeyListNotification) -> ())? = nil,
+        log: ((String) -> ())? = nil
+    ) async throws {
+        try await connect(to: peripheral) {
+            let stream = try await $0.listKeys(using: key, log: log)
+            //var list = KeysList()
+            for try await value in stream {
+                notification?(value)
+                //list.append(value.key)
+            }
+            //return list
+        }
+    }
+}
+*/
+public extension GATTConnection {
+    
+    /// Retreive a list of all keys on device.
+    func listKeys(
+        using key: KeyCredentials,
+        log: ((String) -> ())? = nil
+    ) async throws -> AsyncThrowingStream<KeyListNotification, Error> {
+        let write = {
+            ListKeysCharacteristic(
+                authentication: Authentication(
+                    key: key.secret,
+                    message: AuthenticationMessage(
+                        digest: Digest(hash: Data()),
+                        id: key.id
+                    )
+                )
+            )
+        }
+        return try await list(write(), KeysCharacteristic.self, key: key, log: log)
+    }
+}

@@ -48,3 +48,24 @@ public struct ListEventsRequest: Codable, Equatable {
         self.fetchRequest = fetchRequest
     }
 }
+
+// MARK: - Central
+
+public extension GATTConnection {
+    
+    /// Retreive a list of events on device.
+    func listEvents(
+        fetchRequest: LockEvent.FetchRequest? = nil,
+        using key: KeyCredentials,
+        log: ((String) -> ())? = nil
+    ) async throws -> AsyncThrowingStream<EventListNotification, Error> {
+        let write = {
+            try ListEventsCharacteristic(
+                request: ListEventsRequest(fetchRequest: fetchRequest),
+                using: key.secret,
+                id: key.id
+            )
+        }
+        return try await list(write(), EventsCharacteristic.self, key: key, log: log)
+    }
+}
