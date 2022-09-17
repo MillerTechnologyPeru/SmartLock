@@ -1,0 +1,32 @@
+{
+  "pins" : [
+    {
+      "identity" : "bluetooth",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/PureSwift/Bluetooth.git",
+      "state" : {
+        "revision" : "f28f73c1ff5e0877c212300ab356997e7e9570fa",
+        "version" : "6.1.0"
+      }
+    },
+    {
+      "identity" : "gatt",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/PureSwift/GATT.git",
+      "state" : {
+        "branch" : "master",
+        "revision" : "579ffd583f9a32a88e68b69e12eb85856ee165cb"
+      }
+    },
+    {
+      "identity" : "tlvcoding",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/PureSwift/TLVCoding.git",
+      "state" : {
+        "branch" : "master",
+        "revision" : "49eae2e68320dbe1533eb2880ee82f7b6144517a"
+      }
+    }
+  ],
+  "version" : 2
+}
