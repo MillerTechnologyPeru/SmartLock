@@ -41,8 +41,4 @@ jobs:
     - name: Swift Version
       run: swift --version
     - name: Test (Debug)
-      run: swift test --configuration debug --enable-code-coverage
-    - name: Test (Release)
-      run: swift test --configuration release -Xswiftc -enable-testing --enable-code-coverage
-    - name: Coverage Report
-      uses: maxep/spm-lcov-action@0.3.1
+      run: swift test --configuration debug
