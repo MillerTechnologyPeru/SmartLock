@@ -70,3 +70,44 @@ public extension Key {
         )
     }
 }
+
+// MARK: - Central
+
+public extension CentralManager {
+    
+    /// Setup lock.
+    @discardableResult
+    func setup(
+        _ request: SetupRequest,
+        using sharedSecret: KeyData,
+        for peripheral: Peripheral
+    ) async throws -> LockInformation {
+        try await connection(for: peripheral) {
+            // write setup request
+            try await $0.setup(request, using: sharedSecret)
+            // validate status
+            let information = try await $0.readInformation()
+            guard information.status != .setup else {
+                throw GATTError.invalidData(nil)
+            }
+            return information
+        }
+    }
+}
+
+public extension GATTConnection {
+    
+    /// Setup lock.
+    func setup(
+        _ request: SetupRequest,
+        using sharedSecret: KeyData
+    ) async throws {
+        // encrypt owner key data
+        let characteristicValue = try SetupCharacteristic(
+            request: request,
+            sharedSecret: sharedSecret
+        )
+        // write setup characteristic
+        try await write(characteristicValue)
+    }
+}
