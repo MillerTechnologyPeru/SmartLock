@@ -45,3 +45,30 @@ public struct LockInformationCharacteristic: TLVCharacteristic, Equatable, Codab
         self.unlockActions = unlockActions
     }
 }
+
+// MARK: - Central
+
+public extension CentralManager {
+    
+    /// Read the lock's information characteristic.
+    func readInformation(for peripheral: Peripheral) async throws -> LockInformation {
+        try await connection(for: peripheral) {
+            try await $0.readInformation()
+        }
+    }
+}
+
+public extension GATTConnection {
+    
+    /// Read the lock's information characteristic.
+    func readInformation() async throws -> LockInformation {
+        let characteristic = try await read(LockInformationCharacteristic.self)
+        return LockInformation(
+            id: characteristic.id,
+            buildVersion: characteristic.buildVersion,
+            version: characteristic.version,
+            status: characteristic.status,
+            unlockActions: Set(characteristic.unlockActions.map { $0 })
+        )
+    }
+}
