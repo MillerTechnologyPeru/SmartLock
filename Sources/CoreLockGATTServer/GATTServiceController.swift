@@ -9,7 +9,7 @@ import Foundation
 import Bluetooth
 import GATT
 
-public protocol GATTServiceController: class {
+public protocol GATTServiceController: AnyObject {
     
     associatedtype Peripheral: PeripheralProtocol
     
