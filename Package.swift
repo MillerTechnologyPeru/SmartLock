@@ -43,21 +43,46 @@ let package = Package(
         )
     ],
     targets: [
-        /*
-        .target(
+        .executableTarget(
             name: "lockd",
             dependencies: [
+                .product(
+                    name: "Bluetooth",
+                    package: "Bluetooth"
+                ),
+                .product(
+                    name: "BluetoothGATT",
+                    package: "Bluetooth",
+                    condition: .when(platforms: [.macOS, .linux])
+                ),
+                .product(
+                    name: "BluetoothHCI",
+                    package: "Bluetooth",
+                    condition: .when(platforms: [.macOS, .linux])
+                ),
+                .product(
+                    name: "BluetoothGAP",
+                    package: "Bluetooth",
+                    condition: .when(platforms: [.macOS, .linux])
+                ),
+                .product(
+                    name: "DarwinGATT",
+                    package: "GATT",
+                    condition: .when(platforms: [.macOS])
+                ),
                 "CoreLockGATTServer",
-                "SwiftyGPIO",
-                "CoreLockWebServer"
+                "SwiftyGPIO"
             ]
-        ),*/
+        ),
         .target(
             name: "CoreLock",
             dependencies: [
                 "TLVCoding",
                 "GATT",
-                .product(name: "Bluetooth", package: "Bluetooth"),
+                .product(
+                    name: "Bluetooth",
+                    package: "Bluetooth"
+                ),
             ]
         ),
         .target(
