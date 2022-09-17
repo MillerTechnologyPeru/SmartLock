@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import TLVCoding
 
 public struct EncryptedData: Equatable, Codable {
     
@@ -33,5 +34,28 @@ public extension EncryptedData {
             else { throw AuthenticationError.invalidAuthentication }
         // attempt to decrypt
         return try CoreLock.decrypt(encryptedData, using: key, authentication: authentication.message)
+    }
+}
+
+extension EncryptedData: TLVCodable {
+    
+    internal static var authenticationPrefixLength: Int { 176 }
+    
+    public init?(tlvData: Data) {
+        let prefixLength = Self.authenticationPrefixLength
+        guard tlvData.count >= prefixLength else {
+            return nil
+        }
+        let prefix = Data(tlvData.prefix(prefixLength))
+        guard let authentication = try? TLVDecoder.lock.decode(Authentication.self, from: prefix) else {
+            return nil
+        }
+        self.authentication = authentication
+        self.encryptedData = tlvData.count > prefixLength ? Data(tlvData.suffix(from: prefixLength)) : Data()
+    }
+    
+    public var tlvData: Data {
+        let authenticationData = try! TLVEncoder.lock.encode(authentication)
+        return authenticationData + encryptedData
     }
 }

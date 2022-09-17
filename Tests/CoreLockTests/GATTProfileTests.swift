@@ -38,18 +38,11 @@ final class GATTProfileTests: XCTestCase {
             let decodedRequest = try decodedCharacteristic.decrypt(with: key.secret)
             XCTAssertEqual(decodedRequest, request)
             XCTAssertEqual(characteristic, decodedCharacteristic)
-            XCTAssertEqual(characteristic.encryptedData.encryptedData, decodedCharacteristic.encryptedData.encryptedData)
-            XCTAssertEqual(characteristic.encryptedData.authentication, decodedCharacteristic.encryptedData.authentication)
-            XCTAssertEqual(characteristic.encryptedData.authentication.message, decodedCharacteristic.encryptedData.authentication.message)
-            XCTAssertEqual(characteristic.encryptedData.authentication.message.nonce, decodedCharacteristic.encryptedData.authentication.message.nonce)
-            XCTAssertEqual(characteristic.encryptedData.authentication.message.date, decodedCharacteristic.encryptedData.authentication.message.date)
-            XCTAssertEqual(characteristic.encryptedData.authentication.message.id, decodedCharacteristic.encryptedData.authentication.message.id)
-            XCTAssertEqual(characteristic.encryptedData.authentication.signedData, decodedCharacteristic.encryptedData.authentication.signedData)
             XCTAssert(decodedCharacteristic.encryptedData.authentication.isAuthenticated(using: key.secret))
             XCTAssert(characteristic.encryptedData.authentication.isAuthenticated(using: key.secret))
             XCTAssert(Authentication(key: key.secret, message: characteristic.encryptedData.authentication.message).isAuthenticated(using: key.secret))
             
-            try await Task.sleep(nanoseconds: 100_000_000)
+            try await Task.sleep(nanoseconds: 10_000_000)
         }
     }
     
