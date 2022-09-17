@@ -11,11 +11,20 @@ import Bluetooth
 /// Smart Lock GATT Error
 public enum LockGATTError: Error {
     
+    /// No service with UUID found.
+    case serviceNotFound(BluetoothUUID)
+    
+    /// No characteristic with UUID found.
+    case characteristicNotFound(BluetoothUUID)
+    
+    /// The characteristic's value could not be parsed. Invalid data.
+    case invalidCharacteristicValue(BluetoothUUID)
+    
+    /// Not a compatible peripheral
+    case incompatiblePeripheral(Error?)
+    
     /// Invalid data.
     case invalidData(Data?)
-    
-    /// Could not complete GATT operation. 
-    case couldNotComplete
 }
 
 internal typealias GATTError = LockGATTError
