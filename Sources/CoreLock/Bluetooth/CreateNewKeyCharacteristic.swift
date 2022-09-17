@@ -83,3 +83,35 @@ public extension NewKey {
         self.created = created
     }
 }
+
+// MARK: - Central
+
+public extension CentralManager {
+    
+    /// Create new key.
+    func createKey(
+        _ newKey: CreateNewKeyRequest,
+        using key: KeyCredentials,
+        for peripheral: Peripheral
+    ) async throws {
+        try await connection(for: peripheral) {
+            try await $0.createKey(newKey, using: key)
+        }
+    }
+}
+
+public extension GATTConnection {
+    
+    /// Create new key.
+    func createKey(
+        _ newKey: CreateNewKeyRequest,
+        using key: KeyCredentials
+    ) async throws {
+        let characteristicValue = try CreateNewKeyCharacteristic(
+            request: newKey,
+            using: key.secret,
+            id: key.id
+        )
+        try await write(characteristicValue, response: true)
+    }
+}
