@@ -18,16 +18,10 @@ public struct ListKeysCharacteristic: TLVCharacteristic, Codable, Equatable {
     
     public static let properties: Bluetooth.BitMaskOptionSet<GATT.Characteristic.Property> = [.write]
     
-    /// Identifier of key making request.
-    public let id: UUID
-    
     /// HMAC of key and nonce, and HMAC message
     public let authentication: Authentication
     
-    public init(id: UUID,
-                authentication: Authentication) {
-        
-        self.id = id
+    public init(authentication: Authentication) {
         self.authentication = authentication
     }
 }

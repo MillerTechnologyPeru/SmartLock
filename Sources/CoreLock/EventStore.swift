@@ -8,7 +8,7 @@
 
 import Foundation
 
-public protocol LockEventStore: class {
+public protocol LockEventStore: AnyObject {
     
     func fetch(_ fetchRequest: LockEvent.FetchRequest) throws -> [LockEvent]
     
@@ -64,7 +64,7 @@ public extension LockEvent {
         public var start: Date?
         
         public var end: Date?
-                
+        
         public init(keys: [UUID]?,
                     start: Date? = nil,
                     end: Date? = nil) {

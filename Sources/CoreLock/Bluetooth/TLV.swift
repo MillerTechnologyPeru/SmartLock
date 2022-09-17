@@ -58,3 +58,22 @@ public extension TLVCharacteristic where Self: Codable {
         return try! Self.encoder.encode(self)
     }
 }
+
+public protocol TLVEncryptedCharacteristic: TLVCharacteristic {
+    
+    var encryptedData: EncryptedData { get }
+    
+    init(encryptedData: EncryptedData)
+}
+
+public extension TLVEncryptedCharacteristic where Self: Codable {
+    
+    init(from decoder: Decoder) throws {
+        let encryptedData = try EncryptedData(from: decoder)
+        self.init(encryptedData: encryptedData)
+    }
+    
+    func encode(to encoder: Encoder) throws {
+        try self.encryptedData.encode(to: encoder)
+    }
+}

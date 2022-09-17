@@ -29,10 +29,11 @@ internal func authenticationCode(for message: AuthenticationMessage, using key: 
 }
 
 /// Encrypt data
-internal func encrypt(_ data: Data, using key: KeyData) throws -> Data {
+internal func encrypt(_ data: Data, using key: KeyData, nonce: Nonce, authentication: AuthenticationMessage) throws -> Data {
+    let encoder = TLVEncoder.lock
+    let authenticatedData = try! encoder.encode(authentication)
     do {
-        let authenticationData = Data(SHA512.hash(data: data))
-        let sealed = try ChaChaPoly.seal(data, using: SymmetricKey(key), nonce: .init(), authenticating: authenticationData)
+        let sealed = try ChaChaPoly.seal(data, using: SymmetricKey(key), nonce: ChaChaPoly.Nonce(nonce), authenticating: authenticatedData)
         return sealed.combined
     } catch {
         throw AuthenticationError.encryptionError(error)
@@ -41,10 +42,11 @@ internal func encrypt(_ data: Data, using key: KeyData) throws -> Data {
 
 /// Decrypt data
 internal func decrypt(_ data: Data, using key: KeyData, authentication: AuthenticationMessage) throws -> Data {
+    let encoder = TLVEncoder.lock
+    let authenticatedData = try! encoder.encode(authentication)
     do {
-        let authenticationData = Data(SHA512.hash(data: data))
         let sealed = try ChaChaPoly.SealedBox(combined: data)
-        let decrypted = try ChaChaPoly.open(sealed, using: SymmetricKey(key), authenticating: authenticationData)
+        let decrypted = try ChaChaPoly.open(sealed, using: SymmetricKey(key), authenticating: authenticatedData)
         return decrypted
     } catch {
         throw AuthenticationError.decryptionError(error)
@@ -90,7 +92,7 @@ public extension Digest {
 
 public extension AuthenticationData {
     
-    static var length: Int { 32 }
+    static var length: Int { 64 }
 }
 
 internal extension SymmetricKey {

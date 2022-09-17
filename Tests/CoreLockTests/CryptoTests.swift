@@ -12,45 +12,45 @@ import XCTest
 
 final class CryptoTests: XCTestCase {
     
-    static let allTests = [
-        ("testHMAC", testHMAC),
-        ("testEncrypt", testEncrypt),
-        ("testFailEncrypt", testFailEncrypt),
-        ("testNonce", testNonce)
-        ]
-    
     func testHMAC() {
         
+        let id = UUID()
         let key = KeyData()
         let nonce = Nonce()
         let timestamp = Date()
-        let message = AuthenticationMessage(date: timestamp, nonce: nonce)
-        let hmac = HMAC(key: key, message: message)
-        XCTAssert(hmac.data == HMAC(key: key, message: message).data, "Values must be consistent")
+        let message = AuthenticationMessage(date: timestamp, nonce: nonce, digest: Digest(hash: Data()), id: id)
+        let authentication = Authentication(key: key, message: message)
+        XCTAssert(authentication.isAuthenticated(using: key), "Values must be consistent")
     }
     
-    func testEncrypt() {
+    func testEncrypt() throws {
         
+        let id = UUID()
         let key = KeyData()
+        let randomData = KeyData().data
+        let timestamp = Date()
         let nonce = Nonce()
-        let (encryptedData, iv) = try! encrypt(key: key.data, data: nonce.data)
-        let decryptedData = try! decrypt(key: key.data, iv: iv, data: encryptedData)
-        XCTAssert(nonce.data == decryptedData)
+        let message = AuthenticationMessage(date: timestamp, nonce: nonce, digest: Digest(hash: randomData), id: id)
+        let encryptedData = try encrypt(randomData, using: key, nonce: nonce, authentication: message)
+        let decryptedData = try decrypt(encryptedData, using: key, authentication: message)
+        XCTAssertEqual(randomData, decryptedData)
     }
     
-    func testFailEncrypt() {
+    func testFailEncrypt() throws {
         
         let key = KeyData()
         let key2 = KeyData()
-        XCTAssert(key != key2)
+        XCTAssertNotEqual(key, key2)
+        let id = UUID()
+        let randomData = KeyData().data
+        let timestamp = Date()
         let nonce = Nonce()
-        let (encryptedData, iv) = try! encrypt(key: key.data, data: nonce.data)
-        let decryptedData = try! decrypt(key: key2.data, iv: iv, data: encryptedData)
-        XCTAssert(nonce.data != decryptedData)
+        let message = AuthenticationMessage(date: timestamp, nonce: nonce, digest: Digest(hash: randomData), id: id)
+        let encryptedData = try encrypt(randomData, using: key, nonce: nonce, authentication: message)
+        XCTAssertThrowsError(try decrypt(encryptedData, using: key2, authentication: message))
     }
     
     func testNonce() {
-        
         (0 ... 100).forEach { _ in XCTAssertNotEqual(Nonce(), Nonce()) }
     }
 }

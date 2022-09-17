@@ -10,29 +10,43 @@ import Bluetooth
 import GATT
 
 /// Used to unlock door.
-public struct UnlockCharacteristic: TLVCharacteristic, Codable, Equatable {
+public struct UnlockCharacteristic: TLVEncryptedCharacteristic, Codable, Equatable {
     
-    public static let uuid = BluetoothUUID(rawValue: "265B3EC0-044D-11E6-90F2-09AB70D5A8C7")!
+    public static var uuid: BluetoothUUID { BluetoothUUID(rawValue: "265B3EC0-044D-11E6-90F2-09AB70D5A8C7")! }
     
-    public static let service: GATTProfileService.Type = LockService.self
+    public static var service: GATTProfileService.Type { LockService.self }
     
-    public static let properties: Bluetooth.BitMaskOptionSet<GATT.Characteristic.Property> = [.write]
+    public static var properties: Bluetooth.BitMaskOptionSet<GATT.Characteristic.Property> { [.write] }
     
-    /// Identifier of key making request.
-    public let id: UUID
+    public let encryptedData: EncryptedData
+    
+    public init(encryptedData: EncryptedData) {
+        self.encryptedData = encryptedData
+    }
+    
+    public init(request: UnlockRequest, using key: KeyData, id: UUID) throws {
+        
+        let requestData = try type(of: self).encoder.encode(request)
+        self.encryptedData = try EncryptedData(encrypt: requestData, using: key, id: id)
+    }
+    
+    public func decrypt(with sharedSecret: KeyData) throws -> UnlockRequest {
+        
+        let data = try encryptedData.decrypt(using: sharedSecret)
+        guard let value = try? type(of: self).decoder.decode(UnlockRequest.self, from: data)
+            else { throw GATTError.invalidData(data) }
+        return value
+    }
+}
+
+// MARK: - Supporting Types
+
+public struct UnlockRequest: Equatable, Codable {
     
     /// Unlock action.
     public let action: UnlockAction
     
-    /// HMAC of key and nonce, and HMAC message
-    public let authentication: Authentication
-    
-    public init(id: UUID,
-                action: UnlockAction = .default,
-                authentication: Authentication) {
-        
-        self.id = id
+    public init(action: UnlockAction = .default) {
         self.action = action
-        self.authentication = authentication
     }
 }

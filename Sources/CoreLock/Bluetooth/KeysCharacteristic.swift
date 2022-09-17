@@ -40,10 +40,10 @@ public extension KeysCharacteristic {
         return value
     }
     
-    static func from(chunks: [Chunk], secret: KeyData) throws -> KeyListNotification {
+    static func from(chunks: [Chunk], using key: KeyData) throws -> KeyListNotification {
         
         let encryptedData = try from(chunks: chunks)
-        let data = try encryptedData.decrypt(with: secret)
+        let data = try encryptedData.decrypt(using: key)
         guard let value = try? decoder.decode(KeyListNotification.self, from: data)
             else { throw GATTError.invalidData(data) }
         return value
@@ -56,12 +56,15 @@ public extension KeysCharacteristic {
         return chunks.map { KeysCharacteristic(chunk: $0) }
     }
     
-    static func from(_ value: KeyListNotification,
-                     sharedSecret: KeyData,
-                     maximumUpdateValueLength: Int) throws -> [KeysCharacteristic] {
+    static func from(
+        _ value: KeyListNotification,
+        id: UUID,
+        key: KeyData,
+        maximumUpdateValueLength: Int
+    ) throws -> [KeysCharacteristic] {
         
         let data = try encoder.encode(value)
-        let encryptedData = try EncryptedData(encrypt: data, with: sharedSecret)
+        let encryptedData = try EncryptedData(encrypt: data, using: key, id: id)
         return try from(encryptedData, maximumUpdateValueLength: maximumUpdateValueLength)
     }
 }

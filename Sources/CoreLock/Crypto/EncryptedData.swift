@@ -18,20 +18,20 @@ public struct EncryptedData: Equatable, Codable {
 
 public extension EncryptedData {
     
-    init(encrypt data: Data, with key: KeyData) throws {
+    init(encrypt data: Data, using key: KeyData, id: UUID) throws {
         let digest = Digest(hash: data)
-        let message = AuthenticationMessage(digest: digest)
-        let encryptedData = try encrypt(data, using: key, nonce: message.nonce)
+        let message = AuthenticationMessage(digest: digest, id: id)
+        let encryptedData = try encrypt(data, using: key, nonce: message.nonce, authentication: message)
         let authentication = Authentication(key: key, message: message)
         self.authentication = authentication
         self.encryptedData = encryptedData
     }
     
-    func decrypt(with key: KeyData) throws -> Data {
+    func decrypt(using key: KeyData) throws -> Data {
         // validate HMAC
         guard authentication.isAuthenticated(using: key)
             else { throw AuthenticationError.invalidAuthentication }
         // attempt to decrypt
-        return try CoreLock.decrypt(encryptedData, using: key)
+        return try CoreLock.decrypt(encryptedData, using: key, authentication: authentication.message)
     }
 }

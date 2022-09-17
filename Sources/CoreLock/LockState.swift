@@ -5,8 +5,6 @@
 //  Created by Alsey Coleman Miller on 8/11/18.
 //
 
-import Bluetooth
-
 public enum UnlockState: UInt8, BitMaskOption {
     
     /// Unlocked.

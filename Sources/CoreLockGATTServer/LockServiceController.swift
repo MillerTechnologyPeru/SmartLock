@@ -297,7 +297,7 @@ public final class LockGATTServiceController <Peripheral: PeripheralProtocol> : 
                 else { print("Authentication expired \(timestamp) < \(now)"); return }
             
             // decrypt request
-            let setupRequest = try setup.decrypt(with: sharedSecret)
+            let setupRequest = try setup.decrypt(using: sharedSecret)
             
             // create owner key
             let ownerKey = Key(setup: setupRequest)
@@ -386,7 +386,7 @@ public final class LockGATTServiceController <Peripheral: PeripheralProtocol> : 
             }
             
             // decrypt
-            let request = try characteristic.decrypt(with: secret)
+            let request = try characteristic.decrypt(using: secret)
             let newKey = NewKey(request: request)
             
             try self.authorization.add(newKey, secret: request.secret)
@@ -423,7 +423,7 @@ public final class LockGATTServiceController <Peripheral: PeripheralProtocol> : 
                 else { print("Authentication expired \(timestamp) < \(now)"); return }
             
             // decrypt
-            let request = try characteristic.decrypt(with: secret)
+            let request = try characteristic.decrypt(using: secret)
             let keySecret = request.secret
             let key = Key(
                 identifier: newKey.identifier,

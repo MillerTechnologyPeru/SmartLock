@@ -8,7 +8,7 @@
 import Foundation
 
 /// Lock Configuration Storage
-public protocol LockConfigurationStore: class {
+public protocol LockConfigurationStore: AnyObject {
     
     var configuration: LockConfiguration { get }
     

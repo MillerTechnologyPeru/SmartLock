@@ -59,7 +59,7 @@ public extension CreateNewKeyNetServiceRequest {
                         with key: KeyData,
                         decoder: JSONDecoder = JSONDecoder()) throws -> CreateNewKeyRequest {
         
-        let jsonData = try encryptedData.decrypt(with: key)
+        let jsonData = try encryptedData.decrypt(using: key)
         return try decoder.decode(CreateNewKeyRequest.self, from: jsonData)
     }
 }

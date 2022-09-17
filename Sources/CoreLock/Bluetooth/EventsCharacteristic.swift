@@ -40,10 +40,10 @@ public extension EventsCharacteristic {
         return value
     }
     
-    static func from(chunks: [Chunk], secret: KeyData) throws -> EventListNotification {
+    static func from(chunks: [Chunk], using key: KeyData) throws -> EventListNotification {
         
         let encryptedData = try from(chunks: chunks)
-        let data = try encryptedData.decrypt(with: secret)
+        let data = try encryptedData.decrypt(using: key)
         guard let value = try? decoder.decode(EventListNotification.self, from: data)
             else { throw GATTError.invalidData(data) }
         return value
@@ -56,12 +56,15 @@ public extension EventsCharacteristic {
         return chunks.map { .init(chunk: $0) }
     }
     
-    static func from(_ value: EventListNotification,
-                     sharedSecret: KeyData,
-                     maximumUpdateValueLength: Int) throws -> [EventsCharacteristic] {
+    static func from(
+        _ value: EventListNotification,
+        id: UUID,
+        key: KeyData,
+        maximumUpdateValueLength: Int
+    ) throws -> [EventsCharacteristic] {
         
         let data = try encoder.encode(value)
-        let encryptedData = try EncryptedData(encrypt: data, with: sharedSecret)
+        let encryptedData = try EncryptedData(encrypt: data, using: key, id: id)
         return try from(encryptedData, maximumUpdateValueLength: maximumUpdateValueLength)
     }
 }

@@ -143,7 +143,7 @@ public extension LockNetService.Client {
             let response = try? jsonDecoder.decode(EventsResponse.self, from: jsonData)
             else { throw LockNetService.Error.invalidResponse }
         
-        let keys = try response.decrypt(with: key.secret, decoder: jsonDecoder)
+        let keys = try response.decrypt(using: key.secret, decoder: jsonDecoder)
         return keys
     }
 }

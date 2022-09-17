@@ -10,7 +10,7 @@ import Bluetooth
 import GATT
 
 /// Used to create a new key.
-public struct CreateNewKeyCharacteristic: TLVCharacteristic, Codable, Equatable {
+public struct CreateNewKeyCharacteristic: TLVEncryptedCharacteristic, Codable, Equatable {
     
     public static let uuid = BluetoothUUID(rawValue: "1C9AC449-39DC-4E4D-AE7C-FAF51D35CD7D")!
     
@@ -18,22 +18,22 @@ public struct CreateNewKeyCharacteristic: TLVCharacteristic, Codable, Equatable 
     
     public static let properties: Bluetooth.BitMaskOptionSet<GATT.Characteristic.Property> = [.write]
     
-    /// Identifier of key making request.
-    public let id: UUID
-    
     /// Encrypted payload.
     public let encryptedData: EncryptedData
     
-    public init(request: CreateNewKeyRequest, for key: UUID, sharedSecret: KeyData) throws {
+    public init(encryptedData: EncryptedData) {
+        self.encryptedData = encryptedData
+    }
+    
+    public init(request: CreateNewKeyRequest, using key: KeyData, id: UUID) throws {
         
         let requestData = try type(of: self).encoder.encode(request)
-        self.encryptedData = try EncryptedData(encrypt: requestData, with: sharedSecret)
-        self.id = key
+        self.encryptedData = try EncryptedData(encrypt: requestData, using: key, id: id)
     }
     
     public func decrypt(with sharedSecret: KeyData) throws -> CreateNewKeyRequest {
         
-        let data = try encryptedData.decrypt(with: sharedSecret)
+        let data = try encryptedData.decrypt(using: sharedSecret)
         guard let value = try? type(of: self).decoder.decode(CreateNewKeyRequest.self, from: data)
             else { throw GATTError.invalidData(data) }
         return value

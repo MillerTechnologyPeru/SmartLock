@@ -10,7 +10,7 @@ import Bluetooth
 import GATT
 
 /// Remove the specified key. 
-public struct RemoveKeyCharacteristic: TLVCharacteristic, Codable, Equatable {
+public struct RemoveKeyCharacteristic: TLVEncryptedCharacteristic, Codable, Equatable {
     
     public static let uuid = BluetoothUUID(rawValue: "2DB6C1AF-8FFD-4F7F-9B5A-F0BC9662F9BB")!
     
@@ -18,26 +18,41 @@ public struct RemoveKeyCharacteristic: TLVCharacteristic, Codable, Equatable {
     
     public static let properties: Bluetooth.BitMaskOptionSet<GATT.Characteristic.Property> = [.write]
     
-    /// Identifier of key making request.
-    public let id: UUID
+    public let encryptedData: EncryptedData
+    
+    public init(encryptedData: EncryptedData) {
+        self.encryptedData = encryptedData
+    }
+    
+    public init(request: RemoveKeyRequest, using key: KeyData, id: UUID) throws {
+        
+        let requestData = try type(of: self).encoder.encode(request)
+        self.encryptedData = try EncryptedData(encrypt: requestData, using: key, id: id)
+    }
+    
+    public func decrypt(using key: KeyData) throws -> RemoveKeyRequest {
+        
+        let data = try encryptedData.decrypt(using: key)
+        guard let value = try? type(of: self).decoder.decode(RemoveKeyRequest.self, from: data)
+            else { throw GATTError.invalidData(data) }
+        return value
+    }
+}
+
+// MARK: - Supporting Types
+
+public struct RemoveKeyRequest: Equatable, Codable {
     
     /// Key to remove.
-    public let key: UUID
+    public let id: UUID
     
     /// Type of key
     public let type: KeyType
     
-    /// HMAC of key and nonce, and HMAC message
-    public let authentication: Authentication
-    
     public init(id: UUID,
-                key: UUID,
-                type: KeyType,
-                authentication: Authentication) {
+                type: KeyType) {
         
         self.id = id
-        self.key = key
         self.type = type
-        self.authentication = authentication
     }
 }

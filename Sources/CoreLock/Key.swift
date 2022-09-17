@@ -23,11 +23,12 @@ public struct Key: Identifiable, Codable, Equatable, Hashable {
     /// Key's permissions. 
     public let permission: Permission
     
-    public init(id: UUID = UUID(),
-                name: String = "",
-                created: Date = Date(),
-                permission: Permission) {
-        
+    public init(
+        id: UUID = UUID(),
+        name: String = "",
+        created: Date = Date(),
+        permission: Permission
+    ) {
         self.id = id
         self.name = name
         self.created = created

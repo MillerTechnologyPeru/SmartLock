@@ -17,7 +17,7 @@ public struct Authentication: Equatable, Codable {
                 message: AuthenticationMessage) {
         
         self.message = message
-        self.signedData = AuthenticationData(key: key, message: message)
+        self.signedData = AuthenticationData(message, using: key)
     }
     
     public func isAuthenticated(using key: KeyData) -> Bool {
@@ -31,27 +31,31 @@ public struct AuthenticationMessage: Equatable, Codable {
     public let date: Date
     
     public let nonce: Nonce
-    
+        
     public let digest: Digest
+    
+    public let id: UUID
     
     public init(
         date: Date = Date(),
         nonce: Nonce = Nonce(),
-        digest: Digest
+        digest: Digest,
+        id: UUID
     ) {
         self.date = date
         self.nonce = nonce
         self.digest = digest
+        self.id = id
     }
 }
 
 public extension AuthenticationData {
     
-    init(key: KeyData, message: AuthenticationMessage) {
+    init(_ message: AuthenticationMessage, using key: KeyData) {
         self = authenticationCode(for: message, using: key)
     }
     
     func isAuthenticated(_ message: AuthenticationMessage, using key: KeyData) -> Bool {
-        return data == AuthenticationData(key: key, message: message).data
+        return data == AuthenticationData(message, using: key).data
     }
 }

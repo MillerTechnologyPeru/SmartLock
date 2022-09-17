@@ -9,9 +9,14 @@
 import Foundation
 
 public extension UUID {
-    
+        
     /// iBeacon Lock Notification
     static var lockNotificationBeacon: UUID {
         return UUID(uuidString: "F6AC86F3-A97D-4FA7-8668-C8ECFD1E538D")!
     }
+}
+
+internal extension UUID {
+    
+    static var zero: UUID { UUID(uuidString: "00000000-0000-0000-0000-000000000000")! }
 }

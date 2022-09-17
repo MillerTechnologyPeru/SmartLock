@@ -41,7 +41,7 @@ public extension EventsResponse {
     func decrypt(with key: KeyData,
                  decoder: JSONDecoder = JSONDecoder()) throws -> EventsList {
         
-        let data = try encryptedData.decrypt(with: key)
+        let data = try encryptedData.decrypt(using: key)
         return try decoder.decode(EventsList.self, from: data)
     }
 }

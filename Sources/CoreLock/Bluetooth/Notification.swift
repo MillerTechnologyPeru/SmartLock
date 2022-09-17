@@ -19,11 +19,11 @@ public protocol GATTEncryptedNotification: GATTProfileCharacteristic {
     
     static func from(chunks: [Chunk]) throws -> EncryptedData
     
-    static func from(chunks: [Chunk], secret: KeyData) throws -> Notification
+    static func from(chunks: [Chunk], using key: KeyData) throws -> Notification
     
     static func from(_ value: EncryptedData, maximumUpdateValueLength: Int) throws -> [Self]
     
-    static func from(_ value: Notification, sharedSecret: KeyData, maximumUpdateValueLength: Int) throws -> [Self]
+    static func from(_ value: Notification, id: UUID, key: KeyData, maximumUpdateValueLength: Int) throws -> [Self]
 }
 
 public protocol GATTEncryptedNotificationValue {
