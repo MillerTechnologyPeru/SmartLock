@@ -50,3 +50,35 @@ public struct UnlockRequest: Equatable, Codable {
         self.action = action
     }
 }
+
+// MARK: - Central
+
+public extension CentralManager {
+    
+    /// Unlock action.
+    func unlock(
+        _ action: UnlockAction = .default,
+        using key: KeyCredentials,
+        for peripheral: Peripheral
+    ) async throws {
+        try await connection(for: peripheral) {
+            try await $0.unlock(action, using: key)
+        }
+    }
+}
+
+public extension GATTConnection {
+    
+    /// Unlock action.
+    func unlock(
+        _ action: UnlockAction = .default,
+        using key: KeyCredentials
+    ) async throws {
+        let characteristicValue = try UnlockCharacteristic(
+            request: UnlockRequest(action: action),
+            using: key.secret,
+            id: key.id
+        )
+        try await write(characteristicValue, response: true)
+    }
+}
