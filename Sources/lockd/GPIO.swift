@@ -11,7 +11,7 @@ import CoreLock
 import CoreLockGATTServer
 import SwiftyGPIO
 
-public protocol LockGPIOController: class, UnlockDelegate {
+public protocol LockGPIOController: AnyObject, UnlockDelegate {
     
     var relay: GPIOState { get set }
     

@@ -71,15 +71,15 @@ struct LockDaemon {
             try await Task.sleep(nanoseconds: 5 * 1_000_000_000)
             hostController = await HostController.default
         }
-
-        let address = try await hostController!.readDeviceAddress()
+        let linuxHostController = self.hostController as! BluetoothLinux.HostController
+        let address = try await linuxHostController.readDeviceAddress()
         print("Bluetooth Controller: \(address)")
         let serverOptions = GATTPeripheralOptions(
             maximumTransmissionUnit: .max,
             maximumPreparedWrites: 1000
         )
         let peripheral = LinuxPeripheral(
-            hostController: hostController,
+            hostController: linuxHostController,
             options: serverOptions,
             socket: BluetoothLinux.L2CAPSocket.self
         )

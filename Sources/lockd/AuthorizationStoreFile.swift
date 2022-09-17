@@ -55,7 +55,7 @@ public final class AuthorizationStoreFile: LockAuthorizationStore {
     
     public func key(for id: UUID) throws -> (key: Key, secret: KeyData)? {
         
-        guard let keyEntry = database.keys.first(where: { $0.key.identifier == identifier })
+        guard let keyEntry = database.keys.first(where: { $0.key.id == id })
             else { return nil }
         
         return (keyEntry.key, keyEntry.secret)
@@ -68,7 +68,7 @@ public final class AuthorizationStoreFile: LockAuthorizationStore {
     
     public func newKey(for id: UUID) throws -> (newKey: NewKey, secret: KeyData)? {
 
-        guard let keyEntry = database.newKeys.first(where: { $0.newKey.identifier == identifier })
+        guard let keyEntry = database.newKeys.first(where: { $0.newKey.id == id })
             else { return nil }
         
         return (keyEntry.newKey, keyEntry.secret)
@@ -76,12 +76,12 @@ public final class AuthorizationStoreFile: LockAuthorizationStore {
     
     public func removeKey(_ id: UUID) throws {
         
-        try write { $0.keys.removeAll(where: { $0.key.identifier == identifier }) }
+        try write { $0.keys.removeAll(where: { $0.key.id == id }) }
     }
     
     public func removeNewKey(_ id: UUID) throws {
         
-        try write { $0.newKeys.removeAll(where: { $0.newKey.identifier == identifier }) }
+        try write { $0.newKeys.removeAll(where: { $0.newKey.id == id }) }
     }
     
     public func removeAll() throws {
