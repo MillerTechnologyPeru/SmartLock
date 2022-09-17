@@ -12,10 +12,6 @@ import XCTest
 
 final class URLTests: XCTestCase {
     
-    static let allTests = [
-        ("testSetup", testSetup)
-    ]
-    
     func testSetup() {
         
         let url = URL(string: "lock:/setup/25261345-ADC6-4802-882B-613AD8E86BE1/AcDIoBrCWorulJh4WBRr2z0KTWxzXt9Rz37bOqHYChA=")!
