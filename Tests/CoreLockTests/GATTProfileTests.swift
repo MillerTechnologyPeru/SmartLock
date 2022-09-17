@@ -26,23 +26,31 @@ final class GATTProfileTests: XCTestCase {
         XCTAssertEqual(information, decoded)
     }
     
-    func testUnlock() throws {
+    func testUnlock() async throws {
         
-        let key = (id: UUID(), secret: KeyData())
-        let request = UnlockRequest(action: .default)
-        let characteristic = try UnlockCharacteristic(request: request, using: key.secret, id: key.id)
-        guard let decodedCharacteristic = UnlockCharacteristic(data: characteristic.data)
-            else { XCTFail("Could not parse bytes"); return }
-        let decodedRequest = try decodedCharacteristic.decrypt(with: key.secret)
-        XCTAssertEqual(decodedRequest, request)
-        XCTAssertEqual(characteristic, decodedCharacteristic)
-        XCTAssertEqual(characteristic.encryptedData, decodedCharacteristic.encryptedData)
-        XCTAssertEqual(characteristic.encryptedData.authentication, decodedCharacteristic.encryptedData.authentication)
-        XCTAssertEqual(characteristic.encryptedData.authentication.message, decodedCharacteristic.encryptedData.authentication.message)
-        XCTAssertEqual(characteristic.encryptedData.authentication.signedData, decodedCharacteristic.encryptedData.authentication.signedData)
-        XCTAssert(decodedCharacteristic.encryptedData.authentication.isAuthenticated(using: key.secret))
-        XCTAssert(characteristic.encryptedData.authentication.isAuthenticated(using: key.secret))
-        //XCTAssertFalse(Authentication(key: key.secret, message: characteristic.encryptedData.authentication.message).isAuthenticated(using: key.secret))
+        for _ in 0 ..< 20 {
+            
+            let key = (id: UUID(), secret: KeyData())
+            let request = UnlockRequest(action: .default)
+            let characteristic = try UnlockCharacteristic(request: request, using: key.secret, id: key.id)
+            guard let decodedCharacteristic = UnlockCharacteristic(data: characteristic.data)
+                else { XCTFail("Could not parse bytes"); return }
+            let decodedRequest = try decodedCharacteristic.decrypt(with: key.secret)
+            XCTAssertEqual(decodedRequest, request)
+            XCTAssertEqual(characteristic, decodedCharacteristic)
+            XCTAssertEqual(characteristic.encryptedData.encryptedData, decodedCharacteristic.encryptedData.encryptedData)
+            XCTAssertEqual(characteristic.encryptedData.authentication, decodedCharacteristic.encryptedData.authentication)
+            XCTAssertEqual(characteristic.encryptedData.authentication.message, decodedCharacteristic.encryptedData.authentication.message)
+            XCTAssertEqual(characteristic.encryptedData.authentication.message.nonce, decodedCharacteristic.encryptedData.authentication.message.nonce)
+            XCTAssertEqual(characteristic.encryptedData.authentication.message.date, decodedCharacteristic.encryptedData.authentication.message.date)
+            XCTAssertEqual(characteristic.encryptedData.authentication.message.id, decodedCharacteristic.encryptedData.authentication.message.id)
+            XCTAssertEqual(characteristic.encryptedData.authentication.signedData, decodedCharacteristic.encryptedData.authentication.signedData)
+            XCTAssert(decodedCharacteristic.encryptedData.authentication.isAuthenticated(using: key.secret))
+            XCTAssert(characteristic.encryptedData.authentication.isAuthenticated(using: key.secret))
+            XCTAssert(Authentication(key: key.secret, message: characteristic.encryptedData.authentication.message).isAuthenticated(using: key.secret))
+            
+            try await Task.sleep(nanoseconds: 100_000_000)
+        }
     }
     
     func testSetup() throws {

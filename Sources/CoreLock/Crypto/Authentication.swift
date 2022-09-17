@@ -42,7 +42,7 @@ public struct AuthenticationMessage: Equatable, Codable {
         digest: Digest,
         id: UUID
     ) {
-        self.date = date
+        self.date = date.removingMiliseconds
         self.nonce = nonce
         self.digest = digest
         self.id = id

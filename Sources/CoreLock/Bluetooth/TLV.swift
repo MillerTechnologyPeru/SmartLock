@@ -14,6 +14,7 @@ internal extension TLVEncoder {
         var encoder = TLVEncoder()
         encoder.numericFormatting = .littleEndian
         encoder.uuidFormatting = .bytes
+        encoder.dateFormatting = .secondsSince1970
         return encoder
     }
 }
@@ -24,6 +25,7 @@ internal extension TLVDecoder {
         var decoder = TLVDecoder()
         decoder.numericFormatting = .littleEndian
         decoder.uuidFormatting = .bytes
+        decoder.dateFormatting = .secondsSince1970
         return decoder
     }
 }
@@ -42,6 +44,7 @@ public protocol TLVCharacteristic: GATTProfileCharacteristic {
 public extension TLVCharacteristic {
     
     static var encoder: TLVEncoder { return .lock }
+    
     static var decoder: TLVDecoder { return .lock }
 }
 

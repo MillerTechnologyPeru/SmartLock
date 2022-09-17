@@ -8,7 +8,7 @@
 import Foundation
 
 /// Lock Authorization Store
-public protocol LockAuthorizationStore: class {
+public protocol LockAuthorizationStore: AnyObject {
     
     var isEmpty: Bool { get }
     
