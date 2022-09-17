@@ -8,59 +8,195 @@
 import Foundation
 import Bluetooth
 import GATT
-/*
-internal extension CentralProtocol {
+
+public extension CentralManager {
     
-    /// Connects to the device, fetches the data, performs the action, and disconnects.
-    func device <T> (for peripheral: Peripheral,
-                     timeout: Timeout,
-                     _ action: (GATTConnectionCache<Peripheral>) throws -> (T)) throws -> T {
-        
+    func connection<T>(
+        for peripheral: Peripheral,
+        _ connection: (GATTConnection<Self>
+        ) async throws -> (T)) async throws -> T {
+                
         // connect first
-        try connect(to: peripheral, timeout: try timeout.timeRemaining())
+        try await self.connect(to: peripheral)
         
-        // disconnect
-        defer { disconnect(peripheral: peripheral) }
-        
-        var cache = GATTConnectionCache(peripheral: peripheral)
-        
-        let foundServices = try discoverServices([], for: peripheral, timeout: try timeout.timeRemaining())
-        
-        for service in foundServices {
+        do {
+            // cache MTU
+            let maximumTransmissionUnit = try await self.maximumTransmissionUnit(for: peripheral)
             
-            // validate characteristic exists
-            let foundCharacteristics = try discoverCharacteristics([], for: service, timeout: try timeout.timeRemaining())
+            // get characteristics by UUID
+            let characteristics = try await self.characteristics(for: peripheral)
             
-            cache.characteristics += foundCharacteristics
+            let cache = GATTConnection(
+                central: self,
+                maximumTransmissionUnit: maximumTransmissionUnit,
+                characteristics: characteristics
+            )
+            
+            // perform action
+            let value = try await connection(cache)
+            // disconnect
+            await self.disconnect(peripheral)
+            return value
+        }
+        catch {
+            await self.disconnect(peripheral)
+            throw error
+        }
+    }
+}
+
+public struct GATTConnection <Central: CentralManager> {
+    
+    internal let central: Central
+        
+    public let maximumTransmissionUnit: GATT.MaximumTransmissionUnit
+    
+    internal let characteristics: [BluetoothUUID: [Characteristic<Central.Peripheral, Central.AttributeID>]]
+}
+
+public extension GATTConnection {
+    
+    subscript (type: GATTProfileCharacteristic.Type) -> Characteristic<Central.Peripheral, Central.AttributeID>? {
+        return try? characteristic(for: type)
+    }
+    
+    func characteristic(for type: GATTProfileCharacteristic.Type) throws -> Characteristic<Central.Peripheral, Central.AttributeID> {
+        guard let cache = self.characteristics[type.service.uuid]
+            else { throw GATTError.serviceNotFound(type.service.uuid) }
+        guard let foundCharacteristic = cache.first(where: { $0.uuid == type.uuid })
+            else { throw GATTError.characteristicNotFound(type.uuid) }
+        return foundCharacteristic
+    }
+    
+    func read<T: GATTProfileCharacteristic>(_ type: T.Type) async throws -> T {
+        let characteristics = self.characteristics[T.service.uuid] ?? []
+        return try await central.read(type, for: characteristics)
+    }
+    
+    func write<T: GATTProfileCharacteristic>(_ value: T, response: Bool = true) async throws {
+        let characteristics = self.characteristics[T.service.uuid] ?? []
+        try await central.write(value, for: characteristics, response: response)
+    }
+    
+    func notify<T: GATTProfileCharacteristic>(
+        _ type: T.Type
+    ) async throws -> AsyncIndefiniteStream<T> {
+        let characteristics = self.characteristics[T.service.uuid] ?? []
+        return try await central.notify(type, for: characteristics)
+    }
+}
+
+internal extension CentralManager {
+    
+    /// Connects to the device, fetches the data, and performs the action, and disconnects.
+    func connection<T>(
+        for peripheral: Peripheral,
+        characteristics: [GATTProfileCharacteristic.Type],
+        _ action: ([Characteristic<Peripheral, AttributeID>]
+        ) throws -> (T)) async throws -> T {
+                
+        // connect first
+        try await self.connect(to: peripheral)
+        
+        do {
+            // get characteristics by UUID
+            let foundCharacteristics = try await self.characteristics(
+                characteristics,
+                for: peripheral
+            )
+            
+            // perform action
+            let value = try action(foundCharacteristics)
+            // disconnect
+            await self.disconnect(peripheral)
+            return value
+        }
+        catch {
+            await self.disconnect(peripheral)
+            throw error
+        }
+    }
+    
+    /// Verify a peripheral declares the GATT profile.
+    func characteristics(
+        _ characteristics: [GATTProfileCharacteristic.Type],
+        for peripheral: Peripheral
+    ) async throws -> [Characteristic<Peripheral, AttributeID>] {
+                
+        // group characteristics by service
+        var characteristicsByService = [BluetoothUUID: [BluetoothUUID]]()
+        characteristics.forEach {
+            characteristicsByService[$0.service.uuid] = (characteristicsByService[$0.service.uuid] ?? []) + [$0.uuid]
         }
         
-        // perform action
-        return try action(cache)
+        var results = [Characteristic<Peripheral, AttributeID>]()
+        
+        // validate required characteristics
+        let foundServices = try await discoverServices([], for: peripheral)
+        
+        for (serviceUUID, characteristics) in characteristicsByService {
+            
+            // validate service exists
+            guard let service = foundServices.first(where: { $0.uuid == serviceUUID })
+                else { throw GATTError.serviceNotFound(serviceUUID) }
+            
+            // validate characteristic exists
+            let foundCharacteristics = try await discoverCharacteristics([], for: service)
+            
+            for characteristicUUID in characteristics {
+                
+                guard foundCharacteristics.contains(where: { $0.uuid == characteristicUUID })
+                    else { throw GATTError.characteristicNotFound(characteristicUUID) }
+            }
+            
+            results += foundCharacteristics
+        }
+        
+        return results
     }
     
-    func write <T: GATTCharacteristic> (_ characteristic: T,
-                                               for cache: GATTConnectionCache<Peripheral>,
-                                               withResponse response: Bool = true,
-                                               timeout: Timeout) throws {
+    /// Fetch all characteristics for all services.
+    func characteristics(
+        for peripheral: Peripheral
+    ) async throws -> [BluetoothUUID: [Characteristic<Peripheral, AttributeID>]] {
         
-        guard let foundCharacteristic = cache.characteristics.first(where: { $0.uuid == T.uuid })
-            else { throw CentralError.invalidAttribute(T.uuid) }
-        
-        try self.writeValue(characteristic.data,
-                               for: foundCharacteristic,
-                               withResponse: response,
-                               timeout: try timeout.timeRemaining())
+        var characteristicsByService = [BluetoothUUID: [Characteristic<Peripheral, AttributeID>]]()
+        let foundServices = try await discoverServices([], for: peripheral)
+        for service in foundServices {
+            let foundCharacteristics = try await discoverCharacteristics([], for: service)
+            for characteristic in foundCharacteristics {
+                characteristicsByService[service.uuid, default: []]
+                    .append(characteristic)
+            }
+        }
+        return characteristicsByService
     }
     
-    func read <T: GATTCharacteristic> (_ characteristic: T.Type,
-                                        for cache: GATTConnectionCache<Peripheral>,
-                                        timeout: Timeout) throws -> T {
+    func write <T: GATTProfileCharacteristic> (
+        _ characteristic: T,
+        for cache: [Characteristic<Peripheral, AttributeID>],
+        response: Bool
+    ) async throws {
         
-        guard let foundCharacteristic = cache.characteristics.first(where: { $0.uuid == T.uuid })
+        guard let foundCharacteristic = cache.first(where: { $0.uuid == T.uuid })
             else { throw CentralError.invalidAttribute(T.uuid) }
         
-        let data = try self.readValue(for: foundCharacteristic,
-                                         timeout: try timeout.timeRemaining())
+        try await self.writeValue(
+            characteristic.data,
+            for: foundCharacteristic,
+            withResponse: response
+        )
+    }
+    
+    func read<T: GATTProfileCharacteristic>(
+        _ characteristic: T.Type,
+        for cache: [Characteristic<Peripheral, AttributeID>]
+    ) async throws -> T {
+        
+        guard let foundCharacteristic = cache.first(where: { $0.uuid == T.uuid })
+            else { throw CentralError.invalidAttribute(T.uuid) }
+        
+        let data = try await self.readValue(for: foundCharacteristic)
         
         guard let value = T.init(data: data)
             else { throw GATTError.invalidData(data) }
@@ -68,97 +204,23 @@ internal extension CentralProtocol {
         return value
     }
     
-    func notify <T: GATTCharacteristic> (_ characteristic: T.Type,
-                                        for cache: GATTConnectionCache<Peripheral>,
-                                        timeout: Timeout,
-                                        notification: ((ErrorValue<T>) -> ())?) throws {
+    func notify<T: GATTProfileCharacteristic>(
+        _ characteristic: T.Type,
+        for cache: [Characteristic<Peripheral, AttributeID>]
+    ) async throws -> AsyncIndefiniteStream<T> {
         
-        guard let foundCharacteristic = cache.characteristics.first(where: { $0.uuid == T.uuid })
+        guard let foundCharacteristic = cache.first(where: { $0.uuid == T.uuid })
             else { throw CentralError.invalidAttribute(T.uuid) }
         
-        let dataNotification: ((Data) -> ())?
+        let stream = try await self.notify(for: foundCharacteristic)
         
-        if let notification = notification {
-            
-            dataNotification = { (data) in
-                
-                let response: ErrorValue<T>
-                
-                if let value = T.init(data: data) {
-                    
-                    response = .value(value)
-                    
-                } else {
-                    
-                    response = .error(LockGATTError.invalidData(data))
+        return AsyncIndefiniteStream { continuation in
+            for try await data in stream {
+                guard let value = T.init(data: data) else {
+                    throw GATTError.invalidData(data)
                 }
-                
-                notification(response)
+                continuation(value)
             }
-            
-        } else {
-            
-            dataNotification = nil
-        }
-        
-        try notify(dataNotification, for: foundCharacteristic, timeout: try timeout.timeRemaining())
-    }
-}
-
-// MARK: - Supporting Types
-
-/// Basic wrapper for error / value pairs.
-internal enum ErrorValue <T> {
-    
-    case error(Error)
-    case value(T)
-}
-
-internal struct GATTConnectionCache <Peripheral: Peer> {
-    
-    let peripheral: Peripheral
-    
-    fileprivate(set) var characteristics: [Characteristic<Peripheral>]
-    
-    fileprivate init(peripheral: Peripheral) {
-        
-        self.peripheral = peripheral
-        self.characteristics = []
-    }
-}
-
-// GATT timeout
-internal struct Timeout {
-    
-    let start: Date
-    
-    let timeout: TimeInterval
-    
-    var end: Date {
-        
-        return start + timeout
-    }
-    
-    init(start: Date = Date(),
-         timeout: TimeInterval) {
-        
-        self.start = start
-        self.timeout = timeout
-    }
-    
-    @discardableResult
-    func timeRemaining(for date: Date = Date()) throws -> TimeInterval {
-        
-        let remaining = end.timeIntervalSince(date)
-        
-        if remaining > 0 {
-            
-            return remaining
-            
-        } else {
-            
-            throw CentralError.timeout
         }
     }
 }
-*/
