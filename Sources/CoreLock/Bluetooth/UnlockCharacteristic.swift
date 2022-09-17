@@ -7,6 +7,7 @@
 
 import Foundation
 import Bluetooth
+import GATT
 
 /// Used to unlock door.
 public struct UnlockCharacteristic: TLVCharacteristic, Codable, Equatable {
@@ -18,7 +19,7 @@ public struct UnlockCharacteristic: TLVCharacteristic, Codable, Equatable {
     public static let properties: Bluetooth.BitMaskOptionSet<GATT.Characteristic.Property> = [.write]
     
     /// Identifier of key making request.
-    public let identifier: UUID
+    public let id: UUID
     
     /// Unlock action.
     public let action: UnlockAction
@@ -26,11 +27,11 @@ public struct UnlockCharacteristic: TLVCharacteristic, Codable, Equatable {
     /// HMAC of key and nonce, and HMAC message
     public let authentication: Authentication
     
-    public init(identifier: UUID,
+    public init(id: UUID,
                 action: UnlockAction = .default,
                 authentication: Authentication) {
         
-        self.identifier = identifier
+        self.id = id
         self.action = action
         self.authentication = authentication
     }

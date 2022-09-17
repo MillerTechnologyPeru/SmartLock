@@ -8,7 +8,7 @@
 import Foundation
 import Bluetooth
 import GATT
-
+/*
 internal extension CentralProtocol {
     
     /// Connects to the device, fetches the data, performs the action, and disconnects.
@@ -161,3 +161,4 @@ internal struct Timeout {
         }
     }
 }
+*/

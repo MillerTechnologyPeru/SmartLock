@@ -145,7 +145,7 @@ public extension CoreSpotlightSearchable {
 
 public struct SearchableLock: Equatable {
     
-    public let identifier: UUID
+    public let id: UUID
     
     public let cache: LockCache
 }

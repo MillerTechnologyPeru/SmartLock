@@ -87,7 +87,7 @@ public extension RemoveKeyEventManagedObject {
 
 public extension RemoveKeyEventManagedObject.RemovedKey {
     
-    var identifier: UUID? {
+    var id: UUID? {
         switch self {
         case let .key(managedObject): return managedObject.identifier
         case let .newKey(managedObject): return managedObject.identifier

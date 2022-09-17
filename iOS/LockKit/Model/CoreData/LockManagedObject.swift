@@ -12,13 +12,13 @@ import CoreLock
 
 public final class LockManagedObject: NSManagedObject {
     
-    internal convenience init(identifier: UUID,
+    internal convenience init(id: UUID,
                               name: String,
                               information: LockCache.Information? = nil,
                               context: NSManagedObjectContext) {
         
         self.init(context: context)
-        self.identifier = identifier
+        self.id = id
         self.name = name
         if let information = information {
             update(information: information, context: context)

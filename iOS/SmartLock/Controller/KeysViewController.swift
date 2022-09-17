@@ -228,7 +228,7 @@ final class KeysViewController: UITableViewController {
     }
     
     @discardableResult
-    internal func select(lock identifier: UUID, animated: Bool = true) -> LockViewController? {
+    internal func select(lock id: UUID, animated: Bool = true) -> LockViewController? {
         
         guard Store.shared[lock: identifier] != nil else {
             showErrorAlert(LockError.noKey(lock: identifier).localizedDescription)

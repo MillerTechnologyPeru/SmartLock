@@ -12,15 +12,15 @@ import Foundation
 public struct LockConfiguration: Codable, Equatable, Hashable {
     
     /// Lock identifier UUID
-    public let identifier: UUID
+    public let id: UUID
     
     /// Lock name
     public var name: String?
     
-    public init(identifier: UUID = UUID(),
+    public init(id: UUID = UUID(),
                 name: String? = nil) {
         
-        self.identifier = identifier
+        self.id = id
         self.name = name
     }
 }

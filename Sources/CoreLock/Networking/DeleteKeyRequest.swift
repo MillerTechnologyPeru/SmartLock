@@ -11,7 +11,7 @@ import Foundation
 #if canImport(FoundationNetworking)
 import FoundationNetworking
 #endif
-
+/*
 /// Lock Software Update HTTP Request
 public struct DeleteKeyRequest: Equatable {
     
@@ -50,7 +50,7 @@ public extension DeleteKeyRequest {
 public extension LockNetService.Client {
     
     /// Remove the specified key.
-    func removeKey(_ identifier: UUID,
+    func removeKey(_ id: UUID,
                    type: KeyType = .key,
                    for server: LockNetService,
                    with key: KeyCredentials,
@@ -71,3 +71,4 @@ public extension LockNetService.Client {
             else { throw LockNetService.Error.statusCode(httpResponse.statusCode) }
     }
 }
+*/

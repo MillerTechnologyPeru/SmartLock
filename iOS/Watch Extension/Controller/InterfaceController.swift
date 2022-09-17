@@ -193,7 +193,7 @@ private extension InterfaceController {
     
     struct Item: Equatable {
         
-        let identifier: UUID
+        let id: UUID
         let cache: LockCache
         let peripheral: LockPeripheral<NativeCentral>
     }

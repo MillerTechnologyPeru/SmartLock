@@ -13,7 +13,7 @@ import CoreLock
 
 public extension ActivityInterface where Self: WKInterfaceController {
     
-    func unlock(lock identifier: UUID, peripheral: LockPeripheral<NativeCentral>) {
+    func unlock(lock id: UUID, peripheral: LockPeripheral<NativeCentral>) {
         
         let needsSync: Bool
         if let lockCache = Store.shared[lock: identifier] {

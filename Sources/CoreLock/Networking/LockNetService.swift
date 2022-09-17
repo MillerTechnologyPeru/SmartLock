@@ -4,7 +4,7 @@
 //
 //  Created by Alsey Coleman Miller on 10/16/19.
 //
-
+/*
 import Foundation
 import Bonjour
 
@@ -14,19 +14,19 @@ import FoundationNetworking
 
 public struct LockNetService: Equatable, Hashable {
     
-    public let identifier: UUID
+    public let id: UUID
     
     public let url: URL
 }
 
 internal extension LockNetService {
     
-    init(identifier: UUID, address: NetServiceAddress) {
+    init(id: UUID, address: NetServiceAddress) {
         
         guard let url = URL(string: "http://" + address.description)
             else { fatalError("Could not create URL from \(address)") }
         
-        self.identifier = identifier
+        self.id = id
         self.url = url
     }
 }
@@ -221,3 +221,4 @@ extension LockNetService.EncryptedData {
         catch { throw AuthenticationError.decryptionError(error) }
     }
 }
+*/

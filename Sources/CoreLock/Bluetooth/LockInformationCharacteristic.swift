@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import Bluetooth
+import GATT
 
 /// Used to determine identity, compatibility and supported features.
 public struct LockInformationCharacteristic: TLVCharacteristic, Equatable, Codable {
@@ -18,7 +18,7 @@ public struct LockInformationCharacteristic: TLVCharacteristic, Equatable, Codab
     public static let properties: Bluetooth.BitMaskOptionSet<GATT.Characteristic.Property> = [.read]
     
     /// Lock identifier
-    public let identifier: UUID
+    public let id: UUID
     
     /// Firmware build number
     public let buildVersion: LockBuildVersion
@@ -32,13 +32,13 @@ public struct LockInformationCharacteristic: TLVCharacteristic, Equatable, Codab
     /// Supported lock actions
     public let unlockActions: BitMaskOptionSet<UnlockAction>
     
-    public init(identifier: UUID,
+    public init(id: UUID,
                 buildVersion: LockBuildVersion = .current,
                 version: LockVersion = .current,
                 status: LockStatus,
                 unlockActions: BitMaskOptionSet<UnlockAction> = [.default]) {
         
-        self.identifier = identifier
+        self.id = id
         self.buildVersion = buildVersion
         self.version = version
         self.status = status

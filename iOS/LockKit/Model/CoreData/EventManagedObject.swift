@@ -30,7 +30,7 @@ public class EventManagedObject: NSManagedObject {
         }
     }
     
-    internal static func find(_ identifier: UUID, in context: NSManagedObjectContext) throws -> EventManagedObject? {
+    internal static func find(_ id: UUID, in context: NSManagedObjectContext) throws -> EventManagedObject? {
         
         try context.find(identifier: identifier as NSUUID,
                          propertyName: #keyPath(EventManagedObject.identifier),

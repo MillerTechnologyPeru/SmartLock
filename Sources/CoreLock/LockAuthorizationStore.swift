@@ -14,15 +14,15 @@ public protocol LockAuthorizationStore: class {
     
     func add(_ key: Key, secret: KeyData) throws
     
-    func key(for identifier: UUID) throws -> (key: Key, secret: KeyData)?
+    func key(for id: UUID) throws -> (key: Key, secret: KeyData)?
     
     func add(_ key: NewKey, secret: KeyData) throws
     
-    func newKey(for identifier: UUID) throws -> (newKey: NewKey, secret: KeyData)?
+    func newKey(for id: UUID) throws -> (newKey: NewKey, secret: KeyData)?
     
-    func removeKey(_ identifier: UUID) throws
+    func removeKey(_ id: UUID) throws
     
-    func removeNewKey(_ identifier: UUID) throws
+    func removeNewKey(_ id: UUID) throws
     
     func removeAll() throws
     
@@ -49,9 +49,9 @@ public final class InMemoryLockAuthorization: LockAuthorizationStore {
         keys.append(KeyEntry(key: key, secret: secret))
     }
     
-    public func key(for identifier: UUID) throws -> (key: Key, secret: KeyData)? {
+    public func key(for id: UUID) throws -> (key: Key, secret: KeyData)? {
         
-        guard let keyEntry = keys.first(where: { $0.key.identifier == identifier })
+        guard let keyEntry = keys.first(where: { $0.key.id == id })
             else { return nil }
         
         return (keyEntry.key, keyEntry.secret)
@@ -62,22 +62,22 @@ public final class InMemoryLockAuthorization: LockAuthorizationStore {
         newKeys.append(NewKeyEntry(newKey: key, secret: secret))
     }
     
-    public func newKey(for identifier: UUID) throws -> (newKey: NewKey, secret: KeyData)? {
+    public func newKey(for id: UUID) throws -> (newKey: NewKey, secret: KeyData)? {
         
-        guard let keyEntry = newKeys.first(where: { $0.newKey.identifier == identifier })
+        guard let keyEntry = newKeys.first(where: { $0.newKey.id == id })
             else { return nil }
         
         return (keyEntry.newKey, keyEntry.secret)
     }
     
-    public func removeKey(_ identifier: UUID) throws {
+    public func removeKey(_ id: UUID) throws {
         
-        keys.removeAll(where: { $0.key.identifier == identifier })
+        keys.removeAll(where: { $0.key.id == id })
     }
     
-    public func removeNewKey(_ identifier: UUID) throws {
+    public func removeNewKey(_ id: UUID) throws {
         
-        newKeys.removeAll(where: { $0.newKey.identifier == identifier })
+        newKeys.removeAll(where: { $0.newKey.id == id })
     }
     
     public func removeAll() throws {

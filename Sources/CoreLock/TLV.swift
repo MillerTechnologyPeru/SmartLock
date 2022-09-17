@@ -12,8 +12,8 @@ internal extension TLVEncoder {
     
     static var lock: TLVEncoder {
         var encoder = TLVEncoder()
-        encoder.numericFormat = .littleEndian
-        encoder.uuidFormat = .bytes
+        encoder.numericFormatting = .littleEndian
+        encoder.uuidFormatting = .bytes
         return encoder
     }
 }
@@ -22,8 +22,8 @@ internal extension TLVDecoder {
     
     static var lock: TLVDecoder {
         var decoder = TLVDecoder()
-        decoder.numericFormat = .littleEndian
-        decoder.uuidFormat = .bytes
+        decoder.numericFormatting = .littleEndian
+        decoder.uuidFormatting = .bytes
         return decoder
     }
 }

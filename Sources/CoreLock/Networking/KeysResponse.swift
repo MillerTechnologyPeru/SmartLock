@@ -1,21 +1,21 @@
 //
-//  EventsResponse.swift
+//  KeysResponse.swift
 //  CoreLock
 //
-//  Created by Alsey Coleman Miller on 10/21/19.
+//  Created by Alsey Coleman Miller on 10/16/19.
 //  Copyright © 2019 ColemanCDA. All rights reserved.
 //
 
 import Foundation
-
-public struct EventsResponse: Equatable {
+/*
+public struct KeysResponse: Equatable {
     
     public let encryptedData: LockNetService.EncryptedData
 }
 
 // MARK: - Codable
 
-extension EventsResponse: Codable {
+extension KeysResponse: Codable {
     
     public init(from decoder: Decoder) throws {
         self.encryptedData = try LockNetService.EncryptedData(from: decoder)
@@ -28,9 +28,9 @@ extension EventsResponse: Codable {
 
 // MARK: - Encryption
 
-public extension EventsResponse {
+public extension KeysResponse {
     
-    init(encrypt value: EventsList,
+    init(encrypt value: KeysList,
          with key: KeyData,
          encoder: JSONEncoder = JSONEncoder()) throws {
         
@@ -39,9 +39,10 @@ public extension EventsResponse {
     }
     
     func decrypt(with key: KeyData,
-                 decoder: JSONDecoder = JSONDecoder()) throws -> EventsList {
+                 decoder: JSONDecoder = JSONDecoder()) throws -> KeysList {
         
         let data = try encryptedData.decrypt(with: key)
-        return try decoder.decode(EventsList.self, from: data)
+        return try decoder.decode(KeysList.self, from: data)
     }
 }
+*/

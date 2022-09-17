@@ -7,6 +7,7 @@
 
 import Foundation
 import Bluetooth
+import GATT
 
 /// List events request
 public struct ListEventsCharacteristic: TLVCharacteristic, Codable, Equatable {
@@ -18,7 +19,7 @@ public struct ListEventsCharacteristic: TLVCharacteristic, Codable, Equatable {
     public static let properties: Bluetooth.BitMaskOptionSet<GATT.Characteristic.Property> = [.write]
     
     /// Identifier of key making request.
-    public let identifier: UUID
+    public let id: UUID
     
     /// HMAC of key and nonce, and HMAC message
     public let authentication: Authentication
@@ -26,11 +27,11 @@ public struct ListEventsCharacteristic: TLVCharacteristic, Codable, Equatable {
     /// Fetch limit for events to view.
     public let fetchRequest: LockEvent.FetchRequest?
     
-    public init(identifier: UUID,
+    public init(id: UUID,
                 authentication: Authentication,
                 fetchRequest: LockEvent.FetchRequest? = nil) {
         
-        self.identifier = identifier
+        self.id = id
         self.authentication = authentication
         self.fetchRequest = fetchRequest
     }

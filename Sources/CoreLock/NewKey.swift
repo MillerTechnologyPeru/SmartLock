@@ -11,7 +11,7 @@ import Foundation
 public struct NewKey: Codable, Equatable, Hashable {
     
     /// The unique identifier of the key.
-    public let identifier: UUID
+    public let id: UUID
     
     /// The name of the key.
     public let name: String
@@ -25,13 +25,13 @@ public struct NewKey: Codable, Equatable, Hashable {
     /// Expiration date for new key invitation.
     public let expiration: Date
     
-    public init(identifier: UUID = UUID(),
+    public init(id: UUID = UUID(),
                 name: String = "",
                 permission: Permission = .anytime,
                 created: Date = Date(),
                 expiration: Date = Date().addingTimeInterval(60 * 60 * 24)) {
         
-        self.identifier = identifier
+        self.id = id
         self.name = name
         self.permission = permission
         self.created = created

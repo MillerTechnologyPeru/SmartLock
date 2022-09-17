@@ -7,6 +7,7 @@
 
 import Foundation
 import TLVCoding
+import Bluetooth
 
 /// Unlock Action
 public enum UnlockAction: UInt8, BitMaskOption {

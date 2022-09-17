@@ -61,10 +61,10 @@ public extension Permission {
 /// A Key's permission level.
 public enum PermissionType: UInt8, CaseIterable {
     
-    case owner
-    case admin
-    case anytime
-    case scheduled
+    case owner          = 0x00
+    case admin          = 0x01
+    case anytime        = 0x02
+    case scheduled      = 0x03
 }
 
 internal extension PermissionType {

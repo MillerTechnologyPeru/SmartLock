@@ -156,7 +156,7 @@ public final class Store {
     // MARK: - Subscript
     
     /// Cached information for the specified lock.
-    public subscript (lock identifier: UUID) -> LockCache? {
+    public subscript (lock id: UUID) -> LockCache? {
         
         get { return locks.value[identifier] }
         set {
@@ -166,7 +166,7 @@ public final class Store {
     }
     
     /// Private Key for the specified lock.
-    public subscript (key identifier: UUID) -> KeyData? {
+    public subscript (key id: UUID) -> KeyData? {
         
         get {
             
@@ -207,7 +207,7 @@ public final class Store {
     }
     
     /// The Bluetooth LE peripheral for the speciifed lock.
-    public subscript (peripheral identifier: UUID) -> NativeCentral.Peripheral? {
+    public subscript (peripheral id: UUID) -> NativeCentral.Peripheral? {
         return lockInformation.value.first(where: { $0.value.identifier == identifier })?.key
     }
     
@@ -408,7 +408,7 @@ extension Store: Combine.ObservableObject { }
 
 public extension Store {
     
-    func device(for identifier: UUID,
+    func device(for id: UUID,
                 scanDuration: TimeInterval) throws -> LockPeripheral<NativeCentral>? {
         
         assert(Thread.isMainThread == false)
@@ -437,7 +437,7 @@ public extension Store {
         }
     }
     
-    func device(for identifier: UUID) -> LockPeripheral<NativeCentral>? {
+    func device(for id: UUID) -> LockPeripheral<NativeCentral>? {
         
         guard let peripheral = self[peripheral: identifier],
             let lock = self.peripherals.value[peripheral]

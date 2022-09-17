@@ -19,18 +19,18 @@ public enum LockEvent: Equatable {
 
 public extension LockEvent {
     
-    var identifier: UUID {
+    var id: UUID {
         switch self {
         case let .setup(event):
-            return event.identifier
+            return event.id
         case let .unlock(event):
-            return event.identifier
+            return event.id
         case let .createNewKey(event):
-            return event.identifier
+            return event.id
         case let .confirmNewKey(event):
-            return event.identifier
+            return event.id
         case let .removeKey(event):
-            return event.identifier
+            return event.id
         }
     }
     
@@ -168,17 +168,17 @@ public extension LockEvent {
     
     struct Setup: Codable, Equatable {
         
-        public let identifier: UUID
+        public let id: UUID
         
         public let date: Date
         
         public let key: UUID
         
-        public init(identifier: UUID = UUID(),
+        public init(id: UUID = UUID(),
                     date: Date = Date(),
                     key: UUID) {
             
-            self.identifier = identifier
+            self.id = id
             self.date = date
             self.key = key
         }
@@ -186,7 +186,7 @@ public extension LockEvent {
 
     struct Unlock: Codable, Equatable {
         
-        public let identifier: UUID
+        public let id: UUID
         
         public let date: Date
         
@@ -194,12 +194,12 @@ public extension LockEvent {
         
         public let action: UnlockAction
         
-        public init(identifier: UUID = UUID(),
+        public init(id: UUID = UUID(),
                     date: Date = Date(),
                     key: UUID,
                     action: UnlockAction = .default) {
             
-            self.identifier = identifier
+            self.id = id
             self.date = date
             self.key = key
             self.action = action
@@ -208,7 +208,7 @@ public extension LockEvent {
     
     struct CreateNewKey: Codable, Equatable {
         
-        public let identifier: UUID
+        public let id: UUID
         
         public let date: Date
                 
@@ -216,11 +216,11 @@ public extension LockEvent {
         
         public let newKey: UUID
         
-        public init(identifier: UUID = UUID(),
+        public init(id: UUID = UUID(),
                     date: Date = Date(),
                     key: UUID,
                     newKey: UUID) {
-            self.identifier = identifier
+            self.id = id
             self.date = date
             self.key = key
             self.newKey = newKey
@@ -229,7 +229,7 @@ public extension LockEvent {
     
     struct ConfirmNewKey: Codable, Equatable {
         
-        public let identifier: UUID
+        public let id: UUID
         
         public let date: Date
                 
@@ -239,11 +239,11 @@ public extension LockEvent {
         /// The newly created key.
         public let key: UUID
         
-        public init(identifier: UUID = UUID(),
+        public init(id: UUID = UUID(),
                     date: Date = Date(),
                     newKey: UUID,
                     key: UUID) {
-            self.identifier = identifier
+            self.id = id
             self.date = date
             self.newKey = newKey
             self.key = key
@@ -252,7 +252,7 @@ public extension LockEvent {
     
     struct RemoveKey: Codable, Equatable {
         
-        public let identifier: UUID
+        public let id: UUID
         
         public let date: Date
         
@@ -262,12 +262,12 @@ public extension LockEvent {
         
         public let type: KeyType
         
-        public init(identifier: UUID = UUID(),
+        public init(id: UUID = UUID(),
                     date: Date = Date(),
                     key: UUID,
                     removedKey: UUID,
                     type: KeyType) {
-            self.identifier = identifier
+            self.id = id
             self.date = date
             self.key = key
             self.removedKey = removedKey

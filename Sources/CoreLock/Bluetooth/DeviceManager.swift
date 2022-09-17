@@ -8,7 +8,7 @@
 import Foundation
 import Bluetooth
 import GATT
-
+/*
 /// SmartLock GATT Central client.
 public final class LockManager <Central: CentralProtocol> {
     
@@ -189,7 +189,7 @@ public final class LockManager <Central: CentralProtocol> {
     }
     
     /// Remove the specified key. 
-    public func removeKey(_ identifier: UUID,
+    public func removeKey(_ id: UUID,
                           type: KeyType = .key,
                           for peripheral: Peripheral,
                           with key: KeyCredentials,
@@ -418,12 +418,12 @@ public struct LockPeripheral <Central: CentralProtocol>: Equatable {
 
 public struct KeyCredentials: Equatable {
     
-    public let identifier: UUID
+    public let id: UUID
     
     public let secret: KeyData
     
-    public init(identifier: UUID, secret: KeyData) {
-        self.identifier = identifier
+    public init(id: UUID, secret: KeyData) {
+        self.id = id
         self.secret = secret
     }
 }
@@ -464,3 +464,4 @@ internal final class Semaphore {
         semaphore.signal()
     }
 }
+*/

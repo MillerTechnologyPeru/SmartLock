@@ -32,10 +32,10 @@ public final class LockActivityItem: NSObject {
         .markupAsPDF
     ]
     
-    public let identifier: UUID
+    public let id: UUID
     
-    public init(identifier: UUID) {
-        self.identifier = identifier
+    public init(id: UUID) {
+        self.id = id
     }
     
     // MARK: - Activity Values

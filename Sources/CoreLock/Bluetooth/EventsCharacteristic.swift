@@ -7,6 +7,7 @@
 
 import Foundation
 import Bluetooth
+import GATT
 import TLVCoding
 
 /// Encrypted list of events.

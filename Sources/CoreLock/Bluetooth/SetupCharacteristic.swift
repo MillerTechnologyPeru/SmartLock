@@ -7,6 +7,7 @@
 
 import Foundation
 import Bluetooth
+import GATT
 
 /// Used for initial lock setup.
 public struct SetupCharacteristic: TLVCharacteristic, Equatable {
@@ -52,15 +53,15 @@ extension SetupCharacteristic: Codable {
 public struct SetupRequest: Equatable, Codable {
     
     /// Key identifier
-    public let identifier: UUID
+    public let id: UUID
     
     /// Key secret
     public let secret: KeyData
     
-    public init(identifier: UUID = UUID(),
+    public init(id: UUID = UUID(),
                 secret: KeyData = KeyData()) {
         
-        self.identifier = identifier
+        self.id = id
         self.secret = secret
     }
 }
@@ -70,9 +71,11 @@ public extension Key {
     /// Initialize a new owner key from a setup request. 
     init(setup: SetupRequest) {
         
-        self.init(identifier: setup.identifier,
-                  name: "Owner",
-                  created: Date(),
-                  permission: .owner)
+        self.init(
+            id: setup.id,
+            name: "Owner",
+            created: Date(),
+            permission: .owner
+        )
     }
 }

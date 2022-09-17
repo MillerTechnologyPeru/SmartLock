@@ -13,7 +13,7 @@ import CoreLock
 public struct ApplicationData: Codable, Equatable {
     
     /// Identifier of app instance.
-    public let identifier: UUID
+    public let id: UUID
     
     /// Date application data was created.
     public let created: Date
@@ -39,12 +39,12 @@ public struct ApplicationData: Codable, Equatable {
         self.locks = [:]
     }
     
-    public init(identifier: UUID,
+    public init(id: UUID,
                 created: Date,
                 updated: Date,
                 locks: [UUID: LockCache]) {
         
-        self.identifier = identifier
+        self.id = id
         self.created = created
         self.updated = updated
         self.locks = locks
@@ -57,12 +57,12 @@ public extension ApplicationData {
         return locks.values.map { $0.key }
     }
     
-    subscript (lock identifier: UUID) -> LockCache? {
+    subscript (lock id: UUID) -> LockCache? {
         get { return locks[identifier] }
         set { locks[identifier] = newValue }
     }
     
-    subscript (key identifier: UUID) -> Key? {
+    subscript (key id: UUID) -> Key? {
         return locks.values
             .lazy
             .map { $0.key }

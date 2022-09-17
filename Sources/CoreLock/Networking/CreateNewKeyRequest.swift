@@ -11,7 +11,7 @@ import Foundation
 #if canImport(FoundationNetworking)
 import FoundationNetworking
 #endif
-
+/*
 public struct CreateNewKeyNetServiceRequest: Equatable {
     
     /// Lock server
@@ -89,3 +89,4 @@ public extension LockNetService.Client {
             else { throw LockNetService.Error.statusCode(httpResponse.statusCode) }
     }
 }
+*/

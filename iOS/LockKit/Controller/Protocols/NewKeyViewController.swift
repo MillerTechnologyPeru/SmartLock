@@ -12,7 +12,7 @@ import CoreLock
 
 public protocol NewKeyViewController: ActivityIndicatorViewController {
     
-    var lockIdentifier: UUID! { get }
+    var lockid: UUID! { get }
     
     var view: UIView! { get }
     

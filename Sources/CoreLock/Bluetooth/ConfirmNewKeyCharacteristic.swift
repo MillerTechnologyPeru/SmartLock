@@ -7,6 +7,7 @@
 
 import Foundation
 import Bluetooth
+import GATT
 
 /// Used to complete new key creation.
 public struct ConfirmNewKeyCharacteristic: TLVCharacteristic, Codable, Equatable {
@@ -18,7 +19,7 @@ public struct ConfirmNewKeyCharacteristic: TLVCharacteristic, Codable, Equatable
     public static let properties: Bluetooth.BitMaskOptionSet<GATT.Characteristic.Property> = [.write]
     
     /// Identifier of new key.
-    public let identifier: UUID
+    public let id: UUID
     
     /// Encrypted payload.
     public let encryptedData: EncryptedData
@@ -27,7 +28,7 @@ public struct ConfirmNewKeyCharacteristic: TLVCharacteristic, Codable, Equatable
         
         let requestData = try type(of: self).encoder.encode(request)
         self.encryptedData = try EncryptedData(encrypt: requestData, with: sharedSecret)
-        self.identifier = key
+        self.id = key
     }
     
     public func decrypt(with sharedSecret: KeyData) throws -> ConfirmNewKeyRequest {

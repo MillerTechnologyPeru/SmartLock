@@ -7,13 +7,13 @@
 //
 
 import Foundation
-
+/*
 public extension LockNetService {
     
     struct LockInformation: Equatable, Codable {
         
         /// Lock identifier
-        public let identifier: UUID
+        public let id: UUID
         
         /// Firmware build number
         public let buildVersion: LockBuildVersion
@@ -27,13 +27,13 @@ public extension LockNetService {
         /// Supported lock actions
         public let unlockActions: Set<UnlockAction>
         
-        public init(identifier: UUID,
+        public init(id: UUID,
                     buildVersion: LockBuildVersion = .current,
                     version: LockVersion = .current,
                     status: LockStatus,
                     unlockActions: Set<UnlockAction> = [.default]) {
             
-            self.identifier = identifier
+            self.id = id
             self.buildVersion = buildVersion
             self.version = version
             self.status = status
@@ -41,3 +41,4 @@ public extension LockNetService {
         }
     }
 }
+*/

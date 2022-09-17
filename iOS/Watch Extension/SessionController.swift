@@ -68,7 +68,7 @@ public final class SessionController: NSObject {
         }
     }
     
-    public func requestKeyData(for identifier: UUID) throws -> KeyData {
+    public func requestKeyData(for id: UUID) throws -> KeyData {
         
         let response = try request(.key(identifier))
         switch response {

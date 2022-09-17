@@ -12,7 +12,7 @@ import CoreLock
 
 public extension ActivityIndicatorViewController where Self: UIViewController {
     
-    func update(lock identifier: UUID) {
+    func update(lock id: UUID) {
         
         guard let key = Store.shared.credentials(for: identifier)
             else { assertionFailure(); return }

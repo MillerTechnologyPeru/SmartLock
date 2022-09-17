@@ -7,6 +7,7 @@
 
 import Foundation
 import Bluetooth
+import GATT
 
 /// Used to create a new key.
 public struct CreateNewKeyCharacteristic: TLVCharacteristic, Codable, Equatable {
@@ -18,7 +19,7 @@ public struct CreateNewKeyCharacteristic: TLVCharacteristic, Codable, Equatable 
     public static let properties: Bluetooth.BitMaskOptionSet<GATT.Characteristic.Property> = [.write]
     
     /// Identifier of key making request.
-    public let identifier: UUID
+    public let id: UUID
     
     /// Encrypted payload.
     public let encryptedData: EncryptedData
@@ -27,7 +28,7 @@ public struct CreateNewKeyCharacteristic: TLVCharacteristic, Codable, Equatable 
         
         let requestData = try type(of: self).encoder.encode(request)
         self.encryptedData = try EncryptedData(encrypt: requestData, with: sharedSecret)
-        self.identifier = key
+        self.id = key
     }
     
     public func decrypt(with sharedSecret: KeyData) throws -> CreateNewKeyRequest {
@@ -44,7 +45,7 @@ public struct CreateNewKeyCharacteristic: TLVCharacteristic, Codable, Equatable 
 public struct CreateNewKeyRequest: Equatable, Codable {
     
     /// New Key identifier
-    public let identifier: UUID
+    public let id: UUID
     
     /// The name of the new key.
     public let name: String
@@ -63,7 +64,7 @@ public extension CreateNewKeyRequest {
     
     init(key: NewKey, secret: KeyData) {
         
-        self.identifier = key.identifier
+        self.id = key.id
         self.name = key.name
         self.permission = key.permission
         self.expiration = key.expiration
@@ -75,7 +76,7 @@ public extension NewKey {
     
     init(request: CreateNewKeyRequest, created: Date = Date()) {
         
-        self.identifier = request.identifier
+        self.id = request.id
         self.name = request.name
         self.permission = request.permission
         self.expiration = request.expiration

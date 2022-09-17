@@ -58,7 +58,7 @@ public extension ActivityIndicatorViewController where Self: UIViewController {
 
 public extension ActivityIndicatorViewController where Self: UIViewController {
     
-    func setup(lock identifier: UUID, secret: KeyData, name: String? = nil, scanDuration: TimeInterval = 2.0) {
+    func setup(lock id: UUID, secret: KeyData, name: String? = nil, scanDuration: TimeInterval = 2.0) {
         
         let name = name ?? R.string.localizable.newLockName()
         performActivity(queue: .bluetooth, { () -> Bool in

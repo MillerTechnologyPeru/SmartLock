@@ -17,13 +17,13 @@ import UIKit
 public extension UnlockIntent {
     
     @available(*, deprecated)
-    convenience init(lock identifier: UUID, name: String) {
+    convenience init(lock id: UUID, name: String) {
         
         self.init()
         self.lock = IntentLock(identifier: identifier, name: name)
     }
     
-    convenience init(identifier: UUID, cache: LockCache) {
+    convenience init(id: UUID, cache: LockCache) {
         
         self.init()
         self.lock = IntentLock(identifier: identifier, name: cache.name)
@@ -38,7 +38,7 @@ public extension UnlockIntent {
 @available(iOS 12, iOSApplicationExtension 12.0, watchOS 5.0, *)
 public extension IntentLock {
     
-    convenience init(identifier: UUID, name: String) {
+    convenience init(id: UUID, name: String) {
         self.init(identifier: identifier.uuidString, display: name, pronunciationHint: name)
     }
 }

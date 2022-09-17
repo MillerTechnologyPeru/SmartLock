@@ -10,7 +10,7 @@ import Foundation
 #if canImport(FoundationNetworking)
 import FoundationNetworking
 #endif
-
+/*
 /// Lock Software Update HTTP Request
 public struct UpdateNetServiceRequest: Equatable {
     
@@ -58,3 +58,4 @@ public extension LockNetService.Client {
             else { throw LockNetService.Error.statusCode(httpResponse.statusCode) }
     }
 }
+*/

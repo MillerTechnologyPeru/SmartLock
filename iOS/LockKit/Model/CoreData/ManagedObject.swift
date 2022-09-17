@@ -77,12 +77,12 @@ internal extension NSManagedObjectContext {
 
 public protocol IdentifiableManagedObject {
     
-    var identifier: UUID? { get }
+    var id: UUID? { get }
 }
 
 public extension NSManagedObjectContext {
     
-    func find<T>(identifier: UUID, type: T.Type) throws -> T? where T: IdentifiableManagedObject, T: NSManagedObject {
+    func find<T>(id: UUID, type: T.Type) throws -> T? where T: IdentifiableManagedObject, T: NSManagedObject {
         
         let fetchRequest = NSFetchRequest<T>()
         fetchRequest.entity = T.entity()

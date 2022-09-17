@@ -29,7 +29,7 @@ public final class LockViewController: UITableViewController {
     
     // MARK: - Properties
     
-    public var lockIdentifier: UUID! {
+    public var lockid: UUID! {
         didSet { if self.isViewLoaded { self.configureView() } }
     }
     
@@ -229,7 +229,7 @@ extension LockViewController: ProgressHUDViewController { }
 public extension UIViewController {
     
     @discardableResult
-    func view(lock identifier: UUID) -> Bool {
+    func view(lock id: UUID) -> Bool {
         
         guard Store.shared[lock: identifier] != nil else {
             self.showErrorAlert(R.string.error.noKey())

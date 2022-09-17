@@ -12,17 +12,13 @@ import TLVCoding
 @testable import CoreLock
 
 final class GATTProfileTests: XCTestCase {
-    
-    static let allTests = [
-        ("testInformation", testInformation),
-        ("testUnlock", testUnlock),
-        ("testSetup", testSetup)
-    ]
 
     func testInformation() {
         
-        let information = LockInformationCharacteristic(identifier: UUID(),
-                                                    status: .setup)
+        let information = LockInformationCharacteristic(
+            id: UUID(),
+            status: .setup
+        )
         
         guard let decoded = LockInformationCharacteristic(data: information.data)
             else { XCTFail("Could not parse bytes"); return }
@@ -32,12 +28,12 @@ final class GATTProfileTests: XCTestCase {
     
     func testUnlock() {
         
-        let key = (identifier: UUID(), secret: KeyData())
+        let key = (id: UUID(), secret: KeyData())
         
-        let authentication = Authentication(key: key.secret)
+        let authentication = Authentication(key: key.secret, message: AuthenticationMessage(digest: Digest(hash: <#T##Data#>)))
         
         let characteristic = UnlockCharacteristic(
-            identifier: key.identifier,
+            id: key.id,
             authentication: authentication
         )
         
@@ -47,9 +43,9 @@ final class GATTProfileTests: XCTestCase {
         XCTAssertEqual(characteristic, decoded)
         XCTAssertEqual(try! TLVEncoder.lock.encode(decoded.authentication),
                        try! TLVEncoder.lock.encode(authentication))
-        XCTAssert(decoded.authentication.isAuthenticated(with: key.secret))
-        XCTAssert(characteristic.authentication.isAuthenticated(with: key.secret))
-        XCTAssertFalse(Authentication(key: KeyData()).isAuthenticated(with: key.secret))
+        XCTAssert(decoded.authentication.isAuthenticated(using: key.secret))
+        XCTAssert(characteristic.authentication.isAuthenticated(using: key.secret))
+        XCTAssertFalse(Authentication(key: KeyData()).isAuthenticated(using: key.secret))
     }
     
     func testSetup() {
@@ -69,7 +65,7 @@ final class GATTProfileTests: XCTestCase {
         let decrypted = try! decoded.decrypt(with: deviceSharedSecret)
         
         XCTAssertEqual(request, decrypted)
-        XCTAssertEqual(request.identifier, decrypted.identifier)
+        XCTAssertEqual(request.id, decrypted.id)
         XCTAssertEqual(request.secret, decrypted.secret)
     }
 }

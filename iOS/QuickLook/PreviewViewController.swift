@@ -104,7 +104,7 @@ private extension PreviewViewController {
         loadChildViewController(viewController)
     }
     
-    func loadLock(_ identifier: UUID) {
+    func loadLock(_ id: UUID) {
         
         // load view controller
         let viewController = LockViewController.fromStoryboard(with: identifier)

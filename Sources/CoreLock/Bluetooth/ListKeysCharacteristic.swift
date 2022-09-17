@@ -7,6 +7,7 @@
 
 import Foundation
 import Bluetooth
+import GATT
 
 /// List keys request
 public struct ListKeysCharacteristic: TLVCharacteristic, Codable, Equatable {
@@ -18,15 +19,15 @@ public struct ListKeysCharacteristic: TLVCharacteristic, Codable, Equatable {
     public static let properties: Bluetooth.BitMaskOptionSet<GATT.Characteristic.Property> = [.write]
     
     /// Identifier of key making request.
-    public let identifier: UUID
+    public let id: UUID
     
     /// HMAC of key and nonce, and HMAC message
     public let authentication: Authentication
     
-    public init(identifier: UUID,
+    public init(id: UUID,
                 authentication: Authentication) {
         
-        self.identifier = identifier
+        self.id = id
         self.authentication = authentication
     }
 }

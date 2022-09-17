@@ -17,7 +17,7 @@ public final class LockPermissionsViewController: UITableViewController {
     
     // MARK: - Properties
     
-    public var lockIdentifier: UUID!
+    public var lockid: UUID!
     
     public var completion: (() -> ())?
     
@@ -318,7 +318,7 @@ extension LockPermissionsViewController {
         case key(Key)
         case newKey(NewKey)
         
-        var identifier: UUID {
+        var id: UUID {
             switch self {
             case let .key(value): return value.identifier
             case let .newKey(value): return value.identifier

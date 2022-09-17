@@ -19,7 +19,7 @@ public final class NewKeySelectPermissionViewController: UITableViewController, 
     
     public var completion: (((invitation: NewKey.Invitation, sender: PopoverPresentingView)?) -> ())?
     
-    public var lockIdentifier: UUID!
+    public var lockid: UUID!
     
     public var progressHUD: JGProgressHUD?
     
@@ -178,14 +178,14 @@ extension NewKeySelectPermissionViewController: ProgressHUDViewController { }
 
 public extension UIViewController {
     
-    func shareKey(lock identifier: UUID, completion: @escaping (((invitation: NewKey.Invitation, sender: PopoverPresentingView)?) -> ())) {
+    func shareKey(lock id: UUID, completion: @escaping (((invitation: NewKey.Invitation, sender: PopoverPresentingView)?) -> ())) {
         
         let newKeyViewController = NewKeySelectPermissionViewController.fromStoryboard(with: identifier, completion: completion)
         let navigationController = UINavigationController(rootViewController: newKeyViewController)
         self.present(navigationController, animated: true, completion: nil)
     }
     
-    func shareKey(lock identifier: UUID) {
+    func shareKey(lock id: UUID) {
         
         self.shareKey(lock: identifier) { [weak self] in
             guard let self = self else { return }

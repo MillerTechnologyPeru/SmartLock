@@ -7,6 +7,7 @@
 
 import Foundation
 import Bluetooth
+import GATT
 import TLVCoding
 
 /// Encrypted list of keys.
@@ -88,13 +89,13 @@ public extension KeysList {
         return keys.isEmpty && newKeys.isEmpty
     }
     
-    mutating func remove(_ identifier: UUID, type: KeyType = .key) {
+    mutating func remove(_ id: UUID, type: KeyType = .key) {
         
         switch type {
         case .key:
-            keys.removeAll(where: { $0.identifier == identifier })
+            keys.removeAll(where: { $0.id == id })
         case .newKey:
-            newKeys.removeAll(where: { $0.identifier == identifier })
+            newKeys.removeAll(where: { $0.id == id })
         }
     }
 }
@@ -146,12 +147,12 @@ public extension KeyListNotification {
         case key(Key)
         case newKey(NewKey)
         
-        public var identifier: UUID {
+        public var id: UUID {
             switch self {
             case let .key(key):
-                return key.identifier
+                return key.id
             case let .newKey(newKey):
-                return newKey.identifier
+                return newKey.id
             }
         }
     }

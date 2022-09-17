@@ -297,7 +297,7 @@ extension MessagesViewController {
     
     struct Item {
         
-        let identifier: UUID
+        let id: UUID
         let cache: LockCache
     }
 }

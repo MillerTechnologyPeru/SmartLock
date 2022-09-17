@@ -13,7 +13,7 @@ import Intents
 
 public extension ActivityIndicatorViewController where Self: UIViewController {
     
-    func unlock(lock identifier: UUID, action: UnlockAction = .default, scanDuration: TimeInterval = 2.0) {
+    func unlock(lock id: UUID, action: UnlockAction = .default, scanDuration: TimeInterval = 2.0) {
         
         log("Unlock \(identifier)")
         

@@ -11,7 +11,7 @@ import Foundation
 #if canImport(FoundationNetworking)
 import FoundationNetworking
 #endif
-
+/*
 public struct EventsNetServiceRequest: Equatable {
     
     /// Lock server
@@ -147,3 +147,4 @@ public extension LockNetService.Client {
         return keys
     }
 }
+*/
