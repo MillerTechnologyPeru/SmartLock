@@ -56,3 +56,37 @@ public struct RemoveKeyRequest: Equatable, Codable {
         self.type = type
     }
 }
+
+// MARK: - Central
+
+public extension CentralManager {
+    
+    /// Remove the specified key.
+    func removeKey(
+        _ id: UUID,
+        type: KeyType = .key,
+        using key: KeyCredentials,
+        for peripheral: Peripheral
+    ) async throws {
+        try await connection(for: peripheral) {
+            try await $0.removeKey(id, type: type, using: key)
+        }
+    }
+}
+
+public extension GATTConnection {
+    
+    /// Remove the specified key.
+    func removeKey(
+        _ id: UUID,
+        type: KeyType = .key,
+        using key: KeyCredentials
+    ) async throws {
+        let characteristicValue = try RemoveKeyCharacteristic(
+            request: RemoveKeyRequest(id: id, type: type),
+            using: key.secret,
+            id: key.id
+        )
+        try await write(characteristicValue, response: true)
+    }
+}
