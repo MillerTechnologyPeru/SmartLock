@@ -25,13 +25,13 @@ public struct ConfirmNewKeyCharacteristic: TLVEncryptedCharacteristic, Codable, 
         self.encryptedData = encryptedData
     }
     
-    public init(request: ConfirmNewKeyRequest, for key: UUID, sharedSecret: KeyData) throws {
+    public init(request: ConfirmNewKeyRequest, using sharedSecret: KeyData, id: UUID) throws {
         
         let requestData = try type(of: self).encoder.encode(request)
-        self.encryptedData = try EncryptedData(encrypt: requestData, using: sharedSecret, id: .zero)
+        self.encryptedData = try EncryptedData(encrypt: requestData, using: sharedSecret, id: id)
     }
     
-    public func decrypt(with sharedSecret: KeyData) throws -> ConfirmNewKeyRequest {
+    public func decrypt(using sharedSecret: KeyData) throws -> ConfirmNewKeyRequest {
         
         let data = try encryptedData.decrypt(using: sharedSecret)
         guard let value = try? type(of: self).decoder.decode(ConfirmNewKeyRequest.self, from: data)
@@ -49,5 +49,37 @@ public struct ConfirmNewKeyRequest: Equatable, Codable {
     
     public init(secret: KeyData) {
         self.secret = secret
+    }
+}
+
+// MARK: - Central
+
+public extension CentralManager {
+    
+    /// Confirm new key.
+    func confirmKey(
+        _ confirmation: ConfirmNewKeyRequest,
+        using key: KeyCredentials,
+        for peripheral: Peripheral
+    ) async throws {
+        try await connection(for: peripheral) {
+            try await $0.confirmKey(confirmation, using: key)
+        }
+    }
+}
+
+public extension GATTConnection {
+    
+    /// Confirm new key.
+    func confirmKey(
+        _ confirmation: ConfirmNewKeyRequest,
+        using key: KeyCredentials
+    ) async throws {
+        let characteristicValue = try ConfirmNewKeyCharacteristic(
+            request: confirmation,
+            using: key.secret,
+            id: key.id
+        )
+        try await write(characteristicValue, response: true)
     }
 }
