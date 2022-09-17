@@ -10,11 +10,10 @@ let package = Package(
         .tvOS(.v13),
     ],
     products: [
-        /*
         .executable(
             name: "lockd",
             targets: ["lockd"]
-        ),*/
+        ),
         .library(
             name: "CoreLock",
             targets: ["CoreLock"]
