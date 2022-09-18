@@ -28,7 +28,6 @@
 		6EA776A028D707FE00018FA3 /* LockKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 6EA7769F28D707FE00018FA3 /* LockKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		6EA776A328D707FE00018FA3 /* LockKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6EA7769D28D707FE00018FA3 /* LockKit.framework */; };
 		6EA776A428D707FE00018FA3 /* LockKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 6EA7769D28D707FE00018FA3 /* LockKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		6ED248CA28D79DDA00F78D07 /* LockEventView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6ED248C928D79DDA00F78D07 /* LockEventView.swift */; };
 		6ED248CC28D7A3BF00F78D07 /* ActivityIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6ED248CB28D7A3BF00F78D07 /* ActivityIndicatorView.swift */; };
 /* End PBXBuildFile section */
 
@@ -79,7 +78,6 @@
 		6EA7769128D7061600018FA3 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		6EA7769D28D707FE00018FA3 /* LockKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = LockKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		6EA7769F28D707FE00018FA3 /* LockKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LockKit.h; sourceTree = "<group>"; };
-		6ED248C928D79DDA00F78D07 /* LockEventView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LockEventView.swift; sourceTree = "<group>"; };
 		6ED248CB28D7A3BF00F78D07 /* ActivityIndicatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityIndicatorView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -161,7 +159,6 @@
 				6E4CB61D28D7901D00116573 /* AppKit */,
 				6E4CB61C28D788B900116573 /* UIKit */,
 				6E3276E528D782B900AF171B /* LockRowView.swift */,
-				6ED248C928D79DDA00F78D07 /* LockEventView.swift */,
 				6E4CB61928D788AA00116573 /* PermissionIconView.swift */,
 			);
 			path = View;
@@ -416,7 +413,6 @@
 			files = (
 				6E4CB61F28D7902600116573 /* NSStyleKit.swift in Sources */,
 				6ED248CC28D7A3BF00F78D07 /* ActivityIndicatorView.swift in Sources */,
-				6ED248CA28D79DDA00F78D07 /* LockEventView.swift in Sources */,
 				6E4CB61028D7867700116573 /* LockRowView.swift in Sources */,
 				6E4CB62328D7907E00116573 /* PermissionIconViewNSView.swift in Sources */,
 				6E3276D228D70CE100AF171B /* Store.swift in Sources */,

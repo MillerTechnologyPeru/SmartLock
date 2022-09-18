@@ -16,6 +16,8 @@ public struct LockRowView: View {
     
     public let subtitle: String?
     
+    public let trailing: (String, String)?
+    
     public var body: some View {
         HStack(alignment: .center, spacing: 16) {
             VStack {
@@ -31,7 +33,30 @@ public struct LockRowView: View {
                         .foregroundColor(.gray)
                 }
             }
+            if let trailing = self.trailing {
+                Spacer(minLength: 1)
+                VStack(alignment: .trailing, spacing: 8) {
+                    Text(verbatim: trailing.0)
+                        .font(.system(size: 14))
+                        .foregroundColor(.gray)
+                    Text(verbatim: trailing.1)
+                        .font(.system(size: 14))
+                        .foregroundColor(.gray)
+                }
+            }
         }
+    }
+    
+    public init(
+        image: Image,
+        title: String,
+        subtitle: String? = nil,
+        trailing: (String, String)? = nil
+    ) {
+        self.image = image
+        self.title = title
+        self.subtitle = subtitle
+        self.trailing = trailing
     }
 }
 
@@ -103,18 +128,17 @@ struct LockRowView_Previews: PreviewProvider {
         List {
             LockRowView(
                 image: .loading,
-                title: "Loading...",
-                subtitle: nil
+                title: "Loading..."
+            )
+            LockRowView(
+                image: .permission(.admin),
+                title: "Setup",
+                subtitle: "D39FE551-523F-4F64-96FC-4B828A1F8561"
             )
             LockRowView(
                 image: .permission(.admin),
                 title: "Lock Name",
                 subtitle: "Anytime"
-            )
-            LockRowView(
-                image: .permission(.admin),
-                title: "Office door",
-                subtitle: "Admin"
             )
             LockRowView(
                 image: .permission(.owner),
@@ -127,14 +151,19 @@ struct LockRowView_Previews: PreviewProvider {
                 subtitle: "Anytime"
             )
             LockRowView(
+                image: .permission(.scheduled),
+                title: "Office",
+                subtitle: "Scheduled"
+            )
+            LockRowView(
                 image: .emoji("🔓"),
                 title: "Unlock",
-                subtitle: "By Alsey Coleman Miller"
+                subtitle: "By Alsey Coleman Miller",
+                trailing: ("Today", "9:00AM")
             )
             LockRowView(
                 image: .symbol("bonjour"),
-                title: "Bonjour",
-                subtitle: nil
+                title: "Bonjour"
             )
             .symbolRenderingMode(.multicolor)
         }
