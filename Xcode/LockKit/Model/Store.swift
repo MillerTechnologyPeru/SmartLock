@@ -46,6 +46,10 @@ public final class Store: ObservableObject {
 public extension Store {
     
     func scan() async {
+        guard await central.state == .poweredOn else {
+            isScanning = false
+            return
+        }
         isScanning = true
         let filterDuplicates = true //preferences.filterDuplicates
         self.peripherals.removeAll(keepingCapacity: true)
