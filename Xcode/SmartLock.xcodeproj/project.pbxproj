@@ -10,16 +10,19 @@
 		6E3276BC28D708A000AF171B /* CoreLock in Frameworks */ = {isa = PBXBuildFile; productRef = 6E3276BB28D708A000AF171B /* CoreLock */; };
 		6E3276C328D70A3700AF171B /* HomeKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6E3276C228D70A3700AF171B /* HomeKit.framework */; };
 		6E3276C628D70A3700AF171B /* RequestHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E3276C528D70A3700AF171B /* RequestHandler.swift */; };
-		6E3276CA28D70A3700AF171B /* MatterLock.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 6E3276C128D70A3700AF171B /* MatterLock.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		6E3276D028D70C9400AF171B /* NearbyDevicesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E3276CF28D70C9400AF171B /* NearbyDevicesView.swift */; };
 		6E3276D228D70CE100AF171B /* Store.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E3276D128D70CE100AF171B /* Store.swift */; };
 		6E3276D728D70FA000AF171B /* DarwinGATT in Frameworks */ = {isa = PBXBuildFile; productRef = 6E3276D628D70FA000AF171B /* DarwinGATT */; };
 		6E3276D928D70FA000AF171B /* GATT in Frameworks */ = {isa = PBXBuildFile; productRef = 6E3276D828D70FA000AF171B /* GATT */; };
 		6E3276DC28D7195400AF171B /* Central.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E3276DB28D7195400AF171B /* Central.swift */; };
+		6E4CB61028D7867700116573 /* LockRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E3276E528D782B900AF171B /* LockRowView.swift */; };
+		6E4CB61A28D788AA00116573 /* UIStyleKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E4CB61828D788AA00116573 /* UIStyleKit.swift */; };
+		6E4CB61B28D788AA00116573 /* PermissionIconView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E4CB61928D788AA00116573 /* PermissionIconView.swift */; };
+		6E4CB61F28D7902600116573 /* NSStyleKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E4CB61E28D7902600116573 /* NSStyleKit.swift */; };
+		6E4CB62128D7907200116573 /* PermissionIconViewUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E4CB62028D7907200116573 /* PermissionIconViewUIView.swift */; };
+		6E4CB62328D7907E00116573 /* PermissionIconViewNSView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E4CB62228D7907E00116573 /* PermissionIconViewNSView.swift */; };
+		6E4CB62528D792BF00116573 /* InfoPlist.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E4CB62428D792BF00116573 /* InfoPlist.swift */; };
 		6EA7768528D7061600018FA3 /* App.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EA7768428D7061600018FA3 /* App.swift */; };
-		6EA7768728D7061600018FA3 /* Persistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EA7768628D7061600018FA3 /* Persistence.swift */; };
-		6EA7768A28D7061600018FA3 /* SmartLock.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 6EA7768828D7061600018FA3 /* SmartLock.xcdatamodeld */; };
-		6EA7768C28D7061600018FA3 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EA7768B28D7061600018FA3 /* ContentView.swift */; };
 		6EA7768E28D7061600018FA3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6EA7768D28D7061600018FA3 /* Assets.xcassets */; };
 		6EA7769228D7061600018FA3 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6EA7769128D7061600018FA3 /* Preview Assets.xcassets */; };
 		6EA776A028D707FE00018FA3 /* LockKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 6EA7769F28D707FE00018FA3 /* LockKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -28,13 +31,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		6E3276C828D70A3700AF171B /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 6EA7767928D7061600018FA3 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 6E3276C028D70A3700AF171B;
-			remoteInfo = MatterLock;
-		};
 		6EA776A128D707FE00018FA3 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 6EA7767928D7061600018FA3 /* Project object */;
@@ -45,17 +41,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		6E3276CE28D70A3700AF171B /* Embed Foundation Extensions */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 13;
-			files = (
-				6E3276CA28D70A3700AF171B /* MatterLock.appex in Embed Foundation Extensions */,
-			);
-			name = "Embed Foundation Extensions";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		6EA776A828D707FE00018FA3 /* Embed Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -78,11 +63,15 @@
 		6E3276CF28D70C9400AF171B /* NearbyDevicesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NearbyDevicesView.swift; sourceTree = "<group>"; };
 		6E3276D128D70CE100AF171B /* Store.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Store.swift; sourceTree = "<group>"; };
 		6E3276DB28D7195400AF171B /* Central.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Central.swift; sourceTree = "<group>"; };
+		6E3276E528D782B900AF171B /* LockRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LockRowView.swift; sourceTree = "<group>"; };
+		6E4CB61828D788AA00116573 /* UIStyleKit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIStyleKit.swift; sourceTree = "<group>"; };
+		6E4CB61928D788AA00116573 /* PermissionIconView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PermissionIconView.swift; sourceTree = "<group>"; };
+		6E4CB61E28D7902600116573 /* NSStyleKit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSStyleKit.swift; sourceTree = "<group>"; };
+		6E4CB62028D7907200116573 /* PermissionIconViewUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionIconViewUIView.swift; sourceTree = "<group>"; };
+		6E4CB62228D7907E00116573 /* PermissionIconViewNSView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionIconViewNSView.swift; sourceTree = "<group>"; };
+		6E4CB62428D792BF00116573 /* InfoPlist.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = InfoPlist.swift; path = ../../../iOS/SmartLock/InfoPlist.swift; sourceTree = "<group>"; };
 		6EA7768128D7061600018FA3 /* SmartLock.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SmartLock.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6EA7768428D7061600018FA3 /* App.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = App.swift; sourceTree = "<group>"; };
-		6EA7768628D7061600018FA3 /* Persistence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Persistence.swift; sourceTree = "<group>"; };
-		6EA7768928D7061600018FA3 /* SmartLock.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = SmartLock.xcdatamodel; sourceTree = "<group>"; };
-		6EA7768B28D7061600018FA3 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		6EA7768D28D7061600018FA3 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		6EA7768F28D7061600018FA3 /* SmartLock.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SmartLock.entitlements; sourceTree = "<group>"; };
 		6EA7769128D7061600018FA3 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
@@ -140,7 +129,6 @@
 		6E3276D328D70D6900AF171B /* View */ = {
 			isa = PBXGroup;
 			children = (
-				6EA7768B28D7061600018FA3 /* ContentView.swift */,
 				6E3276CF28D70C9400AF171B /* NearbyDevicesView.swift */,
 			);
 			path = View;
@@ -149,8 +137,7 @@
 		6E3276D428D70D7500AF171B /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				6EA7768828D7061600018FA3 /* SmartLock.xcdatamodeld */,
-				6EA7768628D7061600018FA3 /* Persistence.swift */,
+				6E4CB62428D792BF00116573 /* InfoPlist.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -162,6 +149,35 @@
 				6E3276DB28D7195400AF171B /* Central.swift */,
 			);
 			path = Model;
+			sourceTree = "<group>";
+		};
+		6E4CB60F28D7866600116573 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				6E4CB61D28D7901D00116573 /* AppKit */,
+				6E4CB61C28D788B900116573 /* UIKit */,
+				6E3276E528D782B900AF171B /* LockRowView.swift */,
+				6E4CB61928D788AA00116573 /* PermissionIconView.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		6E4CB61C28D788B900116573 /* UIKit */ = {
+			isa = PBXGroup;
+			children = (
+				6E4CB61828D788AA00116573 /* UIStyleKit.swift */,
+				6E4CB62028D7907200116573 /* PermissionIconViewUIView.swift */,
+			);
+			path = UIKit;
+			sourceTree = "<group>";
+		};
+		6E4CB61D28D7901D00116573 /* AppKit */ = {
+			isa = PBXGroup;
+			children = (
+				6E4CB61E28D7902600116573 /* NSStyleKit.swift */,
+				6E4CB62228D7907E00116573 /* PermissionIconViewNSView.swift */,
+			);
+			path = AppKit;
 			sourceTree = "<group>";
 		};
 		6EA7767828D7061600018FA3 = {
@@ -211,6 +227,7 @@
 			isa = PBXGroup;
 			children = (
 				6EA7769F28D707FE00018FA3 /* LockKit.h */,
+				6E4CB60F28D7866600116573 /* View */,
 				6E3276DA28D7136400AF171B /* Model */,
 			);
 			path = LockKit;
@@ -263,13 +280,11 @@
 				6EA7767E28D7061600018FA3 /* Frameworks */,
 				6EA7767F28D7061600018FA3 /* Resources */,
 				6EA776A828D707FE00018FA3 /* Embed Frameworks */,
-				6E3276CE28D70A3700AF171B /* Embed Foundation Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 				6EA776A228D707FE00018FA3 /* PBXTargetDependency */,
-				6E3276C928D70A3700AF171B /* PBXTargetDependency */,
 			);
 			name = SmartLock;
 			productName = SmartLock;
@@ -383,11 +398,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6E4CB62528D792BF00116573 /* InfoPlist.swift in Sources */,
 				6EA7768528D7061600018FA3 /* App.swift in Sources */,
-				6EA7768A28D7061600018FA3 /* SmartLock.xcdatamodeld in Sources */,
-				6EA7768C28D7061600018FA3 /* ContentView.swift in Sources */,
 				6E3276D028D70C9400AF171B /* NearbyDevicesView.swift in Sources */,
-				6EA7768728D7061600018FA3 /* Persistence.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -395,19 +408,20 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6E4CB61F28D7902600116573 /* NSStyleKit.swift in Sources */,
+				6E4CB61028D7867700116573 /* LockRowView.swift in Sources */,
+				6E4CB62328D7907E00116573 /* PermissionIconViewNSView.swift in Sources */,
 				6E3276D228D70CE100AF171B /* Store.swift in Sources */,
+				6E4CB61A28D788AA00116573 /* UIStyleKit.swift in Sources */,
 				6E3276DC28D7195400AF171B /* Central.swift in Sources */,
+				6E4CB61B28D788AA00116573 /* PermissionIconView.swift in Sources */,
+				6E4CB62128D7907200116573 /* PermissionIconViewUIView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		6E3276C928D70A3700AF171B /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 6E3276C028D70A3700AF171B /* MatterLock */;
-			targetProxy = 6E3276C828D70A3700AF171B /* PBXContainerItemProxy */;
-		};
 		6EA776A228D707FE00018FA3 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 6EA7769C28D707FE00018FA3 /* LockKit */;
@@ -602,6 +616,8 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription = "Bluetooth is used to scan for nearby locks in the background.";
+				INFOPLIST_KEY_NSBluetoothPeripheralUsageDescription = "Bluetooth is needed to connect to your smart lock.";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
@@ -639,6 +655,8 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription = "Bluetooth is used to scan for nearby locks in the background.";
+				INFOPLIST_KEY_NSBluetoothPeripheralUsageDescription = "Bluetooth is needed to connect to your smart lock.";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
@@ -803,19 +821,6 @@
 			productName = GATT;
 		};
 /* End XCSwiftPackageProductDependency section */
-
-/* Begin XCVersionGroup section */
-		6EA7768828D7061600018FA3 /* SmartLock.xcdatamodeld */ = {
-			isa = XCVersionGroup;
-			children = (
-				6EA7768928D7061600018FA3 /* SmartLock.xcdatamodel */,
-			);
-			currentVersion = 6EA7768928D7061600018FA3 /* SmartLock.xcdatamodel */;
-			path = SmartLock.xcdatamodeld;
-			sourceTree = "<group>";
-			versionGroupType = wrapper.xcdatamodel;
-		};
-/* End XCVersionGroup section */
 	};
 	rootObject = 6EA7767928D7061600018FA3 /* Project object */;
 }

@@ -10,7 +10,7 @@
 //
 
 
-
+#if canImport(UIKit)
 import UIKit
 
 public class StyleKit : NSObject {
@@ -2797,3 +2797,4 @@ public class StyleKit : NSObject {
         }
     }
 }
+#endif
