@@ -18,4 +18,4 @@ public protocol LockActivityHandling {
 
 // MARK: - View Controller
 
-public protocol LockActivityHandlingViewController: class, LockActivityHandling { }
+public protocol LockActivityHandlingViewController: AnyObject, LockActivityHandling { }
