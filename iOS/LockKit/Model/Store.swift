@@ -498,9 +498,7 @@ public extension Store {
     }
     
     func readInformation(_ lock: NativeCentral.Peripheral) async throws {
-        
-        assert(Thread.isMainThread == false)
-        
+                
         let information = try await central.readInformation(
             for: lock
         )
