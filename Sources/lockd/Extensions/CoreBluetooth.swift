@@ -11,6 +11,8 @@ import CoreBluetooth
 import Bluetooth
 import GATT
 import DarwinGATT
+import CoreLock
+import CoreLockGATTServer
 
 internal protocol CoreBluetoothManager {
     
@@ -36,9 +38,8 @@ extension CoreBluetoothManager {
             try await Task.sleep(nanoseconds: 1_000_000_000)
             powerOnWait += 1
             guard powerOnWait < timeout
-                else { throw BTLEAgentError.bluetoothUnavailable }
+                else { throw LockDaemonError.bluetoothUnavailable }
         }
     }
 }
 #endif
-
