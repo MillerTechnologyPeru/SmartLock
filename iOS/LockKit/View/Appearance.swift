@@ -6,6 +6,7 @@
 //  Copyright © 2019 ColemanCDA. All rights reserved.
 //
 
+#if canImport(UIKit)
 import Foundation
 import UIKit
 
@@ -56,3 +57,4 @@ internal extension UITabBar {
         self.tintColor = StyleKit.wirelessBlue
     }
 }
+#endif
