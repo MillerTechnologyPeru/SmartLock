@@ -58,7 +58,7 @@ final class KeysViewController: UITableViewController {
         tableView.estimatedRowHeight = 60
         
         // load data
-        locksObserver = Store.shared.locks.sink { locks in
+        locksObserver = Store.shared.$locks.sink { locks in
             mainQueue { [weak self] in self?.configureView() }
         }
     }
@@ -230,13 +230,13 @@ final class KeysViewController: UITableViewController {
     @discardableResult
     internal func select(lock id: UUID, animated: Bool = true) -> LockViewController? {
         
-        guard Store.shared[lock: identifier] != nil else {
-            showErrorAlert(LockError.noKey(lock: identifier).localizedDescription)
+        guard Store.shared[lock: id] != nil else {
+            showErrorAlert(LockError.noKey(lock: id).localizedDescription)
             return nil
         }
         
-        let lockViewController = LockViewController.fromStoryboard(with: identifier)
-        lockViewController.lockIdentifier = identifier
+        let lockViewController = LockViewController.fromStoryboard(with: id)
+        lockViewController.lockIdentifier = id
         if animated {
             self.show(lockViewController, sender: self)
         } else if let navigationController = self.navigationController {

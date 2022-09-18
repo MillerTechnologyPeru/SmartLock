@@ -451,7 +451,11 @@ public extension Store {
         let duration = duration ?? preferences.scanDuration
         let filterDuplicates = preferences.filterDuplicates
         self.peripherals.removeAll()
-        let stream = central.scan(with: [LockService.uuid])
+        let stream = central.scan(with: [LockService.uuid], filterDuplicates: filterDuplicates)
+        Task {
+            try? await Task.sleep(nanoseconds: UInt64(Int64(duration)) * 1_000_000_000)
+            stream.stop()
+        }
         for try await scanData in stream {
             guard let serviceUUIDs = scanData.advertisementData.serviceUUIDs,
                 serviceUUIDs.contains(LockService.uuid)

@@ -78,7 +78,6 @@
 		6E6000292121119500787DAA /* SmartLockUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E6000282121119500787DAA /* SmartLockUITests.swift */; };
 		6E64B7EA231236E5002BC0A2 /* Rswift in Frameworks */ = {isa = PBXBuildFile; productRef = 6E64B7E9231236E5002BC0A2 /* Rswift */; };
 		6E64B7ED23123846002BC0A2 /* KeychainAccess in Frameworks */ = {isa = PBXBuildFile; productRef = 6E64B7EC23123846002BC0A2 /* KeychainAccess */; };
-		6E64B7F1231240CC002BC0A2 /* JGProgressHUD in Frameworks */ = {isa = PBXBuildFile; productRef = 6E64B7F0231240CC002BC0A2 /* JGProgressHUD */; };
 		6E64B7F4231247EF002BC0A2 /* QRCodeReader in Frameworks */ = {isa = PBXBuildFile; platformFilter = ios; productRef = 6E64B7F3231247EF002BC0A2 /* QRCodeReader */; };
 		6E6B78B62325F14600635EEF /* SliderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E135CBD2319842A00FFA7F7 /* SliderCell.swift */; };
 		6E6B78B72325F17300635EEF /* BluetoothSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E135CB72319832900FFA7F7 /* BluetoothSettingsView.swift */; };
@@ -92,6 +91,9 @@
 		6E7374602325EA1600EC85B2 /* Event.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E73745E2325EA1600EC85B2 /* Event.swift */; };
 		6E7503C32318E78400103EBB /* WatchApplicationContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E7503C22318E78400103EBB /* WatchApplicationContext.swift */; };
 		6E7503C42318E78400103EBB /* WatchApplicationContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E7503C22318E78400103EBB /* WatchApplicationContext.swift */; };
+		6E7E787528D6CACD00B81B65 /* JGProgressHUD.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6E7E787228D6CAAB00B81B65 /* JGProgressHUD.framework */; };
+		6E7E787628D6CACD00B81B65 /* JGProgressHUD.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 6E7E787228D6CAAB00B81B65 /* JGProgressHUD.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		6E7E787828D6D37E00B81B65 /* WatchIntent.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 6ED8206C2316711900B69520 /* WatchIntent.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		6E806B8C230F4F2800C6FF78 /* Preferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E806B8B230F4F2800C6FF78 /* Preferences.swift */; };
 		6E806B94230F4F4700C6FF78 /* Keychain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E806B93230F4F4700C6FF78 /* Keychain.swift */; };
 		6E806B96230F4F7300C6FF78 /* AppGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E806B95230F4F7300C6FF78 /* AppGroup.swift */; };
@@ -107,7 +109,6 @@
 		6E806BB3230F6EC400C6FF78 /* R.LockKit.generated.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E806BB2230F6EC300C6FF78 /* R.LockKit.generated.swift */; };
 		6E806BD92310F36E00C6FF78 /* R.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E806BD82310F36E00C6FF78 /* R.swift */; };
 		6E806BDB2310FB2C00C6FF78 /* PermissionIconView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E806BDA2310FB2C00C6FF78 /* PermissionIconView.swift */; };
-		6E81A3262332E26800F73AFC /* WatchIntent.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 6ED8206C2316711900B69520 /* WatchIntent.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		6E83BA6D233CBAF400D6BA04 /* Error.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E83BA6C233CBAF400D6BA04 /* Error.swift */; };
 		6E83BA6E233CBAF400D6BA04 /* Error.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E83BA6C233CBAF400D6BA04 /* Error.swift */; };
 		6E83BA77233CC00B00D6BA04 /* NearbyLocksViewController.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6E83BA79233CC00B00D6BA04 /* NearbyLocksViewController.strings */; };
@@ -231,7 +232,6 @@
 		6E9794CC23315E2E00B5C5C9 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6EB59D5E2312E9E400D5EFA7 /* CloudKit.framework */; };
 		6E9794D123315E7400B5C5C9 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6EB59D5E2312E9E400D5EFA7 /* CloudKit.framework */; };
 		6E9794D223315E8100B5C5C9 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6EB59D5E2312E9E400D5EFA7 /* CloudKit.framework */; };
-		6E9794D423315EA000B5C5C9 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6E9794D323315EA000B5C5C9 /* CloudKit.framework */; };
 		6E9794D523315EB000B5C5C9 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6E9794D323315EA000B5C5C9 /* CloudKit.framework */; };
 		6E9794D623319DC900B5C5C9 /* Log.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60F8AC212127890054995D /* Log.swift */; };
 		6E9794D72331D05B00B5C5C9 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6EB59D5E2312E9E400D5EFA7 /* CloudKit.framework */; };
@@ -419,6 +419,27 @@
 			remoteGlobalIDString = DD75027A1C68FCFC006590AF;
 			remoteInfo = CoreLockTests;
 		};
+		6E7E787128D6CAAB00B81B65 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6E7E786C28D6CAAB00B81B65 /* JGProgressHUD.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 6BF7DC5A1AEFCFD9000A0AE0;
+			remoteInfo = "JGProgressHUD-iOS";
+		};
+		6E7E787328D6CAAB00B81B65 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6E7E786C28D6CAAB00B81B65 /* JGProgressHUD.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 6BABF9A31F7A6133005E783F;
+			remoteInfo = "JGProgressHUD-tvOS";
+		};
+		6E7E787928D6D37E00B81B65 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6E6000082121119400787DAA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 6ED8206B2316711900B69520;
+			remoteInfo = WatchIntent;
+		};
 		6E83BACF233D906C00D6BA04 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 6E60004D2121164B00787DAA /* CoreLock.xcodeproj */;
@@ -602,15 +623,26 @@
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		6E81A31E2332E24000F73AFC /* Embed App Extensions */ = {
+		6E7E787728D6CACD00B81B65 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				6E7E787628D6CACD00B81B65 /* JGProgressHUD.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6E7E787B28D6D37E00B81B65 /* Embed Foundation Extensions */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
-				6E81A3262332E26800F73AFC /* WatchIntent.appex in Embed App Extensions */,
+				6E7E787828D6D37E00B81B65 /* WatchIntent.appex in Embed Foundation Extensions */,
 			);
-			name = "Embed App Extensions";
+			name = "Embed Foundation Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		6E994AF6230E56DD0076DC1B /* Embed App Extensions */ = {
@@ -765,6 +797,7 @@
 		6E7374572325E11300EC85B2 /* NewKeyManagedObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewKeyManagedObject.swift; sourceTree = "<group>"; };
 		6E73745E2325EA1600EC85B2 /* Event.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Event.swift; sourceTree = "<group>"; };
 		6E7503C22318E78400103EBB /* WatchApplicationContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchApplicationContext.swift; sourceTree = "<group>"; };
+		6E7E786C28D6CAAB00B81B65 /* JGProgressHUD.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = JGProgressHUD.xcodeproj; path = JGProgressHUD/JGProgressHUD.xcodeproj; sourceTree = "<group>"; };
 		6E806B8B230F4F2800C6FF78 /* Preferences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Preferences.swift; sourceTree = "<group>"; };
 		6E806B93230F4F4700C6FF78 /* Keychain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Keychain.swift; sourceTree = "<group>"; };
 		6E806B95230F4F7300C6FF78 /* AppGroup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppGroup.swift; sourceTree = "<group>"; };
@@ -961,7 +994,7 @@
 			files = (
 				6E64B7EA231236E5002BC0A2 /* Rswift in Frameworks */,
 				6E64B7F4231247EF002BC0A2 /* QRCodeReader in Frameworks */,
-				6E64B7F1231240CC002BC0A2 /* JGProgressHUD in Frameworks */,
+				6E7E787528D6CACD00B81B65 /* JGProgressHUD.framework in Frameworks */,
 				6ED44E44235C4406002E8F54 /* SFSafeSymbols in Frameworks */,
 				6EE5A10B2329FCA00000235C /* CloudKitCodable in Frameworks */,
 				6E64B7ED23123846002BC0A2 /* KeychainAccess in Frameworks */,
@@ -1015,7 +1048,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6E9794D423315EA000B5C5C9 /* CloudKit.framework in Frameworks */,
 				6EA570F223189CE9008027D4 /* CoreLock.framework in Frameworks */,
 				6EA570EE23189CE9008027D4 /* LockKit.framework in Frameworks */,
 			);
@@ -1123,6 +1155,7 @@
 		6E6000072121119400787DAA = {
 			isa = PBXGroup;
 			children = (
+				6E7E786C28D6CAAB00B81B65 /* JGProgressHUD.xcodeproj */,
 				6E60004D2121164B00787DAA /* CoreLock.xcodeproj */,
 				6E6000122121119400787DAA /* SmartLock */,
 				6E6000272121119500787DAA /* SmartLockUITests */,
@@ -1290,6 +1323,15 @@
 				6ECD6AE923320D2C0007E7DA /* ContextMenu.swift */,
 			);
 			path = Extensions;
+			sourceTree = "<group>";
+		};
+		6E7E786D28D6CAAB00B81B65 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				6E7E787228D6CAAB00B81B65 /* JGProgressHUD.framework */,
+				6E7E787428D6CAAB00B81B65 /* JGProgressHUD.framework */,
+			);
+			name = Products;
 			sourceTree = "<group>";
 		};
 		6E806BA7230F654600C6FF78 /* View */ = {
@@ -1711,6 +1753,7 @@
 				6E994A80230DFB6C0076DC1B /* Sources */,
 				6E994A81230DFB6C0076DC1B /* Frameworks */,
 				6E994A82230DFB6C0076DC1B /* Resources */,
+				6E7E787728D6CACD00B81B65 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -1721,7 +1764,6 @@
 			packageProductDependencies = (
 				6E64B7E9231236E5002BC0A2 /* Rswift */,
 				6E64B7EC23123846002BC0A2 /* KeychainAccess */,
-				6E64B7F0231240CC002BC0A2 /* JGProgressHUD */,
 				6E64B7F3231247EF002BC0A2 /* QRCodeReader */,
 				6EE5A10A2329FCA00000235C /* CloudKitCodable */,
 				6ED44E43235C4406002E8F54 /* SFSafeSymbols */,
@@ -1859,13 +1901,14 @@
 				6EA570CD23189874008027D4 /* Frameworks */,
 				6EA570CE23189874008027D4 /* Resources */,
 				6EA570F423189CE9008027D4 /* Embed Frameworks */,
-				6E81A31E2332E24000F73AFC /* Embed App Extensions */,
 				6E3D1DF42334BDCB000C6E06 /* Build Version */,
+				6E7E787B28D6D37E00B81B65 /* Embed Foundation Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 				6EA570F123189CE9008027D4 /* PBXTargetDependency */,
+				6E7E787A28D6D37E00B81B65 /* PBXTargetDependency */,
 			);
 			name = "Watch Extension";
 			packageProductDependencies = (
@@ -2109,6 +2152,10 @@
 					ProductGroup = 6E60004E2121164B00787DAA /* Products */;
 					ProjectRef = 6E60004D2121164B00787DAA /* CoreLock.xcodeproj */;
 				},
+				{
+					ProductGroup = 6E7E786D28D6CAAB00B81B65 /* Products */;
+					ProjectRef = 6E7E786C28D6CAAB00B81B65 /* JGProgressHUD.xcodeproj */;
+				},
 			);
 			projectRoot = "";
 			targets = (
@@ -2167,6 +2214,20 @@
 			fileType = wrapper.cfbundle;
 			path = CoreLockTests.xctest;
 			remoteRef = 6E60005D2121164B00787DAA /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		6E7E787228D6CAAB00B81B65 /* JGProgressHUD.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = JGProgressHUD.framework;
+			remoteRef = 6E7E787128D6CAAB00B81B65 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		6E7E787428D6CAAB00B81B65 /* JGProgressHUD.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = JGProgressHUD.framework;
+			remoteRef = 6E7E787328D6CAAB00B81B65 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */
@@ -3010,6 +3071,11 @@
 			target = 6E60000F2121119400787DAA /* SmartLock */;
 			targetProxy = 6E6000252121119500787DAA /* PBXContainerItemProxy */;
 		};
+		6E7E787A28D6D37E00B81B65 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 6ED8206B2316711900B69520 /* WatchIntent */;
+			targetProxy = 6E7E787928D6D37E00B81B65 /* PBXContainerItemProxy */;
+		};
 		6E83BACE233D906C00D6BA04 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = "CoreLock-iOS";
@@ -3460,7 +3526,6 @@
 					"@executable_path/../Frameworks",
 					"@executable_path/../../../../Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 10.12;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = maccatalyst.com.colemancda.Lock.Today;
@@ -3486,7 +3551,6 @@
 					"@executable_path/../Frameworks",
 					"@executable_path/../../../../Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 10.12;
 				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = maccatalyst.com.colemancda.Lock.Today;
 				PRODUCT_NAME = Today;
@@ -3744,7 +3808,6 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = LockKit/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"${BUILT_PRODUCTS_DIR}",
@@ -3777,7 +3840,6 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = LockKit/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -3903,7 +3965,6 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 4W79SG34MW;
 				INFOPLIST_FILE = IntentUI/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -3927,7 +3988,6 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 4W79SG34MW;
 				INFOPLIST_FILE = IntentUI/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -3950,7 +4010,6 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 4W79SG34MW;
 				INFOPLIST_FILE = Intent/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -3974,7 +4033,6 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 4W79SG34MW;
 				INFOPLIST_FILE = Intent/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -4228,7 +4286,6 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 4W79SG34MW;
 				INFOPLIST_FILE = QuickLook/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -4254,7 +4311,6 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 4W79SG34MW;
 				INFOPLIST_FILE = QuickLook/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -4279,7 +4335,6 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 4W79SG34MW;
 				INFOPLIST_FILE = Thumbnail/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -4304,7 +4359,6 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 4W79SG34MW;
 				INFOPLIST_FILE = Thumbnail/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -4703,11 +4757,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 6E64B7EB23123846002BC0A2 /* XCRemoteSwiftPackageReference "KeychainAccess" */;
 			productName = KeychainAccess;
-		};
-		6E64B7F0231240CC002BC0A2 /* JGProgressHUD */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 6E64B7EF231240CC002BC0A2 /* XCRemoteSwiftPackageReference "JGProgressHUD" */;
-			productName = JGProgressHUD;
 		};
 		6E64B7F3231247EF002BC0A2 /* QRCodeReader */ = {
 			isa = XCSwiftPackageProductDependency;

@@ -41,7 +41,7 @@ final class MessagesViewController: MSMessagesAppViewController {
         log("✉️ Loaded \(MessagesViewController.self)")
         
         // setup loading
-        LockManager.shared.log = { log("🔒 LockManager: " + $0) }
+        Store.shared.central.log = { log("📲 Central: " + $0) }
         BeaconController.shared.log = { log("📶 \(BeaconController.self): " + $0) }
         SpotlightController.shared.log = { log("🔦 \(SpotlightController.self): " + $0) }
         
@@ -168,11 +168,11 @@ final class MessagesViewController: MSMessagesAppViewController {
         Store.shared.loadCache()
         
         // set data
-        self.items = Store.shared.locks.value
+        self.items = Store.shared.locks
             .lazy
             .filter { $0.value.key.permission.isAdministrator }
             .lazy
-            .map { Item(identifier: $0.key, cache: $0.value) }
+            .map { Item(id: $0.key, cache: $0.value) }
             .sorted(by: { $0.cache.key.created < $1.cache.key.created })
         
         // update table view

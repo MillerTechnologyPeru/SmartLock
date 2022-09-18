@@ -63,13 +63,13 @@ final class NearbyLocksViewController: UITableViewController {
         tableView.estimatedRowHeight = 60
         
         // observe model changes
-        peripheralsObserver = Store.shared.peripherals.sink { [weak self] _ in
+        peripheralsObserver = Store.shared.$peripherals.sink { [weak self] _ in
             self?.locksChanged()
         }
-        informationObserver = Store.shared.lockInformation.sink { [weak self] _ in
+        informationObserver = Store.shared.$lockInformation.sink { [weak self] _ in
             self?.locksChanged()
         }
-        locksObserver = Store.shared.locks.sink { [weak self] _ in
+        locksObserver = Store.shared.$locks.sink { [weak self] _ in
             self?.locksChanged()
         }
         
@@ -84,7 +84,7 @@ final class NearbyLocksViewController: UITableViewController {
         
         #if !targetEnvironment(macCatalyst)
         // scan if none is setup
-        if Store.shared.locks.value.isEmpty {
+        if Store.shared.locks.isEmpty {
             DispatchQueue.main.asyncAfter(deadline: .now() + 1.0,
                                           execute: { [weak self] in self?.scan() })
         }
@@ -102,12 +102,14 @@ final class NearbyLocksViewController: UITableViewController {
         #if targetEnvironment(macCatalyst)
         scan()
         #else
-        if Store.shared.lockManager.central.state == .poweredOn,
-            Store.shared.locks.value.isEmpty || Store.shared.lockInformation.value.isEmpty {
-            scan()
-        } else {
-            // Update beacon status
-            BeaconController.shared.scanBeacons()
+        Task {
+            if await Store.shared.central.state == .poweredOn,
+                Store.shared.locks.isEmpty || Store.shared.lockInformation.isEmpty {
+                scan()
+            } else {
+                // Update beacon status
+                BeaconController.shared.scanBeacons()
+            }
         }
         #endif
     }
@@ -149,8 +151,8 @@ final class NearbyLocksViewController: UITableViewController {
         self.refreshControl?.endRefreshing()
         
         /// ignore if off or not authorized
-        guard LockManager.shared.central.state == .poweredOn
-            else { return } // cannot scan
+        //guard await Store.shared.central.state == .poweredOn
+        //    else { return } // cannot scan
         
         userActivity = NSUserActivity(.screen(.nearbyLocks))
         userActivity?.becomeCurrent()
@@ -161,10 +163,10 @@ final class NearbyLocksViewController: UITableViewController {
         // scan
         performActivity({
             try await Store.shared.scan()
-            for peripheral in Store.shared.peripherals.values {
-                do { try Store.shared.readInformation(peripheral) }
+            for peripheral in Store.shared.peripherals.keys {
+                do { try await Store.shared.readInformation(peripheral) }
                 catch {
-                    log("⚠️ Could not read information for peripheral \(peripheral.scanData.peripheral)")
+                    log("⚠️ Could not read information for peripheral \(peripheral)")
                     // try again
                     mainQueue { [weak self] in self?.scan() }
                 }
@@ -202,7 +204,7 @@ final class NearbyLocksViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, accessoryButtonTappedForRowWith indexPath: IndexPath) {
         
         let lock = self[indexPath]
-        guard let information = Store.shared.lockInformation.value[lock.scanData.peripheral]
+        guard let information = Store.shared.lockInformation[lock]
             else { assertionFailure(); return }
         view(lock: information.id)
     }
@@ -216,8 +218,9 @@ final class NearbyLocksViewController: UITableViewController {
     private func configureView() {
         
         // sort by signal
-        self.items = Store.shared.peripherals.values
-            .sorted(by: { $0.scanData.rssi < $1.scanData.rssi })
+        self.items = Store.shared.peripherals
+            .sorted(by: { $0.value.rssi < $1.value.rssi })
+            .map { $0.key }
     }
     
     private func configure(cell: LockTableViewCell, at indexPath: IndexPath) {
@@ -230,7 +233,7 @@ final class NearbyLocksViewController: UITableViewController {
         let isEnabled: Bool
         let showDetail: Bool
         
-        if let information = Store.shared.lockInformation.value[lock.scanData.peripheral] {
+        if let information = Store.shared.lockInformation[lock] {
             
             isEnabled = true
             
@@ -293,7 +296,7 @@ final class NearbyLocksViewController: UITableViewController {
     
     private func select(_ lock: NativeCentral.Peripheral) {
         
-        guard let information = Store.shared.lockInformation[lock.scanData.peripheral]
+        guard let information = Store.shared.lockInformation[lock]
             else { return }
         
         let identifier = information.id

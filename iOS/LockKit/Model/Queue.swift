@@ -9,7 +9,6 @@
 import Foundation
 
 /// Perform task on main queue
-@inline(__always)
 public func mainQueue(_ block: @escaping () -> ()) {
     DispatchQueue.main.async(execute: block)
 }

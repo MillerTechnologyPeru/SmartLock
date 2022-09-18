@@ -31,7 +31,7 @@ final class IntentHandler: INExtension {
         assert(Thread.isMainThread == false)
         DispatchQueue.main.sync {
             let _  = IntentHandler.didLaunch
-            LockManager.shared.log = { log("🔒 LockManager: " + $0) }
+            Store.shared.central.log = { log("📲 Central: " + $0) }
             #if os(iOS)
             BeaconController.shared.log = { log("📶 \(BeaconController.self): " + $0) }
             #endif
@@ -39,7 +39,7 @@ final class IntentHandler: INExtension {
             Store.shared.loadCache()
         }
         
-        log("🎙 Handle intent \(intent.intentDescription ?? intent.id ?? intent.description)")
+        log("🎙 Handle intent \(intent.intentDescription ?? intent.identifier ?? intent.description)")
         
         if #available(watchOSApplicationExtension 5.0, *) {
             return UnlockIntentHandler()
@@ -62,7 +62,7 @@ final class UnlockIntentHandler: NSObject, UnlockIntentHandling {
             Store.shared.loadCache()
             
             // locks
-            let intentLocks = Store.shared.locks.value.map { IntentLock(identifier: $0, name: $1.name) }
+            let intentLocks = Store.shared.locks.map { IntentLock(id: $0, name: $1.name) }
             completion(intentLocks, nil)
         }
     }
@@ -70,7 +70,7 @@ final class UnlockIntentHandler: NSObject, UnlockIntentHandling {
     @available(iOSApplicationExtension 13.0, watchOSApplicationExtension 6.0, *)
     func resolveLock(for intent: UnlockIntent, with completion: @escaping (UnlockLockResolutionResult) -> Void) {
         
-        DispatchQueue.bluetooth.async {
+        Task {
             
             // load updated lock information
             Store.shared.loadCache()
@@ -82,7 +82,7 @@ final class UnlockIntentHandler: NSObject, UnlockIntentHandling {
             }
                         
             // validate UUID string
-            guard let identifier = intentLock.id.flatMap({ UUID(uuidString: $0) }) else {
+            guard let identifier = intentLock.identifier.flatMap({ UUID(uuidString: $0) }) else {
                 completion(.unsupported())
                 return
             }
@@ -96,7 +96,7 @@ final class UnlockIntentHandler: NSObject, UnlockIntentHandling {
             
             // check if lock is in range
             var device: NativeCentral.Peripheral?
-            do { device = try Store.shared.device(for: identifier, scanDuration: 2.0) }
+            do { device = try await Store.shared.device(for: identifier, scanDuration: 2.0) }
             catch {
                 completion(.confirmationRequired(with: intentLock))
                 return
@@ -116,7 +116,7 @@ final class UnlockIntentHandler: NSObject, UnlockIntentHandling {
     func confirm(intent: UnlockIntent, completion: @escaping (UnlockIntentResponse) -> Void) {
         
         assert(Thread.isMainThread == false, "Should not be main thread")
-        
+        /*
         mainQueue {
             
             guard let intentLock = intent.lock else {
@@ -132,14 +132,14 @@ final class UnlockIntentHandler: NSObject, UnlockIntentHandling {
             }
             
             completion(.init(code: .ready, userActivity: NSUserActivity(.action(.unlock(lockIdentifier)))))
-        }
+        }*/
     }
     
     @available(iOSApplicationExtension 12.0, *)
     func handle(intent: UnlockIntent, completion: @escaping (UnlockIntentResponse) -> Void) {
         
         assert(Thread.isMainThread == false, "Should not be main thread")
-        
+        /*
         mainQueue {
             
             guard let intentLock = intent.lock else {
@@ -162,14 +162,14 @@ final class UnlockIntentHandler: NSObject, UnlockIntentHandling {
                 }
             }
             
-            DispatchQueue.bluetooth.async {
+            Task {
                 do {
-                    guard let peripheral = try Store.shared.device(for: lockIdentifier, scanDuration: 1.0) else {
+                    guard let peripheral = try await Store.shared.device(for: lockIdentifier, scanDuration: 1.0) else {
                         completion(.failure(failureReason: "Lock not in range. "))
                         return
                     }
                     
-                    guard try Store.shared.unlock(peripheral) else {
+                    guard try await Store.shared.unlock(peripheral) else {
                         completion(.failure(failureReason: "Invalid lock."))
                         return
                     }
@@ -181,7 +181,7 @@ final class UnlockIntentHandler: NSObject, UnlockIntentHandling {
                     return
                 }
             }
-        }
+        }*/
     }
 }
 

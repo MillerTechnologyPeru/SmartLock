@@ -29,7 +29,7 @@ final class ExtensionDelegate: NSObject, WKExtensionDelegate {
         log("⌚️ Launching SmartLock Watch v\(Bundle.InfoPlist.shortVersion) Build \(Bundle.InfoPlist.version)")
         
         // setup logging
-        Store.shared.lockManager.log = { log("🔒 LockManager: " + $0) }
+        Store.shared.central.log = { log("📲 Central: " + $0) }
         SessionController.shared.log = { log("📱 SessionController: " + $0) }
         
         // sync with iOS app on launch
@@ -142,9 +142,9 @@ internal extension ExtensionDelegate {
     func scan(completion: (() -> ())? = nil) {
         
         // scan for locks
-        DispatchQueue.bluetooth.async {
+        Task {
             defer { mainQueue { completion?() } }
-            do { try Store.shared.scan() }
+            do { try await Store.shared.scan() }
             catch { log("⚠️ Unable to scan: \(error.localizedDescription)") }
         }
     }
