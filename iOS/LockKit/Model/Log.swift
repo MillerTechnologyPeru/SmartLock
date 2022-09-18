@@ -18,25 +18,18 @@ public func log(_ text: String) {
         print(text)
     }
 #endif
-    
-    DispatchQueue.log.async {
-        
-        // only print for debug builds
-        #if DEBUG
-        print(text)
-        #endif
-        
-        let dateString = Log.dateFormatter.string(from: date)
-        
-        do { try Log.shared.log(dateString + " " + text) }
-        catch CocoaError.fileWriteNoPermission {
-            // unable to write due to permissions
-            if #available(iOS 13, *) {
-                assertionFailure("You don’t have permission to save the log file")
-            }
-        }
-        catch { assertionFailure("Could not write log: \(error)") }
-    }
+    /*
+     let dateString = Log.dateFormatter.string(from: date)
+     
+     do { try Log.shared.log(dateString + " " + text) }
+     catch CocoaError.fileWriteNoPermission {
+         // unable to write due to permissions
+         if #available(iOS 13, *) {
+             assertionFailure("You don’t have permission to save the log file")
+         }
+     }
+     catch { assertionFailure("Could not write log: \(error)") }
+     */
 }
 
 fileprivate extension Log {
