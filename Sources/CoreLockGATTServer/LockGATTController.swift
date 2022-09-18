@@ -53,7 +53,7 @@ public final class LockGATTController <Peripheral: PeripheralManager> {
     public func setHardware(_ newValue: LockHardware) async {
         self.hardware = newValue
         await deviceInformationController.setHardware(newValue)
-        await deviceInformationController.setHardware(newValue)
+        await lockServiceController.setHardware(newValue)
     }
     
     private func willRead(_ request: GATTReadRequest<Peripheral.Central>) -> ATTError? {

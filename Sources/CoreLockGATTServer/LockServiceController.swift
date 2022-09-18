@@ -264,7 +264,7 @@ public final class LockGATTServiceController <Peripheral: PeripheralManager> : G
     
     // MARK: - Private Methods
     
-    private func updateInformation() async {
+    public func updateInformation() async {
         
         let status: LockStatus = authorization.isEmpty ? .setup : .unlock
         let id = configurationStore.configuration.id

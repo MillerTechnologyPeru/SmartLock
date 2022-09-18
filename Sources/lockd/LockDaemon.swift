@@ -121,6 +121,7 @@ struct LockDaemon {
         controller?.lockServiceController.authorization = authorization
         controller?.lockServiceController.events = events
         controller?.lockServiceController.setupSecret = setupSecret.sharedSecret
+        await controller?.lockServiceController.updateInformation()
         /*
         // configure web server
         webServer.authorization = authorization
