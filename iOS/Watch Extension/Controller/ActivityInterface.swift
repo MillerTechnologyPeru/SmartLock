@@ -9,7 +9,7 @@
 import Foundation
 import WatchKit
 
-public protocol ActivityInterface: class {
+public protocol ActivityInterface: AnyObject {
     
     var activityImageView: WKInterfaceImage? { get }
     
@@ -48,38 +48,57 @@ public extension ActivityInterface where Self: WKInterfaceController {
                               completion: ((Self, T) -> ())? = nil) {
         
         assert(Thread.isMainThread)
-        
         let queue = queue ?? .app
-        
         if showActivity { self.showActivity() }
-        
         queue.async {
-            
             do {
-                
                 let value = try asyncOperation()
-                
                 mainQueue { [weak self] in
-                    
                     guard let controller = self
                         else { return }
-                    
                     if showActivity { controller.hideActivity() }
-                    
                     // success
                     completion?(controller, value)
                 }
-            }
-                
-            catch {
-                
+            } catch {
                 mainQueue { [weak self] in
-                    
                     guard let controller = self
                         else { return }
-                    
                     if showActivity { controller.hideActivity() }
-                    
+                    // show error
+                    log("⚠️ Error: \(error.localizedDescription)")
+                    #if DEBUG
+                    print(error)
+                    #endif
+                    controller.showError(error.localizedDescription)
+                }
+            }
+        }
+    }
+    
+    func performActivity <T> (showActivity: Bool = true,
+                              _ asyncOperation: @escaping () async throws -> T,
+                              completion: ((Self, T) -> ())? = nil) {
+        
+        assert(Thread.isMainThread)
+                
+        if showActivity { self.showActivity() }
+        
+        Task {
+            do {
+                let value = try await asyncOperation()
+                await MainActor.run { [weak self] in
+                    guard let controller = self
+                        else { return }
+                    if showActivity { controller.hideActivity() }
+                    // success
+                    completion?(controller, value)
+                }
+            } catch {
+                await MainActor.run { [weak self] in
+                    guard let controller = self
+                        else { return }
+                    if showActivity { controller.hideActivity() }
                     // show error
                     log("⚠️ Error: \(error.localizedDescription)")
                     #if DEBUG

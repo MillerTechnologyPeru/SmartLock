@@ -70,7 +70,7 @@ public final class SessionController: NSObject {
     
     public func requestKeyData(for id: UUID) throws -> KeyData {
         
-        let response = try request(.key(identifier))
+        let response = try request(.key(id))
         switch response {
         case let .error(error):
             throw Error.errorResponse(error)
