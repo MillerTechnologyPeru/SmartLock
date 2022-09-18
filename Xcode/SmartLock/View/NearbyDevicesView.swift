@@ -18,6 +18,9 @@ struct NearbyDevicesView: View {
         list
             .navigationBarTitle(Text("Nearby"), displayMode: .automatic)
             .navigationBarItems(trailing: trailingButtonItem)
+            .tabItem {
+                Label("Nearby", image: "NearTabBarIconSelected")
+            }
         #elseif os(macOS)
         list
             .navigationTitle(Text("Nearby"))
@@ -35,11 +38,15 @@ private extension NearbyDevicesView {
     }
     
     var list: some View {
-        ScrollView {
-            LazyVStack(alignment: .leading) {
-                ForEach(peripherals, id: \.id) {
-                    Text(verbatim: $0.id.description)
-                }
+        List {
+            ForEach(peripherals, id: \.id) {
+                LockRowView(image: .permission(.admin), title: "\($0)")
+            }
+        }
+        .refreshable {
+            Task {
+                await store.scan()
+                try await Task.sleep(nanoseconds: 2 * 1_000_000_00)
             }
         }
         .task {
@@ -59,6 +66,10 @@ private extension NearbyDevicesView {
 
 struct NearbyDevicesView_Previews: PreviewProvider {
     static var previews: some View {
-        NearbyDevicesView()
+        NavigationView {
+            TabView {
+                NearbyDevicesView()
+            }
+        }
     }
 }
