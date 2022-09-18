@@ -322,6 +322,7 @@ public final class Store: ObservableObject {
             do {
                 guard let _ = try await self.device(for: beacon, scanDuration: 1.0) else {
                     log("⚠️ Could not find lock \(beacon) for beacon \(beacon)")
+                    try? await Task.sleep(nanoseconds: 10 * 1_000_000_000)
                     self.beaconController.scanBeacon(for: beacon)
                     return
                 }
