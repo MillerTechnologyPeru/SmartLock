@@ -103,29 +103,13 @@ public final class BeaconController {
                 locationManager.startMonitoring(for: region)
             }
             #endif
-            if #available(iOS 13, *) {
-                if locationManager.rangedBeaconConstraints.contains(.init(region)) == false {
-                    locationManager.startRangingBeacons(satisfying: .init(region))
-                }
-            } else {
-                #if !targetEnvironment(macCatalyst)
-                if locationManager.rangedRegions.contains(region) == false {
-                    locationManager.startRangingBeacons(in: region)
-                }
-                #endif
+            if locationManager.rangedBeaconConstraints.contains(.init(region)) == false {
+                locationManager.startRangingBeacons(satisfying: .init(region))
             }
             locationManager.requestState(for: region)
         case .authorizedWhenInUse:
-            if #available(iOS 13, *) {
-                if locationManager.rangedBeaconConstraints.contains(.init(region)) == false {
-                    locationManager.startRangingBeacons(satisfying: .init(region))
-                }
-            } else {
-                #if !targetEnvironment(macCatalyst)
-                if locationManager.rangedRegions.contains(region) == false {
-                    locationManager.startRangingBeacons(in: region)
-                }
-                #endif
+            if locationManager.rangedBeaconConstraints.contains(.init(region)) == false {
+                locationManager.startRangingBeacons(satisfying: .init(region))
             }
             locationManager.requestState(for: region)
         case .denied,
@@ -136,16 +120,8 @@ public final class BeaconController {
             // try just in case, ignore errors
             locationManager.requestState(for: region)
             locationManager.startMonitoring(for: region)
-            if #available(iOS 13, *) {
-                if locationManager.rangedBeaconConstraints.contains(.init(region)) == false {
-                    locationManager.startRangingBeacons(satisfying: .init(region))
-                }
-            } else {
-                #if !targetEnvironment(macCatalyst)
-                if locationManager.rangedRegions.contains(region) == false {
-                    locationManager.startRangingBeacons(in: region)
-                }
-                #endif
+            if locationManager.rangedBeaconConstraints.contains(.init(region)) == false {
+                locationManager.startRangingBeacons(satisfying: .init(region))
             }
         }
     }
@@ -195,23 +171,11 @@ private extension BeaconController {
                 else { assertionFailure(); return }
             
             if let beaconRegion = region as? CLBeaconRegion {
-                
-                // start ranging beacons
-                if #available(iOS 13, *) {
-                    if manager.rangedBeaconConstraints.contains(.init(beaconRegion)) == false {
-                        manager.startRangingBeacons(satisfying: .init(beaconRegion))
-                    }
-                } else {
-                    #if !targetEnvironment(macCatalyst)
-                    if manager.rangedRegions.contains(region) == false {
-                        manager.startRangingBeacons(in: beaconRegion.proximityUUID)
-                    }
-                    #endif
+                if manager.rangedBeaconConstraints.contains(.init(beaconRegion)) == false {
+                    manager.startRangingBeacons(satisfying: .init(beaconRegion))
                 }
-                
                 guard let beacon = beaconController.beacons.first(where: { $0.value.region == region })?.value
-                    else { assertionFailure("Invalid beacon \(beaconRegion.proximityUUID)"); return }
-                
+                    else { assertionFailure("Invalid beacon \(beaconRegion.uuid)"); return }
                 // update state
                 beacon.state = .inside
             }
@@ -227,16 +191,8 @@ private extension BeaconController {
             
             if let beaconRegion = region as? CLBeaconRegion {
                 // stop ranging beacons
-                if #available(iOS 13, *) {
-                    if manager.rangedBeaconConstraints.contains(.init(beaconRegion)) {
-                        manager.stopRangingBeacons(satisfying: .init(beaconRegion))
-                    }
-                } else {
-                    #if !targetEnvironment(macCatalyst)
-                    if manager.rangedRegions.contains(beaconRegion) {
-                         manager.stopRangingBeacons(in: beaconRegion)
-                    }
-                    #endif
+                if manager.rangedBeaconConstraints.contains(.init(beaconRegion)) {
+                    manager.stopRangingBeacons(satisfying: .init(beaconRegion))
                 }
                 
                 guard let beacon = beaconController.beacons.first(where: { $0.value.region == region })?.value
@@ -254,26 +210,28 @@ private extension BeaconController {
             
             if let beaconRegion = region as? CLBeaconRegion {
                 
-                let newState: Beacon.State
+                let newState: Beacon.State?
                 switch state {
                 case .unknown:
                     // start ranging beacons
-                    manager.startRangingBeacons(in: beaconRegion.proximityUUID)
-                    newState = .outside
+                    manager.startRangingBeacons(in: beaconRegion.uuid)
+                    newState = nil
                 case .inside:
                     // start ranging beacons
-                    manager.startRangingBeacons(in: beaconRegion.proximityUUID)
+                    manager.startRangingBeacons(in: beaconRegion.uuid)
                     newState = .inside
                 case .outside:
                     // stop ranging beacons
-                    manager.stopRangingBeacons(in: beaconRegion.proximityUUID)
+                    manager.stopRangingBeacons(in: beaconRegion.uuid)
                     newState = .outside
                 }
                 
                 guard let beacon = beaconController?.beacons.first(where: { $0.value.region == region })?.value
                     else { return }
                 
-                beacon.state = newState
+                if let state = newState {
+                    beacon.state = state
+                }
             }
         }
         
@@ -323,7 +281,7 @@ private extension BeaconController {
         @objc
         public func locationManager(_ manager: CLLocationManager, didRangeBeacons beacons: [CLBeacon], in region: CLBeaconRegion) {
             
-            didRange(beacons: beacons, for: region.proximityUUID)
+            didRange(beacons: beacons, for: region.uuid)
         }
         
         @objc
@@ -375,34 +333,18 @@ internal extension CLLocationManager {
     }
     
     func startRangingBeacons(in uuid: UUID) {
-        if #available(iOS 13, iOSApplicationExtension 13.0, *) {
-            startRangingBeacons(satisfying: .init(uuid: uuid))
-        } else {
-            #if !targetEnvironment(macCatalyst)
-            startRangingBeacons(in: CLBeaconRegion(proximityUUID: uuid, identifier: uuid.uuidString))
-            #endif
-        }
+        startRangingBeacons(satisfying: .init(uuid: uuid))
     }
     
     func stopRangingBeacons(in uuid: UUID) {
-        if #available(iOS 13, iOSApplicationExtension 13.0, *) {
-            stopRangingBeacons(satisfying: .init(uuid: uuid))
-        } else {
-            #if !targetEnvironment(macCatalyst)
-            stopRangingBeacons(in: CLBeaconRegion(proximityUUID: uuid, identifier: uuid.uuidString))
-            #endif
-        }
+        stopRangingBeacons(satisfying: .init(uuid: uuid))
     }
 }
 
 internal extension CLBeaconRegion {
     
     convenience init(uuid id: UUID) {
-        if #available(iOS 13.0, iOSApplicationExtension 13.0, *) {
-            self.init(beaconIdentityConstraint: .init(uuid: id), identifier: id.uuidString)
-        } else {
-            self.init(proximityUUID: id, identifier: id.uuidString)
-        }
+        self.init(beaconIdentityConstraint: .init(uuid: id), identifier: id.uuidString)
     }
 }
 
