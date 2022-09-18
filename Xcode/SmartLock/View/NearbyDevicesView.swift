@@ -18,9 +18,6 @@ struct NearbyDevicesView: View {
         list
             .navigationBarTitle(Text("Nearby"), displayMode: .automatic)
             .navigationBarItems(trailing: trailingButtonItem)
-            .tabItem {
-                Label("Nearby", image: "NearTabBarIconSelected")
-            }
         #elseif os(macOS)
         list
             .navigationTitle(Text("Nearby"))
@@ -60,16 +57,27 @@ private extension NearbyDevicesView {
     }
     
     var trailingButtonItem: some View {
-        EmptyView()
+        if store.isScanning {
+            return AnyView(
+                ProgressView()
+                    .progressViewStyle(.circular)
+            )
+        } else {
+            return AnyView(
+                Button(action: {
+                    
+                }, label: {
+                    Image(systemName: "arrow.clockwise")
+                })
+            )
+        }
     }
 }
 
 struct NearbyDevicesView_Previews: PreviewProvider {
     static var previews: some View {
         NavigationView {
-            TabView {
-                NearbyDevicesView()
-            }
+            NearbyDevicesView()
         }
     }
 }

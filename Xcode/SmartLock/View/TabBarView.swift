@@ -9,12 +9,21 @@ import SwiftUI
 
 struct TabBarView: View {
     var body: some View {
-        NavigationView {
-            TabView {
+        TabView {
+            NavigationView {
                 NearbyDevicesView()
+                Text("Select a lock")
             }
-            .navigationTitle("Hey")
-            .navigationBarTitleDisplayMode(.inline)
+            .tabItem {
+                Label("Nearby", image: "NearTabBarIconSelected")
+            }
+            NavigationView {
+                SettingsView()
+                Text("Settings detail")
+            }
+            .tabItem {
+                Label("Settings", image: "SettingsTabBarIconSelected")
+            }
         }
     }
 }
