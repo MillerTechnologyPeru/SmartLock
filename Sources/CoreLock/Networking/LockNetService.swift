@@ -156,7 +156,7 @@ public extension LockNetService.Authorization {
     
     init(key: KeyCredentials) {
         
-        self.init(key: key.identifier, authentication: Authentication(key: key.secret))
+        self.init(key: key.id, authentication: Authentication(key: key.secret))
     }
 }
 

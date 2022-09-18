@@ -25,12 +25,12 @@ public extension ApplicationData.Cloud {
     
     init(_ value: ApplicationData, user: CloudUser.ID) {
         
-        self.id = .init(rawValue: value.identifier)
+        self.id = .init(rawValue: value.id)
         self.created = value.created
         self.updated = value.updated
         self.locks = value.locks
             .sorted(by: { $0.key.uuidString > $1.key.uuidString })
-            .map { LockCache.Cloud(lock: $0.key, cache: $0.value, applicationData: value.identifier) }
+            .map { LockCache.Cloud(lock: $0.key, cache: $0.value, applicationData: value.id) }
     }
 }
 
@@ -44,7 +44,7 @@ public extension ApplicationData {
             locks[lock.id.rawValue] = value
         }
         self.init(
-            identifier: cloud.id.rawValue,
+            id: cloud.id.rawValue,
             created: cloud.created,
             updated: cloud.updated,
             locks: locks

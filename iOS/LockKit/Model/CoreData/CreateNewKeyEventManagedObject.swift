@@ -17,7 +17,7 @@ public final class CreateNewKeyEventManagedObject: EventManagedObject {
     internal convenience init(_ value: LockEvent.CreateNewKey, lock: LockManagedObject, context: NSManagedObjectContext) {
         
         self.init(context: context)
-        self.identifier = value.identifier
+        self.identifier = value.id
         self.lock = lock
         self.date = value.date
         self.key = value.key
@@ -29,13 +29,13 @@ public extension LockEvent.CreateNewKey {
     
     init?(managedObject: CreateNewKeyEventManagedObject) {
         
-        guard let identifier = managedObject.identifier,
+        guard let id = managedObject.identifier,
             let date = managedObject.date,
             let key = managedObject.key,
             let pendingKey = managedObject.pendingKey
             else { return nil }
         
-        self.init(identifier: identifier, date: date, key: key, newKey: pendingKey)
+        self.init(id: id, date: date, key: key, newKey: pendingKey)
     }
 }
 
@@ -54,7 +54,7 @@ public extension CreateNewKeyEventManagedObject {
             assertionFailure("Missing key value")
             return nil
         }
-        return try context.find(identifier: newKey, type: NewKeyManagedObject.self)
+        return try context.find(id: newKey, type: NewKeyManagedObject.self)
     }
     
     func confirmKeyEvent(in context: NSManagedObjectContext) throws -> ConfirmNewKeyEventManagedObject? {

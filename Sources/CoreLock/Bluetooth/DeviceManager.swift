@@ -133,7 +133,7 @@ public final class LockManager <Central: CentralProtocol> {
         
         try central.device(for: peripheral, timeout: timeout) { [unowned self] (cache) in
             
-            let characteristicValue = UnlockCharacteristic(identifier: key.identifier,
+            let characteristicValue = UnlockCharacteristic(identifier: key.id,
                                                            action: action,
                                                            authentication: Authentication(key: key.secret))
             
@@ -148,7 +148,7 @@ public final class LockManager <Central: CentralProtocol> {
                           with key: KeyCredentials,
                           timeout: TimeInterval = .gattDefaultTimeout) throws {
         
-        log?("Create \(newKey.permission.type) key \"\(newKey.name)\" \(newKey.identifier) for \(peripheral)")
+        log?("Create \(newKey.permission.type) key \"\(newKey.name)\" \(newKey.id) for \(peripheral)")
         
         let timeout = Timeout(timeout: timeout)
         
@@ -156,7 +156,7 @@ public final class LockManager <Central: CentralProtocol> {
             
             let characteristicValue = try CreateNewKeyCharacteristic(
                 request: newKey,
-                for: key.identifier,
+                for: key.id,
                 sharedSecret: key.secret
             )
             
@@ -171,7 +171,7 @@ public final class LockManager <Central: CentralProtocol> {
                            with key: KeyCredentials,
                            timeout: TimeInterval = .gattDefaultTimeout) throws {
         
-        log?("Confirm key \(key.identifier) for \(peripheral)")
+        log?("Confirm key \(key.id) for \(peripheral)")
         
         let timeout = Timeout(timeout: timeout)
         
@@ -179,7 +179,7 @@ public final class LockManager <Central: CentralProtocol> {
             
             let characteristicValue = try ConfirmNewKeyCharacteristic(
                 request: confirmation,
-                for: key.identifier,
+                for: key.id,
                 sharedSecret: key.secret
             )
             
@@ -201,7 +201,7 @@ public final class LockManager <Central: CentralProtocol> {
         
         try central.device(for: peripheral, timeout: timeout) { [unowned self] (cache) in
             
-            let characteristicValue = RemoveKeyCharacteristic(identifier: key.identifier,
+            let characteristicValue = RemoveKeyCharacteristic(identifier: key.id,
                                                               key: identifier,
                                                               type: type,
                                                               authentication: Authentication(key: key.secret))
@@ -299,11 +299,11 @@ public final class LockManager <Central: CentralProtocol> {
         typealias Notification = KeysCharacteristic
         var keysList = KeysList()
         try list(write: ListKeysCharacteristic(
-            identifier: key.identifier,
+            identifier: key.id,
             authentication: Authentication(key: key.secret)
         ), notify: Notification.self, for: peripheral, with: key, timeout: timeout) { [unowned self] (notificationValue) in
             keysList.append(notificationValue.key)
-            self.log?("Recieved key \(notificationValue.key.identifier)")
+            self.log?("Recieved key \(notificationValue.key.id)")
             notification(keysList, notificationValue.isLast)
         }
         assert(keysList.isEmpty == false)
@@ -336,13 +336,13 @@ public final class LockManager <Central: CentralProtocol> {
         var events = EventsList()
         events.reserveCapacity(fetchRequest?.limit.flatMap({ Int($0) }) ?? 1)
         try list(write: ListEventsCharacteristic(
-            identifier: key.identifier,
+            identifier: key.id,
             authentication: Authentication(key: key.secret),
             fetchRequest: fetchRequest
         ), notify: Notification.self, for: peripheral, with: key, timeout: timeout) { [unowned self] (notificationValue) in
             if let event = notificationValue.event {
                 events.append(event)
-                self.log?("Recieved event \(event.identifier)")
+                self.log?("Recieved event \(event.id)")
             }
             notification(events, notificationValue.isLast)
         }

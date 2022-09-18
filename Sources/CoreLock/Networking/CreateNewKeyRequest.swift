@@ -74,7 +74,7 @@ public extension LockNetService.Client {
                    with key: KeyCredentials,
                    timeout: TimeInterval = LockNetService.defaultTimeout) throws {
         
-        log?("Create \(newKey.permission.type) key \"\(newKey.name)\" \(newKey.identifier) for \(server.url.absoluteString)")
+        log?("Create \(newKey.permission.type) key \"\(newKey.name)\" \(newKey.id) for \(server.url.absoluteString)")
         
         let request = try CreateNewKeyNetServiceRequest(
             server: server.url,

@@ -237,7 +237,7 @@ public extension NSUserActivity {
             if let lockCache = Store.shared[lock: lockIdentifier] {
                 self.title = lockCache.name
                 #if os(iOS)
-                self.contentAttributeSet = SearchableLock(identifier: lockIdentifier, cache: lockCache).searchableAttributeSet()
+                self.contentAttributeSet = SearchableLock(id: lockIdentifier, cache: lockCache).searchableAttributeSet()
                 #endif
             } else {
                 self.title = "Lock \(lockIdentifier)"

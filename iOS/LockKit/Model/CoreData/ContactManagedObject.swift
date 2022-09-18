@@ -17,7 +17,7 @@ public final class ContactManagedObject: NSManagedObject {
     internal convenience init(identifier: String, context: NSManagedObjectContext) {
         
         self.init(context: context)
-        self.id = id
+        self.identifier = identifier
     }
     
     internal static func find(_ identifier: String, in context: NSManagedObjectContext) throws -> ContactManagedObject? {

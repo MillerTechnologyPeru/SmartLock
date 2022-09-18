@@ -269,9 +269,9 @@ public extension Store {
                 let oldApplicationData = self.applicationData
                 var importedKeys = 0
                 for key in newData.keys {
-                    if self[key: key.identifier] == nil {
-                        let keyData = try session.requestKeyData(for: key.identifier)
-                        self[key: key.identifier] = keyData
+                    if self[key: key.id] == nil {
+                        let keyData = try session.requestKeyData(for: key.id)
+                        self[key: key.id] = keyData
                         importedKeys += 1
                     }
                 }
@@ -295,7 +295,7 @@ public extension Store {
                     // old key no longer exists
                     if newData.keys.contains(oldKey) == false {
                         // remove from keychain
-                        self[key: oldKey.identifier] = nil
+                        self[key: oldKey.id] = nil
                         removedKeys += 1
                     }
                 }

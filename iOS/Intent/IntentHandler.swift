@@ -39,7 +39,7 @@ final class IntentHandler: INExtension {
             Store.shared.loadCache()
         }
         
-        log("🎙 Handle intent \(intent.intentDescription ?? intent.identifier ?? intent.description)")
+        log("🎙 Handle intent \(intent.intentDescription ?? intent.id ?? intent.description)")
         
         if #available(watchOSApplicationExtension 5.0, *) {
             return UnlockIntentHandler()
@@ -82,20 +82,20 @@ final class UnlockIntentHandler: NSObject, UnlockIntentHandling {
             }
                         
             // validate UUID string
-            guard let identifier = intentLock.identifier.flatMap({ UUID(uuidString: $0) }) else {
+            guard let identifier = intentLock.id.flatMap({ UUID(uuidString: $0) }) else {
                 completion(.unsupported())
                 return
             }
             
             // validate key is available for lock.
             guard let lockCache = Store.shared[lock: identifier],
-                Store.shared[key: lockCache.key.identifier] != nil else {
+                Store.shared[key: lockCache.key.id] != nil else {
                     completion(.unsupported(forReason: .unknownLock))
                     return
             }
             
             // check if lock is in range
-            var device: LockPeripheral<NativeCentral>?
+            var device: NativeCentral.Peripheral?
             do { device = try Store.shared.device(for: identifier, scanDuration: 2.0) }
             catch {
                 completion(.confirmationRequired(with: intentLock))
@@ -124,7 +124,7 @@ final class UnlockIntentHandler: NSObject, UnlockIntentHandling {
                 return
             }
             
-            guard let identifierString = intentLock.identifier,
+            guard let identifierString = intentLock.id,
                 let lockIdentifier = UUID(uuidString: identifierString),
                 let _ = Store.shared[lock: lockIdentifier] else {
                     completion(.failure(failureReason: "Invalid lock."))
@@ -147,7 +147,7 @@ final class UnlockIntentHandler: NSObject, UnlockIntentHandling {
                 return
             }
             
-            guard let identifierString = intentLock.identifier,
+            guard let identifierString = intentLock.id,
                 let lockIdentifier = UUID(uuidString: identifierString),
                 let lockCache = Store.shared[lock: lockIdentifier] else {
                     completion(.failure(failureReason: "Invalid lock."))

@@ -49,7 +49,7 @@ public extension LockNetService.Client {
         let request = KeysNetServiceRequest(
             server: server.url,
             authorization: LockNetService.Authorization(
-                key: key.identifier,
+                key: key.id,
                 authentication: Authentication(key: key.secret)
             )
         )

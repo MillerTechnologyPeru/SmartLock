@@ -18,7 +18,6 @@ import DarwinGATT
 import AVFoundation
 import Intents
 import JGProgressHUD
-import OpenCombine
 import Combine
 
 final class NearbyLocksViewController: UITableViewController {
@@ -27,7 +26,7 @@ final class NearbyLocksViewController: UITableViewController {
     
     // MARK: - Properties
     
-    private var items = [LockPeripheral<NativeCentral>]() {
+    private var items = [NativeCentral.Peripheral]() {
         didSet { tableView.reloadData() }
     }
     
@@ -47,10 +46,9 @@ final class NearbyLocksViewController: UITableViewController {
         return feedbackGenerator
     }()
     
-    private var peripheralsObserver: OpenCombine.AnyCancellable?
-    private var informationObserver: OpenCombine.AnyCancellable?
-    private var locksObserver: OpenCombine.AnyCancellable?
-    @available(iOS 13.0, *)
+    private var peripheralsObserver: Combine.AnyCancellable?
+    private var informationObserver: Combine.AnyCancellable?
+    private var locksObserver: Combine.AnyCancellable?
     private lazy var updateTableViewSubject = Combine.PassthroughSubject<Void, Never>()
     private var updateTableViewObserver: AnyObject? // AnyCancellable
     
@@ -161,9 +159,9 @@ final class NearbyLocksViewController: UITableViewController {
         BeaconController.shared.scanBeacons()
         
         // scan
-        performActivity(queue: .bluetooth, {
-            try Store.shared.scan()
-            for peripheral in Store.shared.peripherals.value.values {
+        performActivity({
+            try await Store.shared.scan()
+            for peripheral in Store.shared.peripherals.values {
                 do { try Store.shared.readInformation(peripheral) }
                 catch {
                     log("⚠️ Could not read information for peripheral \(peripheral.scanData.peripheral)")
@@ -206,19 +204,19 @@ final class NearbyLocksViewController: UITableViewController {
         let lock = self[indexPath]
         guard let information = Store.shared.lockInformation.value[lock.scanData.peripheral]
             else { assertionFailure(); return }
-        view(lock: information.identifier)
+        view(lock: information.id)
     }
     
     // MARK: - Private Methods
     
-    private subscript (indexPath: IndexPath) -> LockPeripheral<NativeCentral> {
+    private subscript (indexPath: IndexPath) -> NativeCentral.Peripheral {
         return items[indexPath.row]
     }
     
     private func configureView() {
         
         // sort by signal
-        self.items = Store.shared.peripherals.value.values
+        self.items = Store.shared.peripherals.values
             .sorted(by: { $0.scanData.rssi < $1.scanData.rssi })
     }
     
@@ -246,14 +244,14 @@ final class NearbyLocksViewController: UITableViewController {
             case .unlock:
                 
                 // known lock
-                if let lockCache = Store.shared[lock: information.identifier] {
+                if let lockCache = Store.shared[lock: information.id] {
                     permission = lockCache.key.permission.type
                     title = lockCache.name
                     detail = lockCache.key.permission.localizedText
                     showDetail = true
                 } else {
                     title = R.string.nearbyLocksViewController.lockTitleDefault() // "Lock"
-                    detail = information.identifier.description
+                    detail = information.id.description
                     permission = .anytime
                     showDetail = false
                 }
@@ -261,7 +259,7 @@ final class NearbyLocksViewController: UITableViewController {
             case .setup:
                 
                 title = R.string.nearbyLocksViewController.lockTitleSetup() // "Setup"
-                detail = information.identifier.description
+                detail = information.id.description
                 permission = .owner
                 showDetail = false
             }
@@ -293,12 +291,12 @@ final class NearbyLocksViewController: UITableViewController {
         cell.accessoryType = showDetail ? .detailDisclosureButton : .none
     }
     
-    private func select(_ lock: LockPeripheral<NativeCentral>) {
+    private func select(_ lock: NativeCentral.Peripheral) {
         
-        guard let information = Store.shared.lockInformation.value[lock.scanData.peripheral]
+        guard let information = Store.shared.lockInformation[lock.scanData.peripheral]
             else { return }
         
-        let identifier = information.identifier
+        let identifier = information.id
         
         log("Selected lock \(identifier)")
         

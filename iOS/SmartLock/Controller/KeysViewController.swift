@@ -15,7 +15,7 @@ import GATT
 import CoreLock
 import LockKit
 import JGProgressHUD
-import OpenCombine
+import Combine
 import CloudKit
 import SFSafeSymbols
 

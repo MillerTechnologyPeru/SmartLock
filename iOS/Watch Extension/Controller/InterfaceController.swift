@@ -10,7 +10,7 @@ import Foundation
 import WatchKit
 import CoreLock
 import LockKit
-import OpenCombine
+import Combine
 
 final class InterfaceController: WKInterfaceController {
     
@@ -129,8 +129,8 @@ final class InterfaceController: WKInterfaceController {
                     .flatMap { (device, $0) }
             }
             .compactMap { (device, information) in
-                Store.shared[lock: information.identifier].flatMap {
-                    Item(identifier: information.identifier, cache: $0, peripheral: device)
+                Store.shared[lock: information.id].flatMap {
+                    Item(identifier: information.id, cache: $0, peripheral: device)
                 }
             }
         
@@ -157,9 +157,9 @@ final class InterfaceController: WKInterfaceController {
     
     private func select(_ item: Item) {
         
-        log("Selected lock \(item.identifier)")
+        log("Selected lock \(item.id)")
         
-        unlock(lock: item.identifier, peripheral: item.peripheral)
+        unlock(lock: item.id, peripheral: item.peripheral)
     }
     
     // MARK: - Segue
@@ -195,7 +195,7 @@ private extension InterfaceController {
         
         let id: UUID
         let cache: LockCache
-        let peripheral: LockPeripheral<NativeCentral>
+        let peripheral: NativeCentral.Peripheral
     }
 }
 

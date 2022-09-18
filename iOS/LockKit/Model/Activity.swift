@@ -41,7 +41,7 @@ public final class LockActivityItem: NSObject {
     // MARK: - Activity Values
     
     public var lock: LockCache? {
-        return Store.shared[lock: identifier]
+        return Store.shared[lock: id]
     }
     
     public var text: String {
@@ -187,7 +187,7 @@ public final class NewKeyActivity: UIActivity {
     public override func canPerform(withActivityItems activityItems: [Any]) -> Bool {
         
         guard let lockItem = activityItems.compactMap({ $0 as? LockActivityItem }).first,
-            let lockCache = Store.shared[lock: lockItem.identifier]
+            let lockCache = Store.shared[lock: lockItem.id]
             else { return false }
         
         // only owner and admin can share keys
@@ -200,7 +200,7 @@ public final class NewKeyActivity: UIActivity {
     
     public override var activityViewController: UIViewController? {
         
-        let viewController = NewKeySelectPermissionViewController.fromStoryboard(with: item.identifier)
+        let viewController = NewKeySelectPermissionViewController.fromStoryboard(with: item.id)
         viewController.completion =  { [unowned self] in
             guard let (invitation, sender) = $0 else {
                 self.activityDidFinish(false)
@@ -238,7 +238,7 @@ public final class ManageKeysActivity: UIActivity {
     public override func canPerform(withActivityItems activityItems: [Any]) -> Bool {
         
         guard let lockItem = activityItems.compactMap({ $0 as? LockActivityItem }).first,
-            let lockCache = Store.shared[lock: lockItem.identifier]
+            let lockCache = Store.shared[lock: lockItem.id]
             else { return false }
         
         return lockCache.key.permission.isAdministrator
@@ -251,7 +251,7 @@ public final class ManageKeysActivity: UIActivity {
     public override var activityViewController: UIViewController? {
         
         let viewController = LockPermissionsViewController.fromStoryboard(
-            with: item.identifier,
+            with: item.id,
             completion: { [weak self] in self?.activityDidFinish(true) }
         )
         
@@ -297,7 +297,7 @@ public final class DeleteLockActivity: UIActivity {
     
     public override var activityViewController: UIViewController? {
         
-        return type(of: self).viewController(for: item.identifier, completion: { [weak self] (didDelete) in
+        return type(of: self).viewController(for: item.id, completion: { [weak self] (didDelete) in
             self?.activityDidFinish(didDelete)
             if didDelete { self?.completion?() }
         })
@@ -357,7 +357,7 @@ public final class RenameActivity: UIActivity {
     }
     
     public override var activityViewController: UIViewController? {
-        return type(of: self).viewController(for: item.identifier, completion: { [weak self] in
+        return type(of: self).viewController(for: item.id, completion: { [weak self] in
             self?.activityDidFinish($0)
         })
     }
@@ -407,7 +407,7 @@ public final class UpdateActivity: UIActivity {
     public override func canPerform(withActivityItems activityItems: [Any]) -> Bool {
         
         guard let lockItem = activityItems.compactMap({ $0 as? LockActivityItem }).first,
-            let lockCache = Store.shared[lock: lockItem.identifier]
+            let lockCache = Store.shared[lock: lockItem.id]
             else { return false }
         
         guard lockCache.key.permission.isAdministrator
@@ -433,7 +433,7 @@ public final class UpdateActivity: UIActivity {
             
             alert.dismiss(animated: true) { self.activityDidFinish(false) }
         }))
-        
+        /*
         alert.addAction(UIAlertAction(title: R.string.activity.updateActivityAlertUpdate(), style: .`default`, handler: { (UIAlertAction) in
             
             let progressHUD = JGProgressHUD(style: .dark)
@@ -453,11 +453,11 @@ public final class UpdateActivity: UIActivity {
             }
             
             // fetch cache
-            guard let lockCache = Store.shared[lock: lockItem.identifier],
-                let keyData = Store.shared[key: lockCache.key.identifier]
+            guard let lockCache = Store.shared[lock: lockItem.id],
+                let keyData = Store.shared[key: lockCache.key.id]
                 else { alert.dismiss(animated: true) { self.activityDidFinish(false) }; return }
             
-            let key = KeyCredentials(identifier: lockCache.key.identifier, secret: keyData)
+            let key = KeyCredentials(id: lockCache.key.id, secret: keyData)
             
             showProgressHUD()
             
@@ -466,8 +466,8 @@ public final class UpdateActivity: UIActivity {
                 let client = Store.shared.netServiceClient
                 
                 do {
-                    guard let netService = try client.discover(duration: 1.0, timeout: 10.0).first(where: { $0.identifier == lockItem.identifier })
-                        else { throw LockError.notInRange(lock: lockItem.identifier) }
+                    guard let netService = try client.discover(duration: 1.0, timeout: 10.0).first(where: { $0.id == lockItem.id })
+                        else { throw LockError.notInRange(lock: lockItem.id) }
                     
                     try client.update(for: netService, with: key, timeout: 30.0)
                 }
@@ -488,7 +488,7 @@ public final class UpdateActivity: UIActivity {
                 }
             }
         }))
-        
+        */
         return alert
     }
 }
@@ -588,7 +588,7 @@ public final class AddSiriShortcutActivity: UIActivity {
             else { return false }
         
         guard let lockItem = activityItems.compactMap({ $0 as? LockActivityItem }).first,
-            let _ = Store.shared[lock: lockItem.identifier]
+            let _ = Store.shared[lock: lockItem.id]
             else { return false }
         
         return true
@@ -610,11 +610,11 @@ public final class AddSiriShortcutActivity: UIActivity {
         guard let lockItem = self.item
             else { assertionFailure(); return nil }
         
-        guard let lockCache = Store.shared[lock: lockItem.identifier]
+        guard let lockCache = Store.shared[lock: lockItem.id]
             else { assertionFailure("Invalid lock"); return nil }
         
         return INUIAddVoiceShortcutViewController(
-            unlock: lockItem.identifier,
+            unlock: lockItem.id,
             cache: lockCache,
             delegate: self
         )

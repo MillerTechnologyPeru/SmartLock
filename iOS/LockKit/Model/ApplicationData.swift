@@ -33,7 +33,7 @@ public struct ApplicationData: Codable, Equatable {
     
     /// Initialize a new application data.
     public init() {
-        self.identifier = UUID()
+        self.id = UUID()
         self.created = Date()
         self.updated = Date()
         self.locks = [:]
@@ -58,8 +58,8 @@ public extension ApplicationData {
     }
     
     subscript (lock id: UUID) -> LockCache? {
-        get { return locks[identifier] }
-        set { locks[identifier] = newValue }
+        get { return locks[id] }
+        set { locks[id] = newValue }
     }
     
     subscript (key id: UUID) -> Key? {
@@ -67,7 +67,7 @@ public extension ApplicationData {
             .lazy
             .map { $0.key }
             .lazy
-            .first { $0.identifier == identifier }
+            .first { $0.id == id }
     }
 }
 
@@ -119,5 +119,16 @@ internal extension LockCache.Information {
         self.version = characteristic.version
         self.status = characteristic.status
         self.unlockActions = Set(characteristic.unlockActions)
+    }
+}
+
+internal extension LockCache.Information {
+    
+    init(_ lock: LockInformation) {
+        
+        self.buildVersion = lock.buildVersion
+        self.version = lock.version
+        self.status = lock.status
+        self.unlockActions = lock.unlockActions
     }
 }

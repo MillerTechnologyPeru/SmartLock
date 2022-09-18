@@ -103,7 +103,7 @@ public extension KeysList {
     }
 }
 
-internal extension KeysList {
+public extension KeysList {
     
     mutating func append(_ newValue: KeyListNotification.KeyValue) {
         switch newValue {

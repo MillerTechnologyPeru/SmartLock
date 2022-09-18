@@ -72,15 +72,13 @@
 		6E50FC15233B63D5003F3AF7 /* Intents.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = 6E50FC19233B63D5003F3AF7 /* Intents.intentdefinition */; };
 		6E50FC16233B63D5003F3AF7 /* Intents.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = 6E50FC19233B63D5003F3AF7 /* Intents.intentdefinition */; settings = {ATTRIBUTES = (no_codegen, ); }; };
 		6E50FC17233B63D5003F3AF7 /* Intents.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = 6E50FC19233B63D5003F3AF7 /* Intents.intentdefinition */; settings = {ATTRIBUTES = (no_codegen, ); }; };
-		6E5DF8B32319E3A50070787B /* OpenCombine in Frameworks */ = {isa = PBXBuildFile; productRef = 6E5DF8B22319E3A50070787B /* OpenCombine */; };
-		6E5DF8C32319EB020070787B /* OpenCombine in Frameworks */ = {isa = PBXBuildFile; productRef = 6E5DF8C22319EB020070787B /* OpenCombine */; };
 		6E6000142121119400787DAA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E6000132121119400787DAA /* AppDelegate.swift */; };
 		6E6000192121119400787DAA /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6E6000172121119400787DAA /* Main.storyboard */; };
 		6E60001E2121119500787DAA /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6E60001C2121119500787DAA /* LaunchScreen.storyboard */; };
 		6E6000292121119500787DAA /* SmartLockUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E6000282121119500787DAA /* SmartLockUITests.swift */; };
 		6E64B7EA231236E5002BC0A2 /* Rswift in Frameworks */ = {isa = PBXBuildFile; productRef = 6E64B7E9231236E5002BC0A2 /* Rswift */; };
 		6E64B7ED23123846002BC0A2 /* KeychainAccess in Frameworks */ = {isa = PBXBuildFile; productRef = 6E64B7EC23123846002BC0A2 /* KeychainAccess */; };
-		6E64B7F1231240CC002BC0A2 /* JGProgressHUD in Frameworks */ = {isa = PBXBuildFile; platformFilter = maccatalyst; productRef = 6E64B7F0231240CC002BC0A2 /* JGProgressHUD */; };
+		6E64B7F1231240CC002BC0A2 /* JGProgressHUD in Frameworks */ = {isa = PBXBuildFile; productRef = 6E64B7F0231240CC002BC0A2 /* JGProgressHUD */; };
 		6E64B7F4231247EF002BC0A2 /* QRCodeReader in Frameworks */ = {isa = PBXBuildFile; platformFilter = ios; productRef = 6E64B7F3231247EF002BC0A2 /* QRCodeReader */; };
 		6E6B78B62325F14600635EEF /* SliderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E135CBD2319842A00FFA7F7 /* SliderCell.swift */; };
 		6E6B78B72325F17300635EEF /* BluetoothSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E135CB72319832900FFA7F7 /* BluetoothSettingsView.swift */; };
@@ -226,8 +224,6 @@
 		6E83BB48233D906C00D6BA04 /* LockDetail.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 36FC4C94233A249500A5D5B3 /* LockDetail.storyboard */; };
 		6E83BB49233D906C00D6BA04 /* Logs.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 36FC4C75233A17AE00A5D5B3 /* Logs.storyboard */; };
 		6E83BB4A233D906C00D6BA04 /* LockTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6EAADFB521229CBF0074CEDF /* LockTableViewCell.xib */; };
-		6E8772CA231259DE003B9469 /* JGProgressHUD.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6E8772C5231258CD003B9469 /* JGProgressHUD.framework */; platformFilter = ios; };
-		6E8772CB231259DE003B9469 /* JGProgressHUD.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 6E8772C5231258CD003B9469 /* JGProgressHUD.framework */; platformFilter = ios; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		6E8786FB2357B199008624C1 /* NetService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E8786FA2357B199008624C1 /* NetService.swift */; };
 		6E94EF75232F4A790028B745 /* CloudKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E94EF74232F4A790028B745 /* CloudKit.swift */; };
 		6E9740412318C13D00634631 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6ED81FB32316618100B69520 /* Assets.xcassets */; };
@@ -423,13 +419,6 @@
 			remoteGlobalIDString = DD75027A1C68FCFC006590AF;
 			remoteInfo = CoreLockTests;
 		};
-		6E83BACD233D906C00D6BA04 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 6E8772BB231258CC003B9469 /* JGProgressHUD.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = 6BF7DC591AEFCFD9000A0AE0;
-			remoteInfo = "JGProgressHUD-iOS";
-		};
 		6E83BACF233D906C00D6BA04 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 6E60004D2121164B00787DAA /* CoreLock.xcodeproj */;
@@ -437,33 +426,12 @@
 			remoteGlobalIDString = 52D6D97B1BEFF229002C0205;
 			remoteInfo = "CoreLock-iOS";
 		};
-		6E8772C4231258CD003B9469 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 6E8772BB231258CC003B9469 /* JGProgressHUD.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 6BF7DC5A1AEFCFD9000A0AE0;
-			remoteInfo = "JGProgressHUD-iOS";
-		};
-		6E8772C6231258CD003B9469 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 6E8772BB231258CC003B9469 /* JGProgressHUD.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 6BABF9A31F7A6133005E783F;
-			remoteInfo = "JGProgressHUD-tvOS";
-		};
 		6E8772CC23125A70003B9469 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 6E60004D2121164B00787DAA /* CoreLock.xcodeproj */;
 			proxyType = 1;
 			remoteGlobalIDString = 52D6D97B1BEFF229002C0205;
 			remoteInfo = "CoreLock-iOS";
-		};
-		6E8772D0231265B4003B9469 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 6E8772BB231258CC003B9469 /* JGProgressHUD.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = 6BF7DC591AEFCFD9000A0AE0;
-			remoteInfo = "JGProgressHUD-iOS";
 		};
 		6E994A8E230DFB6D0076DC1B /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -605,13 +573,6 @@
 			remoteGlobalIDString = 6E994A83230DFB6C0076DC1B;
 			remoteInfo = LockKit;
 		};
-		6ECDD09A234D8B3400178B25 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 6E8772BB231258CC003B9469 /* JGProgressHUD.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = 6BF7DC591AEFCFD9000A0AE0;
-			remoteInfo = "JGProgressHUD-iOS";
-		};
 		6ED820952316774E00B69520 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 6E60004D2121164B00787DAA /* CoreLock.xcodeproj */;
@@ -637,7 +598,6 @@
 			files = (
 				6E9C95FD23114D07007C18FE /* CoreLock.framework in Embed Frameworks */,
 				6E9C95FF23114D60007C18FE /* LockKit.framework in Embed Frameworks */,
-				6E8772CB231259DE003B9469 /* JGProgressHUD.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -837,7 +797,6 @@
 		6E83BAF52323842500FBC12E /* TableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewController.swift; sourceTree = "<group>"; };
 		6E83BAF72323843500FBC12E /* CollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionViewController.swift; sourceTree = "<group>"; };
 		6E83BB4E233D906C00D6BA04 /* LockKitSwiftUI.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = LockKitSwiftUI.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		6E8772BB231258CC003B9469 /* JGProgressHUD.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = JGProgressHUD.xcodeproj; path = ../Carthage/Checkouts/JGProgressHUD/JGProgressHUD.xcodeproj; sourceTree = "<group>"; };
 		6E8786FA2357B199008624C1 /* NetService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetService.swift; sourceTree = "<group>"; };
 		6E94EF74232F4A790028B745 /* CloudKit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudKit.swift; sourceTree = "<group>"; };
 		6E9794D323315EA000B5C5C9 /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = Platforms/WatchOS.platform/Developer/SDKs/WatchOS6.0.sdk/System/Library/Frameworks/CloudKit.framework; sourceTree = DEVELOPER_DIR; };
@@ -973,7 +932,6 @@
 			files = (
 				6E9C95FC23114D07007C18FE /* CoreLock.framework in Frameworks */,
 				6E9C95FE23114D60007C18FE /* LockKit.framework in Frameworks */,
-				6E8772CA231259DE003B9469 /* JGProgressHUD.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1005,7 +963,6 @@
 				6E64B7F4231247EF002BC0A2 /* QRCodeReader in Frameworks */,
 				6E64B7F1231240CC002BC0A2 /* JGProgressHUD in Frameworks */,
 				6ED44E44235C4406002E8F54 /* SFSafeSymbols in Frameworks */,
-				6E5DF8B32319E3A50070787B /* OpenCombine in Frameworks */,
 				6EE5A10B2329FCA00000235C /* CloudKitCodable in Frameworks */,
 				6E64B7ED23123846002BC0A2 /* KeychainAccess in Frameworks */,
 			);
@@ -1101,7 +1058,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				6ED8209A2316777A00B69520 /* KeychainAccess in Frameworks */,
-				6E5DF8C32319EB020070787B /* OpenCombine in Frameworks */,
 				6ED82092231676C100B69520 /* CoreLock.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1167,7 +1123,6 @@
 		6E6000072121119400787DAA = {
 			isa = PBXGroup;
 			children = (
-				6E8772BB231258CC003B9469 /* JGProgressHUD.xcodeproj */,
 				6E60004D2121164B00787DAA /* CoreLock.xcodeproj */,
 				6E6000122121119400787DAA /* SmartLock */,
 				6E6000272121119500787DAA /* SmartLockUITests */,
@@ -1367,15 +1322,6 @@
 				6E83BA98233D863300D6BA04 /* Info.plist */,
 			);
 			path = LockSwiftUI;
-			sourceTree = "<group>";
-		};
-		6E8772BC231258CC003B9469 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				6E8772C5231258CD003B9469 /* JGProgressHUD.framework */,
-				6E8772C7231258CD003B9469 /* JGProgressHUD.framework */,
-			);
-			name = Products;
 			sourceTree = "<group>";
 		};
 		6E994A85230DFB6C0076DC1B /* LockKit */ = {
@@ -1692,7 +1638,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				6ECDD09B234D8B3400178B25 /* PBXTargetDependency */,
 				6E9C960123114D60007C18FE /* PBXTargetDependency */,
 				6E15AD962318CA4B0004D1AE /* PBXTargetDependency */,
 				6E994B33230EF6DB0076DC1B /* PBXTargetDependency */,
@@ -1742,7 +1687,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				6E83BACC233D906C00D6BA04 /* PBXTargetDependency */,
 				6E83BACE233D906C00D6BA04 /* PBXTargetDependency */,
 			);
 			name = LockKitSwiftUI;
@@ -1771,7 +1715,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				6E8772D1231265B4003B9469 /* PBXTargetDependency */,
 				6E8772CD23125A70003B9469 /* PBXTargetDependency */,
 			);
 			name = LockKit;
@@ -1780,7 +1723,6 @@
 				6E64B7EC23123846002BC0A2 /* KeychainAccess */,
 				6E64B7F0231240CC002BC0A2 /* JGProgressHUD */,
 				6E64B7F3231247EF002BC0A2 /* QRCodeReader */,
-				6E5DF8B22319E3A50070787B /* OpenCombine */,
 				6EE5A10A2329FCA00000235C /* CloudKitCodable */,
 				6ED44E43235C4406002E8F54 /* SFSafeSymbols */,
 			);
@@ -2029,7 +1971,6 @@
 			name = "LockKit watchOS";
 			packageProductDependencies = (
 				6ED820992316777A00B69520 /* KeychainAccess */,
-				6E5DF8C22319EB020070787B /* OpenCombine */,
 			);
 			productName = "LockKit watchOS";
 			productReference = 6ED82086231676AE00B69520 /* LockKit.framework */;
@@ -2158,7 +2099,6 @@
 				6E64B7EB23123846002BC0A2 /* XCRemoteSwiftPackageReference "KeychainAccess" */,
 				6E64B7EF231240CC002BC0A2 /* XCRemoteSwiftPackageReference "JGProgressHUD" */,
 				6E64B7F2231247EF002BC0A2 /* XCRemoteSwiftPackageReference "QRCodeReader.swift" */,
-				6E5DF8B12319E3A50070787B /* XCRemoteSwiftPackageReference "OpenCombine" */,
 				6EE5A1092329FCA00000235C /* XCRemoteSwiftPackageReference "CloudKitCodable" */,
 				6ED44E3C235C43EE002E8F54 /* XCRemoteSwiftPackageReference "SFSafeSymbols" */,
 			);
@@ -2168,10 +2108,6 @@
 				{
 					ProductGroup = 6E60004E2121164B00787DAA /* Products */;
 					ProjectRef = 6E60004D2121164B00787DAA /* CoreLock.xcodeproj */;
-				},
-				{
-					ProductGroup = 6E8772BC231258CC003B9469 /* Products */;
-					ProjectRef = 6E8772BB231258CC003B9469 /* JGProgressHUD.xcodeproj */;
 				},
 			);
 			projectRoot = "";
@@ -2231,20 +2167,6 @@
 			fileType = wrapper.cfbundle;
 			path = CoreLockTests.xctest;
 			remoteRef = 6E60005D2121164B00787DAA /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		6E8772C5231258CD003B9469 /* JGProgressHUD.framework */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.framework;
-			path = JGProgressHUD.framework;
-			remoteRef = 6E8772C4231258CD003B9469 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		6E8772C7231258CD003B9469 /* JGProgressHUD.framework */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.framework;
-			path = JGProgressHUD.framework;
-			remoteRef = 6E8772C6231258CD003B9469 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */
@@ -3088,12 +3010,6 @@
 			target = 6E60000F2121119400787DAA /* SmartLock */;
 			targetProxy = 6E6000252121119500787DAA /* PBXContainerItemProxy */;
 		};
-		6E83BACC233D906C00D6BA04 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = "JGProgressHUD-iOS";
-			platformFilter = ios;
-			targetProxy = 6E83BACD233D906C00D6BA04 /* PBXContainerItemProxy */;
-		};
 		6E83BACE233D906C00D6BA04 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = "CoreLock-iOS";
@@ -3103,12 +3019,6 @@
 			isa = PBXTargetDependency;
 			name = "CoreLock-iOS";
 			targetProxy = 6E8772CC23125A70003B9469 /* PBXContainerItemProxy */;
-		};
-		6E8772D1231265B4003B9469 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = "JGProgressHUD-iOS";
-			platformFilter = ios;
-			targetProxy = 6E8772D0231265B4003B9469 /* PBXContainerItemProxy */;
 		};
 		6E994A8F230DFB6D0076DC1B /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -3217,12 +3127,6 @@
 			isa = PBXTargetDependency;
 			target = 6E994A83230DFB6C0076DC1B /* LockKit */;
 			targetProxy = 6ECD35CA233B51AE00E49357 /* PBXContainerItemProxy */;
-		};
-		6ECDD09B234D8B3400178B25 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = "JGProgressHUD-iOS";
-			platformFilter = ios;
-			targetProxy = 6ECDD09A234D8B3400178B25 /* PBXContainerItemProxy */;
 		};
 		6ED820962316774E00B69520 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -3646,8 +3550,8 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
-				MACOSX_DEPLOYMENT_TARGET = 10.15;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				MACOSX_DEPLOYMENT_TARGET = 12.0;
 				MARKETING_VERSION = 1.0.1;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -3661,8 +3565,8 @@
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
-				TVOS_DEPLOYMENT_TARGET = 11.0;
-				WATCHOS_DEPLOYMENT_TARGET = 4.0;
+				TVOS_DEPLOYMENT_TARGET = 15.0;
+				WATCHOS_DEPLOYMENT_TARGET = 8.0;
 			};
 			name = Debug;
 		};
@@ -3714,8 +3618,8 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
-				MACOSX_DEPLOYMENT_TARGET = 10.15;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				MACOSX_DEPLOYMENT_TARGET = 12.0;
 				MARKETING_VERSION = 1.0.1;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				OTHER_LDFLAGS = (
@@ -3728,9 +3632,9 @@
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				SWIFT_VERSION = 5.0;
-				TVOS_DEPLOYMENT_TARGET = 11.0;
+				TVOS_DEPLOYMENT_TARGET = 15.0;
 				VALIDATE_PRODUCT = YES;
-				WATCHOS_DEPLOYMENT_TARGET = 4.0;
+				WATCHOS_DEPLOYMENT_TARGET = 8.0;
 			};
 			name = Release;
 		};
@@ -4691,14 +4595,6 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		6E5DF8B12319E3A50070787B /* XCRemoteSwiftPackageReference "OpenCombine" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/MillerTechnologyPeru/OpenCombine.git";
-			requirement = {
-				branch = master;
-				kind = branch;
-			};
-		};
 		6E64B7E8231236E5002BC0A2 /* XCRemoteSwiftPackageReference "R.swift" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/mac-cain13/R.swift.Library";
@@ -4798,16 +4694,6 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		6E5DF8B22319E3A50070787B /* OpenCombine */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 6E5DF8B12319E3A50070787B /* XCRemoteSwiftPackageReference "OpenCombine" */;
-			productName = OpenCombine;
-		};
-		6E5DF8C22319EB020070787B /* OpenCombine */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 6E5DF8B12319E3A50070787B /* XCRemoteSwiftPackageReference "OpenCombine" */;
-			productName = OpenCombine;
-		};
 		6E64B7E9231236E5002BC0A2 /* Rswift */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 6E64B7E8231236E5002BC0A2 /* XCRemoteSwiftPackageReference "R.swift" */;

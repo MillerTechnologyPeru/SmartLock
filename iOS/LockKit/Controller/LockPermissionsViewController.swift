@@ -17,7 +17,7 @@ public final class LockPermissionsViewController: UITableViewController {
     
     // MARK: - Properties
     
-    public var lockid: UUID!
+    public var lockIdentifier: UUID!
     
     public var completion: (() -> ())?
     
@@ -78,7 +78,7 @@ public final class LockPermissionsViewController: UITableViewController {
         guard let lockIdentifier = self.lockIdentifier
             else { assertionFailure(); return }
                 
-        performActivity(queue: .app, {
+        performActivity({
             
             // get lock key
             guard let lockCache = Store.shared[lock: lockIdentifier]
@@ -87,19 +87,19 @@ public final class LockPermissionsViewController: UITableViewController {
             guard lockCache.key.permission.isAdministrator
                 else { throw LockError.notAdmin(lock: lockIdentifier) }
             
-            guard let keyData = Store.shared[key: lockCache.key.identifier] else {
+            guard let keyData = Store.shared[key: lockCache.key.id] else {
                 assertionFailure("Missing from Keychain")
                 throw LockError.noKey(lock: lockIdentifier)
             }
             
             let key = KeyCredentials(
-                identifier: lockCache.key.identifier,
+                id: lockCache.key.id,
                 secret: keyData
             )
-            
+            /*
             // attempt to load via Bonjour
             let servers = (try? Store.shared.netServiceClient.discover(duration: 1.0, timeout: 3.0)) ?? []
-            if let netService = servers.first(where: { $0.identifier == lockIdentifier }) {
+            if let netService = servers.first(where: { $0.id == lockIdentifier }) {
                 let list = try Store.shared.netServiceClient.listKeys(
                     for: netService,
                     with: key,
@@ -117,7 +117,8 @@ public final class LockPermissionsViewController: UITableViewController {
                         mainQueue { [weak self] in self?.list = list }
                     })
                 }
-            }
+            }*/
+            
         })
     }
     
@@ -228,10 +229,10 @@ public final class LockPermissionsViewController: UITableViewController {
         let lockIdentifier = self.lockIdentifier!
         
         guard let lockCache = Store.shared[lock: lockIdentifier],
-            let keyData = Store.shared[key: lockCache.key.identifier]
+            let keyData = Store.shared[key: lockCache.key.id]
             else { return nil }
         
-        let key = KeyCredentials(identifier: lockCache.key.identifier, secret: keyData)
+        let key = KeyCredentials(id: lockCache.key.id, secret: keyData)
         
         let keyEntry = self[indexPath]
         
@@ -254,37 +255,35 @@ public final class LockPermissionsViewController: UITableViewController {
                 
                 alert.dismiss(animated: true) { }
                 
-                self?.performActivity(queue: .app, {
+                self?.performActivity({
                     
                     // first try via BLE
-                    if Store.shared.lockManager.central.state == .poweredOn,
-                        let device = try DispatchQueue.bluetooth.sync(execute: { try Store.shared.device(for: lockIdentifier, scanDuration: 2.0) }) {
+                    if await Store.shared.central.state == .poweredOn,
+                        let device = try await Store.shared.device(for: lockIdentifier, scanDuration: 2.0) {
                         
-                        try DispatchQueue.bluetooth.sync {
-                            try Store.shared.lockManager.removeKey(
-                                keyEntry.identifier,
-                                type: keyEntry.type,
-                                for: device.scanData.peripheral,
-                                with: key
-                            )
-                        }
+                        try await Store.shared.central.removeKey(
+                            keyEntry.id,
+                            type: keyEntry.type,
+                            using: key,
+                            for: device
+                        )
                         
-                    } else if let netService = try Store.shared.netServiceClient.discover(duration: 1.0, timeout: 10.0).first(where: { $0.identifier == lockIdentifier }) {
+                    }/* else if let netService = try Store.shared.netServiceClient.discover(duration: 1.0, timeout: 10.0).first(where: { $0.id == lockIdentifier }) {
                         
                         // try via Bonjour
                         try Store.shared.netServiceClient.removeKey(
-                            keyEntry.identifier,
+                            keyEntry.id,
                             type: keyEntry.type,
                             for: netService,
                             with: key,
                             timeout: 30.0
                         )
                         
-                    } else {
+                    }*/ else {
                         throw LockError.notInRange(lock: lockIdentifier)
                     }
                 }, completion: { (viewController, _) in
-                    viewController.list.remove(keyEntry.identifier, type: keyEntry.type)
+                    viewController.list.remove(keyEntry.id, type: keyEntry.type)
                 })
             }))
             
@@ -320,8 +319,8 @@ extension LockPermissionsViewController {
         
         var id: UUID {
             switch self {
-            case let .key(value): return value.identifier
-            case let .newKey(value): return value.identifier
+            case let .key(value): return value.id
+            case let .newKey(value): return value.id
             }
         }
         

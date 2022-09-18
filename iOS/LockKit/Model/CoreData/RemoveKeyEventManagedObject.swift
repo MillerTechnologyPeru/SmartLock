@@ -17,7 +17,7 @@ public final class RemoveKeyEventManagedObject: EventManagedObject {
     internal convenience init(_ value: LockEvent.RemoveKey, lock: LockManagedObject, context: NSManagedObjectContext) {
         
         self.init(context: context)
-        self.identifier = value.identifier
+        self.identifier = value.id
         self.lock = lock
         self.date = value.date
         self.key = value.key
@@ -30,14 +30,14 @@ internal extension LockEvent.RemoveKey {
     
     init?(managedObject: RemoveKeyEventManagedObject) {
         
-        guard let identifier = managedObject.identifier,
+        guard let id = managedObject.identifier,
             let date = managedObject.date,
             let key = managedObject.key,
             let removedKey = managedObject.removedKey,
             let type = KeyType(rawValue: numericCast(managedObject.type))
             else { return nil }
         
-        self.init(identifier: identifier, date: date, key: key, removedKey: removedKey, type: type)
+        self.init(id: id, date: date, key: key, removedKey: removedKey, type: type)
     }
 }
 
@@ -64,11 +64,11 @@ public extension RemoveKeyEventManagedObject {
         
         switch type {
         case .key:
-            guard let managedObject = try context.find(identifier: removedKey, type: KeyManagedObject.self)
+            guard let managedObject = try context.find(id: removedKey, type: KeyManagedObject.self)
                 else { return nil }
             return .key(managedObject)
         case .newKey:
-            guard let managedObject = try context.find(identifier: removedKey, type: NewKeyManagedObject.self)
+            guard let managedObject = try context.find(id: removedKey, type: NewKeyManagedObject.self)
                 else { return nil }
             return .newKey(managedObject)
         }

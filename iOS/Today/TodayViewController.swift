@@ -15,7 +15,7 @@ import GATT
 import DarwinGATT
 import CoreLock
 import LockKit
-import OpenCombine
+import Combine
 import Combine
 
 final class TodayViewController: UITableViewController {
@@ -37,9 +37,9 @@ final class TodayViewController: UITableViewController {
         return feedbackGenerator
     }()
     
-    private var peripheralsObserver: OpenCombine.AnyCancellable?
-    private var informationObserver: OpenCombine.AnyCancellable?
-    private var locksObserver: OpenCombine.AnyCancellable?
+    private var peripheralsObserver: Combine.AnyCancellable?
+    private var informationObserver: Combine.AnyCancellable?
+    private var locksObserver: Combine.AnyCancellable?
     @available(iOS 13.0, *)
     private lazy var updateTableViewSubject = Combine.PassthroughSubject<Void, Never>()
     private var updateTableViewObserver: AnyObject? // Combine.AnyCancellable
@@ -152,14 +152,14 @@ final class TodayViewController: UITableViewController {
             .compactMap { Store.shared.lockInformation.value[$0.scanData.peripheral] }
             .lazy
             .compactMap { information in
-                Store.shared[lock: information.identifier]
-                    .flatMap { (identifier: information.identifier, cache: $0) }
+                Store.shared[lock: information.id]
+                    .flatMap { (identifier: information.id, cache: $0) }
         }
         
         if locks.isEmpty {
             items = [isScanning ? .loading : .noNearbyLocks]
         } else {
-            items = locks.map { .lock($0.identifier, $0.cache) }
+            items = locks.map { .lock($0.id, $0.cache) }
         }
         
         // Show expanded view for multiple devices

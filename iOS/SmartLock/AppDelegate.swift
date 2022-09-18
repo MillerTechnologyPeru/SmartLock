@@ -18,7 +18,7 @@ import GATT
 import CoreLock
 import LockKit
 import JGProgressHUD
-import OpenCombine
+import Combine
 
 @UIApplicationMain
 final class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -41,7 +41,7 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
     private var updateTimer: Timer?
     #endif
     
-    private var locksObserver: OpenCombine.AnyCancellable?
+    private var locksObserver: Combine.AnyCancellable?
         
     // MARK: - UIApplicationDelegate
     
@@ -75,8 +75,10 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
         let _ = Store.shared
         
         // setup logging
-        LockManager.shared.log = { log("🔒 LockManager: " + $0) }
-        LockNetServiceClient.shared.log = { log("🌐 NetService: " + $0) }
+        #if DEBUG
+        Store.shared.central.log = { log("📲 Central: " + $0) }
+        #endif
+        //LockNetServiceClient.shared.log = { log("🌐 NetService: " + $0) }
         BeaconController.shared.log = { log("📶 \(BeaconController.self): " + $0) }
         SpotlightController.shared.log = { log("🔦 \(SpotlightController.self): " + $0) }
         WatchController.shared.log = { log("⌚️ \(WatchController.self): " + $0) }

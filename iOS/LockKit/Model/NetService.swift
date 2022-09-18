@@ -5,7 +5,7 @@
 //  Created by Alsey Coleman Miller on 10/16/19.
 //  Copyright © 2019 ColemanCDA. All rights reserved.
 //
-
+/*
 import Foundation
 import CoreLock
 import Bonjour
@@ -26,3 +26,4 @@ private struct LockNetServiceCache {
         urlSession: .shared
     )
 }
+*/

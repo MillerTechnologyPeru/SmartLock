@@ -12,6 +12,13 @@ public func log(_ text: String) {
     
     let date = Date()
     
+#if DEBUG
+    DispatchQueue.main.async {
+        // only print for debug builds
+        print(text)
+    }
+#endif
+    
     DispatchQueue.log.async {
         
         // only print for debug builds
@@ -71,7 +78,6 @@ public struct Log {
     }
     
     fileprivate init(unsafe url: URL) {
-        
         assert(Log(url: url) != nil, "Invalid url \(url)")
         self.url = url
     }
@@ -81,12 +87,10 @@ public struct Log {
     }
     
     public func load() throws -> String {
-        
         return try String(contentsOf: url)
     }
     
     public func log(_ text: String) throws {
-        
         let newLine = "\n" + text
         let data = Data(newLine.utf8)
         try data.append(fileURL: url)

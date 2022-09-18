@@ -20,13 +20,13 @@ public extension UnlockIntent {
     convenience init(lock id: UUID, name: String) {
         
         self.init()
-        self.lock = IntentLock(identifier: identifier, name: name)
+        self.lock = IntentLock(id: id, name: name)
     }
     
     convenience init(id: UUID, cache: LockCache) {
         
         self.init()
-        self.lock = IntentLock(identifier: identifier, name: cache.name)
+        self.lock = IntentLock(id: id, name: cache.name)
         
         #if os(iOS) && !targetEnvironment(macCatalyst)
         //self.setImage(INImage(uiImage: UIImage(permission: cache.key.permission)), forParameterNamed: \.lock)
@@ -39,7 +39,7 @@ public extension UnlockIntent {
 public extension IntentLock {
     
     convenience init(id: UUID, name: String) {
-        self.init(identifier: identifier.uuidString, display: name, pronunciationHint: name)
+        self.init(identifier: id.uuidString, display: name, pronunciationHint: name)
     }
 }
 
@@ -53,7 +53,7 @@ public extension INUIAddVoiceShortcutViewController {
                      cache: LockCache,
                      delegate: INUIAddVoiceShortcutViewControllerDelegate) {
         
-        let intent = UnlockIntent(identifier: lock, cache: cache)
+        let intent = UnlockIntent(id: lock, cache: cache)
         self.init(shortcut: .intent(intent))
         self.modalPresentationStyle = .formSheet
         self.delegate = delegate

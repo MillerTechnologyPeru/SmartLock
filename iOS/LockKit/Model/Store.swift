@@ -16,14 +16,13 @@ import GATT
 import DarwinGATT
 import KeychainAccess
 import Combine
-import OpenCombine
 
-public final class Store {
+public final class Store: ObservableObject {
     
     public static let shared = Store()
     
     private init() {
-                
+        
         // clear keychain on newly installed app.
         if preferences.isAppInstalled == false {
             preferences.isAppInstalled = true
@@ -66,11 +65,13 @@ public final class Store {
         #if os(iOS)
         // observe iBeacons
         beaconController.beaconChanged = { [unowned self] (beacon) in
-            switch beacon.state {
-            case .inside:
-                self.beaconFound(beacon.uuid)
-            case .outside:
-                self.beaconExited(beacon.uuid)
+            Task {
+                switch beacon.state {
+                case .inside:
+                    await self.beaconFound(beacon.uuid)
+                case .outside:
+                    await self.beaconExited(beacon.uuid)
+                }
             }
         }
         
@@ -79,19 +80,18 @@ public final class Store {
         #endif
         
         // observe local cache changes
-        locksObserver = locks
+        locksObserver = $locks
             .sink(receiveValue: { [weak self] _ in self?.lockCacheChanged() })
         
         // read from filesystem
         loadCache()
     }
     
-    @available(iOS 13.0, watchOSApplicationExtension 6.0, *)
-    public lazy var objectWillChange = Combine.ObservableObjectPublisher()
+    @Published
+    public var isScanning = false
     
-    public let isScanning = OpenCombine.CurrentValueSubject<Bool, Never>(false)
-    
-    public let locks = OpenCombine.CurrentValueSubject<[UUID: LockCache], Never>([UUID: LockCache]())
+    @Published
+    public var locks = [UUID: LockCache]()
     
     public lazy var preferences = Preferences(suiteName: .lock)!
     
@@ -111,13 +111,13 @@ public final class Store {
         }
         set {
             fileManager.applicationData = newValue
-            if locks.value != newValue.locks {
-                locks.value = newValue.locks // update locks
+            if locks != newValue.locks {
+                locks = newValue.locks // update locks
             }
         }
     }
     
-    public lazy var lockManager: LockManager = .shared
+    public lazy var central: NativeCentral =  DarwinCentral(options: .init(showPowerAlert: false, restoreIdentifier: nil))
     
     internal lazy var persistentContainer: NSPersistentContainer = .lock
     
@@ -143,25 +143,28 @@ public final class Store {
     
     public lazy var spotlight: SpotlightController = .shared
     
-    public lazy var netServiceClient: LockNetServiceClient = .shared
+    //public lazy var netServiceClient: LockNetServiceClient = .shared
     #endif
     
     // BLE cache
-    public let peripherals = OpenCombine.CurrentValueSubject<[NativeCentral.Peripheral: LockPeripheral<NativeCentral>], Never>([NativeCentral.Peripheral: LockPeripheral<NativeCentral>]())
     
-    public let lockInformation = OpenCombine.CurrentValueSubject<[NativeCentral.Peripheral: LockInformationCharacteristic], Never>([NativeCentral.Peripheral: LockInformationCharacteristic]())
+    @Published
+    public var peripherals = [NativeCentral.Peripheral: ScanData<NativeCentral.Peripheral, NativeCentral.Advertisement>]()
     
-    private var locksObserver: OpenCombine.AnyCancellable?
+    @Published
+    public var lockInformation = [NativeCentral.Peripheral: LockInformation]()
+    
+    private var locksObserver: Combine.AnyCancellable?
     
     // MARK: - Subscript
     
     /// Cached information for the specified lock.
     public subscript (lock id: UUID) -> LockCache? {
         
-        get { return locks.value[identifier] }
+        get { return locks[id] }
         set {
-            locks.value[identifier] = newValue // update observers
-            applicationData.locks = locks.value // write file
+            locks[id] = newValue // update observers
+            applicationData.locks = locks // write file
         }
     }
     
@@ -171,7 +174,7 @@ public final class Store {
         get {
             
             do {
-                guard let data = try keychain.getData(identifier.uuidString)
+                guard let data = try keychain.getData(id.uuidString)
                     else { return nil }
                 guard let key = KeyData(data: data)
                     else { assertionFailure("Invalid key data"); return nil }
@@ -186,7 +189,7 @@ public final class Store {
         }
         
         set {
-            let key = identifier.uuidString
+            let key = id.uuidString
             do {
                 guard let data = newValue?.data else {
                     try keychain.remove(key)
@@ -208,7 +211,7 @@ public final class Store {
     
     /// The Bluetooth LE peripheral for the speciifed lock.
     public subscript (peripheral id: UUID) -> NativeCentral.Peripheral? {
-        return lockInformation.value.first(where: { $0.value.identifier == identifier })?.key
+        return lockInformation.first(where: { $0.value.id == id })?.key
     }
     
     /// Remove the specified lock from the cache and keychain.
@@ -219,7 +222,7 @@ public final class Store {
             else { return false }
         
         self[lock: lock] = nil
-        self[key: lockCache.key.identifier] = nil
+        self[key: lockCache.key.id] = nil
         
         return true
     }
@@ -227,9 +230,9 @@ public final class Store {
     /// Get credentials from Keychain to authorize requests.
     public func credentials(for lock: UUID) -> KeyCredentials? {
         guard let cache = self[lock: lock],
-            let keyData = self[key: cache.key.identifier]
+            let keyData = self[key: cache.key.id]
             else { return nil }
-        return .init(identifier: cache.key.identifier, secret: keyData)
+        return .init(id: cache.key.id, secret: keyData)
     }
     
     /// Forceably load cache.
@@ -238,8 +241,8 @@ public final class Store {
         // read file
         let applicationData = self.applicationData
         // set value
-        if locks.value != applicationData.locks {
-            locks.value = applicationData.locks
+        if locks != applicationData.locks {
+            locks = applicationData.locks
         }
     }
     
@@ -262,18 +265,17 @@ public final class Store {
     
     internal func updateCoreData() {
         
-        let locks = self.locks.value
+        let locks = self.locks
         backgroundContext.commit {
             try $0.insert(locks)
         }
     }
     
     #if os(iOS)
-    
     private func monitorBeacons() {
         
         // always monitor lock notification iBeacon
-        let beacons = Set(self.locks.value.keys) + [.lockNotificationBeacon]
+        let beacons = Set(self.locks.keys) + [.lockNotificationBeacon]
         let oldBeacons = self.beaconController.beacons.keys
         
         // remove old beacons
@@ -294,11 +296,11 @@ public final class Store {
     private func updateSpotlight() {
         
         guard SpotlightController.isSupported else { return }
-        spotlight.reindexAll(locks: locks.value)
+        spotlight.reindexAll(locks: locks)
     }
     
     private func updateCloud() {
-        
+        /*
         DispatchQueue.cloud.async { [weak self] in
             guard let self = self else { return }
             do {
@@ -306,28 +308,26 @@ public final class Store {
                 try self.syncCloud()
             }
             catch { log("⚠️ Unable to sync iCloud: \(error.localizedDescription)") }
-        }
+        }*/
     }
     
-    private func beaconFound(_ beacon: UUID) {
+    @MainActor
+    private func beaconFound(_ beacon: UUID) async {
         
         // Can't do anything because we don't have Bluetooth
-        guard lockManager.central.state == .poweredOn
+        guard await central.state == .poweredOn
             else { return }
         
         if let _ = Store.shared[lock: beacon] {
-            DispatchQueue.bluetooth.async { [weak self] in
-                guard let self = self else { return }
-                do {
-                    guard let _ = try self.device(for: beacon, scanDuration: 1.0) else {
-                        log("⚠️ Could not find lock \(beacon) for beacon \(beacon)")
-                        self.beaconController.scanBeacon(for: beacon)
-                        return
-                    }
-                    log("📶 Found lock \(beacon)")
-                } catch {
-                    log("⚠️ Could not scan: \(error.localizedDescription)")
+            do {
+                guard let _ = try await self.device(for: beacon, scanDuration: 1.0) else {
+                    log("⚠️ Could not find lock \(beacon) for beacon \(beacon)")
+                    self.beaconController.scanBeacon(for: beacon)
+                    return
                 }
+                log("📶 Found lock \(beacon)")
+            } catch {
+                log("⚠️ Could not scan: \(error.localizedDescription)")
             }
         } else if beacon == .lockNotificationBeacon { // Entered region event
             log("📶 Lock notification")
@@ -336,226 +336,221 @@ public final class Store {
             typealias FetchRequest = LockEvent.FetchRequest
             typealias Predicate = LockEvent.Predicate
             let context = Store.shared.backgroundContext
-            DispatchQueue.bluetooth.async {
-                // scan for all locks
-                let locks = Store.shared.locks.value.keys
-                // scan if none is visible
-                if locks.compactMap({ self.device(for: $0) }).isEmpty {
-                    do { try Store.shared.scan(duration: 1.0) }
-                    catch { log("⚠️ Could not scan for locks: \(error.localizedDescription)") }
-                }
-                let visibleLocks = locks.filter { self.device(for: $0) != nil }
-                // queue fetching events
-                DispatchQueue.bluetooth.asyncAfter(deadline: .now() + 3.0) {
-                    defer { self.beaconController.scanBeacons() } // refresh beacons
-                    for lock in visibleLocks {
-                        do {
-                            guard let device = try self.device(for: lock, scanDuration: 1.0)
-                                else { continue }
-                            let lastEventDate = try context.performErrorBlockAndWait {
-                                try context.find(identifier: lock, type: LockManagedObject.self)
-                                    .flatMap { try $0.lastEvent(in: context)?.date }
-                            }
-                            let fetchRequest = FetchRequest(
-                                offset: 0,
-                                limit: nil,
-                                predicate: Predicate(
-                                    keys: nil,
-                                    start: lastEventDate,
-                                    end: nil
-                                )
-                            )
-                            try self.listEvents(device, fetchRequest: fetchRequest, notification: { _,_ in })
-                        } catch {
-                            log("⚠️ Could not fetch latest data for lock \(lock): \(error.localizedDescription)")
-                            continue
-                        }
+            
+            // scan for all locks
+            let locks = Store.shared.locks.keys
+            // scan if none is visible
+            if locks.compactMap({ self.device(for: $0) }).isEmpty {
+                do { try await Store.shared.scan(duration: 1.0) }
+                catch { log("⚠️ Could not scan for locks: \(error.localizedDescription)") }
+            }
+            let visibleLocks = locks.filter { self.device(for: $0) != nil }
+            // queue fetching events
+            try? await Task.sleep(nanoseconds: 3 * 1_000_000_000)
+            defer { self.beaconController.scanBeacons() } // refresh beacons
+            for lock in visibleLocks {
+                do {
+                    guard let device = try await self.device(for: lock, scanDuration: 1.0)
+                        else { continue }
+                    let lastEventDate = try context.performErrorBlockAndWait {
+                        try context.find(id: lock, type: LockManagedObject.self)
+                            .flatMap { try $0.lastEvent(in: context)?.date }
                     }
+                    let fetchRequest = FetchRequest(
+                        offset: 0,
+                        limit: nil,
+                        predicate: Predicate(
+                            keys: nil,
+                            start: lastEventDate,
+                            end: nil
+                        )
+                    )
+                    try await self.listEvents(device, fetchRequest: fetchRequest, notification: { _,_ in })
+                } catch {
+                    log("⚠️ Could not fetch latest data for lock \(lock): \(error.localizedDescription)")
+                    continue
                 }
             }
         }
     }
     
-    private func beaconExited(_ beacon: UUID) {
+    @MainActor
+    private func beaconExited(_ beacon: UUID) async {
         
         guard let _ = Store.shared[lock: beacon]
             else { return }
         
-        DispatchQueue.bluetooth.async { [weak self] in
-            guard let self = self else { return }
-            do {
-                try self.scan(duration: 1.0)
-                if self.device(for: beacon) == nil {
-                    log("Lock \(beacon) no longer in range")
-                } else {
-                    // lock is in range, refresh beacons
-                    self.beaconController.scanBeacon(for: beacon)
-                }
-            } catch {
-                log("⚠️ Could not scan: \(error.localizedDescription)")
+        do {
+            try await self.scan(duration: 1.0)
+            if self.device(for: beacon) == nil {
+                log("Lock \(beacon) no longer in range")
+            } else {
+                // lock is in range, refresh beacons
+                self.beaconController.scanBeacon(for: beacon)
             }
+        } catch {
+            log("⚠️ Could not scan: \(error.localizedDescription)")
         }
     }
-    
     #endif
 }
 
-// MARK: - ObservableObject
-
-extension Store: Combine.ObservableObject { }
-
 // MARK: - Lock Bluetooth Operations
 
+@MainActor
 public extension Store {
     
     func device(for id: UUID,
-                scanDuration: TimeInterval) throws -> LockPeripheral<NativeCentral>? {
-        
-        assert(Thread.isMainThread == false)
-        
-        if let lock = device(for: identifier) {
+                scanDuration: TimeInterval) async throws -> NativeCentral.Peripheral? {
+                
+        if let lock = device(for: id) {
             return lock
         } else {
-            try self.scan(duration: scanDuration)
-            for peripheral in peripherals.value.values {
+            try await self.scan(duration: scanDuration)
+            for peripheral in peripherals.keys {
                 // skip known locks that are not the targeted device
-                if let information = lockInformation.value[peripheral.scanData.peripheral] {
-                    guard information.identifier == identifier else { continue }
+                if let information = lockInformation[peripheral] {
+                    guard information.id == id else { continue }
                 }
                 // request information
                 do {
-                    try self.readInformation(peripheral)
+                    try await self.readInformation(peripheral)
                 } catch {
                     log("⚠️ Could not read information: \(error.localizedDescription)")
                     continue // ignore
                 }
-                if let foundDevice = device(for: identifier) {
+                if let foundDevice = device(for: id) {
                     return foundDevice
                 }
             }
-            return device(for: identifier)
+            return device(for: id)
         }
     }
     
-    func device(for id: UUID) -> LockPeripheral<NativeCentral>? {
-        
-        guard let peripheral = self[peripheral: identifier],
-            let lock = self.peripherals.value[peripheral]
-            else { return nil }
-        
-        return lock
+    func device(for id: UUID) -> NativeCentral.Peripheral? {
+        self[peripheral: id]
     }
     
-    func key(for lock: LockPeripheral<NativeCentral>) -> KeyCredentials? {
+    func key(for lock: NativeCentral.Peripheral) -> KeyCredentials? {
         
-        guard let information = self.lockInformation.value[lock.scanData.peripheral],
-            let lockCache = self[lock: information.identifier],
-            let keyData = self[key: lockCache.key.identifier]
+        guard let information = self.lockInformation[lock],
+            let lockCache = self[lock: information.id],
+            let keyData = self[key: lockCache.key.id]
             else { return nil }
         
         let key = KeyCredentials(
-            identifier: lockCache.key.identifier,
+            id: lockCache.key.id,
             secret: keyData
         )
         
         return key
     }
     
-    func scan(duration: TimeInterval? = nil) throws {
+    func scan(duration: TimeInterval? = nil) async throws {
         
         let duration = duration ?? preferences.scanDuration
         let filterDuplicates = preferences.filterDuplicates
-        assert(Thread.isMainThread == false)
-        self.peripherals.value.removeAll()
-        try lockManager.scanLocks(duration: duration, filterDuplicates: filterDuplicates) { [unowned self] in
-            self.peripherals.value[$0.scanData.peripheral] = $0
+        self.peripherals.removeAll()
+        let stream = central.scan(with: [LockService.uuid])
+        for try await scanData in stream {
+            guard let serviceUUIDs = scanData.advertisementData.serviceUUIDs,
+                serviceUUIDs.contains(LockService.uuid)
+                else { continue }
+            // cache found device
+            self.peripherals[scanData.peripheral] = scanData
         }
+        //try lockManager.scanLocks(duration: duration, filterDuplicates: filterDuplicates) { [unowned self] in
+        //    self.peripherals.value[$0.scanData.peripheral] = $0
+        //}
     }
     
     /// Setup a lock.
-    func setup(_ lock: LockPeripheral<NativeCentral>,
-               sharedSecret: KeyData,
-               name: String) throws {
+    func setup(
+        _ lock: NativeCentral.Peripheral,
+        sharedSecret: KeyData,
+        name: String
+    ) async throws {
         
-        assert(Thread.isMainThread == false)
         let setupRequest = SetupRequest()
-        let information = try lockManager.setup(
+        let information = try await central.setup(
             setupRequest,
-            for: lock.scanData.peripheral,
-            sharedSecret: sharedSecret,
-            timeout: preferences.bluetoothTimeout
+            using: sharedSecret,
+            for: lock
         )
         
         let ownerKey = Key(setup: setupRequest)
         let lockCache = LockCache(
             key: ownerKey,
             name: name,
-            information: .init(characteristic: information)
+            information: .init(information)
         )
         
         // store key
-        self[lock: information.identifier] = lockCache
-        self[key: ownerKey.identifier] = setupRequest.secret
+        self[lock: information.id] = lockCache
+        self[key: ownerKey.id] = setupRequest.secret
         
         // update lock information
-        self.lockInformation.value[lock.scanData.peripheral] = information
+        self.lockInformation[lock] = information
     }
     
-    func readInformation(_ lock: LockPeripheral<NativeCentral>) throws {
+    func readInformation(_ lock: NativeCentral.Peripheral) async throws {
         
         assert(Thread.isMainThread == false)
         
-        let information = try lockManager.readInformation(
-            for: lock.scanData.peripheral,
-            timeout: preferences.bluetoothTimeout
+        let information = try await central.readInformation(
+            for: lock
         )
         
         // update lock information cache
-        self.lockInformation.value[lock.scanData.peripheral] = information
-        self[lock: information.identifier]?.information = LockCache.Information(characteristic: information)
+        self.lockInformation[lock] = information
+        self[lock: information.id]?.information = LockCache.Information(information)
     }
     
     @discardableResult
-    func unlock(_ lock: LockPeripheral<NativeCentral>, action: UnlockAction = .default) throws -> Bool {
+    func unlock(_ lock: NativeCentral.Peripheral, action: UnlockAction = .default) async throws -> Bool {
         
         // get lock key
         guard let key = self.key(for: lock)
             else { return false }
         
-        try lockManager.unlock(action,
-                               for: lock.scanData.peripheral,
-                               with: key,
-                               timeout: preferences.bluetoothTimeout)
+        try await central.unlock(
+            action,
+            using: key,
+            for: lock
+        )
+        
         return true
     }
     
     @discardableResult
-    func listKeys(_ lock: LockPeripheral<NativeCentral>,
-                  notification: @escaping ((KeysList, Bool) -> ()) = { _,_ in }) throws -> Bool {
+    func listKeys(
+        _ lock: NativeCentral.Peripheral,
+        notification updateBlock: ((KeysList, Bool) -> ()) = { _,_ in }
+    ) async throws -> Bool {
         
         // get lock key
-        guard let information = self.lockInformation.value[lock.scanData.peripheral],
-            let lockCache = self[lock: information.identifier],
-            let keyData = self[key: lockCache.key.identifier]
+        guard let information = self.lockInformation[lock],
+            let lockCache = self[lock: information.id],
+            let keyData = self[key: lockCache.key.id]
             else { return false }
         
         let key = KeyCredentials(
-            identifier: lockCache.key.identifier,
+            id: lockCache.key.id,
             secret: keyData
         )
+            
+        let context = backgroundContext
         
         // BLE request
-        try lockManager.listKeys(for: lock.scanData.peripheral, with: key, timeout: preferences.bluetoothTimeout) { [weak self] (list, isComplete) in
-            // call completion block
-            notification(list, isComplete)
-            // store in CoreData
-            guard list.keys.isEmpty == false else { return }
-            self?.backgroundContext.commit { (context) in
-                try list.keys.forEach {
-                    try context.insert($0, for: information.identifier)
-                }
-                try list.newKeys.forEach {
-                    try context.insert($0, for: information.identifier)
+        try await central.connection(for: lock) {
+            let stream = try await $0.listKeys(using: key, log: { log("📲 Central: " + $0) })
+            var list = KeysList()
+            for try await notification in stream {
+                list.append(notification.key)
+                // call completion block
+                updateBlock(list, notification.isLast)
+                await context.commit { (context) in
+                    try context.insert(notification.key, for: information.id)
                 }
             }
         }
@@ -569,35 +564,46 @@ public extension Store {
     }
     
     @discardableResult
-    func listEvents(_ lock: LockPeripheral<NativeCentral>,
-                    fetchRequest: LockEvent.FetchRequest? = nil,
-                    notification: @escaping ((EventsList, Bool) -> ()) = { _,_ in }) throws -> Bool {
+    func listEvents(
+        _ lock: NativeCentral.Peripheral,
+        fetchRequest: LockEvent.FetchRequest? = nil,
+        notification updateBlock: @escaping ((EventsList, Bool) -> ()) = { _,_ in }
+    ) async throws -> Bool {
         
         // get lock key
-        guard let information = self.lockInformation.value[lock.scanData.peripheral],
-            let lockCache = self[lock: information.identifier],
-            let keyData = self[key: lockCache.key.identifier]
+        guard let information = self.lockInformation[lock],
+            let lockCache = self[lock: information.id],
+            let keyData = self[key: lockCache.key.id]
             else { return false }
         
         let key = KeyCredentials(
-            identifier: lockCache.key.identifier,
+            id: lockCache.key.id,
             secret: keyData
         )
         
-        let lockIdentifier = information.identifier
+        let lockIdentifier = information.id
+        let context = backgroundContext
         
         // BLE request
-        var events = [LockEvent]()
-        try lockManager.listEvents(fetchRequest: fetchRequest, for: lock.scanData.peripheral, with: key, timeout: preferences.bluetoothTimeout) { [weak self] (list, isComplete) in
-            // call completion block
-            notification(list, isComplete)
-            events = list
-            // store in CoreData
-            self?.backgroundContext.commit { (context) in
-                try context.insert(list, for: information.identifier)
+        let log = central.log
+        try await central.connection(for: lock) {
+            let stream = try await $0.listEvents(fetchRequest: fetchRequest, using: key, log: log)
+            var events = [LockEvent]()
+            for try await notification in stream {
+                if let event = notification.event {
+                    events.append(event)
+                    log?("Recieved event \(event.id)")
+                    await context.commit { (context) in
+                        try context.insert(event, for: information.id)
+                    }
+                }
+                // call completion block
+                updateBlock(events, notification.isLast)
+                
             }
         }
         
+        /*
         #if os(iOS)
         if preferences.isCloudBackupEnabled {
             DispatchQueue.cloud.async { [weak self] in
@@ -613,11 +619,11 @@ public extension Store {
             }
         }
         #endif
-        
+        */
         return true
     }
 }
-
+/*
 // MARK: - Bonjour Requests
 
 #if os(iOS)
@@ -629,12 +635,12 @@ public extension Store {
                     fetchRequest: LockEvent.FetchRequest? = nil) throws -> Bool {
         
         // get lock key
-        guard let lockCache = self[lock: lock.identifier],
-            let keyData = self[key: lockCache.key.identifier]
+        guard let lockCache = self[lock: lock.id],
+            let keyData = self[key: lockCache.key.id]
             else { return false }
         
         let key = KeyCredentials(
-            identifier: lockCache.key.identifier,
+            id: lockCache.key.id,
             secret: keyData
         )
         
@@ -646,7 +652,7 @@ public extension Store {
         )
         
         backgroundContext.commit { (context) in
-            try context.insert(events, for: lock.identifier)
+            try context.insert(events, for: lock.id)
         }
         
         #if os(iOS)
@@ -655,7 +661,7 @@ public extension Store {
                 // upload to iCloud
                 do {
                     for event in events {
-                        let value = LockEvent.Cloud(event: event, for: lock.identifier)
+                        let value = LockEvent.Cloud(event: event, for: lock.id)
                         try self?.cloud.upload(value)
                     }
                 } catch {
@@ -670,7 +676,7 @@ public extension Store {
 }
 
 #endif
-
+*/
 // MARK: - CloudKit Operations
 
 #if os(iOS)

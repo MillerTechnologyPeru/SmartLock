@@ -55,6 +55,34 @@ public extension ActivityIndicatorViewController {
             }
         }
     }
+    
+    func performActivity <T> (
+        showActivity: Bool = true,
+        _ asyncOperation: @escaping () async throws -> T,
+        completion: ((Self, T) -> ())? = nil
+    ) {
+        assert(Thread.isMainThread)
+        if showActivity { self.showActivity() }
+        Task {
+            do {
+                let value = try await asyncOperation()
+                await MainActor.run {
+                    if showActivity { self.hideActivity(animated: true) }
+                    completion?(self, value)
+                }
+            } catch {
+                await MainActor.run {
+                    if showActivity { self.hideActivity(animated: false) }
+                    // show error
+                    log("⚠️ Error: \(error.localizedDescription)")
+                    #if DEBUG
+                    print(error)
+                    #endif
+                    (self as? UIViewController)?.showErrorAlert(error.localizedDescription)
+                }
+            }
+        }
+    }
 }
 
 public protocol TableViewActivityIndicatorViewController: ActivityIndicatorViewController {

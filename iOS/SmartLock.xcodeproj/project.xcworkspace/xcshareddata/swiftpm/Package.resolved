@@ -1,133 +1,86 @@
 {
-  "object": {
-    "pins": [
-      {
-        "package": "Bluetooth",
-        "repositoryURL": "https://github.com/PureSwift/Bluetooth.git",
-        "state": {
-          "branch": "master",
-          "revision": "b03524c7a0c7eca048133a9df9dc4bbe727b38e0",
-          "version": null
-        }
-      },
-      {
-        "package": "Bonjour",
-        "repositoryURL": "git@github.com:PureSwift/Bonjour.git",
-        "state": {
-          "branch": "master",
-          "revision": "b3d28cc68b7fac11811848613633c90c8dd2e058",
-          "version": null
-        }
-      },
-      {
-        "package": "CloudKitCodable",
-        "repositoryURL": "https://github.com/colemancda/CloudKitCodable.git",
-        "state": {
-          "branch": "master",
-          "revision": "598e04c5c6f1162d51fdc45d11c85574d39ee85c",
-          "version": null
-        }
-      },
-      {
-        "package": "CryptoSwift",
-        "repositoryURL": "https://github.com/krzyzanowskim/CryptoSwift",
-        "state": {
-          "branch": "master",
-          "revision": "7c94c0bc9d222f9c88d9f6ed8f71926f372d30a8",
-          "version": null
-        }
-      },
-      {
-        "package": "GATT",
-        "repositoryURL": "https://github.com/PureSwift/GATT.git",
-        "state": {
-          "branch": "master",
-          "revision": "955a19b2030e08666154f2ee52d7955f56bb6ff5",
-          "version": null
-        }
-      },
-      {
-        "package": "GottaGoFast",
-        "repositoryURL": "https://github.com/broadwaylamb/GottaGoFast.git",
-        "state": {
-          "branch": null,
-          "revision": "098e92679419e509d42fd97d3e84292acd53e291",
-          "version": "0.2.0"
-        }
-      },
-      {
-        "package": "JGProgressHUD",
-        "repositoryURL": "https://github.com/MillerTechnologyPeru/JGProgressHUD.git",
-        "state": {
-          "branch": "master",
-          "revision": "a027e0d347c431247c11370b408db567de06e88e",
-          "version": null
-        }
-      },
-      {
-        "package": "KeychainAccess",
-        "repositoryURL": "https://github.com/MillerTechnologyPeru/KeychainAccess.git",
-        "state": {
-          "branch": "master",
-          "revision": "ee878eaeb3efa09753a9e29e8deb8c331b96f3c8",
-          "version": null
-        }
-      },
-      {
-        "package": "OpenCombine",
-        "repositoryURL": "https://github.com/MillerTechnologyPeru/OpenCombine.git",
-        "state": {
-          "branch": "master",
-          "revision": "9b9915bde7bcb5c812a577fdd39c1c982668339e",
-          "version": null
-        }
-      },
-      {
-        "package": "QRCodeReader",
-        "repositoryURL": "https://github.com/MillerTechnologyPeru/QRCodeReader.swift.git",
-        "state": {
-          "branch": "master",
-          "revision": "9db77f45f6f58ad8643f295b7573f0061f03b888",
-          "version": null
-        }
-      },
-      {
-        "package": "R.swift.Library",
-        "repositoryURL": "https://github.com/mac-cain13/R.swift.Library",
-        "state": {
-          "branch": "master",
-          "revision": "3365947d725398694d6ed49f2e6622f05ca3fc0f",
-          "version": null
-        }
-      },
-      {
-        "package": "SFSafeSymbols",
-        "repositoryURL": "https://github.com/piknotech/SFSafeSymbols.git",
-        "state": {
-          "branch": null,
-          "revision": "d63bbbd0e70182362d33f108549968b69d0b859a",
-          "version": "1.0.0"
-        }
-      },
-      {
-        "package": "TLVCoding",
-        "repositoryURL": "https://github.com/PureSwift/TLVCoding.git",
-        "state": {
-          "branch": "master",
-          "revision": "8c41d0fd48f6fc00c429aad025c114a941aad764",
-          "version": null
-        }
-      },
-      {
-        "package": "Yams",
-        "repositoryURL": "https://github.com/jpsim/Yams.git",
-        "state": {
-          "branch": null,
-          "revision": "c947a306d2e80ecb2c0859047b35c73b8e1ca27f",
-          "version": "2.0.0"
-        }
+  "pins" : [
+    {
+      "identity" : "bluetooth",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/PureSwift/Bluetooth.git",
+      "state" : {
+        "revision" : "f28f73c1ff5e0877c212300ab356997e7e9570fa",
+        "version" : "6.1.0"
       }
-    ]
-  },
-  "version": 1
+    },
+    {
+      "identity" : "cloudkitcodable",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/colemancda/CloudKitCodable.git",
+      "state" : {
+        "branch" : "master",
+        "revision" : "598e04c5c6f1162d51fdc45d11c85574d39ee85c"
+      }
+    },
+    {
+      "identity" : "gatt",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/PureSwift/GATT.git",
+      "state" : {
+        "branch" : "master",
+        "revision" : "579ffd583f9a32a88e68b69e12eb85856ee165cb"
+      }
+    },
+    {
+      "identity" : "jgprogresshud",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/MillerTechnologyPeru/JGProgressHUD.git",
+      "state" : {
+        "branch" : "master",
+        "revision" : "a027e0d347c431247c11370b408db567de06e88e"
+      }
+    },
+    {
+      "identity" : "keychainaccess",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/MillerTechnologyPeru/KeychainAccess.git",
+      "state" : {
+        "branch" : "master",
+        "revision" : "ee878eaeb3efa09753a9e29e8deb8c331b96f3c8"
+      }
+    },
+    {
+      "identity" : "qrcodereader.swift",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/MillerTechnologyPeru/QRCodeReader.swift.git",
+      "state" : {
+        "branch" : "master",
+        "revision" : "9db77f45f6f58ad8643f295b7573f0061f03b888"
+      }
+    },
+    {
+      "identity" : "r.swift.library",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/mac-cain13/R.swift.Library",
+      "state" : {
+        "branch" : "master",
+        "revision" : "3a64127e8113cc33179504dfadc91b361d55a0b1"
+      }
+    },
+    {
+      "identity" : "sfsafesymbols",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/piknotech/SFSafeSymbols.git",
+      "state" : {
+        "revision" : "31a99db357f2b839a18ab598c4aa87a741bd6009",
+        "version" : "1.2.0"
+      }
+    },
+    {
+      "identity" : "tlvcoding",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/PureSwift/TLVCoding.git",
+      "state" : {
+        "branch" : "master",
+        "revision" : "49eae2e68320dbe1533eb2880ee82f7b6144517a"
+      }
+    }
+  ],
+  "version" : 2
 }

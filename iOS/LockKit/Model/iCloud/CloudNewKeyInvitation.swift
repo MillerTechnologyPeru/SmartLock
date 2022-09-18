@@ -39,7 +39,7 @@ internal extension NewKey.Invitation.Cloud {
     
     init(_ value: NewKey.Invitation) {
         
-        self.id = .init(rawValue: value.key.identifier)
+        self.id = .init(rawValue: value.key.id)
         self.lock = value.lock
         self.secret = value.secret
         self.key = try! NewKey.Invitation.Cloud.keyEncoder.encode(value.key)

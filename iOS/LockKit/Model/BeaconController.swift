@@ -88,7 +88,7 @@ public final class BeaconController {
     
     @discardableResult
     public func scanBeacon(for id: UUID) -> Bool {
-        guard let region = beacons[identifier]?.region
+        guard let region = beacons[id]?.region
             else { return false }
         scanBeacons(in: region)
         return true
@@ -379,7 +379,7 @@ internal extension CLLocationManager {
             startRangingBeacons(satisfying: .init(uuid: uuid))
         } else {
             #if !targetEnvironment(macCatalyst)
-            startRangingBeacons(in: CLBeaconRegion(proximityUUID: uuid, id: UUID.uuidString))
+            startRangingBeacons(in: CLBeaconRegion(proximityUUID: uuid, identifier: uuid.uuidString))
             #endif
         }
     }
@@ -389,7 +389,7 @@ internal extension CLLocationManager {
             stopRangingBeacons(satisfying: .init(uuid: uuid))
         } else {
             #if !targetEnvironment(macCatalyst)
-            stopRangingBeacons(in: CLBeaconRegion(proximityUUID: uuid, id: UUID.uuidString))
+            stopRangingBeacons(in: CLBeaconRegion(proximityUUID: uuid, identifier: uuid.uuidString))
             #endif
         }
     }
@@ -399,9 +399,9 @@ internal extension CLBeaconRegion {
     
     convenience init(uuid id: UUID) {
         if #available(iOS 13.0, iOSApplicationExtension 13.0, *) {
-            self.init(beaconIdentityConstraint: .init(uuid: identifier), identifier: identifier.uuidString)
+            self.init(beaconIdentityConstraint: .init(uuid: id), identifier: id.uuidString)
         } else {
-            self.init(proximityUUID: identifier, identifier: identifier.uuidString)
+            self.init(proximityUUID: id, identifier: id.uuidString)
         }
     }
 }

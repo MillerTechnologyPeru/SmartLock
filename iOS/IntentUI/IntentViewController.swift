@@ -47,7 +47,7 @@ final class IntentViewController: UIViewController, INUIHostedViewControlling {
         Store.shared.loadCache()
         
         guard let intent = interaction.intent as? UnlockIntent,
-            let lockIdentifierString = intent.lock?.identifier,
+            let lockIdentifierString = intent.lock?.id,
             let lockIdentifier = UUID(uuidString: lockIdentifierString),
             let lockCache = FileManager.Lock.shared.applicationData?.locks[lockIdentifier] else {
             completion(false, [], .zero)

@@ -15,19 +15,19 @@ public extension ActivityIndicatorViewController where Self: UIViewController {
     
     func unlock(lock id: UUID, action: UnlockAction = .default, scanDuration: TimeInterval = 2.0) {
         
-        log("Unlock \(identifier)")
+        log("Unlock \(id)")
         
-        performActivity(queue: DispatchQueue.bluetooth, {
-            guard let lockPeripheral = try Store.shared.device(for: identifier, scanDuration: scanDuration)
-                else { throw LockError.notInRange(lock: identifier) }
-            try Store.shared.unlock(lockPeripheral, action: action)
+        performActivity({
+            guard let lockPeripheral = try await Store.shared.device(for: id, scanDuration: scanDuration)
+                else { throw LockError.notInRange(lock: id) }
+            try await Store.shared.unlock(lockPeripheral, action: action)
         }, completion: { (viewController, _) in
-            log("Successfully unlocked lock \"\(identifier)\"")
+            log("Successfully unlocked lock \"\(id)\"")
         })
     }
     
-    func unlock(lock: LockPeripheral<NativeCentral>, action: UnlockAction = .default) {
-        performActivity(queue: .bluetooth, { try Store.shared.unlock(lock, action: action) })
+    func unlock(lock: NativeCentral.Peripheral, action: UnlockAction = .default) {
+        performActivity({ try await Store.shared.unlock(lock, action: action) })
     }
 }
 
@@ -45,7 +45,7 @@ public extension UIViewController {
         }
         
         if #available(iOS 12, iOSApplicationExtension 12.0, *) {
-            let intent = UnlockIntent(identifier: lock, cache: lockCache)
+            let intent = UnlockIntent(id: lock, cache: lockCache)
             let interaction = INInteraction(intent: intent, response: nil)
             interaction.donate { error in
                 if let error = error {

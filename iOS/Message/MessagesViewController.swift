@@ -193,10 +193,10 @@ final class MessagesViewController: MSMessagesAppViewController {
     
     private func select(_ item: Item) {
         
-        log("Selected \(item.cache.name) \(item.identifier)")
+        log("Selected \(item.cache.name) \(item.id)")
         
         requestPresentationStyle(.expanded)
-        shareKey(lock: item.identifier) { [unowned self] in
+        shareKey(lock: item.id) { [unowned self] in
             self.dismiss(animated: true, completion: nil)
             self.requestPresentationStyle(.compact)
             guard let invitation = $0?.invitation else {

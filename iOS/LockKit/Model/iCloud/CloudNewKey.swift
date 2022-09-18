@@ -35,14 +35,14 @@ public extension NewKey {
 public extension NewKey.Cloud {
     
     init(_ value: NewKey, lock: UUID) {
-        self.id = .init(rawValue: value.identifier)
+        self.id = .init(rawValue: value.id)
         self.lock = .init(rawValue: lock)
         self.name = value.name
         self.created = value.created
         self.expiration = value.expiration
         self.permissionType = value.permission.type
         if case let .scheduled(schedule) = value.permission {
-            self.schedule = Permission.Schedule.Cloud(schedule, key: value.identifier, type: .newKey)
+            self.schedule = Permission.Schedule.Cloud(schedule, key: value.id, type: .newKey)
         } else {
             self.schedule = nil
         }
@@ -71,7 +71,7 @@ public extension NewKey {
         }
         
         self.init(
-            identifier: id,
+            id: id,
             name: cloud.name,
             permission: permission,
             created: cloud.created,

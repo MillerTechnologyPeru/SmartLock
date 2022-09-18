@@ -17,7 +17,7 @@ public final class SetupEventManagedObject: EventManagedObject {
     internal convenience init(_ value: LockEvent.Setup, lock: LockManagedObject, context: NSManagedObjectContext) {
         
         self.init(context: context)
-        self.identifier = value.identifier
+        self.identifier = value.id
         self.lock = lock
         self.date = value.date
         self.key = value.key
@@ -28,12 +28,12 @@ public extension LockEvent.Setup {
     
     init?(managedObject: SetupEventManagedObject) {
         
-        guard let identifier = managedObject.identifier,
+        guard let id = managedObject.identifier,
             let date = managedObject.date,
             let key = managedObject.key
             else { return nil }
         
-        self.init(identifier: identifier, date: date, key: key)
+        self.init(id: id, date: date, key: key)
     }
 }
 

@@ -32,7 +32,7 @@ public class EventManagedObject: NSManagedObject {
     
     internal static func find(_ id: UUID, in context: NSManagedObjectContext) throws -> EventManagedObject? {
         
-        try context.find(identifier: identifier as NSUUID,
+        try context.find(identifier: id as NSUUID,
                          propertyName: #keyPath(EventManagedObject.identifier),
                          type: EventManagedObject.self)
     }
@@ -82,7 +82,7 @@ public extension EventManagedObject {
             return nil
         }
         
-        return try context.find(identifier: key, type: KeyManagedObject.self)
+        return try context.find(id: key, type: KeyManagedObject.self)
     }
 }
 
@@ -118,24 +118,28 @@ internal extension NSManagedObjectContext {
     
     @discardableResult
     func insert(_ events: [LockEvent], for lock: LockManagedObject) throws -> [EventManagedObject] {
-        
-        // insert events
         return try events.map {
-            try EventManagedObject.find($0.identifier, in: self)
-                ?? EventManagedObject.initWith($0, lock: lock, context: self)
+            try insert($0, for: lock)
         }
     }
     
     @discardableResult
+    func insert(_ event: LockEvent, for lock: LockManagedObject) throws -> EventManagedObject {
+        try EventManagedObject.find(event.id, in: self)
+            ?? EventManagedObject.initWith(event, lock: lock, context: self)
+    }
+    
+    @discardableResult
     func insert(_ events: [LockEvent], for lock: UUID) throws -> [EventManagedObject] {
-        
-        let managedObject = try find(identifier: lock, type: LockManagedObject.self)
-            ?? LockManagedObject(identifier: lock, name: "", context: self)
+        let managedObject = try find(id: lock, type: LockManagedObject.self)
+            ?? LockManagedObject(id: lock, name: "", context: self)
         return try insert(events, for: managedObject)
     }
     
     @discardableResult
     func insert(_ event: LockEvent, for lock: UUID) throws -> EventManagedObject {
-        return try insert([event], for: lock)[0]
+        let managedObject = try find(id: lock, type: LockManagedObject.self)
+            ?? LockManagedObject(id: lock, name: "", context: self)
+        return try insert(event, for: managedObject)
     }
 }
