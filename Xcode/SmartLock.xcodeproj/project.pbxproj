@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		6E2182EF28D7B37000A622B3 /* TabBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E2182EE28D7B37000A622B3 /* TabBarView.swift */; };
+		6E2182F128D7B4FA00A622B3 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E2182F028D7B4FA00A622B3 /* SettingsView.swift */; };
+		6E2182FA28D7B7FE00A622B3 /* Appearance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E2182F928D7B7FE00A622B3 /* Appearance.swift */; };
 		6E3276BC28D708A000AF171B /* CoreLock in Frameworks */ = {isa = PBXBuildFile; productRef = 6E3276BB28D708A000AF171B /* CoreLock */; };
 		6E3276C328D70A3700AF171B /* HomeKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6E3276C228D70A3700AF171B /* HomeKit.framework */; };
 		6E3276C628D70A3700AF171B /* RequestHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E3276C528D70A3700AF171B /* RequestHandler.swift */; };
@@ -56,6 +59,9 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		6E2182EE28D7B37000A622B3 /* TabBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarView.swift; sourceTree = "<group>"; };
+		6E2182F028D7B4FA00A622B3 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		6E2182F928D7B7FE00A622B3 /* Appearance.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Appearance.swift; path = ../../../../iOS/LockKit/View/Appearance.swift; sourceTree = "<group>"; };
 		6E3276BA28D7088D00AF171B /* SmartLock */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = SmartLock; path = ..; sourceTree = "<group>"; };
 		6E3276C128D70A3700AF171B /* MatterLock.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = MatterLock.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		6E3276C228D70A3700AF171B /* HomeKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = HomeKit.framework; path = Library/Frameworks/HomeKit.framework; sourceTree = DEVELOPER_DIR; };
@@ -132,6 +138,8 @@
 			isa = PBXGroup;
 			children = (
 				6E3276CF28D70C9400AF171B /* NearbyDevicesView.swift */,
+				6E2182EE28D7B37000A622B3 /* TabBarView.swift */,
+				6E2182F028D7B4FA00A622B3 /* SettingsView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -170,6 +178,7 @@
 				6E4CB61828D788AA00116573 /* UIStyleKit.swift */,
 				6E4CB62028D7907200116573 /* PermissionIconViewUIView.swift */,
 				6ED248CB28D7A3BF00F78D07 /* ActivityIndicatorView.swift */,
+				6E2182F928D7B7FE00A622B3 /* Appearance.swift */,
 			);
 			path = UIKit;
 			sourceTree = "<group>";
@@ -401,8 +410,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6E2182F128D7B4FA00A622B3 /* SettingsView.swift in Sources */,
 				6E4CB62528D792BF00116573 /* InfoPlist.swift in Sources */,
 				6EA7768528D7061600018FA3 /* App.swift in Sources */,
+				6E2182EF28D7B37000A622B3 /* TabBarView.swift in Sources */,
 				6E3276D028D70C9400AF171B /* NearbyDevicesView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -416,6 +427,7 @@
 				6E4CB61028D7867700116573 /* LockRowView.swift in Sources */,
 				6E4CB62328D7907E00116573 /* PermissionIconViewNSView.swift in Sources */,
 				6E3276D228D70CE100AF171B /* Store.swift in Sources */,
+				6E2182FA28D7B7FE00A622B3 /* Appearance.swift in Sources */,
 				6E4CB61A28D788AA00116573 /* UIStyleKit.swift in Sources */,
 				6E3276DC28D7195400AF171B /* Central.swift in Sources */,
 				6E4CB61B28D788AA00116573 /* PermissionIconView.swift in Sources */,
