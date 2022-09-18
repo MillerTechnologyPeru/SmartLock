@@ -50,6 +50,7 @@ playground.xcworkspace
 
 # Carthage
 Carthage/*
+iOS/JGProgressHUD
 
 # fastlane
 #

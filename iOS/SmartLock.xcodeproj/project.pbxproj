@@ -92,8 +92,9 @@
 		6E7503C32318E78400103EBB /* WatchApplicationContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E7503C22318E78400103EBB /* WatchApplicationContext.swift */; };
 		6E7503C42318E78400103EBB /* WatchApplicationContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E7503C22318E78400103EBB /* WatchApplicationContext.swift */; };
 		6E7E787528D6CACD00B81B65 /* JGProgressHUD.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6E7E787228D6CAAB00B81B65 /* JGProgressHUD.framework */; };
-		6E7E787628D6CACD00B81B65 /* JGProgressHUD.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 6E7E787228D6CAAB00B81B65 /* JGProgressHUD.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		6E7E787828D6D37E00B81B65 /* WatchIntent.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 6ED8206C2316711900B69520 /* WatchIntent.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		6E7E787C28D6D63E00B81B65 /* JGProgressHUD.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6E7E787228D6CAAB00B81B65 /* JGProgressHUD.framework */; };
+		6E7E787D28D6D63E00B81B65 /* JGProgressHUD.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 6E7E787228D6CAAB00B81B65 /* JGProgressHUD.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		6E806B8C230F4F2800C6FF78 /* Preferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E806B8B230F4F2800C6FF78 /* Preferences.swift */; };
 		6E806B94230F4F4700C6FF78 /* Keychain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E806B93230F4F4700C6FF78 /* Keychain.swift */; };
 		6E806B96230F4F7300C6FF78 /* AppGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E806B95230F4F7300C6FF78 /* AppGroup.swift */; };
@@ -619,17 +620,7 @@
 			files = (
 				6E9C95FD23114D07007C18FE /* CoreLock.framework in Embed Frameworks */,
 				6E9C95FF23114D60007C18FE /* LockKit.framework in Embed Frameworks */,
-			);
-			name = "Embed Frameworks";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		6E7E787728D6CACD00B81B65 /* Embed Frameworks */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-				6E7E787628D6CACD00B81B65 /* JGProgressHUD.framework in Embed Frameworks */,
+				6E7E787D28D6D63E00B81B65 /* JGProgressHUD.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -965,6 +956,7 @@
 			files = (
 				6E9C95FC23114D07007C18FE /* CoreLock.framework in Frameworks */,
 				6E9C95FE23114D60007C18FE /* LockKit.framework in Frameworks */,
+				6E7E787C28D6D63E00B81B65 /* JGProgressHUD.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1753,7 +1745,6 @@
 				6E994A80230DFB6C0076DC1B /* Sources */,
 				6E994A81230DFB6C0076DC1B /* Frameworks */,
 				6E994A82230DFB6C0076DC1B /* Resources */,
-				6E7E787728D6CACD00B81B65 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
