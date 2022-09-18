@@ -13,19 +13,21 @@ import CoreLock
 /// Renders lock permission icon.
 public struct PermissionIconView: View {
     
-    @State
-    var permission: PermissionType = .admin
+    let permission: PermissionType
 }
 
 // MARK: - Preview
 
 struct PermissionIconView_Previews: PreviewProvider {
     static var previews: some View {
-        Group {
-            PermissionIconView()
-                .padding(5.0)
-                .preferredColorScheme(.light)
-                .previewLayout(.sizeThatFits)
+        VStack(spacing: 20) {
+            PermissionIconView(permission: .owner)
+                .frame(width: 100, height: 100, alignment: .center)
+            PermissionIconView(permission: .admin)
+                .frame(width: 100, height: 100, alignment: .center)
+            PermissionIconView(permission: .anytime)
+                .frame(width: 100, height: 100, alignment: .center)
+            PermissionIconView(permission: .scheduled)
                 .frame(width: 100, height: 100, alignment: .center)
         }
     }
