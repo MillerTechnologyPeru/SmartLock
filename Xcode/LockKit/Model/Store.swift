@@ -49,7 +49,7 @@ public final class Store: ObservableObject {
                 if newState != oldValue {
                     self.state = newState
                     if newState == .poweredOn, isScanning == false {
-                        //await self.scan()
+                        await self.scan()
                     }
                 }
                 try await Task.sleep(nanoseconds: 1_000_000_000)
@@ -71,6 +71,7 @@ public extension Store {
         if let stream = scanStream, stream.isScanning {
             return // already scanning
         }
+        let scanStart = Date()
         self.scanStream = nil
         let filterDuplicates = true //preferences.filterDuplicates
         self.peripherals.removeAll(keepingCapacity: true)
@@ -79,6 +80,7 @@ public extension Store {
             filterDuplicates: filterDuplicates
         )
         self.scanStream = stream
+        // process scanned devices
         Task {
             do {
                 for try await scanData in stream {
@@ -92,6 +94,31 @@ public extension Store {
                 log("⚠️ Unable to scan. \(error)")
             }
             isScanning = false
+        }
+        // stop scanning after 5 sec if need to read device info
+        Task {
+            let loading = {
+                self.peripherals
+                    .keys
+                    .filter { !self.lockInformation.keys.contains($0) }
+            }
+            try? await Task.sleep(nanoseconds: 5 * 1_000_000_000)
+            while self.isScanning, loading().isEmpty {
+                try? await Task.sleep(nanoseconds: 2 * 1_000_000_000)
+            }
+            // stop scanning and load info for unknown devices
+            stopScanning()
+            for peripheral in loading() {
+                do {
+                    let information = try await self.readInformation(for: peripheral)
+                    log("Read information for lock \(information.id)")
+                    #if DEBUG
+                    dump(information)
+                    #endif
+                } catch {
+                    log("⚠️ Unable to load information for peripheral \(peripheral). \(error)")
+                }
+            }
         }
     }
     

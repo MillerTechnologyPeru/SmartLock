@@ -23,11 +23,8 @@ struct NearbyDevicesView: View {
             }
         )
         .onAppear {
-            Task {
-                try await Task.sleep(nanoseconds: 2 * 1_000_000_000)
-                if store.isScanning == false {
-                    await scan()
-                }
+            if store.isScanning == false {
+                Task { await scan() }
             }
         }
     }
@@ -51,30 +48,6 @@ private extension NearbyDevicesView {
             return
         }
         await store.scan()
-        Task {
-            let loading = {
-                store.peripherals
-                    .keys
-                    .filter { !store.lockInformation.keys.contains($0) }
-            }
-            try? await Task.sleep(nanoseconds: 5 * 1_000_000_000)
-            while store.isScanning, loading().isEmpty {
-                try? await Task.sleep(nanoseconds: 2 * 1_000_000_000)
-            }
-            // stop scanning and load info for unknown devices
-            store.stopScanning()
-            for peripheral in loading() {
-                do {
-                    let information = try await store.readInformation(for: peripheral)
-                    log("Read information for lock \(information.id)")
-                    #if DEBUG
-                    dump(information)
-                    #endif
-                } catch {
-                    log("⚠️ Unable to load information for peripheral \(peripheral). \(error)")
-                }
-            }
-        }
     }
     
     var peripherals: [NativePeripheral] {
