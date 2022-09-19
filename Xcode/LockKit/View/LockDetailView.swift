@@ -61,17 +61,66 @@ extension LockDetailView {
         
         let unlock: () -> ()
         
+        private static let dateFormatter: DateFormatter = {
+            let formatter = DateFormatter()
+            formatter.dateStyle = .short
+            formatter.timeStyle = .short
+            return formatter
+        }()
+        
         public var body: some View {
-            List {
-                VStack {
-                    // unlock button
-                    Button(action: unlock, label: {
-                        PermissionIconView(permission: cache.key.permission.type)
-                            .frame(width: 150, height: 150, alignment: .center)
-                    })
-                    // info
-                    Text(verbatim: id.description)
+            ScrollView {
+                VStack(alignment: .leading, spacing: 20) {
+                    HStack {
+                        Spacer()
+                        // unlock button
+                        Button(action: unlock, label: {
+                            PermissionIconView(permission: cache.key.permission.type)
+                                .frame(width: 150, height: 150, alignment: .center)
+                        })
+                        .padding(30)
+                        Spacer()
+                    }
+                    VStack(alignment: .leading, spacing: 20) {
+                        // info
+                        HStack {
+                            Text("Lock")
+                                .frame(width: 100, height: nil, alignment: .leading)
+                                .font(.body)
+                                .foregroundColor(.gray)
+                            Text(verbatim: id.description)
+                        }
+                        HStack {
+                            Text("Key")
+                                .frame(width: 100, height: nil, alignment: .leading)
+                                .font(.body)
+                                .foregroundColor(.gray)
+                            Text(verbatim: cache.key.id.description)
+                        }
+                        HStack {
+                            Text("Type")
+                                .frame(width: 100, height: nil, alignment: .leading)
+                                .font(.body)
+                                .foregroundColor(.gray)
+                            Text(verbatim: cache.key.permission.localizedText)
+                        }
+                        HStack {
+                            Text("Created")
+                                .frame(width: 100, height: nil, alignment: .leading)
+                                .font(.body)
+                                .foregroundColor(.gray)
+                            Text(verbatim: Self.dateFormatter.string(from: cache.key.created))
+                        }
+                        HStack {
+                            Text("Version")
+                                .frame(width: 100, height: nil, alignment: .leading)
+                                .font(.body)
+                                .foregroundColor(.gray)
+                            Text(verbatim: "v" + cache.information.version.description)
+                        }
+                    }
                 }
+                .padding(20)
             }
             .navigationTitle(Text(verbatim: cache.name))
         }
@@ -120,6 +169,11 @@ struct LockDetailView_Previews: PreviewProvider {
                     unlock: { }
                 )
             }
+            
+            NavigationView {
+                LockDetailView.UnknownView(id: UUID(), information: nil)
+            }
+            .previewDisplayName("Unknown View")
         }
     }
 }
