@@ -14,12 +14,16 @@ struct NearbyDevicesView: View {
     var store: Store
     
     var body: some View {
-        StateView(
+        StateView<AnyView>(
             state: state,
             items: items,
             toggleScan: toggleScan,
-            destination: {
-                Text(verbatim: "\($0)")
+            destination: { (item) in
+                if let information = store.lockInformation.first(where: { $0.key.id == item.id })?.value {
+                    return AnyView(LockDetailView(id: information.id))
+                } else {
+                    return AnyView(EmptyView())
+                }
             }
         )
         .onAppear {

@@ -36,7 +36,7 @@ struct SidebarView: View {
                 ),
                 isKeysExpanded: $isKeysExpanded
             )
-            DetailView(state: detail)
+            detail
         }
     }
 }
@@ -54,9 +54,8 @@ private extension SidebarView {
     var keys: [Item] {
         store.applicationData.locks.values
             .lazy
-            .map { $0.key }
-            .sorted(by: { $0.created < $1.created })
-            .map { .key($0.id, $0.name, $0.permission.type) }
+            .sorted(by: { $0.key.created < $1.key.created })
+            .map { .key($0.key.id, $0.name, $0.key.permission.type) }
     }
     
     func toggleNearbyExpanded(_ newValue: Bool) {
@@ -95,54 +94,35 @@ private extension SidebarView {
         }
     }
     
-    var detail: DetailView.State {
+    var detail: some View {
         guard let selection = self.selection, let item = locks.first(where: { $0.id == selection }) ?? keys.first(where: { $0.id == selection }) else {
-            return .empty
+            return AnyView(
+                Text("Select a lock")
+            )
         }
         switch item {
         case let .lock(id, _, _):
             // FIXME: store peripheral instead of id
             guard let peripheral = store.peripherals.keys.first(where: { $0.id == id }) else {
-                return .empty
-            }
-            return .lock(peripheral)
-        case let .key(id, _, _):
-            return .key(id)
-        }
-    }
-}
-
-extension SidebarView {
-    
-    struct DetailView: View {
-        
-        let state: State
-        
-        var body: some View {
-            switch state {
-            case .empty:
-                AnyView(
+                return AnyView(
                     Text("Select a lock")
                 )
-            case let .lock(peripheral):
-                AnyView(
-                    Text(verbatim: "Lock \(peripheral)")
-                )
-            case let .key(id):
-                AnyView(
-                    Text(verbatim: "Key \(id)")
+            }
+            guard let information = store.lockInformation[peripheral] else {
+                return AnyView(
+                    ProgressView()
+                        .progressViewStyle(.circular)
                 )
             }
+            return AnyView(LockDetailView(id: information.id))
+        case let .key(id, _, _):
+            guard let lock = store.applicationData.locks.first(where: { $0.value.key.id == id })?.key else {
+                return AnyView(
+                    Text("Select a lock")
+                )
+            }
+            return AnyView(LockDetailView(id: lock))
         }
-    }
-}
-
-extension SidebarView.DetailView {
-    
-    enum State {
-        case empty
-        case lock(NativePeripheral)
-        case key(UUID)
     }
 }
 
