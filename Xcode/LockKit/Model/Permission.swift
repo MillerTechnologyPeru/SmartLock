@@ -54,23 +54,15 @@ public extension Permission.Schedule {
     }
 }
 
-
 public extension Permission.Schedule.Weekdays {
     
     var localizedText: String {
-        
         let every = NSLocalizedString("Every", comment: "Permission.Scheduled.Weekdays.Every")
-        
         if self == .none {
-            
             return NSLocalizedString("Never", comment: "Permission.Scheduled.Weekdays.Never")
-            
         } else if self == .all {
-            
             return String(format: "%@ %@", every, NSLocalizedString("Day", comment: "Permission.Scheduled.Weekdays.Day"))
-            
         } else {
-            
             return String(format: "%@ %@", every, self.days.map({ $0.localizedText }).joined(separator: ", "))
         }
     }

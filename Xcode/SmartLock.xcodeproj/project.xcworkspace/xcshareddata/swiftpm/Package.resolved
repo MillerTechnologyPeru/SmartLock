@@ -28,6 +28,15 @@
       }
     },
     {
+      "identity" : "keychainaccess",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/MillerTechnologyPeru/KeychainAccess.git",
+      "state" : {
+        "branch" : "master",
+        "revision" : "ee878eaeb3efa09753a9e29e8deb8c331b96f3c8"
+      }
+    },
+    {
       "identity" : "socket",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/PureSwift/Socket.git",

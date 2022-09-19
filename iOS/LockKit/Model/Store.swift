@@ -180,9 +180,7 @@ public final class Store: ObservableObject {
                     else { assertionFailure("Invalid key data"); return nil }
                 return key
             } catch {
-                #if DEBUG
-                print(error)
-                #endif
+                log("Unable retrieve value from keychain: \(error)")
                 assertionFailure("Unable retrieve value from keychain: \(error)")
                 return nil
             }
@@ -201,10 +199,8 @@ public final class Store: ObservableObject {
                 try keychain.set(data, key: key)
             }
             catch {
-                #if DEBUG
-                print(error)
-                #endif
-                assertionFailure("Unable store value in keychain: \(error)")
+                log("Unable store value in keychain: \(error)")
+                preconditionFailure("Unable store value in keychain: \(error)")
             }
         }
     }

@@ -77,8 +77,8 @@ private extension NearbyDevicesView {
             case .setup:
                 return .setup(peripheral.id, information.id)
             default:
-                if let key = store.lockInformation[peripheral] { //store[lock: information.id] {
-                    return .key(peripheral.id, "", .admin)
+                if let lockCache = store[lock: information.id] {
+                    return .key(peripheral.id, lockCache.name, lockCache.key.permission.type)
                 } else {
                     return .unknown(peripheral.id, information.id)
                 }

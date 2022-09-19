@@ -9,8 +9,9 @@ import Foundation
 import Combine
 @_exported import Bluetooth
 @_exported import GATT
-import DarwinGATT
 @_exported import CoreLock
+import DarwinGATT
+import KeychainAccess
 
 /// Lock Store object
 @MainActor
@@ -36,9 +37,14 @@ public final class Store: ObservableObject {
     
     private var scanStream: AsyncCentralScan<DarwinCentral>?
     
+    internal lazy var keychain = Keychain(service: .lock, accessGroup: .lock)
+    
+    internal lazy var fileManager: FileManager.Lock = .shared
+    
     // MARK: - Initialization
     
     private init() {
+        // setup logging
         central.log = { log("📲 Central: " + $0) }
         
         // observe state
@@ -58,9 +64,118 @@ public final class Store: ObservableObject {
     }
 }
 
+// MARK: - Keychain
+
+public extension Store {
+    
+    /// Remove the specified lock from the cache and keychain.
+    @discardableResult
+    func remove(_ lock: UUID) -> Bool {
+        
+        guard let lockCache = self[lock: lock]
+            else { return false }
+        
+        self[lock: lock] = nil
+        self[key: lockCache.key.id] = nil
+        
+        return true
+    }
+    
+    /// Get credentials from Keychain to authorize requests.
+    func key(for lock: UUID) -> KeyCredentials? {
+        guard let cache = self[lock: lock],
+            let keyData = self[key: cache.key.id]
+            else { return nil }
+        return .init(id: cache.key.id, secret: keyData)
+    }
+    
+    func key(for peripheral: NativeCentral.Peripheral) throws -> KeyCredentials {
+        guard let information = self.lockInformation[peripheral] else {
+            throw LockError.unknownLock(peripheral)
+        }
+        guard let key = self.key(for: information.id) else {
+            throw LockError.noKey(lock: information.id)
+        }
+        return key
+    }
+    
+    /// Private Key for the specified lock.
+    subscript (key id: UUID) -> KeyData? {
+        
+        get {
+            
+            do {
+                guard let data = try keychain.getData(id.uuidString)
+                    else { return nil }
+                guard let key = KeyData(data: data)
+                    else { assertionFailure("Invalid key data"); return nil }
+                return key
+            } catch {
+                #if DEBUG
+                print(error)
+                #endif
+                assertionFailure("Unable retrieve value from keychain: \(error)")
+                return nil
+            }
+        }
+        
+        set {
+            let key = id.uuidString
+            do {
+                guard let data = newValue?.data else {
+                    try keychain.remove(key)
+                    return
+                }
+                if try keychain.contains(key) {
+                    try keychain.remove(key)
+                }
+                try keychain.set(data, key: key)
+            }
+            catch {
+                #if DEBUG
+                print(error)
+                #endif
+                assertionFailure("Unable store value in keychain: \(error)")
+            }
+        }
+    }
+}
+
+// MARK: - File Methods
+
+public extension Store {
+    
+    var applicationData: ApplicationData {
+        get {
+            if let applicationData = fileManager.applicationData {
+                return applicationData
+            } else {
+                let applicationData = ApplicationData()
+                fileManager.applicationData = applicationData
+                return applicationData
+            }
+        }
+        set {
+            objectWillChange.send()
+            fileManager.applicationData = newValue
+        }
+    }
+    
+    /// Cached information for the specified lock.
+    subscript (lock id: UUID) -> LockCache? {
+        get { return applicationData[lock: id] }
+        set { applicationData[lock: id] = newValue }
+    }
+}
+
 // MARK: - Bluetooth Methods
 
 public extension Store {
+    
+    /// The Bluetooth LE peripheral for the speciifed lock.
+    subscript (peripheral id: UUID) -> NativeCentral.Peripheral? {
+        return lockInformation.first(where: { $0.value.id == id })?.key
+    }
     
     func scan() async {
         guard await central.state == .poweredOn else {
@@ -150,54 +265,45 @@ public extension Store {
         )
         // update lock information cache
         self.lockInformation[peripheral] = information
-        //self[lock: information.id]?.information = LockCache.Information(information)
+        self[lock: information.id]?.information = LockCache.Information(information)
         return information
     }
     
     /// Setup a lock.
     func setup(
-        _ lock: DarwinCentral.Peripheral,
+        for lock: DarwinCentral.Peripheral,
         using sharedSecret: KeyData,
         name: String
     ) async throws {
-        
         let setupRequest = SetupRequest()
         let information = try await central.setup(
             setupRequest,
             using: sharedSecret,
             for: lock
         )
-        
         let ownerKey = Key(setup: setupRequest)
-        /*
         let lockCache = LockCache(
             key: ownerKey,
             name: name,
             information: .init(information)
         )
-        
         // store key
         self[lock: information.id] = lockCache
         self[key: ownerKey.id] = setupRequest.secret
-        */
         // update lock information
         self.lockInformation[lock] = information
     }
     
     func unlock(
-        _ lock: DarwinCentral.Peripheral,
+        for lock: DarwinCentral.Peripheral,
         action: UnlockAction = .default
     ) async throws {
-        /*
         // get lock key
-        guard let key = self.key(for: lock)
-            else { return false }
-        
+        let key = try self.key(for: lock)
         try await central.unlock(
             action,
             using: key,
             for: lock
         )
-        */
     }
 }

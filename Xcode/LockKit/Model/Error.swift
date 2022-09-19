@@ -13,6 +13,8 @@ public enum LockError: Error {
     
     case bluetoothUnavailable
     
+    case unknownLock(NativePeripheral)
+    
     /// The specified lock is not in range.
     case notInRange(lock: UUID)
     
