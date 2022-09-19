@@ -8,7 +8,7 @@
 import Foundation
 import TLVCoding
 
-public enum LockEvent: Equatable {
+public enum LockEvent: Equatable, Identifiable {
     
     case setup(Setup)
     case unlock(Unlock)
@@ -166,7 +166,7 @@ extension LockEvent.EventType: TLVCodable {
 
 public extension LockEvent {
     
-    struct Setup: Codable, Equatable {
+    struct Setup: Codable, Equatable, Identifiable {
         
         public let id: UUID
         
@@ -184,7 +184,7 @@ public extension LockEvent {
         }
     }
 
-    struct Unlock: Codable, Equatable {
+    struct Unlock: Codable, Equatable, Identifiable {
         
         public let id: UUID
         
@@ -206,7 +206,7 @@ public extension LockEvent {
         }
     }
     
-    struct CreateNewKey: Codable, Equatable {
+    struct CreateNewKey: Codable, Equatable, Identifiable {
         
         public let id: UUID
         
@@ -227,7 +227,7 @@ public extension LockEvent {
         }
     }
     
-    struct ConfirmNewKey: Codable, Equatable {
+    struct ConfirmNewKey: Codable, Equatable, Identifiable {
         
         public let id: UUID
         
@@ -250,7 +250,7 @@ public extension LockEvent {
         }
     }
     
-    struct RemoveKey: Codable, Equatable {
+    struct RemoveKey: Codable, Equatable, Identifiable {
         
         public let id: UUID
         
