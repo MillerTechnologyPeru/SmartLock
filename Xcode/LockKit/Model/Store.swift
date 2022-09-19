@@ -255,7 +255,7 @@ public extension Store {
                         await self.scan()
                     }
                 }
-                try await Task.sleep(nanoseconds: 1_000_000_000)
+                try await Task.sleep(timeInterval: 1)
             }
         }
     }
@@ -290,7 +290,7 @@ public extension Store {
                         serviceUUIDs.contains(LockService.uuid)
                         else { continue }
                     // cache found device
-                    try? await Task.sleep(nanoseconds: 200_000_000)
+                    try? await Task.sleep(timeInterval: 0.5)
                     self.peripherals[scanData.peripheral] = scanData
                 }
             } catch {
@@ -305,9 +305,9 @@ public extension Store {
                     .keys
                     .filter { !self.lockInformation.keys.contains($0) }
             }
-            try? await Task.sleep(nanoseconds: 3 * 1_000_000_000)
+            try? await Task.sleep(timeInterval: 3)
             while self.isScanning, loading().isEmpty {
-                try? await Task.sleep(nanoseconds: 2 * 1_000_000_000)
+                try? await Task.sleep(timeInterval: 2)
             }
             // stop scanning and load info for unknown devices
             stopScanning()

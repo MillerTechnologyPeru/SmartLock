@@ -7,6 +7,7 @@
 
 import SwiftUI
 import CoreLock
+import LocalAuthentication
 
 public struct LockDetailView: View {
         
@@ -50,7 +51,13 @@ private extension LockDetailView {
     }
     
     func unlock() async {
+        let authentication = LAContext()
+        let policy: LAPolicy = .deviceOwnerAuthenticationWithBiometrics
+        let reason = NSLocalizedString("Biometrics are needed to unlock", comment: "")
         do {
+            if try authentication.canEvaluate(policy: policy) {
+                try await authentication.evaluatePolicy(policy, localizedReason: reason)
+            }
             try await store.unlock(for: id, action: .default)
         }
         catch {
