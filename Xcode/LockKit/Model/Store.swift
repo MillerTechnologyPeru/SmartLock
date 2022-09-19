@@ -25,7 +25,7 @@ public final class Store: ObservableObject {
     public internal(set) var state: DarwinBluetoothState = .unknown
     
     @Published
-    public internal(set) var isScanning = false
+    public var isScanning = false
     
     @Published
     public var peripherals = [NativePeripheral: ScanData<NativeCentral.Peripheral, NativeCentral.Advertisement>]()
@@ -186,7 +186,6 @@ public extension Store {
         if let stream = scanStream, stream.isScanning {
             return // already scanning
         }
-        let scanStart = Date()
         self.scanStream = nil
         let filterDuplicates = true //preferences.filterDuplicates
         self.peripherals.removeAll(keepingCapacity: true)

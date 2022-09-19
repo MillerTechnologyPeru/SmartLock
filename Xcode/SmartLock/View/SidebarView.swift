@@ -48,27 +48,50 @@ private extension SidebarView {
     }
     
     var locks: [Item] {
-        peripherals.map {
-            .lock($0.id, "Lock \($0)", .admin)
-        }
+        peripherals.map { item(for: $0) }
     }
     
     var keys: [Item] {
-        [
-            .key(UUID(), "Key1", .admin)
-        ]
+        store.applicationData.locks.values
+            .lazy
+            .map { $0.key }
+            .sorted(by: { $0.created < $1.created })
+            .map { .key($0.id, $0.name, $0.permission.type) }
     }
     
     func toggleNearbyExpanded(_ newValue: Bool) {
         isNearbyExpanded = newValue
         // start scanning if not already
         if newValue, !store.isScanning {
+            store.peripherals.removeAll(keepingCapacity: true)
+            store.isScanning = true
             Task {
                 try? await Task.sleep(nanoseconds: 1_000_000_000)
                 await store.scan()
             }
         } else if !newValue, store.isScanning {
             store.stopScanning()
+        }
+    }
+    
+    func item(for peripheral: NativePeripheral) -> Item {
+        if let information = store.lockInformation[peripheral] {
+            switch information.status {
+            case .setup:
+                //return .setup(peripheral.id, information.id)
+                return .lock(peripheral.id, "Setup", .owner)
+            default:
+                if let lockCache = store[lock: information.id] {
+                    //return .key(peripheral.id, lockCache.name, lockCache.key.permission.type)
+                    return .lock(peripheral.id, lockCache.name, lockCache.key.permission.type)
+                } else {
+                    //return .unknown(peripheral.id, information.id)
+                    return .lock(peripheral.id, "Lock", .anytime)
+                }
+            }
+        } else {
+            //return .loading(peripheral.id)
+            return .lock(peripheral.id, "Loading...", nil)
         }
     }
 }
@@ -140,7 +163,7 @@ extension SidebarView {
 extension SidebarView {
     
     enum Item {
-        case lock(NativePeripheral.ID, String, PermissionType)
+        case lock(NativePeripheral.ID, String, PermissionType?)
         case key(UUID, String, PermissionType)
     }
 }
@@ -162,9 +185,15 @@ extension SidebarLabel {
     init(_ item: SidebarView.Item) {
         switch item {
         case let .lock(_, title, permission):
-            self.init(title: title, image: .permission(permission))
+            self.init(
+                title: title,
+                image: permission.flatMap { .permission($0) } ?? .loading
+            )
         case let .key(_, title, permission):
-            self.init(title: title, image: .permission(permission))
+            self.init(
+                title: title,
+                image: .permission(permission)
+            )
         }
     }
 }
