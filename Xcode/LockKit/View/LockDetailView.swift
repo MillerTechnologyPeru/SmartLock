@@ -26,6 +26,9 @@ public struct LockDetailView: View {
                     unlock: unlock
                 )
             )
+        } else if let information = self.information,
+            information.status == .setup {
+            AnyView(Text("Setup"))
         } else {
             AnyView(UnknownView(id: id, information: information))
         }
@@ -73,6 +76,9 @@ extension LockDetailView {
         
         let keys: Int
         
+        @State
+        var showID = false
+        
         let unlock: () -> ()
         
         private static let dateFormatter: DateFormatter = {
@@ -82,9 +88,8 @@ extension LockDetailView {
             return formatter
         }()
         
-        
         private var titleWidth: CGFloat {
-            110
+            100
         }
         
         public var body: some View {
@@ -102,7 +107,7 @@ extension LockDetailView {
                     }
                     VStack(alignment: .leading, spacing: 20) {
                         // info
-                        if cache.key.permission.isAdministrator {
+                        if showID {
                             HStack {
                                 Text("Lock")
                                     .frame(width: titleWidth, height: nil, alignment: .leading)
@@ -123,7 +128,12 @@ extension LockDetailView {
                                 .frame(width: titleWidth, height: nil, alignment: .leading)
                                 .font(.body)
                                 .foregroundColor(.gray)
-                            Text(verbatim: cache.key.permission.localizedText)
+                            Button(action: {
+                                showID.toggle()
+                            }, label: {
+                                Text(verbatim: cache.key.permission.localizedText)
+                                    .foregroundColor(.primary)
+                            })
                         }
                         HStack {
                             Text("Created")
@@ -145,7 +155,7 @@ extension LockDetailView {
                                 .font(.body)
                                 .foregroundColor(.gray)
                             NavigationLink(destination: {
-                                
+                                Text("Events")
                             }, label: {
                                 HStack {
                                     Text("\(events) events")
@@ -157,11 +167,11 @@ extension LockDetailView {
                         if cache.key.permission.isAdministrator {
                             HStack {
                                 Text("Permissions")
-                                    .frame(width: 100, height: nil, alignment: .leading)
+                                    .frame(width: titleWidth, height: nil, alignment: .leading)
                                     .font(.body)
                                     .foregroundColor(.gray)
                                 NavigationLink(destination: {
-                                    
+                                    Text("Keys")
                                 }, label: {
                                     HStack {
                                         Text("\(keys) keys")
@@ -226,7 +236,10 @@ struct LockDetailView_Previews: PreviewProvider {
             }
             
             NavigationView {
-                LockDetailView.UnknownView(id: UUID(), information: nil)
+                LockDetailView.UnknownView(
+                    id: UUID(),
+                    information: LockInformation(id: UUID(), status: .unlock)
+                )
             }
             .previewDisplayName("Unknown View")
         }

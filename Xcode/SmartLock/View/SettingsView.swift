@@ -11,9 +11,6 @@ struct SettingsView: View {
     var body: some View {
         Text("Settings")
             .navigationTitle("Settings")
-            .tabItem {
-                Label("Settings", image: "SettingsTabBarIconSelected")
-            }
     }
 }
 

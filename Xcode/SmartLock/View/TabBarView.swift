@@ -12,19 +12,39 @@ import LockKit
 struct TabBarView: View {
     var body: some View {
         TabView {
+            // Nearby
             NavigationView {
                 NearbyDevicesView()
                 Text("Select a lock")
             }
             .tabItem {
-                Label("Nearby", image: "NearTabBarIconSelected")
+                Label("Nearby", systemImage: "location.circle.fill")
             }
+            
+            // Keys
+            NavigationView {
+                EmptyView()
+                Text("Select a lock")
+            }
+            .tabItem {
+                Label("Keys", systemImage: "key.fill")
+            }
+            
+            // Keys
+            NavigationView {
+                EmptyView()
+            }
+            .tabItem {
+                Label("History", systemImage: "clock.fill")
+            }
+            
+            // Settings
             NavigationView {
                 SettingsView()
                 Text("Settings detail")
             }
             .tabItem {
-                Label("Settings", image: "SettingsTabBarIconSelected")
+                Label("Settings", systemImage: "gearshape.fill")
             }
         }
         .navigationViewStyle(.stack)
