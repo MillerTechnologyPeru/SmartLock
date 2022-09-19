@@ -10,6 +10,9 @@ import CoreLock
 
 public struct EventsView: View {
     
+    @EnvironmentObject
+    public var store: Store
+    
     @Environment(\.managedObjectContext)
     var managedObjectContext
     
@@ -38,6 +41,9 @@ public struct EventsView: View {
         return dateFormatter
     }()
     
+    @State
+    private var needsKeys = Set<UUID>()
+    
     public var body: some View {
         list
             .navigationTitle("History")
@@ -63,6 +69,10 @@ private extension EventsView {
         }
     }
     
+    var locks: Set<UUID> {
+        return self.lock.flatMap { [$0] } ?? Set(store.applicationData.locks.keys)
+    }
+    
     var list: some View {
         List(events) {
             row(for: $0)
@@ -80,16 +90,17 @@ private extension EventsView {
     }
     
     func row(for managedObject: EventManagedObject) -> some View {
-        //guard let lock = managedObject.lock?.identifier else {
-        //    fatalError("Missing identifier")
-        //}
+        var needsKeys = Set<UUID>()
+        guard let lock = managedObject.lock?.identifier else {
+            fatalError("Missing identifier")
+        }
         let context = self.managedObjectContext
         let eventType = type(of: managedObject).eventType
         let action: String
         var keyName: String
         let key = try! managedObject.key(in: context)
         if key == nil {
-            //needsKeys.insert(lock)
+            needsKeys.insert(lock)
         }
         switch managedObject {
         case is SetupEventManagedObject:
@@ -105,7 +116,7 @@ private extension EventsView {
                 action = "Shared \(newKey)" //R.string.locksEventsViewController.eventsSharedNamed(newKey)
             } else {
                 action = "Shared key" //R.string.locksEventsViewController.eventsShared()
-                //needsKeys.insert(lock)
+                needsKeys.insert(lock)
             }
             keyName = key?.name ?? ""
         case let event as ConfirmNewKeyEventManagedObject:
@@ -116,29 +127,29 @@ private extension EventsView {
                     keyName = "Shared by \(parentKey.name ?? "")" //R.string.locksEventsViewController.eventsSharedBy(parentKey.name ?? "")
                 } else {
                     keyName = ""
-                    //needsKeys.insert(lock)
+                    needsKeys.insert(lock)
                 }
             } else {
                 action = "Created key" //R.string.locksEventsViewController.eventsCreatedNamed()
                 keyName = ""
-                //needsKeys.insert(lock)
+                needsKeys.insert(lock)
             }
         case let event as RemoveKeyEventManagedObject:
             if let removedKey = try! event.removedKey(in: context)?.name {
                 action = "Removed key \(removedKey)" //R.string.locksEventsViewController.eventsRemovedNamed(removedKey)
             } else {
                 action = "Removed key" //R.string.locksEventsViewController.eventsRemoved()
-                //needsKeys.insert(lock)
+                needsKeys.insert(lock)
             }
             keyName = key?.name ?? ""
         default:
             fatalError("Invalid event \(managedObject)")
         }
         
-        //let lockName = managedObject.lock?.name ?? ""
-        //if self.lock == nil, lockName.isEmpty == false {
-        //    keyName = keyName.isEmpty ? lockName : lockName + " - " + keyName
-        //}
+        let lockName = managedObject.lock?.name ?? ""
+        if self.lock == nil, lockName.isEmpty == false {
+            keyName = keyName.isEmpty ? lockName : lockName + " - " + keyName
+        }
         
         return LockRowView(
             image: .emoji(eventType.symbol),

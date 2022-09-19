@@ -70,6 +70,11 @@ private extension LockDetailView {
     
     var events: Int {
         let fetchRequest = EventManagedObject.fetchRequest()
+        fetchRequest.predicate = NSPredicate(
+            format: "%K == %@",
+            #keyPath(EventManagedObject.lock.identifier),
+            id as NSUUID
+        )
         return (try? managedObjectContext.count(for: fetchRequest)) ?? 0
     }
     
