@@ -23,9 +23,12 @@ struct LockApp: App {
         }
     }
     
-    static let initialize: () = {
+    init() {
         // print app info
         log("Launching SmartLock v\(Bundle.InfoPlist.shortVersion) (\(Bundle.InfoPlist.version))")
+    }
+    
+    static let initialize: () = {
         #if canImport(UIKit)
         // set app appearance
         UIView.configureLockAppearance()

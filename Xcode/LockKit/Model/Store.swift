@@ -48,8 +48,8 @@ public final class Store: ObservableObject {
                 let oldValue = self.state
                 if newState != oldValue {
                     self.state = newState
-                    if newState == .poweredOn {
-                        await self.scan()
+                    if newState == .poweredOn, isScanning == false {
+                        //await self.scan()
                     }
                 }
                 try await Task.sleep(nanoseconds: 1_000_000_000)
@@ -71,6 +71,7 @@ public extension Store {
         if let stream = scanStream, stream.isScanning {
             return // already scanning
         }
+        self.scanStream = nil
         let filterDuplicates = true //preferences.filterDuplicates
         self.peripherals.removeAll(keepingCapacity: true)
         let stream = central.scan(

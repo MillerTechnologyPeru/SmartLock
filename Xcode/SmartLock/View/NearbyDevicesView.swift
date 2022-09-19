@@ -17,18 +17,37 @@ struct NearbyDevicesView: View {
         StateView(
             state: state,
             items: items,
-            reload: reload,
+            toggleScan: toggleScan,
             destination: {
                 Text(verbatim: "\($0)")
             }
         )
+        .onAppear {
+            Task {
+                try await Task.sleep(nanoseconds: 2 * 1_000_000_000)
+                if store.isScanning == false {
+                    await scan()
+                }
+            }
+        }
     }
 }
 
 private extension NearbyDevicesView {
     
-    func reload() async {
-        guard await store.central.state == .poweredOn else {
+    func toggleScan() {
+        if store.isScanning {
+            store.stopScanning()
+        } else {
+            Task {
+                await scan()
+            }
+        }
+    }
+    
+    func scan() async {
+        guard await store.central.state == .poweredOn,
+              store.isScanning == false else {
             return
         }
         await store.scan()
@@ -105,7 +124,7 @@ extension NearbyDevicesView {
         
         let items: [Item]
         
-        let reload: () async -> ()
+        let toggleScan: () -> ()
         
         let destination: (Item) -> (Destination)
         
@@ -134,17 +153,6 @@ private extension NearbyDevicesView.StateView {
                 })
             }
         }
-        .refreshable {
-            guard state == .stopScan else {
-                return
-            }
-            Task {
-                await reload()
-            }
-        }
-        .task {
-            await reload()
-        }
         .listStyle(.plain)
     }
     
@@ -157,7 +165,7 @@ private extension NearbyDevicesView.StateView {
         case .scanning:
             return AnyView(
                 Button(action: {
-                    
+                    toggleScan()
                 }, label: {
                     Image(systemName: "stop.fill")
                 })
@@ -165,7 +173,7 @@ private extension NearbyDevicesView.StateView {
         case .stopScan:
             return AnyView(
                 Button(action: {
-                    
+                    toggleScan()
                 }, label: {
                     Image(systemName: "arrow.clockwise")
                 })
@@ -255,7 +263,7 @@ struct NearbyDevicesView_Previews: PreviewProvider {
                     .unknown(UUID(), UUID()),
                     .key(UUID(), "My lock", .admin)
                 ],
-                reload: {  },
+                toggleScan: {  },
                 destination: { Text(verbatim: $0.id.uuidString) }
             )
         }
