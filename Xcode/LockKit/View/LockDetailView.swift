@@ -14,6 +14,9 @@ public struct LockDetailView: View {
     @EnvironmentObject
     public var store: Store
     
+    @Environment(\.managedObjectContext)
+    var managedObjectContext
+    
     public let id: UUID
     
     public var body: some View {
@@ -66,7 +69,8 @@ private extension LockDetailView {
     }
     
     var events: Int {
-        2
+        let fetchRequest = EventManagedObject.fetchRequest()
+        return (try? managedObjectContext.count(for: fetchRequest)) ?? 0
     }
     
     var keys: Int {
@@ -175,7 +179,7 @@ extension LockDetailView {
                                 .font(.body)
                                 .foregroundColor(.gray)
                             NavigationLink(destination: {
-                                Text("Events")
+                                EventsView(lock: id)
                             }, label: {
                                 HStack {
                                     Text("\(events) events")

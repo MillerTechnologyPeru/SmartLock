@@ -30,9 +30,9 @@ struct TabBarView: View {
                 Label("Keys", systemImage: "key.fill")
             }
             
-            // Keys
+            // History
             NavigationView {
-                EmptyView()
+                EventsView()
             }
             .tabItem {
                 Label("History", systemImage: "clock.fill")

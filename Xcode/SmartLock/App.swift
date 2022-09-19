@@ -15,6 +15,7 @@ struct LockApp: App {
         WindowGroup {
             ContentView()
                 .environmentObject(Store.shared)
+                .environment(\.managedObjectContext, Store.shared.managedObjectContext)
                 .onAppear {
                     _ = LockApp.initialize
                 }
