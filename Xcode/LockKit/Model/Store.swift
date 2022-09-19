@@ -217,7 +217,7 @@ public extension Store {
                     .keys
                     .filter { !self.lockInformation.keys.contains($0) }
             }
-            try? await Task.sleep(nanoseconds: 5 * 1_000_000_000)
+            try? await Task.sleep(nanoseconds: 3 * 1_000_000_000)
             while self.isScanning, loading().isEmpty {
                 try? await Task.sleep(nanoseconds: 2 * 1_000_000_000)
             }
@@ -266,6 +266,7 @@ public extension Store {
         // update lock information cache
         self.lockInformation[peripheral] = information
         self[lock: information.id]?.information = LockCache.Information(information)
+        log("Read information for \(information.id)")
         return information
     }
     
@@ -292,6 +293,7 @@ public extension Store {
         self[key: ownerKey.id] = setupRequest.secret
         // update lock information
         self.lockInformation[lock] = information
+        log("Finished setup for \(information.id)")
     }
     
     func unlock(
@@ -305,5 +307,189 @@ public extension Store {
             using: key,
             for: lock
         )
+        log("Unlocked")
+    }
+    
+    func newKey(
+        for peripheral: DarwinCentral.Peripheral,
+        permission: Permission,
+        name newKeyName: String
+    ) async throws -> NewKey.Invitation {
+        // get lock key
+        guard let information = self.lockInformation[peripheral] else {
+            throw LockError.unknownLock(peripheral)
+        }
+        let lockIdentifier = information.id
+        guard let lockCache = self[lock: lockIdentifier],
+            let parentKeyData = self[key: lockCache.key.id] else {
+            throw LockError.noKey(lock: lockIdentifier)
+        }
+        let newKeyIdentifier = UUID()
+        let parentKey = KeyCredentials(
+            id: lockCache.key.id,
+            secret: parentKeyData
+        )
+        let newKey = NewKey(
+            id: newKeyIdentifier,
+            name: newKeyName,
+            permission: permission
+        )
+        let newKeySharedSecret = KeyData()
+        // file for sharing
+        let newKeyInvitation = NewKey.Invitation(
+            lock: lockIdentifier,
+            key: newKey,
+            secret: newKeySharedSecret
+        )
+        let newKeyRequest = CreateNewKeyRequest(
+            key: newKey,
+            secret: newKeySharedSecret
+        )
+        try await central.createKey(
+            newKeyRequest,
+            using: parentKey,
+            for: peripheral
+        )
+        log("Created new key \(newKey.id) (\(newKey.permission.type))")
+        return newKeyInvitation
+    }
+    
+    func confirm(_ newKeyInvitation: NewKey.Invitation, name: String) async throws {
+        guard applicationData.locks[newKeyInvitation.lock] == nil else {
+            throw LockError.existingKey(lock: newKeyInvitation.lock)
+        }
+        guard newKeyInvitation.key.expiration.timeIntervalSinceNow > 0 else {
+            throw LockError.newKeyExpired
+        }
+        let keyData = KeyData()
+        // recieve new key
+        let credentials = KeyCredentials(
+            id: newKeyInvitation.key.id,
+            secret: newKeyInvitation.secret
+        )
+        guard let (peripheral, information) = lockInformation.first(where: { $0.value.id == newKeyInvitation.lock }) else {
+            fatalError() // FIXME:
+        }
+        // BLE request
+        try await central.confirmKey(
+            .init(secret: keyData),
+            using: credentials,
+            for: peripheral
+        )
+        // save data
+        let lockCache = LockCache(
+            key: Key(
+                id: newKeyInvitation.key.id,
+                name: newKeyInvitation.key.name,
+                created: newKeyInvitation.key.created,
+                permission: newKeyInvitation.key.permission
+            ),
+            name: name,
+            information: .init(information)
+        )
+        self[lock: newKeyInvitation.lock] = lockCache
+        self[key: newKeyInvitation.key.id] = keyData
+        log("Confirmed new key for lock \(information.id)")
+    }
+    
+    @discardableResult
+    func listKeys(
+        _ lock: NativeCentral.Peripheral,
+        notification updateBlock: ((KeysList, Bool) -> ()) = { _,_ in }
+    ) async throws -> Bool {
+        
+        // get lock key
+        guard let information = self.lockInformation[lock],
+            let lockCache = self[lock: information.id],
+            let keyData = self[key: lockCache.key.id]
+            else { return false }
+        
+        let key = KeyCredentials(
+            id: lockCache.key.id,
+            secret: keyData
+        )
+            
+        //let context = backgroundContext
+        
+        // BLE request
+        try await central.connection(for: lock) {
+            let stream = try await $0.listKeys(using: key, log: { log("📲 Central: " + $0) })
+            var list = KeysList()
+            for try await notification in stream {
+                list.append(notification.key)
+                // call completion block
+                updateBlock(list, notification.isLast)/*
+                await context.commit { (context) in
+                    try context.insert(notification.key, for: information.id)
+                }*/
+            }
+        }
+        
+        // upload keys to cloud
+        #if os(iOS)
+        //updateCloud()
+        #endif
+        
+        return true
+    }
+    
+    @discardableResult
+    func listEvents(
+        _ lock: NativeCentral.Peripheral,
+        fetchRequest: LockEvent.FetchRequest? = nil,
+        notification updateBlock: @escaping ((EventsList, Bool) -> ()) = { _,_ in }
+    ) async throws -> Bool {
+        
+        // get lock key
+        guard let information = self.lockInformation[lock],
+            let lockCache = self[lock: information.id],
+            let keyData = self[key: lockCache.key.id]
+            else { return false }
+        
+        let key = KeyCredentials(
+            id: lockCache.key.id,
+            secret: keyData
+        )
+        
+        let lockIdentifier = information.id
+        //let context = backgroundContext
+        
+        // BLE request
+        let log = central.log
+        try await central.connection(for: lock) {
+            let stream = try await $0.listEvents(fetchRequest: fetchRequest, using: key, log: log)
+            var events = [LockEvent]()
+            for try await notification in stream {
+                if let event = notification.event {
+                    events.append(event)
+                    log?("Recieved event \(event.id)")/*
+                    await context.commit { (context) in
+                        try context.insert(event, for: information.id)
+                    }*/
+                }
+                // call completion block
+                updateBlock(events, notification.isLast)
+                
+            }
+        }
+        
+        /*
+        #if os(iOS)
+        if preferences.isCloudBackupEnabled {
+            DispatchQueue.cloud.async { [weak self] in
+                // upload to iCloud
+                do {
+                    for event in events {
+                        let value = LockEvent.Cloud(event: event, for: lockIdentifier)
+                        try self?.cloud.upload(value)
+                    }
+                } catch {
+                    log("⚠️ Could not upload latest events to iCloud: \(error.localizedDescription)")
+                }
+            }
+        }
+        #endif
+        */
+        return true
     }
 }
