@@ -203,6 +203,7 @@ public extension Store {
                         serviceUUIDs.contains(LockService.uuid)
                         else { continue }
                     // cache found device
+                    try? await Task.sleep(nanoseconds: 200_000_000)
                     self.peripherals[scanData.peripheral] = scanData
                 }
             } catch {

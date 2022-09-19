@@ -5,7 +5,9 @@
 //  Created by Alsey Coleman Miller on 9/18/22.
 //
 
+#if os(iOS)
 import SwiftUI
+import LockKit
 
 struct TabBarView: View {
     var body: some View {
@@ -25,6 +27,8 @@ struct TabBarView: View {
                 Label("Settings", image: "SettingsTabBarIconSelected")
             }
         }
+        .navigationViewStyle(.stack)
+        .navigationBarTitleDisplayMode(.large)
     }
 }
 
@@ -33,3 +37,4 @@ struct TabBarView_Previews: PreviewProvider {
         TabBarView()
     }
 }
+#endif

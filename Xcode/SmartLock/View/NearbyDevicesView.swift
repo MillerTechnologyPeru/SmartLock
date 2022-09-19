@@ -10,8 +10,8 @@ import LockKit
 
 struct NearbyDevicesView: View {
     
-    @ObservedObject
-    var store: Store = .shared
+    @EnvironmentObject
+    var store: Store
     
     var body: some View {
         StateView(
@@ -104,11 +104,11 @@ extension NearbyDevicesView {
         var body: some View {
             #if os(iOS)
             list
-                .navigationBarTitle(Text("Nearby"), displayMode: .automatic)
+                .navigationTitle(title)
                 .navigationBarItems(trailing: trailingButtonItem)
             #elseif os(macOS)
             list
-                .navigationTitle(Text("Nearby"))
+                .navigationTitle(title)
             #endif
         }
     }
@@ -116,42 +116,44 @@ extension NearbyDevicesView {
 
 private extension NearbyDevicesView.StateView {
     
+    var title: LocalizedStringKey {
+        "Nearby"
+    }
+    
     var list: some View {
         List {
             ForEach(items) { (item) in
-                NavigationLink(destination: {
-                    destination(item)
-                }, label: {
+                switch item {
+                case .loading, .unknown:
                     LockRowView(item)
-                })
+                case .key, .setup:
+                    NavigationLink(destination: {
+                        destination(item)
+                    }, label: {
+                        LockRowView(item)
+                    })
+                }
             }
         }
         .listStyle(.plain)
     }
     
     var trailingButtonItem: some View {
-        switch state {
-        case .bluetoothUnavailable:
-            return AnyView(
-                Text(verbatim: "⚠️")
-            )
-        case .scanning:
-            return AnyView(
-                Button(action: {
-                    toggleScan()
-                }, label: {
-                    Image(systemName: "stop.fill")
-                })
-            )
-        case .stopScan:
-            return AnyView(
-                Button(action: {
-                    toggleScan()
-                }, label: {
-                    Image(systemName: "arrow.clockwise")
-                })
-            )
-        }
+        Button(action: {
+            toggleScan()
+        }, label: {
+            switch state {
+            case .bluetoothUnavailable:
+                Image(systemName: "exclamationmark.triangle.fill")
+                    .symbolRenderingMode(.monochrome)
+            case .scanning:
+                Image(systemName: "arrow.clockwise")
+                    .symbolRenderingMode(.monochrome)
+            case .stopScan:
+                Image(systemName: "stop.fill")
+                    .symbolRenderingMode(.monochrome)
+            }
+        })
     }
 }
 
@@ -201,16 +203,16 @@ extension LockRowView {
                 image: .loading,
                 title: "Loading..."
             )
-        case let .setup(_, id):
-            self.init(
-                image: .permission(.owner),
-                title: "Setup",
-                subtitle: id.description
-            )
         case let .unknown(_, id):
             self.init(
                 image: .permission(.anytime),
                 title: "Lock",
+                subtitle: id.description
+            )
+        case let .setup(_, id):
+            self.init(
+                image: .permission(.owner),
+                title: "Setup",
                 subtitle: id.description
             )
         case let .key(_, name, type):

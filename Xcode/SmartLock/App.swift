@@ -13,7 +13,8 @@ struct LockApp: App {
 
     var body: some Scene {
         WindowGroup {
-            TabBarView()
+            ContentView()
+                .environmentObject(Store.shared)
                 .onAppear {
                     _ = LockApp.initialize
                 }
@@ -31,7 +32,7 @@ struct LockApp: App {
     static let initialize: () = {
         #if canImport(UIKit)
         // set app appearance
-        UIView.configureLockAppearance()
+        //UIView.configureLockAppearance()
         #endif
     }()
 }

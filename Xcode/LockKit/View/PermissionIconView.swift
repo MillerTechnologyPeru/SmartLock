@@ -13,7 +13,11 @@ import CoreLock
 /// Renders lock permission icon.
 public struct PermissionIconView: View {
     
-    let permission: PermissionType
+    public let permission: PermissionType
+    
+    public init(permission: PermissionType) {
+        self.permission = permission
+    }
 }
 
 // MARK: - Preview

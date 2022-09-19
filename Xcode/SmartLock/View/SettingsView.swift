@@ -10,7 +10,7 @@ import SwiftUI
 struct SettingsView: View {
     var body: some View {
         Text("Settings")
-            .navigationBarTitle(Text("Settings"), displayMode: .automatic)
+            .navigationTitle("Settings")
             .tabItem {
                 Label("Settings", image: "SettingsTabBarIconSelected")
             }

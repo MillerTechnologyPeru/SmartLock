@@ -27,10 +27,18 @@ internal extension UINavigationBar {
         let titleTextAttributes: [NSAttributedString.Key : Any] = [
             .foregroundColor: UIColor.white
         ]
+        let barButtonItemAppearance = UIBarButtonItemAppearance(style: .plain)
+        barButtonItemAppearance.normal.titleTextAttributes = [.foregroundColor: UIColor.white]
+        barButtonItemAppearance.disabled.titleTextAttributes = [.foregroundColor: UIColor.lightText]
+        barButtonItemAppearance.highlighted.titleTextAttributes = [.foregroundColor: UIColor.label]
+        barButtonItemAppearance.focused.titleTextAttributes = [.foregroundColor: UIColor.white]
         let appearance = UINavigationBarAppearance()
         appearance.backgroundColor = barTintColor
         appearance.titleTextAttributes = titleTextAttributes
         appearance.largeTitleTextAttributes = titleTextAttributes
+        appearance.buttonAppearance = barButtonItemAppearance
+        appearance.backButtonAppearance = barButtonItemAppearance
+        appearance.doneButtonAppearance = barButtonItemAppearance
         self.standardAppearance = appearance
         self.compactAppearance = appearance
         self.scrollEdgeAppearance = appearance
