@@ -41,6 +41,7 @@
 		6E21834128D8F3B500A622B3 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 6E21833128D8F3B500A622B3 /* Model.xcdatamodeld */; };
 		6E21834228D8F3B500A622B3 /* UnlockEventManagedObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E21833328D8F3B500A622B3 /* UnlockEventManagedObject.swift */; };
 		6E21834328D8F3B500A622B3 /* ManagedObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E21833428D8F3B500A622B3 /* ManagedObject.swift */; };
+		6E21834628D8FC4300A622B3 /* Task.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E21834528D8FC4300A622B3 /* Task.swift */; };
 		6E3276BC28D708A000AF171B /* CoreLock in Frameworks */ = {isa = PBXBuildFile; productRef = 6E3276BB28D708A000AF171B /* CoreLock */; };
 		6E3276C328D70A3700AF171B /* HomeKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6E3276C228D70A3700AF171B /* HomeKit.framework */; };
 		6E3276C628D70A3700AF171B /* RequestHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E3276C528D70A3700AF171B /* RequestHandler.swift */; };
@@ -124,6 +125,7 @@
 		6E21833228D8F3B500A622B3 /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
 		6E21833328D8F3B500A622B3 /* UnlockEventManagedObject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UnlockEventManagedObject.swift; sourceTree = "<group>"; };
 		6E21833428D8F3B500A622B3 /* ManagedObject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ManagedObject.swift; sourceTree = "<group>"; };
+		6E21834528D8FC4300A622B3 /* Task.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Task.swift; sourceTree = "<group>"; };
 		6E3276BA28D7088D00AF171B /* SmartLock */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = SmartLock; path = ..; sourceTree = "<group>"; };
 		6E3276C128D70A3700AF171B /* MatterLock.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = MatterLock.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		6E3276C228D70A3700AF171B /* HomeKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = HomeKit.framework; path = Library/Frameworks/HomeKit.framework; sourceTree = DEVELOPER_DIR; };
@@ -200,6 +202,14 @@
 				6E21833328D8F3B500A622B3 /* UnlockEventManagedObject.swift */,
 			);
 			path = CoreData;
+			sourceTree = "<group>";
+		};
+		6E21834428D8FC3700A622B3 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				6E21834528D8FC4300A622B3 /* Task.swift */,
+			);
+			path = Extensions;
 			sourceTree = "<group>";
 		};
 		6E3276B928D7088D00AF171B /* Packages */ = {
@@ -341,6 +351,7 @@
 			children = (
 				6EA7769F28D707FE00018FA3 /* LockKit.h */,
 				6E21830428D7C51900A622B3 /* Log.swift */,
+				6E21834428D8FC3700A622B3 /* Extensions */,
 				6E4CB60F28D7866600116573 /* View */,
 				6E3276DA28D7136400AF171B /* Model */,
 			);
@@ -555,6 +566,7 @@
 				6E21833628D8F3B500A622B3 /* ContactManagedObject.swift in Sources */,
 				6E3276D228D70CE100AF171B /* Store.swift in Sources */,
 				6E4CB61A28D788AA00116573 /* UIStyleKit.swift in Sources */,
+				6E21834628D8FC4300A622B3 /* Task.swift in Sources */,
 				6E21830E28D7FF2400A622B3 /* AppGroup.swift in Sources */,
 				6E21831528D80FF900A622B3 /* ApplicationData.swift in Sources */,
 				6E21833A28D8F3B500A622B3 /* LockManagedObject.swift in Sources */,

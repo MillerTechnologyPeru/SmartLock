@@ -328,8 +328,58 @@ public extension Store {
     func scan(duration: TimeInterval) async {
         await scan()
         Task {
-            try? await Task.sleep(nanoseconds: UInt64(duration) * 1_000_000_000)
+            try? await Task.sleep(timeInterval: duration)
             stopScanning()
+        }
+    }
+    
+    func device(
+        for id: UUID,
+        scanDuration duration: TimeInterval = 2.0
+    ) async throws -> NativeCentral.Peripheral? {
+        if let peripheral = self[peripheral: id] {
+            return peripheral
+        } else {
+            let filterDuplicates = true //preferences.filterDuplicates
+            let stream = central.scan(
+                with: [LockService.uuid],
+                filterDuplicates: filterDuplicates
+            )
+            Task {
+                try? await Task.sleep(timeInterval: duration)
+                stream.stop()
+            }
+            for try await scanData in stream {
+                guard let serviceUUIDs = scanData.advertisementData.serviceUUIDs,
+                    serviceUUIDs.contains(LockService.uuid)
+                    else { continue }
+                self.peripherals[scanData.peripheral] = scanData
+                let peripheral = scanData.peripheral
+                // if found and information has cached, stop scanning
+                if let information = lockInformation[peripheral],
+                    information.id == id {
+                    stream.stop()
+                    return peripheral // return first found device
+                }
+            }
+            // scan stopped due to timeout
+            for peripheral in peripherals.keys {
+                // skip known locks that are not the targeted device
+                if let information = lockInformation[peripheral] {
+                    guard information.id == id else { continue }
+                }
+                // request information
+                do {
+                    let _ = try await self.readInformation(for: peripheral)
+                } catch {
+                    log("⚠️ Could not read information: \(error.localizedDescription)")
+                    continue // ignore
+                }
+                if let foundDevice = self[peripheral: id] {
+                    return foundDevice
+                }
+            }
+            return self[peripheral: id]
         }
     }
     
@@ -385,17 +435,25 @@ public extension Store {
     }
     
     func unlock(
-        for lock: DarwinCentral.Peripheral,
+        for lock: UUID,
         action: UnlockAction = .default
     ) async throws {
+        stopScanning()
         // get lock key
-        let key = try self.key(for: lock)
+        guard let key = self.key(for: lock) else {
+            throw LockError.noKey(lock: lock)
+        }
+        // scan for lock
+        guard let peripheral = try await self.device(for: lock) else {
+            throw LockError.notInRange(lock: lock)
+        }
+        // connect to device
         try await central.unlock(
             action,
             using: key,
-            for: lock
+            for: peripheral
         )
-        log("Unlocked")
+        log("Unlocked \(lock)")
     }
     
     func newKey(
@@ -455,8 +513,13 @@ public extension Store {
             id: newKeyInvitation.key.id,
             secret: newKeyInvitation.secret
         )
-        guard let (peripheral, information) = lockInformation.first(where: { $0.value.id == newKeyInvitation.lock }) else {
-            fatalError() // FIXME:
+        let lock = newKeyInvitation.lock
+        guard let peripheral = try await device(for: lock) else {
+            throw LockError.notInRange(lock: lock)
+        }
+        guard let information = lockInformation[peripheral] else {
+            assertionFailure("Should have information cached")
+            throw LockError.unknownLock(peripheral)
         }
         // BLE request
         try await central.confirmKey(
@@ -497,26 +560,27 @@ public extension Store {
             secret: keyData
         )
             
-        //let context = backgroundContext
+        let context = backgroundContext
         
         // BLE request
+        let centralLog = central.log
         try await central.connection(for: lock) {
-            let stream = try await $0.listKeys(using: key, log: { log("📲 Central: " + $0) })
+            let stream = try await $0.listKeys(using: key, log: centralLog)
             var list = KeysList()
             for try await notification in stream {
                 list.append(notification.key)
                 // call completion block
-                updateBlock(list, notification.isLast)/*
+                updateBlock(list, notification.isLast)
                 await context.commit { (context) in
                     try context.insert(notification.key, for: information.id)
-                }*/
+                }
             }
         }
         
         // upload keys to cloud
-        #if os(iOS)
         //updateCloud()
-        #endif
+        
+        log("Listed keys for lock \(information.id)")
         
         return true
     }
@@ -539,21 +603,20 @@ public extension Store {
             secret: keyData
         )
         
-        let lockIdentifier = information.id
-        //let context = backgroundContext
+        let context = backgroundContext
         
         // BLE request
-        let log = central.log
+        let centralLog = central.log
         try await central.connection(for: lock) {
-            let stream = try await $0.listEvents(fetchRequest: fetchRequest, using: key, log: log)
+            let stream = try await $0.listEvents(fetchRequest: fetchRequest, using: key, log: centralLog)
             var events = [LockEvent]()
             for try await notification in stream {
                 if let event = notification.event {
                     events.append(event)
-                    log?("Recieved event \(event.id)")/*
+                    centralLog?("Recieved event \(event.id)")
                     await context.commit { (context) in
                         try context.insert(event, for: information.id)
-                    }*/
+                    }
                 }
                 // call completion block
                 updateBlock(events, notification.isLast)
@@ -578,6 +641,9 @@ public extension Store {
         }
         #endif
         */
+        
+        log("Listed events for lock \(information.id)")
+        
         return true
     }
 }

@@ -49,9 +49,12 @@ private extension LockDetailView {
         store.lockInformation.first(where: { $0.value.id == id })?.value
     }
     
-    func unlock() {
-        Task {
-            //store.unlock(for:action:)
+    func unlock() async {
+        do {
+            try await store.unlock(for: id, action: .default)
+        }
+        catch {
+            log("⚠️ Unable to unlock \(id)")
         }
     }
     
@@ -79,7 +82,10 @@ extension LockDetailView {
         @State
         var showID = false
         
-        let unlock: () -> ()
+        let unlock: () async -> ()
+        
+        @State
+        private var enableActions = true
         
         private static let dateFormatter: DateFormatter = {
             let formatter = DateFormatter()
@@ -98,10 +104,17 @@ extension LockDetailView {
                     HStack {
                         Spacer()
                         // unlock button
-                        Button(action: unlock, label: {
+                        Button(action: {
+                            //enableActions = false
+                            Task {
+                                await unlock()
+                                //enableActions = true
+                            }
+                        }, label: {
                             PermissionIconView(permission: cache.key.permission.type)
                                 .frame(width: 150, height: 150, alignment: .center)
                         })
+                        //.disabled(enableActions == false)
                         .padding(30)
                         Spacer()
                     }
