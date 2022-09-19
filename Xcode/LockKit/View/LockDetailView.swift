@@ -21,6 +21,8 @@ public struct LockDetailView: View {
                 StateView(
                     id: id,
                     cache: cache,
+                    events: events,
+                    keys: keys,
                     unlock: unlock
                 )
             )
@@ -49,6 +51,14 @@ private extension LockDetailView {
             //store.unlock(for:action:)
         }
     }
+    
+    var events: Int {
+        2
+    }
+    
+    var keys: Int {
+        1
+    }
 }
 
 extension LockDetailView {
@@ -59,6 +69,10 @@ extension LockDetailView {
         
         let cache: LockCache
         
+        let events: Int
+        
+        let keys: Int
+        
         let unlock: () -> ()
         
         private static let dateFormatter: DateFormatter = {
@@ -67,6 +81,11 @@ extension LockDetailView {
             formatter.timeStyle = .short
             return formatter
         }()
+        
+        
+        private var titleWidth: CGFloat {
+            110
+        }
         
         public var body: some View {
             ScrollView {
@@ -83,40 +102,74 @@ extension LockDetailView {
                     }
                     VStack(alignment: .leading, spacing: 20) {
                         // info
-                        HStack {
-                            Text("Lock")
-                                .frame(width: 100, height: nil, alignment: .leading)
-                                .font(.body)
-                                .foregroundColor(.gray)
-                            Text(verbatim: id.description)
-                        }
-                        HStack {
-                            Text("Key")
-                                .frame(width: 100, height: nil, alignment: .leading)
-                                .font(.body)
-                                .foregroundColor(.gray)
-                            Text(verbatim: cache.key.id.description)
+                        if cache.key.permission.isAdministrator {
+                            HStack {
+                                Text("Lock")
+                                    .frame(width: titleWidth, height: nil, alignment: .leading)
+                                    .font(.body)
+                                    .foregroundColor(.gray)
+                                Text(verbatim: id.description)
+                            }
+                            HStack {
+                                Text("Key")
+                                    .frame(width: titleWidth, height: nil, alignment: .leading)
+                                    .font(.body)
+                                    .foregroundColor(.gray)
+                                Text(verbatim: cache.key.id.description)
+                            }
                         }
                         HStack {
                             Text("Type")
-                                .frame(width: 100, height: nil, alignment: .leading)
+                                .frame(width: titleWidth, height: nil, alignment: .leading)
                                 .font(.body)
                                 .foregroundColor(.gray)
                             Text(verbatim: cache.key.permission.localizedText)
                         }
                         HStack {
                             Text("Created")
-                                .frame(width: 100, height: nil, alignment: .leading)
+                                .frame(width: titleWidth, height: nil, alignment: .leading)
                                 .font(.body)
                                 .foregroundColor(.gray)
                             Text(verbatim: Self.dateFormatter.string(from: cache.key.created))
                         }
                         HStack {
                             Text("Version")
-                                .frame(width: 100, height: nil, alignment: .leading)
+                                .frame(width: titleWidth, height: nil, alignment: .leading)
                                 .font(.body)
                                 .foregroundColor(.gray)
-                            Text(verbatim: "v" + cache.information.version.description)
+                            Text(verbatim: "v\(cache.information.version.description)")
+                        }
+                        HStack {
+                            Text("History")
+                                .frame(width: titleWidth, height: nil, alignment: .leading)
+                                .font(.body)
+                                .foregroundColor(.gray)
+                            NavigationLink(destination: {
+                                
+                            }, label: {
+                                HStack {
+                                    Text("\(events) events")
+                                    Image(systemName: "chevron.right")
+                                }
+                            })
+                            .foregroundColor(.primary)
+                        }
+                        if cache.key.permission.isAdministrator {
+                            HStack {
+                                Text("Permissions")
+                                    .frame(width: 100, height: nil, alignment: .leading)
+                                    .font(.body)
+                                    .foregroundColor(.gray)
+                                NavigationLink(destination: {
+                                    
+                                }, label: {
+                                    HStack {
+                                        Text("\(keys) keys")
+                                        Image(systemName: "chevron.right")
+                                    }
+                                })
+                                .foregroundColor(.primary)
+                            }
                         }
                     }
                 }
@@ -166,6 +219,8 @@ struct LockDetailView_Previews: PreviewProvider {
                             unlockActions: [.default]
                         )
                     ),
+                    events: 10,
+                    keys: 2,
                     unlock: { }
                 )
             }
