@@ -26,6 +26,21 @@
 		6E21831F28D84A7300A622B3 /* SidebarLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E21831E28D84A7300A622B3 /* SidebarLabel.swift */; };
 		6E21832128D8501500A622B3 /* ProgressIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E21832028D8501500A622B3 /* ProgressIndicatorView.swift */; };
 		6E21832328D8D26300A622B3 /* LockDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E21832228D8D26300A622B3 /* LockDetailView.swift */; };
+		6E21833528D8F3B500A622B3 /* SetupEventManagedObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E21832528D8F3B500A622B3 /* SetupEventManagedObject.swift */; };
+		6E21833628D8F3B500A622B3 /* ContactManagedObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E21832628D8F3B500A622B3 /* ContactManagedObject.swift */; };
+		6E21833728D8F3B500A622B3 /* PersistentContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E21832728D8F3B500A622B3 /* PersistentContainer.swift */; };
+		6E21833828D8F3B500A622B3 /* NewKeyManagedObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E21832828D8F3B500A622B3 /* NewKeyManagedObject.swift */; };
+		6E21833928D8F3B500A622B3 /* ScheduleManagedObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E21832928D8F3B500A622B3 /* ScheduleManagedObject.swift */; };
+		6E21833A28D8F3B500A622B3 /* LockManagedObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E21832A28D8F3B500A622B3 /* LockManagedObject.swift */; };
+		6E21833B28D8F3B500A622B3 /* ConfirmNewKeyEventManagedObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E21832B28D8F3B500A622B3 /* ConfirmNewKeyEventManagedObject.swift */; };
+		6E21833C28D8F3B500A622B3 /* KeyManagedObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E21832C28D8F3B500A622B3 /* KeyManagedObject.swift */; };
+		6E21833D28D8F3B500A622B3 /* EventManagedObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E21832D28D8F3B500A622B3 /* EventManagedObject.swift */; };
+		6E21833E28D8F3B500A622B3 /* CreateNewKeyEventManagedObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E21832E28D8F3B500A622B3 /* CreateNewKeyEventManagedObject.swift */; };
+		6E21833F28D8F3B500A622B3 /* LockInformationManagedObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E21832F28D8F3B500A622B3 /* LockInformationManagedObject.swift */; };
+		6E21834028D8F3B500A622B3 /* RemoveKeyEventManagedObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E21833028D8F3B500A622B3 /* RemoveKeyEventManagedObject.swift */; };
+		6E21834128D8F3B500A622B3 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 6E21833128D8F3B500A622B3 /* Model.xcdatamodeld */; };
+		6E21834228D8F3B500A622B3 /* UnlockEventManagedObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E21833328D8F3B500A622B3 /* UnlockEventManagedObject.swift */; };
+		6E21834328D8F3B500A622B3 /* ManagedObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E21833428D8F3B500A622B3 /* ManagedObject.swift */; };
 		6E3276BC28D708A000AF171B /* CoreLock in Frameworks */ = {isa = PBXBuildFile; productRef = 6E3276BB28D708A000AF171B /* CoreLock */; };
 		6E3276C328D70A3700AF171B /* HomeKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6E3276C228D70A3700AF171B /* HomeKit.framework */; };
 		6E3276C628D70A3700AF171B /* RequestHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E3276C528D70A3700AF171B /* RequestHandler.swift */; };
@@ -94,6 +109,21 @@
 		6E21831E28D84A7300A622B3 /* SidebarLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SidebarLabel.swift; sourceTree = "<group>"; };
 		6E21832028D8501500A622B3 /* ProgressIndicatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressIndicatorView.swift; sourceTree = "<group>"; };
 		6E21832228D8D26300A622B3 /* LockDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LockDetailView.swift; sourceTree = "<group>"; };
+		6E21832528D8F3B500A622B3 /* SetupEventManagedObject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SetupEventManagedObject.swift; sourceTree = "<group>"; };
+		6E21832628D8F3B500A622B3 /* ContactManagedObject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContactManagedObject.swift; sourceTree = "<group>"; };
+		6E21832728D8F3B500A622B3 /* PersistentContainer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PersistentContainer.swift; sourceTree = "<group>"; };
+		6E21832828D8F3B500A622B3 /* NewKeyManagedObject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewKeyManagedObject.swift; sourceTree = "<group>"; };
+		6E21832928D8F3B500A622B3 /* ScheduleManagedObject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScheduleManagedObject.swift; sourceTree = "<group>"; };
+		6E21832A28D8F3B500A622B3 /* LockManagedObject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LockManagedObject.swift; sourceTree = "<group>"; };
+		6E21832B28D8F3B500A622B3 /* ConfirmNewKeyEventManagedObject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConfirmNewKeyEventManagedObject.swift; sourceTree = "<group>"; };
+		6E21832C28D8F3B500A622B3 /* KeyManagedObject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyManagedObject.swift; sourceTree = "<group>"; };
+		6E21832D28D8F3B500A622B3 /* EventManagedObject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventManagedObject.swift; sourceTree = "<group>"; };
+		6E21832E28D8F3B500A622B3 /* CreateNewKeyEventManagedObject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateNewKeyEventManagedObject.swift; sourceTree = "<group>"; };
+		6E21832F28D8F3B500A622B3 /* LockInformationManagedObject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LockInformationManagedObject.swift; sourceTree = "<group>"; };
+		6E21833028D8F3B500A622B3 /* RemoveKeyEventManagedObject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoveKeyEventManagedObject.swift; sourceTree = "<group>"; };
+		6E21833228D8F3B500A622B3 /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
+		6E21833328D8F3B500A622B3 /* UnlockEventManagedObject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UnlockEventManagedObject.swift; sourceTree = "<group>"; };
+		6E21833428D8F3B500A622B3 /* ManagedObject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ManagedObject.swift; sourceTree = "<group>"; };
 		6E3276BA28D7088D00AF171B /* SmartLock */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = SmartLock; path = ..; sourceTree = "<group>"; };
 		6E3276C128D70A3700AF171B /* MatterLock.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = MatterLock.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		6E3276C228D70A3700AF171B /* HomeKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = HomeKit.framework; path = Library/Frameworks/HomeKit.framework; sourceTree = DEVELOPER_DIR; };
@@ -150,6 +180,28 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		6E21832428D8F3B500A622B3 /* CoreData */ = {
+			isa = PBXGroup;
+			children = (
+				6E21833128D8F3B500A622B3 /* Model.xcdatamodeld */,
+				6E21832B28D8F3B500A622B3 /* ConfirmNewKeyEventManagedObject.swift */,
+				6E21832628D8F3B500A622B3 /* ContactManagedObject.swift */,
+				6E21832E28D8F3B500A622B3 /* CreateNewKeyEventManagedObject.swift */,
+				6E21832D28D8F3B500A622B3 /* EventManagedObject.swift */,
+				6E21832C28D8F3B500A622B3 /* KeyManagedObject.swift */,
+				6E21832F28D8F3B500A622B3 /* LockInformationManagedObject.swift */,
+				6E21832A28D8F3B500A622B3 /* LockManagedObject.swift */,
+				6E21833428D8F3B500A622B3 /* ManagedObject.swift */,
+				6E21832828D8F3B500A622B3 /* NewKeyManagedObject.swift */,
+				6E21832728D8F3B500A622B3 /* PersistentContainer.swift */,
+				6E21833028D8F3B500A622B3 /* RemoveKeyEventManagedObject.swift */,
+				6E21832928D8F3B500A622B3 /* ScheduleManagedObject.swift */,
+				6E21832528D8F3B500A622B3 /* SetupEventManagedObject.swift */,
+				6E21833328D8F3B500A622B3 /* UnlockEventManagedObject.swift */,
+			);
+			path = CoreData;
+			sourceTree = "<group>";
+		};
 		6E3276B928D7088D00AF171B /* Packages */ = {
 			isa = PBXGroup;
 			children = (
@@ -191,15 +243,16 @@
 		6E3276DA28D7136400AF171B /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				6E21832428D8F3B500A622B3 /* CoreData */,
 				6E21830D28D7FF2400A622B3 /* AppGroup.swift */,
+				6E21831428D80FF900A622B3 /* ApplicationData.swift */,
 				6E3276DB28D7195400AF171B /* Central.swift */,
 				6E21830028D7C37500A622B3 /* Error.swift */,
-				6E21830F28D80DCD00A622B3 /* Keychain.swift */,
-				6E21831428D80FF900A622B3 /* ApplicationData.swift */,
-				6E21831628D8116C00A622B3 /* NewKey.swift */,
-				6E21831728D8116C00A622B3 /* NewKeyDocument.swift */,
 				6E21830B28D7FEF600A622B3 /* FileManager.swift */,
 				6E21831228D80FDD00A622B3 /* JSON.swift */,
+				6E21830F28D80DCD00A622B3 /* Keychain.swift */,
+				6E21831628D8116C00A622B3 /* NewKey.swift */,
+				6E21831728D8116C00A622B3 /* NewKeyDocument.swift */,
 				6E21830628D7D08300A622B3 /* Permission.swift */,
 				6E3276D128D70CE100AF171B /* Store.swift */,
 			);
@@ -481,21 +534,36 @@
 				6E21831928D8116C00A622B3 /* NewKeyDocument.swift in Sources */,
 				6ED248CC28D7A3BF00F78D07 /* ActivityIndicatorView.swift in Sources */,
 				6E21830528D7C51900A622B3 /* Log.swift in Sources */,
+				6E21833B28D8F3B500A622B3 /* ConfirmNewKeyEventManagedObject.swift in Sources */,
 				6E21830C28D7FEF600A622B3 /* FileManager.swift in Sources */,
 				6E4CB61028D7867700116573 /* LockRowView.swift in Sources */,
 				6E21831828D8116C00A622B3 /* NewKey.swift in Sources */,
 				6E21831028D80DCD00A622B3 /* Keychain.swift in Sources */,
+				6E21833C28D8F3B500A622B3 /* KeyManagedObject.swift in Sources */,
 				6E21830128D7C37500A622B3 /* Error.swift in Sources */,
+				6E21833E28D8F3B500A622B3 /* CreateNewKeyEventManagedObject.swift in Sources */,
 				6E4CB62328D7907E00116573 /* PermissionIconViewNSView.swift in Sources */,
 				6E21830728D7D08300A622B3 /* Permission.swift in Sources */,
+				6E21833F28D8F3B500A622B3 /* LockInformationManagedObject.swift in Sources */,
+				6E21833D28D8F3B500A622B3 /* EventManagedObject.swift in Sources */,
+				6E21834128D8F3B500A622B3 /* Model.xcdatamodeld in Sources */,
+				6E21833728D8F3B500A622B3 /* PersistentContainer.swift in Sources */,
+				6E21834228D8F3B500A622B3 /* UnlockEventManagedObject.swift in Sources */,
+				6E21833528D8F3B500A622B3 /* SetupEventManagedObject.swift in Sources */,
+				6E21834328D8F3B500A622B3 /* ManagedObject.swift in Sources */,
+				6E21834028D8F3B500A622B3 /* RemoveKeyEventManagedObject.swift in Sources */,
+				6E21833628D8F3B500A622B3 /* ContactManagedObject.swift in Sources */,
 				6E3276D228D70CE100AF171B /* Store.swift in Sources */,
 				6E4CB61A28D788AA00116573 /* UIStyleKit.swift in Sources */,
 				6E21830E28D7FF2400A622B3 /* AppGroup.swift in Sources */,
 				6E21831528D80FF900A622B3 /* ApplicationData.swift in Sources */,
+				6E21833A28D8F3B500A622B3 /* LockManagedObject.swift in Sources */,
 				6E21830328D7C47500A622B3 /* Appearance.swift in Sources */,
 				6E3276DC28D7195400AF171B /* Central.swift in Sources */,
+				6E21833928D8F3B500A622B3 /* ScheduleManagedObject.swift in Sources */,
 				6E21831328D80FDD00A622B3 /* JSON.swift in Sources */,
 				6E21832128D8501500A622B3 /* ProgressIndicatorView.swift in Sources */,
+				6E21833828D8F3B500A622B3 /* NewKeyManagedObject.swift in Sources */,
 				6E4CB61B28D788AA00116573 /* PermissionIconView.swift in Sources */,
 				6E4CB62128D7907200116573 /* PermissionIconViewUIView.swift in Sources */,
 			);
@@ -924,6 +992,19 @@
 			productName = GATT;
 		};
 /* End XCSwiftPackageProductDependency section */
+
+/* Begin XCVersionGroup section */
+		6E21833128D8F3B500A622B3 /* Model.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				6E21833228D8F3B500A622B3 /* Model.xcdatamodel */,
+			);
+			currentVersion = 6E21833228D8F3B500A622B3 /* Model.xcdatamodel */;
+			path = Model.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = 6EA7767928D7061600018FA3 /* Project object */;
 }

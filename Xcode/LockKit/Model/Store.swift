@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import CoreData
 import Combine
 @_exported import Bluetooth
 @_exported import GATT
@@ -41,32 +42,56 @@ public final class Store: ObservableObject {
     
     internal lazy var fileManager: FileManager.Lock = .shared
     
+    internal lazy var persistentContainer: NSPersistentContainer = .lock
+    
+    public lazy var managedObjectContext: NSManagedObjectContext = {
+        let context = self.persistentContainer.viewContext
+        context.automaticallyMergesChangesFromParent = true
+        context.mergePolicy = NSMergePolicy.mergeByPropertyObjectTrump
+        context.undoManager = nil
+        return context
+    }()
+    
+    internal lazy var backgroundContext: NSManagedObjectContext = {
+        let context = self.persistentContainer.newBackgroundContext()
+        context.mergePolicy = NSMergePolicy.mergeByPropertyStoreTrump
+        context.undoManager = nil
+        return context
+    }()
+    
     // MARK: - Initialization
     
     private init() {
-        // setup logging
         central.log = { log("📲 Central: " + $0) }
-        
-        // observe state
-        Task { [weak self] in
-            while let self = self {
-                let newState = await self.central.state
-                let oldValue = self.state
-                if newState != oldValue {
-                    self.state = newState
-                    if newState == .poweredOn, isScanning == false {
-                        await self.scan()
-                    }
-                }
-                try await Task.sleep(nanoseconds: 1_000_000_000)
-            }
-        }
+        clearKeychainNewInstall()
+        loadPersistentStore()
+        lockCacheChanged()
+        observeBluetoothState()
     }
 }
 
 // MARK: - Keychain
 
 public extension Store {
+    
+    /// Clear keychain on newly installed app.
+    private func clearKeychainNewInstall() {
+        /*
+        if preferences.isAppInstalled == false {
+            preferences.isAppInstalled = true
+            do { try keychain.removeAll() }
+            catch {
+                log("⚠️ Unable to clear keychain: \(error.localizedDescription)")
+                DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) {
+                    #if DEBUG
+                    print(error)
+                    #endif
+                    assertionFailure("Unable to clear keychain")
+                }
+            }
+        }
+        */
+    }
     
     /// Remove the specified lock from the cache and keychain.
     @discardableResult
@@ -141,9 +166,13 @@ public extension Store {
     }
 }
 
-// MARK: - File Methods
+// MARK: - Application Data
 
 public extension Store {
+    
+    private func lockCacheChanged() {
+        updateCoreData()
+    }
     
     var applicationData: ApplicationData {
         get {
@@ -157,7 +186,11 @@ public extension Store {
         }
         set {
             objectWillChange.send()
+            let oldValue = fileManager.applicationData
             fileManager.applicationData = newValue
+            if oldValue?.locks != newValue.locks {
+                lockCacheChanged()
+            }
         }
     }
     
@@ -168,9 +201,64 @@ public extension Store {
     }
 }
 
+// MARK: - CoreData
+
+private extension Store {
+    
+    func updateCoreData() {
+        let locks = self.applicationData.locks
+        backgroundContext.commit {
+            try $0.insert(locks)
+        }
+    }
+    
+    func loadPersistentStore() {
+        // load CoreData
+        let semaphore = DispatchSemaphore(value: 0)
+        persistentContainer.loadPersistentStores { (store, error) in
+            semaphore.signal()
+            if let error = error {
+                log("⚠️ Unable to load persistent store: \(error.localizedDescription)")
+                #if DEBUG
+                print(error)
+                #endif
+                if let url = store.url {
+                    do { try FileManager.default.removeItem(at: url) }
+                    catch { print(error) }
+                }
+                assertionFailure("Unable to load persistent store")
+                return
+            }
+            #if DEBUG
+            print("🗄 Loaded persistent store")
+            print(store)
+            #endif
+        }
+        let didTimeout = semaphore.wait(timeout: .now() + 5.0) == .timedOut
+        assert(didTimeout == false)
+    }
+}
+
 // MARK: - Bluetooth Methods
 
 public extension Store {
+    
+    private func observeBluetoothState() {
+        // observe state
+        Task { [weak self] in
+            while let self = self {
+                let newState = await self.central.state
+                let oldValue = self.state
+                if newState != oldValue {
+                    self.state = newState
+                    if newState == .poweredOn, isScanning == false {
+                        await self.scan()
+                    }
+                }
+                try await Task.sleep(nanoseconds: 1_000_000_000)
+            }
+        }
+    }
     
     /// The Bluetooth LE peripheral for the speciifed lock.
     subscript (peripheral id: UUID) -> NativeCentral.Peripheral? {
