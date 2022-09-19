@@ -147,10 +147,10 @@ private extension NearbyDevicesView.StateView {
                 Image(systemName: "exclamationmark.triangle.fill")
                     .symbolRenderingMode(.monochrome)
             case .scanning:
-                Image(systemName: "arrow.clockwise")
+                Image(systemName: "stop.fill")
                     .symbolRenderingMode(.monochrome)
             case .stopScan:
-                Image(systemName: "stop.fill")
+                Image(systemName: "arrow.clockwise")
                     .symbolRenderingMode(.monochrome)
             }
         })
