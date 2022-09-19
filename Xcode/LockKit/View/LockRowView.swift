@@ -45,6 +45,7 @@ public struct LockRowView: View {
                 }
             }
         }
+        .padding(EdgeInsets(top: 8, leading: 8, bottom: 8, trailing: 8))
     }
     
     public init(
@@ -131,19 +132,14 @@ struct LockRowView_Previews: PreviewProvider {
                 title: "Loading..."
             )
             LockRowView(
-                image: .permission(.admin),
+                image: .permission(.owner),
                 title: "Setup",
                 subtitle: "D39FE551-523F-4F64-96FC-4B828A1F8561"
             )
             LockRowView(
                 image: .permission(.admin),
                 title: "Lock Name",
-                subtitle: "Anytime"
-            )
-            LockRowView(
-                image: .permission(.owner),
-                title: "My house",
-                subtitle: "Owner"
+                subtitle: "Admin"
             )
             LockRowView(
                 image: .permission(.anytime),

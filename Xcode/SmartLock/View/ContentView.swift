@@ -12,13 +12,12 @@ struct ContentView: View {
         #if os(iOS)
         TabBarView()
         #elseif os(macOS)
-        NavigationView {
-            Sidebar()
-            Text(verbatim: "Select a lock")
-        }
+        SidebarView()
         #endif
     }
 }
+
+// MARK: - Preview
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {

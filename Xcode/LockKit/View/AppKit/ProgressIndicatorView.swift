@@ -30,6 +30,11 @@ public struct ProgressIndicatorView: View, NSViewRepresentable {
         view.style = self.style
         view.controlSize = self.controlSize
     }
+    
+    public init(style: NSProgressIndicator.Style, controlSize: NSControl.ControlSize) {
+        self.style = style
+        self.controlSize = controlSize
+    }
 }
 
 struct ProgressIndicatorView_Previews: PreviewProvider {
