@@ -36,7 +36,7 @@ struct SidebarView: View {
                 ),
                 isKeysExpanded: $isKeysExpanded
             )
-            Text(verbatim: "Select a lock\n\(selection?.description ?? "")")
+            DetailView(state: detail)
         }
     }
 }
@@ -93,6 +93,56 @@ private extension SidebarView {
             //return .loading(peripheral.id)
             return .lock(peripheral.id, "Loading...", nil)
         }
+    }
+    
+    var detail: DetailView.State {
+        guard let selection = self.selection, let item = locks.first(where: { $0.id == selection }) ?? keys.first(where: { $0.id == selection }) else {
+            return .empty
+        }
+        switch item {
+        case let .lock(id, _, _):
+            // FIXME: store peripheral instead of id
+            guard let peripheral = store.peripherals.keys.first(where: { $0.id == id }) else {
+                return .empty
+            }
+            return .lock(peripheral)
+        case let .key(id, _, _):
+            return .key(id)
+        }
+    }
+}
+
+extension SidebarView {
+    
+    struct DetailView: View {
+        
+        let state: State
+        
+        var body: some View {
+            switch state {
+            case .empty:
+                AnyView(
+                    Text("Select a lock")
+                )
+            case let .lock(peripheral):
+                AnyView(
+                    Text(verbatim: "Lock \(peripheral)")
+                )
+            case let .key(id):
+                AnyView(
+                    Text(verbatim: "Key \(id)")
+                )
+            }
+        }
+    }
+}
+
+extension SidebarView.DetailView {
+    
+    enum State {
+        case empty
+        case lock(NativePeripheral)
+        case key(UUID)
     }
 }
 
