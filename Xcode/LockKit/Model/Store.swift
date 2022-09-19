@@ -21,6 +21,9 @@ public final class Store: ObservableObject {
     // MARK: - Properties
     
     @Published
+    public internal(set) var state: DarwinBluetoothState = .unknown
+    
+    @Published
     public internal(set) var isScanning = false
     
     @Published
@@ -36,9 +39,23 @@ public final class Store: ObservableObject {
     // MARK: - Initialization
     
     private init() {
-        _ = central
+        central.log = { log("📲 Central: " + $0) }
+        
+        // observe state
+        Task { [weak self] in
+            while let self = self {
+                let newState = await self.central.state
+                let oldValue = self.state
+                if newState != oldValue {
+                    self.state = newState
+                    if newState == .poweredOn {
+                        await self.scan()
+                    }
+                }
+                try await Task.sleep(nanoseconds: 1_000_000_000)
+            }
+        }
     }
-    
 }
 
 // MARK: - Bluetooth Methods
@@ -51,6 +68,9 @@ public extension Store {
             return
         }
         isScanning = true
+        if let stream = scanStream, stream.isScanning {
+            return // already scanning
+        }
         let filterDuplicates = true //preferences.filterDuplicates
         self.peripherals.removeAll(keepingCapacity: true)
         let stream = central.scan(
@@ -68,7 +88,7 @@ public extension Store {
                     self.peripherals[scanData.peripheral] = scanData
                 }
             } catch {
-                print("Scanning error \(error)")
+                log("⚠️ Unable to scan. \(error)")
             }
             isScanning = false
         }
@@ -88,15 +108,22 @@ public extension Store {
         isScanning = false
     }
     
-    func readInformation(_ lock: DarwinCentral.Peripheral) async throws {
-                
+    @discardableResult
+    func readInformation(for peripheral: DarwinCentral.Peripheral) async throws -> LockInformation {
+        guard await central.state == .poweredOn else {
+            throw LockError.bluetoothUnavailable
+        }
+        // stop scanning
+        if isScanning {
+            stopScanning()
+        }
         let information = try await central.readInformation(
-            for: lock
+            for: peripheral
         )
-        
         // update lock information cache
-        self.lockInformation[lock] = information
+        self.lockInformation[peripheral] = information
         //self[lock: information.id]?.information = LockCache.Information(information)
+        return information
     }
     
     /// Setup a lock.

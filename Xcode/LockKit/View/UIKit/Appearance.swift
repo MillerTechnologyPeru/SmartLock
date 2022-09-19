@@ -6,7 +6,7 @@
 //  Copyright © 2019 ColemanCDA. All rights reserved.
 //
 
-#if canImport(UIKit)
+#if canImport(UIKit) && os(iOS)
 import Foundation
 import UIKit
 

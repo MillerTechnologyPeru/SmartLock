@@ -6,13 +6,10 @@
 //
 
 import SwiftUI
+import LockKit
 
 @main
 struct LockApp: App {
-    
-    //let persistenceController = PersistenceController.shared
-    
-    
 
     var body: some Scene {
         WindowGroup {
@@ -28,9 +25,10 @@ struct LockApp: App {
     
     static let initialize: () = {
         // print app info
-        print("Launching SmartLock v\(Bundle.InfoPlist.shortVersion) Build \(Bundle.InfoPlist.version)")
-        
+        log("Launching SmartLock v\(Bundle.InfoPlist.shortVersion) (\(Bundle.InfoPlist.version))")
+        #if canImport(UIKit)
         // set app appearance
         UIView.configureLockAppearance()
+        #endif
     }()
 }
