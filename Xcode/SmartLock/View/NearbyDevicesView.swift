@@ -139,7 +139,6 @@ private extension NearbyDevicesView.StateView {
                 }
             }
         }
-        .listStyle(.plain)
     }
     
     var trailingButtonItem: some View {

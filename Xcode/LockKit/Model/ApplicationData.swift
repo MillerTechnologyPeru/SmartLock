@@ -91,6 +91,14 @@ public struct LockCache: Codable, Equatable {
     
     /// Lock information.
     public var information: Information
+    
+    #if DEBUG
+    public init(key: Key, name: String, information: Information) {
+        self.key = key
+        self.name = name
+        self.information = information
+    }
+    #endif
 }
 
 public extension LockCache {
@@ -109,6 +117,15 @@ public extension LockCache {
         
         /// Supported lock actions
         public var unlockActions: Set<UnlockAction>
+        
+        #if DEBUG
+        public init(buildVersion: LockBuildVersion, version: LockVersion, status: LockStatus, unlockActions: Set<UnlockAction>) {
+            self.buildVersion = buildVersion
+            self.version = version
+            self.status = status
+            self.unlockActions = unlockActions
+        }
+        #endif
     }
 }
 

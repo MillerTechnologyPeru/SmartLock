@@ -23,7 +23,7 @@ struct TabBarView: View {
             
             // Keys
             NavigationView {
-                EmptyView()
+                KeysView()
                 Text("Select a lock")
             }
             .tabItem {
