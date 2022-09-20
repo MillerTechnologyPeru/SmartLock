@@ -179,8 +179,8 @@ public extension Store {
         // update CoreData
         await updateCoreData()
         // update CloudKit
-        //do { try await uploadCloudApplicationData() }
-        //catch { log("⚠️ Unable to upload locks to iCloud") }
+        do { try await syncCloud() }
+        catch { log("⚠️ Unable to upload locks to iCloud") }
     }
     
     var applicationData: ApplicationData {
@@ -574,7 +574,7 @@ public extension Store {
             id: lockCache.key.id,
             secret: keyData
         )
-            
+        
         let context = backgroundContext
         
         // BLE request

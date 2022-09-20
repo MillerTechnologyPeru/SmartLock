@@ -14,9 +14,9 @@ public struct EventsView: View {
     public var store: Store
     
     @Environment(\.managedObjectContext)
-    var managedObjectContext
+    public var managedObjectContext
     
-    let lock: UUID?
+    public let lock: UUID?
     
     @FetchRequest(
         entity: EventManagedObject.entity(),
@@ -26,7 +26,7 @@ public struct EventsView: View {
         predicate: nil,
         animation: .linear
     )
-    var events: FetchedResults<EventManagedObject>
+    private var events: FetchedResults<EventManagedObject>
     
     private static let dateFormatter: DateFormatter = {
         let dateFormatter = DateFormatter()

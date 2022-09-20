@@ -28,7 +28,15 @@ struct NearbyDevicesView: View {
         )
         .onAppear {
             if store.isScanning == false {
-                Task { await scan() }
+                Task {
+                    try? await Task.sleep(timeInterval: 1.5)
+                    await scan()
+                }
+            }
+        }
+        .onDisappear {
+            if store.isScanning {
+                store.stopScanning()
             }
         }
     }

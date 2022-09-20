@@ -22,7 +22,7 @@ public enum CloudShare {
         case newKey = "com.colemancda.Lock.CloudKit.Share.NewKey"
     }
     
-    public struct NewKey: Codable, Equatable {
+    public struct NewKey: Codable, Equatable, Identifiable {
         
         /// Identifier
         public let id: ID

@@ -15,7 +15,7 @@ public struct LockDetailView: View {
     public var store: Store
     
     @Environment(\.managedObjectContext)
-    var managedObjectContext
+    public var managedObjectContext
     
     public let id: UUID
     
@@ -250,7 +250,7 @@ extension LockDetailView {
                                     .font(.body)
                                     .foregroundColor(.gray)
                                 AppNavigationLink(destination: {
-                                    Text("Keys")
+                                    PermissionsView(id: id)
                                 }, label: {
                                     HStack {
                                         Text("\(keys) keys")

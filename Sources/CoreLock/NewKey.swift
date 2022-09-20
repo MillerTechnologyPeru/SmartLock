@@ -8,7 +8,7 @@
 import Foundation
 
 /// New Key
-public struct NewKey: Codable, Equatable, Hashable {
+public struct NewKey: Codable, Equatable, Hashable, Identifiable {
     
     /// The unique identifier of the key.
     public let id: UUID
