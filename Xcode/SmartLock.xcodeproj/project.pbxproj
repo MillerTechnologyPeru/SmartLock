@@ -9,6 +9,10 @@
 /* Begin PBXBuildFile section */
 		6E169A7828D9A34F008545EC /* NavigationLink.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E169A7728D9A34F008545EC /* NavigationLink.swift */; };
 		6E169A7928D9AA32008545EC /* Task.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E21834528D8FC4300A622B3 /* Task.swift */; };
+		6E169A7D28D9C097008545EC /* PermissionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E169A7C28D9C097008545EC /* PermissionsView.swift */; };
+		6E169A7F28D9C135008545EC /* NewPermissionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E169A7E28D9C135008545EC /* NewPermissionView.swift */; };
+		6E169A8128D9C15B008545EC /* PermissionScheduleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E169A8028D9C15B008545EC /* PermissionScheduleView.swift */; };
+		6E169A8428D9C25C008545EC /* SFSafeSymbols in Frameworks */ = {isa = PBXBuildFile; productRef = 6E169A8328D9C25C008545EC /* SFSafeSymbols */; };
 		6E2182EF28D7B37000A622B3 /* TabBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E2182EE28D7B37000A622B3 /* TabBarView.swift */; };
 		6E2182F128D7B4FA00A622B3 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E2182F028D7B4FA00A622B3 /* SettingsView.swift */; };
 		6E21830128D7C37500A622B3 /* Error.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E21830028D7C37500A622B3 /* Error.swift */; };
@@ -111,6 +115,9 @@
 
 /* Begin PBXFileReference section */
 		6E169A7728D9A34F008545EC /* NavigationLink.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationLink.swift; sourceTree = "<group>"; };
+		6E169A7C28D9C097008545EC /* PermissionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionsView.swift; sourceTree = "<group>"; };
+		6E169A7E28D9C135008545EC /* NewPermissionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewPermissionView.swift; sourceTree = "<group>"; };
+		6E169A8028D9C15B008545EC /* PermissionScheduleView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PermissionScheduleView.swift; sourceTree = "<group>"; };
 		6E2182EE28D7B37000A622B3 /* TabBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarView.swift; sourceTree = "<group>"; };
 		6E2182F028D7B4FA00A622B3 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		6E21830028D7C37500A622B3 /* Error.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Error.swift; sourceTree = "<group>"; };
@@ -208,6 +215,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6E169A8428D9C25C008545EC /* SFSafeSymbols in Frameworks */,
 				6E21830A28D7FEA900A622B3 /* KeychainAccess in Frameworks */,
 				6E3276D928D70FA000AF171B /* GATT in Frameworks */,
 				6E3276BC28D708A000AF171B /* CoreLock in Frameworks */,
@@ -334,11 +342,14 @@
 			children = (
 				6E4CB61D28D7901D00116573 /* AppKit */,
 				6E4CB61C28D788B900116573 /* UIKit */,
-				6E3276E528D782B900AF171B /* LockRowView.swift */,
-				6E4CB61928D788AA00116573 /* PermissionIconView.swift */,
-				6E21832228D8D26300A622B3 /* LockDetailView.swift */,
 				6E21834728D90CB800A622B3 /* EventsView.swift */,
+				6E21832228D8D26300A622B3 /* LockDetailView.swift */,
+				6E3276E528D782B900AF171B /* LockRowView.swift */,
 				6E169A7728D9A34F008545EC /* NavigationLink.swift */,
+				6E4CB61928D788AA00116573 /* PermissionIconView.swift */,
+				6E169A7C28D9C097008545EC /* PermissionsView.swift */,
+				6E169A7E28D9C135008545EC /* NewPermissionView.swift */,
+				6E169A8028D9C15B008545EC /* PermissionScheduleView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -498,6 +509,7 @@
 				6E3276D828D70FA000AF171B /* GATT */,
 				6E21830928D7FEA900A622B3 /* KeychainAccess */,
 				6E21836928D953D000A622B3 /* CloudKitCodable */,
+				6E169A8328D9C25C008545EC /* SFSafeSymbols */,
 			);
 			productName = LockKit;
 			productReference = 6EA7769D28D707FE00018FA3 /* LockKit.framework */;
@@ -538,6 +550,7 @@
 				6E3276D528D70FA000AF171B /* XCRemoteSwiftPackageReference "GATT" */,
 				6E21830828D7FEA900A622B3 /* XCRemoteSwiftPackageReference "KeychainAccess" */,
 				6E21836828D953D000A622B3 /* XCRemoteSwiftPackageReference "CloudKitCodable" */,
+				6E169A8228D9C25C008545EC /* XCRemoteSwiftPackageReference "SFSafeSymbols" */,
 			);
 			productRefGroup = 6EA7768228D7061600018FA3 /* Products */;
 			projectDirPath = "";
@@ -607,6 +620,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				6E21832328D8D26300A622B3 /* LockDetailView.swift in Sources */,
+				6E169A8128D9C15B008545EC /* PermissionScheduleView.swift in Sources */,
 				6E4CB61F28D7902600116573 /* NSStyleKit.swift in Sources */,
 				6E21835D28D9516A00A622B3 /* CloudShare.swift in Sources */,
 				6E21831928D8116C00A622B3 /* NewKeyDocument.swift in Sources */,
@@ -630,6 +644,8 @@
 				6E169A7828D9A34F008545EC /* NavigationLink.swift in Sources */,
 				6E21836628D9516B00A622B3 /* CloudNewKeyInvitation.swift in Sources */,
 				6E21834128D8F3B500A622B3 /* Model.xcdatamodeld in Sources */,
+				6E169A7F28D9C135008545EC /* NewPermissionView.swift in Sources */,
+				6E169A7D28D9C097008545EC /* PermissionsView.swift in Sources */,
 				6E21833728D8F3B500A622B3 /* PersistentContainer.swift in Sources */,
 				6E21835E28D9516B00A622B3 /* CloudKey.swift in Sources */,
 				6E21836528D9516B00A622B3 /* CloudLock.swift in Sources */,
@@ -1047,6 +1063,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		6E169A8228D9C25C008545EC /* XCRemoteSwiftPackageReference "SFSafeSymbols" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/piknotech/SFSafeSymbols.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 4.0.0;
+			};
+		};
 		6E21830828D7FEA900A622B3 /* XCRemoteSwiftPackageReference "KeychainAccess" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/MillerTechnologyPeru/KeychainAccess.git";
@@ -1074,6 +1098,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		6E169A8328D9C25C008545EC /* SFSafeSymbols */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6E169A8228D9C25C008545EC /* XCRemoteSwiftPackageReference "SFSafeSymbols" */;
+			productName = SFSafeSymbols;
+		};
 		6E21830928D7FEA900A622B3 /* KeychainAccess */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 6E21830828D7FEA900A622B3 /* XCRemoteSwiftPackageReference "KeychainAccess" */;

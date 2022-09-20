@@ -46,6 +46,15 @@
       }
     },
     {
+      "identity" : "sfsafesymbols",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/piknotech/SFSafeSymbols.git",
+      "state" : {
+        "revision" : "50bc33264e6c0972f905b61af656201cf6091de8",
+        "version" : "4.0.0"
+      }
+    },
+    {
       "identity" : "socket",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/PureSwift/Socket.git",

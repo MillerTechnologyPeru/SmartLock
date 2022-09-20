@@ -99,13 +99,6 @@ private extension LockDetailView {
         Task {
             let context = store.backgroundContext
             store.stopScanning()
-            // load via Bonjour
-            /*
-            do {
-                
-            } catch {
-                log("⚠️ Error loading events for \(lock) via Bonjour")
-            }*/
             // scan and find device
             do {
                 if let peripheral = try await store.device(for: lock) {
