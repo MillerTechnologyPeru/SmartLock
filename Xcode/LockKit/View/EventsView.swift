@@ -5,6 +5,8 @@
 //  Created by Alsey Coleman Miller on 9/19/22.
 //
 
+import Foundation
+import CoreData
 import SwiftUI
 import CoreLock
 
@@ -105,7 +107,7 @@ private extension EventsView {
                     if let peripheral = try await store.device(for: lock) {
                         // load keys if admin
                         if let permssion = store[lock: lock]?.key.permission, permssion.isAdministrator {
-                            let _ = try await store.listKeys(peripheral)
+                            try await store.listKeys(for: peripheral)
                         }
                         // load latest events
                         var lastEventDate: Date?
@@ -122,7 +124,7 @@ private extension EventsView {
                                 end: nil
                             )
                         )
-                        let _ = try await store.listEvents(peripheral, fetchRequest: fetchRequest)
+                        try await store.listEvents(for: peripheral, fetchRequest: fetchRequest)
                     }
                 } catch {
                     log("⚠️ Error loading events for \(lock)")
@@ -202,5 +204,150 @@ private extension EventsView {
                 managedObject.date.flatMap { Self.timeFormatter.string(from: $0) } ?? ""
             )
         )
+    }
+}
+
+// MARK: - Preview
+
+struct EventsView_Previews: PreviewProvider {
+    
+    static var previews: some View {
+        PreviewView()
+            .environmentObject(Store.shared)
+            .environment(\.managedObjectContext, Store.shared.managedObjectContext)
+    }
+    
+    struct PreviewView: View {
+        
+        @EnvironmentObject
+        var store: Store
+        
+        @Environment(\.managedObjectContext)
+        var managedObjectContext
+        
+        @State
+        private var filter = false
+        
+        var body: some View {
+            NavigationView {
+                EventsView(lock: filter ? lock : nil)
+                    .onAppear(perform: insertLockData)
+                    .navigationBarItems(
+                        leading: Button(
+                            filter ? "Show All" : "Filter",
+                            action: { filter.toggle() }
+                        ),
+                        trailing: Button(
+                            "Insert",
+                            action: insertNewEvents
+                        )
+                    )
+            }
+        }
+    }
+}
+
+private extension EventsView_Previews.PreviewView {
+    
+    var lock: UUID { UUID(uuidString: "9C4CF5A6-A3A9-4C82-A5AF-62DDC9C1E5AE")! }
+    var ownerKey: UUID { UUID(uuidString: "43DF5757-93E3-436F-8D53-B6944FB5FF4C")! }
+    var setupEvent: UUID { UUID(uuidString: "3A2762BE-0189-402B-A72A-E8AED8B35962")! }
+    
+    func insertLockData() {
+        store.backgroundContext.commit {
+            // insert owner key
+            let key = Key(
+                id: ownerKey,
+                name: "Owner",
+                created: Date() - 6,
+                permission: .owner
+            )
+            // insert lock
+            try $0.insert([
+                lock: LockCache(
+                    key: key,
+                    name: "My lock",
+                    information: .init(
+                        buildVersion: .current,
+                        version: .current,
+                        status: .unlock,
+                        unlockActions: [.default]
+                    )
+                )
+            ])
+            // insert setup event
+            (try $0.insert(
+                .setup(
+                    LockEvent.Setup(
+                        id: setupEvent,
+                        date: key.created,
+                        key: ownerKey
+                    )
+                ), for: lock
+            ) as! SetupEventManagedObject)
+                .date = key.created
+        }
+    }
+    
+    func insertNewEvents() {
+        insertLockData()
+        store.backgroundContext.commit {
+            // insert new events
+            let newKeyInvitation = UUID()
+            let key = Key(
+                id: UUID(),
+                name: "Key 2",
+                created: Date() - 4,
+                permission: .anytime
+            )
+            try $0.insert(key, for: lock)
+            try $0.insert(
+                .unlock(
+                    .init(
+                        date: Date() - 5,
+                        key: ownerKey,
+                        action: .default
+                    )
+                ), for: lock
+            )
+            
+            try $0.insert(
+                .createNewKey(
+                    .init(
+                        date: Date() - 4,
+                        key: ownerKey,
+                        newKey: newKeyInvitation
+                    )
+                ), for: lock
+            )
+            try $0.insert(
+                .confirmNewKey(
+                    .init(
+                        date: Date() - 3,
+                        newKey: newKeyInvitation,
+                        key: key.id
+                    )
+                ), for: lock
+            )
+            try $0.insert(
+                .removeKey(
+                    .init(
+                        date: Date() - 2,
+                        key: ownerKey,
+                        removedKey: UUID(),
+                        type: .key
+                    )
+                ), for: lock
+            )
+            try $0.insert(
+                .unlock(
+                    .init(
+                        date: Date() - 1,
+                        key: key.id,
+                        action: .default
+                    )
+                ), for: lock
+            )
+        }
     }
 }

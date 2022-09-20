@@ -67,8 +67,12 @@ internal extension NSManagedObjectContext {
         // insert locks
         return try locks.map { (identifier, cache) in
             if let managedObject = try find(id: identifier, type: LockManagedObject.self) {
+                // update name
                 managedObject.name = cache.name
+                // update read info
                 managedObject.update(information: cache.information, context: self)
+                // insert key
+                try insert(cache.key, for: managedObject)
                 return managedObject
             } else {
                 return LockManagedObject(id: identifier,

@@ -106,7 +106,7 @@ private extension LockDetailView {
                     let _ = try await store.readInformation(for: peripheral)
                     // load keys if admin
                     if let permssion = store[lock: lock]?.key.permission, permssion.isAdministrator {
-                        let _ = try await store.listKeys(peripheral)
+                        try await store.listKeys(for: peripheral)
                     }
                     // load latest events
                     var lastEventDate: Date?
@@ -123,7 +123,7 @@ private extension LockDetailView {
                             end: nil
                         )
                     )
-                    let _ = try await store.listEvents(peripheral, fetchRequest: fetchRequest)
+                    let _ = try await store.listEvents(for: peripheral, fetchRequest: fetchRequest)
                 }
             } catch {
                 log("⚠️ Error loading information for \(lock)")

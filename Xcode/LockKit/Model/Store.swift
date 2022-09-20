@@ -558,18 +558,19 @@ public extension Store {
         log("Confirmed new key for lock \(information.id)")
     }
     
-    @discardableResult
     func listKeys(
-        _ lock: NativeCentral.Peripheral,
-        notification updateBlock: ((KeysList, Bool) -> ()) = { _,_ in }
-    ) async throws -> Bool {
+        for peripheral: NativeCentral.Peripheral
+    ) async throws {
         
         // get lock key
-        guard let information = self.lockInformation[lock],
-            let lockCache = self[lock: information.id],
-            let keyData = self[key: lockCache.key.id]
-            else { return false }
-        
+        guard let information = self.lockInformation[peripheral] else {
+            throw LockError.unknownLock(peripheral)
+        }
+        let lockIdentifier = information.id
+        guard let lockCache = self[lock: lockIdentifier],
+            let keyData = self[key: lockCache.key.id] else {
+            throw LockError.noKey(lock: lockIdentifier)
+        }
         let key = KeyCredentials(
             id: lockCache.key.id,
             secret: keyData
@@ -579,13 +580,10 @@ public extension Store {
         
         // BLE request
         let centralLog = central.log
-        try await central.connection(for: lock) {
+        try await central.connection(for: peripheral) {
             let stream = try await $0.listKeys(using: key, log: centralLog)
-            var list = KeysList()
             for try await notification in stream {
-                list.append(notification.key)
                 // call completion block
-                updateBlock(list, notification.isLast)
                 await context.commit { (context) in
                     try context.insert(notification.key, for: information.id)
                 }
@@ -599,27 +597,22 @@ public extension Store {
         }
         
         log("Listed keys for lock \(information.id)")
-        
-        return true
     }
     
-    @discardableResult
     func listEvents(
-        _ lock: NativeCentral.Peripheral,
-        fetchRequest: LockEvent.FetchRequest? = nil,
-        notification updateBlock: @escaping ((EventsList, Bool) -> ()) = { _,_ in }
-    ) async throws -> Bool {
-        
-        var events = [LockEvent]()
-        
+        for peripheral: NativeCentral.Peripheral,
+        fetchRequest: LockEvent.FetchRequest? = nil
+    ) async throws {
+                
         // get lock key
-        guard let information = self.lockInformation[lock],
-            let lockCache = self[lock: information.id],
-            let keyData = self[key: lockCache.key.id]
-            else { return false }
-        
+        guard let information = self.lockInformation[peripheral] else {
+            throw LockError.unknownLock(peripheral)
+        }
         let lockIdentifier = information.id
-        
+        guard let lockCache = self[lock: lockIdentifier],
+            let keyData = self[key: lockCache.key.id] else {
+            throw LockError.noKey(lock: lockIdentifier)
+        }
         let key = KeyCredentials(
             id: lockCache.key.id,
             secret: keyData
@@ -629,41 +622,28 @@ public extension Store {
         
         // BLE request
         let centralLog = central.log
-        try await central.connection(for: lock) {
+        try await central.connection(for: peripheral) {
             let stream = try await $0.listEvents(fetchRequest: fetchRequest, using: key, log: centralLog)
             for try await notification in stream {
                 if let event = notification.event {
-                    events.append(event)
                     centralLog?("Recieved event \(event.id)")
                     // store in CoreData
                     await context.commit { (context) in
                         try context.insert(event, for: information.id)
                     }
+                    // upload to iCloud
+                    if preferences.isCloudBackupEnabled {
+                        // perform concurrently
+                        Task {
+                            let value = LockEvent.Cloud(event: event, for: lockIdentifier)
+                            try await self.cloud.upload(value)
+                        }
+                    }
                 }
-                // call completion block
-                updateBlock(events, notification.isLast)
-                
             }
         }
         objectWillChange.send()
         
-        // upload to iCloud
-        if preferences.isCloudBackupEnabled {
-            // perform concurrently
-            Task {
-                do {
-                    for event in events {
-                        let value = LockEvent.Cloud(event: event, for: lockIdentifier)
-                        try await self.cloud.upload(value)
-                    }
-                } catch {
-                    log("⚠️ Could not upload latest events to iCloud: \(error.localizedDescription)")
-                }
-            }
-        }
-        
         log("Listed events for lock \(information.id)")
-        
-        return true
     }
 }
