@@ -24,13 +24,7 @@ struct SidebarView: View {
     private var isKeysExpanded = true
     
     @State
-    private var detail = AnyView(Text("Select a lock"))
-    
-    @State
-    private var currentSubview = AnyView(EmptyView())
-    
-    @State
-    private var showingSubview = false
+    private var navigationStack = [AnyView]()
     
     var body: some View {
         SwiftUI.NavigationView {
@@ -48,14 +42,40 @@ struct SidebarView: View {
                 ),
                 isKeysExpanded: $isKeysExpanded
             )
-            detail
+            switch navigationStack.count {
+            case 0:
+                Text("Select a lock")
+            case 1:
+                navigationStack[0]
+            case 2:
+                SwiftUI.NavigationView {
+                    navigationStack[0]
+                        .frame(minWidth: 350)
+                    navigationStack[1]
+                        .frame(minWidth: 350)
+                }
+            default:
+                SwiftUI.NavigationView {
+                    navigationStack[0]
+                        .frame(minWidth: 350)
+                    navigationStack[1]
+                        .frame(minWidth: 350)
+                    navigationStack[2]
+                        .frame(minWidth: 350)
+                }
+                .navigationViewStyle(.columns)
+            }
         }
         .navigationViewStyle(.columns)
+        .frame(minHeight: 550)
         .onAppear {
             // configure navigation links
             AppNavigationLinkNavigate = {
-                self.currentSubview = $0
-                self.showingSubview = true
+                if navigationStack.count > 2 {
+                    navigationStack[1] = navigationStack[2]
+                    navigationStack[2] = $0
+                }
+                self.navigationStack.append($0)
             }
             Task {
                 do { try await Store.shared.syncCloud(conflicts: { _ in return true }) } // always override on macOS
@@ -120,44 +140,43 @@ private extension SidebarView {
                 // cannot select loading locks
                 return
             }
-            detail = detailView(for: information.id)
+            navigationStack = [detailView(for: information.id)]
         case let .key(keyID, _, _):
             guard let lock = store.applicationData.locks.first(where: { $0.value.key.id == keyID })?.key else {
                 // invalid key selection
                 assertionFailure("Selected unknown key \(keyID)")
                 return
             }
-            detail = detailView(for: lock)
+            navigationStack = [detailView(for: lock)]
         }
     }
     
     func detailView(for lock: UUID) -> AnyView {
-        AnyView(StackNavigationView(
-             currentSubview: $currentSubview,
-             showingSubview: $showingSubview,
-             rootView: {
-                 LockDetailView(id: lock)
-                     .toolbar {
-                         ToolbarItem(placement: .navigation) {
-                             Button(action: {
-                                 Task {
-                                     if store.isScanning {
-                                         store.stopScanning()
-                                     } else {
-                                         await store.scan()
-                                     }
-                                 }
-                             }, label: {
-                                 if store.isScanning {
-                                     Label("stop", systemImage: "stop.fill")
-                                 } else {
-                                     Label("scan", systemImage: "arrow.clockwise")
-                                 }
-                             })
+        return AnyView(
+            LockDetailView(id: lock)
+        )
+        
+        /*
+         .toolbar {
+             ToolbarItem(placement: .navigation) {
+                 Button(action: {
+                     Task {
+                         if store.isScanning {
+                             store.stopScanning()
+                         } else {
+                             await store.scan()
                          }
                      }
+                 }, label: {
+                     if store.isScanning {
+                         Label("stop", systemImage: "stop.fill")
+                     } else {
+                         Label("scan", systemImage: "arrow.clockwise")
+                     }
+                 })
              }
-         ))
+         }
+         */
     }
     
     func item(for peripheral: NativePeripheral) -> Item {
