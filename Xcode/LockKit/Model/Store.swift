@@ -593,7 +593,9 @@ public extension Store {
         }
         
         // upload keys to cloud
-        //updateCloud()
+        Task {
+            //updateCloud()
+        }
         
         log("Listed keys for lock \(information.id)")
         

@@ -23,7 +23,8 @@ public struct EventsView: View {
         sortDescriptors: [
             NSSortDescriptor(keyPath: \EventManagedObject.date, ascending: false)
         ],
-        predicate: nil
+        predicate: nil,
+        animation: .linear
     )
     var events: FetchedResults<EventManagedObject>
     
@@ -77,6 +78,7 @@ private extension EventsView {
         List(events) {
             row(for: $0)
         }
+        .listStyle(.plain)
         .refreshable {
             reload()
         }
@@ -86,7 +88,47 @@ private extension EventsView {
     }
     
     func reload() {
-        
+        let locks = locks.sorted(by: { $0.description < $1.description })
+        Task {
+            let context = store.backgroundContext
+            store.stopScanning()
+            for lock in locks {
+                // load via Bonjour
+                /*
+                do {
+                    
+                } catch {
+                    log("⚠️ Error loading events for \(lock) via Bonjour")
+                }*/
+                // scan and find device
+                do {
+                    if let peripheral = try await store.device(for: lock) {
+                        // load keys if admin
+                        if let permssion = store[lock: lock]?.key.permission, permssion.isAdministrator {
+                            let _ = try await store.listKeys(peripheral)
+                        }
+                        // load latest events
+                        var lastEventDate: Date?
+                        try? await context.perform {
+                            lastEventDate = try context.find(id: lock, type: LockManagedObject.self)
+                                .flatMap { try $0.lastEvent(in: context)?.date }
+                        }
+                        let fetchRequest = LockEvent.FetchRequest(
+                            offset: 0,
+                            limit: nil,
+                            predicate: LockEvent.Predicate(
+                                keys: nil,
+                                start: lastEventDate,
+                                end: nil
+                            )
+                        )
+                        let _ = try await store.listEvents(peripheral, fetchRequest: fetchRequest)
+                    }
+                } catch {
+                    log("⚠️ Error loading events for \(lock)")
+                }
+            }
+        }
     }
     
     func row(for managedObject: EventManagedObject) -> some View {
