@@ -45,7 +45,7 @@ private extension KeysView.StateView {
     
     var list: some View {
         List(items) { (item) in
-            NavigationLink(destination: {
+            AppNavigationLink(destination: {
                 LockDetailView(id: item.id)
             }, label: {
                 LockRowView(item)

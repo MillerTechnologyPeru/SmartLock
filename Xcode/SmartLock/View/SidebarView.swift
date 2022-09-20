@@ -15,7 +15,7 @@ struct SidebarView: View {
     var store: Store
     
     @State
-    var selection: Item.ID?
+    private var selection: Item.ID?
     
     @State
     private var isNearbyExpanded = true
@@ -23,10 +23,16 @@ struct SidebarView: View {
     @State
     private var isKeysExpanded = true
     
+    @State
+    private var detail: AnyView?
+    
     var body: some View {
         SwiftUI.NavigationView {
             SidebarView.NavigationView(
-                selection: $selection,
+                selection: Binding(
+                    get: { selection },
+                    set: { selectionChanged($0) }
+                ),
                 isScanning: store.isScanning,
                 locks: locks,
                 keys: keys,
@@ -36,10 +42,14 @@ struct SidebarView: View {
                 ),
                 isKeysExpanded: $isKeysExpanded
             )
-            detail
+            detail ?? AnyView(Text("Select a lock"))
         }
         .navigationViewStyle(.columns)
         .onAppear {
+            // configure navigation links
+            AppNavigationLinkNavigate = {
+                self.detail = $0
+            }
             Task {
                 do { try await Store.shared.syncCloud(conflicts: { _ in return true }) } // always override on macOS
                 catch { log("⚠️ Unable to automatically sync with iCloud") }
@@ -80,6 +90,11 @@ private extension SidebarView {
         }
     }
     
+    func selectionChanged(_ newValue: Item.ID?) {
+        selection = newValue
+        detail = selectionDetail
+    }
+    
     func item(for peripheral: NativePeripheral) -> Item {
         if let information = store.lockInformation[peripheral] {
             switch information.status {
@@ -101,7 +116,7 @@ private extension SidebarView {
         }
     }
     
-    var detail: some View {
+    var selectionDetail: AnyView {
         guard let selection = self.selection, let item = locks.first(where: { $0.id == selection }) ?? keys.first(where: { $0.id == selection }) else {
             return AnyView(
                 Text("Select a lock")

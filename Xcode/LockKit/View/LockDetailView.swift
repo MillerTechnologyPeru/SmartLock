@@ -184,7 +184,7 @@ extension LockDetailView {
                                 .frame(width: titleWidth, height: nil, alignment: .leading)
                                 .font(.body)
                                 .foregroundColor(.gray)
-                            NavigationLink(destination: {
+                            AppNavigationLink(destination: {
                                 EventsView(lock: id)
                             }, label: {
                                 HStack {
@@ -200,7 +200,7 @@ extension LockDetailView {
                                     .frame(width: titleWidth, height: nil, alignment: .leading)
                                     .font(.body)
                                     .foregroundColor(.gray)
-                                NavigationLink(destination: {
+                                AppNavigationLink(destination: {
                                     Text("Keys")
                                 }, label: {
                                     HStack {
