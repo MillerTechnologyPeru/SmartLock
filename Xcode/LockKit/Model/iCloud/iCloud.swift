@@ -324,6 +324,8 @@ public extension Store {
             try await cloud.accountStatus() == .available
             else { return }
         
+        log("☁️ Will sync with iCloud")
+        
         // download to CoreData
         try await downloadCloudLocks()
         
@@ -335,6 +337,7 @@ public extension Store {
         
         // download and upload application data
         if try await downloadCloudApplicationData(conflicts: conflicts) {
+            // upload merged app data
             try await uploadCloudApplicationData()
         }
         

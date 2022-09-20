@@ -73,22 +73,23 @@ public extension ContactManagedObject {
 // MARK: - Store
 
 public extension Store {
-    /*
-    #if os(iOS)
-    func updateContacts() throws {
+    
+    func updateContacts() async throws {
         
         // exclude self
-        let currentUser = try cloud.container.fetchUserRecordID()
+        let currentUser = try await cloud.container.fetchUserRecordID()
         
         // insert new contacts
         var insertedUsers = Set<String>()
-        let context = backgroundContext
-        try cloud.container.discoverAllUserIdentities { (user) in
+        for try await user in cloud.container.discoverAllUserIdentities() {
             guard let userRecordID = user.userRecordID,
                 userRecordID != currentUser
                 else { return }
             insertedUsers.insert(userRecordID.recordName)
-            context.commit { try $0.insert(contact: user) }
+            // save in CoreData
+            await backgroundContext.commit {
+                try $0.insert(contact: user)
+            }
         }
         
         // delete old contacts
@@ -98,14 +99,12 @@ public extension Store {
             .init(keyPath: \ContactManagedObject.identifier, ascending: true)
         ]
         fetchRequest.predicate = NSPredicate(format: "NONE %K IN %@", #keyPath(ContactManagedObject.identifier), insertedUsers)
-        context.commit { (context) in
+        await backgroundContext.commit { (context) in
             try context.fetch(fetchRequest).forEach {
                 context.delete($0)
             }
         }
     }
-    #endif
-     */
 }
 
 internal extension ContactManagedObject {

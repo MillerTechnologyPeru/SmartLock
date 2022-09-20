@@ -232,9 +232,7 @@ internal extension CKDatabase {
         operation.configuration.isLongLived = false
         operation.configuration.allowsCellularAccess = true
         operation.configuration.qualityOfService = .userInitiated
-        fatalError()
-        /*
-        return AsyncThrowingStream<CKQueryOperation.AsyncStreamValue, Swift.Error>(CKQueryOperation.AsyncStreamValue.self, bufferingPolicy: .unbounded) { (continuation: AsyncThrowingStream<CKQueryOperation.AsyncStreamValue, Swift.Error>.Continuation) in
+        return .init(CKQueryOperation.AsyncStreamValue.self, bufferingPolicy: .unbounded) { continuation in
             
             operation.recordMatchedBlock = { (id, result) in
                 switch result {
@@ -244,62 +242,74 @@ internal extension CKDatabase {
                     continuation.finish(throwing: error)
                 }
             }
-            operation.queryResultBlock { (result) in
+            
+            operation.queryResultBlock = { (result) in
                 switch result {
                 case let .success(value):
                     if let cursor = value {
-                        continuation.yield(.cursor(value))
+                        continuation.yield(.cursor(cursor))
                     }
                     continuation.finish()
                 case let .failure(error):
                     continuation.finish(throwing: error)
                 }
             }
+            
             add(operation)
-        }*/
+        }
     }
     
     func queryAll(
         _ query: CKQuery,
         zone: CKRecordZone.ID? = nil
-    ) -> AsyncThrowingStream<CKRecord, Error> {        
+    ) -> AsyncThrowingStream<CKRecord, Swift.Error> {
         let operation = CKQueryOperation(query: query)
         operation.zoneID = zone
         operation.configuration.isLongLived = false
         operation.configuration.allowsCellularAccess = true
         operation.configuration.qualityOfService = .userInitiated
-        fatalError()
-        /*
-        return AsyncThrowingStream<CKRecord, Error>.init(CKRecord.self, bufferingPolicy: .unbounded) { continuation in
-            let task = Task.detached {
-                var cursor: CKQueryOperation.Cursor?
-                // first request
-                for try await value in self.query(operation) {
-                    switch value {
-                    case let .record(record):
-                        continuation.yield(record)
-                    case let .cursor(newCursor):
-                        cursor = newCursor
-                    }
-                }
-                // continue fetching if cursor returned
-                while let queryCursor = cursor {
-                    let cursorOperation = CKQueryOperation(cursor: queryCursor)
-                    cursorOperation.zoneID = zone
-                    for try await value in self.query(operation) {
-                        switch value {
-                        case let .record(record):
-                            continuation.yield(record)
-                        case let .cursor(newCursor):
-                            cursor = newCursor
+        return AsyncThrowingStream(CKRecord.self, bufferingPolicy: .unbounded) { (continuation: AsyncThrowingStream<CKRecord, Swift.Error>.Continuation) in
+            do {
+                let task = Task.detached {
+                    do {
+                        var cursor: CKQueryOperation.Cursor?
+                        // first request
+                        for try await value in self.query(operation) {
+                            switch value {
+                            case let .record(record):
+                                continuation.yield(record)
+                            case let .cursor(newCursor):
+                                cursor = newCursor
+                            }
                         }
+                        
+                        // continue fetching if cursor returned
+                        while let queryCursor = cursor {
+                            let cursorOperation = CKQueryOperation(cursor: queryCursor)
+                            cursorOperation.zoneID = zone
+                            for try await value in self.query(operation) {
+                                switch value {
+                                case let .record(record):
+                                    continuation.yield(record)
+                                case let .cursor(newCursor):
+                                    cursor = newCursor
+                                }
+                            }
+                        }
+                        
+                        // end stream
+                        continuation.finish()
+                    } catch {
+                        continuation.finish(throwing: error)
                     }
                 }
+                /*
+                continuation.onTermination = {
+                    task.cancel()
+                }*/
             }
-            continuation.onTermination = {
-                task.cancel()
-            }
-        }*/
+            return
+        }
     }
     
     func modifyZones(

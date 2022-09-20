@@ -176,7 +176,11 @@ public extension Store {
 public extension Store {
     
     private func lockCacheChanged() async {
+        // update CoreData
         await updateCoreData()
+        // update CloudKit
+        //do { try await uploadCloudApplicationData() }
+        //catch { log("⚠️ Unable to upload locks to iCloud") }
     }
     
     var applicationData: ApplicationData {
@@ -603,11 +607,15 @@ public extension Store {
         notification updateBlock: @escaping ((EventsList, Bool) -> ()) = { _,_ in }
     ) async throws -> Bool {
         
+        var events = [LockEvent]()
+        
         // get lock key
         guard let information = self.lockInformation[lock],
             let lockCache = self[lock: information.id],
             let keyData = self[key: lockCache.key.id]
             else { return false }
+        
+        let lockIdentifier = information.id
         
         let key = KeyCredentials(
             id: lockCache.key.id,
@@ -620,11 +628,11 @@ public extension Store {
         let centralLog = central.log
         try await central.connection(for: lock) {
             let stream = try await $0.listEvents(fetchRequest: fetchRequest, using: key, log: centralLog)
-            var events = [LockEvent]()
             for try await notification in stream {
                 if let event = notification.event {
                     events.append(event)
                     centralLog?("Recieved event \(event.id)")
+                    // store in CoreData
                     await context.commit { (context) in
                         try context.insert(event, for: information.id)
                     }
@@ -635,23 +643,20 @@ public extension Store {
             }
         }
         
-        /*
-        #if os(iOS)
+        // upload to iCloud
         if preferences.isCloudBackupEnabled {
-            DispatchQueue.cloud.async { [weak self] in
-                // upload to iCloud
+            // perform concurrently
+            Task {
                 do {
                     for event in events {
                         let value = LockEvent.Cloud(event: event, for: lockIdentifier)
-                        try self?.cloud.upload(value)
+                        try await self.cloud.upload(value)
                     }
                 } catch {
                     log("⚠️ Could not upload latest events to iCloud: \(error.localizedDescription)")
                 }
             }
         }
-        #endif
-        */
         
         log("Listed events for lock \(information.id)")
         
