@@ -92,7 +92,14 @@ private extension SidebarView {
     
     func selectionChanged(_ newValue: Item.ID?) {
         selection = newValue
+        guard let _ = newValue else {
+            return // don't allow deselecting
+        }
         detail = selectionDetail
+        Task {
+            try await Task.sleep(timeInterval: 0.2)
+            selection = nil
+        }
     }
     
     func item(for peripheral: NativePeripheral) -> Item {
