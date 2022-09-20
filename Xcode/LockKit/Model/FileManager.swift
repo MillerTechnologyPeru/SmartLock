@@ -155,6 +155,8 @@ private extension FileManager.Lock {
             assertionFailure("Could not encode \(T.self) to \(file.rawValue)")
             #endif
         }
+        
+        log("🗄️ Wrote file \(file.rawValue).json")
     }
 }
 

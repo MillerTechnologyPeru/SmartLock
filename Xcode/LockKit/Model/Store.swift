@@ -190,11 +190,17 @@ public extension Store {
             }
         }
         set {
-            objectWillChange.send()
             let oldValue = fileManager.applicationData
+            guard oldValue != newValue else {
+                return
+            }
+            // write file
             fileManager.applicationData = newValue
-            if oldValue?.locks != newValue.locks {
-                lockCacheChanged()
+            // emit combine change
+            objectWillChange.send()
+            // update CoreData and CloudKit
+            Task {
+                await lockCacheChanged()
             }
         }
     }
