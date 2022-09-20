@@ -85,7 +85,13 @@ private extension LockDetailView {
     }
     
     var keys: Int {
-        1
+        let fetchRequest = KeyManagedObject.fetchRequest()
+        fetchRequest.predicate = NSPredicate(
+            format: "%K == %@",
+            #keyPath(KeyManagedObject.lock.identifier),
+            id as NSUUID
+        )
+        return (try? managedObjectContext.count(for: fetchRequest)) ?? 0
     }
     
     func reload() {
