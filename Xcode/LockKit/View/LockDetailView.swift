@@ -29,6 +29,12 @@ public struct LockDetailView: View {
                     keys: keys,
                     unlock: unlock
                 )
+                .refreshable {
+                    reload()
+                }
+                .onAppear {
+                    reload()
+                }
             )
         } else if let information = self.information,
             information.status == .setup {
@@ -80,6 +86,50 @@ private extension LockDetailView {
     
     var keys: Int {
         1
+    }
+    
+    func reload() {
+        let lock = self.id
+        Task {
+            let context = store.backgroundContext
+            store.stopScanning()
+            // load via Bonjour
+            /*
+            do {
+                
+            } catch {
+                log("⚠️ Error loading events for \(lock) via Bonjour")
+            }*/
+            // scan and find device
+            do {
+                if let peripheral = try await store.device(for: lock) {
+                    // read information
+                    let _ = try await store.readInformation(for: peripheral)
+                    // load keys if admin
+                    if let permssion = store[lock: lock]?.key.permission, permssion.isAdministrator {
+                        let _ = try await store.listKeys(peripheral)
+                    }
+                    // load latest events
+                    var lastEventDate: Date?
+                    try? await context.perform {
+                        lastEventDate = try context.find(id: lock, type: LockManagedObject.self)
+                            .flatMap { try $0.lastEvent(in: context)?.date }
+                    }
+                    let fetchRequest = LockEvent.FetchRequest(
+                        offset: 0,
+                        limit: nil,
+                        predicate: LockEvent.Predicate(
+                            keys: nil,
+                            start: lastEventDate,
+                            end: nil
+                        )
+                    )
+                    let _ = try await store.listEvents(peripheral, fetchRequest: fetchRequest)
+                }
+            } catch {
+                log("⚠️ Error loading information for \(lock)")
+            }
+        }
     }
 }
 

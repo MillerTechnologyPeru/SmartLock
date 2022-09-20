@@ -591,6 +591,7 @@ public extension Store {
                 }
             }
         }
+        objectWillChange.send()
         
         // upload keys to cloud
         Task {
@@ -644,6 +645,7 @@ public extension Store {
                 
             }
         }
+        objectWillChange.send()
         
         // upload to iCloud
         if preferences.isCloudBackupEnabled {
