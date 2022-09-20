@@ -209,6 +209,7 @@ private extension EventsView {
 
 // MARK: - Preview
 
+#if DEBUG
 struct EventsView_Previews: PreviewProvider {
     
     static var previews: some View {
@@ -229,6 +230,7 @@ struct EventsView_Previews: PreviewProvider {
         private var filter = false
         
         var body: some View {
+            #if os(iOS)
             NavigationView {
                 EventsView(lock: filter ? lock : nil)
                     .onAppear(perform: insertLockData)
@@ -243,6 +245,9 @@ struct EventsView_Previews: PreviewProvider {
                         )
                     )
             }
+            #else
+            EventsView(lock: filter ? lock : nil)
+            #endif
         }
     }
 }
@@ -351,3 +356,4 @@ private extension EventsView_Previews.PreviewView {
         }
     }
 }
+#endif

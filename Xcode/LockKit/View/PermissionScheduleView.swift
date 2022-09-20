@@ -212,8 +212,10 @@ public struct PermissionScheduleView: View {
                 }
             }
         }
+        #if os(iOS)
         .listStyle(GroupedListStyle())
         .navigationBarTitle(Text("Schedule"))
+        #endif
     }
 }
 
@@ -235,7 +237,7 @@ public extension PermissionScheduleView {
         public var schedule = Permission.Schedule()
         
         public var body: some View {
-            
+            #if os(iOS)
             NavigationView {
                 PermissionScheduleView(schedule: $schedule)
                 .navigationBarItems(
@@ -249,6 +251,9 @@ public extension PermissionScheduleView {
                     )
                 )
             }
+            #else
+            PermissionScheduleView(schedule: $schedule)
+            #endif
         }
     }
 }
