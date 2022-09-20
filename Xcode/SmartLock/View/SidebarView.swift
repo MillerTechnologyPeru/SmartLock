@@ -15,7 +15,7 @@ struct SidebarView: View {
     var store: Store
     
     @State
-    private var selection: Item.ID?
+    private var sidebarSelection: Item.ID?
     
     @State
     private var isNearbyExpanded = true
@@ -24,14 +24,20 @@ struct SidebarView: View {
     private var isKeysExpanded = true
     
     @State
-    private var detail: AnyView?
+    private var detail = AnyView(Text("Select a lock"))
+    
+    @State
+    private var currentSubview = AnyView(EmptyView())
+    
+    @State
+    private var showingSubview = false
     
     var body: some View {
         SwiftUI.NavigationView {
             SidebarView.NavigationView(
                 selection: Binding(
-                    get: { selection },
-                    set: { selectionChanged($0) }
+                    get: { sidebarSelection },
+                    set: { sidebarSelectionChanged($0) }
                 ),
                 isScanning: store.isScanning,
                 locks: locks,
@@ -42,13 +48,14 @@ struct SidebarView: View {
                 ),
                 isKeysExpanded: $isKeysExpanded
             )
-            detail ?? AnyView(Text("Select a lock"))
+            detail
         }
         .navigationViewStyle(.columns)
         .onAppear {
             // configure navigation links
             AppNavigationLinkNavigate = {
-                self.detail = $0
+                self.currentSubview = $0
+                self.showingSubview = true
             }
             Task {
                 do { try await Store.shared.syncCloud(conflicts: { _ in return true }) } // always override on macOS
@@ -90,16 +97,67 @@ private extension SidebarView {
         }
     }
     
-    func selectionChanged(_ newValue: Item.ID?) {
-        selection = newValue
-        guard let _ = newValue else {
-            return // don't allow deselecting
-        }
-        detail = selectionDetail
+    func sidebarSelectionChanged(_ newValue: Item.ID?) {
+        sidebarSelection = newValue
+        // deselect
         Task {
-            try await Task.sleep(timeInterval: 0.2)
-            selection = nil
+            try? await Task.sleep(timeInterval: 0.5)
+            sidebarSelection = nil
         }
+        guard let sidebarSelection = newValue else {
+            return // no effect if deselect
+        }
+        guard let item = locks.first(where: { $0.id == sidebarSelection }) ?? keys.first(where: { $0.id == sidebarSelection }) else {
+            return
+        }
+        // try to show cached lock
+        switch item {
+        case let .lock(peripheralID, _, _):
+            guard let peripheral = store.peripherals.keys.first(where: { $0.id == peripheralID }) else {
+                return
+            }
+            guard let information = store.lockInformation[peripheral] else {
+                // cannot select loading locks
+                return
+            }
+            detail = detailView(for: information.id)
+        case let .key(keyID, _, _):
+            guard let lock = store.applicationData.locks.first(where: { $0.value.key.id == keyID })?.key else {
+                // invalid key selection
+                assertionFailure("Selected unknown key \(keyID)")
+                return
+            }
+            detail = detailView(for: lock)
+        }
+    }
+    
+    func detailView(for lock: UUID) -> AnyView {
+        AnyView(StackNavigationView(
+             currentSubview: $currentSubview,
+             showingSubview: $showingSubview,
+             rootView: {
+                 LockDetailView(id: lock)
+                     .toolbar {
+                         ToolbarItem(placement: .navigation) {
+                             Button(action: {
+                                 Task {
+                                     if store.isScanning {
+                                         store.stopScanning()
+                                     } else {
+                                         await store.scan()
+                                     }
+                                 }
+                             }, label: {
+                                 if store.isScanning {
+                                     Label("stop", systemImage: "stop.fill")
+                                 } else {
+                                     Label("scan", systemImage: "arrow.clockwise")
+                                 }
+                             })
+                         }
+                     }
+             }
+         ))
     }
     
     func item(for peripheral: NativePeripheral) -> Item {
@@ -124,7 +182,7 @@ private extension SidebarView {
     }
     
     var selectionDetail: AnyView {
-        guard let selection = self.selection, let item = locks.first(where: { $0.id == selection }) ?? keys.first(where: { $0.id == selection }) else {
+        guard let selection = self.sidebarSelection, let item = locks.first(where: { $0.id == selection }) ?? keys.first(where: { $0.id == selection }) else {
             return AnyView(
                 Text("Select a lock")
             )
