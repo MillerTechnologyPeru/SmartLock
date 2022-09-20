@@ -19,6 +19,15 @@
       }
     },
     {
+      "identity" : "cloudkitcodable",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/colemancda/CloudKitCodable.git",
+      "state" : {
+        "branch" : "master",
+        "revision" : "598e04c5c6f1162d51fdc45d11c85574d39ee85c"
+      }
+    },
+    {
       "identity" : "gatt",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/PureSwift/GATT.git",

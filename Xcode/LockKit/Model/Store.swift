@@ -38,6 +38,8 @@ public final class Store: ObservableObject {
     
     private var scanStream: AsyncCentralScan<DarwinCentral>?
     
+    public lazy var preferences = Preferences(suiteName: .lock)!
+    
     internal lazy var keychain = Keychain(service: .lock, accessGroup: .lock)
     
     internal lazy var fileManager: FileManager.Lock = .shared
@@ -59,14 +61,18 @@ public final class Store: ObservableObject {
         return context
     }()
     
+    public lazy var cloud: CloudStore = .shared
+    
     // MARK: - Initialization
     
     private init() {
         central.log = { log("📲 Central: " + $0) }
         clearKeychainNewInstall()
         loadPersistentStore()
-        lockCacheChanged()
         observeBluetoothState()
+        Task {
+            await lockCacheChanged()
+        }
     }
 }
 
@@ -76,7 +82,7 @@ public extension Store {
     
     /// Clear keychain on newly installed app.
     private func clearKeychainNewInstall() {
-        /*
+        
         if preferences.isAppInstalled == false {
             preferences.isAppInstalled = true
             do { try keychain.removeAll() }
@@ -90,7 +96,6 @@ public extension Store {
                 }
             }
         }
-        */
     }
     
     /// Remove the specified lock from the cache and keychain.
@@ -170,8 +175,8 @@ public extension Store {
 
 public extension Store {
     
-    private func lockCacheChanged() {
-        updateCoreData()
+    private func lockCacheChanged() async {
+        await updateCoreData()
     }
     
     var applicationData: ApplicationData {
@@ -203,11 +208,11 @@ public extension Store {
 
 // MARK: - CoreData
 
-private extension Store {
+internal extension Store {
     
-    func updateCoreData() {
+    func updateCoreData() async {
         let locks = self.applicationData.locks
-        backgroundContext.commit {
+        await backgroundContext.commit {
             try $0.insert(locks)
         }
     }

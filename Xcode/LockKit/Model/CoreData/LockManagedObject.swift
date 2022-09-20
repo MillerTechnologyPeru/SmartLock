@@ -78,8 +78,7 @@ internal extension NSManagedObjectContext {
             }
         }
     }
-    /*
-    #if os(iOS)
+    
     @discardableResult
     func insert(_ cloudValue: CloudLock) throws -> LockManagedObject {
         
@@ -95,6 +94,4 @@ internal extension NSManagedObjectContext {
         }
         return lockManagedObject
     }
-    #endif
-     */
 }
