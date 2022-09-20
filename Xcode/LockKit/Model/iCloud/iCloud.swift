@@ -461,10 +461,6 @@ public extension Store {
         
         // Import application data
         let oldApplicationData = self.applicationData
-        guard cloudData != oldApplicationData else {
-            log("☁️ No new data from iCloud")
-            return false
-        }
         
         #if DEBUG
         let dateFormatter = DateFormatter()
@@ -475,6 +471,11 @@ public extension Store {
         print("Local: \(oldApplicationData.id) \(dateFormatter.string(from: oldApplicationData.updated))")
         dump(oldApplicationData)
         #endif
+        
+        guard cloudData != oldApplicationData else {
+            log("☁️ No new data from iCloud")
+            return false
+        }
         
         // attempt to overwrite
         if let newData = oldApplicationData.update(with: cloudData) {

@@ -49,6 +49,12 @@ struct TabBarView: View {
         }
         .navigationViewStyle(.stack)
         .navigationBarTitleDisplayMode(.large)
+        .onAppear {
+            Task {
+                do { try await Store.shared.syncCloud() }
+                catch { log("⚠️ Unable to automatically sync with iCloud") }
+            }
+        }
     }
 }
 

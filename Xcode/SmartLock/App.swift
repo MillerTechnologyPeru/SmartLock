@@ -18,10 +18,6 @@ struct LockApp: App {
                 .environment(\.managedObjectContext, Store.shared.managedObjectContext)
                 .onAppear {
                     _ = LockApp.initialize
-                    Task {
-                        do { try await Store.shared.syncCloud() }
-                        catch { log("⚠️ Unable to automatically sync with iCloud") }
-                    }
                 }
                 .onContinueUserActivity("") { _ in
                     

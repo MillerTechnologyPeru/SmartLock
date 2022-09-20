@@ -64,7 +64,7 @@ private extension LockDetailView {
             try await store.unlock(for: id, action: .default)
         }
         catch {
-            log("⚠️ Unable to unlock \(id)")
+            log("⚠️ Unable to unlock \(id). \(error)")
         }
     }
     
@@ -130,6 +130,7 @@ extension LockDetailView {
                             PermissionIconView(permission: cache.key.permission.type)
                                 .frame(width: 150, height: 150, alignment: .center)
                         })
+                        .buttonStyle(.plain)
                         //.disabled(enableActions == false)
                         .padding(30)
                         Spacer()
@@ -213,6 +214,7 @@ extension LockDetailView {
                     }
                 }
                 .padding(20)
+                .buttonStyle(.plain)
             }
             .navigationTitle(Text(verbatim: cache.name))
         }
