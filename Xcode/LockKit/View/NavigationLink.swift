@@ -27,7 +27,7 @@ public struct AppNavigationLink <Destination: View, Label: View> : View {
         )
         .buttonStyle(.plain)
         #else
-        NavigationLink(destination: destination, label: label)
+        NavigationLink(destination: destination, label: { label })
         #endif
     }
     
