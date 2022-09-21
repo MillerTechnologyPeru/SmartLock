@@ -118,6 +118,17 @@ private extension SidebarView {
         //    return
         //}
         
+        // special cases
+        switch id.type {
+        case .lock:
+            navigationStack = [(id, view)]
+        case .permissions,
+            .events:
+            navigationStack = (navigationStack.first.flatMap { [$0] } ?? []) + [(id, view)]
+        default:
+            break
+        }
+        
         // try to replace existing of same type
         if let index = navigationStack.firstIndex(where: { $0.id.type == id.type  }) {
             navigationStack[index] = (id, view)

@@ -17,10 +17,12 @@ public struct PermissionScheduleView: View {
     // MARK: - Properties
     
     public init(schedule: Permission.Schedule = .init()) {
+        isEditable = false
         _schedule = Binding(get: { schedule }, set: { _ in }) // read only
     }
     
     public init(schedule: Binding<Permission.Schedule>) {
+        isEditable = true
         _schedule = schedule
     }
     
@@ -28,6 +30,8 @@ public struct PermissionScheduleView: View {
     
     @Binding
     public var schedule: Permission.Schedule
+    
+    private let isEditable: Bool
     
     @State
     private var defaultExpiration = Date() + (60 * 60 * 24)
@@ -212,6 +216,8 @@ public struct PermissionScheduleView: View {
                 }
             }
         }
+        .disabled(isEditable == false)
+        .padding(20)
         #if os(iOS)
         .listStyle(GroupedListStyle())
         .navigationBarTitle(Text("Schedule"))
