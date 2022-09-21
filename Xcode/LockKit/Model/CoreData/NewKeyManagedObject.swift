@@ -15,14 +15,22 @@ public final class NewKeyManagedObject: NSManagedObject {
     internal convenience init(_ value: NewKey, lock: LockManagedObject, context: NSManagedObjectContext) {
         self.init(context: context)
         self.identifier = value.id
+        self.update(value, lock: lock, context: context)
+    }
+    
+    internal func update(_ value: NewKey, lock: LockManagedObject, context: NSManagedObjectContext) {
         self.lock = lock
         self.name = value.name
         self.created = value.created
+        self.expiration = value.expiration
         self.permission = numericCast(value.permission.type.rawValue)
         if case let .scheduled(schedule) = value.permission {
-            self.schedule = .init(schedule, context: context)
+            if let _ = self.schedule {
+                // don't update
+            } else {
+                self.schedule = .init(schedule, context: context)
+            }
         }
-        self.expiration = value.expiration
     }
 }
 
@@ -42,7 +50,7 @@ public extension NewKey {
         case .owner:
             permission = .owner
         case .admin:
-            permission = .owner
+            permission = .admin
         case .anytime:
             permission = .anytime
         case .scheduled:
@@ -74,6 +82,7 @@ internal extension NSManagedObjectContext {
         
         if let managedObject = try find(id: newKey.id, type: NewKeyManagedObject.self) {
             assert(managedObject.lock == lock, "Key stored with conflicting lock")
+            managedObject.update(newKey, lock: lock, context: self)
             return managedObject
         } else {
             return NewKeyManagedObject(newKey, lock: lock, context: self)
