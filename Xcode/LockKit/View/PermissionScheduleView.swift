@@ -218,8 +218,8 @@ public struct PermissionScheduleView: View {
         }
         .padding(20)
         .navigationTitle("Schedule")
-        .disabled(isEditable == false)
         #if os(macOS)
+        .disabled(isEditable == false)
         //.buttonStyle(isEditable ? .plain : .bordered)
         #elseif os(iOS)
         //.listStyle(GroupedListStyle())

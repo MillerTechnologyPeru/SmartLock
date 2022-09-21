@@ -70,6 +70,15 @@ public struct PermissionsView: View {
             self.keys.nsPredicate = predicate
             self.newKeys.nsPredicate = predicate
         }
+        .toolbar {
+            ToolbarItem(placement: .primaryAction) {
+                if let key = store[lock: id]?.key, key.permission.isAdministrator {
+                    Button(action: newPermission, label: {
+                        Image(systemSymbol: .plus)
+                    })
+                }
+            }
+        }
     }
     
     public init(id: UUID) {
@@ -88,7 +97,25 @@ private extension PermissionsView {
     }
     
     func reload() {
-        
+        Task {
+            guard await store.central.state == .poweredOn else {
+                return
+            }
+            do {
+                if store.isScanning {
+                    store.stopScanning()
+                }
+                guard let peripheral = try await store.device(for: id) else {
+                    // unable to find device
+                    return
+                }
+                try await store.listKeys(for: peripheral)
+            }
+        }
+    }
+    
+    func newPermission() {
+        // show modal
     }
 }
 

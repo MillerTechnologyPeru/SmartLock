@@ -162,6 +162,19 @@ public extension KeyDetailView.Value {
 #if DEBUG
 struct KeyDetailView_Previews: PreviewProvider {
     
+    static var previews: some View {
+        Group {
+            ForEach(keys) { key in
+                NavigationView {
+                    KeyDetailView(
+                        key: key
+                    )
+                }
+                .previewDisplayName(key.name)
+            }
+        }
+    }
+    
     static let keys: [KeyDetailView.Value] = [
         .key(
             Key(
@@ -169,6 +182,22 @@ struct KeyDetailView_Previews: PreviewProvider {
                 name: "Owner",
                 created: Date() - 60 * 60 * 24,
                 permission: .owner
+            )
+        ),
+        .key(
+            Key(
+                id: UUID(),
+                name: "Key 2",
+                created: Date() - 60 * 60 * 24,
+                permission: .admin
+            )
+        ),
+        .key(
+            Key(
+                id: UUID(),
+                name: "Key 3",
+                created: Date() - 60 * 60 * 24,
+                permission: .anytime
             )
         ),
         .newKey(
@@ -187,18 +216,5 @@ struct KeyDetailView_Previews: PreviewProvider {
                 )
         )
     ]
-    
-    static var previews: some View {
-        Group {
-            ForEach(keys) { key in
-                NavigationView {
-                    KeyDetailView(
-                        key: key
-                    )
-                }
-                .previewDisplayName("\(key.name) Key")
-            }
-        }
-    }
 }
 #endif
