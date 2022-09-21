@@ -600,26 +600,71 @@ public extension Store {
         )
         
         let context = backgroundContext
-        var keysCount = 0
-        var newKeysCount = 0
+        var keys = Set<UUID>()
+        var newKeys = Set<UUID>()
         // BLE request
         let centralLog = central.log
         let stream = try await connection.listKeys(using: key, log: centralLog)
         for try await notification in stream {
             switch notification.key {
             case let .key(key):
-                keysCount += 1
+                keys.insert(key.id)
                 centralLog?("Recieved \(key.permission.type) key \(key.id) \(key.name)")
             case let .newKey(key):
-                newKeysCount += 1
-                centralLog?("Recieved \(key.permission.type) key \(key.id) \(key.name)")
+                newKeys.insert(key.id)
+                centralLog?("Recieved \(key.permission.type) pending key \(key.id) \(key.name)")
             }
-            // call completion block
+            // insert key to CoreData
             await context.commit { (context) in
                 try context.insert(notification.key, for: information.id)
             }
-            // remove old keys
-            // FIXME: Remove old keys
+        }
+        // remove other keys from CoreData
+        Task {
+            await context.commit { (context) in
+                do {
+                    let fetchRequest = KeyManagedObject.fetchRequest()
+                    fetchRequest.predicate = NSPredicate(
+                        format: "%K == %@ && NOT %@ CONTAINS %K",
+                        #keyPath(NewKeyManagedObject.lock.identifier),
+                        lockIdentifier as NSUUID,
+                        keys as NSSet,
+                        #keyPath(KeyManagedObject.identifier)
+                    )
+                    // fetch
+                    let invalidKeys = try context.fetch(fetchRequest)
+                    // remove keys from CoreData
+                    invalidKeys.forEach {
+                        context.delete($0)
+                    }
+                    if invalidKeys.isEmpty == false {
+                        log("Removed \(invalidKeys.count) invalid keys from cache")
+                    }
+                }
+                
+                do {
+                    let fetchRequest = NewKeyManagedObject.fetchRequest()
+                    if newKeys.isEmpty == false {
+                        fetchRequest.predicate = NSPredicate(
+                            format: "%K == %@ && NOT %@ CONTAINS %K",
+                            #keyPath(NewKeyManagedObject.lock.identifier),
+                            lockIdentifier as NSUUID,
+                            newKeys as NSSet,
+                            #keyPath(NewKeyManagedObject.identifier)
+                        )
+                    }
+                    // fetch
+                    let invalidKeys = try context.fetch(fetchRequest)
+                    print("Invalid keys ", invalidKeys.count)
+                    // remove keys from CoreData
+                    invalidKeys.forEach {
+                        context.delete($0)
+                    }
+                    if invalidKeys.isEmpty == false {
+                        log("Removed \(invalidKeys.count) invalid pending keys from cache")
+                    }
+                }
+            }
         }
         
         objectWillChange.send()
@@ -629,7 +674,7 @@ public extension Store {
             //updateCloud()
         }
         
-        log("Recieved \(keysCount) keys and \(newKeysCount) pending keys for lock \(information.id)")
+        log("Recieved \(keys.count) keys and \(newKeys.count) pending keys for lock \(information.id)")
     }
     
     func listEvents(
