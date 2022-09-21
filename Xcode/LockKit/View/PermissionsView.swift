@@ -163,19 +163,11 @@ private extension PermissionsView.StateView {
     }
     
     func destination(for item: Key) -> some View {
-        AppNavigationLink(id: .keySchedule(item.id), destination: {
-            PermissionScheduleView(schedule: item.permission.schedule ?? Permission.Schedule())
-        }, label: {
-            Text("Key \(item.id)")
-        })
+        KeyDetailView(key: .key(item))
     }
     
     func destination(for item: NewKey) -> some View {
-        AppNavigationLink(id: .keySchedule(item.id), destination: {
-            PermissionScheduleView(schedule: item.permission.schedule ?? Permission.Schedule())
-        }, label: {
-            Text("New Key \(item.id)")
-        })
+        KeyDetailView(key: .newKey(item))
     }
     
     func deleteKey(at indexSet: IndexSet) {

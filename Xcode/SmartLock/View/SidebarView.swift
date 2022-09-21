@@ -63,7 +63,7 @@ struct SidebarView: View {
                     navigationStack[2].view
                         .frame(minWidth: 350)
                 }
-                .navigationViewStyle(.columns)
+                
             }
         }
         .navigationViewStyle(.columns)

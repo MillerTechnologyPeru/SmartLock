@@ -216,11 +216,14 @@ public struct PermissionScheduleView: View {
                 }
             }
         }
-        .disabled(isEditable == false)
         .padding(20)
-        #if os(iOS)
-        .listStyle(GroupedListStyle())
-        .navigationBarTitle(Text("Schedule"))
+        .navigationTitle("Schedule")
+        .disabled(isEditable == false)
+        #if os(macOS)
+        //.buttonStyle(isEditable ? .plain : .bordered)
+        #elseif os(iOS)
+        //.listStyle(GroupedListStyle())
+        //.listStyle(.plain)
         #endif
     }
 }
