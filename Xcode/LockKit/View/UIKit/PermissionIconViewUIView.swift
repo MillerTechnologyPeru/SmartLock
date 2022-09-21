@@ -83,6 +83,20 @@ public extension PermissionIconView.UIViewType {
     }
 }
 
+// MARK: - Image Rendering
+
+public extension UIImage {
+    
+    static func permissionType(_ permissionType: PermissionType, size: CGSize = CGSize(width: 32, height: 32)) -> UIImage {
+        let view = PermissionIconView.UIViewType(permission: permissionType, frame: CGRect(origin: .zero, size: size))
+        let renderer = UIGraphicsImageRenderer(size: view.bounds.size)
+        let image = renderer.image { context in
+            view.drawHierarchy(in: view.bounds, afterScreenUpdates: true)
+        }
+        return image
+    }
+}
+ 
 // MARK: - Supporting Types
 
 private extension PermissionIconView.UIViewType {

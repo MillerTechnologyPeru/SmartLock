@@ -48,13 +48,21 @@ public final class NewKeyFileActivityItem: UIActivityItemProvider {
     
     // MARK: - UIActivityItemSource
     
-    public override func activityViewController(_ activityViewController: UIActivityViewController, subjectForActivityType activityType: UIActivity.ActivityType?) -> String {
+    public override func activityViewController(
+        _ activityViewController: UIActivityViewController,
+        subjectForActivityType activityType: UIActivity.ActivityType?
+    ) -> String {
         
         return invitation.key.name
     }
     
-    public override func activityViewController(_ activityViewController: UIActivityViewController, thumbnailImageForActivityType activityType: UIActivity.ActivityType?, suggestedSize size: CGSize) -> UIImage? {
-        return nil//return UIImage(permissionType: invitation.key.permission.type)
+    public override func activityViewController(
+        _ activityViewController: UIActivityViewController,
+        thumbnailImageForActivityType activityType: UIActivity.ActivityType?,
+        suggestedSize size: CGSize
+    ) -> UIImage? {
+        
+        return UIImage.permissionType(invitation.key.permission.type, size: size)
     }
     /*
     @available(iOSApplicationExtension 13.0, *)
