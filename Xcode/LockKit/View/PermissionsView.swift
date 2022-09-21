@@ -60,6 +60,9 @@ public struct PermissionsView: View {
         return dateFormatter
     }()
     
+    @State
+    private var showNewKeyModal = false
+    
     public var body: some View {
         StateView(
             keys: keys.lazy.map { Key(managedObject: $0)! },
@@ -72,11 +75,16 @@ public struct PermissionsView: View {
         }
         .toolbar {
             ToolbarItem(placement: .primaryAction) {
-                if let key = store[lock: id]?.key, key.permission.isAdministrator {
+                if canCreateNewKey {
                     Button(action: newPermission, label: {
                         Image(systemSymbol: .plus)
                     })
                 }
+            }
+        }
+        .sheet(isPresented: $showNewKeyModal, onDismiss: { }) {
+            NavigationView {
+                NewPermissionView(id: id)
             }
         }
     }
@@ -114,8 +122,16 @@ private extension PermissionsView {
         }
     }
     
+    var canCreateNewKey: Bool {
+        #if targetEnvironment(simulator)
+        return true
+        #else
+        return store[lock: id]?.key.permission.isAdministrator ?? false
+        #endif
+    }
+    
     func newPermission() {
-        // show modal
+        showNewKeyModal = true
     }
 }
 
