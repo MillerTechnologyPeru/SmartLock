@@ -298,7 +298,7 @@ public extension Store {
         )
         self.scanStream = stream
         // process scanned devices
-        Task {
+        Task.bluetooth {
             do {
                 for try await scanData in stream {
                     guard let serviceUUIDs = scanData.advertisementData.serviceUUIDs,
@@ -311,7 +311,7 @@ public extension Store {
             } catch {
                 log("⚠️ Unable to scan. \(error)")
             }
-            isScanning = false
+            self.isScanning = false
         }
         // stop scanning after 5 sec if need to read device info
         Task {

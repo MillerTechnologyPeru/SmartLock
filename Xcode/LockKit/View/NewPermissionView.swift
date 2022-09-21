@@ -65,7 +65,7 @@ private extension NewPermissionView {
             }
         }
         #else
-        Task {
+        Task.bluetooth {
             do {
                 guard await store.central.state == .poweredOn else {
                     throw LockError.bluetoothUnavailable
@@ -85,6 +85,7 @@ private extension NewPermissionView {
                 completion(newKey)
             } catch {
                 state = .error(error.localizedDescription)
+                log("⚠️ Error creating new key for \(id). \(error)")
             }
         }
         #endif

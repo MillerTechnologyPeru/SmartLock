@@ -28,7 +28,7 @@ struct NearbyDevicesView: View {
         )
         .onAppear {
             if store.isScanning == false {
-                Task {
+                Task.bluetooth {
                     try? await Task.sleep(timeInterval: 1.5)
                     await scan()
                 }
@@ -48,7 +48,7 @@ private extension NearbyDevicesView {
         if store.isScanning {
             store.stopScanning()
         } else {
-            Task {
+            Task.bluetooth {
                 await scan()
             }
         }
@@ -59,7 +59,9 @@ private extension NearbyDevicesView {
               store.isScanning == false else {
             return
         }
-        await store.scan()
+        Task.bluetooth {
+            await store.scan()
+        }
     }
     
     var peripherals: [NativePeripheral] {

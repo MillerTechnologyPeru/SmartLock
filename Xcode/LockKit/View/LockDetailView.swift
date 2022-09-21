@@ -107,7 +107,7 @@ private extension LockDetailView {
     
     func reload() {
         let lock = self.id
-        Task {
+        Task.bluetooth {
             let context = store.backgroundContext
             store.stopScanning()
             // scan and find device
@@ -137,7 +137,7 @@ private extension LockDetailView {
                     let _ = try await store.listEvents(for: peripheral, fetchRequest: fetchRequest)
                 }
             } catch {
-                log("⚠️ Error loading information for \(lock)")
+                log("⚠️ Error loading information for \(lock). \(error)")
             }
         }
     }

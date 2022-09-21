@@ -140,7 +140,7 @@ private extension PermissionsView {
     }
     
     func reload() {
-        Task {
+        Task.bluetooth {
             guard await store.central.state == .poweredOn else {
                 return
             }
@@ -153,6 +153,8 @@ private extension PermissionsView {
                     return
                 }
                 try await store.listKeys(for: peripheral)
+            } catch {
+                log("⚠️ Error loading keys for \(id). \(error)")
             }
         }
     }

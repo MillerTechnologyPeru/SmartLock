@@ -91,7 +91,7 @@ private extension EventsView {
     
     func reload() {
         let locks = locks.sorted(by: { $0.description < $1.description })
-        Task {
+        Task.bluetooth {
             let context = store.backgroundContext
             store.stopScanning()
             for lock in locks {
