@@ -61,3 +61,10 @@ public extension NewKey {
         }
     }
 }
+
+extension NewKey.Invitation: Identifiable {
+    
+    public var id: String {
+        return lock.description + "-" + key.id.description
+    }
+}
