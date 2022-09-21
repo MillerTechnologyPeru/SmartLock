@@ -141,6 +141,16 @@ public extension Permission {
     }
 }
 
+public extension Permission {
+    
+    var schedule: Schedule? {
+        guard case let .scheduled(schedule) = self else {
+            return nil
+        }
+        return schedule
+    }
+}
+
 // MARK: - Schedule Interval
 
 public extension Permission.Schedule {
