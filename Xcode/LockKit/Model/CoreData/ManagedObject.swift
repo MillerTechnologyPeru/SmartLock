@@ -8,6 +8,7 @@
 
 import Foundation
 import CoreData
+import Predicate
 
 public extension NSManagedObjectModel {
     
@@ -71,7 +72,13 @@ internal extension NSManagedObjectContext {
         
         let fetchRequest = NSFetchRequest<T>()
         fetchRequest.entity = T.entity()
-        fetchRequest.predicate = NSPredicate(format: "%K == %@", propertyName, identifier)
+        if let uuid = identifier as? NSUUID {
+            let predicate = (.keyPath(.init(rawValue: propertyName)) == .value(.uuid(uuid as UUID))).toFoundation()
+            fetchRequest.predicate = predicate
+            assert(predicate == NSPredicate(format: "%K == %@", propertyName, identifier))
+        } else {
+            fetchRequest.predicate = NSPredicate(format: "%K == %@", propertyName, identifier)
+        }
         fetchRequest.fetchLimit = 1
         fetchRequest.includesSubentities = true
         fetchRequest.returnsObjectsAsFaults = false
@@ -90,7 +97,9 @@ public extension NSManagedObjectContext {
         
         let fetchRequest = NSFetchRequest<T>()
         fetchRequest.entity = T.entity()
-        fetchRequest.predicate = NSPredicate(format: "%K == %@", "identifier", id as NSUUID)
+        let predicate = ("identifier" == id).toFoundation()
+        fetchRequest.predicate = predicate
+        assert(predicate == NSPredicate(format: "%K == %@", "identifier", id as NSUUID))
         fetchRequest.fetchLimit = 1
         fetchRequest.includesSubentities = true
         fetchRequest.returnsObjectsAsFaults = false

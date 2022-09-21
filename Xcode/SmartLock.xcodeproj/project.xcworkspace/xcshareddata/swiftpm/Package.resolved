@@ -46,6 +46,15 @@
       }
     },
     {
+      "identity" : "predicate",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/PureSwift/Predicate",
+      "state" : {
+        "revision" : "7e0d2fd1fa4104db408903ea3d7def9bc613f8fb",
+        "version" : "1.1.1"
+      }
+    },
+    {
       "identity" : "sfsafesymbols",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/piknotech/SFSafeSymbols.git",

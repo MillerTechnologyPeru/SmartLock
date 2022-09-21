@@ -10,6 +10,7 @@ import Foundation
 import CloudKit
 import CloudKitCodable
 import CoreLock
+import Predicate
 
 #if os(iOS)
 import UIKit
@@ -87,9 +88,11 @@ internal extension CloudStore {
         } else {
             userID = try await container.fetchUserRecordID()
         }
+        let predicate = (.keyPath("user") == .value(.string(userID.recordName))).toFoundation()
+        assert(predicate == NSPredicate(format: "%K == %@", "user", userID.recordName))
         let query = CKQuery(
             recordType: CloudShare.NewKey.ID.cloudRecordType,
-            predicate: NSPredicate(format: "%K == %@", "user", userID.recordName)
+            predicate: predicate
         )
         return database.queryAll(query)
             .map { try decoder.decode(CloudShare.NewKey.self, from: $0) }
@@ -102,9 +105,11 @@ public extension CloudStore {
     
     func subcribeNewKeyShares() async throws {
         let user = try await container.fetchUserRecordID()
+        let predicate = (.keyPath("user") == .value(.string(user.recordName))).toFoundation()
+        assert(predicate == NSPredicate(format: "%K == %@", "user", user.recordName))
         let subcription = CKQuerySubscription(
             recordType: CloudShare.NewKey.ID.cloudRecordType,
-            predicate: NSPredicate(format: "%K == %@", "user", user.recordName),
+            predicate: predicate,
             options: [.firesOnRecordCreation]
         )
         let notificationInfo = CKQuerySubscription.NotificationInfo()

@@ -9,6 +9,7 @@
 import Foundation
 import CoreData
 import CoreLock
+import Predicate
 
 public final class ConfirmNewKeyEventManagedObject: EventManagedObject {
     
@@ -69,7 +70,10 @@ public extension ConfirmNewKeyEventManagedObject {
         
         let fetchRequest = NSFetchRequest<CreateNewKeyEventManagedObject>()
         fetchRequest.entity = CreateNewKeyEventManagedObject.entity()
-        fetchRequest.predicate = NSPredicate(format: "%K == %@", #keyPath(CreateNewKeyEventManagedObject.pendingKey), newKey as NSUUID)
+        let predicate = (.keyPath(#keyPath(CreateNewKeyEventManagedObject.pendingKey)) == .value(.uuid(newKey))).toFoundation()
+        fetchRequest.predicate = predicate
+        assert(predicate.description == NSPredicate(format: "%K == %@", #keyPath(CreateNewKeyEventManagedObject.pendingKey), newKey as NSUUID).description)
+        assert(predicate == NSPredicate(format: "%K == %@", #keyPath(CreateNewKeyEventManagedObject.pendingKey), newKey as NSUUID))
         fetchRequest.fetchLimit = 1
         fetchRequest.includesSubentities = false
         fetchRequest.returnsObjectsAsFaults = false

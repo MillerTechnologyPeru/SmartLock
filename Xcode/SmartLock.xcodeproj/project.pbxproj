@@ -83,6 +83,7 @@
 		6E9E37AB28DAA6D100BE7128 /* KeyDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E9E37AA28DAA6D100BE7128 /* KeyDetailView.swift */; };
 		6E9E37AD28DADF2600BE7128 /* ActivityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E9E37AC28DADF2600BE7128 /* ActivityView.swift */; };
 		6E9E37AF28DAEBE000BE7128 /* ActivityItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E9E37AE28DAEBE000BE7128 /* ActivityItem.swift */; };
+		6E9E37B228DB852A00BE7128 /* Predicate in Frameworks */ = {isa = PBXBuildFile; productRef = 6E9E37B128DB852A00BE7128 /* Predicate */; };
 		6EA7768528D7061600018FA3 /* App.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EA7768428D7061600018FA3 /* App.swift */; };
 		6EA7768E28D7061600018FA3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6EA7768D28D7061600018FA3 /* Assets.xcassets */; };
 		6EA7769228D7061600018FA3 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6EA7769128D7061600018FA3 /* Preview Assets.xcassets */; };
@@ -222,6 +223,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6E9E37B228DB852A00BE7128 /* Predicate in Frameworks */,
 				6E169A8428D9C25C008545EC /* SFSafeSymbols in Frameworks */,
 				6E21830A28D7FEA900A622B3 /* KeychainAccess in Frameworks */,
 				6E3276D928D70FA000AF171B /* GATT in Frameworks */,
@@ -521,6 +523,7 @@
 				6E21830928D7FEA900A622B3 /* KeychainAccess */,
 				6E21836928D953D000A622B3 /* CloudKitCodable */,
 				6E169A8328D9C25C008545EC /* SFSafeSymbols */,
+				6E9E37B128DB852A00BE7128 /* Predicate */,
 			);
 			productName = LockKit;
 			productReference = 6EA7769D28D707FE00018FA3 /* LockKit.framework */;
@@ -562,6 +565,7 @@
 				6E21830828D7FEA900A622B3 /* XCRemoteSwiftPackageReference "KeychainAccess" */,
 				6E21836828D953D000A622B3 /* XCRemoteSwiftPackageReference "CloudKitCodable" */,
 				6E169A8228D9C25C008545EC /* XCRemoteSwiftPackageReference "SFSafeSymbols" */,
+				6E9E37B028DB852A00BE7128 /* XCRemoteSwiftPackageReference "Predicate" */,
 			);
 			productRefGroup = 6EA7768228D7061600018FA3 /* Products */;
 			projectDirPath = "";
@@ -1109,6 +1113,14 @@
 				kind = branch;
 			};
 		};
+		6E9E37B028DB852A00BE7128 /* XCRemoteSwiftPackageReference "Predicate" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/PureSwift/Predicate";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -1140,6 +1152,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 6E3276D528D70FA000AF171B /* XCRemoteSwiftPackageReference "GATT" */;
 			productName = GATT;
+		};
+		6E9E37B128DB852A00BE7128 /* Predicate */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6E9E37B028DB852A00BE7128 /* XCRemoteSwiftPackageReference "Predicate" */;
+			productName = Predicate;
 		};
 /* End XCSwiftPackageProductDependency section */
 

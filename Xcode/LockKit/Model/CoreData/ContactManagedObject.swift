@@ -11,6 +11,7 @@ import CoreData
 import CoreLock
 import CloudKit
 import Contacts
+import Predicate
 
 public final class ContactManagedObject: NSManagedObject {
     

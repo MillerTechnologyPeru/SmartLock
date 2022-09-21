@@ -9,6 +9,7 @@
 import Foundation
 import CoreData
 import CoreLock
+import Predicate
 
 public class EventManagedObject: NSManagedObject {
     
@@ -103,6 +104,7 @@ public extension LockManagedObject {
                 ascending: false
             )
         ]
+        //let predicate = (.keyPath(#keyPath(EventManagedObject.lock.identifier)) == .value(self.identifier!))
         fetchRequest.predicate = NSPredicate(
             format: "%K == %@",
             #keyPath(EventManagedObject.lock),

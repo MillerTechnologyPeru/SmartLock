@@ -13,6 +13,7 @@ import Combine
 @_exported import CoreLock
 import DarwinGATT
 import KeychainAccess
+import Predicate
 
 /// Lock Store object
 @MainActor
@@ -619,18 +620,34 @@ public extension Store {
                 try context.insert(notification.key, for: information.id)
             }
         }
+        
         // remove other keys from CoreData
         Task {
             await context.commit { (context) in
                 do {
                     let fetchRequest = KeyManagedObject.fetchRequest()
-                    fetchRequest.predicate = NSPredicate(
+                    let predicate = (
+                        (#keyPath(KeyManagedObject.lock.identifier) == lockIdentifier)
+                        && .compound(.not(
+                            .comparison(
+                                Comparison(
+                                    left: .value(.collection(keys.map { .uuid($0) })),
+                                    right: .keyPath(#keyPath(KeyManagedObject.identifier)),
+                                    type: .contains
+                                )
+                            )
+                        ))
+                    )
+                    fetchRequest.predicate = predicate.toFoundation()
+                    assert(NSPredicate(
                         format: "%K == %@ && NOT %@ CONTAINS %K",
-                        #keyPath(NewKeyManagedObject.lock.identifier),
+                        #keyPath(KeyManagedObject.lock.identifier),
                         lockIdentifier as NSUUID,
                         keys as NSSet,
                         #keyPath(KeyManagedObject.identifier)
-                    )
+                    ).description == predicate.description)
+                    assert(predicate.description == predicate.toFoundation().description)
+                    print(predicate.toFoundation().description)
                     // fetch
                     let invalidKeys = try context.fetch(fetchRequest)
                     // remove keys from CoreData
@@ -644,24 +661,40 @@ public extension Store {
                 
                 do {
                     let fetchRequest = NewKeyManagedObject.fetchRequest()
-                    if newKeys.isEmpty == false {
-                        fetchRequest.predicate = NSPredicate(
-                            format: "%K == %@ && NOT %@ CONTAINS %K",
-                            #keyPath(NewKeyManagedObject.lock.identifier),
-                            lockIdentifier as NSUUID,
-                            newKeys as NSSet,
-                            #keyPath(NewKeyManagedObject.identifier)
-                        )
-                    }
+                    let predicate = (
+                        (#keyPath(NewKeyManagedObject.lock.identifier) == lockIdentifier)
+                        && .compound(.not(
+                            .comparison(
+                                Comparison(
+                                    left: .value(.collection(newKeys.map { .uuid($0) })),
+                                    right: .keyPath(#keyPath(NewKeyManagedObject.identifier)),
+                                    type: .contains
+                                )
+                            )
+                        ))
+                    )
+                    fetchRequest.predicate = predicate.toFoundation()
+                    assert(NSPredicate(
+                        format: "%K == %@ && NOT %@ CONTAINS %K",
+                        #keyPath(NewKeyManagedObject.lock.identifier),
+                        lockIdentifier as NSUUID,
+                        newKeys as NSSet,
+                        #keyPath(NewKeyManagedObject.identifier)
+                    ).description == predicate.description)
                     // fetch
                     let invalidKeys = try context.fetch(fetchRequest)
-                    print("Invalid keys ", invalidKeys.count)
                     // remove keys from CoreData
                     invalidKeys.forEach {
                         context.delete($0)
                     }
                     if invalidKeys.isEmpty == false {
                         log("Removed \(invalidKeys.count) invalid pending keys from cache")
+                    }
+                }
+                
+                Task {
+                    await MainActor.run { [weak self] in
+                        self?.objectWillChange.send()
                     }
                 }
             }

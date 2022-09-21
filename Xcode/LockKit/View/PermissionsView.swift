@@ -74,8 +74,8 @@ public struct PermissionsView: View {
     
     public var body: some View {
         StateView(
-            keys: keys.lazy.map { Key(managedObject: $0)! },
-            newKeys: newKeys.lazy.map { NewKey(managedObject: $0)! },
+            keys: keys.lazy.compactMap { Key(managedObject: $0) },
+            newKeys: newKeys.lazy.compactMap { NewKey(managedObject: $0) },
             reload: reload
         )
         .onAppear {
