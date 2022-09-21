@@ -186,11 +186,16 @@ private extension PermissionsView {
     }
     
     func didCreateNewKey(_ newKey: NewKey.Invitation) {
+        // reload pending keys
+        reload()
+        // hide modal
         showNewKeyModal = false
+        // show popover
         Task {
             try? await Task.sleep(timeInterval: 0.6)
             self.newKeyInvitation = newKey
         }
+        
     }
 }
 
