@@ -102,9 +102,13 @@ private extension EventsView {
     
     func reload() {
         let locks = locks.sorted(by: { $0.description < $1.description })
+        activityIndicator = true
         Task.bluetooth {
             activityIndicator = true
             defer { Task { await MainActor.run { activityIndicator = false } } }
+            guard await store.central.state == .poweredOn else {
+                return
+            }
             let context = store.backgroundContext
             if store.isScanning {
                 store.stopScanning()

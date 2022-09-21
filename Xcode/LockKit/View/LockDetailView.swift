@@ -120,9 +120,13 @@ private extension LockDetailView {
     
     func reload() {
         let lock = self.id
+        activityIndicator = true
         Task.bluetooth {
             activityIndicator = true
             defer { Task { await MainActor.run { activityIndicator = false } } }
+            guard await store.central.state == .poweredOn else {
+                return
+            }
             let context = store.backgroundContext
             store.stopScanning()
             // scan and find device

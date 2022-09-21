@@ -151,12 +151,13 @@ private extension PermissionsView {
     }
     
     func reload() {
+        activityIndicator = true
         Task.bluetooth {
+            activityIndicator = true
+            defer { Task { await MainActor.run { activityIndicator = false } } }
             guard await store.central.state == .poweredOn else {
                 return
             }
-            activityIndicator = true
-            defer { Task { await MainActor.run { activityIndicator = false } } }
             do {
                 if store.isScanning {
                     store.stopScanning()

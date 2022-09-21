@@ -29,7 +29,7 @@ struct NearbyDevicesView: View {
         .onAppear {
             if store.isScanning == false {
                 Task {
-                    try? await Task.sleep(timeInterval: 1.5)
+                    try? await Task.sleep(timeInterval: 0.7)
                     Task.bluetooth {
                         await scan()
                     }
