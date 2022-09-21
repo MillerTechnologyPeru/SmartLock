@@ -27,6 +27,7 @@ public struct LockDetailView: View {
                     cache: cache,
                     events: events,
                     keys: keys,
+                    newKeys: newKeys,
                     unlock: unlock
                 )
                 .refreshable {
@@ -94,6 +95,16 @@ private extension LockDetailView {
         return (try? managedObjectContext.count(for: fetchRequest)) ?? 0
     }
     
+    var newKeys: Int {
+        let fetchRequest = NewKeyManagedObject.fetchRequest()
+        fetchRequest.predicate = NSPredicate(
+            format: "%K == %@",
+            #keyPath(NewKeyManagedObject.lock.identifier),
+            id as NSUUID
+        )
+        return (try? managedObjectContext.count(for: fetchRequest)) ?? 0
+    }
+    
     func reload() {
         let lock = self.id
         Task {
@@ -143,6 +154,8 @@ extension LockDetailView {
         let events: Int
         
         let keys: Int
+        
+        let newKeys: Int
         
         @State
         var showID = false
@@ -253,7 +266,11 @@ extension LockDetailView {
                                     PermissionsView(id: id)
                                 }, label: {
                                     HStack {
-                                        Text("\(keys) keys")
+                                        if newKeys > 0 {
+                                            Text("\(keys) keys, \(newKeys) pending")
+                                        } else {
+                                            Text("\(keys) keys")
+                                        }
                                         Image(systemName: "chevron.right")
                                     }
                                 })
@@ -311,6 +328,7 @@ struct LockDetailView_Previews: PreviewProvider {
                     ),
                     events: 10,
                     keys: 2,
+                    newKeys: 5,
                     unlock: { }
                 )
             }
