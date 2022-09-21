@@ -577,12 +577,21 @@ public extension Store {
         )
         
         let context = backgroundContext
-        
+        var keysCount = 0
+        var newKeysCount = 0
         // BLE request
         let centralLog = central.log
         try await central.connection(for: peripheral) {
             let stream = try await $0.listKeys(using: key, log: centralLog)
             for try await notification in stream {
+                switch notification.key {
+                case let .key(key):
+                    keysCount += 1
+                    centralLog?("Recieved \(key.permission.type) key \(key.id) \(key.name)")
+                case let .newKey(key):
+                    newKeysCount += 1
+                    centralLog?("Recieved \(key.permission.type) key \(key.id) \(key.name)")
+                }
                 // call completion block
                 await context.commit { (context) in
                     try context.insert(notification.key, for: information.id)
@@ -596,7 +605,7 @@ public extension Store {
             //updateCloud()
         }
         
-        log("Listed keys for lock \(information.id)")
+        log("Recieved \(keysCount) keys and \(newKeysCount) pending keys for lock \(information.id)")
     }
     
     func listEvents(
@@ -619,14 +628,15 @@ public extension Store {
         )
         
         let context = backgroundContext
-        
+        var eventsCount = 0
         // BLE request
         let centralLog = central.log
         try await central.connection(for: peripheral) {
             let stream = try await $0.listEvents(fetchRequest: fetchRequest, using: key, log: centralLog)
             for try await notification in stream {
                 if let event = notification.event {
-                    centralLog?("Recieved event \(event.id)")
+                    centralLog?("Recieved \(event.type) event \(event.id)")
+                    eventsCount += 1
                     // store in CoreData
                     await context.commit { (context) in
                         try context.insert(event, for: information.id)
@@ -644,6 +654,6 @@ public extension Store {
         }
         objectWillChange.send()
         
-        log("Listed events for lock \(information.id)")
+        log("Recieved \(eventsCount) events for lock \(information.id)")
     }
 }
