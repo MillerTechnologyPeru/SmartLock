@@ -217,25 +217,53 @@ public extension Permission.Schedule {
 
 public extension Permission.Schedule.Weekdays {
     
-    static let all = Permission.Schedule.Weekdays(
-        sunday: true,
-        monday: true,
-        tuesday: true,
-        wednesday: true,
-        thursday: true,
-        friday: true,
-        saturday: true
-    )
+    static var all: Permission.Schedule.Weekdays {
+        Permission.Schedule.Weekdays(
+            sunday: true,
+            monday: true,
+            tuesday: true,
+            wednesday: true,
+            thursday: true,
+            friday: true,
+            saturday: true
+        )
+    }
     
-    static let none = Permission.Schedule.Weekdays(
-        sunday: false,
-        monday: false,
-        tuesday: false,
-        wednesday: false,
-        thursday: false,
-        friday: false,
-        saturday: false
-    )
+    static var none: Permission.Schedule.Weekdays {
+        Permission.Schedule.Weekdays(
+            sunday: false,
+            monday: false,
+            tuesday: false,
+            wednesday: false,
+            thursday: false,
+            friday: false,
+            saturday: false
+        )
+    }
+    
+    static var workdays: Permission.Schedule.Weekdays {
+        Permission.Schedule.Weekdays(
+            sunday: false,
+            monday: true,
+            tuesday: true,
+            wednesday: true,
+            thursday: true,
+            friday: true,
+            saturday: false
+        )
+    }
+    
+    static var weekend: Permission.Schedule.Weekdays {
+        Permission.Schedule.Weekdays(
+            sunday: true,
+            monday: false,
+            tuesday: false,
+            wednesday: false,
+            thursday: false,
+            friday: false,
+            saturday: true
+        )
+    }
 }
 
 public extension Permission.Schedule.Weekdays {
