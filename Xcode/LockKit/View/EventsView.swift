@@ -45,7 +45,7 @@ public struct EventsView: View {
     }()
     
     @State
-    private var needsKeys = Set<UUID>()
+    private var activityIndicator = false
     
     public var body: some View {
         list
@@ -53,6 +53,17 @@ public struct EventsView: View {
             .onAppear {
                 self._events.wrappedValue.nsPredicate = self.predicate
             }
+            #if os(iOS)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    if activityIndicator {
+                        ProgressView()
+                            .progressViewStyle(.circular)
+                    }
+                }
+            }
+            #endif
+            
     }
     
     public init(lock: UUID? = nil) {
@@ -92,8 +103,12 @@ private extension EventsView {
     func reload() {
         let locks = locks.sorted(by: { $0.description < $1.description })
         Task.bluetooth {
+            activityIndicator = true
+            defer { Task { await MainActor.run { activityIndicator = false } } }
             let context = store.backgroundContext
-            store.stopScanning()
+            if store.isScanning {
+                store.stopScanning()
+            }
             for lock in locks {
                 // load via Bonjour
                 /*

@@ -19,6 +19,9 @@ public struct LockDetailView: View {
     
     public let id: UUID
     
+    @State
+    private var activityIndicator = false
+    
     public var body: some View {
         if let cache = self.cache {
             AnyView(
@@ -36,6 +39,16 @@ public struct LockDetailView: View {
                 .onAppear {
                     reload()
                 }
+                #if os(iOS)
+                .toolbar {
+                    ToolbarItem(placement: .navigationBarTrailing) {
+                        if activityIndicator {
+                            ProgressView()
+                                .progressViewStyle(.circular)
+                        }
+                    }
+                }
+                #endif
             )
         } else if let information = self.information,
             information.status == .setup {
@@ -108,6 +121,8 @@ private extension LockDetailView {
     func reload() {
         let lock = self.id
         Task.bluetooth {
+            activityIndicator = true
+            defer { Task { await MainActor.run { activityIndicator = false } } }
             let context = store.backgroundContext
             store.stopScanning()
             // scan and find device

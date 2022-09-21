@@ -298,14 +298,14 @@ public extension Store {
         )
         self.scanStream = stream
         // process scanned devices
-        Task.bluetooth {
+        Task {
             do {
                 for try await scanData in stream {
                     guard let serviceUUIDs = scanData.advertisementData.serviceUUIDs,
                         serviceUUIDs.contains(LockService.uuid)
                         else { continue }
                     // cache found device
-                    try? await Task.sleep(timeInterval: 0.5)
+                    try? await Task.sleep(timeInterval: 0.6)
                     self.peripherals[scanData.peripheral] = scanData
                 }
             } catch {
@@ -326,15 +326,17 @@ public extension Store {
             }
             // stop scanning and load info for unknown devices
             stopScanning()
-            for peripheral in loading() {
-                do {
-                    let information = try await self.readInformation(for: peripheral)
-                    log("Read information for lock \(information.id)")
-                    #if DEBUG
-                    dump(information)
-                    #endif
-                } catch {
-                    log("⚠️ Unable to load information for peripheral \(peripheral). \(error)")
+            Task.bluetooth {
+                for peripheral in loading() {
+                    do {
+                        let information = try await self.readInformation(for: peripheral)
+                        log("Read information for lock \(information.id)")
+                        #if DEBUG
+                        dump(information)
+                        #endif
+                    } catch {
+                        log("⚠️ Unable to load information for peripheral \(peripheral). \(error)")
+                    }
                 }
             }
         }

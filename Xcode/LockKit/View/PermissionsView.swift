@@ -61,6 +61,9 @@ public struct PermissionsView: View {
     }()
     
     @State
+    private var activityIndicator = false
+    
+    @State
     private var showNewKeyModal = false
     
     @State
@@ -94,6 +97,14 @@ public struct PermissionsView: View {
                     #endif
                 }
             }
+            #if os(iOS)
+            ToolbarItem(placement: .navigationBarTrailing) {
+                if activityIndicator {
+                    ProgressView()
+                        .progressViewStyle(.circular)
+                }
+            }
+            #endif
         }
         .sheet(isPresented: $showNewKeyModal, onDismiss: { }) {
             #if os(iOS)
@@ -144,6 +155,8 @@ private extension PermissionsView {
             guard await store.central.state == .poweredOn else {
                 return
             }
+            activityIndicator = true
+            defer { Task { await MainActor.run { activityIndicator = false } } }
             do {
                 if store.isScanning {
                     store.stopScanning()
