@@ -7,8 +7,6 @@
 
 import SwiftUI
 
-public var AppNavigationLinkNavigate: (AppNavigationLink.ID, AnyView) -> () = { _, _ in assertionFailure() }
-
 public struct AppNavigationLink <Destination: View, Label: View> : View {
     
     public typealias ID = AppNavigationLinkID
@@ -18,6 +16,11 @@ public struct AppNavigationLink <Destination: View, Label: View> : View {
     private let destination: Destination
     
     private let label: Label
+    
+    #if os(macOS)
+    @EnvironmentObject
+    private var coordinator: AppNavigationLinkCoordinator
+    #endif
     
     public var body: some View {
         #if os(macOS)
@@ -38,12 +41,16 @@ public struct AppNavigationLink <Destination: View, Label: View> : View {
     }
 }
 
+#if os(macOS)
 private extension AppNavigationLink {
     
     func buttonAction() {
-        AppNavigationLinkNavigate(id, AnyView(destination))
+        coordinator.current = (id: id, view: AnyView(destination))
     }
 }
+#endif
+
+// MARK: - Supporting Types
 
 public enum AppNavigationLinkID: Hashable {
     
@@ -84,3 +91,13 @@ public extension AppNavigationLinkID {
         }
     }
 }
+
+#if os(macOS)
+public final class AppNavigationLinkCoordinator: ObservableObject {
+    
+    @Published
+    public var current: (id: AppNavigationLinkID, view: AnyView)?
+    
+    public init() { }
+}
+#endif

@@ -160,7 +160,7 @@ private extension NearbyDevicesView.StateView {
             switch state {
             case .bluetoothUnavailable:
                 Image(systemName: "exclamationmark.triangle.fill")
-                    .symbolRenderingMode(.monochrome)
+                    .symbolRenderingMode(.multicolor)
             case .scanning:
                 Image(systemName: "stop.fill")
                     .symbolRenderingMode(.monochrome)

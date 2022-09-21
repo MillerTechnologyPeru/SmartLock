@@ -23,65 +23,57 @@ struct SidebarView: View {
     @State
     private var isKeysExpanded = true
     
-    @State
-    private var navigationStack = [(id: AppNavigationLinkID, view: AnyView)]()
+    @StateObject
+    var coordinator = AppNavigationLinkCoordinator()
     
     var body: some View {
-        SwiftUI.NavigationView {
-            SidebarView.NavigationView(
+        NavigationView {
+            SidebarNavigationView(
                 selection: Binding(
                     get: { sidebarSelection },
                     set: { sidebarSelectionChanged($0) }
                 ),
-                isScanning: store.isScanning,
+                scanStatus: scanStatus,
                 locks: locks,
                 keys: keys,
                 isNearbyExpanded: Binding(
                     get: { isNearbyExpanded },
                     set: { toggleNearbyExpanded($0) }
                 ),
-                isKeysExpanded: $isKeysExpanded
+                isKeysExpanded: $isKeysExpanded,
+                toggleScan: toggleScan
             )
-            switch navigationStack.count {
-            case 0:
-                Text("Select a lock")
-            case 1:
+            if navigationStack.count > 0 {
                 navigationStack[0].view
-            case 2:
-                SwiftUI.NavigationView {
-                    navigationStack[0].view
-                        .frame(minWidth: 350)
-                    navigationStack[1].view
-                        .frame(minWidth: 350)
-                }
-            default:
-                SwiftUI.NavigationView {
-                    navigationStack[0].view
-                        .frame(minWidth: 350)
-                    navigationStack[1].view
-                        .frame(minWidth: 350)
-                    navigationStack[2].view
-                        .frame(minWidth: 350)
-                }
-                
+            }
+            if navigationStack.count > 1 {
+                navigationStack[1].view
             }
         }
         .navigationViewStyle(.columns)
-        .frame(minHeight: 550)
+        .frame(minWidth: 550, minHeight: 550)
         .onAppear {
-            // configure navigation links
-            AppNavigationLinkNavigate = { (id, view) in
-                navigate(id: id, view: view)
-            }
             Task {
                 do { try await Store.shared.syncCloud(conflicts: { _ in return true }) } // always override on macOS
                 catch { log("⚠️ Unable to automatically sync with iCloud. \(error)") }
             }
         }
+        .environmentObject(coordinator)
+        
     }
 }
 
 private extension SidebarView {
+    
+    var scanStatus: ScanStatus {
+        if store.isScanning {
+            return .scanning
+        } else if store.state != .poweredOn {
+            return .bluetoothUnavailable
+        } else {
+            return .stopScan
+        }
+    }
     
     var peripherals: [NativePeripheral] {
         store.peripherals.keys.sorted(by: { $0.id.description < $1.id.description })
@@ -96,6 +88,24 @@ private extension SidebarView {
             .lazy
             .sorted(by: { $0.key.created < $1.key.created })
             .map { .key($0.key.id, $0.name, $0.key.permission.type) }
+    }
+    
+    func toggleScan() {
+        if store.isScanning {
+            store.stopScanning()
+        } else {
+            Task {
+                //await scanTask?.cancel()
+                await TaskQueue.bluetooth.cancelAll() // stop all pending operations to scan
+                await Task.bluetooth {
+                    guard await store.central.state == .poweredOn,
+                          store.isScanning == false else {
+                        return
+                    }
+                    await store.scan()
+                }
+            }
+        }
     }
     
     func toggleNearbyExpanded(_ newValue: Bool) {
@@ -113,30 +123,19 @@ private extension SidebarView {
         }
     }
     
-    func navigate(id: AppNavigationLinkID, view: AnyView) {
-        //guard navigationStack.contains(where: { $0.id == id }) == false else {
-        //    return
-        //}
-        
-        // special cases
-        switch id.type {
-        case .lock:
-            navigationStack = [(id, view)]
-        case .permissions,
-            .events:
-            navigationStack = (navigationStack.first.flatMap { [$0] } ?? []) + [(id, view)]
-        default:
-            break
+    var navigationStack: [(id: AppNavigationLinkID, view: AnyView)] {
+        guard let current = coordinator.current else {
+            return []
         }
-        
-        // try to replace existing of same type
-        if let index = navigationStack.firstIndex(where: { $0.id.type == id.type  }) {
-            navigationStack[index] = (id, view)
-        } else if navigationStack.count > 2 {
-            navigationStack[1] = navigationStack[2] // push stack, max 3
-            navigationStack[2] = (id, view)
-        } else {
-            navigationStack.append((id, view)) // push stack
+        switch current.id {
+        case let .lock(lock):
+            return [current, (.events(lock), AnyView(EventsView(lock: lock)))]
+        case let .events(lock):
+            return [(.lock(lock), AnyView(LockDetailView(id: lock))), current]
+        case let .permissions(lock):
+            return [(.lock(lock), AnyView(LockDetailView(id: lock))), current]
+        default:
+            return [current]
         }
     }
     
@@ -164,14 +163,14 @@ private extension SidebarView {
                 return
             }
             let lock = information.id
-            navigationStack = [(.lock(lock), detailView(for: lock))]
+            coordinator.current = (.lock(lock), detailView(for: lock))
         case let .key(keyID, _, _):
             guard let lock = store.applicationData.locks.first(where: { $0.value.key.id == keyID })?.key else {
                 // invalid key selection
                 assertionFailure("Selected unknown key \(keyID)")
                 return
             }
-            navigationStack = [(.lock(lock), detailView(for: lock))]
+            coordinator.current = (.lock(lock), detailView(for: lock))
         }
     }
     
@@ -179,28 +178,6 @@ private extension SidebarView {
         return AnyView(
             LockDetailView(id: lock)
         )
-        
-        /*
-         .toolbar {
-             ToolbarItem(placement: .navigation) {
-                 Button(action: {
-                     Task {
-                         if store.isScanning {
-                             store.stopScanning()
-                         } else {
-                             await store.scan()
-                         }
-                     }
-                 }, label: {
-                     if store.isScanning {
-                         Label("stop", systemImage: "stop.fill")
-                     } else {
-                         Label("scan", systemImage: "arrow.clockwise")
-                     }
-                 })
-             }
-         }
-         */
     }
     
     func item(for peripheral: NativePeripheral) -> Item {
@@ -258,12 +235,12 @@ private extension SidebarView {
 
 extension SidebarView {
     
-    struct NavigationView: View {
+    struct SidebarNavigationView: View {
         
         @Binding
         var selection: Item.ID?
         
-        let isScanning: Bool
+        let scanStatus: ScanStatus
         
         let locks: [Item]
         
@@ -275,11 +252,13 @@ extension SidebarView {
         @Binding
         var isKeysExpanded: Bool
         
+        var toggleScan: () -> ()
+        
         var body: some View {
             List(selection: $selection) {
                 Group(
                     title: "Nearby",
-                    image: isScanning ? .loading : .symbol("antenna.radiowaves.left.and.right"),
+                    image: scanStatus == .scanning ? .loading : .symbol("antenna.radiowaves.left.and.right"),
                     items: locks,
                     isExpanded: $isNearbyExpanded
                 )
@@ -290,7 +269,42 @@ extension SidebarView {
                     isExpanded: $isKeysExpanded
                 )
             }
+            .toolbar {
+                ToolbarItem(placement: .primaryAction) {
+                    scanButton
+                }
+            }
         }
+    }
+}
+
+private extension SidebarView.SidebarNavigationView {
+    
+    var scanButton: some View {
+        Button(action: {
+            toggleScan()
+        }, label: {
+            switch scanStatus {
+            case .bluetoothUnavailable:
+                Image(systemName: "exclamationmark.triangle.fill")
+                    .symbolRenderingMode(.multicolor)
+            case .scanning:
+                Image(systemName: "stop.fill")
+                    .symbolRenderingMode(.monochrome)
+            case .stopScan:
+                Image(systemName: "arrow.clockwise")
+                    .symbolRenderingMode(.monochrome)
+            }
+        })
+    }
+}
+
+extension SidebarView {
+    
+    enum ScanStatus {
+        case bluetoothUnavailable
+        case scanning
+        case stopScan
     }
 }
 
