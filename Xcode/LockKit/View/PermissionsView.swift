@@ -131,7 +131,7 @@ internal extension PermissionsView {
 private extension PermissionsView.StateView {
     
     func row(for item: Key) -> some View {
-        AppNavigationLink(id: "key-\(item.id)", destination: {
+        AppNavigationLink(id: .key(item.id, pending: false), destination: {
             destination(for: item)
         }, label: {
             LockRowView(
@@ -147,7 +147,7 @@ private extension PermissionsView.StateView {
     }
     
     func row(for item: NewKey) -> some View {
-        AppNavigationLink(id: "newKey-\(item.id)", destination: {
+        AppNavigationLink(id: .newKey(item.id), destination: {
             destination(for: item)
         }, label: {
             LockRowView(
@@ -163,11 +163,11 @@ private extension PermissionsView.StateView {
     }
     
     func destination(for item: Key) -> some View {
-        Text("Key")
+        Text("Key \(item.id)")
     }
     
     func destination(for item: NewKey) -> some View {
-        Text("Key")
+        Text("New Key \(item.id)")
     }
     
     func deleteKey(at indexSet: IndexSet) {

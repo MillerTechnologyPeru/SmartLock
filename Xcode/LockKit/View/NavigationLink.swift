@@ -7,9 +7,11 @@
 
 import SwiftUI
 
-public var AppNavigationLinkNavigate: (String, AnyView) -> () = { _, _ in assertionFailure() }
+public var AppNavigationLinkNavigate: (AppNavigationLink.ID, AnyView) -> () = { _, _ in assertionFailure() }
 
-public struct AppNavigationLink <Destination: View, Label: View, ID: Hashable> : View {
+public struct AppNavigationLink <Destination: View, Label: View> : View {
+    
+    public typealias ID = AppNavigationLinkID
     
     public let id: ID
     
@@ -39,6 +41,46 @@ public struct AppNavigationLink <Destination: View, Label: View, ID: Hashable> :
 private extension AppNavigationLink {
     
     func buttonAction() {
-        AppNavigationLinkNavigate("\(id)", AnyView(destination))
+        AppNavigationLinkNavigate(id, AnyView(destination))
+    }
+}
+
+public enum AppNavigationLinkID: Hashable {
+    
+    case lock(UUID)
+    case events(UUID)
+    case permissions(UUID)
+    case key(UUID, pending: Bool = false)
+    case keySchedule(UUID)
+    
+    static func newKey(_ id: UUID) -> AppNavigationLinkID {
+        .key(id, pending: true)
+    }
+}
+
+public enum AppNavigationLinkType: String {
+    
+    case lock
+    case events
+    case permissions
+    case key
+    case keySchedule
+}
+
+public extension AppNavigationLinkID {
+    
+    var type: AppNavigationLinkType {
+        switch self {
+        case .lock:
+            return .lock
+        case .events:
+            return .events
+        case .permissions:
+            return .permissions
+        case .key:
+            return .key
+        case .keySchedule:
+            return .keySchedule
+        }
     }
 }

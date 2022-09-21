@@ -24,7 +24,7 @@ struct SidebarView: View {
     private var isKeysExpanded = true
     
     @State
-    private var navigationStack = [(id: String, view: AnyView)]()
+    private var navigationStack = [(id: AppNavigationLinkID, view: AnyView)]()
     
     var body: some View {
         SwiftUI.NavigationView {
@@ -71,15 +71,7 @@ struct SidebarView: View {
         .onAppear {
             // configure navigation links
             AppNavigationLinkNavigate = { (id, view) in
-                guard navigationStack.contains(where: { $0.id == id }) == false else {
-                    return
-                }
-                if navigationStack.count > 2 {
-                    navigationStack[1] = navigationStack[2]
-                    navigationStack[2] = (id, view)
-                } else {
-                    self.navigationStack.append((id, view))
-                }
+                navigate(id: id, view: view)
             }
             Task {
                 do { try await Store.shared.syncCloud(conflicts: { _ in return true }) } // always override on macOS
@@ -121,6 +113,22 @@ private extension SidebarView {
         }
     }
     
+    func navigate(id: AppNavigationLinkID, view: AnyView) {
+        //guard navigationStack.contains(where: { $0.id == id }) == false else {
+        //    return
+        //}
+        
+        // try to replace existing of same type
+        if let index = navigationStack.firstIndex(where: { $0.id.type == id.type  }) {
+            navigationStack[index] = (id, view)
+        } else if navigationStack.count > 2 {
+            navigationStack[1] = navigationStack[2] // push stack, max 3
+            navigationStack[2] = (id, view)
+        } else {
+            navigationStack.append((id, view)) // push stack
+        }
+    }
+    
     func sidebarSelectionChanged(_ newValue: Item.ID?) {
         sidebarSelection = newValue
         // deselect
@@ -145,14 +153,14 @@ private extension SidebarView {
                 return
             }
             let lock = information.id
-            navigationStack = [("lock-\(lock)", detailView(for: lock))]
+            navigationStack = [(.lock(lock), detailView(for: lock))]
         case let .key(keyID, _, _):
             guard let lock = store.applicationData.locks.first(where: { $0.value.key.id == keyID })?.key else {
                 // invalid key selection
                 assertionFailure("Selected unknown key \(keyID)")
                 return
             }
-            navigationStack = [("lock-\(lock)", detailView(for: lock))]
+            navigationStack = [(.lock(lock), detailView(for: lock))]
         }
     }
     
