@@ -82,6 +82,16 @@ public struct PermissionsView: View {
                     Button(action: newPermission, label: {
                         Image(systemSymbol: .plus)
                     })
+                    #if os(iOS)
+                    .popover(item: $newKeyInvitation, content: { key in
+                        ActivityView(
+                            activityItems: newKeyInvitation
+                                .flatMap { [NewKeyFileActivityItem(invitation: $0)] as [Any] } ?? [],
+                            applicationActivities: nil,
+                            excludedActivityTypes: NewKeyFileActivityItem.excludedActivityTypes
+                        )
+                    })
+                    #endif
                 }
             }
         }
@@ -112,22 +122,6 @@ public struct PermissionsView: View {
             }
             #endif
         }
-        #if os(iOS)
-        .sheet(isPresented: Binding(get: {
-            newKeyInvitation != nil
-        }, set: {
-            if $0 == false {
-                newKeyInvitation = nil
-            }
-        }), content: {
-            ActivityView(
-                activityItems: newKeyInvitation
-                    .flatMap { [NewKeyFileActivityItem(invitation: $0)] as [Any] } ?? [],
-                applicationActivities: nil,
-                excludedActivityTypes: NewKeyFileActivityItem.excludedActivityTypes
-            )
-        })
-        #endif
     }
     
     public init(id: UUID) {
@@ -178,7 +172,7 @@ private extension PermissionsView {
     func didCreateNewKey(_ newKey: NewKey.Invitation) {
         showNewKeyModal = false
         Task {
-            try? await Task.sleep(timeInterval: 1)
+            try? await Task.sleep(timeInterval: 0.6)
             self.newKeyInvitation = newKey
         }
     }
