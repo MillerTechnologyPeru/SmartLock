@@ -83,9 +83,31 @@ public struct PermissionsView: View {
             }
         }
         .sheet(isPresented: $showNewKeyModal, onDismiss: { }) {
+            #if os(iOS)
             NavigationView {
-                NewPermissionView(id: id)
+                NewPermissionView(id: id, completion: didCreateNewKey)
+                    .toolbar {
+                        ToolbarItem(placement: .cancellationAction) {
+                            Button("Cancel") {
+                                showNewKeyModal = false
+                            }
+                        }
+                    }
             }
+            #elseif os(macOS)
+            ScrollView {
+                NewPermissionView(id: id, completion: didCreateNewKey)
+                    .padding(30)
+            }
+            .frame(width: 500, height: 500)
+            .toolbar {
+                ToolbarItem(placement: .cancellationAction) {
+                    Button("Cancel") {
+                        showNewKeyModal = false
+                    }
+                }
+            }
+            #endif
         }
     }
     
@@ -132,6 +154,18 @@ private extension PermissionsView {
     
     func newPermission() {
         showNewKeyModal = true
+    }
+    
+    func didCreateNewKey(_ newKey: NewKey.Invitation) {
+        showNewKeyModal = false
+        Task {
+            try? await Task.sleep(timeInterval: 0.5)
+            #if os(iOS)
+            
+            #elseif os(macOS)
+            
+            #endif
+        }
     }
 }
 

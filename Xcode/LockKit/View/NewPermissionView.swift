@@ -18,6 +18,8 @@ public struct NewPermissionView: View {
     
     public let id: UUID
     
+    private var completion: (NewKey.Invitation) -> () = { _ in }
+    
     @State
     private var permission: Permission = .anytime
     
@@ -27,6 +29,18 @@ public struct NewPermissionView: View {
     @State
     private var state: ViewState = .editing
     
+    public init(
+        id: UUID,
+        name: String = "",
+        permission: Permission = .anytime,
+        completion: @escaping (NewKey.Invitation) -> ()
+    ) {
+        self.id = id
+        self.name = name
+        self.permission = permission
+        self.completion = completion
+    }
+    
     public var body: some View {
         StateView(
             permission: $permission,
@@ -34,16 +48,6 @@ public struct NewPermissionView: View {
             state: $state,
             create: create
         )
-    }
-    
-    public init(
-        id: UUID,
-        name: String = "",
-        permission: Permission = .anytime
-    ) {
-        self.id = id
-        self.name = name
-        self.permission = permission
     }
 }
 
@@ -56,7 +60,9 @@ private extension NewPermissionView {
         #if targetEnvironment(simulator)
         Task {
             try? await Task.sleep(timeInterval: 1)
-            state = .error("Unable to connect to device.")
+            if self.name.isEmpty {
+                state = .error("Unable to connect to device.")
+            }
         }
         #else
         Task {
@@ -76,16 +82,12 @@ private extension NewPermissionView {
                     name: name
                 )
                 state = .editing
-                shareKey(newKey)
+                completion(newKey)
             } catch {
                 state = .error(error.localizedDescription)
             }
         }
         #endif
-    }
-    
-    func shareKey(_ newKey: NewKey.Invitation) {
-        
     }
 }
 
@@ -139,11 +141,17 @@ private extension NewPermissionView.StateView {
             }
             nameSection
             permissionSection
+            #if os(macOS)
+            Spacer(minLength: 20)
+            PermissionScheduleView(
+                schedule: schedule
+            )
+            #endif
         }
     }
     
     var createToolbarItem: some ToolbarContent {
-        ToolbarItem(placement: .primaryAction) {
+        ToolbarItem(placement: .confirmationAction) {
             if state == .loading {
                 AnyView(
                     ProgressView()
@@ -167,19 +175,20 @@ private extension NewPermissionView.StateView {
         Section(header: Text("Permission")) {
             ForEach(permissionTypes, id: \.rawValue) { type in
                 if type == .scheduled {
+                    #if os(macOS)
+                    Button(action: {
+                        permission = .scheduled(.init(interval: .default))
+                    }, label: {
+                        NewPermissionView.PermissionTypeView(
+                            permission: type,
+                            isSelected: self.permission.type == type
+                        )
+                    })
+                    .buttonStyle(.plain)
+                    #else
                     NavigationLink(destination: {
                         PermissionScheduleView(
-                            schedule: Binding(get: {
-                                // default schedule is the same as anytime
-                                return permission.schedule ?? Permission.Schedule()
-                            }, set: {
-                                // schedule must be customized
-                                if $0 == .init() {
-                                    permission = .anytime
-                                } else {
-                                    permission = .scheduled($0)
-                                }
-                            })
+                            schedule: schedule
                         )
                     }, label: {
                         NewPermissionView.PermissionTypeView(
@@ -187,6 +196,7 @@ private extension NewPermissionView.StateView {
                             isSelected: self.permission.type == type
                         )
                     })
+                    #endif
                 } else {
                     Button(action: {
                         switch type {
@@ -207,6 +217,20 @@ private extension NewPermissionView.StateView {
                 }
             }
         }
+    }
+    
+    var schedule: Binding<Permission.Schedule> {
+        Binding(get: {
+            // default schedule is the same as anytime
+            return permission.schedule ?? Permission.Schedule()
+        }, set: {
+            // schedule must be customized
+            if $0 == .init() {
+                permission = .anytime
+            } else {
+                permission = .scheduled($0)
+            }
+        })
     }
 }
 
@@ -261,7 +285,9 @@ private extension NewPermissionView.PermissionTypeView {
 struct NewPermissionView_Previews: PreviewProvider {
     static var previews: some View {
         NavigationView {
-            NewPermissionView(id: UUID())
+            NewPermissionView(id: UUID()) { _ in
+                
+            }
         }
     }
 }
