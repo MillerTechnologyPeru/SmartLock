@@ -128,28 +128,30 @@ private extension LockDetailView {
             // scan and find device
             do {
                 if let peripheral = try await store.device(for: lock) {
-                    // read information
-                    let _ = try await store.readInformation(for: peripheral)
-                    // load keys if admin
-                    if let permssion = store[lock: lock]?.key.permission, permssion.isAdministrator {
-                        try await store.listKeys(for: peripheral)
-                    }
-                    // load latest events
-                    var lastEventDate: Date?
-                    try? await context.perform {
-                        lastEventDate = try context.find(id: lock, type: LockManagedObject.self)
-                            .flatMap { try $0.lastEvent(in: context)?.date }
-                    }
-                    let fetchRequest = LockEvent.FetchRequest(
-                        offset: 0,
-                        limit: nil,
-                        predicate: LockEvent.Predicate(
-                            keys: nil,
-                            start: lastEventDate,
-                            end: nil
+                    try await store.central.connection(for: peripheral) { connection in
+                        // read information
+                        let _ = try await store.readInformation(for: connection)
+                        // load keys if admin
+                        if let permssion = store[lock: lock]?.key.permission, permssion.isAdministrator {
+                            try await store.listKeys(for: connection)
+                        }
+                        // load latest events
+                        var lastEventDate: Date?
+                        try? await context.perform {
+                            lastEventDate = try context.find(id: lock, type: LockManagedObject.self)
+                                .flatMap { try $0.lastEvent(in: context)?.date }
+                        }
+                        let fetchRequest = LockEvent.FetchRequest(
+                            offset: 0,
+                            limit: nil,
+                            predicate: LockEvent.Predicate(
+                                keys: nil,
+                                start: lastEventDate,
+                                end: nil
+                            )
                         )
-                    )
-                    let _ = try await store.listEvents(for: peripheral, fetchRequest: fetchRequest)
+                        let _ = try await store.listEvents(for: connection, fetchRequest: fetchRequest)
+                    }
                 }
             } catch {
                 log("⚠️ Error loading information for \(lock). \(error)")

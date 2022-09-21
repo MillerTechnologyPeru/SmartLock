@@ -415,11 +415,17 @@ public extension Store {
         if isScanning {
             stopScanning()
         }
-        let information = try await central.readInformation(
-            for: peripheral
-        )
+        let information = try await central.connection(for: peripheral) {
+            try await self.readInformation(for: $0)
+        }
+        return information
+    }
+    
+    @discardableResult
+    func readInformation(for connection: GATTConnection<NativeCentral>) async throws -> LockInformation {
+        let information = try await connection.readInformation()
         // update lock information cache
-        self.lockInformation[peripheral] = information
+        self.lockInformation[connection.peripheral] = information
         self[lock: information.id]?.information = LockCache.Information(information)
         log("Read information for \(information.id)")
         return information
@@ -563,7 +569,15 @@ public extension Store {
     func listKeys(
         for peripheral: NativeCentral.Peripheral
     ) async throws {
-        
+        try await central.connection(for: peripheral) {
+            try await self.listKeys(for: $0)
+        }
+    }
+    
+    func listKeys(
+        for connection: GATTConnection<NativeCentral>
+    ) async throws {
+        let peripheral = connection.peripheral
         // get lock key
         guard let information = self.lockInformation[peripheral] else {
             throw LockError.unknownLock(peripheral)
@@ -583,23 +597,22 @@ public extension Store {
         var newKeysCount = 0
         // BLE request
         let centralLog = central.log
-        try await central.connection(for: peripheral) {
-            let stream = try await $0.listKeys(using: key, log: centralLog)
-            for try await notification in stream {
-                switch notification.key {
-                case let .key(key):
-                    keysCount += 1
-                    centralLog?("Recieved \(key.permission.type) key \(key.id) \(key.name)")
-                case let .newKey(key):
-                    newKeysCount += 1
-                    centralLog?("Recieved \(key.permission.type) key \(key.id) \(key.name)")
-                }
-                // call completion block
-                await context.commit { (context) in
-                    try context.insert(notification.key, for: information.id)
-                }
+        let stream = try await connection.listKeys(using: key, log: centralLog)
+        for try await notification in stream {
+            switch notification.key {
+            case let .key(key):
+                keysCount += 1
+                centralLog?("Recieved \(key.permission.type) key \(key.id) \(key.name)")
+            case let .newKey(key):
+                newKeysCount += 1
+                centralLog?("Recieved \(key.permission.type) key \(key.id) \(key.name)")
+            }
+            // call completion block
+            await context.commit { (context) in
+                try context.insert(notification.key, for: information.id)
             }
         }
+        
         objectWillChange.send()
         
         // upload keys to cloud
@@ -614,7 +627,16 @@ public extension Store {
         for peripheral: NativeCentral.Peripheral,
         fetchRequest: LockEvent.FetchRequest? = nil
     ) async throws {
-                
+        try await central.connection(for: peripheral) {
+            try await self.listEvents(for: $0, fetchRequest: fetchRequest)
+        }
+    }
+    
+    func listEvents(
+        for connection: GATTConnection<NativeCentral>,
+        fetchRequest: LockEvent.FetchRequest? = nil
+    ) async throws {
+        let peripheral = connection.peripheral
         // get lock key
         guard let information = self.lockInformation[peripheral] else {
             throw LockError.unknownLock(peripheral)
@@ -633,27 +655,26 @@ public extension Store {
         var eventsCount = 0
         // BLE request
         let centralLog = central.log
-        try await central.connection(for: peripheral) {
-            let stream = try await $0.listEvents(fetchRequest: fetchRequest, using: key, log: centralLog)
-            for try await notification in stream {
-                if let event = notification.event {
-                    centralLog?("Recieved \(event.type) event \(event.id)")
-                    eventsCount += 1
-                    // store in CoreData
-                    await context.commit { (context) in
-                        try context.insert(event, for: information.id)
-                    }
-                    // upload to iCloud
-                    if preferences.isCloudBackupEnabled {
-                        // perform concurrently
-                        Task {
-                            let value = LockEvent.Cloud(event: event, for: lockIdentifier)
-                            try await self.cloud.upload(value)
-                        }
+        let stream = try await connection.listEvents(fetchRequest: fetchRequest, using: key, log: centralLog)
+        for try await notification in stream {
+            if let event = notification.event {
+                centralLog?("Recieved \(event.type) event \(event.id)")
+                eventsCount += 1
+                // store in CoreData
+                await context.commit { (context) in
+                    try context.insert(event, for: information.id)
+                }
+                // upload to iCloud
+                if preferences.isCloudBackupEnabled {
+                    // perform concurrently
+                    Task {
+                        let value = LockEvent.Cloud(event: event, for: lockIdentifier)
+                        try await self.cloud.upload(value)
                     }
                 }
             }
         }
+        
         objectWillChange.send()
         
         log("Recieved \(eventsCount) events for lock \(information.id)")

@@ -28,6 +28,7 @@ public extension CentralManager {
             
             let cache = GATTConnection(
                 central: self,
+                peripheral: peripheral,
                 maximumTransmissionUnit: maximumTransmissionUnit,
                 characteristics: characteristics
             )
@@ -48,6 +49,8 @@ public extension CentralManager {
 public struct GATTConnection <Central: CentralManager> {
     
     internal unowned let central: Central
+    
+    public let peripheral: Central.Peripheral
     
     public let maximumTransmissionUnit: GATT.MaximumTransmissionUnit
     
