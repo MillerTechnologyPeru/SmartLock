@@ -64,6 +64,9 @@ public struct PermissionsView: View {
     private var activityIndicator = false
     
     @State
+    private var reloadTask: TaskQueue.PendingTask?
+    
+    @State
     private var showNewKeyModal = false
     
     @State
@@ -152,24 +155,28 @@ private extension PermissionsView {
     
     func reload() {
         activityIndicator = true
-        Task.bluetooth {
-            activityIndicator = true
-            defer { Task { await MainActor.run { activityIndicator = false } } }
-            guard await store.central.state == .poweredOn else {
-                return
-            }
-            do {
-                if store.isScanning {
-                    store.stopScanning()
-                }
-                guard let peripheral = try await store.device(for: id) else {
-                    // unable to find device
+        Task {
+            await reloadTask?.cancel()
+            reloadTask = await Task.bluetooth {
+                activityIndicator = true
+                defer { Task { await MainActor.run { activityIndicator = false } } }
+                guard await store.central.state == .poweredOn else {
                     return
                 }
-                try await store.listKeys(for: peripheral)
-            } catch {
-                log("⚠️ Error loading keys for \(id). \(error)")
+                do {
+                    if store.isScanning {
+                        store.stopScanning()
+                    }
+                    guard let peripheral = try await store.device(for: id) else {
+                        // unable to find device
+                        return
+                    }
+                    try await store.listKeys(for: peripheral)
+                } catch {
+                    log("⚠️ Error loading keys for \(id). \(error)")
+                }
             }
+            
         }
     }
     
@@ -186,16 +193,18 @@ private extension PermissionsView {
     }
     
     func didCreateNewKey(_ newKey: NewKey.Invitation) {
-        // reload pending keys
-        reload()
         // hide modal
         showNewKeyModal = false
         // show popover
         Task {
-            try? await Task.sleep(timeInterval: 0.6)
+            try? await Task.sleep(timeInterval: 0.2)
             self.newKeyInvitation = newKey
         }
-        
+        Task {
+            try? await Task.sleep(timeInterval: 1.0)
+            // reload pending keys
+            reload()
+        }
     }
 }
 

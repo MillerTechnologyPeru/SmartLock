@@ -65,27 +65,29 @@ private extension NewPermissionView {
             }
         }
         #else
-        Task.bluetooth {
-            do {
-                guard await store.central.state == .poweredOn else {
-                    throw LockError.bluetoothUnavailable
+        Task {
+            await Task.bluetooth {
+                do {
+                    guard await store.central.state == .poweredOn else {
+                        throw LockError.bluetoothUnavailable
+                    }
+                    if store.isScanning {
+                        store.stopScanning()
+                    }
+                    guard let peripheral = try await store.device(for: id) else {
+                        throw LockError.notInRange(lock: id)
+                    }
+                    let newKey = try await store.newKey(
+                        for: peripheral,
+                        permission: permission,
+                        name: name
+                    )
+                    state = .editing
+                    completion(newKey)
+                } catch {
+                    state = .error(error.localizedDescription)
+                    log("⚠️ Error creating new key for \(id). \(error)")
                 }
-                if store.isScanning {
-                    store.stopScanning()
-                }
-                guard let peripheral = try await store.device(for: id) else {
-                    throw LockError.notInRange(lock: id)
-                }
-                let newKey = try await store.newKey(
-                    for: peripheral,
-                    permission: permission,
-                    name: name
-                )
-                state = .editing
-                completion(newKey)
-            } catch {
-                state = .error(error.localizedDescription)
-                log("⚠️ Error creating new key for \(id). \(error)")
             }
         }
         #endif

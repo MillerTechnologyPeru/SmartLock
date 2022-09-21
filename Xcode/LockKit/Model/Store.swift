@@ -180,7 +180,7 @@ public extension Store {
         await updateCoreData()
         // update CloudKit
         do { try await syncCloud() }
-        catch { log("⚠️ Unable to upload locks to iCloud") }
+        catch { log("⚠️ Unable to upload locks to iCloud. \(error)") }
     }
     
     var applicationData: ApplicationData {
@@ -270,7 +270,7 @@ public extension Store {
                         await self.scan()
                     }
                 }
-                try await Task.sleep(timeInterval: 1)
+                try await Task.sleep(timeInterval: 0.5)
             }
         }
     }
@@ -292,6 +292,8 @@ public extension Store {
         self.scanStream = nil
         let filterDuplicates = true //preferences.filterDuplicates
         self.peripherals.removeAll(keepingCapacity: true)
+        stopScanning()
+        isScanning = true
         let stream = central.scan(
             with: [LockService.uuid],
             filterDuplicates: filterDuplicates
@@ -326,8 +328,9 @@ public extension Store {
             }
             // stop scanning and load info for unknown devices
             stopScanning()
-            Task.bluetooth {
+            await Task.bluetooth {
                 for peripheral in loading() {
+                    self.stopScanning()
                     do {
                         let information = try await self.readInformation(for: peripheral)
                         log("Read information for lock \(information.id)")
@@ -354,6 +357,7 @@ public extension Store {
         for id: UUID,
         scanDuration duration: TimeInterval = 2.0
     ) async throws -> NativeCentral.Peripheral? {
+        stopScanning()
         if let peripheral = self[peripheral: id] {
             return peripheral
         } else {
@@ -362,9 +366,11 @@ public extension Store {
                 with: [LockService.uuid],
                 filterDuplicates: filterDuplicates
             )
+            self.scanStream = stream
+            self.isScanning = true
             Task {
                 try? await Task.sleep(timeInterval: duration)
-                stream.stop()
+                stopScanning()
             }
             for try await scanData in stream {
                 guard let serviceUUIDs = scanData.advertisementData.serviceUUIDs,
@@ -375,10 +381,11 @@ public extension Store {
                 // if found and information has cached, stop scanning
                 if let information = lockInformation[peripheral],
                     information.id == id {
-                    stream.stop()
+                    stopScanning()
                     return peripheral // return first found device
                 }
             }
+            self.isScanning = false
             // scan stopped due to timeout
             for peripheral in peripherals.keys {
                 // skip known locks that are not the targeted device
@@ -412,9 +419,7 @@ public extension Store {
             throw LockError.bluetoothUnavailable
         }
         // stop scanning
-        if isScanning {
-            stopScanning()
-        }
+        stopScanning()
         let information = try await central.connection(for: peripheral) {
             try await self.readInformation(for: $0)
         }
@@ -437,6 +442,7 @@ public extension Store {
         using sharedSecret: KeyData,
         name: String
     ) async throws {
+        stopScanning()
         let setupRequest = SetupRequest()
         let information = try await central.setup(
             setupRequest,
@@ -569,6 +575,7 @@ public extension Store {
     func listKeys(
         for peripheral: NativeCentral.Peripheral
     ) async throws {
+        stopScanning()
         try await central.connection(for: peripheral) {
             try await self.listKeys(for: $0)
         }
@@ -611,6 +618,8 @@ public extension Store {
             await context.commit { (context) in
                 try context.insert(notification.key, for: information.id)
             }
+            // remove old keys
+            // FIXME: Remove old keys
         }
         
         objectWillChange.send()
@@ -627,6 +636,7 @@ public extension Store {
         for peripheral: NativeCentral.Peripheral,
         fetchRequest: LockEvent.FetchRequest? = nil
     ) async throws {
+        stopScanning()
         try await central.connection(for: peripheral) {
             try await self.listEvents(for: $0, fetchRequest: fetchRequest)
         }

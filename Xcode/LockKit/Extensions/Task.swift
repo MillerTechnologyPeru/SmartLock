@@ -24,6 +24,8 @@ public actor TaskQueue {
         
     private var tasks = [PendingTask]()
     
+    private var currentTask: (id: UInt64, task: Task<Void, Never>)?
+    
     private var isRunning = false
     
     private var count: UInt64 = 0
@@ -40,15 +42,34 @@ public actor TaskQueue {
     
     // MARK: - Methods
     
-    public nonisolated func queue(after delay: Double? = nil, _ task: @escaping () async -> ()) {
-        Task.detached(priority: priority) {
+    public func queue(after delay: Double? = nil, _ task: @escaping () async -> ()) async -> PendingTask {
+        return await Task(priority: priority) {
             // sleep before running task
             if let duration = delay {
                 try? await Task.sleep(timeInterval: duration)
             }
             // execute and block global actor
-            await self.execute(task)
+            return await self.execute(task)
+        }.value
+    }
+    
+    public func cancelAll() {
+        var count = tasks.count
+        if currentTask != nil {
+            count += 1
         }
+        //currentTask?.task.cancel()
+        currentTask = nil
+        tasks.removeAll(keepingCapacity: true)
+        isRunning = false
+        tasks.forEach { task in
+            Task { await task.setFinished() }
+        }
+        #if DEBUG
+        if count > 0 {
+            NSLog("\(name) Cancelled \(count) tasks")
+        }
+        #endif
     }
     
     private func pop() -> PendingTask? {
@@ -57,57 +78,103 @@ public actor TaskQueue {
         }
         let _ = tasks.removeFirst()
         #if DEBUG
-        print("\(name) Will execute task \(pendingTask.id)")
-        print("\(name) \(tasks.map { $0.id })")
+        NSLog("\(name) Will execute task \(pendingTask.id)")
         #endif
         return pendingTask
     }
     
-    private func push(_ task: @escaping (() async -> ())) {
+    private func push(_ task: @escaping (() async -> ())) -> PendingTask {
+        let id = self.count
+        let name = self.name
         let pendingTask = PendingTask(
-            id: count,
-            work: task
+            id: id,
+            work: task,
+            onTermination: {
+                Task {
+                    // cancel current executing task
+                    if let task = self.currentTask, task.id == id {
+                        self.currentTask = nil
+                        //task.task.cancel()
+                        #if DEBUG
+                        NSLog("\(name) Cancelled task \(id)")
+                        #endif
+                    }
+                }
+            }
         )
         count += 1
         tasks.append(pendingTask)
         #if DEBUG
-        print("\(name) Queued task \(pendingTask.id)")
-        print("\(name) \(tasks.map { $0.id })")
+        NSLog("\(name) Queued task \(pendingTask.id)")
         #endif
+        return pendingTask
     }
     
     private func lock(_ isRunning: Bool = true) {
         self.isRunning = isRunning
     }
     
-    private func execute(_ task: @escaping () async -> ()) async {
+    private func execute(_ task: @escaping () async -> ()) async -> PendingTask {
         // push task to stack
-        push(task)
+        let newTask = push(task)
         // check lock to see if currently running
         guard isRunning == false else {
-            return // the other detached task will run them all
+            return newTask // the other detached task will run them all
         }
         lock()
         // run in sequential order
         while let queuedTask = pop() {
+            // skip cancelled task
+            guard await queuedTask.didFinish == false else {
+                NSLog("\(name) Skipped task \(queuedTask.id)")
+                continue
+            }
             // execute task
-            await queuedTask.work()
+            let task = Task(priority: priority) {
+                await queuedTask.work()
+            }
+            currentTask = (queuedTask.id, task)
+            await task.value // wait for task to finish
+            currentTask = nil
+            await queuedTask.setFinished()
             #if DEBUG
-            print("\(name) Executed task \(queuedTask.id) of \(count - 1)")
-            print("\(name) \(tasks.map { $0.id })")
+            NSLog("\(name) Executed task \(queuedTask.id) of \(count - 1)")
             #endif
         }
         lock(false) // unlock
+        return newTask
     }
 }
 
-private extension TaskQueue {
+public extension TaskQueue {
     
-    struct PendingTask: Identifiable {
+    actor PendingTask: Identifiable {
         
-        let id: UInt64
+        public let id: UInt64
         
-        let work: () async -> ()
+        internal let work: () async -> ()
+        
+        internal let onTermination: () -> ()
+        
+        internal fileprivate(set) var didFinish = false
+        
+        fileprivate init(id: UInt64, work: @escaping () async -> (), onTermination: @escaping () -> Void) {
+            self.id = id
+            self.work = work
+            self.onTermination = onTermination
+        }
+        
+        public func cancel() {
+            guard didFinish == false else {
+                return
+            }
+            setFinished()
+            onTermination()
+        }
+        
+        fileprivate func setFinished() {
+            didFinish = true
+        }
     }
 }
 
@@ -116,8 +183,9 @@ private extension TaskQueue {
 public extension Task where Success == Never, Failure == Never {
     
     /// Serial task queue for Bluetooth.
-    static func bluetooth(_ task: @escaping () async -> ()) {
-        TaskQueue.bluetooth.queue(task)
+    @discardableResult
+    static func bluetooth(_ task: @escaping () async -> ()) async -> TaskQueue.PendingTask {
+        return await TaskQueue.bluetooth.queue(task)
     }
 }
 

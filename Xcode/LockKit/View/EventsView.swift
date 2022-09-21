@@ -47,6 +47,9 @@ public struct EventsView: View {
     @State
     private var activityIndicator = false
     
+    @State
+    private var reloadTask: TaskQueue.PendingTask?
+    
     public var body: some View {
         list
             .navigationTitle("History")
@@ -103,52 +106,55 @@ private extension EventsView {
     func reload() {
         let locks = locks.sorted(by: { $0.description < $1.description })
         activityIndicator = true
-        Task.bluetooth {
-            activityIndicator = true
-            defer { Task { await MainActor.run { activityIndicator = false } } }
-            guard await store.central.state == .poweredOn else {
-                return
-            }
-            let context = store.backgroundContext
-            if store.isScanning {
-                store.stopScanning()
-            }
-            for lock in locks {
-                // load via Bonjour
-                /*
-                do {
-                    
-                } catch {
-                    log("⚠️ Error loading events for \(lock) via Bonjour")
-                }*/
-                // scan and find device
-                do {
-                    if let peripheral = try await store.device(for: lock) {
-                        try await store.central.connection(for: peripheral) { connection in
-                            // load keys if admin
-                            if let permssion = store[lock: lock]?.key.permission, permssion.isAdministrator {
-                                try await store.listKeys(for: connection)
-                            }
-                            // load latest events
-                            var lastEventDate: Date?
-                            try? await context.perform {
-                                lastEventDate = try context.find(id: lock, type: LockManagedObject.self)
-                                    .flatMap { try $0.lastEvent(in: context)?.date }
-                            }
-                            let fetchRequest = LockEvent.FetchRequest(
-                                offset: 0,
-                                limit: nil,
-                                predicate: LockEvent.Predicate(
-                                    keys: nil,
-                                    start: lastEventDate,
-                                    end: nil
+        Task {
+            await self.reloadTask?.cancel()
+            self.reloadTask = await Task.bluetooth {
+                activityIndicator = true
+                defer { Task { await MainActor.run { activityIndicator = false } } }
+                guard await store.central.state == .poweredOn else {
+                    return
+                }
+                let context = store.backgroundContext
+                if store.isScanning {
+                    store.stopScanning()
+                }
+                for lock in locks {
+                    // load via Bonjour
+                    /*
+                    do {
+                        
+                    } catch {
+                        log("⚠️ Error loading events for \(lock) via Bonjour")
+                    }*/
+                    // scan and find device
+                    do {
+                        if let peripheral = try await store.device(for: lock) {
+                            try await store.central.connection(for: peripheral) { connection in
+                                // load keys if admin
+                                if let permssion = store[lock: lock]?.key.permission, permssion.isAdministrator {
+                                    try await store.listKeys(for: connection)
+                                }
+                                // load latest events
+                                var lastEventDate: Date?
+                                try? await context.perform {
+                                    lastEventDate = try context.find(id: lock, type: LockManagedObject.self)
+                                        .flatMap { try $0.lastEvent(in: context)?.date }
+                                }
+                                let fetchRequest = LockEvent.FetchRequest(
+                                    offset: 0,
+                                    limit: nil,
+                                    predicate: LockEvent.Predicate(
+                                        keys: nil,
+                                        start: lastEventDate,
+                                        end: nil
+                                    )
                                 )
-                            )
-                            try await store.listEvents(for: connection, fetchRequest: fetchRequest)
+                                try await store.listEvents(for: connection, fetchRequest: fetchRequest)
+                            }
                         }
+                    } catch {
+                        log("⚠️ Error loading events for \(lock). \(error)")
                     }
-                } catch {
-                    log("⚠️ Error loading events for \(lock)")
                 }
             }
         }

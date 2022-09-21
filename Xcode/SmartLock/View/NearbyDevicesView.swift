@@ -13,6 +13,9 @@ struct NearbyDevicesView: View {
     @EnvironmentObject
     var store: Store
     
+    @SwiftUI.State
+    private var scanTask: TaskQueue.PendingTask?
+    
     var body: some View {
         StateView<AnyView>(
             state: state,
@@ -27,12 +30,11 @@ struct NearbyDevicesView: View {
             }
         )
         .onAppear {
-            if store.isScanning == false {
-                Task {
-                    try? await Task.sleep(timeInterval: 0.7)
-                    Task.bluetooth {
-                        await scan()
-                    }
+            Task {
+                // start scanning after delay
+                try? await Task.sleep(timeInterval: 0.7)
+                if store.isScanning == false {
+                    toggleScan()
                 }
             }
         }
@@ -50,19 +52,17 @@ private extension NearbyDevicesView {
         if store.isScanning {
             store.stopScanning()
         } else {
-            Task.bluetooth {
-                await scan()
+            Task {
+                await scanTask?.cancel()
+                await TaskQueue.bluetooth.cancelAll() // stop all pending operations to scan
+                scanTask = await Task.bluetooth {
+                    guard await store.central.state == .poweredOn,
+                          store.isScanning == false else {
+                        return
+                    }
+                    await store.scan()
+                }
             }
-        }
-    }
-    
-    func scan() async {
-        guard await store.central.state == .poweredOn,
-              store.isScanning == false else {
-            return
-        }
-        Task.bluetooth {
-            await store.scan()
         }
     }
     

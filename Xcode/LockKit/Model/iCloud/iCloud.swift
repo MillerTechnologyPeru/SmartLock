@@ -297,7 +297,7 @@ internal extension ApplicationData {
 public extension Store {
     
     #if os(iOS)
-    func cloudDidChangeExternally() {
+    func cloudDidChangeExternally() async {
         
         if let lastUpdatedCloud = self.cloud.lastUpdated() {
             guard self.applicationData.updated != lastUpdatedCloud
@@ -305,13 +305,10 @@ public extension Store {
         }
         
         log("☁️ iCloud changed externally")
-        /*
         do {
-            try self.syncCloud(conflicts: { _ in
-                return nil
-            })
+            await try self.syncCloud()
         }
-        catch { log("⚠️ Could not sync iCloud: \(error.localizedDescription)") }*/
+        catch { log("⚠️ Could not sync iCloud: \(error.localizedDescription)") }
     }
     #endif
     

@@ -52,7 +52,7 @@ struct TabBarView: View {
         .onAppear {
             Task {
                 do { try await Store.shared.syncCloud() }
-                catch { log("⚠️ Unable to automatically sync with iCloud") }
+                catch { log("⚠️ Unable to automatically sync with iCloud. \(error)") }
             }
         }
     }

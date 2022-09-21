@@ -22,6 +22,9 @@ public struct LockDetailView: View {
     @State
     private var activityIndicator = false
     
+    @State
+    private var pendingTask: TaskQueue.PendingTask?
+    
     public var body: some View {
         if let cache = self.cache {
             AnyView(
@@ -73,18 +76,38 @@ private extension LockDetailView {
         store.lockInformation.first(where: { $0.value.id == id })?.value
     }
     
-    func unlock() async {
-        let authentication = LAContext()
-        let policy: LAPolicy = .deviceOwnerAuthenticationWithBiometrics
-        let reason = NSLocalizedString("Biometrics are needed to unlock", comment: "")
-        do {
-            if try authentication.canEvaluate(policy: policy) {
-                try await authentication.evaluatePolicy(policy, localizedReason: reason)
+    func unlock() {
+        // FIXME: Handler errors
+        Task {
+            guard await store.central.state == .poweredOn else {
+                return
             }
-            try await store.unlock(for: id, action: .default)
-        }
-        catch {
-            log("⚠️ Unable to unlock \(id). \(error)")
+            // FaceID
+            let authentication = LAContext()
+            let policy: LAPolicy = .deviceOwnerAuthenticationWithBiometrics
+            let reason = NSLocalizedString("Biometrics are needed to unlock", comment: "")
+            do {
+                if try authentication.canEvaluate(policy: policy) {
+                    try await authentication.evaluatePolicy(policy, localizedReason: reason)
+                }
+            }
+            catch {
+                log("⚠️ Unable to authenticate for unlock \(id). \(error)")
+            }
+            // cancel all operation
+            if store.isScanning {
+                store.stopScanning()
+            }
+            await TaskQueue.bluetooth.cancelAll()
+            await pendingTask?.cancel()
+            pendingTask = await Task.bluetooth {
+                do {
+                    // Bluetooth request
+                    try await store.unlock(for: id, action: .default)
+                } catch {
+                    log("⚠️ Unable to unlock \(id). \(error)")
+                }
+            }
         }
     }
     
@@ -121,44 +144,47 @@ private extension LockDetailView {
     func reload() {
         let lock = self.id
         activityIndicator = true
-        Task.bluetooth {
-            activityIndicator = true
-            defer { Task { await MainActor.run { activityIndicator = false } } }
-            guard await store.central.state == .poweredOn else {
-                return
-            }
-            let context = store.backgroundContext
-            store.stopScanning()
-            // scan and find device
-            do {
-                if let peripheral = try await store.device(for: lock) {
-                    try await store.central.connection(for: peripheral) { connection in
-                        // read information
-                        let _ = try await store.readInformation(for: connection)
-                        // load keys if admin
-                        if let permssion = store[lock: lock]?.key.permission, permssion.isAdministrator {
-                            try await store.listKeys(for: connection)
-                        }
-                        // load latest events
-                        var lastEventDate: Date?
-                        try? await context.perform {
-                            lastEventDate = try context.find(id: lock, type: LockManagedObject.self)
-                                .flatMap { try $0.lastEvent(in: context)?.date }
-                        }
-                        let fetchRequest = LockEvent.FetchRequest(
-                            offset: 0,
-                            limit: nil,
-                            predicate: LockEvent.Predicate(
-                                keys: nil,
-                                start: lastEventDate,
-                                end: nil
-                            )
-                        )
-                        let _ = try await store.listEvents(for: connection, fetchRequest: fetchRequest)
-                    }
+        Task {
+            await pendingTask?.cancel()
+            await pendingTask = Task.bluetooth {
+                activityIndicator = true
+                defer { Task { await MainActor.run { activityIndicator = false } } }
+                guard await store.central.state == .poweredOn else {
+                    return
                 }
-            } catch {
-                log("⚠️ Error loading information for \(lock). \(error)")
+                let context = store.backgroundContext
+                store.stopScanning()
+                // scan and find device
+                do {
+                    if let peripheral = try await store.device(for: lock) {
+                        try await store.central.connection(for: peripheral) { connection in
+                            // read information
+                            let _ = try await store.readInformation(for: connection)
+                            // load latest events
+                            var lastEventDate: Date?
+                            try? await context.perform {
+                                lastEventDate = try context.find(id: lock, type: LockManagedObject.self)
+                                    .flatMap { try $0.lastEvent(in: context)?.date }
+                            }
+                            let fetchRequest = LockEvent.FetchRequest(
+                                offset: 0,
+                                limit: nil,
+                                predicate: LockEvent.Predicate(
+                                    keys: nil,
+                                    start: lastEventDate,
+                                    end: nil
+                                )
+                            )
+                            let _ = try await store.listEvents(for: connection, fetchRequest: fetchRequest)
+                            // load keys if admin
+                            if let permssion = store[lock: lock]?.key.permission, permssion.isAdministrator {
+                                try await store.listKeys(for: connection)
+                            }
+                        }
+                    }
+                } catch {
+                    log("⚠️ Error loading information for \(lock). \(error)")
+                }
             }
         }
     }
@@ -181,7 +207,7 @@ extension LockDetailView {
         @State
         var showID = false
         
-        let unlock: () async -> ()
+        let unlock: () -> ()
         
         @State
         private var enableActions = true
@@ -203,13 +229,7 @@ extension LockDetailView {
                     HStack {
                         Spacer()
                         // unlock button
-                        Button(action: {
-                            //enableActions = false
-                            Task {
-                                await unlock()
-                                //enableActions = true
-                            }
-                        }, label: {
+                        Button(action: unlock, label: {
                             PermissionIconView(permission: cache.key.permission.type)
                                 .frame(width: 150, height: 150, alignment: .center)
                         })
