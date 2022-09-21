@@ -139,7 +139,7 @@ private extension NearbyDevicesView.StateView {
                 case .loading, .unknown:
                     LockRowView(item)
                 case .key, .setup:
-                    AppNavigationLink(destination: {
+                    AppNavigationLink(id: "peripheral-\(item.id)", destination: {
                         destination(item)
                     }, label: {
                         LockRowView(item)

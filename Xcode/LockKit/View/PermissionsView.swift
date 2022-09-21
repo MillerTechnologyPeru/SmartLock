@@ -131,7 +131,7 @@ internal extension PermissionsView {
 private extension PermissionsView.StateView {
     
     func row(for item: Key) -> some View {
-        AppNavigationLink(destination: {
+        AppNavigationLink(id: "key-\(item.id)", destination: {
             destination(for: item)
         }, label: {
             LockRowView(
@@ -147,7 +147,7 @@ private extension PermissionsView.StateView {
     }
     
     func row(for item: NewKey) -> some View {
-        AppNavigationLink(destination: {
+        AppNavigationLink(id: "newKey-\(item.id)", destination: {
             destination(for: item)
         }, label: {
             LockRowView(

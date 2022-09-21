@@ -24,7 +24,7 @@ struct SidebarView: View {
     private var isKeysExpanded = true
     
     @State
-    private var navigationStack = [AnyView]()
+    private var navigationStack = [(id: String, view: AnyView)]()
     
     var body: some View {
         SwiftUI.NavigationView {
@@ -46,21 +46,21 @@ struct SidebarView: View {
             case 0:
                 Text("Select a lock")
             case 1:
-                navigationStack[0]
+                navigationStack[0].view
             case 2:
                 SwiftUI.NavigationView {
-                    navigationStack[0]
+                    navigationStack[0].view
                         .frame(minWidth: 350)
-                    navigationStack[1]
+                    navigationStack[1].view
                         .frame(minWidth: 350)
                 }
             default:
                 SwiftUI.NavigationView {
-                    navigationStack[0]
+                    navigationStack[0].view
                         .frame(minWidth: 350)
-                    navigationStack[1]
+                    navigationStack[1].view
                         .frame(minWidth: 350)
-                    navigationStack[2]
+                    navigationStack[2].view
                         .frame(minWidth: 350)
                 }
                 .navigationViewStyle(.columns)
@@ -70,12 +70,16 @@ struct SidebarView: View {
         .frame(minHeight: 550)
         .onAppear {
             // configure navigation links
-            AppNavigationLinkNavigate = {
+            AppNavigationLinkNavigate = { (id, view) in
+                guard navigationStack.contains(where: { $0.id == id }) == false else {
+                    return
+                }
                 if navigationStack.count > 2 {
                     navigationStack[1] = navigationStack[2]
-                    navigationStack[2] = $0
+                    navigationStack[2] = (id, view)
+                } else {
+                    self.navigationStack.append((id, view))
                 }
-                self.navigationStack.append($0)
             }
             Task {
                 do { try await Store.shared.syncCloud(conflicts: { _ in return true }) } // always override on macOS
@@ -140,14 +144,15 @@ private extension SidebarView {
                 // cannot select loading locks
                 return
             }
-            navigationStack = [detailView(for: information.id)]
+            let lock = information.id
+            navigationStack = [("lock-\(lock)", detailView(for: lock))]
         case let .key(keyID, _, _):
             guard let lock = store.applicationData.locks.first(where: { $0.value.key.id == keyID })?.key else {
                 // invalid key selection
                 assertionFailure("Selected unknown key \(keyID)")
                 return
             }
-            navigationStack = [detailView(for: lock)]
+            navigationStack = [("lock-\(lock)", detailView(for: lock))]
         }
     }
     
