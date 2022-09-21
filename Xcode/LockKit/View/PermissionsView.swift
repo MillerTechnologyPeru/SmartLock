@@ -63,6 +63,9 @@ public struct PermissionsView: View {
     @State
     private var showNewKeyModal = false
     
+    @State
+    private var newKeyInvitation: NewKey.Invitation?
+    
     public var body: some View {
         StateView(
             keys: keys.lazy.map { Key(managedObject: $0)! },
@@ -109,6 +112,22 @@ public struct PermissionsView: View {
             }
             #endif
         }
+        #if os(iOS)
+        .sheet(isPresented: Binding(get: {
+            newKeyInvitation != nil
+        }, set: {
+            if $0 == false {
+                newKeyInvitation = nil
+            }
+        }), content: {
+            ActivityView(
+                activityItems: newKeyInvitation
+                    .flatMap { [NewKeyFileActivityItem(invitation: $0)] as [Any] } ?? [],
+                applicationActivities: nil,
+                excludedActivityTypes: NewKeyFileActivityItem.excludedActivityTypes
+            )
+        })
+        #endif
     }
     
     public init(id: UUID) {
@@ -159,12 +178,8 @@ private extension PermissionsView {
     func didCreateNewKey(_ newKey: NewKey.Invitation) {
         showNewKeyModal = false
         Task {
-            try? await Task.sleep(timeInterval: 0.5)
-            #if os(iOS)
-            
-            #elseif os(macOS)
-            
-            #endif
+            try? await Task.sleep(timeInterval: 1)
+            self.newKeyInvitation = newKey
         }
     }
 }

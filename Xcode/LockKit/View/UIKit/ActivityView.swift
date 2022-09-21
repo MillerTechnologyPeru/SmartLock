@@ -9,9 +9,12 @@
 import SwiftUI
 import UIKit
 
+/// A view controller that you use to offer standard services from your app.
+///
+/// Wraps `UIActivityViewController` for SwiftUI
 public struct ActivityView: UIViewControllerRepresentable {
     
-    public let activityItems: [Any]
+    public var activityItems: [Any]
     
     public let applicationActivities: [UIActivity]?
     
@@ -36,13 +39,33 @@ public struct ActivityView: UIViewControllerRepresentable {
         return controller
     }
     
-    public func updateUIViewController(_ viewController: UIActivityViewController, context: Context) {
-        
+    public func updateUIViewController(
+        _ viewController: UIActivityViewController,
+        context: Context
+    ) {
         
     }
 }
 
 // MARK: - Supporting Types
+
+public extension View {
+    
+    func shareSheet(
+        isPresented: Binding<Bool>,
+        activityItems: [Any],
+        applicationActivities: [UIActivity]? = nil,
+        excludedActivityTypes: [UIActivity.ActivityType]? = nil
+    ) -> some View {
+        self.sheet(isPresented: isPresented, content: {
+            ActivityView(
+                activityItems: activityItems,
+                applicationActivities: applicationActivities,
+                excludedActivityTypes: excludedActivityTypes
+            )
+        })
+    }
+}
 
 public struct ShareSheetContextMenuModifer: ViewModifier {
     

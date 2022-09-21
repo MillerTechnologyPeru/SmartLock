@@ -83,6 +83,7 @@
 		6E79A4BA28DA63FC00B44855 /* StackNavigationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E79A4B828DA63C400B44855 /* StackNavigationView.swift */; };
 		6E9E37AB28DAA6D100BE7128 /* KeyDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E9E37AA28DAA6D100BE7128 /* KeyDetailView.swift */; };
 		6E9E37AD28DADF2600BE7128 /* ActivityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E9E37AC28DADF2600BE7128 /* ActivityView.swift */; };
+		6E9E37AF28DAEBE000BE7128 /* ActivityItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E9E37AE28DAEBE000BE7128 /* ActivityItem.swift */; };
 		6EA7768528D7061600018FA3 /* App.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EA7768428D7061600018FA3 /* App.swift */; };
 		6EA7768E28D7061600018FA3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6EA7768D28D7061600018FA3 /* Assets.xcassets */; };
 		6EA7769228D7061600018FA3 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6EA7769128D7061600018FA3 /* Preview Assets.xcassets */; };
@@ -190,6 +191,7 @@
 		6E79A4B828DA63C400B44855 /* StackNavigationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StackNavigationView.swift; sourceTree = "<group>"; };
 		6E9E37AA28DAA6D100BE7128 /* KeyDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyDetailView.swift; sourceTree = "<group>"; };
 		6E9E37AC28DADF2600BE7128 /* ActivityView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityView.swift; sourceTree = "<group>"; };
+		6E9E37AE28DAEBE000BE7128 /* ActivityItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityItem.swift; sourceTree = "<group>"; };
 		6EA7768128D7061600018FA3 /* SmartLock.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SmartLock.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6EA7768428D7061600018FA3 /* App.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = App.swift; sourceTree = "<group>"; };
 		6EA7768D28D7061600018FA3 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -370,6 +372,7 @@
 				6E21830228D7C47500A622B3 /* Appearance.swift */,
 				6ED248CB28D7A3BF00F78D07 /* ActivityIndicatorView.swift */,
 				6E9E37AC28DADF2600BE7128 /* ActivityView.swift */,
+				6E9E37AE28DAEBE000BE7128 /* ActivityItem.swift */,
 			);
 			path = UIKit;
 			sourceTree = "<group>";
@@ -650,6 +653,7 @@
 				6E21833E28D8F3B500A622B3 /* CreateNewKeyEventManagedObject.swift in Sources */,
 				6E4CB62328D7907E00116573 /* PermissionIconViewNSView.swift in Sources */,
 				6E21830728D7D08300A622B3 /* Permission.swift in Sources */,
+				6E9E37AF28DAEBE000BE7128 /* ActivityItem.swift in Sources */,
 				6E21833F28D8F3B500A622B3 /* LockInformationManagedObject.swift in Sources */,
 				6E21833D28D8F3B500A622B3 /* EventManagedObject.swift in Sources */,
 				6E169A7828D9A34F008545EC /* NavigationLink.swift in Sources */,
