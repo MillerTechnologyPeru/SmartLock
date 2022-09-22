@@ -42,7 +42,7 @@ public struct NewKey: Codable, Equatable, Hashable, Identifiable {
 public extension NewKey {
     
     /// Exportable new key invitation.
-    struct Invitation: Codable, Equatable {
+    struct Invitation: Codable, Equatable, Hashable {
         
         /// Identifier of lock.
         public let lock: UUID

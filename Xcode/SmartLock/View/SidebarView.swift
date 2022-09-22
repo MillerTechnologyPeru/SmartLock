@@ -8,6 +8,7 @@
 #if os(macOS)
 import SwiftUI
 import LockKit
+import SFSafeSymbols
 
 struct SidebarView: View {
     
@@ -24,6 +25,12 @@ struct SidebarView: View {
     private var isKeysExpanded = true
     
     @State
+    private var isEventsExpanded = true
+    
+    @State
+    private var isNewKeysExpanded = true
+    
+    @State
     private var detail: AnyView = AnyView(Text("Select a lock"))
     
     var body: some View {
@@ -36,15 +43,21 @@ struct SidebarView: View {
                 scanStatus: scanStatus,
                 locks: locks,
                 keys: keys,
+                events: events,
                 isNearbyExpanded: Binding(
                     get: { isNearbyExpanded },
                     set: { toggleNearbyExpanded($0) }
                 ),
                 isKeysExpanded: $isKeysExpanded,
+                isEventsExpanded: $isEventsExpanded,
+                isNewKeysExpanded: $isNewKeysExpanded,
                 toggleScan: toggleScan
             )
             NavigationStack {
                 detail
+                .navigationDestination(for: AppNavigationLinkID.self) {
+                    AppNavigationDestinationView(id: $0)
+                }
             }
         }
         .navigationViewStyle(.columns)
@@ -84,6 +97,10 @@ private extension SidebarView {
             .lazy
             .sorted(by: { $0.key.created < $1.key.created })
             .map { .key($0.key.id, $0.name, $0.key.permission.type) }
+    }
+    
+    var events: [Item] {
+        [] // FIXME: Events
     }
     
     func toggleScan() {
@@ -150,8 +167,9 @@ private extension SidebarView {
                 assertionFailure("Selected unknown key \(keyID)")
                 return
             }
-            
             detail = AnyView(detailView(for: lock))
+        case let .events(predicate, _):
+            detail = AnyView(EventsView(predicate: predicate))
         }
     }
     
@@ -179,37 +197,6 @@ private extension SidebarView {
             return .lock(peripheral.id, "Loading...", nil)
         }
     }
-    
-    var selectionDetail: AnyView {
-        guard let selection = self.sidebarSelection, let item = locks.first(where: { $0.id == selection }) ?? keys.first(where: { $0.id == selection }) else {
-            return AnyView(
-                Text("Select a lock")
-            )
-        }
-        switch item {
-        case let .lock(id, _, _):
-            // FIXME: store peripheral instead of id
-            guard let peripheral = store.peripherals.keys.first(where: { $0.id == id }) else {
-                return AnyView(
-                    Text("Select a lock")
-                )
-            }
-            guard let information = store.lockInformation[peripheral] else {
-                return AnyView(
-                    ProgressView()
-                        .progressViewStyle(.circular)
-                )
-            }
-            return AnyView(LockDetailView(id: information.id))
-        case let .key(id, _, _):
-            guard let lock = store.applicationData.locks.first(where: { $0.value.key.id == id })?.key else {
-                return AnyView(
-                    Text("Select a lock")
-                )
-            }
-            return AnyView(LockDetailView(id: lock))
-        }
-    }
 }
 
 extension SidebarView {
@@ -225,11 +212,19 @@ extension SidebarView {
         
         let keys: [Item]
         
+        let events: [Item]
+        
         @Binding
         var isNearbyExpanded: Bool
         
         @Binding
         var isKeysExpanded: Bool
+        
+        @Binding
+        var isEventsExpanded: Bool
+        
+        @Binding
+        var isNewKeysExpanded: Bool
         
         var toggleScan: () -> ()
         
@@ -237,15 +232,27 @@ extension SidebarView {
             List(selection: $selection) {
                 Group(
                     title: "Nearby",
-                    image: scanStatus == .scanning ? .loading : .symbol("antenna.radiowaves.left.and.right"),
+                    image: scanStatus == .scanning ? .loading : .symbol(.antennaRadiowavesLeftAndRight), //"antenna.radiowaves.left.and.right"
                     items: locks,
                     isExpanded: $isNearbyExpanded
                 )
                 Group(
                     title: "Keys",
-                    image: .symbol("key"),
+                    image: .symbol(.key),
                     items: keys,
                     isExpanded: $isKeysExpanded
+                )
+                Group(
+                    title: "Invitations",
+                    image: .symbol(.envelope),
+                    items: [],
+                    isExpanded: $isNewKeysExpanded
+                )
+                Group(
+                    title: "History",
+                    image: .symbol(.clock),
+                    items: events,
+                    isExpanded: $isEventsExpanded
                 )
             }
             .toolbar {
@@ -318,6 +325,8 @@ extension SidebarView {
     enum Item {
         case lock(NativePeripheral.ID, String, PermissionType?)
         case key(UUID, String, PermissionType)
+        //case newKey(URL)
+        case events(LockEvent.Predicate?, String)
     }
 }
 
@@ -329,6 +338,8 @@ extension SidebarView.Item: Identifiable {
             return "lock_" + id.description
         case let .key(id, _, _):
             return "key_" + id.description
+        case let .events(predicate, _):
+            return "events_\(predicate.flatMap { "\($0)" } ?? "all")"
         }
     }
 }
@@ -347,15 +358,19 @@ extension SidebarLabel {
                 title: title,
                 image: .permission(permission)
             )
+        case let .events(_, name):
+            self.init(title: name, image: .symbol(.clock))
         }
     }
 }
 
 // MARK: - Preview
 
+#if DEBUG
 struct Sidebar_Previews: PreviewProvider {
     static var previews: some View {
         EmptyView()
     }
 }
+#endif
 #endif

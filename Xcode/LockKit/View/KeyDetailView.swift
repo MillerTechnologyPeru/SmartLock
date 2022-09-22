@@ -57,9 +57,7 @@ public struct KeyDetailView: View {
                             .font(.body)
                             .foregroundColor(.gray)
                         if let schedule = key.permission.schedule {
-                            AppNavigationLink(id: .keySchedule(key.id), destination: {
-                                PermissionScheduleView(schedule: schedule)
-                            }, label: {
+                            AppNavigationLink(id: .keySchedule(schedule), label: {
                                 HStack {
                                     Text(verbatim: key.permission.localizedText)
                                         .foregroundColor(.primary)

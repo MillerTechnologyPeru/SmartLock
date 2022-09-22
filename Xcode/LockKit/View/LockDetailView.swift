@@ -287,9 +287,7 @@ extension LockDetailView {
                                 .frame(width: titleWidth, height: nil, alignment: .leading)
                                 .font(.body)
                                 .foregroundColor(.gray)
-                            AppNavigationLink(id: .events(id), destination: {
-                                EventsView(lock: id)
-                            }, label: {
+                            AppNavigationLink(id: .events(.init(keys: [cache.key.id])), label: {
                                 HStack {
                                     Text("\(events) events")
                                     Image(systemName: "chevron.right")
@@ -303,9 +301,7 @@ extension LockDetailView {
                                     .frame(width: titleWidth, height: nil, alignment: .leading)
                                     .font(.body)
                                     .foregroundColor(.gray)
-                                AppNavigationLink(id: .permissions(id), destination: {
-                                    PermissionsView(id: id)
-                                }, label: {
+                                AppNavigationLink(id: .permissions(id), label: {
                                     HStack {
                                         if newKeys > 0 {
                                             Text("\(keys) keys, \(newKeys) pending")

@@ -6,25 +6,43 @@
 //
 
 import SwiftUI
+import CoreLock
 
-public struct AppNavigationLink <Destination: View, Label: View> : View {
+public struct AppNavigationLink <Label: View> : View {
     
     public typealias ID = AppNavigationLinkID
     
     public let id: ID
     
-    private let destination: Destination
-    
     private let label: Label
     
     public var body: some View {
-        NavigationLink(destination: destination, label: { label })
+        if #available(macOS 13, iOS 16, tvOS 16, *) {
+            navigationStackLink
+        } else {
+            navigationViewLink
+        }
     }
     
-    public init(id: ID, destination: () -> Destination, label: () -> Label) {
+    public init(id: ID, label: () -> Label) {
         self.id = id
-        self.destination = destination()
         self.label = label()
+    }
+}
+
+private extension AppNavigationLink {
+    
+    var navigationViewLink: some View {
+        NavigationLink(destination: {
+            AppNavigationDestinationView(id: id)
+        }, label: {
+            label
+        })
+    }
+    
+    @available(macOS 13, iOS 16, tvOS 16, *)
+    var navigationStackLink: some View {
+        NavigationLink(value: id, label: { label })
     }
 }
 
@@ -33,14 +51,10 @@ public struct AppNavigationLink <Destination: View, Label: View> : View {
 public enum AppNavigationLinkID: Hashable {
     
     case lock(UUID)
-    case events(UUID)
+    case events(LockEvent.Predicate?)
     case permissions(UUID)
-    case key(UUID, pending: Bool = false)
-    case keySchedule(UUID)
-    
-    static func newKey(_ id: UUID) -> AppNavigationLinkID {
-        .key(id, pending: true)
-    }
+    case key(KeyDetailView.Value)
+    case keySchedule(Permission.Schedule) // view only
 }
 
 public enum AppNavigationLinkType: String {
@@ -66,6 +80,40 @@ public extension AppNavigationLinkID {
             return .key
         case .keySchedule:
             return .keySchedule
+        }
+    }
+}
+
+public struct AppNavigationDestinationView: View {
+    
+    public let id: AppNavigationLinkID
+    
+    public init(id: AppNavigationLinkID) {
+        self.id = id
+    }
+    
+    public var body: some View {
+        switch id {
+        case let .lock(id):
+            AnyView(
+                LockDetailView(id: id)
+            )
+        case let .events(predicate):
+            AnyView(
+                EventsView(predicate: predicate)
+            )
+        case let .permissions(id):
+            AnyView(
+                PermissionsView(id: id)
+            )
+        case let .key(key):
+            AnyView(
+                KeyDetailView(key: key)
+            )
+        case let .keySchedule(schedule):
+            AnyView(
+                PermissionScheduleView(schedule: schedule)
+            )
         }
     }
 }

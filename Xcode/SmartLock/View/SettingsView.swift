@@ -8,16 +8,23 @@
 import SwiftUI
 
 struct SettingsView: View {
+    
     var body: some View {
-        Text("Settings")
+        List {
+            Text("Setting 1")
+            Text("Setting 2")
+        }
             .navigationTitle("Settings")
     }
 }
 
+#if DEBUG
+@available(macOS 13, iOS 16, tvOS 16, watchOS 9, *)
 struct SettingsView_Previews: PreviewProvider {
     static var previews: some View {
-        NavigationView {
+        NavigationStack {
             SettingsView()
         }
     }
 }
+#endif

@@ -25,6 +25,7 @@ struct LockApp: App {
     #endif
     
     var body: some Scene {
+        // main window
         WindowGroup {
             ContentView()
                 .environmentObject(Store.shared)
@@ -36,6 +37,21 @@ struct LockApp: App {
                     
                 }
         }
+        
+        #if os(macOS)
+        
+        WindowGroup("Nearby") {
+            NavigationStack {
+                NearbyDevicesView()
+            }
+        }
+        
+        Settings {
+            NavigationStack {
+                SettingsView()
+            }
+        }
+        #endif
     }
     
     init() {

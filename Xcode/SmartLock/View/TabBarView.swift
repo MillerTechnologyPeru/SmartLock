@@ -18,7 +18,7 @@ struct TabBarView: View {
                 Text("Select a lock")
             }
             .tabItem {
-                Label("Nearby", systemImage: "location.circle.fill")
+                Label("Nearby", systemSymbol: .locationCircleFill)
             }
             
             // Keys
@@ -27,7 +27,7 @@ struct TabBarView: View {
                 Text("Select a lock")
             }
             .tabItem {
-                Label("Keys", systemImage: "key.fill")
+                Label("Keys", systemSymbol: .keyFill)
             }
             
             // History
@@ -35,7 +35,7 @@ struct TabBarView: View {
                 EventsView()
             }
             .tabItem {
-                Label("History", systemImage: "clock.fill")
+                Label("History", systemSymbol: .clockFill)
             }
             
             // Settings
@@ -44,7 +44,7 @@ struct TabBarView: View {
                 Text("Settings detail")
             }
             .tabItem {
-                Label("Settings", systemImage: "gearshape.fill")
+                Label("Settings", systemSymbol: .gearshapeFill)
             }
         }
         .navigationViewStyle(.stack)

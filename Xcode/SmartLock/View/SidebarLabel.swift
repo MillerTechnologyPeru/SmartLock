@@ -8,6 +8,7 @@
 #if os(macOS)
 import SwiftUI
 import LockKit
+import SFSafeSymbols
 
 struct SidebarLabel: View {
     
@@ -30,7 +31,7 @@ extension SidebarLabel {
         case loading
         case permission(PermissionType)
         case emoji(Character)
-        case symbol(String)
+        case symbol(SFSymbol)
     }
 }
 
@@ -58,7 +59,7 @@ extension SidebarLabel {
                 )
             case let .symbol(symbol):
                 AnyView(
-                    SwiftUI.Image(systemName: symbol)
+                    SwiftUI.Image(systemSymbol: symbol)
                         .font(.system(size: 15))
                 )
             }
@@ -88,7 +89,7 @@ struct SidebarLabel_Previews: PreviewProvider {
                 SidebarLabel(title: "Lock 3", image: .permission(.scheduled))
                 SidebarLabel(title: "Lock", image: .permission(.anytime))
             }, label: {
-                SidebarLabel(title: "Nearby", image: .symbol("antenna.radiowaves.left.and.right"))
+                SidebarLabel(title: "Nearby", image: .symbol(.antennaRadiowavesLeftAndRight)) // "antenna.radiowaves.left.and.right"
             })
             DisclosureGroup(content: {
                 SidebarLabel(title: "Setup", image: .permission(.owner))
@@ -96,7 +97,7 @@ struct SidebarLabel_Previews: PreviewProvider {
                 SidebarLabel(title: "Lock 2", image: .permission(.anytime))
                 SidebarLabel(title: "Lock 2", image: .permission(.scheduled))
             }, label: {
-                SidebarLabel(title: "Keys", image: .symbol("key"))
+                SidebarLabel(title: "Keys", image: .symbol(.key))
             })
         }
     }

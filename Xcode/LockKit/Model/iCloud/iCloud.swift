@@ -306,7 +306,7 @@ public extension Store {
         
         log("☁️ iCloud changed externally")
         do {
-            await try self.syncCloud()
+            try await self.syncCloud()
         }
         catch { log("⚠️ Could not sync iCloud: \(error.localizedDescription)") }
     }

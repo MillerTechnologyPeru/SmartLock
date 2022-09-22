@@ -247,9 +247,7 @@ internal extension PermissionsView {
 private extension PermissionsView.StateView {
     
     func row(for item: Key) -> some View {
-        AppNavigationLink(id: .key(item.id, pending: false), destination: {
-            destination(for: item)
-        }, label: {
+        AppNavigationLink(id: .key(.key(item)), label: {
             LockRowView(
                 image: .permission(item.permission.type),
                 title: item.name,
@@ -263,9 +261,7 @@ private extension PermissionsView.StateView {
     }
     
     func row(for item: NewKey) -> some View {
-        AppNavigationLink(id: .newKey(item.id), destination: {
-            destination(for: item)
-        }, label: {
+        AppNavigationLink(id: .key(.newKey(item)), label: {
             LockRowView(
                 image: .permission(item.permission.type),
                 title: item.name,

@@ -18,7 +18,8 @@ public struct EventsView: View {
     @Environment(\.managedObjectContext)
     public var managedObjectContext
     
-    public let lock: UUID?
+    @State
+    public var predicate: LockEvent.Predicate?
     
     @FetchRequest(
         entity: EventManagedObject.entity(),
@@ -49,12 +50,16 @@ public struct EventsView: View {
     
     @State
     private var reloadTask: TaskQueue.PendingTask?
+        
+    public init(predicate: LockEvent.Predicate? = nil) {
+        self.predicate = predicate
+    }
     
     public var body: some View {
         list
             .navigationTitle("History")
             .onAppear {
-                self._events.wrappedValue.nsPredicate = self.predicate
+                self._events.wrappedValue.nsPredicate = self.predicate?.toFoundation()
             }
             #if os(iOS)
             .toolbar {
@@ -68,26 +73,20 @@ public struct EventsView: View {
             #endif
             
     }
-    
-    public init(lock: UUID? = nil) {
-        self.lock = lock
-    }
 }
 
 private extension EventsView {
     
-    var predicate: NSPredicate? {
-        lock.flatMap {
-            NSPredicate(
-                format: "%K == %@",
-                #keyPath(EventManagedObject.lock.identifier),
-                $0 as NSUUID
-            )
-        }
-    }
-    
+    /// Locks to scan for.
     var locks: Set<UUID> {
-        return self.lock.flatMap { [$0] } ?? Set(store.applicationData.locks.keys)
+        guard let keys = predicate?.keys, keys.isEmpty == false else {
+            return Set(store.applicationData.locks.keys) // all locks
+        }
+        return Set(
+            store.applicationData.locks
+                .filter { keys.contains($0.key)  }
+                .map { $0.key }
+        )
     }
     
     var list: some View {
@@ -218,7 +217,8 @@ private extension EventsView {
         }
         
         let lockName = managedObject.lock?.name ?? ""
-        if self.lock == nil, lockName.isEmpty == false {
+        if (self.predicate?.keys?.count ?? 0) == 1, // if filtering for a single lock
+           lockName.isEmpty == false {
             keyName = keyName.isEmpty ? lockName : lockName + " - " + keyName
         }
         
@@ -256,24 +256,23 @@ struct EventsView_Previews: PreviewProvider {
         @State
         private var filter = false
         
+        private var predicate: LockEvent.Predicate? {
+            if filter {
+                return LockEvent.Predicate(keys: [ownerKey])
+            } else {
+                return nil
+            }
+        }
+        
         var body: some View {
             #if os(iOS)
             NavigationView {
-                EventsView(lock: filter ? lock : nil)
-                    .onAppear(perform: insertLockData)
-                    .navigationBarItems(
-                        leading: Button(
-                            filter ? "Show All" : "Filter",
-                            action: { filter.toggle() }
-                        ),
-                        trailing: Button(
-                            "Insert",
-                            action: insertNewEvents
-                        )
-                    )
+                EventsView(predicate: predicate)
             }
             #else
-            EventsView(lock: filter ? lock : nil)
+            NavigationStack {
+                EventsView(predicate: predicate)
+            }
             #endif
         }
     }

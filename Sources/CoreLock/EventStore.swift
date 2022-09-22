@@ -36,7 +36,7 @@ public final class InMemoryLockEvents: LockEventStore {
 
 public extension LockEvent {
     
-    struct FetchRequest: Codable, Equatable {
+    struct FetchRequest: Codable, Equatable, Hashable {
         
         /// The fetch offset of the fetch request.
         public var offset: UInt8
@@ -57,7 +57,7 @@ public extension LockEvent {
         }
     }
     
-    struct Predicate: Codable, Equatable {
+    struct Predicate: Codable, Equatable, Hashable {
         
         public var keys: [UUID]?
         
