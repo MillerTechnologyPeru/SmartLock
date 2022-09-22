@@ -21,7 +21,8 @@ struct LockApp: App {
     @NSApplicationDelegateAdaptor(AppDelegate.self)
     var appDelegate
     #elseif os(iOS) || os(tvOS)
-    
+    @UIApplicationDelegateAdaptor(AppDelegate.self)
+    var appDelegate
     #endif
     
     var body: some Scene {
@@ -30,26 +31,37 @@ struct LockApp: App {
             ContentView()
                 .environmentObject(Store.shared)
                 .environment(\.managedObjectContext, Store.shared.managedObjectContext)
-                .onAppear {
-                    _ = LockApp.initialize
-                }
-                .onContinueUserActivity("") { _ in
-                    
-                }
         }
         
         #if os(macOS)
-        
-        WindowGroup("Nearby") {
+        Window("Nearby", id: "nearby") {
             NavigationStack {
                 NearbyDevicesView()
+                    .navigationDestination(for: AppNavigationLinkID.self) {
+                        AppNavigationDestinationView(id: $0)
+                    }
             }
+            .environmentObject(Store.shared)
+            .environment(\.managedObjectContext, Store.shared.managedObjectContext)
+        }
+        
+        Window("Keys", id: "keys") {
+            NavigationStack {
+                KeysView()
+                    .navigationDestination(for: AppNavigationLinkID.self) {
+                        AppNavigationDestinationView(id: $0)
+                    }
+            }
+            .environmentObject(Store.shared)
+            .environment(\.managedObjectContext, Store.shared.managedObjectContext)
         }
         
         Settings {
             NavigationStack {
                 SettingsView()
             }
+            .environmentObject(Store.shared)
+            .environment(\.managedObjectContext, Store.shared.managedObjectContext)
         }
         #endif
     }
@@ -58,19 +70,44 @@ struct LockApp: App {
         // print app info
         log("Launching SmartLock v\(Bundle.InfoPlist.shortVersion) (\(Bundle.InfoPlist.version))")
     }
-    
-    static let initialize: () = {
-        #if canImport(UIKit)
-        // set app appearance
-        //UIView.configureLockAppearance()
-        #endif
-    }()
 }
 
-#if os(macOS)
+#if os(iOS)
+final class AppDelegate: UIResponder, UIApplicationDelegate {
+    
+    // MARK: - UIApplicationDelegate
+    
+    func application(
+        _ application: UIApplication,
+        didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
+    ) -> Bool {
+        
+        // set app appearance
+        //UIView.configureLockAppearance()
+        
+        return true
+    }
+    
+    func applicationDidBecomeActive(
+        _ application: UIApplication
+    ) {
+        
+        Task {
+            do { try await Store.shared.syncCloud() }
+            catch { log("⚠️ Unable to automatically sync with iCloud. \(error)") }
+        }
+    }
+}
+#elseif os(macOS)
 final class AppDelegate: NSResponder, NSApplicationDelegate {
     
-    func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool {
+    // MARK: - NSApplicationDelegate
+    
+    
+    
+    func applicationShouldTerminateAfterLastWindowClosed(
+        _ sender: NSApplication
+    ) -> Bool {
         return false
     }
 }

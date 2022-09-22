@@ -18,7 +18,7 @@ public struct PermissionScheduleView: View {
     
     public init(schedule: Permission.Schedule = .init()) {
         isEditable = false
-        _schedule = Binding(get: { schedule }, set: { _ in }) // read only
+        _schedule = .constant(schedule)
     }
     
     public init(schedule: Binding<Permission.Schedule>) {

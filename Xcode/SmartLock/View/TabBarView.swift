@@ -8,27 +8,31 @@
 #if os(iOS)
 import SwiftUI
 import LockKit
+import SFSafeSymbols
 
 struct TabBarView: View {
+    
+    //@State
+    //private var columnVisibility: NavigationSplitViewVisibility = .doubleColumn
+    
     var body: some View {
         TabView {
+            
             // Nearby
-            NavigationView {
-                NearbyDevicesView()
-                Text("Select a lock")
-            }
-            .tabItem {
-                Label("Nearby", systemSymbol: .locationCircleFill)
-            }
+            SplitView(
+                title: "Nearby",
+                systemSymbol: .locationCircleFill,
+                sidebar: { NearbyDevicesView() },
+                detail: { Text("Select a lock") }
+            )
             
             // Keys
-            NavigationView {
-                KeysView()
-                Text("Select a lock")
-            }
-            .tabItem {
-                Label("Keys", systemSymbol: .keyFill)
-            }
+            SplitView(
+                title: "Keys",
+                systemSymbol: .keyFill,
+                sidebar: { KeysView() },
+                detail: { Text("Select a lock") }
+            )
             
             // History
             NavigationView {
@@ -37,6 +41,7 @@ struct TabBarView: View {
             .tabItem {
                 Label("History", systemSymbol: .clockFill)
             }
+            .navigationViewStyle(.stack)
             
             // Settings
             NavigationView {
@@ -46,21 +51,73 @@ struct TabBarView: View {
             .tabItem {
                 Label("Settings", systemSymbol: .gearshapeFill)
             }
+            .navigationViewStyle(.stack)
         }
-        .navigationViewStyle(.stack)
         .navigationBarTitleDisplayMode(.large)
-        .onAppear {
-            Task {
-                do { try await Store.shared.syncCloud() }
-                catch { log("⚠️ Unable to automatically sync with iCloud. \(error)") }
-            }
+    }
+}
+
+extension TabBarView {
+    
+    struct SplitView <Sidebar: View, Detail: View> : View {
+        
+        let title: LocalizedStringKey
+        
+        let systemSymbol: SFSymbol
+        
+        let sidebar: () -> Sidebar
+        
+        let detail: () -> Detail
+        
+        @State
+        private var columnVisibilityData: Data?
+        
+        var body: some View {
+            navigationView
+                .tabItem {
+                    Label(title, systemSymbol: systemSymbol)
+                }
         }
     }
 }
 
+private extension TabBarView.SplitView {
+    
+    var navigationView: some View {
+        if #available(iOS 16.0, *) {
+            return NavigationSplitView(
+                columnVisibility: columnVisibility,
+                sidebar: sidebar,
+                detail: detail
+            )
+            .navigationSplitViewStyle(.prominentDetail)
+        } else {
+            return NavigationView {
+                sidebar()
+                detail()
+            }
+            .navigationViewStyle(.stack)
+        }
+    }
+    
+    @available(iOS 16.0, *)
+    var columnVisibility: Binding<NavigationSplitViewVisibility> {
+        Binding(get: {
+            let decoder = JSONDecoder()
+            return columnVisibilityData.flatMap { try? decoder.decode(NavigationSplitViewVisibility.self, from: $0) } ?? .automatic
+        }, set: {
+            let encoder = JSONEncoder()
+            columnVisibilityData = try? encoder.encode($0)
+        })
+    }
+}
+
+#if DEBUG
 struct TabBarView_Previews: PreviewProvider {
     static var previews: some View {
         TabBarView()
     }
 }
+#endif
+
 #endif

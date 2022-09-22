@@ -93,13 +93,15 @@ private extension EventsView {
         List(events) {
             row(for: $0)
         }
-        .listStyle(.plain)
         .refreshable {
             reload()
         }
         .onAppear {
             reload()
         }
+        #if os(iOS)
+        .listStyle(.plain)
+        #endif
     }
     
     func reload() {

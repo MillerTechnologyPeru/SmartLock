@@ -154,15 +154,21 @@ private extension NewPermissionView.StateView {
     }
     
     var createToolbarItem: some ToolbarContent {
-        ToolbarItem(placement: .confirmationAction) {
+        ToolbarItem(placement: .primaryAction) {
             if state == .loading {
+                #if os(macOS)
+                AnyView(
+                    ProgressIndicatorView(style: .spinning, controlSize: .mini)
+                )
+                #else
                 AnyView(
                     ProgressView()
                         .progressViewStyle(.circular)
                 )
+                #endif
             } else {
                 AnyView(
-                    Button("Create", action: { create() })
+                    Button("Create", action: create)
                 )
             }
         }

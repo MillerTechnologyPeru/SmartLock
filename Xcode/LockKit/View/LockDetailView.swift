@@ -25,6 +25,13 @@ public struct LockDetailView: View {
     @State
     private var pendingTask: TaskQueue.PendingTask?
     
+    @State
+    private var showNewKeyModal = false
+    
+    public init(id: UUID) {
+        self.id = id
+    }
+    
     public var body: some View {
         if let cache = self.cache {
             AnyView(
@@ -42,27 +49,49 @@ public struct LockDetailView: View {
                 .onAppear {
                     reload()
                 }
-                #if os(iOS)
                 .toolbar {
+                    #if os(iOS)
                     ToolbarItem(placement: .navigationBarTrailing) {
                         if activityIndicator {
                             ProgressView()
                                 .progressViewStyle(.circular)
                         }
                     }
+                    #endif
+                    
+                    ToolbarItem(placement: .primaryAction) {
+                        Button(action: { }) {
+                            Image(systemSymbol: .pencil)
+                        }
+                    }
+                    
+                    ToolbarItem(placement: .primaryAction) {
+                        Button(action: { }) {
+                            Image(systemSymbol: .trash)
+                        }
+                    }
+                    
+                    // create new key
+                    ToolbarItem(placement: .primaryAction) {
+                        if cache.key.permission.isAdministrator {
+                            Button(action: newPermission) {
+                                Image(systemSymbol: .plus)
+                            }
+                        }
+                    }
+                    
                 }
-                #endif
             )
         } else if let information = self.information,
             information.status == .setup {
-            AnyView(Text("Setup"))
+            #if os(iOS)
+            AnyView(SetupLockView(id: id))
+            #else
+            AnyView(Text("Scan to Setup"))
+            #endif
         } else {
             AnyView(UnknownView(id: id, information: information))
         }
-    }
-    
-    public init(id: UUID) {
-        self.id = id
     }
 }
 
@@ -74,41 +103,6 @@ private extension LockDetailView {
     
     var information: LockInformation? {
         store.lockInformation.first(where: { $0.value.id == id })?.value
-    }
-    
-    func unlock() {
-        // FIXME: Handler errors
-        Task {
-            guard await store.central.state == .poweredOn else {
-                return
-            }
-            // FaceID
-            let authentication = LAContext()
-            let policy: LAPolicy = .deviceOwnerAuthenticationWithBiometrics
-            let reason = NSLocalizedString("Biometrics are needed to unlock", comment: "")
-            do {
-                if try authentication.canEvaluate(policy: policy) {
-                    try await authentication.evaluatePolicy(policy, localizedReason: reason)
-                }
-            }
-            catch {
-                log("⚠️ Unable to authenticate for unlock \(id). \(error)")
-            }
-            // cancel all operation
-            if store.isScanning {
-                store.stopScanning()
-            }
-            await TaskQueue.bluetooth.cancelAll()
-            await pendingTask?.cancel()
-            pendingTask = await Task.bluetooth {
-                do {
-                    // Bluetooth request
-                    try await store.unlock(for: id, action: .default)
-                } catch {
-                    log("⚠️ Unable to unlock \(id). \(error)")
-                }
-            }
-        }
     }
     
     var events: Int {
@@ -139,6 +133,10 @@ private extension LockDetailView {
             id as NSUUID
         )
         return (try? managedObjectContext.count(for: fetchRequest)) ?? 0
+    }
+    
+    func newPermission() {
+        showNewKeyModal = true
     }
     
     func reload() {
@@ -184,6 +182,41 @@ private extension LockDetailView {
                     }
                 } catch {
                     log("⚠️ Error loading information for \(lock). \(error)")
+                }
+            }
+        }
+    }
+    
+    func unlock() {
+        // FIXME: Handle errors
+        Task {
+            guard await store.central.state == .poweredOn else {
+                return
+            }
+            // FaceID
+            let authentication = LAContext()
+            let policy: LAPolicy = .deviceOwnerAuthenticationWithBiometrics
+            let reason = NSLocalizedString("Biometrics are needed to unlock", comment: "")
+            do {
+                if try authentication.canEvaluate(policy: policy) {
+                    try await authentication.evaluatePolicy(policy, localizedReason: reason)
+                }
+            }
+            catch {
+                log("⚠️ Unable to authenticate for unlock \(id). \(error)")
+            }
+            // cancel all operation
+            if store.isScanning {
+                store.stopScanning()
+            }
+            await TaskQueue.bluetooth.cancelAll()
+            await pendingTask?.cancel()
+            pendingTask = await Task.bluetooth {
+                do {
+                    // Bluetooth request
+                    try await store.unlock(for: id, action: .default)
+                } catch {
+                    log("⚠️ Unable to unlock \(id). \(error)")
                 }
             }
         }

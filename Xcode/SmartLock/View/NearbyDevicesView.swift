@@ -121,10 +121,13 @@ extension NearbyDevicesView {
             #if os(iOS)
             list
                 .navigationTitle(title)
-                .navigationBarItems(trailing: trailingButtonItem)
+                .navigationBarItems(trailing: scanButton)
             #elseif os(macOS)
             list
                 .navigationTitle(title)
+                .toolbar {
+                    ToolbarItem(id: "scan", placement: .primaryAction) { scanButton }
+                }
             #endif
         }
     }
@@ -153,19 +156,19 @@ private extension NearbyDevicesView.StateView {
         }
     }
     
-    var trailingButtonItem: some View {
+    var scanButton: some View {
         Button(action: {
             toggleScan()
         }, label: {
             switch state {
             case .bluetoothUnavailable:
-                Image(systemName: "exclamationmark.triangle.fill")
+                Image(systemSymbol: .exclamationmarkTriangleFill) //"exclamationmark.triangle.fill"
                     .symbolRenderingMode(.multicolor)
             case .scanning:
-                Image(systemName: "stop.fill")
+                Image(systemSymbol: .stopFill) // "stop.fill"
                     .symbolRenderingMode(.monochrome)
             case .stopScan:
-                Image(systemName: "arrow.clockwise")
+                Image(systemSymbol: .arrowClockwise) // "arrow.clockwise"
                     .symbolRenderingMode(.monochrome)
             }
         })

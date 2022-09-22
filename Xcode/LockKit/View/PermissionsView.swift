@@ -88,16 +88,6 @@ public struct PermissionsView: View {
                     Button(action: newPermission, label: {
                         Image(systemSymbol: .plus)
                     })
-                    #if os(iOS)
-                    .popover(item: $newKeyInvitation, content: { key in
-                        ActivityView(
-                            activityItems: newKeyInvitation
-                                .flatMap { [NewKeyFileActivityItem(invitation: $0)] as [Any] } ?? [],
-                            applicationActivities: nil,
-                            excludedActivityTypes: NewKeyFileActivityItem.excludedActivityTypes
-                        )
-                    })
-                    #endif
                 }
             }
             #if os(iOS)
