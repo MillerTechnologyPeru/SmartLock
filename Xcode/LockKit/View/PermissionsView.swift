@@ -99,33 +99,12 @@ public struct PermissionsView: View {
             }
             #endif
         }
-        .sheet(isPresented: $showNewKeyModal, onDismiss: { }) {
-            #if os(iOS)
-            NavigationView {
-                NewPermissionView(id: id, completion: didCreateNewKey)
-                    .toolbar {
-                        ToolbarItem(placement: .cancellationAction) {
-                            Button("Cancel") {
-                                showNewKeyModal = false
-                            }
-                        }
-                    }
-            }
-            #elseif os(macOS)
-            ScrollView {
-                NewPermissionView(id: id, completion: didCreateNewKey)
-                    .padding(30)
-            }
-            .frame(width: 500, height: 500)
-            .toolbar {
-                ToolbarItem(placement: .cancellationAction) {
-                    Button("Cancel") {
-                        showNewKeyModal = false
-                    }
-                }
-            }
-            #endif
-        }
+        .newPermissionSheet(
+            for: id,
+            isPresented: $showNewKeyModal,
+            onDismiss: { },
+            completion: didCreateNewKey
+        )
     }
     
     public init(id: UUID) {

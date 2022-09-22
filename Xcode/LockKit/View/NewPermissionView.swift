@@ -290,6 +290,50 @@ private extension NewPermissionView.PermissionTypeView {
     }
 }
 
+// MARK: - View Extensions
+
+public extension View {
+    
+    func newPermissionSheet(
+        for lock: UUID,
+        isPresented: Binding<Bool>,
+        onDismiss: @escaping () -> (),
+        completion: @escaping (NewKey.Invitation) -> ()
+    ) -> some View {
+        return self.sheet(isPresented: isPresented, onDismiss: onDismiss) {
+            #if os(iOS)
+            NavigationView {
+                NewPermissionView(id: lock, completion: completion)
+                    .toolbar {
+                        ToolbarItem(placement: .cancellationAction) {
+                            Button("Cancel") {
+                                isPresented.wrappedValue = false
+                            }
+                        }
+                    }
+            }
+            #elseif os(macOS)
+            NavigationStack {
+                ScrollView {
+                    NewPermissionView(id: lock, completion: completion)
+                        .padding(20)
+                }
+            }
+            .frame(width: 500, height: 500)
+            .toolbar {
+                ToolbarItem(placement: .cancellationAction) {
+                    Button("Cancel") {
+                        isPresented.wrappedValue = false
+                    }
+                }
+            }
+            #endif
+        }
+    }
+}
+
+// MARK: - Preview
+
 #if DEBUG
 struct NewPermissionView_Previews: PreviewProvider {
     static var previews: some View {

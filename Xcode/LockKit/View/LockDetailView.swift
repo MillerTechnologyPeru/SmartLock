@@ -49,6 +49,12 @@ public struct LockDetailView: View {
                 .onAppear {
                     reload()
                 }
+                .newPermissionSheet(
+                    for: id,
+                    isPresented: $showNewKeyModal,
+                    onDismiss: { },
+                    completion: didCreateNewKey
+                )
                 .toolbar {
                     #if os(iOS)
                     ToolbarItem(placement: .navigationBarTrailing) {
@@ -79,7 +85,6 @@ public struct LockDetailView: View {
                             }
                         }
                     }
-                    
                 }
             )
         } else if let information = self.information,
@@ -137,6 +142,10 @@ private extension LockDetailView {
     
     func newPermission() {
         showNewKeyModal = true
+    }
+    
+    func didCreateNewKey(_ newKey: NewKey.Invitation) {
+        
     }
     
     func reload() {
