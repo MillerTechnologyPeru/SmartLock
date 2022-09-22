@@ -8,9 +8,22 @@
 import SwiftUI
 import LockKit
 
+#if os(macOS)
+import AppKit
+#elseif canImport(UIKit)
+import UIKit
+#endif
+
 @main
 struct LockApp: App {
-
+    
+    #if os(macOS)
+    @NSApplicationDelegateAdaptor(AppDelegate.self)
+    var appDelegate
+    #elseif os(iOS) || os(tvOS)
+    
+    #endif
+    
     var body: some Scene {
         WindowGroup {
             ContentView()
@@ -37,3 +50,12 @@ struct LockApp: App {
         #endif
     }()
 }
+
+#if os(macOS)
+final class AppDelegate: NSResponder, NSApplicationDelegate {
+    
+    func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool {
+        return false
+    }
+}
+#endif

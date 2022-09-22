@@ -23,8 +23,8 @@ struct SidebarView: View {
     @State
     private var isKeysExpanded = true
     
-    @StateObject
-    var coordinator = AppNavigationLinkCoordinator()
+    @State
+    private var detail: AnyView = AnyView(Text("Select a lock"))
     
     var body: some View {
         NavigationView {
@@ -43,11 +43,8 @@ struct SidebarView: View {
                 isKeysExpanded: $isKeysExpanded,
                 toggleScan: toggleScan
             )
-            if navigationStack.count > 0 {
-                navigationStack[0].view
-            }
-            if navigationStack.count > 1 {
-                navigationStack[1].view
+            NavigationStack {
+                detail
             }
         }
         .navigationViewStyle(.columns)
@@ -58,7 +55,6 @@ struct SidebarView: View {
                 catch { log("⚠️ Unable to automatically sync with iCloud. \(error)") }
             }
         }
-        .environmentObject(coordinator)
         
     }
 }
@@ -123,22 +119,6 @@ private extension SidebarView {
         }
     }
     
-    var navigationStack: [(id: AppNavigationLinkID, view: AnyView)] {
-        guard let current = coordinator.current else {
-            return []
-        }
-        switch current.id {
-        case let .lock(lock):
-            return [current, (.events(lock), AnyView(EventsView(lock: lock)))]
-        case let .events(lock):
-            return [(.lock(lock), AnyView(LockDetailView(id: lock))), current]
-        case let .permissions(lock):
-            return [(.lock(lock), AnyView(LockDetailView(id: lock))), current]
-        default:
-            return [current]
-        }
-    }
-    
     func sidebarSelectionChanged(_ newValue: Item.ID?) {
         sidebarSelection = newValue
         // deselect
@@ -163,21 +143,20 @@ private extension SidebarView {
                 return
             }
             let lock = information.id
-            coordinator.current = (.lock(lock), detailView(for: lock))
+            detail = AnyView(detailView(for: lock))
         case let .key(keyID, _, _):
             guard let lock = store.applicationData.locks.first(where: { $0.value.key.id == keyID })?.key else {
                 // invalid key selection
                 assertionFailure("Selected unknown key \(keyID)")
                 return
             }
-            coordinator.current = (.lock(lock), detailView(for: lock))
+            
+            detail = AnyView(detailView(for: lock))
         }
     }
     
-    func detailView(for lock: UUID) -> AnyView {
-        return AnyView(
-            LockDetailView(id: lock)
-        )
+    func detailView(for lock: UUID) -> some View {
+        LockDetailView(id: lock)
     }
     
     func item(for peripheral: NativePeripheral) -> Item {

@@ -17,21 +17,8 @@ public struct AppNavigationLink <Destination: View, Label: View> : View {
     
     private let label: Label
     
-    #if os(macOS)
-    @EnvironmentObject
-    private var coordinator: AppNavigationLinkCoordinator
-    #endif
-    
     public var body: some View {
-        #if os(macOS)
-        Button(
-            action: buttonAction,
-            label: { label }
-        )
-        .buttonStyle(.plain)
-        #else
         NavigationLink(destination: destination, label: { label })
-        #endif
     }
     
     public init(id: ID, destination: () -> Destination, label: () -> Label) {
@@ -40,15 +27,6 @@ public struct AppNavigationLink <Destination: View, Label: View> : View {
         self.label = label()
     }
 }
-
-#if os(macOS)
-private extension AppNavigationLink {
-    
-    func buttonAction() {
-        coordinator.current = (id: id, view: AnyView(destination))
-    }
-}
-#endif
 
 // MARK: - Supporting Types
 
@@ -91,13 +69,3 @@ public extension AppNavigationLinkID {
         }
     }
 }
-
-#if os(macOS)
-public final class AppNavigationLinkCoordinator: ObservableObject {
-    
-    @Published
-    public var current: (id: AppNavigationLinkID, view: AnyView)?
-    
-    public init() { }
-}
-#endif
