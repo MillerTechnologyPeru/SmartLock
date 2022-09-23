@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct LockInformation: Equatable, Hashable, Codable {
+public struct LockInformation: Equatable, Hashable, Codable, Identifiable {
     
     /// Lock identifier
     public let id: UUID

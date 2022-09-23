@@ -384,7 +384,6 @@ public extension Store {
                 .keys
                 .filter { !self.lockInformation.keys.contains($0) }
         }
-        NSLog("LOG: \(self.peripherals)")
         for peripheral in loading() {
             do {
                 let _ = try await self.readInformation(for: peripheral)
@@ -687,7 +686,6 @@ public extension Store {
                         #keyPath(KeyManagedObject.identifier)
                     ).description == predicate.description)
                     assert(predicate.description == predicate.toFoundation().description)
-                    print(predicate.toFoundation().description)
                     // fetch
                     let invalidKeys = try context.fetch(fetchRequest)
                     // remove keys from CoreData

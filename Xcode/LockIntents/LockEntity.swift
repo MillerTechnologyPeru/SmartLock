@@ -35,17 +35,9 @@ extension LockEntity {
     }
     
     var displayRepresentation: DisplayRepresentation {
-        /*
-        let name: LocalizedStringResource
-        if let key = FileManager.Lock.shared.applicationData?.locks[id] {
-            name = "\(key.name)"
-        } else {
-            name = "Lock"
-        }*/
         return DisplayRepresentation(
             title: "Lock",
-            subtitle: "UUID \(id.description) v\(version.description)",
-            image: .init(systemName: "lock.fill")
+            subtitle: "\(id.description)"
         )
     }
 }
