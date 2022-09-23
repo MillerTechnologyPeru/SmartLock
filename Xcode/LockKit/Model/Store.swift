@@ -268,7 +268,7 @@ public extension Store {
                 if newState != oldValue {
                     self.state = newState
                     if newState == .poweredOn, isScanning == false {
-                        await self.scan()
+                        self.scanDefault()
                     }
                 }
                 try await Task.sleep(timeInterval: 0.5)
@@ -281,14 +281,77 @@ public extension Store {
         return lockInformation.first(where: { $0.value.id == id })?.key
     }
     
-    func scan() async {
-        guard await central.state == .poweredOn else {
-            isScanning = false
+    func scanDefault() {
+        guard state == .poweredOn else {
             return
         }
-        isScanning = true
-        if let stream = scanStream, stream.isScanning {
-            return // already scanning
+        Task {
+            let bluetoothState = await self.central.state
+            guard bluetoothState == .poweredOn else {
+                throw LockError.bluetoothUnavailable
+            }
+            self.isScanning = true
+            if let stream = scanStream, stream.isScanning {
+                return // already scanning
+            }
+            self.scanStream = nil
+            let filterDuplicates = true //preferences.filterDuplicates
+            self.peripherals.removeAll(keepingCapacity: true)
+            self.stopScanning()
+            self.isScanning = true
+            let stream = central.scan(
+                with: [LockService.uuid],
+                filterDuplicates: filterDuplicates
+            )
+            self.scanStream = stream
+            // process scanned devices
+            Task {
+                defer { Task { await MainActor.run { self.isScanning = false } } }
+                do {
+                    for try await scanData in stream {
+                        guard let serviceUUIDs = scanData.advertisementData.serviceUUIDs,
+                            serviceUUIDs.contains(LockService.uuid)
+                            else { continue }
+                        // cache found device
+                        try? await Task.sleep(timeInterval: 0.6)
+                        self.peripherals[scanData.peripheral] = scanData
+                    }
+                } catch {
+                    log("⚠️ Unable to scan. \(error)")
+                }
+            }
+            // stop scanning after 5 sec if need to read device info
+            Task {
+                let loading = {
+                    self.peripherals
+                        .keys
+                        .filter { !self.lockInformation.keys.contains($0) }
+                }
+                try? await Task.sleep(timeInterval: 3)
+                while self.isScanning, loading().isEmpty {
+                    try? await Task.sleep(timeInterval: 2)
+                }
+                // stop scanning and load info for unknown devices
+                self.stopScanning()
+                await Task.bluetooth {
+                    for peripheral in loading() {
+                        self.stopScanning()
+                        do {
+                            let _ = try await self.readInformation(for: peripheral)
+                        } catch {
+                            log("⚠️ Unable to load information for peripheral \(peripheral). \(error)")
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+    func scan(duration: TimeInterval) async throws {
+        precondition(duration > 0.001)
+        let bluetoothState = await central.state
+        guard bluetoothState == .poweredOn else {
+            throw LockError.bluetoothUnavailable
         }
         self.scanStream = nil
         let filterDuplicates = true //preferences.filterDuplicates
@@ -300,57 +363,33 @@ public extension Store {
             filterDuplicates: filterDuplicates
         )
         self.scanStream = stream
-        // process scanned devices
-        Task {
+        let task = Task { [unowned self] in
+            defer { Task { await MainActor.run { self.isScanning = false } } }
+            var peripherals = [NativePeripheral: ScanData<NativeCentral.Peripheral, NativeCentral.Advertisement>]()
+            for try await scanData in stream {
+                guard let serviceUUIDs = scanData.advertisementData.serviceUUIDs,
+                      serviceUUIDs.contains(LockService.uuid)
+                else { continue }
+                // cache found device
+                peripherals[scanData.peripheral] = scanData
+            }
+            return peripherals
+        }
+        try await Task.sleep(timeInterval: duration)
+        stream.stop()
+        let peripherals = try await task.value // throw errors
+        self.peripherals = peripherals
+        let loading = {
+            self.peripherals
+                .keys
+                .filter { !self.lockInformation.keys.contains($0) }
+        }
+        for peripheral in loading() {
             do {
-                for try await scanData in stream {
-                    guard let serviceUUIDs = scanData.advertisementData.serviceUUIDs,
-                        serviceUUIDs.contains(LockService.uuid)
-                        else { continue }
-                    // cache found device
-                    try? await Task.sleep(timeInterval: 0.6)
-                    self.peripherals[scanData.peripheral] = scanData
-                }
+                let _ = try await self.readInformation(for: peripheral)
             } catch {
-                log("⚠️ Unable to scan. \(error)")
+                log("⚠️ Unable to load information for peripheral \(peripheral). \(error)")
             }
-            self.isScanning = false
-        }
-        // stop scanning after 5 sec if need to read device info
-        Task {
-            let loading = {
-                self.peripherals
-                    .keys
-                    .filter { !self.lockInformation.keys.contains($0) }
-            }
-            try? await Task.sleep(timeInterval: 3)
-            while self.isScanning, loading().isEmpty {
-                try? await Task.sleep(timeInterval: 2)
-            }
-            // stop scanning and load info for unknown devices
-            stopScanning()
-            await Task.bluetooth {
-                for peripheral in loading() {
-                    self.stopScanning()
-                    do {
-                        let information = try await self.readInformation(for: peripheral)
-                        log("Read information for lock \(information.id)")
-                        #if DEBUG
-                        dump(information)
-                        #endif
-                    } catch {
-                        log("⚠️ Unable to load information for peripheral \(peripheral). \(error)")
-                    }
-                }
-            }
-        }
-    }
-    
-    func scan(duration: TimeInterval) async {
-        await scan()
-        Task {
-            try? await Task.sleep(timeInterval: duration)
-            stopScanning()
         }
     }
     

@@ -9,6 +9,7 @@
 import Foundation
 import CoreData
 import CoreLock
+import Predicate
 
 public final class LockManagedObject: NSManagedObject {
     
@@ -50,6 +51,23 @@ public extension LockManagedObject {
         let fetchRequest = NSFetchRequest<LockManagedObject>()
         fetchRequest.entity = entity()
         fetchRequest.fetchBatchSize = 10
+        fetchRequest.sortDescriptors = sort.isEmpty == false ? sort : [
+            .init(keyPath: \LockManagedObject.identifier, ascending: true)
+        ]
+        return try context.fetch(fetchRequest)
+    }
+    
+    static func fetch(
+        for identifiers: [UUID],
+        in context: NSManagedObjectContext,
+        sort: [NSSortDescriptor] = []
+    ) throws -> [LockManagedObject] {
+        let fetchRequest = LockManagedObject.fetchRequest()
+        let predicate = #keyPath(LockManagedObject.identifier).in(identifiers)
+        fetchRequest.predicate = predicate.toFoundation()
+        assert(fetchRequest.predicate?.description == predicate.description)
+        fetchRequest.fetchBatchSize = identifiers.count
+        fetchRequest.fetchLimit = identifiers.count
         fetchRequest.sortDescriptors = sort.isEmpty == false ? sort : [
             .init(keyPath: \LockManagedObject.identifier, ascending: true)
         ]

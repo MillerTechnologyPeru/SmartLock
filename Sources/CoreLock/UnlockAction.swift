@@ -9,7 +9,7 @@ import Foundation
 import TLVCoding
 
 /// Unlock Action
-public enum UnlockAction: UInt8, BitMaskOption {
+public enum UnlockAction: UInt8, BitMaskOption, Sendable {
     
     /// Unlock immediately.
     case `default` = 0b01

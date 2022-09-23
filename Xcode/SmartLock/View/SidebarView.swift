@@ -107,17 +107,7 @@ private extension SidebarView {
         if store.isScanning {
             store.stopScanning()
         } else {
-            Task {
-                //await scanTask?.cancel()
-                await TaskQueue.bluetooth.cancelAll() // stop all pending operations to scan
-                await Task.bluetooth {
-                    guard await store.central.state == .poweredOn,
-                          store.isScanning == false else {
-                        return
-                    }
-                    await store.scan()
-                }
-            }
+            store.scanDefault()
         }
     }
     
@@ -126,10 +116,9 @@ private extension SidebarView {
         // start scanning if not already
         if newValue, !store.isScanning {
             store.peripherals.removeAll(keepingCapacity: true)
-            store.isScanning = true
             Task {
                 try? await Task.sleep(nanoseconds: 1_000_000_000)
-                await store.scan()
+                store.scanDefault()
             }
         } else if !newValue, store.isScanning {
             store.stopScanning()
