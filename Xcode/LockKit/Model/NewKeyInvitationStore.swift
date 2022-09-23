@@ -38,8 +38,9 @@ public final class NewKeyInvitationStore: ObservableObject {
         // wait for task
         try await writeTask.value
         await self.cache(invitation, url: fileURL)
+        return fileURL
     }
-    
+    /*
     @discardableResult
     public func fetchAll() async throws -> Cache {
         let documentsURL = try self.documentsURL
@@ -87,7 +88,7 @@ public final class NewKeyInvitationStore: ObservableObject {
         }
         return newValue
     }
-    
+    */
     internal var documentsURL: URL {
         get throws {
             guard let url = fileManager.documentsURL else {
