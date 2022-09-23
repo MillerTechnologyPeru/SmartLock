@@ -90,6 +90,10 @@
 		6E84E52D28DDC841008CAE85 /* LockEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E8BBFFB28DD438500F03735 /* LockEntity.swift */; };
 		6E84E52E28DDC90B008CAE85 /* TestIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E84E52128DD9713008CAE85 /* TestIntent.swift */; };
 		6E84E53028DDCF4F008CAE85 /* KeyQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E84E52F28DDCF4F008CAE85 /* KeyQuery.swift */; };
+		6E84E53228DDDC11008CAE85 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6E84E53128DDDC11008CAE85 /* Assets.xcassets */; };
+		6E84E53428DDDCDC008CAE85 /* Bundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E84E53328DDDCDC008CAE85 /* Bundle.swift */; };
+		6E84E53628DDE01F008CAE85 /* AssetExtractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E84E53528DDE01F008CAE85 /* AssetExtractor.swift */; };
+		6E84E53828DDE08A008CAE85 /* UIImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E84E53728DDE08A008CAE85 /* UIImage.swift */; };
 		6E8BBFDA28DC2CA000F03735 /* SetupLockView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E8BBFD928DC2CA000F03735 /* SetupLockView.swift */; };
 		6E8BBFDC28DCC8F300F03735 /* AsyncFetchRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E8BBFDB28DCC8F300F03735 /* AsyncFetchRequest.swift */; };
 		6E8BBFEB28DD301B00F03735 /* LockIntentsExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E8BBFEA28DD301B00F03735 /* LockIntentsExtension.swift */; };
@@ -216,6 +220,10 @@
 		6E84E52128DD9713008CAE85 /* TestIntent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestIntent.swift; sourceTree = "<group>"; };
 		6E84E52528DDB0F2008CAE85 /* KeyEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyEntity.swift; sourceTree = "<group>"; };
 		6E84E52F28DDCF4F008CAE85 /* KeyQuery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyQuery.swift; sourceTree = "<group>"; };
+		6E84E53128DDDC11008CAE85 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		6E84E53328DDDCDC008CAE85 /* Bundle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bundle.swift; sourceTree = "<group>"; };
+		6E84E53528DDE01F008CAE85 /* AssetExtractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetExtractor.swift; sourceTree = "<group>"; };
+		6E84E53728DDE08A008CAE85 /* UIImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImage.swift; sourceTree = "<group>"; };
 		6E8BBFD928DC2CA000F03735 /* SetupLockView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupLockView.swift; sourceTree = "<group>"; };
 		6E8BBFDB28DCC8F300F03735 /* AsyncFetchRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsyncFetchRequest.swift; sourceTree = "<group>"; };
 		6E8BBFE828DD301B00F03735 /* LockIntents.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.extensionkit-extension"; includeInIndex = 0; path = LockIntents.appex; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -308,6 +316,7 @@
 			children = (
 				6E21834528D8FC4300A622B3 /* Task.swift */,
 				6E21834928D90F7A00A622B3 /* LocalAuthentication.swift */,
+				6E84E53328DDDCDC008CAE85 /* Bundle.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -384,6 +393,7 @@
 				6E6A97EE28DBEC2D00C689F6 /* NewKeyInvitationStore.swift */,
 				6E8BBFDB28DCC8F300F03735 /* AsyncFetchRequest.swift */,
 				6E6A97F028DBEE0700C689F6 /* Predicate.swift */,
+				6E84E53528DDE01F008CAE85 /* AssetExtractor.swift */,
 				6E21830F28D80DCD00A622B3 /* Keychain.swift */,
 				6E21831628D8116C00A622B3 /* NewKey.swift */,
 				6E21831728D8116C00A622B3 /* NewKeyDocument.swift */,
@@ -418,6 +428,7 @@
 			isa = PBXGroup;
 			children = (
 				6E4CB61828D788AA00116573 /* UIStyleKit.swift */,
+				6E84E53728DDE08A008CAE85 /* UIImage.swift */,
 				6E4CB62028D7907200116573 /* PermissionIconViewUIView.swift */,
 				6E21830228D7C47500A622B3 /* Appearance.swift */,
 				6ED248CB28D7A3BF00F78D07 /* ActivityIndicatorView.swift */,
@@ -506,6 +517,7 @@
 			children = (
 				6EA7769F28D707FE00018FA3 /* LockKit.h */,
 				6E21830428D7C51900A622B3 /* Log.swift */,
+				6E84E53128DDDC11008CAE85 /* Assets.xcassets */,
 				6E21834428D8FC3700A622B3 /* Extensions */,
 				6E4CB60F28D7866600116573 /* View */,
 				6E3276DA28D7136400AF171B /* Model */,
@@ -697,6 +709,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6E84E53228DDDC11008CAE85 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -766,6 +779,7 @@
 				6E21831028D80DCD00A622B3 /* Keychain.swift in Sources */,
 				6E21833C28D8F3B500A622B3 /* KeyManagedObject.swift in Sources */,
 				6E21830128D7C37500A622B3 /* Error.swift in Sources */,
+				6E84E53428DDDCDC008CAE85 /* Bundle.swift in Sources */,
 				6E21836328D9516B00A622B3 /* iCloud.swift in Sources */,
 				6E21833E28D8F3B500A622B3 /* CreateNewKeyEventManagedObject.swift in Sources */,
 				6E4CB62328D7907E00116573 /* PermissionIconViewNSView.swift in Sources */,
@@ -786,6 +800,7 @@
 				6E8BBFDA28DC2CA000F03735 /* SetupLockView.swift in Sources */,
 				6E9E37AD28DADF2600BE7128 /* ActivityView.swift in Sources */,
 				6E21834328D8F3B500A622B3 /* ManagedObject.swift in Sources */,
+				6E84E53628DDE01F008CAE85 /* AssetExtractor.swift in Sources */,
 				6E21834028D8F3B500A622B3 /* RemoveKeyEventManagedObject.swift in Sources */,
 				6E21834A28D90F7A00A622B3 /* LocalAuthentication.swift in Sources */,
 				6E21833628D8F3B500A622B3 /* ContactManagedObject.swift in Sources */,
@@ -802,6 +817,7 @@
 				6E6A97F328DC030000C689F6 /* NewKeyInvitationView.swift in Sources */,
 				6E21831528D80FF900A622B3 /* ApplicationData.swift in Sources */,
 				6E21833A28D8F3B500A622B3 /* LockManagedObject.swift in Sources */,
+				6E84E53828DDE08A008CAE85 /* UIImage.swift in Sources */,
 				6E21830328D7C47500A622B3 /* Appearance.swift in Sources */,
 				6E3276DC28D7195400AF171B /* Central.swift in Sources */,
 				6E21833928D8F3B500A622B3 /* ScheduleManagedObject.swift in Sources */,

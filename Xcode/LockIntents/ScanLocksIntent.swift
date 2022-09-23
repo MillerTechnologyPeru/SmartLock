@@ -74,6 +74,7 @@ private extension ScanLocksIntent {
                 } else {
                     ForEach(results) {
                         view(for: $0)
+                            .padding(8)
                     }
                 }
             }
@@ -84,16 +85,25 @@ private extension ScanLocksIntent {
     func view(for lock: LockInformation) -> some View {
         if let cache = Store.shared.applicationData.locks[lock.id] {
             return LockRowView(
-                image: .emoji("🔒"), //.permission(cache.key.permission.type),
+                image: .image(Image(permissionType: cache.key.permission.type)),
                 title: cache.name,
                 subtitle: cache.key.permission.type.localizedText
             )
         } else {
-            return LockRowView(
-                image: .emoji("🔒"),
-                title: lock.status == .setup ? "Setup" : "Lock",
-                subtitle: lock.id.description
-            )
+            switch lock.status {
+            case .unlock:
+                return LockRowView(
+                    image: .image(Image(permissionType: .anytime)),
+                    title: "Lock",
+                    subtitle: lock.id.description
+                )
+            case .setup:
+                return LockRowView(
+                    image: .image(Image(permissionType: .owner)),
+                    title: "Setup",
+                    subtitle: lock.id.description
+                )
+            }
         }
     }
 }

@@ -8,6 +8,7 @@
 #if os(iOS)
 import Foundation
 import UIKit
+import LinkPresentation
 
 public final class NewKeyFileActivityItem: UIActivityItemProvider {
     
@@ -62,19 +63,19 @@ public final class NewKeyFileActivityItem: UIActivityItemProvider {
         suggestedSize size: CGSize
     ) -> UIImage? {
         
-        return UIImage.permissionType(invitation.key.permission.type, size: size)
+        return UIImage(permissionType: invitation.key.permission.type)
     }
-    /*
-    @available(iOSApplicationExtension 13.0, *)
+    
     public override func activityViewControllerLinkMetadata(_ activityViewController: UIActivityViewController) -> LPLinkMetadata? {
         
-        let permissionImageURL = AssetExtractor.shared.url(for: invitation.key.permission.type.image)
+        let imageName = PermissionType.Image(permissionType: invitation.key.permission.type)
+        let permissionImageURL = AssetExtractor.shared.url(for: imageName.rawValue, in: .lockKit)
         assert(permissionImageURL != nil, "Missing permission image")
         let metadata = LPLinkMetadata()
         metadata.title = invitation.key.name
         metadata.imageProvider = permissionImageURL.flatMap { NSItemProvider(contentsOf: $0) }
         return metadata
-    }*/
+    }
 }
 
 public extension NewKeyFileActivityItem {

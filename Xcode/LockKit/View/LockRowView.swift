@@ -68,11 +68,7 @@ public extension LockRowView {
         case permission(PermissionType)
         case emoji(Character)
         case symbol(String)
-        #if canImport(UIKit)
-        case image(UIImage)
-        #elseif canImport(AppKit)
-        case image(NSImage)
-        #endif
+        case image(SwiftUI.Image)
     }
 }
 
@@ -108,15 +104,9 @@ extension LockRowView {
                         .font(.system(size: 40))
                 )
             case let .image(image):
-                #if canImport(UIKit)
                 AnyView(
-                    SwiftUI.Image(uiImage: image)
+                    image
                 )
-                #elseif canImport(AppKit)
-                AnyView(
-                    SwiftUI.Image(nsImage: image)
-                )
-                #endif
             }
         }
     }

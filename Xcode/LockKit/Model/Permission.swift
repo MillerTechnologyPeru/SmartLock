@@ -90,3 +90,56 @@ public extension Permission.Schedule.Weekdays.Day {
         }
     }
 }
+
+// MARK: - Image
+
+public extension PermissionType {
+    
+    enum Image: String {
+        
+        case owner      = "permissionOwner"
+        case admin      = "permissionAdmin"
+        case anytime    = "permissionAnytime"
+        case scheduled  = "permissionScheduled"
+    }
+}
+
+public extension PermissionType.Image {
+    
+    init(permissionType: PermissionType) {
+        switch permissionType {
+        case .owner:
+            self = .owner
+        case .admin:
+            self = .admin
+        case .anytime:
+            self = .anytime
+        case .scheduled:
+            self = .scheduled
+        }
+    }
+}
+
+#if canImport(SwiftUI)
+import SwiftUI
+
+public extension Image {
+    
+    init(permissionType: PermissionType) {
+        let image = PermissionType.Image(permissionType: permissionType)
+        self.init(image.rawValue, bundle: .lockKit)
+    }
+}
+#endif
+
+#if canImport(UIKit)
+import UIKit
+
+public extension UIImage {
+    
+    convenience init(permissionType: PermissionType) {
+        let image = PermissionType.Image(permissionType: permissionType)
+        self.init(named: image.rawValue, in: .lockKit, with: nil)!
+    }
+}
+#endif
