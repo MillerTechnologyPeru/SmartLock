@@ -9,6 +9,7 @@ import AppIntents
 import LockKit
 
 /// Lock Intent Entity
+@available(macOS 13, iOS 16, watchOS 9, tvOS 16, *)
 struct LockEntity: AppEntity, Identifiable {
     
     let id: UUID
@@ -26,6 +27,7 @@ struct LockEntity: AppEntity, Identifiable {
     var unlockActions: Set<UnlockAction>
 }
 
+@available(macOS 13, iOS 16, watchOS 9, tvOS 16, *)
 extension LockEntity {
     
     static var defaultQuery = LockQuery()
@@ -42,6 +44,7 @@ extension LockEntity {
     }
 }
 
+@available(macOS 13, iOS 16, watchOS 9, tvOS 16, *)
 extension LockEntity {
     
     init(information: LockInformation) {
@@ -53,42 +56,47 @@ extension LockEntity {
     }
 }
 
-enum LockStatus: UInt8, AppEnum {
+@available(macOS 13, iOS 16, watchOS 9, tvOS 16, *)
+extension LockEntity {
     
-    /// Initial Status
-    case setup = 0x00
-    
-    /// Idle / Unlock Mode
-    case unlock = 0x01
-    
-    static var typeDisplayRepresentation: TypeDisplayRepresentation {
-        "Lock Status"
+    enum LockStatus: UInt8, AppEnum {
+        
+        /// Initial Status
+        case setup = 0x00
+        
+        /// Idle / Unlock Mode
+        case unlock = 0x01
+        
+        static var typeDisplayRepresentation: TypeDisplayRepresentation {
+            "Lock Status"
+        }
+        
+        static var caseDisplayRepresentations: [LockStatus : DisplayRepresentation] {
+            [
+                .setup: "Needs Setup",
+                .unlock: "Ready to Unlock"
+            ]
+        }
     }
-    
-    static var caseDisplayRepresentations: [LockStatus : DisplayRepresentation] {
-        [
-            .setup: "Needs Setup",
-            .unlock: "Ready to Unlock"
-        ]
-    }
-}
 
-enum UnlockAction: UInt8, AppEnum {
-    
-    /// Unlock immediately.
-    case `default` = 0b01
-    
-    /// Unlock when button is pressed.
-    case button = 0b10
-    
-    static var typeDisplayRepresentation: TypeDisplayRepresentation {
-        "Unlock Action"
-    }
-    
-    static var caseDisplayRepresentations: [UnlockAction : DisplayRepresentation] {
-        [
-            .default: "Default",
-            .button: "Button"
-        ]
+    @available(macOS 13, iOS 16, watchOS 9, tvOS 16, *)
+    enum UnlockAction: UInt8, AppEnum {
+        
+        /// Unlock immediately.
+        case `default` = 0b01
+        
+        /// Unlock when button is pressed.
+        case button = 0b10
+        
+        static var typeDisplayRepresentation: TypeDisplayRepresentation {
+            "Unlock Action"
+        }
+        
+        static var caseDisplayRepresentations: [UnlockAction : DisplayRepresentation] {
+            [
+                .default: "Default",
+                .button: "Button"
+            ]
+        }
     }
 }

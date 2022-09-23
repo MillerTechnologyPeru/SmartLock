@@ -8,6 +8,7 @@
 import AppIntents
 import LockKit
 
+@available(macOS 13, iOS 16, watchOS 9, tvOS 16, *)
 struct LockQuery: EntityQuery {
     
     func entities(for identifiers: [UUID]) async throws -> [LockEntity] {

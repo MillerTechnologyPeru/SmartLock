@@ -9,6 +9,7 @@ import AppIntents
 import SwiftUI
 import LockKit
 
+@available(macOS 13, iOS 16, watchOS 9, tvOS 16, *)
 struct ScanLocksIntent: AppIntent {
         
     static var title: LocalizedStringResource { "Scan for Locks" }
@@ -53,6 +54,7 @@ struct ScanLocksIntent: AppIntent {
     }
 }
 
+@available(macOS 13, iOS 16, watchOS 9, tvOS 16, *)
 @MainActor
 private extension ScanLocksIntent {
     
@@ -72,15 +74,6 @@ private extension ScanLocksIntent {
     }
     
     func view(for lock: LockInformation) -> some View {
-        /*
-        let cache = Store.shared.applicationData.locks[lock.id]
-        return VStack {
-            Text(verbatim: cache?.name ?? (lock.status == .setup ? "Setup" : "Lock"))
-            Text(verbatim: lock.id.description)
-            if let permission = cache?.key.permission.type {
-                Text(verbatim: permission.localizedText)
-            }
-        }*/
         if let cache = Store.shared.applicationData.locks[lock.id] {
             return LockRowView(
                 image: .emoji("🔒"), //.permission(cache.key.permission.type),

@@ -7,6 +7,7 @@
 
 import AppIntents
 
+@available(macOS 13, iOS 16, watchOS 9, tvOS 16, *)
 struct AppShortcuts: AppShortcutsProvider {
 
     static var appShortcuts: [AppShortcut] {
