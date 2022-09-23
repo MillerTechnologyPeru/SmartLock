@@ -25,6 +25,12 @@ struct LockEntity: AppEntity, Identifiable {
     
     /// Supported lock actions
     var unlockActions: Set<UnlockAction>
+    
+    /// Stored name
+    var name: String?
+    
+    /// Associated key
+    var key: KeyEntity?
 }
 
 @available(macOS 13, iOS 16, watchOS 9, tvOS 16, *)
@@ -38,7 +44,7 @@ extension LockEntity {
     
     var displayRepresentation: DisplayRepresentation {
         return DisplayRepresentation(
-            title: "Lock",
+            title: "\(name ?? "Lock")",
             subtitle: "\(id.description)"
         )
     }
@@ -47,14 +53,18 @@ extension LockEntity {
 @available(macOS 13, iOS 16, watchOS 9, tvOS 16, *)
 extension LockEntity {
     
-    init(information: LockInformation) {
+    init(information: LockInformation, name: String?, key: KeyEntity?) {
         self.id = information.id
         self.buildVersion = information.buildVersion.rawValue
         self.version = information.version.rawValue
         self.status = .init(rawValue: information.status.rawValue)!
         self.unlockActions = .init(information.unlockActions.map { .init(rawValue: $0.rawValue)! })
+        self.name = name
+        self.key = key
     }
 }
+
+// MARK: - Supporting Typess=
 
 @available(macOS 13, iOS 16, watchOS 9, tvOS 16, *)
 extension LockEntity {

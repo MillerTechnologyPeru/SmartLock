@@ -47,8 +47,16 @@ struct ScanLocksIntent: AppIntent {
         let locks = store.lockInformation
             .sorted(by: { $0.key.id.description < $1.key.id.description })
             .map { $0.value }
+        let lockCache = store.applicationData.locks
+        let results = locks.map { lock in
+            LockEntity(
+                information: lock,
+                name: lockCache[lock.id]?.name,
+                key: lockCache[lock.id].flatMap { KeyEntity(key: $0.key, lock: lock.id) }
+            )
+        }
         return .result(
-            value: locks.map { LockEntity(information: $0) },
+            value: results,
             view: view(for: locks)
         )
     }

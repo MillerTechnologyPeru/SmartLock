@@ -89,6 +89,7 @@
 		6E84E52C28DDC841008CAE85 /* LockQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E8BBFFD28DD491100F03735 /* LockQuery.swift */; };
 		6E84E52D28DDC841008CAE85 /* LockEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E8BBFFB28DD438500F03735 /* LockEntity.swift */; };
 		6E84E52E28DDC90B008CAE85 /* TestIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E84E52128DD9713008CAE85 /* TestIntent.swift */; };
+		6E84E53028DDCF4F008CAE85 /* KeyQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E84E52F28DDCF4F008CAE85 /* KeyQuery.swift */; };
 		6E8BBFDA28DC2CA000F03735 /* SetupLockView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E8BBFD928DC2CA000F03735 /* SetupLockView.swift */; };
 		6E8BBFDC28DCC8F300F03735 /* AsyncFetchRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E8BBFDB28DCC8F300F03735 /* AsyncFetchRequest.swift */; };
 		6E8BBFEB28DD301B00F03735 /* LockIntentsExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E8BBFEA28DD301B00F03735 /* LockIntentsExtension.swift */; };
@@ -214,6 +215,7 @@
 		6E84E51F28DD9646008CAE85 /* Shortcuts.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Shortcuts.swift; sourceTree = "<group>"; };
 		6E84E52128DD9713008CAE85 /* TestIntent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestIntent.swift; sourceTree = "<group>"; };
 		6E84E52528DDB0F2008CAE85 /* KeyEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyEntity.swift; sourceTree = "<group>"; };
+		6E84E52F28DDCF4F008CAE85 /* KeyQuery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyQuery.swift; sourceTree = "<group>"; };
 		6E8BBFD928DC2CA000F03735 /* SetupLockView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupLockView.swift; sourceTree = "<group>"; };
 		6E8BBFDB28DCC8F300F03735 /* AsyncFetchRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsyncFetchRequest.swift; sourceTree = "<group>"; };
 		6E8BBFE828DD301B00F03735 /* LockIntents.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.extensionkit-extension"; includeInIndex = 0; path = LockIntents.appex; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -446,6 +448,7 @@
 				6E8BBFFB28DD438500F03735 /* LockEntity.swift */,
 				6E84E52528DDB0F2008CAE85 /* KeyEntity.swift */,
 				6E8BBFFD28DD491100F03735 /* LockQuery.swift */,
+				6E84E52F28DDCF4F008CAE85 /* KeyQuery.swift */,
 				6E84E52128DD9713008CAE85 /* TestIntent.swift */,
 				6E8BBFEE28DD301B00F03735 /* Info.plist */,
 			);
@@ -729,6 +732,7 @@
 				6E4CB62528D792BF00116573 /* InfoPlist.swift in Sources */,
 				6E21831D28D834D200A622B3 /* ContentView.swift in Sources */,
 				6EA7768528D7061600018FA3 /* App.swift in Sources */,
+				6E84E53028DDCF4F008CAE85 /* KeyQuery.swift in Sources */,
 				6E2182EF28D7B37000A622B3 /* TabBarView.swift in Sources */,
 				6E21834C28D9140D00A622B3 /* KeysView.swift in Sources */,
 				6E84E52828DDC841008CAE85 /* UnlockIntent.swift in Sources */,
