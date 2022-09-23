@@ -57,14 +57,17 @@ struct ScanLocksIntent: AppIntent {
 private extension ScanLocksIntent {
     
     func view(for results: [LockInformation]) -> some View {
-        VStack(alignment: .leading, spacing: 8) {
-            if results.isEmpty {
-                Text("No locks found.")
-            } else {
-                ForEach(results) {
-                    view(for: $0)
+        HStack(alignment: .top, spacing: 0) {
+            VStack(alignment: .leading, spacing: 8) {
+                if results.isEmpty {
+                    Text("No locks found.")
+                } else {
+                    ForEach(results) {
+                        view(for: $0)
+                    }
                 }
             }
+            Spacer(minLength: 0)
         }
     }
     
