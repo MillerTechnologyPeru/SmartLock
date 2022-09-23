@@ -19,8 +19,8 @@ struct LockQuery: EntityQuery {
                 id: $0.key,
                 buildVersion: $0.value.information.buildVersion.rawValue,
                 version: $0.value.information.version.rawValue,
-                status: $0.value.information.status,
-                unlockActions: $0.value.information.unlockActions
+                status: .init(rawValue: $0.value.information.status.rawValue)!,
+                unlockActions: .init($0.value.information.unlockActions.map { .init(rawValue: $0.rawValue)! })
             )
         }
     }

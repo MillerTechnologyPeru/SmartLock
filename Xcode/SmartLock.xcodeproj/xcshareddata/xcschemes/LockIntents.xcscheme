@@ -59,12 +59,21 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
+            BlueprintIdentifier = "6E8BBFE728DD301B00F03735"
+            BuildableName = "LockIntents.appex"
+            BlueprintName = "LockIntents"
+            ReferencedContainer = "container:SmartLock.xcodeproj">
+         </BuildableReference>
+      </BuildableProductRunnable>
+      <MacroExpansion>
+         <BuildableReference
+            BuildableIdentifier = "primary"
             BlueprintIdentifier = "6EA7768028D7061600018FA3"
             BuildableName = "SmartLock.app"
             BlueprintName = "SmartLock"
             ReferencedContainer = "container:SmartLock.xcodeproj">
          </BuildableReference>
-      </BuildableProductRunnable>
+      </MacroExpansion>
    </LaunchAction>
    <ProfileAction
       buildConfiguration = "Release"

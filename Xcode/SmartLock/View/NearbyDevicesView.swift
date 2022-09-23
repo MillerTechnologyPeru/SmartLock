@@ -60,7 +60,7 @@ private extension NearbyDevicesView {
                           store.isScanning == false else {
                         return
                     }
-                    await store.scanDefault()
+                    store.scanDefault()
                 }
             }
         }

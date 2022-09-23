@@ -88,7 +88,11 @@ private extension TabBarView.SplitView {
             return NavigationSplitView(
                 columnVisibility: columnVisibility,
                 sidebar: sidebar,
-                detail: detail
+                detail: {
+                    detail().navigationDestination(for: AppNavigationLinkID.self) {
+                        AppNavigationDestinationView(id: $0)
+                    }
+                }
             )
             .navigationSplitViewStyle(.prominentDetail)
         } else {

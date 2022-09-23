@@ -9,6 +9,6 @@ import Foundation
 
 public func log(_ message: String) {
     DispatchQueue.main.async {
-        print(message)
+        NSLog(message)
     }
 }

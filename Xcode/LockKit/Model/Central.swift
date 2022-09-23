@@ -15,7 +15,7 @@ import DarwinGATT
 public typealias NativeCentral = DarwinCentral
 public typealias NativePeripheral = DarwinCentral.Peripheral
 
-extension DarwinCentral {
+public extension DarwinCentral {
     
     /// Wait for CoreBluetooth to be ready.
     func waitPowerOn(warning: Int = 3, timeout: Int = 10) async throws {
@@ -25,7 +25,7 @@ extension DarwinCentral {
             
             // inform user after 3 seconds
             if powerOnWait == warning {
-                print("Waiting for CoreBluetooth to be ready, please turn on Bluetooth")
+                NSLog("Waiting for CoreBluetooth to be ready, please turn on Bluetooth")
             }
             
             try await Task.sleep(nanoseconds: 1_000_000_000)

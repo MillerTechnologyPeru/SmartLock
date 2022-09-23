@@ -10,5 +10,4 @@ import AppIntents
 @main
 struct LockIntentsExtension: AppIntentsExtension {
     
-    
 }

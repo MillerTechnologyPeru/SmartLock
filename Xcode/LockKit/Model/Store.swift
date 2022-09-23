@@ -268,7 +268,7 @@ public extension Store {
                 if newState != oldValue {
                     self.state = newState
                     if newState == .poweredOn, isScanning == false {
-                        self.scanDefault()
+                        //self.scanDefault()
                     }
                 }
                 try await Task.sleep(timeInterval: 0.5)
@@ -384,6 +384,7 @@ public extension Store {
                 .keys
                 .filter { !self.lockInformation.keys.contains($0) }
         }
+        NSLog("LOG: \(self.peripherals)")
         for peripheral in loading() {
             do {
                 let _ = try await self.readInformation(for: peripheral)

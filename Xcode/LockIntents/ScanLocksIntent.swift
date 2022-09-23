@@ -17,11 +17,17 @@ struct ScanLocksIntent: AppIntent {
     
     func perform() async throws -> some IntentResult {
         let store = await Store.shared
+        do { try await store.central.waitPowerOn() }
+        catch {
+            return .result(value: [LockEntity]())
+        }
         try await store.scan(duration: duration)
         let locks = await store.lockInformation
             .lazy
             .sorted(by: { $0.key.id.description < $1.key.id.description })
             .map { LockEntity(information: $0.value) }
-        return .result(value: locks)
+        return .result(
+            value: locks
+        )
     }
 }

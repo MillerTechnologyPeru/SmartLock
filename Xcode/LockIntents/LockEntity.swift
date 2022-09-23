@@ -35,14 +35,15 @@ extension LockEntity {
     }
     
     var displayRepresentation: DisplayRepresentation {
+        /*
         let name: LocalizedStringResource
         if let key = FileManager.Lock.shared.applicationData?.locks[id] {
             name = "\(key.name)"
         } else {
             name = "Lock"
-        }
+        }*/
         return DisplayRepresentation(
-            title: name,
+            title: "Lock",
             subtitle: "UUID \(id.description) v\(version.description)",
             image: .init(systemName: "lock.fill")
         )
@@ -55,18 +56,24 @@ extension LockEntity {
         self.id = information.id
         self.buildVersion = information.buildVersion.rawValue
         self.version = information.version.rawValue
-        self.status = information.status
-        self.unlockActions = information.unlockActions
+        self.status = .init(rawValue: information.status.rawValue)!
+        self.unlockActions = .init(information.unlockActions.map { .init(rawValue: $0.rawValue)! })
     }
 }
 
-extension LockStatus: AppEnum {
+enum LockStatus: UInt8, AppEnum {
     
-    public static var typeDisplayRepresentation: TypeDisplayRepresentation {
+    /// Initial Status
+    case setup = 0x00
+    
+    /// Idle / Unlock Mode
+    case unlock = 0x01
+    
+    static var typeDisplayRepresentation: TypeDisplayRepresentation {
         "Lock Status"
     }
     
-    public static var caseDisplayRepresentations: [LockStatus : DisplayRepresentation] {
+    static var caseDisplayRepresentations: [LockStatus : DisplayRepresentation] {
         [
             .setup: "Needs Setup",
             .unlock: "Ready to Unlock"
@@ -74,17 +81,22 @@ extension LockStatus: AppEnum {
     }
 }
 
-extension UnlockAction: AppEnum {
+enum UnlockAction: UInt8, AppEnum {
     
-    public static var typeDisplayRepresentation: TypeDisplayRepresentation {
+    /// Unlock immediately.
+    case `default` = 0b01
+    
+    /// Unlock when button is pressed.
+    case button = 0b10
+    
+    static var typeDisplayRepresentation: TypeDisplayRepresentation {
         "Unlock Action"
     }
     
-    public static var caseDisplayRepresentations: [UnlockAction : DisplayRepresentation] {
+    static var caseDisplayRepresentations: [UnlockAction : DisplayRepresentation] {
         [
             .default: "Default",
             .button: "Button"
         ]
     }
 }
-
