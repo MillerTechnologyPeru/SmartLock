@@ -46,7 +46,7 @@ public final class MockCentral: CentralManager {
     
     internal init() {
         Task {
-            try await Task.sleep(timeInterval: 0.5)
+            try await Task.sleep(timeInterval: 0.3)
             await self.storage.stateDidChange(.poweredOn)
         }
     }

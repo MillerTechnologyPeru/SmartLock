@@ -74,6 +74,9 @@ public final class Store: ObservableObject {
         Task {
             await lockCacheChanged()
         }
+        #if targetEnvironment(simulator)
+        insertMockData()
+        #endif
     }
 }
 
