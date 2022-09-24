@@ -247,6 +247,7 @@ extension LockRowView {
 
 // MARK: - Preview
 
+#if targetEnvironment(simulator)
 struct NearbyDevicesView_Previews: PreviewProvider {
     static var previews: some View {
         NavigationView {
@@ -264,3 +265,4 @@ struct NearbyDevicesView_Previews: PreviewProvider {
         }
     }
 }
+#endif

@@ -28,6 +28,9 @@ public struct LockDetailView: View {
     @State
     private var showNewKeyModal = false
     
+    @State
+    private var error: Error?
+    
     public init(id: UUID) {
         self.id = id
     }
@@ -49,6 +52,7 @@ public struct LockDetailView: View {
                 .onAppear {
                     reload()
                 }
+                .alert(error: $error)
                 .newPermissionSheet(
                     for: id,
                     isPresented: $showNewKeyModal,
@@ -213,6 +217,8 @@ private extension LockDetailView {
             }
             catch {
                 log("⚠️ Unable to authenticate for unlock \(id). \(error)")
+                self.error = error
+                return
             }
             // cancel all operation
             if store.isScanning {
@@ -226,6 +232,7 @@ private extension LockDetailView {
                     try await store.unlock(for: id, action: .default)
                 } catch {
                     log("⚠️ Unable to unlock \(id). \(error)")
+                    self.error = error
                 }
             }
         }

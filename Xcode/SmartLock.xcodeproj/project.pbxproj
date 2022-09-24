@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		6E10C90028DFC6C400703691 /* ErrorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E10C8FF28DFC6C400703691 /* ErrorView.swift */; };
 		6E169A7828D9A34F008545EC /* NavigationLink.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E169A7728D9A34F008545EC /* NavigationLink.swift */; };
 		6E169A7D28D9C097008545EC /* PermissionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E169A7C28D9C097008545EC /* PermissionsView.swift */; };
 		6E169A7F28D9C135008545EC /* NewPermissionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E169A7E28D9C135008545EC /* NewPermissionView.swift */; };
@@ -151,6 +152,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		6E10C8FF28DFC6C400703691 /* ErrorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorView.swift; sourceTree = "<group>"; };
 		6E169A7728D9A34F008545EC /* NavigationLink.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationLink.swift; sourceTree = "<group>"; };
 		6E169A7C28D9C097008545EC /* PermissionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionsView.swift; sourceTree = "<group>"; };
 		6E169A7E28D9C135008545EC /* NewPermissionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewPermissionView.swift; sourceTree = "<group>"; };
@@ -437,6 +439,7 @@
 				6E9E37AA28DAA6D100BE7128 /* KeyDetailView.swift */,
 				6E6A97F228DC030000C689F6 /* NewKeyInvitationView.swift */,
 				6E8BBFD928DC2CA000F03735 /* SetupLockView.swift */,
+				6E10C8FF28DFC6C400703691 /* ErrorView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -866,6 +869,7 @@
 				6E21836528D9516B00A622B3 /* CloudLock.swift in Sources */,
 				6E21834228D8F3B500A622B3 /* UnlockEventManagedObject.swift in Sources */,
 				6E21833528D8F3B500A622B3 /* SetupEventManagedObject.swift in Sources */,
+				6E10C90028DFC6C400703691 /* ErrorView.swift in Sources */,
 				6E8BBFDA28DC2CA000F03735 /* SetupLockView.swift in Sources */,
 				6E9E37AD28DADF2600BE7128 /* ActivityView.swift in Sources */,
 				6E21834328D8F3B500A622B3 /* ManagedObject.swift in Sources */,
