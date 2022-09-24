@@ -8,7 +8,7 @@
 import AppIntents
 import SwiftUI
 import LockKit
-/*
+
 @available(macOS 13, iOS 16, watchOS 9, tvOS 16, *)
 struct UnlockIntent: AppIntent {
     
@@ -38,4 +38,3 @@ struct UnlockIntent: AppIntent {
         return .result()
     }
 }
-*/

@@ -24,7 +24,7 @@ struct KeyEntity: AppEntity, Identifiable {
     var created: Date
     
     /// Key's permissions.
-    var permission: Permission
+    var permission: PermissionAppEnum
 }
 
 @available(macOS 13, iOS 16, watchOS 9, tvOS 16, *)

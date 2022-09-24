@@ -97,9 +97,3 @@ struct FetchEventsIntent: AppIntent {
         )
     }
 }
-
-@available(macOS 13, iOS 16, watchOS 9, tvOS 16, *)
-extension FetchEventsIntent {
-    
-    
-}

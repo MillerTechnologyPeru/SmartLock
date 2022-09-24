@@ -70,7 +70,17 @@ public final class MockCentral: CentralManager {
             guard state == .poweredOn else {
                 throw DarwinCentralError.invalidState(state)
             }
-            try await Task.sleep(timeInterval: 1.0)
+            await self.storage.updateState {
+                $0.isScanning = true
+            }
+            defer {
+                Task {
+                    await self.storage.updateState {
+                        $0.isScanning = false
+                    }
+                }
+            }
+            try await Task.sleep(timeInterval: 0.2)
             for scanData in await self.storage.state.scanData {
                 // apply filter
                 if services.isEmpty == false {
@@ -79,7 +89,10 @@ public final class MockCentral: CentralManager {
                         continue
                     }
                 }
-                try await Task.sleep(timeInterval: 0.3)
+                try await Task.sleep(timeInterval: 0.1)
+                guard await self.storage.state.isScanning else {
+                    continue
+                }
                 continuation(scanData)
             }
         }
@@ -315,64 +328,30 @@ internal extension MockCentral {
     
     struct State {
         var isScanning = false
-        var scanData: [MockScanData] = [.beacon, .smartThermostat, .lock, .lock(2), .lock(3)]
+        var scanData: [MockScanData] = [.beacon, .smartThermostat] + MockLock.locks.enumerated().map { .lock(UInt8($0.offset)) }
         var connected = Set<Peripheral>()
-        var characteristics: [MockService: [MockCharacteristic]] = [
-            .deviceInformation: [
-                .deviceName,
-                .manufacturerName,
-                .modelNumber,
-                .serialNumber
-            ],
-            .battery: [
-                .batteryLevel
-            ],
-            .savantSystems: [
-                .savantTest
-            ],
-            .lock(0x01): [
-                .lockInformation(0x01)
-            ],
-            .lock(0x02): [
-                .lockInformation(0x02)
-            ],
-            .lock(0x03): [
-                .lockInformation(0x03)
-            ]
-        ]
+        var characteristics: [MockService: [MockCharacteristic]] = {
+            let characteristics = MockLock.locks.enumerated().map { (index, lock) in
+                let id = UInt8(index)
+                return (MockService.lock(id), [
+                    Characteristic.lockInformation(id)
+                ])
+            }
+            return .init(uniqueKeysWithValues: characteristics)
+        }()
         var descriptors: [MockCharacteristic: [MockDescriptor]] = [
             .batteryLevel: [.clientCharacteristicConfiguration(.beacon)],
             .savantTest: [.clientCharacteristicConfiguration(.smartThermostat)],
         ]
-        var characteristicValues: [MockCharacteristic: Data] = [
-            .deviceName: Data("iBeacon".utf8),
-            .manufacturerName: Data("Apple Inc.".utf8),
-            .modelNumber: Data("iPhone11.8".utf8),
-            .serialNumber: Data(UUID().uuidString.utf8),
-            .batteryLevel: Data([100]),
-            .savantTest: Data(UUID().uuidString.utf8),
-            .lockInformation(0x01): LockInformationCharacteristic(
-                id: UUID(),
+        var characteristicValues: [MockCharacteristic: Data] = .init(uniqueKeysWithValues: MockLock.locks.enumerated().map({ (index, lock) in
+            (.lockInformation(UInt8(index)), LockInformationCharacteristic(
+                id: lock.id,
                 buildVersion: .current,
                 version: .current,
-                status: .unlock,
+                status: lock.status,
                 unlockActions: [.default]
-            ).data,
-            .lockInformation(0x02): LockInformationCharacteristic(
-                id: UUID(),
-                buildVersion: .current,
-                version: .current,
-                status: .unlock,
-                unlockActions: [.default]
-            ).data,
-            .lockInformation(0x03): LockInformationCharacteristic(
-                id: UUID(),
-                buildVersion: .current,
-                version: .current,
-                status: .unlock,
-                unlockActions: [.default]
-            ).data
-        ]
+            ).data)
+        }))
         var descriptorValues: [MockDescriptor: Data] = [
             .clientCharacteristicConfiguration(.beacon): Data([0x00]),
             .clientCharacteristicConfiguration(.smartThermostat): Data([0x00]),

@@ -65,10 +65,16 @@ private extension ScanLocksIntent {
             VStack(alignment: .leading, spacing: 8) {
                 if results.isEmpty {
                     Text("No locks found.")
+                        .padding(20)
                 } else {
-                    ForEach(results) {
-                        view(for: $0)
-                            .padding(8)
+                    if results.count > 3 {
+                        Text("Found \(results.count) locks.")
+                            .padding(20)
+                    } else {
+                        ForEach(results) {
+                            view(for: $0)
+                                .padding(8)
+                        }
                     }
                 }
             }

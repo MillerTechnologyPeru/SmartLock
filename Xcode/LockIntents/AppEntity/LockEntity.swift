@@ -21,10 +21,10 @@ struct LockEntity: AppEntity, Identifiable {
     var version: String
     
     /// Device state
-    var status: LockStatus
+    var status: LockStatusAppEnum
     
     /// Supported lock actions
-    var unlockActions: Set<UnlockAction>
+    var unlockActions: Set<UnlockActionAppEnum>
     
     /// Stored name
     var name: String?

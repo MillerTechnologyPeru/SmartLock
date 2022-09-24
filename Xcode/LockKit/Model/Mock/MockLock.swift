@@ -34,6 +34,96 @@ public extension MockLock {
             id: UUID(uuidString: "2AF2BFF2-F826-4154-AA61-E2D41C45CF34")!,
             status: .unlock,
             sharedSecret: KeyData()
-        )
+        ),
+        MockLock(
+            id: UUID(),
+            status: .unlock,
+            sharedSecret: KeyData()
+        ),
+        MockLock(
+            id: UUID(),
+            status: .unlock,
+            sharedSecret: KeyData()
+        ),
+        MockLock(
+            id: UUID(),
+            status: .unlock,
+            sharedSecret: KeyData()
+        ),
+        MockLock(
+            id: UUID(),
+            status: .unlock,
+            sharedSecret: KeyData()
+        ),
+        MockLock(
+            id: UUID(),
+            status: .unlock,
+            sharedSecret: KeyData()
+        ),
+        MockLock(
+            id: UUID(),
+            status: .unlock,
+            sharedSecret: KeyData()
+        ),
+        MockLock(
+            id: UUID(),
+            status: .unlock,
+            sharedSecret: KeyData()
+        ),
+        MockLock(
+            id: UUID(),
+            status: .unlock,
+            sharedSecret: KeyData()
+        ),
+        MockLock(
+            id: UUID(),
+            status: .unlock,
+            sharedSecret: KeyData()
+        ),
+        MockLock(
+            id: UUID(),
+            status: .unlock,
+            sharedSecret: KeyData()
+        ),
+        MockLock(
+            id: UUID(),
+            status: .unlock,
+            sharedSecret: KeyData()
+        ),
+        MockLock(
+            id: UUID(),
+            status: .unlock,
+            sharedSecret: KeyData()
+        ),
+        MockLock(
+            id: UUID(),
+            status: .unlock,
+            sharedSecret: KeyData()
+        ),
+        MockLock(
+            id: UUID(),
+            status: .unlock,
+            sharedSecret: KeyData()
+        ),
+        MockLock(
+            id: UUID(),
+            status: .unlock,
+            sharedSecret: KeyData()
+        ),
+        MockLock(
+            id: UUID(),
+            status: .unlock,
+            sharedSecret: KeyData()
+        ),
+        MockLock(
+            id: UUID(),
+            status: .unlock,
+            sharedSecret: KeyData()
+        ),
+        MockLock(
+            id: UUID(),
+            status: .unlock,
+            sharedSecret: KeyData()
+        ),
     ]
 }
