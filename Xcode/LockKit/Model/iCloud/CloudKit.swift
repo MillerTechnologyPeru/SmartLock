@@ -287,7 +287,7 @@ internal extension CKDatabase {
                         while let queryCursor = cursor {
                             let cursorOperation = CKQueryOperation(cursor: queryCursor)
                             cursorOperation.zoneID = zone
-                            for try await value in self.query(operation) {
+                            for try await value in self.query(cursorOperation) {
                                 switch value {
                                 case let .record(record):
                                     continuation.yield(record)
