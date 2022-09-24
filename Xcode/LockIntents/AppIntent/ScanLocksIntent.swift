@@ -39,6 +39,11 @@ struct ScanLocksIntent: AppIntent {
         try await store.central.wait(for: .poweredOn)
         try await store.scan(duration: duration)
         let locks = store.lockInformation
+            .lazy
+            .sorted(by: {
+                store.applicationData.locks[$0.value.id]?.name ?? ""
+                > store.applicationData.locks[$1.value.id]?.name ?? ""
+            })
             .sorted(by: { $0.key.id.description < $1.key.id.description })
             .map { $0.value }
         let lockCache = store.applicationData.locks

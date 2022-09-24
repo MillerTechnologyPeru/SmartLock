@@ -23,10 +23,6 @@ struct FetchEventsIntent: AppIntent {
         )
     }
     
-    static var parameterSummary: some ParameterSummary {
-        Summary("Fetch the events for \(\.$lock)")
-    }
-    
     /// The specified lock to unlock.
     @Parameter(
         title: "Lock",
@@ -45,9 +41,10 @@ struct FetchEventsIntent: AppIntent {
     /// The fetch limit of the fetch request.
     @Parameter(
         title: "Limit",
-        description: "The fetch limit of the fetch request."
+        description: "The fetch limit of the fetch request.",
+        default: 10
     )
-    var limit: Int?
+    var limit: Int
     
     /// The keys used to filter the results.
     @Parameter(
@@ -76,7 +73,7 @@ struct FetchEventsIntent: AppIntent {
         let store = Store.shared
         let fetchRequest = LockEvent.FetchRequest(
             offset: UInt8(offset),
-            limit: limit.flatMap(UInt8.init),
+            limit: UInt8(limit),
             predicate: .init(
                 keys: keys.map { $0.id },
                 start: start,
