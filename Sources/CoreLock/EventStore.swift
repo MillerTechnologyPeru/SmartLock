@@ -57,10 +57,13 @@ public extension LockEvent {
         }
     }
     
+    /// Lock Event Fetch Request Predicate
     struct Predicate: Codable, Equatable, Hashable {
         
+        /// The keys used to filter by the results.
         public var keys: [UUID]?
         
+        /// The start date to filter results.
         public var start: Date?
         
         public var end: Date?

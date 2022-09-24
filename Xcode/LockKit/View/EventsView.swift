@@ -18,6 +18,8 @@ public struct EventsView: View {
     @Environment(\.managedObjectContext)
     public var managedObjectContext
     
+    // FIXME: Filter by lock as well
+    
     @State
     public var predicate: LockEvent.Predicate?
     

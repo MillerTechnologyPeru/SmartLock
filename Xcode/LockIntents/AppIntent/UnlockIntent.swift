@@ -34,39 +34,7 @@ struct UnlockIntent: AppIntent {
     
     @MainActor
     func perform() async throws -> some IntentResult {
-        do {
-            try await Store.shared.unlock(for: lock.id)
-        }
-        catch {
-            return .result(
-                value: false,
-                content: { ResultView(error: error.localizedDescription) }
-            )
-        }
-        return .result(
-            value: true,
-            content: { ResultView(error: nil) }
-        )
-    }
-}
-
-
-@available(macOS 13, iOS 16, watchOS 9, tvOS 16, *)
-extension UnlockIntent {
-    
-    struct ResultView: View {
-        
-        let error: String?
-        
-        var body: some View {
-            VStack(alignment: .center, spacing: 8) {
-                if let error = error {
-                    Text("Unable to unlock")
-                    Text(verbatim: error)
-                } else {
-                    Text("Unlocked")
-                }
-            }
-        }
+        try await Store.shared.unlock(for: lock.id)
+        return .result()
     }
 }

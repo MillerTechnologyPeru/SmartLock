@@ -748,20 +748,22 @@ public extension Store {
         log("Recieved \(keys.count) keys and \(newKeys.count) pending keys for lock \(information.id)")
     }
     
+    @discardableResult
     func listEvents(
         for peripheral: NativeCentral.Peripheral,
         fetchRequest: LockEvent.FetchRequest? = nil
-    ) async throws {
+    ) async throws -> [LockEvent] {
         stopScanning()
-        try await central.connection(for: peripheral) {
+        return try await central.connection(for: peripheral) {
             try await self.listEvents(for: $0, fetchRequest: fetchRequest)
         }
     }
     
+    @discardableResult
     func listEvents(
         for connection: GATTConnection<NativeCentral>,
         fetchRequest: LockEvent.FetchRequest? = nil
-    ) async throws {
+    ) async throws -> [LockEvent] {
         let peripheral = connection.peripheral
         // get lock key
         guard let information = self.lockInformation[peripheral] else {
@@ -778,14 +780,15 @@ public extension Store {
         )
         
         let context = backgroundContext
-        var eventsCount = 0
+        var events = [LockEvent]()
+        events.reserveCapacity(Int(fetchRequest?.limit ?? 10))
         // BLE request
         let centralLog = central.log
         let stream = try await connection.listEvents(fetchRequest: fetchRequest, using: key, log: centralLog)
         for try await notification in stream {
             if let event = notification.event {
                 centralLog?("Recieved \(event.type) event \(event.id)")
-                eventsCount += 1
+                events.append(event)
                 // store in CoreData
                 await context.commit { (context) in
                     try context.insert(event, for: information.id)
@@ -803,6 +806,7 @@ public extension Store {
         
         objectWillChange.send()
         
-        log("Recieved \(eventsCount) events for lock \(information.id)")
+        log("Recieved \(events.count) events for lock \(information.id)")
+        return events
     }
 }
