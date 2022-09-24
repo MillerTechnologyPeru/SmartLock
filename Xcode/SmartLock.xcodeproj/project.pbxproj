@@ -88,12 +88,14 @@
 		6E84E52B28DDC841008CAE85 /* KeyEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E84E52528DDB0F2008CAE85 /* KeyEntity.swift */; };
 		6E84E52C28DDC841008CAE85 /* LockQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E8BBFFD28DD491100F03735 /* LockQuery.swift */; };
 		6E84E52D28DDC841008CAE85 /* LockEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E8BBFFB28DD438500F03735 /* LockEntity.swift */; };
-		6E84E52E28DDC90B008CAE85 /* TestIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E84E52128DD9713008CAE85 /* TestIntent.swift */; };
 		6E84E53028DDCF4F008CAE85 /* KeyQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E84E52F28DDCF4F008CAE85 /* KeyQuery.swift */; };
 		6E84E53228DDDC11008CAE85 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6E84E53128DDDC11008CAE85 /* Assets.xcassets */; };
 		6E84E53428DDDCDC008CAE85 /* Bundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E84E53328DDDCDC008CAE85 /* Bundle.swift */; };
 		6E84E53628DDE01F008CAE85 /* AssetExtractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E84E53528DDE01F008CAE85 /* AssetExtractor.swift */; };
 		6E84E53828DDE08A008CAE85 /* UIImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E84E53728DDE08A008CAE85 /* UIImage.swift */; };
+		6E84E53F28DE86A1008CAE85 /* LockStatusAppEnum.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E84E53E28DE86A1008CAE85 /* LockStatusAppEnum.swift */; };
+		6E84E54128DE8728008CAE85 /* UnlockActionAppEnum.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E84E54028DE8728008CAE85 /* UnlockActionAppEnum.swift */; };
+		6E84E54328DE878D008CAE85 /* PermissionAppEnum.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E84E54228DE878D008CAE85 /* PermissionAppEnum.swift */; };
 		6E8BBFDA28DC2CA000F03735 /* SetupLockView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E8BBFD928DC2CA000F03735 /* SetupLockView.swift */; };
 		6E8BBFDC28DCC8F300F03735 /* AsyncFetchRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E8BBFDB28DCC8F300F03735 /* AsyncFetchRequest.swift */; };
 		6E8BBFEB28DD301B00F03735 /* LockIntentsExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E8BBFEA28DD301B00F03735 /* LockIntentsExtension.swift */; };
@@ -217,13 +219,15 @@
 		6E6A97F028DBEE0700C689F6 /* Predicate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Predicate.swift; sourceTree = "<group>"; };
 		6E6A97F228DC030000C689F6 /* NewKeyInvitationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewKeyInvitationView.swift; sourceTree = "<group>"; };
 		6E84E51F28DD9646008CAE85 /* Shortcuts.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Shortcuts.swift; sourceTree = "<group>"; };
-		6E84E52128DD9713008CAE85 /* TestIntent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestIntent.swift; sourceTree = "<group>"; };
 		6E84E52528DDB0F2008CAE85 /* KeyEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyEntity.swift; sourceTree = "<group>"; };
 		6E84E52F28DDCF4F008CAE85 /* KeyQuery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyQuery.swift; sourceTree = "<group>"; };
 		6E84E53128DDDC11008CAE85 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		6E84E53328DDDCDC008CAE85 /* Bundle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bundle.swift; sourceTree = "<group>"; };
 		6E84E53528DDE01F008CAE85 /* AssetExtractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetExtractor.swift; sourceTree = "<group>"; };
 		6E84E53728DDE08A008CAE85 /* UIImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImage.swift; sourceTree = "<group>"; };
+		6E84E53E28DE86A1008CAE85 /* LockStatusAppEnum.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LockStatusAppEnum.swift; sourceTree = "<group>"; };
+		6E84E54028DE8728008CAE85 /* UnlockActionAppEnum.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnlockActionAppEnum.swift; sourceTree = "<group>"; };
+		6E84E54228DE878D008CAE85 /* PermissionAppEnum.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionAppEnum.swift; sourceTree = "<group>"; };
 		6E8BBFD928DC2CA000F03735 /* SetupLockView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupLockView.swift; sourceTree = "<group>"; };
 		6E8BBFDB28DCC8F300F03735 /* AsyncFetchRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsyncFetchRequest.swift; sourceTree = "<group>"; };
 		6E8BBFE828DD301B00F03735 /* LockIntents.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.extensionkit-extension"; includeInIndex = 0; path = LockIntents.appex; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -448,19 +452,53 @@
 			path = AppKit;
 			sourceTree = "<group>";
 		};
+		6E84E53A28DE862B008CAE85 /* AppEntity */ = {
+			isa = PBXGroup;
+			children = (
+				6E8BBFFB28DD438500F03735 /* LockEntity.swift */,
+				6E84E52528DDB0F2008CAE85 /* KeyEntity.swift */,
+			);
+			path = AppEntity;
+			sourceTree = "<group>";
+		};
+		6E84E53B28DE8643008CAE85 /* AppIntent */ = {
+			isa = PBXGroup;
+			children = (
+				6E8BBFEC28DD301B00F03735 /* ScanLocksIntent.swift */,
+				6E8BBFFF28DD492300F03735 /* UnlockIntent.swift */,
+			);
+			path = AppIntent;
+			sourceTree = "<group>";
+		};
+		6E84E53C28DE8658008CAE85 /* EntityQuery */ = {
+			isa = PBXGroup;
+			children = (
+				6E8BBFFD28DD491100F03735 /* LockQuery.swift */,
+				6E84E52F28DDCF4F008CAE85 /* KeyQuery.swift */,
+			);
+			path = EntityQuery;
+			sourceTree = "<group>";
+		};
+		6E84E53D28DE8679008CAE85 /* AppEnum */ = {
+			isa = PBXGroup;
+			children = (
+				6E84E53E28DE86A1008CAE85 /* LockStatusAppEnum.swift */,
+				6E84E54028DE8728008CAE85 /* UnlockActionAppEnum.swift */,
+				6E84E54228DE878D008CAE85 /* PermissionAppEnum.swift */,
+			);
+			path = AppEnum;
+			sourceTree = "<group>";
+		};
 		6E8BBFE928DD301B00F03735 /* LockIntents */ = {
 			isa = PBXGroup;
 			children = (
 				6E8BC00A28DD54E200F03735 /* LockIntents.entitlements */,
 				6E8BBFEA28DD301B00F03735 /* LockIntentsExtension.swift */,
-				6E8BBFEC28DD301B00F03735 /* ScanLocksIntent.swift */,
 				6E84E51F28DD9646008CAE85 /* Shortcuts.swift */,
-				6E8BBFFF28DD492300F03735 /* UnlockIntent.swift */,
-				6E8BBFFB28DD438500F03735 /* LockEntity.swift */,
-				6E84E52528DDB0F2008CAE85 /* KeyEntity.swift */,
-				6E8BBFFD28DD491100F03735 /* LockQuery.swift */,
-				6E84E52F28DDCF4F008CAE85 /* KeyQuery.swift */,
-				6E84E52128DD9713008CAE85 /* TestIntent.swift */,
+				6E84E53D28DE8679008CAE85 /* AppEnum */,
+				6E84E53B28DE8643008CAE85 /* AppIntent */,
+				6E84E53A28DE862B008CAE85 /* AppEntity */,
+				6E84E53C28DE8658008CAE85 /* EntityQuery */,
 				6E8BBFEE28DD301B00F03735 /* Info.plist */,
 			);
 			path = LockIntents;
@@ -729,7 +767,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				6E8BBFEB28DD301B00F03735 /* LockIntentsExtension.swift in Sources */,
-				6E84E52E28DDC90B008CAE85 /* TestIntent.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -741,6 +778,7 @@
 				6E84E52D28DDC841008CAE85 /* LockEntity.swift in Sources */,
 				6E84E52728DDC841008CAE85 /* ScanLocksIntent.swift in Sources */,
 				6E84E52A28DDC841008CAE85 /* Shortcuts.swift in Sources */,
+				6E84E54328DE878D008CAE85 /* PermissionAppEnum.swift in Sources */,
 				6E84E52B28DDC841008CAE85 /* KeyEntity.swift in Sources */,
 				6E4CB62528D792BF00116573 /* InfoPlist.swift in Sources */,
 				6E21831D28D834D200A622B3 /* ContentView.swift in Sources */,
@@ -750,9 +788,11 @@
 				6E21834C28D9140D00A622B3 /* KeysView.swift in Sources */,
 				6E84E52828DDC841008CAE85 /* UnlockIntent.swift in Sources */,
 				6E21831B28D8341000A622B3 /* SidebarView.swift in Sources */,
+				6E84E53F28DE86A1008CAE85 /* LockStatusAppEnum.swift in Sources */,
 				6E3276D028D70C9400AF171B /* NearbyDevicesView.swift in Sources */,
 				6E84E52C28DDC841008CAE85 /* LockQuery.swift in Sources */,
 				6E21831F28D84A7300A622B3 /* SidebarLabel.swift in Sources */,
+				6E84E54128DE8728008CAE85 /* UnlockActionAppEnum.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
