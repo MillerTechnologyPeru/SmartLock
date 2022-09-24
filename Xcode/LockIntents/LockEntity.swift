@@ -43,10 +43,20 @@ extension LockEntity {
     }
     
     var displayRepresentation: DisplayRepresentation {
+        let permission = self.key?.permission ?? .anytime
         return DisplayRepresentation(
             title: "\(name ?? "Lock")",
-            subtitle: "\(id.description)"
+            subtitle: "\(id.description)",
+            image: .init(named: permission.imageName, isTemplate: false)
         )
+    }
+}
+
+@available(macOS 13, iOS 16, watchOS 9, tvOS 16, *)
+private extension LockEntity {
+    
+    var image: PermissionType.Image {
+        PermissionType.Image(permissionType: .init(rawValue: (key?.permission ?? .anytime).rawValue)!)
     }
 }
 

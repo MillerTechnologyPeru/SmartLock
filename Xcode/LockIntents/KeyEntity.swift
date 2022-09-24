@@ -39,7 +39,8 @@ extension KeyEntity {
     var displayRepresentation: DisplayRepresentation {
         return DisplayRepresentation(
             title: "\(name)",
-            subtitle: "\(permission.localizedStringResource)"
+            subtitle: "\(permission.localizedStringResource)",
+            image: .init(named: permission.imageName, isTemplate: false)
         )
     }
 }
@@ -79,6 +80,19 @@ extension KeyEntity {
                 .anytime: "Anytime",
                 .scheduled: "Scheduled"
             ]
+        }
+        
+        var imageName: String {
+            switch self {
+            case .owner:
+                return "permissionOwner"
+            case .admin:
+                return "permissionAdmin"
+            case .anytime:
+                return "permissionAnytime"
+            case .scheduled:
+                return "permissionScheduled"
+            }
         }
     }
 }
