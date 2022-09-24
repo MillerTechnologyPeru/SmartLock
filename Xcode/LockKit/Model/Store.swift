@@ -35,9 +35,9 @@ public final class Store: ObservableObject {
     @Published
     public var lockInformation = [NativePeripheral: LockInformation]()
     
-    public lazy var central = DarwinCentral()
+    public lazy var central = NativeCentral.shared
     
-    private var scanStream: AsyncCentralScan<DarwinCentral>?
+    private var scanStream: AsyncCentralScan<NativeCentral>?
     
     public lazy var preferences = Preferences(suiteName: .lock)!
     
@@ -454,7 +454,7 @@ public extension Store {
     }
     
     @discardableResult
-    func readInformation(for peripheral: DarwinCentral.Peripheral) async throws -> LockInformation {
+    func readInformation(for peripheral: NativePeripheral) async throws -> LockInformation {
         guard await central.state == .poweredOn else {
             throw LockError.bluetoothUnavailable
         }
@@ -478,7 +478,7 @@ public extension Store {
     
     /// Setup a lock.
     func setup(
-        for lock: DarwinCentral.Peripheral,
+        for lock: NativePeripheral,
         using sharedSecret: KeyData,
         name: String
     ) async throws {
@@ -526,7 +526,7 @@ public extension Store {
     }
     
     func newKey(
-        for peripheral: DarwinCentral.Peripheral,
+        for peripheral: NativePeripheral,
         permission: Permission,
         name newKeyName: String
     ) async throws -> NewKey.Invitation {
@@ -750,7 +750,7 @@ public extension Store {
     
     @discardableResult
     func listEvents(
-        for peripheral: NativeCentral.Peripheral,
+        for peripheral: NativePeripheral,
         fetchRequest: LockEvent.FetchRequest? = nil
     ) async throws -> [LockEvent] {
         stopScanning()

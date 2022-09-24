@@ -251,13 +251,13 @@ struct NearbyDevicesView_Previews: PreviewProvider {
             NearbyDevicesView.StateView(
                 state: .scanning,
                 items: [
-                    .loading(UUID()),
-                    .setup(UUID(), UUID()),
-                    .unknown(UUID(), UUID()),
-                    .key(UUID(), "My lock", .admin)
+                    .loading(.random),
+                    .setup(.random, UUID()),
+                    .unknown(.random, UUID()),
+                    .key(.random, "My lock", .admin)
                 ],
                 toggleScan: {  },
-                destination: { Text(verbatim: $0.id.uuidString) }
+                destination: { Text(verbatim: $0.id.description) }
             )
         }
     }

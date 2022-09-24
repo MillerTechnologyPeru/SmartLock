@@ -97,6 +97,11 @@
 		6E84E54128DE8728008CAE85 /* UnlockActionAppEnum.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E84E54028DE8728008CAE85 /* UnlockActionAppEnum.swift */; };
 		6E84E54328DE878D008CAE85 /* PermissionAppEnum.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E84E54228DE878D008CAE85 /* PermissionAppEnum.swift */; };
 		6E84E54628DEA0CE008CAE85 /* FetchEventsIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E84E54428DE89BC008CAE85 /* FetchEventsIntent.swift */; };
+		6E84E54C28DF4A98008CAE85 /* MockAdvertisement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E84E54828DF4A98008CAE85 /* MockAdvertisement.swift */; };
+		6E84E54D28DF4A98008CAE85 /* MockCentral.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E84E54928DF4A98008CAE85 /* MockCentral.swift */; };
+		6E84E54E28DF4A98008CAE85 /* MockAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E84E54A28DF4A98008CAE85 /* MockAttributes.swift */; };
+		6E84E54F28DF4A98008CAE85 /* MockScanData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E84E54B28DF4A98008CAE85 /* MockScanData.swift */; };
+		6E84E55128DF59D1008CAE85 /* MockLock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E84E55028DF59D1008CAE85 /* MockLock.swift */; };
 		6E8BBFDA28DC2CA000F03735 /* SetupLockView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E8BBFD928DC2CA000F03735 /* SetupLockView.swift */; };
 		6E8BBFDC28DCC8F300F03735 /* AsyncFetchRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E8BBFDB28DCC8F300F03735 /* AsyncFetchRequest.swift */; };
 		6E8BBFEB28DD301B00F03735 /* LockIntentsExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E8BBFEA28DD301B00F03735 /* LockIntentsExtension.swift */; };
@@ -230,6 +235,11 @@
 		6E84E54028DE8728008CAE85 /* UnlockActionAppEnum.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnlockActionAppEnum.swift; sourceTree = "<group>"; };
 		6E84E54228DE878D008CAE85 /* PermissionAppEnum.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionAppEnum.swift; sourceTree = "<group>"; };
 		6E84E54428DE89BC008CAE85 /* FetchEventsIntent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchEventsIntent.swift; sourceTree = "<group>"; };
+		6E84E54828DF4A98008CAE85 /* MockAdvertisement.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockAdvertisement.swift; sourceTree = "<group>"; };
+		6E84E54928DF4A98008CAE85 /* MockCentral.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockCentral.swift; sourceTree = "<group>"; };
+		6E84E54A28DF4A98008CAE85 /* MockAttributes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockAttributes.swift; sourceTree = "<group>"; };
+		6E84E54B28DF4A98008CAE85 /* MockScanData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockScanData.swift; sourceTree = "<group>"; };
+		6E84E55028DF59D1008CAE85 /* MockLock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockLock.swift; sourceTree = "<group>"; };
 		6E8BBFD928DC2CA000F03735 /* SetupLockView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupLockView.swift; sourceTree = "<group>"; };
 		6E8BBFDB28DCC8F300F03735 /* AsyncFetchRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsyncFetchRequest.swift; sourceTree = "<group>"; };
 		6E8BBFE828DD301B00F03735 /* LockIntents.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.extensionkit-extension"; includeInIndex = 0; path = LockIntents.appex; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -387,6 +397,7 @@
 		6E3276DA28D7136400AF171B /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				6E84E54728DF4A2C008CAE85 /* Mock */,
 				6E21835128D9516A00A622B3 /* iCloud */,
 				6E21832428D8F3B500A622B3 /* CoreData */,
 				6E21830D28D7FF2400A622B3 /* AppGroup.swift */,
@@ -490,6 +501,18 @@
 				6E84E54228DE878D008CAE85 /* PermissionAppEnum.swift */,
 			);
 			path = AppEnum;
+			sourceTree = "<group>";
+		};
+		6E84E54728DF4A2C008CAE85 /* Mock */ = {
+			isa = PBXGroup;
+			children = (
+				6E84E54828DF4A98008CAE85 /* MockAdvertisement.swift */,
+				6E84E54A28DF4A98008CAE85 /* MockAttributes.swift */,
+				6E84E54928DF4A98008CAE85 /* MockCentral.swift */,
+				6E84E54B28DF4A98008CAE85 /* MockScanData.swift */,
+				6E84E55028DF59D1008CAE85 /* MockLock.swift */,
+			);
+			path = Mock;
 			sourceTree = "<group>";
 		};
 		6E8BBFE928DD301B00F03735 /* LockIntents */ = {
@@ -814,6 +837,7 @@
 				6E21833B28D8F3B500A622B3 /* ConfirmNewKeyEventManagedObject.swift in Sources */,
 				6E21830C28D7FEF600A622B3 /* FileManager.swift in Sources */,
 				6E9E37AB28DAA6D100BE7128 /* KeyDetailView.swift in Sources */,
+				6E84E54C28DF4A98008CAE85 /* MockAdvertisement.swift in Sources */,
 				6E6A97EF28DBEC2D00C689F6 /* NewKeyInvitationStore.swift in Sources */,
 				6E4CB61028D7867700116573 /* LockRowView.swift in Sources */,
 				6E21835028D9506100A622B3 /* Preferences.swift in Sources */,
@@ -824,6 +848,7 @@
 				6E21833C28D8F3B500A622B3 /* KeyManagedObject.swift in Sources */,
 				6E21830128D7C37500A622B3 /* Error.swift in Sources */,
 				6E84E53428DDDCDC008CAE85 /* Bundle.swift in Sources */,
+				6E84E54E28DF4A98008CAE85 /* MockAttributes.swift in Sources */,
 				6E21836328D9516B00A622B3 /* iCloud.swift in Sources */,
 				6E21833E28D8F3B500A622B3 /* CreateNewKeyEventManagedObject.swift in Sources */,
 				6E4CB62328D7907E00116573 /* PermissionIconViewNSView.swift in Sources */,
@@ -844,9 +869,11 @@
 				6E8BBFDA28DC2CA000F03735 /* SetupLockView.swift in Sources */,
 				6E9E37AD28DADF2600BE7128 /* ActivityView.swift in Sources */,
 				6E21834328D8F3B500A622B3 /* ManagedObject.swift in Sources */,
+				6E84E54D28DF4A98008CAE85 /* MockCentral.swift in Sources */,
 				6E84E53628DDE01F008CAE85 /* AssetExtractor.swift in Sources */,
 				6E21834028D8F3B500A622B3 /* RemoveKeyEventManagedObject.swift in Sources */,
 				6E21834A28D90F7A00A622B3 /* LocalAuthentication.swift in Sources */,
+				6E84E54F28DF4A98008CAE85 /* MockScanData.swift in Sources */,
 				6E21833628D8F3B500A622B3 /* ContactManagedObject.swift in Sources */,
 				6E3276D228D70CE100AF171B /* Store.swift in Sources */,
 				6E4CB61A28D788AA00116573 /* UIStyleKit.swift in Sources */,
@@ -856,6 +883,7 @@
 				6E21836128D9516B00A622B3 /* CloudKit.swift in Sources */,
 				6E21836428D9516B00A622B3 /* CloudUser.swift in Sources */,
 				6E21834E28D91FDC00A622B3 /* Event.swift in Sources */,
+				6E84E55128DF59D1008CAE85 /* MockLock.swift in Sources */,
 				6E21830E28D7FF2400A622B3 /* AppGroup.swift in Sources */,
 				6E21836728D9516B00A622B3 /* CloudNewKey.swift in Sources */,
 				6E6A97F328DC030000C689F6 /* NewKeyInvitationView.swift in Sources */,

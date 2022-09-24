@@ -36,7 +36,7 @@ struct ScanLocksIntent: AppIntent {
     @MainActor
     func perform() async throws -> some IntentResult {
         let store = Store.shared
-        try await store.central.waitPowerOn()
+        try await store.central.wait(for: .poweredOn)
         try await store.scan(duration: duration)
         let locks = store.lockInformation
             .sorted(by: { $0.key.id.description < $1.key.id.description })

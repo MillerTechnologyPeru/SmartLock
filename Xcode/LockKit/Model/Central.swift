@@ -5,23 +5,59 @@
 //  Created by Alsey Coleman Miller on 9/18/22.
 //
 
-#if canImport(CoreBluetooth) && canImport(DarwinGATT)
 import Foundation
 import CoreBluetooth
 import Bluetooth
 import GATT
 import DarwinGATT
 
+#if targetEnvironment(simulator)
+
+public typealias NativeCentral = MockCentral
+public typealias NativePeripheral = MockCentral.Peripheral
+
+public extension NativeCentral {
+    
+    private struct Cache {
+        static let central = MockCentral()
+    }
+    
+    static var shared: NativeCentral {
+        return Cache.central
+    }
+}
+
+#else
+
 public typealias NativeCentral = DarwinCentral
 public typealias NativePeripheral = DarwinCentral.Peripheral
 
-public extension DarwinCentral {
+public extension NativeCentral {
+    
+    private struct Cache {
+        static let central = DarwinCentral(
+            options: .init(showPowerAlert: true)
+        )
+    }
+    
+    static var shared: NativeCentral {
+        return Cache.central
+    }
+}
+
+#endif
+
+public extension NativeCentral {
     
     /// Wait for CoreBluetooth to be ready.
-    func waitPowerOn(warning: Int = 3, timeout: Int = 10) async throws {
+    func wait(
+        for state: DarwinBluetoothState,
+        warning: Int = 3,
+        timeout: Int = 10
+    ) async throws {
         
         var powerOnWait = 0
-        while await state != .poweredOn {
+        while await self.state != state {
             
             // inform user after 3 seconds
             if powerOnWait == warning {
@@ -35,5 +71,3 @@ public extension DarwinCentral {
         }
     }
 }
-
-#endif
