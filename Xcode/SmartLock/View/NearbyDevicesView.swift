@@ -67,10 +67,12 @@ private extension NearbyDevicesView {
     }
     
     var peripherals: [NativePeripheral] {
-        store.peripherals
+        store.peripherals.keys
             .lazy
-            .sorted(by: { $0.value.rssi < $1.value.rssi })
-            .map { $0.key }
+            .sorted(by: { store.lockInformation[$0]?.id.description ?? "" > store.lockInformation[$1]?.id.description ?? ""  })
+            .sorted(by: {
+                store.applicationData.locks[store.lockInformation[$0]?.id ?? UUID()]?.key.created ?? .distantFuture > store.applicationData.locks[store.lockInformation[$1]?.id ?? UUID()]?.key.created ?? .distantFuture })
+            .sorted(by: { $0.description < $1.description })
     }
     
     var state: State {
