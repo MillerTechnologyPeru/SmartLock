@@ -37,10 +37,35 @@ public enum LockError: Error {
     case newKeyExpired
 }
 
-/*
+
 // MARK: - CustomNSError
 
-#if os(iOS)
+extension LockError: LocalizedError {
+    
+    public var errorDescription: String? {
+        switch self {
+        case .unknownLock:
+            return "Unable to read lock information"
+        case let .notInRange(lock: lock):
+            return "Lock \(lock) Not in range" //R.string.error.notInRange()
+        case let .noKey(lock: lock):
+            return "No key for lock \(lock)" //R.string.error.noKey()
+        case let .notAdmin(lock: lock):
+            return "Not an admin of lock \(lock)" //R.string.error.notAdmin()
+        case .invalidQRCode:
+            return "Invalid QR code" //R.string.error.invalidQRCode()
+        case .invalidNewKeyFile:
+            return "Invalid key invitation" //R.string.error.invalidNewKeyFile()
+        case let .existingKey(lock: lock):
+            return "You already have an existing key for lock \(lock)" //R.string.error.existingKey()
+        case .newKeyExpired:
+            return "Key invitation expired" //R.string.error.newKeyExpired()
+        case .bluetoothUnavailable:
+            return "Bluetooth unavailable"
+        }
+    }
+}
+
 extension LockError: CustomNSError {
     
     public enum UserInfoKey: String {
@@ -56,30 +81,29 @@ extension LockError: CustomNSError {
     public var errorUserInfo: [String : Any] {
         
         var userInfo = [String : Any](minimumCapacity: 2)
+        userInfo[NSLocalizedDescriptionKey] = self.errorDescription
         
         switch self {
         case let .notInRange(lock: lock):
-            userInfo[NSLocalizedDescriptionKey] = R.string.error.notInRange()
             userInfo[UserInfoKey.lock.rawValue] = lock as NSUUID
         case let .noKey(lock: lock):
-            userInfo[NSLocalizedDescriptionKey] = R.string.error.noKey()
             userInfo[UserInfoKey.lock.rawValue] = lock as NSUUID
         case let .notAdmin(lock: lock):
-            userInfo[NSLocalizedDescriptionKey] = R.string.error.notAdmin()
             userInfo[UserInfoKey.lock.rawValue] = lock as NSUUID
         case .invalidQRCode:
-            userInfo[NSLocalizedDescriptionKey] = R.string.error.invalidQRCode()
+            break
         case .invalidNewKeyFile:
-            userInfo[NSLocalizedDescriptionKey] = R.string.error.invalidNewKeyFile()
+            break
         case let .existingKey(lock: lock):
-            userInfo[NSLocalizedDescriptionKey] = R.string.error.existingKey()
             userInfo[UserInfoKey.lock.rawValue] = lock as NSUUID
         case .newKeyExpired:
-            userInfo[NSLocalizedDescriptionKey] = R.string.error.newKeyExpired()
+            break
+        case .bluetoothUnavailable:
+            break
+        case .unknownLock:
+            break
         }
         
         return userInfo
     }
 }
-#endif
-*/
