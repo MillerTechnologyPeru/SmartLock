@@ -94,7 +94,7 @@ public extension MockLock {
                 .setup(
                     .init(
                         id: UUID(uuidString: "3CEAD223-2CBF-4216-85CD-CAD79302E201")!,
-                        date: Date() - TimeInterval(60 * (3 - 0 + 1)),
+                        date: Date() - TimeInterval(60 * (3 - 1 + 1)),
                         key: UUID(uuidString: "53F21D45-2E82-43CC-9FDC-18313511\(UInt16(0x01).toHexadecimal())")!
                     )
                 ),
@@ -124,7 +124,7 @@ public extension MockLock {
                 .setup(
                     .init(
                         id: UUID(uuidString: "3CEAD223-2CBF-4216-85CD-CAD79302E202")!,
-                        date: Date() - TimeInterval(60 * (3 - 0 + 1)),
+                        date: Date() - TimeInterval(60 * (3 - 2 + 1)),
                         key: UUID(uuidString: "53F21D45-2E82-43CC-9FDC-18313511\(UInt16(0x02).toHexadecimal())")!
                     )
                 ),

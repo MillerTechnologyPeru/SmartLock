@@ -17,11 +17,15 @@ public struct AppNavigationLink <Label: View> : View {
     private let label: Label
     
     public var body: some View {
+        #if os(macOS)
         if #available(macOS 13, iOS 16, tvOS 16, *) {
             navigationStackLink
         } else {
-            navigationViewLink
+            
         }
+        #else
+        navigationViewLink
+        #endif
     }
     
     public init(id: ID, label: () -> Label) {
@@ -43,9 +47,6 @@ private extension AppNavigationLink {
     @available(macOS 13, iOS 16, tvOS 16, *)
     var navigationStackLink: some View {
         NavigationLink(value: id, label: { label })
-            .navigationDestination(for: AppNavigationLinkID.self) {
-                AppNavigationDestinationView(id: $0)
-            }
     }
 }
 

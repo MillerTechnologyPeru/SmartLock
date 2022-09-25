@@ -85,13 +85,27 @@ private extension TabBarView.SplitView {
     
     var navigationView: some View {
         if #available(iOS 16.0, *) {
+            return NavigationView {
+                sidebar()
+            }
+            .navigationViewStyle(.stack)
+        } else {
+            return NavigationView {
+                sidebar()
+            }
+            .navigationViewStyle(.stack)
+        }
+    }
+    
+    var navigationStack: some View {
+        if #available(iOS 16.0, *) {
             return NavigationSplitView(
                 columnVisibility: columnVisibility,
-                sidebar: sidebar,
+                sidebar: {
+                    sidebar()
+                },
                 detail: {
-                    detail().navigationDestination(for: AppNavigationLinkID.self) {
-                        AppNavigationDestinationView(id: $0)
-                    }
+                    detail()
                 }
             )
             .navigationSplitViewStyle(.prominentDetail)
