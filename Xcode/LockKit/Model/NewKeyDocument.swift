@@ -29,7 +29,6 @@ public extension NewKey.Invitation {
         }
         
         public func fileWrapper(configuration: WriteConfiguration) throws -> FileWrapper {
-            
             fatalError()
         }
     }

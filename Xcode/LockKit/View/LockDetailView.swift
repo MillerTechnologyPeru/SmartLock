@@ -70,13 +70,17 @@ public struct LockDetailView: View {
                     #endif
                     
                     ToolbarItem(placement: .primaryAction) {
-                        Button(action: { }) {
+                        Button(action: {
+                            
+                        }) {
                             Image(systemSymbol: .pencil)
                         }
                     }
                     
                     ToolbarItem(placement: .primaryAction) {
-                        Button(action: { }) {
+                        Button(action: {
+                            
+                        }) {
                             Image(systemSymbol: .trash)
                         }
                     }
@@ -96,7 +100,7 @@ public struct LockDetailView: View {
             #if os(iOS)
             AnyView(SetupLockView(id: id))
             #else
-            AnyView(Text("Scan to Setup"))
+            AnyView(Text("Setup this lock on your iOS device."))
             #endif
         } else {
             AnyView(UnknownView(id: id, information: information))
@@ -201,7 +205,6 @@ private extension LockDetailView {
     }
     
     func unlock() {
-        // FIXME: Handle errors
         Task {
             guard await store.central.state == .poweredOn else {
                 return
@@ -211,7 +214,7 @@ private extension LockDetailView {
             let policy: LAPolicy = .deviceOwnerAuthenticationWithBiometrics
             let reason = NSLocalizedString("Biometrics are needed to unlock", comment: "")
             do {
-                if try authentication.canEvaluate(policy: policy) {
+                if (try? authentication.canEvaluate(policy: policy)) ?? false {
                     try await authentication.evaluatePolicy(policy, localizedReason: reason)
                 }
             }

@@ -68,7 +68,7 @@ private extension LockEventEntity {
     var defaultDisplayRepresentation: DisplayRepresentation {
         DisplayRepresentation(
             title: "\(String(type.symbol)) \(type.localizedStringResource)", // - \(lock.name ?? "Lock")",
-            subtitle: "\(date.formatted(date: .abbreviated, time: .shortened))",
+            subtitle: "\(date.formatted(date: .numeric, time: .shortened))",
             image: image
         )
     }

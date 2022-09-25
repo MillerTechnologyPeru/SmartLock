@@ -141,7 +141,7 @@ private extension FetchEventsIntent {
             title: action,
             subtitle: keyName,
             trailing: (
-                managedObject.date?.formatted(date: .abbreviated, time: .omitted) ?? "",
+                managedObject.date?.formatted(date: .numeric, time: .omitted) ?? "",
                 managedObject.date?.formatted(date: .omitted, time: .shortened) ?? ""
             )
         )

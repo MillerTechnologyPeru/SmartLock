@@ -49,7 +49,14 @@ public extension MockScanData {
 public extension MockCentral.Peripheral {
     
     static var random: MockCentral.Peripheral {
-        Peripheral(id: BluetoothAddress(bytes: (.random(in: .min ... .max), .random(in: .min ... .max), .random(in: .min ... .max), .random(in: .min ... .max), .random(in: .min ... .max), .random(in: .min ... .max))))
+        Peripheral(id: BluetoothAddress(bytes: (
+            .random(in: .min ... .max),
+            .random(in: .min ... .max),
+            .random(in: .min ... .max),
+            .random(in: .min ... .max),
+            .random(in: .min ... .max),
+            .random(in: .min ... .max)))
+        )
     }
     
     static var beacon: Peripheral {

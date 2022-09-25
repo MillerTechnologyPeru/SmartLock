@@ -110,13 +110,22 @@ extension MockCharacteristic {
             id: 41,
             uuid: LockInformationCharacteristic.uuid,
             peripheral: .lock(id),
-            properties: [.read]
+            properties: LockInformationCharacteristic.properties
+        )
+    }
+    
+    static func unlock(_ id: UInt8) -> MockCharacteristic {
+        Characteristic(
+            id: 42,
+            uuid: UnlockCharacteristic.uuid,
+            peripheral: .lock(id),
+            properties: UnlockCharacteristic.properties
         )
     }
     
     static func lockEventsRequest(_ id: UInt8) -> MockCharacteristic {
         Characteristic(
-            id: 42,
+            id: 43,
             uuid: ListEventsCharacteristic.uuid,
             peripheral: .lock(id),
             properties: ListEventsCharacteristic.properties
@@ -125,7 +134,7 @@ extension MockCharacteristic {
     
     static func lockEventsNotifications(_ id: UInt8) -> MockCharacteristic {
         Characteristic(
-            id: 43,
+            id: 44,
             uuid: EventsCharacteristic.uuid,
             peripheral: .lock(id),
             properties: EventsCharacteristic.properties
@@ -134,7 +143,7 @@ extension MockCharacteristic {
     
     static func lockKeysRequest(_ id: UInt8) -> MockCharacteristic {
         Characteristic(
-            id: 44,
+            id: 45,
             uuid: ListKeysCharacteristic.uuid,
             peripheral: .lock(id),
             properties: ListKeysCharacteristic.properties
@@ -143,7 +152,7 @@ extension MockCharacteristic {
     
     static func lockKeysNotifications(_ id: UInt8) -> MockCharacteristic {
         Characteristic(
-            id: 45,
+            id: 46,
             uuid: KeysCharacteristic.uuid,
             peripheral: .lock(id),
             properties: KeysCharacteristic.properties

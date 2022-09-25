@@ -417,6 +417,7 @@ internal extension MockCentral {
                 let id = UInt8(index)
                 return (MockService.lock(id), [
                     MockCharacteristic.lockInformation(id),
+                    MockCharacteristic.unlock(id),
                     MockCharacteristic.lockEventsRequest(id),
                     MockCharacteristic.lockEventsNotifications(id),
                     MockCharacteristic.lockKeysRequest(id),
@@ -439,6 +440,7 @@ internal extension MockCentral {
                     status: lock.status,
                     unlockActions: [.default]
                 ).data
+                values[.unlock(UInt8(index))] = Data()
                 values[.lockEventsRequest(UInt8(index))] = Data()
                 values[.lockKeysRequest(UInt8(index))] = Data()
             }
