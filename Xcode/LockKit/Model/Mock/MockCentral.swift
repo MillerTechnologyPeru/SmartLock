@@ -10,6 +10,7 @@ import Foundation
 import Bluetooth
 import GATT
 import DarwinGATT
+import CoreLock
 
 public final class MockCentral: CentralManager {
     
@@ -28,14 +29,14 @@ public final class MockCentral: CentralManager {
     
     public var state: DarwinBluetoothState {
         get async {
-            try? await Task.sleep(timeInterval: 0.1)
+            try? await Task.sleep(timeInterval: 0.01)
             return await storage.bluetoothState
         }
     }
     
     public var peripherals: Set<GATT.Peripheral> {
         get async {
-            try? await Task.sleep(timeInterval: 0.1)
+            try? await Task.sleep(timeInterval: 0.01)
             return await Set(storage.state.scanData.map { $0.peripheral })
         }
     }
@@ -81,6 +82,7 @@ public final class MockCentral: CentralManager {
                 }
             }
             try await Task.sleep(timeInterval: 0.2)
+            var count = 0
             for scanData in await self.storage.state.scanData {
                 // apply filter
                 if services.isEmpty == false {
@@ -94,12 +96,15 @@ public final class MockCentral: CentralManager {
                     continue
                 }
                 continuation(scanData)
+                count += 1
             }
+            self.log?("Discovered \(count) peripherals")
         }
     }
     
     /// Connect to the specified device
     public func connect(to peripheral: Peripheral) async throws {
+        log?("Will connect to \(peripheral)")
         let state = await self.state
         guard state == .poweredOn else {
             throw DarwinCentralError.invalidState(state)
@@ -113,13 +118,16 @@ public final class MockCentral: CentralManager {
     public func disconnect(_ peripheral: Peripheral) {
         Task {
             await self.storage.updateState {
-                $0.connected.remove(peripheral)
+                if $0.connected.remove(peripheral) != nil {
+                    self.log?("Will disconnect \(peripheral)")
+                }
             }
         }
     }
     
     /// Disconnect all connected devices.
     public func disconnectAll() {
+        self.log?("Will disconnect all")
         Task {
             await storage.updateState {
                 $0.connected.removeAll()
@@ -132,6 +140,7 @@ public final class MockCentral: CentralManager {
         _ services: Set<BluetoothUUID> = [],
         for peripheral: Peripheral
     ) async throws -> [Service<Peripheral, AttributeID>] {
+        log?("Peripheral \(peripheral) will discover services")
         let state = await self.state
         guard state == .poweredOn else {
             throw DarwinCentralError.invalidState(state)
@@ -147,6 +156,7 @@ public final class MockCentral: CentralManager {
         _ services: Set<BluetoothUUID> = [],
         for service: Service<Peripheral, AttributeID>
     ) async throws -> [Service<Peripheral, AttributeID>] {
+        log?("Peripheral \(service.peripheral) will discover included services of service \(service.uuid)")
         let state = await self.state
         guard state == .poweredOn else {
             throw DarwinCentralError.invalidState(state)
@@ -159,6 +169,7 @@ public final class MockCentral: CentralManager {
         _ characteristics: Set<BluetoothUUID> = [],
         for service: Service<Peripheral, AttributeID>
     ) async throws -> [Characteristic<Peripheral, AttributeID>] {
+        log?("Peripheral \(service.peripheral) will discover characteristics of service \(service.uuid)")
         let state = await self.state
         guard state == .poweredOn else {
             throw DarwinCentralError.invalidState(state)
@@ -177,6 +188,11 @@ public final class MockCentral: CentralManager {
     public func readValue(
         for characteristic: Characteristic<Peripheral, AttributeID>
     ) async throws -> Data {
+        log?("Peripheral \(characteristic.peripheral) will read characteristic \(characteristic.uuid)")
+        let state = await self.state
+        guard state == .poweredOn else {
+            throw DarwinCentralError.invalidState(state)
+        }
         guard await storage.state.connected.contains(characteristic.peripheral) else {
             throw CentralError.disconnected
         }
@@ -189,6 +205,7 @@ public final class MockCentral: CentralManager {
         for characteristic: Characteristic<Peripheral, AttributeID>,
         withResponse: Bool = true
     ) async throws {
+        log?("Peripheral \(characteristic.peripheral) will write characteristic \(characteristic.uuid)")
         let state = await self.state
         guard state == .poweredOn else {
             throw DarwinCentralError.invalidState(state)
@@ -209,12 +226,57 @@ public final class MockCentral: CentralManager {
         await storage.updateState {
             $0.characteristicValues[characteristic] = data
         }
+        // mock
+        guard let (index, lock) = MockLock.locks
+            .enumerated()
+            .first(where: { Peripheral.lock(UInt8($0.offset)) == characteristic.peripheral })
+            else { return }
+        switch characteristic.uuid {
+        case ListEventsCharacteristic.uuid:
+            guard let listEventsCharacteristic = ListEventsCharacteristic(data: data) else {
+                throw CentralError.invalidAttribute(ListEventsCharacteristic.uuid)
+            }
+            let key = listEventsCharacteristic.encryptedData.authentication.message.id
+            guard let keyData = await Store.shared[key: key] else {
+                throw CentralError.invalidAttribute(ListEventsCharacteristic.uuid)
+            }
+            let request = try listEventsCharacteristic.decrypt(using: keyData)
+            let events = request.fetchRequest.map { lock.events.fetch($0) } ?? lock.events
+            // build notifications
+            await storage.updateState {
+                $0.notifications[.lockEventsNotifications(UInt8(index))] = EventListNotification
+                    .from(list: events)
+                    .reduce([], { try! $0 + EventsCharacteristic.from($1, id: key, key: keyData, maximumUpdateValueLength: 20) })
+                    .map { $0.data }
+            }
+        case ListKeysCharacteristic.uuid:
+            guard let listKeysCharacteristic = ListKeysCharacteristic(data: data) else {
+                throw CentralError.invalidAttribute(ListKeysCharacteristic.uuid)
+            }
+            let key = listKeysCharacteristic.authentication.message.id
+            guard let keyData = await Store.shared[key: key] else {
+                throw CentralError.invalidAttribute(ListKeysCharacteristic.uuid)
+            }
+            let keysList = KeysList(
+                keys: lock.keys,
+                newKeys: lock.newKeys
+            )
+            await storage.updateState {
+                $0.notifications[.lockEventsNotifications(UInt8(index))] = KeyListNotification
+                    .from(list: keysList)
+                    .reduce([], { try! $0 + KeysCharacteristic.from($1, id: key, key: keyData, maximumUpdateValueLength: 20) })
+                    .map { $0.data }
+            }
+        default:
+            return
+        }
     }
     
     /// Discover descriptors
     public func discoverDescriptors(
         for characteristic: Characteristic<Peripheral, AttributeID>
     ) async throws -> [Descriptor<Peripheral, AttributeID>] {
+        log?("Peripheral \(characteristic.peripheral) will discover descriptors of characteristic \(characteristic.uuid)")
         let state = await self.state
         guard state == .poweredOn else {
             throw DarwinCentralError.invalidState(state)
@@ -229,6 +291,7 @@ public final class MockCentral: CentralManager {
     public func readValue(
         for descriptor: Descriptor<Peripheral, AttributeID>
     ) async throws -> Data {
+        log?("Peripheral \(descriptor.peripheral) will read descriptor \(descriptor.uuid)")
         let state = await self.state
         guard state == .poweredOn else {
             throw DarwinCentralError.invalidState(state)
@@ -244,6 +307,7 @@ public final class MockCentral: CentralManager {
         _ data: Data,
         for descriptor: Descriptor<Peripheral, AttributeID>
     ) async throws {
+        log?("Peripheral \(descriptor.peripheral) will write descriptor \(descriptor.uuid)")
         let state = await self.state
         guard state == .poweredOn else {
             throw DarwinCentralError.invalidState(state)
@@ -259,6 +323,7 @@ public final class MockCentral: CentralManager {
     public func notify(
         for characteristic: GATT.Characteristic<GATT.Peripheral, AttributeID>
     ) async throws -> AsyncCentralNotifications<MockCentral> {
+        log?("Peripheral \(characteristic.peripheral) will enable notifications for characteristic \(characteristic.uuid)")
         let state = await self.state
         guard state == .poweredOn else {
             throw DarwinCentralError.invalidState(state)
@@ -267,9 +332,10 @@ public final class MockCentral: CentralManager {
             throw CentralError.disconnected
         }
         return AsyncCentralNotifications { [unowned self] continuation in
+            try await Task.sleep(nanoseconds: 100_000_000)
             if let notifications = await storage.state.notifications[characteristic] {
                 for notification in notifications {
-                    try await Task.sleep(nanoseconds: 100_000_000)
+                    try await Task.sleep(nanoseconds: 100_000)
                     continuation(notification)
                 }
             }
@@ -278,6 +344,7 @@ public final class MockCentral: CentralManager {
     
     /// Read MTU
     public func maximumTransmissionUnit(for peripheral: Peripheral) async throws -> MaximumTransmissionUnit {
+        self.log?("Will read MTU for \(peripheral)")
         let state = await self.state
         guard state == .poweredOn else {
             throw DarwinCentralError.invalidState(state)
@@ -290,6 +357,7 @@ public final class MockCentral: CentralManager {
     
     // Read RSSI
     public func rssi(for peripheral: Peripheral) async throws -> RSSI {
+        log?("Will read RSSI for \(peripheral)")
         let state = await self.state
         guard state == .poweredOn else {
             throw DarwinCentralError.invalidState(state)
@@ -334,7 +402,11 @@ internal extension MockCentral {
             let characteristics = MockLock.locks.enumerated().map { (index, lock) in
                 let id = UInt8(index)
                 return (MockService.lock(id), [
-                    Characteristic.lockInformation(id)
+                    MockCharacteristic.lockInformation(id),
+                    MockCharacteristic.lockEventsRequest(id),
+                    MockCharacteristic.lockEventsNotifications(id),
+                    MockCharacteristic.lockKeysRequest(id),
+                    MockCharacteristic.lockKeysNotifications(id)
                 ])
             }
             return .init(uniqueKeysWithValues: characteristics)
@@ -343,15 +415,22 @@ internal extension MockCentral {
             .batteryLevel: [.clientCharacteristicConfiguration(.beacon)],
             .savantTest: [.clientCharacteristicConfiguration(.smartThermostat)],
         ]
-        var characteristicValues: [MockCharacteristic: Data] = .init(uniqueKeysWithValues: MockLock.locks.enumerated().map({ (index, lock) in
-            (.lockInformation(UInt8(index)), LockInformationCharacteristic(
-                id: lock.id,
-                buildVersion: .current,
-                version: .current,
-                status: lock.status,
-                unlockActions: [.default]
-            ).data)
-        }))
+        var characteristicValues: [MockCharacteristic: Data] = {
+            var values = [MockCharacteristic: Data]()
+            for (index, lock) in MockLock.locks.enumerated() {
+                values[.lockInformation(UInt8(index))] = LockInformationCharacteristic(
+                    id: lock.id,
+                    buildVersion: .current,
+                    version: .current,
+                    status: lock.status,
+                    unlockActions: [.default]
+                ).data
+                values[.lockEventsRequest(UInt8(index))] = Data()
+                values[.lockKeysRequest(UInt8(index))] = Data()
+            }
+            return values
+        }()
+            //.init(uniqueKeysWithValues: MockLock.locks.enumerated().reduce([(MockCharacteristic, Data)](), { (index, lock) in
         var descriptorValues: [MockDescriptor: Data] = [
             .clientCharacteristicConfiguration(.beacon): Data([0x00]),
             .clientCharacteristicConfiguration(.smartThermostat): Data([0x00]),
@@ -373,7 +452,7 @@ internal extension MockCentral {
                 Data(UUID().uuidString.utf8),
                 Data(UUID().uuidString.utf8),
                 Data(UUID().uuidString.utf8),
-            ]
+            ],
         ]
     }
     

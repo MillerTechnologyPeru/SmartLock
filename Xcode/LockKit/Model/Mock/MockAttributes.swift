@@ -6,9 +6,11 @@
 //
 
 #if DEBUG
+import Foundation
 import SwiftUI
 import Bluetooth
 import GATT
+import CoreLock
 
 typealias MockService = GATT.Service<GATT.Peripheral, UInt16>
 typealias MockCharacteristic = GATT.Characteristic<GATT.Peripheral, UInt16>
@@ -109,6 +111,42 @@ extension MockCharacteristic {
             uuid: LockInformationCharacteristic.uuid,
             peripheral: .lock(id),
             properties: [.read]
+        )
+    }
+    
+    static func lockEventsRequest(_ id: UInt8) -> MockCharacteristic {
+        Characteristic(
+            id: 42,
+            uuid: ListEventsCharacteristic.uuid,
+            peripheral: .lock(id),
+            properties: ListEventsCharacteristic.properties
+        )
+    }
+    
+    static func lockEventsNotifications(_ id: UInt8) -> MockCharacteristic {
+        Characteristic(
+            id: 43,
+            uuid: EventsCharacteristic.uuid,
+            peripheral: .lock(id),
+            properties: EventsCharacteristic.properties
+        )
+    }
+    
+    static func lockKeysRequest(_ id: UInt8) -> MockCharacteristic {
+        Characteristic(
+            id: 44,
+            uuid: ListKeysCharacteristic.uuid,
+            peripheral: .lock(id),
+            properties: ListKeysCharacteristic.properties
+        )
+    }
+    
+    static func lockKeysNotifications(_ id: UInt8) -> MockCharacteristic {
+        Characteristic(
+            id: 45,
+            uuid: KeysCharacteristic.uuid,
+            peripheral: .lock(id),
+            properties: KeysCharacteristic.properties
         )
     }
 }

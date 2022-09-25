@@ -42,7 +42,7 @@ public extension MockScanData {
     }
     
     static var lock: MockScanData {
-        .lock(0x01)
+        .lock(0x00)
     }
 }
 
@@ -61,11 +61,11 @@ public extension MockCentral.Peripheral {
     }
     
     static func lock(_ id: UInt8) -> Peripheral {
-        Peripheral(id: BluetoothAddress(bytes: (0x00, 0xAA, 0xBB, 0xCC, 0xDD, id)))
+        Peripheral(id: .init(bigEndian: BluetoothAddress(bytes: (0x00, 0xAA, 0xBB, 0xCC, 0xDD, id))))
     }
     
     static var lock: Peripheral {
-        .lock(0x01)
+        .lock(0x00)
     }
 }
 
