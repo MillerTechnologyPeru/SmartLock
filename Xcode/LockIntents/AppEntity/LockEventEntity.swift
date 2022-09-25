@@ -7,8 +7,15 @@
 
 import Foundation
 import CoreData
+import SwiftUI
 import AppIntents
 import LockKit
+
+#if canImport(UIKit)
+import UIKit
+#elseif canImport(AppKit)
+import AppKit
+#endif
 
 /// Lock Intent Entity
 @available(macOS 13, iOS 16, watchOS 9, tvOS 16, *)
@@ -46,7 +53,7 @@ extension LockEventEntity {
             return DisplayRepresentation(
                 title: "\(title)",
                 subtitle: "\(subtitle)\n\(date.formatted(date: .numeric, time: .shortened))",
-                image: nil
+                image: image
             )
         } catch {
             assertionFailure("Unable to fetch event. \(error)")
@@ -62,8 +69,28 @@ private extension LockEventEntity {
         DisplayRepresentation(
             title: "\(String(type.symbol)) \(type.localizedStringResource)", // - \(lock.name ?? "Lock")",
             subtitle: "\(date.formatted(date: .abbreviated, time: .shortened))",
-            image: nil
+            image: image
         )
+    }
+    
+    var image: DisplayRepresentation.Image? {
+        return DispatchQueue.main.sync {
+            let view = Text(verbatim: String(type.symbol))
+                .font(.system(size: 43))
+            let imageRenderer = ImageRenderer(content: view)
+            #if canImport(UIKit)
+            return imageRenderer.uiImage?
+                .pngData()
+                .map { .init(data: $0) }
+            #elseif canImport(AppKit)
+            return imageRenderer.cgImage
+                .map { NSBitmapImageRep(cgImage: $0) }?
+                .representation(using: .png, properties: [:])
+                .map { .init(data: $0) }
+            #else
+            return nil
+            #endif
+        }
     }
 }
 
