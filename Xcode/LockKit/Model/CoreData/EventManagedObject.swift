@@ -150,3 +150,35 @@ internal extension NSManagedObjectContext {
         return try insert(event, for: managedObject)
     }
 }
+
+// MARK: - Predicate
+
+public extension LockEvent.Predicate {
+    
+    func toFoundation(lock: UUID? = nil) -> NSPredicate {
+        // CoreData predicate
+        var subpredicates = [Predicate]()
+        if let lock = lock {
+            subpredicates.append(
+                #keyPath(EventManagedObject.lock.identifier) == lock
+            )
+        }
+        if let keys = self.keys, keys.isEmpty == false {
+            subpredicates.append(
+                #keyPath(EventManagedObject.key).in(keys)
+            )
+        }
+        if let start = self.start {
+            subpredicates.append(
+                #keyPath(EventManagedObject.date) >= start
+            )
+        }
+        if let end = self.end {
+            subpredicates.append(
+                #keyPath(EventManagedObject.date) <= end
+            )
+        }
+        let predicate: Predicate = subpredicates.isEmpty ? .value(true) : .compound(.and(subpredicates))
+        return predicate.toFoundation()
+    }
+}

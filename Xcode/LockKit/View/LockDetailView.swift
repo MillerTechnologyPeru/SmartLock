@@ -336,7 +336,7 @@ extension LockDetailView {
                                 .frame(width: titleWidth, height: nil, alignment: .leading)
                                 .font(.body)
                                 .foregroundColor(.gray)
-                            AppNavigationLink(id: .events(.init(keys: [cache.key.id])), label: {
+                            AppNavigationLink(id: .events(id, nil), label: {
                                 HStack {
                                     Text("\(events) events")
                                     Image(systemName: "chevron.right")

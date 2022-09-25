@@ -54,7 +54,7 @@ private extension AppNavigationLink {
 public enum AppNavigationLinkID: Hashable {
     
     case lock(UUID)
-    case events(LockEvent.Predicate?)
+    case events(UUID, LockEvent.Predicate?)
     case permissions(UUID)
     case key(KeyDetailView.Value)
     case keySchedule(Permission.Schedule) // view only
@@ -101,9 +101,9 @@ public struct AppNavigationDestinationView: View {
             AnyView(
                 LockDetailView(id: id)
             )
-        case let .events(predicate):
+        case let .events(lock, predicate):
             AnyView(
-                EventsView(predicate: predicate)
+                EventsView(lock: lock, predicate: predicate)
             )
         case let .permissions(id):
             AnyView(

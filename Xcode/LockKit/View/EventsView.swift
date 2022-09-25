@@ -18,7 +18,8 @@ public struct EventsView: View {
     @Environment(\.managedObjectContext)
     public var managedObjectContext
     
-    // FIXME: Filter by lock as well
+    @State
+    public var lock: UUID?
     
     @State
     public var predicate: LockEvent.Predicate?
@@ -53,15 +54,16 @@ public struct EventsView: View {
     @State
     private var reloadTask: TaskQueue.PendingTask?
         
-    public init(predicate: LockEvent.Predicate? = nil) {
+    public init(lock: UUID?, predicate: LockEvent.Predicate? = nil) {
         self.predicate = predicate
+        self.lock = lock
     }
     
     public var body: some View {
         list
             .navigationTitle("History")
             .onAppear {
-                self._events.wrappedValue.nsPredicate = self.predicate?.toFoundation()
+                self._events.wrappedValue.nsPredicate = self.predicate?.toFoundation(lock: lock)
             }
             #if os(iOS)
             .toolbar {
@@ -164,14 +166,12 @@ private extension EventsView {
     }
     
     func row(for managedObject: EventManagedObject) -> some View {
-        let context = self.managedObjectContext
         let eventType = type(of: managedObject).eventType
         let displayLockName = (self.predicate?.keys?.count ?? 0) == 1
         let (action, keyName, _) = try! managedObject.displayRepresentation(
             displayLockName: displayLockName,
             in: managedObjectContext
         )
-        
         return LockRowView(
             image: .emoji(eventType.symbol),
             title: action,
@@ -217,11 +217,11 @@ struct EventsView_Previews: PreviewProvider {
         var body: some View {
             #if os(iOS)
             NavigationView {
-                EventsView(predicate: predicate)
+                EventsView(lock: nil, predicate: predicate)
             }
             #else
             NavigationStack {
-                EventsView(predicate: predicate)
+                EventsView(lock: nil, predicate: predicate)
             }
             #endif
         }

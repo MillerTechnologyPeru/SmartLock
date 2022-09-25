@@ -157,8 +157,8 @@ private extension SidebarView {
                 return
             }
             detail = AnyView(detailView(for: lock))
-        case let .events(predicate, _):
-            detail = AnyView(EventsView(predicate: predicate))
+        case let .events(lock, predicate, _):
+            detail = AnyView(EventsView(lock: lock, predicate: predicate))
         }
     }
     
@@ -315,7 +315,7 @@ extension SidebarView {
         case lock(NativePeripheral.ID, String, PermissionType?)
         case key(UUID, String, PermissionType)
         //case newKey(URL)
-        case events(LockEvent.Predicate?, String)
+        case events(UUID?, LockEvent.Predicate?, String)
     }
 }
 
@@ -327,8 +327,12 @@ extension SidebarView.Item: Identifiable {
             return "lock_" + id.description
         case let .key(id, _, _):
             return "key_" + id.description
-        case let .events(predicate, _):
-            return "events_\(predicate.flatMap { "\($0)" } ?? "all")"
+        case let .events(lock, predicate, _):
+            if lock == nil, predicate == nil {
+                return "event_\(lock?.description ?? "")\(predicate.map { String(describing: $0) } ?? "")"
+            } else {
+                return "events_all"
+            }
         }
     }
 }
@@ -347,7 +351,7 @@ extension SidebarLabel {
                 title: title,
                 image: .permission(permission)
             )
-        case let .events(_, name):
+        case let .events(_, _, name):
             self.init(title: name, image: .symbol(.clock))
         }
     }
