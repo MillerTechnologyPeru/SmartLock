@@ -70,6 +70,7 @@ struct FetchEventsIntent: AppIntent {
     
     @MainActor
     func perform() async throws -> some IntentResult {
+        let limit = min(self.limit, Int(UInt8.max))
         let store = Store.shared
         let fetchRequest = LockEvent.FetchRequest(
             offset: UInt8(offset),
@@ -90,7 +91,7 @@ struct FetchEventsIntent: AppIntent {
             fetchRequest: fetchRequest
         )
         return .result(
-            value: "\(events)"
+            value: events.map { LockEventEntity($0) }
         )
     }
 }

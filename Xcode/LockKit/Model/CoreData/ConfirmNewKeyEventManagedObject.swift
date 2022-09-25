@@ -13,7 +13,7 @@ import Predicate
 
 public final class ConfirmNewKeyEventManagedObject: EventManagedObject {
     
-    @nonobjc override class var eventType: LockEvent.EventType { return .confirmNewKey }
+    @nonobjc override public class var eventType: LockEvent.EventType { return .confirmNewKey }
     
     internal convenience init(_ value: LockEvent.ConfirmNewKey,
                               lock: LockManagedObject,

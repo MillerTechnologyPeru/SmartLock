@@ -13,7 +13,7 @@ import Predicate
 
 public class EventManagedObject: NSManagedObject {
     
-    @nonobjc class var eventType: LockEvent.EventType { fatalError("Implemented by subclass") }
+    @nonobjc public class var eventType: LockEvent.EventType { fatalError("Implemented by subclass") }
     
     internal static func initWith(_ value: LockEvent, lock: LockManagedObject, context: NSManagedObjectContext) -> EventManagedObject {
                 
@@ -31,7 +31,7 @@ public class EventManagedObject: NSManagedObject {
         }
     }
     
-    internal static func find(_ id: UUID, in context: NSManagedObjectContext) throws -> EventManagedObject? {
+    public static func find(_ id: UUID, in context: NSManagedObjectContext) throws -> EventManagedObject? {
         
         try context.find(identifier: id as NSUUID,
                          propertyName: #keyPath(EventManagedObject.identifier),
@@ -90,10 +90,15 @@ public extension EventManagedObject {
 public extension LockManagedObject {
     
     func lastEvent(in context: NSManagedObjectContext) throws -> EventManagedObject? {
+        return try lastEvents(count: 1, in: context).first
+    }
+    
+    func lastEvents(count: Int, in context: NSManagedObjectContext) throws -> [EventManagedObject] {
         
         let fetchRequest = NSFetchRequest<EventManagedObject>()
         fetchRequest.entity = EventManagedObject.entity()
-        fetchRequest.fetchBatchSize = 10
+        fetchRequest.fetchBatchSize = count
+        fetchRequest.fetchLimit = count
         fetchRequest.includesSubentities = true
         fetchRequest.shouldRefreshRefetchedObjects = false
         fetchRequest.returnsObjectsAsFaults = true
@@ -110,7 +115,7 @@ public extension LockManagedObject {
             #keyPath(EventManagedObject.lock),
             self
         )
-        return try context.fetch(fetchRequest).first
+        return try context.fetch(fetchRequest)
     }
 }
 

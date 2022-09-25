@@ -45,7 +45,7 @@ public final class Store: ObservableObject {
     
     internal lazy var fileManager: FileManager.Lock = .shared
     
-    internal lazy var persistentContainer: NSPersistentContainer = .lock
+    public lazy var persistentContainer: NSPersistentContainer = .lock
     
     public lazy var managedObjectContext: NSManagedObjectContext = {
         let context = self.persistentContainer.viewContext
@@ -55,7 +55,7 @@ public final class Store: ObservableObject {
         return context
     }()
     
-    internal lazy var backgroundContext: NSManagedObjectContext = {
+    public lazy var backgroundContext: NSManagedObjectContext = {
         let context = self.persistentContainer.newBackgroundContext()
         context.mergePolicy = NSMergePolicy.mergeByPropertyStoreTrump
         context.undoManager = nil

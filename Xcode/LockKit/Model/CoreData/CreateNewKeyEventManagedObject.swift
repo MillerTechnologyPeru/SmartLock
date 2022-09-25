@@ -13,7 +13,7 @@ import Predicate
 
 public final class CreateNewKeyEventManagedObject: EventManagedObject {
     
-    @nonobjc override class var eventType: LockEvent.EventType { return .createNewKey }
+    @nonobjc override public class var eventType: LockEvent.EventType { return .createNewKey }
     
     internal convenience init(_ value: LockEvent.CreateNewKey, lock: LockManagedObject, context: NSManagedObjectContext) {
         

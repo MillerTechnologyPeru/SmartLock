@@ -12,7 +12,7 @@ import CoreLock
 
 public final class RemoveKeyEventManagedObject: EventManagedObject {
     
-    @nonobjc override class var eventType: LockEvent.EventType { return .removeKey }
+    @nonobjc override public class var eventType: LockEvent.EventType { return .removeKey }
     
     internal convenience init(_ value: LockEvent.RemoveKey, lock: LockManagedObject, context: NSManagedObjectContext) {
         
