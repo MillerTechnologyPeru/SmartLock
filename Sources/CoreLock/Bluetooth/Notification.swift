@@ -59,19 +59,22 @@ internal extension GATTConnection {
         return AsyncThrowingStream(ChunkNotification.Notification.self, bufferingPolicy: .unbounded) { continuation in
             Task.detached {
                 do {
+                    var notificationsCount = 0
                     var chunks = [Chunk]()
                     chunks.reserveCapacity(2)
                     for try await chunkNotification in stream {
                         let chunk = chunkNotification.chunk
-                        log?("Received chunk \(chunks.count + 1) (\(chunk.bytes.count) bytes)")
                         chunks.append(chunk)
+                        log?("Received chunk \(chunks.count) (\(chunks.length)/\(chunk.total))")
                         assert(chunks.isEmpty == false)
                         guard chunks.length >= chunk.total else {
                             continue // wait for more chunks
                         }
                         let notificationValue = try ChunkNotification.from(chunks: chunks, using: key.secret)
-                        chunks.removeAll(keepingCapacity: true)
                         continuation.yield(notificationValue)
+                        notificationsCount += 1
+                        log?("Received\(notificationValue.isLast ? " last" : "") notification \(notificationsCount)")
+                        chunks.removeAll(keepingCapacity: true)
                         guard notificationValue.isLast else {
                             continue // wait for final value
                         }
