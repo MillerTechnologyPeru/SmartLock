@@ -21,7 +21,7 @@ struct FetchKeysIntent: AppIntent {
         IntentDescription(
             "Fetch the keys for a specified lock.",
             categoryName: "Utility",
-            searchKeywords: ["events", "bluetooth", "lock"]
+            searchKeywords: ["key", "bluetooth", "lock"]
         )
     }
     
