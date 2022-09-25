@@ -5,7 +5,9 @@
 //  Created by Alsey Coleman Miller on 9/23/22.
 //
 
+import Foundation
 import AppIntents
+import CoreData
 import SwiftUI
 import LockKit
 
@@ -70,28 +72,78 @@ struct FetchEventsIntent: AppIntent {
     
     @MainActor
     func perform() async throws -> some IntentResult {
-        let limit = min(self.limit, Int(UInt8.max))
         let store = Store.shared
-        let fetchRequest = LockEvent.FetchRequest(
+        // search for lock if not in cache
+        guard let peripheral = try await store.device(for: lock.id) else {
+            throw LockError.notInRange(lock: lock.id)
+        }
+        // fetch events
+        let events = try await store.listEvents(
+            for: peripheral,
+            fetchRequest: fetchRequest
+        )
+        let managedObjectContext = Store.shared.managedObjectContext
+        let managedObjects = try events.compactMap { try EventManagedObject.find($0.id, in: managedObjectContext) }
+        assert(managedObjects.count == events.count)
+        return .result(
+            value: events.map { LockEventEntity($0) },
+            view: view(for: managedObjects, in: managedObjectContext)
+        )
+    }
+}
+
+@available(macOS 13, iOS 16, watchOS 9, tvOS 16, *)
+@MainActor
+private extension FetchEventsIntent {
+    
+    var fetchRequest: LockEvent.FetchRequest {
+        LockEvent.FetchRequest(
             offset: UInt8(offset),
-            limit: UInt8(limit),
+            limit: UInt8(min(self.limit, Int(UInt8.max))),
             predicate: .init(
                 keys: keys.map { $0.id },
                 start: start,
                 end: end
             )
         )
-        // search for lock if not in cache
-        guard let peripheral = try await store.device(for: lock.id) else {
-            throw LockError.notInRange(lock: lock.id)
+    }
+    
+    func view(for results: [EventManagedObject], in managedObjectContext: NSManagedObjectContext) -> some View {
+        HStack(alignment: .top, spacing: 0) {
+            VStack(alignment: .leading, spacing: 8) {
+                if results.isEmpty {
+                    Text("No events found.")
+                        .padding(20)
+                } else {
+                    if results.count > 3 {
+                        Text("Found \(results.count) events.")
+                            .padding(20)
+                    } else {
+                        ForEach(results) {
+                            view(for: $0, in: managedObjectContext)
+                                .padding(8)
+                        }
+                    }
+                }
+            }
+            Spacer(minLength: 0)
         }
-        // fetch events
-        let events = try await Store.shared.listEvents(
-            for: peripheral,
-            fetchRequest: fetchRequest
+    }
+    
+    func view(for managedObject: EventManagedObject, in managedObjectContext: NSManagedObjectContext) -> some View {
+        let eventType = type(of: managedObject).eventType
+        let (action, keyName, _) = try! managedObject.displayRepresentation(
+            displayLockName: true,
+            in: managedObjectContext
         )
-        return .result(
-            value: events.map { LockEventEntity($0) }
+        return LockRowView(
+            image: .emoji(eventType.symbol),
+            title: action,
+            subtitle: keyName,
+            trailing: (
+                managedObject.date?.formatted(date: .abbreviated, time: .omitted) ?? "",
+                managedObject.date?.formatted(date: .omitted, time: .shortened) ?? ""
+            )
         )
     }
 }
