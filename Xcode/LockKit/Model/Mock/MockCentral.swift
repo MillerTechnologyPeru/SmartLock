@@ -243,11 +243,16 @@ public final class MockCentral: CentralManager {
             let request = try listEventsCharacteristic.decrypt(using: keyData)
             let events = request.fetchRequest.map { lock.events.fetch($0) } ?? lock.events
             // build notifications
-            await storage.updateState {
-                $0.notifications[.lockEventsNotifications(UInt8(index))] = EventListNotification
-                    .from(list: events)
-                    .reduce([], { try! $0 + EventsCharacteristic.from($1, id: key, key: keyData, maximumUpdateValueLength: 20) })
-                    .map { $0.data }
+            let notifications = EventListNotification
+                .from(list: events)
+                .reduce([], { try! $0 + EventsCharacteristic.from($1, id: key, key: keyData, maximumUpdateValueLength: 20) })
+                .map { $0.data }
+            guard let continuation = await storage.state.notifications[.lockEventsNotifications(UInt8(index))] else {
+                assertionFailure()
+                return
+            }
+            notifications.forEach {
+                continuation.yield($0)
             }
         case ListKeysCharacteristic.uuid:
             guard let listKeysCharacteristic = ListKeysCharacteristic(data: data) else {
@@ -261,11 +266,16 @@ public final class MockCentral: CentralManager {
                 keys: lock.keys,
                 newKeys: lock.newKeys
             )
-            await storage.updateState {
-                $0.notifications[.lockEventsNotifications(UInt8(index))] = KeyListNotification
-                    .from(list: keysList)
-                    .reduce([], { try! $0 + KeysCharacteristic.from($1, id: key, key: keyData, maximumUpdateValueLength: 20) })
-                    .map { $0.data }
+            let notifications = KeyListNotification
+                .from(list: keysList)
+                .reduce([], { try! $0 + KeysCharacteristic.from($1, id: key, key: keyData, maximumUpdateValueLength: 20) })
+                .map { $0.data }
+            guard let continuation = await storage.state.notifications[.lockKeysNotifications(UInt8(index))] else {
+                assertionFailure()
+                return
+            }
+            notifications.forEach {
+                continuation.yield($0)
             }
         default:
             return
@@ -331,12 +341,16 @@ public final class MockCentral: CentralManager {
         guard await storage.state.connected.contains(characteristic.peripheral) else {
             throw CentralError.disconnected
         }
-        return AsyncCentralNotifications { [unowned self] continuation in
-            try await Task.sleep(nanoseconds: 100_000_000)
-            if let notifications = await storage.state.notifications[characteristic] {
-                for notification in notifications {
-                    try await Task.sleep(nanoseconds: 100_000)
-                    continuation(notification)
+        return AsyncCentralNotifications(bufferSize: 1000, onTermination: {
+            Task {
+                await self.storage.updateState {
+                    $0.notifications[characteristic] = nil
+                }
+            }
+        }) { continuation in
+            Task {
+                await self.storage.updateState {
+                    $0.notifications[characteristic] = continuation
                 }
             }
         }
@@ -435,25 +449,7 @@ internal extension MockCentral {
             .clientCharacteristicConfiguration(.beacon): Data([0x00]),
             .clientCharacteristicConfiguration(.smartThermostat): Data([0x00]),
         ]
-        var notifications: [MockCharacteristic: [Data]] = [
-            .batteryLevel: [
-                Data([99]),
-                Data([98]),
-                Data([95]),
-                Data([80]),
-                Data([75]),
-                Data([25]),
-                Data([20]),
-                Data([5]),
-                Data([1]),
-            ],
-            .savantTest: [
-                Data(UUID().uuidString.utf8),
-                Data(UUID().uuidString.utf8),
-                Data(UUID().uuidString.utf8),
-                Data(UUID().uuidString.utf8),
-            ],
-        ]
+        var notifications = [MockCharacteristic: AsyncIndefiniteStream<Data>.Continuation]()
     }
     
     struct Continuation {
