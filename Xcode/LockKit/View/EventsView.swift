@@ -164,67 +164,13 @@ private extension EventsView {
     }
     
     func row(for managedObject: EventManagedObject) -> some View {
-        var needsKeys = Set<UUID>()
-        guard let lock = managedObject.lock?.identifier else {
-            fatalError("Missing identifier")
-        }
         let context = self.managedObjectContext
         let eventType = type(of: managedObject).eventType
-        let action: String
-        var keyName: String
-        let key = try! managedObject.key(in: context)
-        if key == nil {
-            needsKeys.insert(lock)
-        }
-        switch managedObject {
-        case is SetupEventManagedObject:
-            action = "Setup" //R.string.locksEventsViewController.eventsSetup()
-            keyName = key?.name ?? ""
-        case is UnlockEventManagedObject:
-            action = "Unlocked" //R.string.locksEventsViewController.eventsUnlocked()
-            keyName = key?.name ?? ""
-        case let event as CreateNewKeyEventManagedObject:
-            if let newKey = try! event.confirmKeyEvent(in: context)?.key(in: context)?.name {
-                action = "Shared \(newKey)" //R.string.locksEventsViewController.eventsSharedNamed(newKey)
-            } else if let newKey = try! event.newKey(in: context)?.name {
-                action = "Shared \(newKey)" //R.string.locksEventsViewController.eventsSharedNamed(newKey)
-            } else {
-                action = "Shared key" //R.string.locksEventsViewController.eventsShared()
-                needsKeys.insert(lock)
-            }
-            keyName = key?.name ?? ""
-        case let event as ConfirmNewKeyEventManagedObject:
-            if let key = key,
-                let permission = PermissionType(rawValue: numericCast(key.permission)) {
-                action = "Recieved \(permission.localizedText) from \(key.name ?? "")" //R.string.locksEventsViewController.eventsCreated(key.name ?? "", permission.localizedText)
-                if let parentKey = try! event.createKeyEvent(in: context)?.key(in: context) {
-                    keyName = "Shared by \(parentKey.name ?? "")" //R.string.locksEventsViewController.eventsSharedBy(parentKey.name ?? "")
-                } else {
-                    keyName = ""
-                    needsKeys.insert(lock)
-                }
-            } else {
-                action = "Created key" //R.string.locksEventsViewController.eventsCreatedNamed()
-                keyName = ""
-                needsKeys.insert(lock)
-            }
-        case let event as RemoveKeyEventManagedObject:
-            if let removedKey = try! event.removedKey(in: context)?.name {
-                action = "Removed key \(removedKey)" //R.string.locksEventsViewController.eventsRemovedNamed(removedKey)
-            } else {
-                action = "Removed key" //R.string.locksEventsViewController.eventsRemoved()
-                needsKeys.insert(lock)
-            }
-            keyName = key?.name ?? ""
-        default:
-            fatalError("Invalid event \(managedObject)")
-        }
-        
-        let lockName = managedObject.lock?.name ?? ""
-        if (self.predicate?.keys?.count ?? 0) == 1, // if filtering for a single lock
-           lockName.isEmpty == false {
-            keyName = keyName.isEmpty ? lockName : lockName + " - " + keyName
-        }
+        let displayLockName = (self.predicate?.keys?.count ?? 0) == 1
+        let (action, keyName, _) = try! managedObject.displayRepresentation(
+            displayLockName: displayLockName,
+            in: managedObjectContext
+        )
         
         return LockRowView(
             image: .emoji(eventType.symbol),
