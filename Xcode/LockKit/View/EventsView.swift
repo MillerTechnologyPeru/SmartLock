@@ -54,7 +54,7 @@ public struct EventsView: View {
     @State
     private var reloadTask: TaskQueue.PendingTask?
         
-    public init(lock: UUID?, predicate: LockEvent.Predicate? = nil) {
+    public init(lock: UUID? = nil, predicate: LockEvent.Predicate? = nil) {
         self.predicate = predicate
         self.lock = lock
     }
