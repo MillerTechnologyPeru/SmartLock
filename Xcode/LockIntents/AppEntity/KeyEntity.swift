@@ -12,19 +12,23 @@ import LockKit
 struct KeyEntity: AppEntity, Identifiable {
     
     /// The unique identifier of the key.
-    var id: UUID
+    let id: UUID
     
     /// Lock associated with this key.
-    var lock: UUID
+    let lock: UUID
     
     /// The name of the key.
-    var name: String
+    let name: String
     
     /// Date key was created.
-    var created: Date
+    let created: Date
     
     /// Key's permissions.
-    var permission: PermissionAppEnum
+    let permission: PermissionAppEnum
+    
+    let isPending: Bool
+    
+    let expiration: Date?
 }
 
 @available(macOS 13, iOS 16, watchOS 9, tvOS 16, *)
@@ -36,9 +40,11 @@ extension KeyEntity {
         "Key"
     }
     
+    @MainActor
     var displayRepresentation: DisplayRepresentation {
+        let lock = Store.shared.applicationData.locks[lock]?.name
         return DisplayRepresentation(
-            title: "\(name)",
+            title: lock.map { "\($0) - \(name)" } ?? "\(name)",
             subtitle: "\(permission.localizedStringResource)",
             image: .init(named: permission.imageName, isTemplate: false)
         )
@@ -54,5 +60,17 @@ extension KeyEntity {
         self.name = key.name
         self.created = key.created
         self.permission = .init(rawValue: key.permission.type.rawValue)!
+        self.isPending = false
+        self.expiration = nil
+    }
+    
+    init(newKey: NewKey, lock: UUID) {
+        self.id = newKey.id
+        self.lock = lock
+        self.name = newKey.name
+        self.created = newKey.created
+        self.permission = .init(rawValue: newKey.permission.type.rawValue)!
+        self.isPending = true
+        self.expiration = newKey.expiration
     }
 }

@@ -23,6 +23,8 @@ struct LockEventEntity: AppEntity, Identifiable {
     
     let id: UUID
     
+    let lock: UUID
+    
     /// Date event was created
     let date: Date
     
@@ -99,12 +101,14 @@ extension LockEventEntity {
     
     init?(managedObject: EventManagedObject) {
         guard let id = managedObject.identifier,
+              let lock = managedObject.lock?.identifier,
               let date = managedObject.date,
               let key = managedObject.key,
               let eventType = EventTypeAppEnum(rawValue: Swift.type(of: managedObject).eventType.rawValue)
             else { return nil }
         
         self.id = id
+        self.lock = lock
         self.date = date
         self.key = key
         self.type = eventType
@@ -114,9 +118,10 @@ extension LockEventEntity {
 @available(macOS 13, iOS 16, watchOS 9, tvOS 16, *)
 extension LockEventEntity {
     
-    init(_ value: LockEvent) {
+    init(_ value: LockEvent, lock: UUID) {
         
         self.id = value.id
+        self.lock = lock
         self.date = value.date
         self.key = value.key
         self.type = .init(rawValue: value.type.rawValue)!

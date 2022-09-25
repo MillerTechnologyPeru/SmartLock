@@ -615,18 +615,20 @@ public extension Store {
         log("Confirmed new key for lock \(information.id)")
     }
     
+    @discardableResult
     func listKeys(
         for peripheral: NativeCentral.Peripheral
-    ) async throws {
+    ) async throws -> KeysList {
         stopScanning()
-        try await central.connection(for: peripheral) {
+        return try await central.connection(for: peripheral) {
             try await self.listKeys(for: $0)
         }
     }
     
+    @discardableResult
     func listKeys(
         for connection: GATTConnection<NativeCentral>
-    ) async throws {
+    ) async throws -> KeysList {
         let peripheral = connection.peripheral
         // get lock key
         guard let information = self.lockInformation[peripheral] else {
@@ -643,20 +645,19 @@ public extension Store {
         )
         
         let context = backgroundContext
-        var keys = Set<UUID>()
-        var newKeys = Set<UUID>()
+        var keysList = KeysList()
         // BLE request
         let centralLog = central.log
         let stream = try await connection.listKeys(using: key, log: centralLog)
         for try await notification in stream {
             switch notification.key {
             case let .key(key):
-                keys.insert(key.id)
                 centralLog?("Recieved \(key.permission.type) key \(key.id) \(key.name)")
             case let .newKey(key):
-                newKeys.insert(key.id)
                 centralLog?("Recieved \(key.permission.type) pending key \(key.id) \(key.name)")
             }
+            //
+            keysList.append(notification.key)
             // insert key to CoreData
             await context.commit { (context) in
                 try context.insert(notification.key, for: information.id)
@@ -673,7 +674,7 @@ public extension Store {
                         && .compound(.not(
                             .comparison(
                                 Comparison(
-                                    left: .value(.collection(keys.map { .uuid($0) })),
+                                    left: .value(.collection(keysList.keys.map { .uuid($0.id) })),
                                     right: .keyPath(#keyPath(KeyManagedObject.identifier)),
                                     type: .contains
                                 )
@@ -685,7 +686,7 @@ public extension Store {
                         format: "%K == %@ && NOT %@ CONTAINS %K",
                         #keyPath(KeyManagedObject.lock.identifier),
                         lockIdentifier as NSUUID,
-                        keys as NSSet,
+                        Set(keysList.keys.map({ $0.id })) as NSSet,
                         #keyPath(KeyManagedObject.identifier)
                     ).description == predicate.description)
                     assert(predicate.description == predicate.toFoundation().description)
@@ -707,7 +708,7 @@ public extension Store {
                         && .compound(.not(
                             .comparison(
                                 Comparison(
-                                    left: .value(.collection(newKeys.map { .uuid($0) })),
+                                    left: .value(.collection(keysList.newKeys.map { .uuid($0.id) })),
                                     right: .keyPath(#keyPath(NewKeyManagedObject.identifier)),
                                     type: .contains
                                 )
@@ -719,7 +720,7 @@ public extension Store {
                         format: "%K == %@ && NOT %@ CONTAINS %K",
                         #keyPath(NewKeyManagedObject.lock.identifier),
                         lockIdentifier as NSUUID,
-                        newKeys as NSSet,
+                        Set(keysList.newKeys.map { $0.id }) as NSSet,
                         #keyPath(NewKeyManagedObject.identifier)
                     ).description == predicate.description)
                     // fetch
@@ -748,7 +749,9 @@ public extension Store {
             //updateCloud()
         }
         
-        log("Recieved \(keys.count) keys and \(newKeys.count) pending keys for lock \(information.id)")
+        log("Recieved \(keysList.keys.count) keys and \(keysList.newKeys.count) pending keys for lock \(information.id)")
+        
+        return keysList
     }
     
     @discardableResult

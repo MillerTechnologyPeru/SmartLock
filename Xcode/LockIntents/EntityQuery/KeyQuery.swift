@@ -21,7 +21,9 @@ struct KeyQuery: EntityQuery {
                     lock: $0.key,
                     name: $0.value.key.name,
                     created: $0.value.key.created,
-                    permission: .init(rawValue: $0.value.key.permission.type.rawValue)!
+                    permission: .init(rawValue: $0.value.key.permission.type.rawValue)!,
+                    isPending: false,
+                    expiration: nil
                 )
             }
     }
@@ -35,7 +37,9 @@ struct KeyQuery: EntityQuery {
                     lock: $0.key,
                     name: $0.value.key.name,
                     created: $0.value.key.created,
-                    permission: .init(rawValue: $0.value.key.permission.type.rawValue)!
+                    permission: .init(rawValue: $0.value.key.permission.type.rawValue)!,
+                    isPending: false,
+                    expiration: nil
                 )
             }
     }

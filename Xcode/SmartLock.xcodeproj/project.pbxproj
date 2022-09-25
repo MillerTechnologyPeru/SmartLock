@@ -12,6 +12,7 @@
 		6E10C90428DFD18D00703691 /* EventTypeAppEnum.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E10C90328DFD18D00703691 /* EventTypeAppEnum.swift */; };
 		6E10C90628DFD26300703691 /* LockEventQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E10C90528DFD26300703691 /* LockEventQuery.swift */; };
 		6E10C90828E0006700703691 /* Hexadecimal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E10C90728E0006700703691 /* Hexadecimal.swift */; };
+		6E10C90A28E03ED700703691 /* FetchKeysIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E10C90928E03ED700703691 /* FetchKeysIntent.swift */; };
 		6E169A7828D9A34F008545EC /* NavigationLink.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E169A7728D9A34F008545EC /* NavigationLink.swift */; };
 		6E169A7D28D9C097008545EC /* PermissionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E169A7C28D9C097008545EC /* PermissionsView.swift */; };
 		6E169A7F28D9C135008545EC /* NewPermissionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E169A7E28D9C135008545EC /* NewPermissionView.swift */; };
@@ -160,6 +161,7 @@
 		6E10C90328DFD18D00703691 /* EventTypeAppEnum.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventTypeAppEnum.swift; sourceTree = "<group>"; };
 		6E10C90528DFD26300703691 /* LockEventQuery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LockEventQuery.swift; sourceTree = "<group>"; };
 		6E10C90728E0006700703691 /* Hexadecimal.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Hexadecimal.swift; sourceTree = "<group>"; };
+		6E10C90928E03ED700703691 /* FetchKeysIntent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchKeysIntent.swift; sourceTree = "<group>"; };
 		6E169A7728D9A34F008545EC /* NavigationLink.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationLink.swift; sourceTree = "<group>"; };
 		6E169A7C28D9C097008545EC /* PermissionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionsView.swift; sourceTree = "<group>"; };
 		6E169A7E28D9C135008545EC /* NewPermissionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewPermissionView.swift; sourceTree = "<group>"; };
@@ -490,6 +492,7 @@
 				6E8BBFEC28DD301B00F03735 /* ScanLocksIntent.swift */,
 				6E8BBFFF28DD492300F03735 /* UnlockIntent.swift */,
 				6E84E54428DE89BC008CAE85 /* FetchEventsIntent.swift */,
+				6E10C90928E03ED700703691 /* FetchKeysIntent.swift */,
 			);
 			path = AppIntent;
 			sourceTree = "<group>";
@@ -812,6 +815,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6E10C90A28E03ED700703691 /* FetchKeysIntent.swift in Sources */,
 				6E2182F128D7B4FA00A622B3 /* SettingsView.swift in Sources */,
 				6E84E52D28DDC841008CAE85 /* LockEntity.swift in Sources */,
 				6E10C90228DFCFED00703691 /* LockEventEntity.swift in Sources */,

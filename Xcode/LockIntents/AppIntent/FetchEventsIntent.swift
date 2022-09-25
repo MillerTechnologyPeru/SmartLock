@@ -86,7 +86,7 @@ struct FetchEventsIntent: AppIntent {
         let managedObjects = try events.compactMap { try EventManagedObject.find($0.id, in: managedObjectContext) }
         assert(managedObjects.count == events.count)
         return .result(
-            value: events.map { LockEventEntity($0) },
+            value: events.map { LockEventEntity($0, lock: lock.id) },
             view: view(for: managedObjects, in: managedObjectContext)
         )
     }

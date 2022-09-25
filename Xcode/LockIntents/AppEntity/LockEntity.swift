@@ -15,22 +15,22 @@ struct LockEntity: AppEntity, Identifiable {
     let id: UUID
     
     /// Firmware build number
-    var buildVersion: UInt64
+    let buildVersion: UInt64
     
     /// Firmware version
-    var version: String
+    let version: String
     
     /// Device state
-    var status: LockStatusAppEnum
+    let status: LockStatusAppEnum
     
     /// Supported lock actions
-    var unlockActions: Set<UnlockActionAppEnum>
+    let unlockActions: Set<UnlockActionAppEnum>
     
     /// Stored name
-    var name: String?
+    let name: String?
     
     /// Associated key
-    var key: KeyEntity?
+    let key: KeyEntity?
 }
 
 @available(macOS 13, iOS 16, watchOS 9, tvOS 16, *)
