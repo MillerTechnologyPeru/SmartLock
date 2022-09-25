@@ -686,7 +686,7 @@ public extension Store {
                         format: "%K == %@ && NOT %@ CONTAINS %K",
                         #keyPath(KeyManagedObject.lock.identifier),
                         lockIdentifier as NSUUID,
-                        Set(keysList.keys.map({ $0.id })) as NSSet,
+                        keysList.keys.map({ $0.id }) as NSArray,
                         #keyPath(KeyManagedObject.identifier)
                     ).description == predicate.description)
                     assert(predicate.description == predicate.toFoundation().description)
@@ -720,7 +720,7 @@ public extension Store {
                         format: "%K == %@ && NOT %@ CONTAINS %K",
                         #keyPath(NewKeyManagedObject.lock.identifier),
                         lockIdentifier as NSUUID,
-                        Set(keysList.newKeys.map { $0.id }) as NSSet,
+                        keysList.newKeys.map { $0.id } as NSArray,
                         #keyPath(NewKeyManagedObject.identifier)
                     ).description == predicate.description)
                     // fetch
@@ -790,22 +790,27 @@ public extension Store {
         events.reserveCapacity(Int(fetchRequest?.limit ?? 10))
         // BLE request
         let centralLog = central.log
-        let stream = try await connection.listEvents(fetchRequest: fetchRequest, using: key, log: centralLog)
+        let stream = try await connection.listEvents(
+            fetchRequest: fetchRequest,
+            using: key,
+            log: centralLog
+        )
         for try await notification in stream {
-            if let event = notification.event {
-                centralLog?("Recieved \(event.type) event \(event.id)")
-                events.append(event)
-                // store in CoreData
-                await context.commit { (context) in
-                    try context.insert(event, for: information.id)
-                }
-                // upload to iCloud
-                if preferences.isCloudBackupEnabled {
-                    // perform concurrently
-                    Task {
-                        let value = LockEvent.Cloud(event: event, for: lockIdentifier)
-                        try await self.cloud.upload(value)
-                    }
+            guard let event = notification.event else {
+                break
+            }
+            centralLog?("Recieved \(event.type) event \(event.id)")
+            events.append(event)
+            // store in CoreData
+            await context.commit { (context) in
+                try context.insert(event, for: information.id)
+            }
+            // upload to iCloud
+            if preferences.isCloudBackupEnabled {
+                // perform concurrently
+                Task {
+                    let value = LockEvent.Cloud(event: event, for: lockIdentifier)
+                    try await self.cloud.upload(value)
                 }
             }
         }
