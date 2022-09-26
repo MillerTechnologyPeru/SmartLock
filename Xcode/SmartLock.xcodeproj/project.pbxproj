@@ -1214,9 +1214,14 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = SmartLock/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = Cerradura;
 				INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription = "Bluetooth is used to scan for nearby locks in the background.";
 				INFOPLIST_KEY_NSBluetoothPeripheralUsageDescription = "Bluetooth is needed to connect to your smart lock.";
+				INFOPLIST_KEY_NSCameraUsageDescription = "Your camera is needed to setup your smart lock.";
+				INFOPLIST_KEY_NSContactsUsageDescription = "Access to your contacts is needed to share keys with friends.";
 				INFOPLIST_KEY_NSFaceIDUsageDescription = "Your FaceID is needed to unlock.";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Your location is needed to find nearby smart locks.";
+				INFOPLIST_KEY_NSSiriUsageDescription = "Siri is used to unlock with voice commands.";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
@@ -1227,6 +1232,7 @@
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportsDocumentBrowser = YES;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.colemancda.SmartLock;
@@ -1259,9 +1265,14 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = SmartLock/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = Cerradura;
 				INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription = "Bluetooth is used to scan for nearby locks in the background.";
 				INFOPLIST_KEY_NSBluetoothPeripheralUsageDescription = "Bluetooth is needed to connect to your smart lock.";
+				INFOPLIST_KEY_NSCameraUsageDescription = "Your camera is needed to setup your smart lock.";
+				INFOPLIST_KEY_NSContactsUsageDescription = "Access to your contacts is needed to share keys with friends.";
 				INFOPLIST_KEY_NSFaceIDUsageDescription = "Your FaceID is needed to unlock.";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Your location is needed to find nearby smart locks.";
+				INFOPLIST_KEY_NSSiriUsageDescription = "Siri is used to unlock with voice commands.";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
@@ -1272,6 +1283,7 @@
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportsDocumentBrowser = YES;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.colemancda.SmartLock;
