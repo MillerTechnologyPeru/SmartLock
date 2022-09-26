@@ -21,7 +21,7 @@ public struct AppNavigationLink <Label: View> : View {
         if #available(macOS 13, iOS 16, tvOS 16, *) {
             navigationStackLink
         } else {
-            
+            navigationViewLink
         }
         #else
         navigationViewLink

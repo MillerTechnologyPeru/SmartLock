@@ -18,7 +18,7 @@ public struct NewPermissionView: View {
     
     public let id: UUID
     
-    private var completion: (NewKey.Invitation) -> () = { _ in }
+    private var completion: (URL, NewKey.Invitation) -> () = { (_, _) in assertionFailure() }
     
     @State
     private var permission: Permission = .anytime
@@ -33,7 +33,7 @@ public struct NewPermissionView: View {
         id: UUID,
         name: String = "",
         permission: Permission = .anytime,
-        completion: @escaping (NewKey.Invitation) -> ()
+        completion: @escaping (URL, NewKey.Invitation) -> ()
     ) {
         self.id = id
         self.name = name
@@ -77,13 +77,14 @@ private extension NewPermissionView {
                     guard let peripheral = try await store.device(for: id) else {
                         throw LockError.notInRange(lock: id)
                     }
-                    let newKey = try await store.newKey(
+                    let invitation = try await store.newKey(
                         for: peripheral,
                         permission: permission,
                         name: name
                     )
+                    let url = try await store.newKeyInvitations.save(invitation)
                     state = .editing
-                    completion(newKey)
+                    completion(url, invitation)
                 } catch {
                     state = .error(error.localizedDescription)
                     log("⚠️ Error creating new key for \(id). \(error)")
@@ -298,7 +299,7 @@ public extension View {
         for lock: UUID,
         isPresented: Binding<Bool>,
         onDismiss: @escaping () -> (),
-        completion: @escaping (NewKey.Invitation) -> ()
+        completion: @escaping (URL, NewKey.Invitation) -> ()
     ) -> some View {
         return self.sheet(isPresented: isPresented, onDismiss: onDismiss) {
             #if os(iOS)
@@ -338,7 +339,7 @@ public extension View {
 struct NewPermissionView_Previews: PreviewProvider {
     static var previews: some View {
         NavigationView {
-            NewPermissionView(id: UUID()) { _ in
+            NewPermissionView(id: UUID()) { (_, _) in
                 
             }
         }

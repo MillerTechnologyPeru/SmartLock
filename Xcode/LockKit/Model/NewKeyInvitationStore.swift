@@ -13,14 +13,50 @@ public final class NewKeyInvitationStore: ObservableObject {
     
     public typealias Cache = [URL: NewKey.Invitation]
     
+    // MARK: - Properties
+    
     @Published
     public private(set) var cache = Cache()
     
-    internal lazy var fileManager = FileManager()
+    internal let fileManager = FileManager()
+    
+    internal let encoder = JSONEncoder()
+    
+    internal let decoder = JSONDecoder()
+    
+    // MARK: - Initialization
     
     public static let shared = NewKeyInvitationStore()
     
     private init() { }
+    
+    // MARK: - Methods
+    
+    public func fetchDocuments() throws -> [URL] {
+        return try fileManager
+            .contentsOfDirectory(
+                at: documentsURL,
+                includingPropertiesForKeys: [
+                    .creationDateKey
+                ],
+                options: [.skipsHiddenFiles]
+            )
+            .lazy
+            .filter { $0.lastPathComponent.hasSuffix(".ekey") }
+            .map { (url: $0, date: (try? self.fileManager.attributesOfItem(atPath: $0.path)[FileAttributeKey.creationDate] as? Date) ?? Date()) }
+            .sorted  { $0.date < $1.date }
+            .map { $0.url }
+    }
+    
+    @discardableResult
+    public func delete(_ url: URL) async throws -> Bool {
+        guard fileManager.fileExists(atPath: url.path) else {
+            return false
+        }
+        try fileManager.removeItem(at: url)
+        await removeCached(url)
+        return true
+    }
     
     @discardableResult
     public func save(
@@ -30,7 +66,6 @@ public final class NewKeyInvitationStore: ObservableObject {
         let documentsURL = try self.documentsURL
         let fileName = fileName ?? "newKey-\(invitation.key.id).ekey"
         let fileURL = documentsURL.appendingPathComponent(fileName)
-        let encoder = JSONEncoder()
         let writeTask = Task {
             let data = try encoder.encode(invitation)
             try data.write(to: fileURL, options: [.atomic])
@@ -40,55 +75,14 @@ public final class NewKeyInvitationStore: ObservableObject {
         await self.cache(invitation, url: fileURL)
         return fileURL
     }
-    /*
-    @discardableResult
-    public func fetchAll() async throws -> Cache {
-        let documentsURL = try self.documentsURL
-        let files = try fileManager.contentsOfDirectory(atPath: documentsURL.path)
-        let keyFiles = files.filter { $0.hasSuffix(".ekey") }
-        
-        // attempt to read concurrently
-        let oldValue = await MainActor.run { self.cache }
-        let newValue = await withTaskGroup(of: (URL, Result<NewKey.Invitation, Swift.Error>).self, returning: Cache.self) { taskGroup in
-            for path in keyFiles {
-                let url = URL(fileURLWithPath: path)
-                taskGroup.addTask {
-                    do {
-                        let decoder = JSONDecoder()
-                        let data = try Data(contentsOf: url, options: [.mappedIfSafe])
-                        let value = try decoder.decode(NewKey.Invitation.self, from: data)
-                        // update UI incrementally
-                        await self.cache(value, url: url)
-                        return (url, .success(value))
-                    }
-                    catch {
-                        log("⚠️ Unable to read \(url.lastPathComponent). \(error.localizedDescription)")
-                        return (url, .failure(error))
-                    }
-                }
-            }
-            
-            // build result serially
-            var newValue = Cache()
-            newValue.reserveCapacity(oldValue.count + 2)
-            for await value in taskGroup {
-                switch value {
-                case let .success(newKey):
-                    newValue[newKey]
-                case let .failure(error):
-                    // decrement count
-                    break
-                }
-            }
-            return newValue
-        }
-        // replace everything
-        await MainActor.run {
-            self.cache = newValue
-        }
-        return newValue
+    
+    public func load(_ url: URL) async throws -> NewKey.Invitation {
+        let data = try Data(contentsOf: url, options: [.mappedIfSafe])
+        let invitation = try decoder.decode(NewKey.Invitation.self, from: data)
+        await cache(invitation, url: url)
+        return invitation
     }
-    */
+    
     internal var documentsURL: URL {
         get throws {
             guard let url = fileManager.documentsURL else {
@@ -99,7 +93,12 @@ public final class NewKeyInvitationStore: ObservableObject {
     }
     
     @MainActor
-    private func cache(_ value: NewKey.Invitation, url: URL) async {
+    private func cache(_ value: NewKey.Invitation, url: URL) {
         self.cache[url] = value
+    }
+    
+    @MainActor
+    private func removeCached(_ url: URL) {
+        self.cache.removeValue(forKey: url)
     }
 }

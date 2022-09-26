@@ -24,7 +24,6 @@ public struct AsyncFetchRequest <DataSource: AsyncFetchDataSource> {
         self.configuration = configuration
     }
     
-    @MainActor
     public var wrappedValue: AsyncFetchedResults<DataSource> {
         return .init(
             dataSource: dataSource,
@@ -33,7 +32,19 @@ public struct AsyncFetchRequest <DataSource: AsyncFetchDataSource> {
     }
 }
 
-public protocol AsyncFetchDataSource: AnyObject, ObservableObject {
+public extension AsyncFetchRequest where DataSource.Configuration == Void {
+    
+    init(
+        dataSource: DataSource
+    ) {
+        self.init(
+            dataSource: dataSource,
+            configuration: ()
+        )
+    }
+}
+
+public protocol AsyncFetchDataSource {
     
     associatedtype ID: Hashable
     
@@ -50,18 +61,20 @@ public protocol AsyncFetchDataSource: AnyObject, ObservableObject {
     func fetch(configuration: Configuration) -> [ID]
     
     /// Asyncronously load the specified item.
-    func load(id: ID) async -> Result<Success, Failure>
+    func load(_ id: ID) async -> Result<Success, Failure>
 }
 
 extension AsyncFetchRequest: DynamicProperty {
     
-    //public mutating func update() {
+    public mutating func update() {
+        print(#function)
+    }
 }
 
 @MainActor
 public struct AsyncFetchedResults <DataSource: AsyncFetchDataSource> {
     
-    @ObservedObject
+    //@ObservedObject
     internal var dataSource: DataSource
     
     internal var configuration: DataSource.Configuration
@@ -148,6 +161,10 @@ extension AsyncFetchedResults: RandomAccessCollection {
         return results.count
     }
     
+    public var isEmpty: Bool {
+        count == 0
+    }
+    
     public var startIndex: Int {
         results.startIndex
     }
@@ -170,7 +187,7 @@ extension AsyncFetchedResults: RandomAccessCollection {
             if tasks[id] == nil {
                 tasks[id] = Task {
                     // load
-                    let result = await dataSource.load(id: id)
+                    let result = await dataSource.load(id)
                     // save error
                     switch result {
                     case .success:

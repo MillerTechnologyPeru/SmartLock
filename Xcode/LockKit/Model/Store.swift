@@ -27,13 +27,13 @@ public final class Store: ObservableObject {
     public internal(set) var state: DarwinBluetoothState = .unknown
     
     @Published
-    public var isScanning = false
+    public internal(set) var isScanning = false
     
     @Published
-    public var peripherals = [NativePeripheral: ScanData<NativeCentral.Peripheral, NativeCentral.Advertisement>]()
+    public internal(set) var peripherals = [NativePeripheral: ScanData<NativeCentral.Peripheral, NativeCentral.Advertisement>]()
     
     @Published
-    public var lockInformation = [NativePeripheral: LockInformation]()
+    public internal(set) var lockInformation = [NativePeripheral: LockInformation]()
     
     public lazy var central = NativeCentral.shared
     
@@ -44,6 +44,8 @@ public final class Store: ObservableObject {
     internal lazy var keychain = Keychain(service: .lock, accessGroup: .lock)
     
     internal lazy var fileManager: FileManager.Lock = .shared
+    
+    public lazy var newKeyInvitations: NewKeyInvitationStore = .shared
     
     public lazy var persistentContainer: NSPersistentContainer = .lock
     

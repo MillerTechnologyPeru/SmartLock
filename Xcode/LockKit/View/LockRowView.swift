@@ -45,7 +45,7 @@ public struct LockRowView: View {
                 }
             }
         }
-        .padding(EdgeInsets(top: 8, leading: 8, bottom: 8, trailing: 8))
+        .padding(8)
     }
     
     public init(

@@ -14,6 +14,7 @@
 		6E10C90828E0006700703691 /* Hexadecimal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E10C90728E0006700703691 /* Hexadecimal.swift */; };
 		6E10C90A28E03ED700703691 /* FetchKeysIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E10C90928E03ED700703691 /* FetchKeysIntent.swift */; };
 		6E10C90C28E0518F00703691 /* NewKeyIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E10C90B28E0518F00703691 /* NewKeyIntent.swift */; };
+		6E10C90E28E0D97800703691 /* NewKeysAsyncFetchRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E10C90D28E0D97800703691 /* NewKeysAsyncFetchRequest.swift */; };
 		6E169A7828D9A34F008545EC /* NavigationLink.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E169A7728D9A34F008545EC /* NavigationLink.swift */; };
 		6E169A7D28D9C097008545EC /* PermissionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E169A7C28D9C097008545EC /* PermissionsView.swift */; };
 		6E169A7F28D9C135008545EC /* NewPermissionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E169A7E28D9C135008545EC /* NewPermissionView.swift */; };
@@ -164,6 +165,7 @@
 		6E10C90728E0006700703691 /* Hexadecimal.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Hexadecimal.swift; sourceTree = "<group>"; };
 		6E10C90928E03ED700703691 /* FetchKeysIntent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchKeysIntent.swift; sourceTree = "<group>"; };
 		6E10C90B28E0518F00703691 /* NewKeyIntent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewKeyIntent.swift; sourceTree = "<group>"; };
+		6E10C90D28E0D97800703691 /* NewKeysAsyncFetchRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewKeysAsyncFetchRequest.swift; sourceTree = "<group>"; };
 		6E169A7728D9A34F008545EC /* NavigationLink.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationLink.swift; sourceTree = "<group>"; };
 		6E169A7C28D9C097008545EC /* PermissionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionsView.swift; sourceTree = "<group>"; };
 		6E169A7E28D9C135008545EC /* NewPermissionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewPermissionView.swift; sourceTree = "<group>"; };
@@ -422,6 +424,7 @@
 				6E21831228D80FDD00A622B3 /* JSON.swift */,
 				6E6A97EE28DBEC2D00C689F6 /* NewKeyInvitationStore.swift */,
 				6E8BBFDB28DCC8F300F03735 /* AsyncFetchRequest.swift */,
+				6E10C90D28E0D97800703691 /* NewKeysAsyncFetchRequest.swift */,
 				6E84E53528DDE01F008CAE85 /* AssetExtractor.swift */,
 				6E21830F28D80DCD00A622B3 /* Keychain.swift */,
 				6E21831628D8116C00A622B3 /* NewKey.swift */,
@@ -895,6 +898,7 @@
 				6E21834328D8F3B500A622B3 /* ManagedObject.swift in Sources */,
 				6E84E54D28DF4A98008CAE85 /* MockCentral.swift in Sources */,
 				6E84E53628DDE01F008CAE85 /* AssetExtractor.swift in Sources */,
+				6E10C90E28E0D97800703691 /* NewKeysAsyncFetchRequest.swift in Sources */,
 				6E21834028D8F3B500A622B3 /* RemoveKeyEventManagedObject.swift in Sources */,
 				6E21834A28D90F7A00A622B3 /* LocalAuthentication.swift in Sources */,
 				6E84E54F28DF4A98008CAE85 /* MockScanData.swift in Sources */,

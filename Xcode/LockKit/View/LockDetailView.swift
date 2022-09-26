@@ -52,6 +52,9 @@ public struct LockDetailView: View {
                 .onAppear {
                     reload()
                 }
+                .onDisappear {
+                    
+                }
                 .alert(error: $error)
                 .newPermissionSheet(
                     for: id,
@@ -152,8 +155,9 @@ private extension LockDetailView {
         showNewKeyModal = true
     }
     
-    func didCreateNewKey(_ newKey: NewKey.Invitation) {
-        
+    func didCreateNewKey(url: URL, invitation: NewKey.Invitation) {
+        showNewKeyModal = false
+        reload()
     }
     
     func reload() {
