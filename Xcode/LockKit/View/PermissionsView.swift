@@ -16,6 +16,9 @@ public struct PermissionsView: View {
     @Environment(\.managedObjectContext)
     public var managedObjectContext
     
+    @StateObject
+    public var fileStore: NewKeyInvitationStore = Store.shared.newKeyInvitations
+    
     /// Identifier of lock
     public let id: UUID
         
@@ -69,18 +72,21 @@ public struct PermissionsView: View {
     @State
     private var showNewKeyModal = false
     
-    @State
-    private var newKeyInvitation: NewKey.Invitation?
-    
     public var body: some View {
         StateView(
             keys: keys.lazy.compactMap { Key(managedObject: $0) },
             newKeys: newKeys.lazy.compactMap { NewKey(managedObject: $0) },
+            invitations: invitations,
             reload: reload
         )
         .onAppear {
             self.keys.nsPredicate = predicate
             self.newKeys.nsPredicate = predicate
+        }
+        .onDisappear {
+            Task {
+                await self.reloadTask?.cancel()
+            }
         }
         .toolbar {
             ToolbarItem(placement: .primaryAction) {
@@ -122,6 +128,17 @@ private extension PermissionsView {
         )
     }
     
+    var invitations: [UUID: URL] {
+        let cache = fileStore.cache
+        var invitations = [UUID: URL]()
+        invitations.reserveCapacity(cache.count)
+        for (url, invitation) in cache {
+            invitations[invitation.key.id] = url
+        }
+        assert(invitations.count == cache.count)
+        return invitations
+    }
+    
     func reload() {
         activityIndicator = true
         Task {
@@ -145,7 +162,21 @@ private extension PermissionsView {
                     log("⚠️ Error loading keys for \(id). \(error)")
                 }
             }
-            
+            Task {
+                do {
+                    let urls = try fileStore.fetchDocuments()
+                    for url in urls {
+                        guard fileStore.cache[url] == nil,
+                              let invitation = try? await fileStore.load(url) else {
+                            continue
+                        }
+                        log("Loaded key \(invitation.key.name) \(invitation.lock) at \(url.lastPathComponent)")
+                    }
+                } catch {
+                    log("⚠️ Error loading pending keys invitations. \(error)")
+                    assertionFailure()
+                }
+            }
         }
     }
     
@@ -161,16 +192,12 @@ private extension PermissionsView {
         showNewKeyModal = true
     }
     
-    func didCreateNewKey(_ newKey: NewKey.Invitation) {
+    func didCreateNewKey(url: URL, invitation: NewKey.Invitation) {
         // hide modal
         showNewKeyModal = false
-        // show popover
+        // reload
         Task {
             try? await Task.sleep(timeInterval: 0.2)
-            self.newKeyInvitation = newKey
-        }
-        Task {
-            try? await Task.sleep(timeInterval: 1.0)
             // reload pending keys
             reload()
         }
@@ -185,6 +212,8 @@ internal extension PermissionsView {
         
         let newKeys: NewKeys
         
+        let invitations: [UUID: URL]
+        
         let reload: () -> ()
         
         var body: some View {
@@ -196,7 +225,7 @@ internal extension PermissionsView {
                 if newKeys.isEmpty == false {
                     Section("Pending") {
                         ForEach(newKeys) {
-                            row(for: $0)
+                            row(for: $0, invitationURL: invitations[$0.id])
                         }
                         .onDelete(perform: deleteNewKey)
                     }
@@ -229,18 +258,49 @@ private extension PermissionsView.StateView {
         })
     }
     
-    func row(for item: NewKey) -> some View {
+    func row(for item: NewKey, invitationURL: URL?) -> some View {
         AppNavigationLink(id: .key(.newKey(item)), label: {
-            LockRowView(
-                image: .permission(item.permission.type),
-                title: item.name,
-                subtitle: item.permission.localizedText + "\n" + "Expires " + PermissionsView.relativeDateTimeFormatter.localizedString(for: item.expiration, relativeTo: Date()),
-                trailing: (
-                    PermissionsView.dateFormatter.string(from: item.created),
-                    PermissionsView.timeFormatter.string(from: item.created)
-                )
-            )
+            HStack(alignment: .center, spacing: 8) {
+                row(for: item, showDate: invitationURL == nil)
+                if let url = invitationURL {
+                    Spacer()
+                    if #available(macOS 13, iOS 16, *) {
+                        AnyView(
+                            ShareLink(
+                                item: url,
+                                subject: Text("\(item.name)"),
+                                message: Text("Share this key"),
+                                label: { shareImage }
+                            )
+                            .buttonStyle(.plain)
+                        )
+                    } else {
+                        AnyView(Button(action: {
+                            
+                        }, label: { shareImage }))
+                        .buttonStyle(.plain)
+                    }
+                }
+            }
         })
+    }
+    
+    func row(for item: NewKey, showDate: Bool) -> some View {
+        LockRowView(
+            image: .permission(item.permission.type),
+            title: item.name,
+            subtitle: item.permission.localizedText + "\n" + "Expires " + PermissionsView.relativeDateTimeFormatter.localizedString(for: item.expiration, relativeTo: Date()),
+            trailing: showDate ? (
+                PermissionsView.dateFormatter.string(from: item.created),
+                PermissionsView.timeFormatter.string(from: item.created)
+            ) : nil
+        )
+    }
+    
+    var shareImage: some View {
+        Image(systemSymbol: .squareAndArrowUp)
+            .foregroundColor(.blue)
+            .padding(8)
     }
     
     func destination(for item: Key) -> some View {
@@ -261,8 +321,9 @@ private extension PermissionsView.StateView {
 }
 
 // MARK: - Preview
-
+/*
 struct PermissionsView_Previews: PreviewProvider {
+    
     static var previews: some View {
         NavigationView {
             PermissionsView.StateView(
@@ -300,15 +361,27 @@ struct PermissionsView_Previews: PreviewProvider {
                 ],
                 newKeys: [
                     NewKey(
-                        id: UUID(),
+                        id: UUID(uuidString: "ED6DE87A-D0AF-421B-912D-3400A60EB294")!,
                         name: "Key 4",
                         permission: .anytime,
                         created: Date() - 60 * 60 * 2,
                         expiration: Date() + (60 * 60 * 24 * 1) + 10
+                    ),
+                    NewKey(
+                        id: UUID()!,
+                        name: "Key 5",
+                        permission: .anytime,
+                        created: Date() - 60 * 60 * 1,
+                        expiration: Date() + (60 * 60 * 24 * 1) + 10
                     )
+                ],
+                invitations: [
+                    UUID(uuidString: "ED6DE87A-D0AF-421B-912D-3400A60EB294")! :
+                        URL(fileURLWithPath: "/tmp/newKey-\(UUID(uuidString: "ED6DE87A-D0AF-421B-912D-3400A60EB294")!).ekey")
                 ],
                 reload: { }
             )
         }
     }
 }
+*/
