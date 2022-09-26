@@ -19,20 +19,24 @@ public struct LockRowView: View {
     public let trailing: (String, String)?
     
     public var body: some View {
-        HStack(alignment: .center, spacing: 16) {
-            VStack {
-                ImageView(image: image)
-                    .frame(width: 50, height: 50, alignment: .center)
-            }
-            VStack(alignment: .leading, spacing: 8) {
-                Text(verbatim: title)
-                    .font(.system(size: 19))
-                if let subtitle = subtitle {
-                    Text(verbatim: subtitle)
-                        .font(.system(size: 14))
-                        .foregroundColor(.gray)
+        HStack(alignment: .center, spacing: 3) {
+            //
+            HStack(alignment: .center, spacing: 16) {
+                VStack {
+                    ImageView(image: image)
+                        .frame(width: 50, height: 50, alignment: .center)
+                }
+                VStack(alignment: .leading, spacing: 8) {
+                    Text(verbatim: title)
+                        .font(.system(size: 19))
+                    if let subtitle = subtitle {
+                        Text(verbatim: subtitle)
+                            .font(.system(size: 14))
+                            .foregroundColor(.gray)
+                    }
                 }
             }
+            //
             if let trailing = self.trailing {
                 Spacer(minLength: 1)
                 VStack(alignment: .trailing, spacing: 8) {

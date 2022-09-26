@@ -13,10 +13,14 @@ struct KeysView: View {
     @EnvironmentObject
     var store: Store
     
-    @AsyncFetchRequest(
-        dataSource: NewKeyInvitationStore.DataSource(store: .shared)
-    )
-    var newKeys: AsyncFetchedResults<NewKeyInvitationStore.DataSource>
+    @State
+    private var invitationFiles = [URL]()
+    
+    @State
+    private var fileTasks = [URL: Task<Void, Never>]()
+    
+    @State
+    private var fileErrors = [URL: Error]()
     
     var body: some View {
         StateView(
@@ -34,6 +38,9 @@ struct KeysView: View {
             }),
             deleteNewKey: deleteNewKey
         )
+        .onAppear {
+            reload()
+        }
     }
 }
 
@@ -46,8 +53,16 @@ private extension KeysView {
             .map { Lock(id: $0.key, cache: $0.value) }
     }
     
+    var newKeys: AsyncFetchedResults<NewKeyInvitationStore.DataSource> {
+        .init(dataSource: .init(store: store.newKeyInvitations), configuration: (), results: $invitationFiles, tasks: $fileTasks, errors: $fileErrors)
+    }
+    
     func deleteNewKey(_ url: URL) {
         log("Delete \(url)")
+    }
+    
+    func reload() {
+        newKeys.reload()
     }
 }
 
@@ -62,8 +77,7 @@ extension KeysView {
         let deleteNewKey: (URL) -> ()
         
         var body: some View {
-            list
-                .navigationTitle("Keys")
+            list.navigationTitle("Keys")
         }
     }
 }

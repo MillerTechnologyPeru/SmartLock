@@ -8,43 +8,7 @@
 import Foundation
 import SwiftUI
 
-@propertyWrapper
-@MainActor
-public struct AsyncFetchRequest <DataSource: AsyncFetchDataSource> {
-    
-    internal let dataSource: DataSource
-    
-    internal let configuration: DataSource.Configuration
-    
-    public init(
-        dataSource: DataSource,
-        configuration: DataSource.Configuration
-    ) {
-        self.dataSource = dataSource
-        self.configuration = configuration
-    }
-    
-    public var wrappedValue: AsyncFetchedResults<DataSource> {
-        return .init(
-            dataSource: dataSource,
-            configuration: configuration
-        )
-    }
-}
-
-public extension AsyncFetchRequest where DataSource.Configuration == Void {
-    
-    init(
-        dataSource: DataSource
-    ) {
-        self.init(
-            dataSource: dataSource,
-            configuration: ()
-        )
-    }
-}
-
-public protocol AsyncFetchDataSource {
+public protocol AsyncFetchDataSource: ObservableObject {
     
     associatedtype ID: Hashable
     
@@ -64,36 +28,35 @@ public protocol AsyncFetchDataSource {
     func load(_ id: ID) async -> Result<Success, Failure>
 }
 
-extension AsyncFetchRequest: DynamicProperty {
-    
-    public mutating func update() {
-        print(#function)
-    }
-}
-
 @MainActor
 public struct AsyncFetchedResults <DataSource: AsyncFetchDataSource> {
     
-    //@ObservedObject
+    @ObservedObject
     internal var dataSource: DataSource
     
     internal var configuration: DataSource.Configuration
     
-    @State
-    internal var results = [DataSource.ID]()
+    @Binding
+    internal var results: [DataSource.ID]
     
-    @State
-    internal var tasks = [DataSource.ID: Task<Void, Never>]()
+    @Binding
+    internal var tasks: [DataSource.ID: Task<Void, Never>]
     
-    @State
-    internal var errors = [DataSource.ID: DataSource.Failure]()
+    @Binding
+    internal var errors: [DataSource.ID: DataSource.Failure]
     
     public init(
         dataSource: DataSource,
-        configuration: DataSource.Configuration
+        configuration: DataSource.Configuration,
+        results: Binding<[DataSource.ID]>,
+        tasks: Binding<[DataSource.ID: Task<Void, Never>]>,
+        errors: Binding<[DataSource.ID: DataSource.Failure]>
     ) {
         self.dataSource = dataSource
         self.configuration = configuration
+        self._results = results
+        self._tasks = tasks
+        self._errors = errors
     }
 }
 
@@ -156,8 +119,12 @@ private extension AsyncFetchedResults.Element {
 extension AsyncFetchedResults: RandomAccessCollection {
     
     public var count: Int {
-        // fetch
-        results = dataSource.fetch(configuration: configuration)
+        Task {
+            let results = dataSource.fetch(configuration: configuration)
+            if self.results != results {
+                self.results = results
+            }
+        }
         return results.count
     }
     
@@ -202,7 +169,6 @@ extension AsyncFetchedResults: RandomAccessCollection {
             if let error = errors[id] {
                 return .failure(id, error)
             } else {
-                assert(tasks[id] != nil)
                 return .loading(id)
             }
         }

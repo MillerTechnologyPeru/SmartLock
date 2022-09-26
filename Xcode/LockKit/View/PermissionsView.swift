@@ -321,7 +321,8 @@ private extension PermissionsView.StateView {
 }
 
 // MARK: - Preview
-/*
+
+#if DEBUG
 struct PermissionsView_Previews: PreviewProvider {
     
     static var previews: some View {
@@ -362,16 +363,9 @@ struct PermissionsView_Previews: PreviewProvider {
                 newKeys: [
                     NewKey(
                         id: UUID(uuidString: "ED6DE87A-D0AF-421B-912D-3400A60EB294")!,
-                        name: "Key 4",
+                        name: "Anytime Key",
                         permission: .anytime,
                         created: Date() - 60 * 60 * 2,
-                        expiration: Date() + (60 * 60 * 24 * 1) + 10
-                    ),
-                    NewKey(
-                        id: UUID()!,
-                        name: "Key 5",
-                        permission: .anytime,
-                        created: Date() - 60 * 60 * 1,
                         expiration: Date() + (60 * 60 * 24 * 1) + 10
                     )
                 ],
@@ -384,4 +378,4 @@ struct PermissionsView_Previews: PreviewProvider {
         }
     }
 }
-*/
+#endif

@@ -6,11 +6,12 @@
 //
 
 import Foundation
+import Combine
 import CoreLock
 
 public extension NewKeyInvitationStore {
     
-    struct DataSource: AsyncFetchDataSource {
+    class DataSource: AsyncFetchDataSource {
         
         public typealias Configuration = Void
         
@@ -18,6 +19,10 @@ public extension NewKeyInvitationStore {
         
         public init(store: NewKeyInvitationStore = .shared) {
             self.store = store
+        }
+        
+        public var objectWillChange: ObservableObjectPublisher {
+            store.objectWillChange
         }
         
         /// Provide the cached result if value has been fetched.
