@@ -151,7 +151,8 @@ extension AsyncFetchedResults: RandomAccessCollection {
             return .success(id, cachedValue)
         } else {
             // async load
-            if tasks[id] == nil {
+            Task {
+                guard tasks[id] == nil else { return }
                 tasks[id] = Task {
                     // load
                     let result = await dataSource.load(id)
