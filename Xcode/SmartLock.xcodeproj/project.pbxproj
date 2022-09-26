@@ -123,6 +123,7 @@
 		6EA776A028D707FE00018FA3 /* LockKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 6EA7769F28D707FE00018FA3 /* LockKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		6EA776A328D707FE00018FA3 /* LockKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6EA7769D28D707FE00018FA3 /* LockKit.framework */; };
 		6EA776A428D707FE00018FA3 /* LockKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 6EA7769D28D707FE00018FA3 /* LockKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		6EBD590F28E14A7F00CC3852 /* ScanResultsAsyncDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EBD590E28E14A7F00CC3852 /* ScanResultsAsyncDataSource.swift */; };
 		6ED248CC28D7A3BF00F78D07 /* ActivityIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6ED248CB28D7A3BF00F78D07 /* ActivityIndicatorView.swift */; };
 /* End PBXBuildFile section */
 
@@ -274,6 +275,7 @@
 		6EA7769128D7061600018FA3 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		6EA7769D28D707FE00018FA3 /* LockKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = LockKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		6EA7769F28D707FE00018FA3 /* LockKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LockKit.h; sourceTree = "<group>"; };
+		6EBD590E28E14A7F00CC3852 /* ScanResultsAsyncDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanResultsAsyncDataSource.swift; sourceTree = "<group>"; };
 		6ED248CB28D7A3BF00F78D07 /* ActivityIndicatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityIndicatorView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -425,6 +427,7 @@
 				6E6A97EE28DBEC2D00C689F6 /* NewKeyInvitationStore.swift */,
 				6E8BBFDB28DCC8F300F03735 /* AsyncFetchRequest.swift */,
 				6E10C90D28E0D97800703691 /* NewKeysAsyncFetchRequest.swift */,
+				6EBD590E28E14A7F00CC3852 /* ScanResultsAsyncDataSource.swift */,
 				6E84E53528DDE01F008CAE85 /* AssetExtractor.swift */,
 				6E21830F28D80DCD00A622B3 /* Keychain.swift */,
 				6E21831628D8116C00A622B3 /* NewKey.swift */,
@@ -870,6 +873,7 @@
 				6E21831828D8116C00A622B3 /* NewKey.swift in Sources */,
 				6E21835F28D9516B00A622B3 /* CloudApplicationData.swift in Sources */,
 				6E8BBFDC28DCC8F300F03735 /* AsyncFetchRequest.swift in Sources */,
+				6EBD590F28E14A7F00CC3852 /* ScanResultsAsyncDataSource.swift in Sources */,
 				6E21831028D80DCD00A622B3 /* Keychain.swift in Sources */,
 				6E21833C28D8F3B500A622B3 /* KeyManagedObject.swift in Sources */,
 				6E21830128D7C37500A622B3 /* Error.swift in Sources */,
