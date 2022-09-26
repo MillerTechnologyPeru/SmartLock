@@ -89,10 +89,14 @@
 		6E4CB62528D792BF00116573 /* InfoPlist.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E4CB62428D792BF00116573 /* InfoPlist.swift */; };
 		6E5D51DF28E20C6D008FFB4D /* QuickLook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6E5D51C128E185DB008FFB4D /* QuickLook.framework */; };
 		6E5D51E228E20C6D008FFB4D /* PreviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E5D51E128E20C6D008FFB4D /* PreviewViewController.swift */; };
-		6E5D51E428E20C6D008FFB4D /* PreviewProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E5D51E328E20C6D008FFB4D /* PreviewProvider.swift */; };
 		6E5D51E728E20C6D008FFB4D /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6E5D51E528E20C6D008FFB4D /* MainInterface.storyboard */; };
 		6E5D51EB28E20C6D008FFB4D /* LockQuickLook.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 6E5D51DE28E20C6C008FFB4D /* LockQuickLook.appex */; platformFilter = ios; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		6E5D51F028E20E8E008FFB4D /* LockKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6EA7769D28D707FE00018FA3 /* LockKit.framework */; };
+		6E5D51FB28E21538008FFB4D /* Quartz.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6E5D51FA28E21537008FFB4D /* Quartz.framework */; };
+		6E5D51FE28E21538008FFB4D /* PreviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E5D51FD28E21538008FFB4D /* PreviewViewController.swift */; };
+		6E5D520328E21538008FFB4D /* PreviewViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6E5D520128E21538008FFB4D /* PreviewViewController.xib */; };
+		6E5D520828E21538008FFB4D /* LockQuickLook.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 6E5D51F928E21537008FFB4D /* LockQuickLook.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		6E5D520C28E215E9008FFB4D /* LockKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6EA7769D28D707FE00018FA3 /* LockKit.framework */; };
 		6E6A97EF28DBEC2D00C689F6 /* NewKeyInvitationStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E6A97EE28DBEC2D00C689F6 /* NewKeyInvitationStore.swift */; };
 		6E6A97F328DC030000C689F6 /* NewKeyInvitationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E6A97F228DC030000C689F6 /* NewKeyInvitationView.swift */; };
 		6E84E52728DDC841008CAE85 /* ScanLocksIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E8BBFEC28DD301B00F03735 /* ScanLocksIntent.swift */; };
@@ -148,6 +152,20 @@
 			remoteGlobalIDString = 6EA7769C28D707FE00018FA3;
 			remoteInfo = LockKit;
 		};
+		6E5D520628E21538008FFB4D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6EA7767928D7061600018FA3 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 6E5D51F828E21537008FFB4D;
+			remoteInfo = "LockQuickLook-macOS";
+		};
+		6E5D520E28E215E9008FFB4D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6EA7767928D7061600018FA3 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 6EA7769C28D707FE00018FA3;
+			remoteInfo = LockKit;
+		};
 		6E8BBFF828DD30B400F03735 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 6EA7767928D7061600018FA3 /* Project object */;
@@ -171,6 +189,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
+				6E5D520828E21538008FFB4D /* LockQuickLook.appex in Embed Foundation Extensions */,
 				6E5D51EB28E20C6D008FFB4D /* LockQuickLook.appex in Embed Foundation Extensions */,
 			);
 			name = "Embed Foundation Extensions";
@@ -271,10 +290,15 @@
 		6E5D51C128E185DB008FFB4D /* QuickLook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuickLook.framework; path = System/Library/Frameworks/QuickLook.framework; sourceTree = SDKROOT; };
 		6E5D51DE28E20C6C008FFB4D /* LockQuickLook.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = LockQuickLook.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		6E5D51E128E20C6D008FFB4D /* PreviewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewViewController.swift; sourceTree = "<group>"; };
-		6E5D51E328E20C6D008FFB4D /* PreviewProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewProvider.swift; sourceTree = "<group>"; };
 		6E5D51E628E20C6D008FFB4D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MainInterface.storyboard; sourceTree = "<group>"; };
 		6E5D51E828E20C6D008FFB4D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6E5D51EF28E20CAC008FFB4D /* LockQuickLook-iOS.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "LockQuickLook-iOS.entitlements"; sourceTree = "<group>"; };
+		6E5D51F928E21537008FFB4D /* LockQuickLook.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = LockQuickLook.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		6E5D51FA28E21537008FFB4D /* Quartz.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Quartz.framework; path = System/Library/Frameworks/Quartz.framework; sourceTree = SDKROOT; };
+		6E5D51FD28E21538008FFB4D /* PreviewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewViewController.swift; sourceTree = "<group>"; };
+		6E5D520228E21538008FFB4D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/PreviewViewController.xib; sourceTree = "<group>"; };
+		6E5D520428E21538008FFB4D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		6E5D520528E21538008FFB4D /* LockQuickLook-macOS.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "LockQuickLook-macOS.entitlements"; sourceTree = "<group>"; };
 		6E6A97EE28DBEC2D00C689F6 /* NewKeyInvitationStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewKeyInvitationStore.swift; sourceTree = "<group>"; };
 		6E6A97F228DC030000C689F6 /* NewKeyInvitationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewKeyInvitationView.swift; sourceTree = "<group>"; };
 		6E84E51F28DD9646008CAE85 /* Shortcuts.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Shortcuts.swift; sourceTree = "<group>"; };
@@ -332,6 +356,15 @@
 			files = (
 				6E5D51F028E20E8E008FFB4D /* LockKit.framework in Frameworks */,
 				6E5D51DF28E20C6D008FFB4D /* QuickLook.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6E5D51F628E21537008FFB4D /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6E5D520C28E215E9008FFB4D /* LockKit.framework in Frameworks */,
+				6E5D51FB28E21538008FFB4D /* Quartz.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -534,13 +567,23 @@
 		6E5D51E028E20C6D008FFB4D /* LockQuickLook-iOS */ = {
 			isa = PBXGroup;
 			children = (
-				6E5D51EF28E20CAC008FFB4D /* LockQuickLook-iOS.entitlements */,
-				6E5D51E128E20C6D008FFB4D /* PreviewViewController.swift */,
-				6E5D51E328E20C6D008FFB4D /* PreviewProvider.swift */,
-				6E5D51E528E20C6D008FFB4D /* MainInterface.storyboard */,
 				6E5D51E828E20C6D008FFB4D /* Info.plist */,
+				6E5D51EF28E20CAC008FFB4D /* LockQuickLook-iOS.entitlements */,
+				6E5D51E528E20C6D008FFB4D /* MainInterface.storyboard */,
+				6E5D51E128E20C6D008FFB4D /* PreviewViewController.swift */,
 			);
 			path = "LockQuickLook-iOS";
+			sourceTree = "<group>";
+		};
+		6E5D51FC28E21538008FFB4D /* LockQuickLook-macOS */ = {
+			isa = PBXGroup;
+			children = (
+				6E5D520428E21538008FFB4D /* Info.plist */,
+				6E5D520528E21538008FFB4D /* LockQuickLook-macOS.entitlements */,
+				6E5D51FD28E21538008FFB4D /* PreviewViewController.swift */,
+				6E5D520128E21538008FFB4D /* PreviewViewController.xib */,
+			);
+			path = "LockQuickLook-macOS";
 			sourceTree = "<group>";
 		};
 		6E84E53A28DE862B008CAE85 /* AppEntity */ = {
@@ -622,6 +665,7 @@
 				6E3276C428D70A3700AF171B /* MatterLock */,
 				6E8BBFE928DD301B00F03735 /* LockIntents */,
 				6E5D51E028E20C6D008FFB4D /* LockQuickLook-iOS */,
+				6E5D51FC28E21538008FFB4D /* LockQuickLook-macOS */,
 				6EA7768228D7061600018FA3 /* Products */,
 				6EA776A928D7082300018FA3 /* Frameworks */,
 			);
@@ -635,6 +679,7 @@
 				6E3276C128D70A3700AF171B /* MatterLock.appex */,
 				6E8BBFE828DD301B00F03735 /* LockIntents.appex */,
 				6E5D51DE28E20C6C008FFB4D /* LockQuickLook.appex */,
+				6E5D51F928E21537008FFB4D /* LockQuickLook.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -679,6 +724,7 @@
 			children = (
 				6E3276C228D70A3700AF171B /* HomeKit.framework */,
 				6E5D51C128E185DB008FFB4D /* QuickLook.framework */,
+				6E5D51FA28E21537008FFB4D /* Quartz.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -732,6 +778,24 @@
 			productReference = 6E5D51DE28E20C6C008FFB4D /* LockQuickLook.appex */;
 			productType = "com.apple.product-type.app-extension";
 		};
+		6E5D51F828E21537008FFB4D /* LockQuickLook-macOS */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 6E5D520928E21538008FFB4D /* Build configuration list for PBXNativeTarget "LockQuickLook-macOS" */;
+			buildPhases = (
+				6E5D51F528E21537008FFB4D /* Sources */,
+				6E5D51F628E21537008FFB4D /* Frameworks */,
+				6E5D51F728E21537008FFB4D /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				6E5D520F28E215E9008FFB4D /* PBXTargetDependency */,
+			);
+			name = "LockQuickLook-macOS";
+			productName = "LockQuickLook-macOS";
+			productReference = 6E5D51F928E21537008FFB4D /* LockQuickLook.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 		6E8BBFE728DD301B00F03735 /* LockIntents */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 6E8BBFF228DD301B00F03735 /* Build configuration list for PBXNativeTarget "LockIntents" */;
@@ -765,6 +829,7 @@
 			dependencies = (
 				6EA776A228D707FE00018FA3 /* PBXTargetDependency */,
 				6E5D51EA28E20C6D008FFB4D /* PBXTargetDependency */,
+				6E5D520728E21538008FFB4D /* PBXTargetDependency */,
 			);
 			name = SmartLock;
 			productName = SmartLock;
@@ -814,6 +879,9 @@
 					6E5D51DD28E20C6C008FFB4D = {
 						CreatedOnToolsVersion = 14.1;
 					};
+					6E5D51F828E21537008FFB4D = {
+						CreatedOnToolsVersion = 14.1;
+					};
 					6E8BBFE728DD301B00F03735 = {
 						CreatedOnToolsVersion = 14.1;
 					};
@@ -851,6 +919,7 @@
 				6E3276C028D70A3700AF171B /* MatterLock */,
 				6E8BBFE728DD301B00F03735 /* LockIntents */,
 				6E5D51DD28E20C6C008FFB4D /* LockQuickLook-iOS */,
+				6E5D51F828E21537008FFB4D /* LockQuickLook-macOS */,
 			);
 		};
 /* End PBXProject section */
@@ -868,6 +937,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				6E5D51E728E20C6D008FFB4D /* MainInterface.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6E5D51F728E21537008FFB4D /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6E5D520328E21538008FFB4D /* PreviewViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -911,7 +988,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				6E5D51E228E20C6D008FFB4D /* PreviewViewController.swift in Sources */,
-				6E5D51E428E20C6D008FFB4D /* PreviewProvider.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6E5D51F528E21537008FFB4D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6E5D51FE28E21538008FFB4D /* PreviewViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1052,6 +1136,16 @@
 			target = 6EA7769C28D707FE00018FA3 /* LockKit */;
 			targetProxy = 6E5D51F228E20E8E008FFB4D /* PBXContainerItemProxy */;
 		};
+		6E5D520728E21538008FFB4D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 6E5D51F828E21537008FFB4D /* LockQuickLook-macOS */;
+			targetProxy = 6E5D520628E21538008FFB4D /* PBXContainerItemProxy */;
+		};
+		6E5D520F28E215E9008FFB4D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 6EA7769C28D707FE00018FA3 /* LockKit */;
+			targetProxy = 6E5D520E28E215E9008FFB4D /* PBXContainerItemProxy */;
+		};
 		6E8BBFF928DD30B400F03735 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 6EA7769C28D707FE00018FA3 /* LockKit */;
@@ -1071,6 +1165,14 @@
 				6E5D51E628E20C6D008FFB4D /* Base */,
 			);
 			name = MainInterface.storyboard;
+			sourceTree = "<group>";
+		};
+		6E5D520128E21538008FFB4D /* PreviewViewController.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				6E5D520228E21538008FFB4D /* Base */,
+			);
+			name = PreviewViewController.xib;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
@@ -1139,7 +1241,6 @@
 				INFOPLIST_FILE = "LockQuickLook-iOS/Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = LockQuickLook;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				IPHONEOS_DEPLOYMENT_TARGET = 16.1;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1172,7 +1273,6 @@
 				INFOPLIST_FILE = "LockQuickLook-iOS/Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = LockQuickLook;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				IPHONEOS_DEPLOYMENT_TARGET = 16.1;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1189,6 +1289,66 @@
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		6E5D520A28E21538008FFB4D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = "LockQuickLook-macOS/LockQuickLook-macOS.entitlements";
+				CODE_SIGN_IDENTITY = "-";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 4W79SG34MW;
+				ENABLE_HARDENED_RUNTIME = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "LockQuickLook-macOS/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = LockQuickLook;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.colemancda.Lock.QuickLook;
+				PRODUCT_NAME = LockQuickLook;
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		6E5D520B28E21538008FFB4D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = "LockQuickLook-macOS/LockQuickLook-macOS.entitlements";
+				CODE_SIGN_IDENTITY = "-";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 4W79SG34MW;
+				ENABLE_HARDENED_RUNTIME = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "LockQuickLook-macOS/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = LockQuickLook;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.colemancda.Lock.QuickLook;
+				PRODUCT_NAME = LockQuickLook;
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
 		};
@@ -1574,6 +1734,15 @@
 			buildConfigurations = (
 				6E5D51ED28E20C6D008FFB4D /* Debug */,
 				6E5D51EE28E20C6D008FFB4D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		6E5D520928E21538008FFB4D /* Build configuration list for PBXNativeTarget "LockQuickLook-macOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6E5D520A28E21538008FFB4D /* Debug */,
+				6E5D520B28E21538008FFB4D /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

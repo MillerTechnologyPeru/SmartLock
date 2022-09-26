@@ -15,8 +15,8 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "6E5D51BF28E185DB008FFB4D"
-               BuildableName = "LockQuickLook-iOS.appex"
+               BlueprintIdentifier = "6E5D51DD28E20C6C008FFB4D"
+               BuildableName = "LockQuickLook.appex"
                BlueprintName = "LockQuickLook-iOS"
                ReferencedContainer = "container:SmartLock.xcodeproj">
             </BuildableReference>

@@ -1,29 +1,27 @@
 //
 //  PreviewViewController.swift
-//  LockQuickLook
+//  LockQuickLook-macOS
 //
 //  Created by Alsey Coleman Miller on 9/26/22.
 //
 
-import Foundation
-import UIKit
-import QuickLook
-import LockKit
+import Cocoa
+import Quartz
 import SwiftUI
+import LockKit
 
-final class PreviewViewController: UIViewController, QLPreviewingController {
-        
-    override func viewDidLoad() {
-        super.viewDidLoad()
+final class PreviewViewController: NSViewController, QLPreviewingController {
+    
+    override var nibName: NSNib.Name? {
+        return NSNib.Name("PreviewViewController")
+    }
+
+    override func loadView() {
+        super.loadView()
         // Do any additional setup after loading the view.
         assert(Thread.isMainThread)
         // log
         log("👁‍🗨 Loaded \(PreviewViewController.self)")
-    }
-    
-    func preparePreviewOfSearchableItem(identifier: String, queryString: String?) async throws {
-        log("👁‍🗨 Prepare preview for searchable item \(identifier) \(queryString ?? "")")
-        
     }
     
     func preparePreviewOfFile(at url: URL) async throws {
@@ -58,26 +56,21 @@ private extension PreviewViewController {
     
     func loadNewKey(_ invitation: NewKey.Invitation) {
         assert(Thread.isMainThread)
-        let viewController = UIHostingController(
+        let viewController = NSHostingController(
             rootView: NewKeyInvitationView(invitation: invitation)
                 .environmentObject(Store.shared)
         )
         loadChildViewController(viewController)
     }
     
-    func loadChildViewController(_ viewController: UIViewController) {
+    func loadChildViewController(_ viewController: NSViewController) {
         assert(Thread.isMainThread)
-        viewController.loadViewIfNeeded()
-        viewController.view.layoutIfNeeded()
+        viewController.loadView()
+        viewController.view.layout()
         addChild(viewController)
         view.addSubview(viewController.view)
-        viewController.didMove(toParent: self)
-        
-        guard let childView = viewController.view else {
-            assertionFailure()
-            return
-        }
-        
+        //viewController .didMove(toParent: self)
+        let childView = viewController.view
         childView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             childView.leftAnchor.constraint(equalTo: view.leftAnchor),
@@ -87,3 +80,4 @@ private extension PreviewViewController {
         ])
     }
 }
+
