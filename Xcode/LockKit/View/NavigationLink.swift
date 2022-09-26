@@ -57,7 +57,8 @@ public enum AppNavigationLinkID: Hashable {
     case lock(UUID)
     case events(UUID, LockEvent.Predicate?)
     case permissions(UUID)
-    case key(KeyDetailView.Value)
+    case key(UUID, KeyDetailView.Value)
+    case newKeyInvitation(NewKey.Invitation)
     case keySchedule(Permission.Schedule) // view only
 }
 
@@ -67,6 +68,7 @@ public enum AppNavigationLinkType: String {
     case events
     case permissions
     case key
+    case newKeyInvitation
     case keySchedule
 }
 
@@ -84,6 +86,8 @@ public extension AppNavigationLinkID {
             return .key
         case .keySchedule:
             return .keySchedule
+        case .newKeyInvitation:
+            return .newKeyInvitation
         }
     }
 }
@@ -110,13 +114,17 @@ public struct AppNavigationDestinationView: View {
             AnyView(
                 PermissionsView(id: id)
             )
-        case let .key(key):
+        case let .key(lock, key):
             AnyView(
-                KeyDetailView(key: key)
+                KeyDetailView(key: key, lock: lock)
             )
         case let .keySchedule(schedule):
             AnyView(
                 PermissionScheduleView(schedule: schedule)
+            )
+        case let .newKeyInvitation(invitation):
+            AnyView(
+                NewKeyInvitationView(invitation: invitation)
             )
         }
     }

@@ -132,7 +132,7 @@ private extension KeysView.StateView {
                 )
             )
         case let .invitation(invitation, lockName):
-            return AnyView(AppNavigationLink(id: .key(.newKey(invitation.key))) { // FIXME: Show invitation view
+            return AnyView(AppNavigationLink(id: .key(invitation.lock, .newKey(invitation.key))) { // FIXME: Show invitation view
                 LockRowView(
                     image: .permission(invitation.key.permission.type),
                     title: invitation.key.name,

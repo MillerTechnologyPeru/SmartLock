@@ -10,87 +10,125 @@ import CoreLock
 
 public struct KeyDetailView: View {
     
+    @EnvironmentObject
+    public var store: Store
+    
     public let key: Value
     
-    @State
-    var showID = false
+    public let lock: UUID
     
-    private static let dateFormatter: DateFormatter = {
-        let formatter = DateFormatter()
-        formatter.dateStyle = .short
-        formatter.timeStyle = .short
-        return formatter
-    }()
-    
-    private var titleWidth: CGFloat {
-        100
-    }
-    
-    public init(key: Value) {
+    public init(key: Value, lock: UUID) {
         self.key = key
+        self.lock = lock
     }
     
     public var body: some View {
-        ScrollView {
-            VStack(alignment: .leading, spacing: 20) {
-                HStack {
-                    Spacer()
-                    PermissionIconView(permission: key.permission.type)
-                        .frame(width: 150, height: 150, alignment: .center)
-                    .padding(30)
-                    Spacer()
-                }
-                VStack(alignment: .leading, spacing: 20) {
-                    // info
-                    if showID {
-                        HStack {
-                            Text("Key")
-                                .frame(width: titleWidth, height: nil, alignment: .leading)
-                                .font(.body)
-                                .foregroundColor(.gray)
-                            Text(verbatim: key.id.description)
-                        }
-                    }
-                    HStack {
-                        Text("Type")
-                            .frame(width: titleWidth, height: nil, alignment: .leading)
-                            .font(.body)
-                            .foregroundColor(.gray)
-                        if let schedule = key.permission.schedule {
-                            AppNavigationLink(id: .keySchedule(schedule), label: {
-                                HStack {
-                                    Text(verbatim: key.permission.localizedText)
-                                        .foregroundColor(.primary)
-                                    Image(systemName: "chevron.right")
-                                }
-                            })
-                        } else {
-                            Text(verbatim: key.permission.localizedText)
-                                .foregroundColor(.primary)
-                        }
-                    }
-                    HStack {
-                        Text("Created")
-                            .frame(width: titleWidth, height: nil, alignment: .leading)
-                            .font(.body)
-                            .foregroundColor(.gray)
-                        Text(verbatim: Self.dateFormatter.string(from: key.created))
-                    }
-                    if let expiration = key.expiration {
-                        HStack {
-                            Text("Expiration")
-                                .frame(width: titleWidth, height: nil, alignment: .leading)
-                                .font(.body)
-                                .foregroundColor(.gray)
-                            Text(verbatim: Self.dateFormatter.string(from: expiration))
-                        }
-                    }
-                }
-            }
-            .padding(20)
-            .buttonStyle(.plain)
+        StateView(
+            key: key,
+            lock: lockText,
+            showID: false
+        )
+    }
+}
+
+private extension KeyDetailView {
+    
+    var lockText: String {
+        return store.applicationData.locks[lock]?.name ?? lock.description
+    }
+}
+
+extension KeyDetailView {
+    
+    struct StateView: View {
+        
+        let key: Value
+        
+        let lock: String
+        
+        @State
+        var showID = false
+        
+        private static let dateFormatter: DateFormatter = {
+            let formatter = DateFormatter()
+            formatter.dateStyle = .short
+            formatter.timeStyle = .short
+            return formatter
+        }()
+        
+        private var titleWidth: CGFloat {
+            100
         }
-        .navigationTitle(Text(verbatim: key.name))
+        
+        var body: some View {
+            ScrollView {
+                VStack(alignment: .leading, spacing: 20) {
+                    HStack {
+                        Spacer()
+                        PermissionIconView(permission: key.permission.type)
+                            .frame(width: 150, height: 150, alignment: .center)
+                        .padding(30)
+                        Spacer()
+                    }
+                    VStack(alignment: .leading, spacing: 20) {
+                        // info
+                        if showID {
+                            HStack {
+                                Text("Key")
+                                    .frame(width: titleWidth, height: nil, alignment: .leading)
+                                    .font(.body)
+                                    .foregroundColor(.gray)
+                                Text(verbatim: key.id.description)
+                            }
+                        }
+                        HStack {
+                            Text("Lock")
+                                .frame(width: titleWidth, height: nil, alignment: .leading)
+                                .font(.body)
+                                .foregroundColor(.gray)
+                            Text(verbatim: lock)
+                        }
+                        HStack {
+                            Text("Type")
+                                .frame(width: titleWidth, height: nil, alignment: .leading)
+                                .font(.body)
+                                .foregroundColor(.gray)
+                            if let schedule = key.permission.schedule {
+                                AppNavigationLink(id: .keySchedule(schedule), label: {
+                                    HStack {
+                                        Text(verbatim: key.permission.localizedText)
+                                            .foregroundColor(.primary)
+                                        Image(systemName: "chevron.right")
+                                    }
+                                })
+                            } else {
+                                Text(verbatim: key.permission.localizedText)
+                                    .foregroundColor(.primary)
+                            }
+                        }
+                        HStack {
+                            Text("Created")
+                                .frame(width: titleWidth, height: nil, alignment: .leading)
+                                .font(.body)
+                                .foregroundColor(.gray)
+                            Text(verbatim: Self.dateFormatter.string(from: key.created))
+                        }
+                        if let expiration = key.expiration {
+                            HStack {
+                                Text("Expiration")
+                                    .frame(width: titleWidth, height: nil, alignment: .leading)
+                                    .font(.body)
+                                    .foregroundColor(.gray)
+                                Text(verbatim: Self.dateFormatter.string(from: expiration))
+                            }
+                        }
+                    }
+                }
+                .padding(20)
+                .buttonStyle(.plain)
+            }
+            .navigationTitle(Text(verbatim: key.name))
+        }
     }
 }
 
@@ -165,7 +203,8 @@ struct KeyDetailView_Previews: PreviewProvider {
             ForEach(keys) { key in
                 NavigationView {
                     KeyDetailView(
-                        key: key
+                        key: key,
+                        lock: UUID()
                     )
                 }
                 .previewDisplayName(key.name)

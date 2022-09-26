@@ -115,7 +115,6 @@ private extension SidebarView {
         isNearbyExpanded = newValue
         // start scanning if not already
         if newValue, !store.isScanning {
-            store.peripherals.removeAll(keepingCapacity: true)
             Task {
                 try? await Task.sleep(nanoseconds: 1_000_000_000)
                 store.scanDefault()

@@ -74,6 +74,7 @@ public struct PermissionsView: View {
     
     public var body: some View {
         StateView(
+            lock: id,
             keys: keys.lazy.compactMap { Key(managedObject: $0) },
             newKeys: newKeys.lazy.compactMap { NewKey(managedObject: $0) },
             invitations: invitations,
@@ -208,6 +209,8 @@ internal extension PermissionsView {
     
     struct StateView <Keys, NewKeys> : View where Keys: RandomAccessCollection, Keys.Element == Key, NewKeys: RandomAccessCollection, NewKeys.Element == NewKey {
         
+        let lock: UUID
+        
         let keys: Keys
         
         let newKeys: NewKeys
@@ -245,7 +248,7 @@ internal extension PermissionsView {
 private extension PermissionsView.StateView {
     
     func row(for item: Key) -> some View {
-        AppNavigationLink(id: .key(.key(item)), label: {
+        AppNavigationLink(id: .key(lock, .key(item)), label: {
             LockRowView(
                 image: .permission(item.permission.type),
                 title: item.name,
@@ -259,7 +262,7 @@ private extension PermissionsView.StateView {
     }
     
     func row(for item: NewKey, invitationURL: URL?) -> some View {
-        AppNavigationLink(id: .key(.newKey(item)), label: {
+        AppNavigationLink(id: .key(lock, .newKey(item)), label: {
             HStack(alignment: .center, spacing: 8) {
                 row(for: item, showDate: invitationURL == nil)
                 if let url = invitationURL {
@@ -270,6 +273,10 @@ private extension PermissionsView.StateView {
                                 item: url,
                                 subject: Text("\(item.name)"),
                                 message: Text("Share this key"),
+                                preview: SharePreview(
+                                    item.name,
+                                    icon: Image(permissionType: item.permission.type)
+                                ),
                                 label: { shareImage }
                             )
                             .buttonStyle(.plain)
@@ -303,14 +310,6 @@ private extension PermissionsView.StateView {
             .padding(8)
     }
     
-    func destination(for item: Key) -> some View {
-        KeyDetailView(key: .key(item))
-    }
-    
-    func destination(for item: NewKey) -> some View {
-        KeyDetailView(key: .newKey(item))
-    }
-    
     func deleteKey(at indexSet: IndexSet) {
         
     }
@@ -328,6 +327,7 @@ struct PermissionsView_Previews: PreviewProvider {
     static var previews: some View {
         NavigationView {
             PermissionsView.StateView(
+                lock: UUID(),
                 keys: [
                     Key(
                         id: UUID(),
