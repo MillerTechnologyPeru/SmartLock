@@ -13,16 +13,25 @@ struct NearbyDevicesView: View {
     @EnvironmentObject
     var store: Store
     
-    @SwiftUI.State
+    @State
     private var scanTask: TaskQueue.PendingTask?
+    
+    @State
+    private var peripherals = [NativePeripheral]()
+    
+    @State
+    private var readInformationTasks = [NativePeripheral: Task<Void, Never>]()
+    
+    @State
+    private var readInformationError = [NativePeripheral: Error]()
     
     var body: some View {
         StateView<AnyView>(
             state: state,
-            items: items,
+            items: scanResults.map { item(for: $0) },
             toggleScan: toggleScan,
             destination: { (item) in
-                if let information = store.lockInformation.first(where: { $0.key.id == item.id })?.value {
+                if let information = store.lockInformation[item.id] {
                     return AnyView(LockDetailView(id: information.id))
                 } else {
                     return AnyView(EmptyView())
@@ -66,16 +75,31 @@ private extension NearbyDevicesView {
         }
     }
     
-    var peripherals: [NativePeripheral] {
-        store.peripherals.keys
-            .lazy
-            .sorted(by: { store.lockInformation[$0]?.id.description ?? "" > store.lockInformation[$1]?.id.description ?? ""  })
-            .sorted(by: {
-                store.applicationData.locks[store.lockInformation[$0]?.id ?? UUID()]?.key.created ?? .distantFuture > store.applicationData.locks[store.lockInformation[$1]?.id ?? UUID()]?.key.created ?? .distantFuture })
-            .sorted(by: { $0.description < $1.description })
+    var scanResults: AsyncFetchedResults<ScanResultsAsyncDataSource> {
+        .init(dataSource: .init(store: store), configuration: (), results: $peripherals, tasks: $readInformationTasks, errors: $readInformationError)
     }
     
-    var state: State {
+    func item(for element: AsyncFetchedResults<ScanResultsAsyncDataSource>.Element) -> NearbyDevicesView.Item {
+        switch element {
+        case let .loading(peripheral):
+            return .loading(peripheral)
+        case let .failure(peripheral, error):
+            return .error(peripheral, error.localizedDescription)
+        case let .success(peripheral, information):
+            switch information.status {
+            case .setup:
+                return .setup(peripheral, information.id)
+            default:
+                if let lockCache = store[lock: information.id] {
+                    return .lock(peripheral, lockCache.name, lockCache.key.permission.type)
+                } else {
+                    return .unknown(peripheral, information.id)
+                }
+            }
+        }
+    }
+    
+    var state: ScanState {
         if store.state != .poweredOn {
             return .bluetoothUnavailable
         } else if store.isScanning {
@@ -84,34 +108,13 @@ private extension NearbyDevicesView {
             return .stopScan
         }
     }
-    
-    var items: [Item] {
-        peripherals.map { item(for: $0) }
-    }
-    
-    func item(for peripheral: NativePeripheral) -> Item {
-        if let information = store.lockInformation[peripheral] {
-            switch information.status {
-            case .setup:
-                return .setup(peripheral.id, information.id)
-            default:
-                if let lockCache = store[lock: information.id] {
-                    return .key(peripheral.id, lockCache.name, lockCache.key.permission.type)
-                } else {
-                    return .unknown(peripheral.id, information.id)
-                }
-            }
-        } else {
-            return .loading(peripheral.id)
-        }
-    }
 }
 
 extension NearbyDevicesView {
     
     struct StateView <Destination>: View where Destination: View {
         
-        let state: State
+        let state: ScanState
         
         let items: [Item]
         
@@ -145,9 +148,9 @@ private extension NearbyDevicesView.StateView {
         List {
             ForEach(items) { (item) in
                 switch item {
-                case .loading, .unknown:
+                case .loading, .error, .unknown:
                     LockRowView(item)
-                case .key, .setup:
+                case .lock, .setup:
                     NavigationLink(destination: {
                         destination(item)
                     }, label: {
@@ -181,7 +184,7 @@ private extension NearbyDevicesView.StateView {
 
 extension NearbyDevicesView {
     
-    enum State {
+    enum ScanState {
         case bluetoothUnavailable
         case scanning
         case stopScan
@@ -191,22 +194,25 @@ extension NearbyDevicesView {
 extension NearbyDevicesView {
     
     enum Item {
-        case loading(NativeCentral.Peripheral.ID)
-        case setup(NativeCentral.Peripheral.ID, UUID)
-        case key(NativeCentral.Peripheral.ID, String, PermissionType)
-        case unknown(NativeCentral.Peripheral.ID, UUID)
+        case loading(NativePeripheral)
+        case error(NativePeripheral, String)
+        case setup(NativePeripheral, UUID)
+        case lock(NativePeripheral, String, PermissionType)
+        case unknown(NativePeripheral, UUID)
     }
 }
 
 extension NearbyDevicesView.Item: Identifiable {
     
-    var id: NativeCentral.Peripheral.ID {
+    var id: NativeCentral.Peripheral {
         switch self {
+        case let .error(id, _):
+            return id
         case let .loading(id):
             return id
         case let .setup(id, _):
             return id
-        case let .key(id, _, _):
+        case let .lock(id, _, _):
             return id
         case let .unknown(id, _):
             return id
@@ -223,6 +229,12 @@ extension LockRowView {
                 image: .loading,
                 title: "Loading..."
             )
+        case let .error(_, error):
+            self.init(
+                image: .emoji("⚠️"),
+                title: "Error",
+                subtitle: error
+            )
         case let .unknown(_, id):
             self.init(
                 image: .permission(.anytime),
@@ -235,7 +247,7 @@ extension LockRowView {
                 title: "Setup",
                 subtitle: id.description
             )
-        case let .key(_, name, type):
+        case let .lock(_, name, type):
             self.init(
                 image: .permission(type),
                 title: name,
@@ -255,9 +267,10 @@ struct NearbyDevicesView_Previews: PreviewProvider {
                 state: .scanning,
                 items: [
                     .loading(.random),
+                    .error(.random, LockError.notInRange(lock: UUID()).localizedDescription),
                     .setup(.random, UUID()),
                     .unknown(.random, UUID()),
-                    .key(.random, "My lock", .admin)
+                    .lock(.random, "My lock", .admin)
                 ],
                 toggleScan: {  },
                 destination: { Text(verbatim: $0.id.description) }
