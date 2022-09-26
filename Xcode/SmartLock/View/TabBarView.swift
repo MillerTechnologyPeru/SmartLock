@@ -15,6 +15,12 @@ struct TabBarView: View {
     //@State
     //private var columnVisibility: NavigationSplitViewVisibility = .doubleColumn
     
+    @State
+    private var sheet: AppNavigationDestinationView?
+    
+    @State
+    private var error: Error?
+    
     var body: some View {
         TabView {
             
@@ -54,6 +60,66 @@ struct TabBarView: View {
             .navigationViewStyle(.stack)
         }
         .navigationBarTitleDisplayMode(.large)
+        .onOpenURL { url in
+            open(url: url)
+        }
+        .sheet(item: $sheet) { view in
+            NavigationView {
+                view
+                    .toolbar {
+                        ToolbarItem(placement: .navigation) {
+                            Text("Cancel")
+                        }
+                }
+            }
+        }
+        .alert(error: $error)
+    }
+}
+
+extension TabBarView {
+    
+    func open(url: URL) {
+        self.error = nil
+        log("Open \(url.description)")
+        Task {
+            do {
+                try await open(url: url)
+            }
+            catch {
+                log("⚠️ Unable to open URL. \(error.localizedDescription)")
+                // show error
+                self.error = error
+            }
+        }
+    }
+    
+    func open(url: URL) async throws {
+        
+        if url.isFileURL {
+            try await open(file: url)
+        } else if let lockURL = LockURL(rawValue: url) {
+            try open(url: lockURL)
+        } else {
+            throw CocoaError(.fileReadInvalidFileName)
+        }
+    }
+    
+    func open(file url: URL) async throws {
+        let data = try Data(contentsOf: url, options: [.mappedIfSafe])
+        let decoder = JSONDecoder()
+        let invitation = try decoder.decode(NewKey.Invitation.self, from: data)
+        await open(invitation: invitation)
+    }
+    
+    @MainActor
+    func open(invitation: NewKey.Invitation) {
+        self.sheet = .init(id: .newKeyInvitation(invitation))
+    }
+    
+    func open(url: LockURL) throws {
+        // deep link
+        assertionFailure()
     }
 }
 

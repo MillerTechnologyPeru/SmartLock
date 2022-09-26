@@ -18,18 +18,32 @@ public extension NewKey.Invitation {
     
     /// New Key Invitation File Document
     struct Document: FileDocument {
+        
+        public let invitation: NewKey.Invitation
+        
+        public init(invitation: NewKey.Invitation) {
+            self.invitation = invitation
+        }
+        
+        internal static let decoder = JSONDecoder()
+        
+        internal static let encoder = JSONEncoder()
                 
         /// The types the document is able to open.
         public static var readableContentTypes: [UTType] {
-            return [.json]
+            return [.json, UTType(exportedAs: NewKey.Invitation.documentType)]
         }
         
         public init(configuration: ReadConfiguration) throws {
-            fatalError()
+            guard let data = configuration.file.regularFileContents,
+                  let invitation = try? Self.decoder.decode(NewKey.Invitation.self, from: data)
+                else { throw CocoaError(.fileReadCorruptFile) }
+            self.init(invitation: invitation)
         }
         
         public func fileWrapper(configuration: WriteConfiguration) throws -> FileWrapper {
-            fatalError()
+            let data = try Self.encoder.encode(invitation)
+            return .init(regularFileWithContents: data)
         }
     }
 }

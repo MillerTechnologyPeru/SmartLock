@@ -92,7 +92,7 @@ public extension AppNavigationLinkID {
     }
 }
 
-public struct AppNavigationDestinationView: View {
+public struct AppNavigationDestinationView: View, Identifiable {
     
     public let id: AppNavigationLinkID
     

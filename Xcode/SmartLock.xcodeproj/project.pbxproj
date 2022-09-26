@@ -90,12 +90,12 @@
 		6E5D51DF28E20C6D008FFB4D /* QuickLook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6E5D51C128E185DB008FFB4D /* QuickLook.framework */; };
 		6E5D51E228E20C6D008FFB4D /* PreviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E5D51E128E20C6D008FFB4D /* PreviewViewController.swift */; };
 		6E5D51E728E20C6D008FFB4D /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6E5D51E528E20C6D008FFB4D /* MainInterface.storyboard */; };
-		6E5D51EB28E20C6D008FFB4D /* LockQuickLook.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 6E5D51DE28E20C6C008FFB4D /* LockQuickLook.appex */; platformFilter = ios; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		6E5D51EB28E20C6D008FFB4D /* LockQuickLookMobile.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 6E5D51DE28E20C6C008FFB4D /* LockQuickLookMobile.appex */; platformFilter = ios; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		6E5D51F028E20E8E008FFB4D /* LockKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6EA7769D28D707FE00018FA3 /* LockKit.framework */; };
 		6E5D51FB28E21538008FFB4D /* Quartz.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6E5D51FA28E21537008FFB4D /* Quartz.framework */; };
 		6E5D51FE28E21538008FFB4D /* PreviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E5D51FD28E21538008FFB4D /* PreviewViewController.swift */; };
 		6E5D520328E21538008FFB4D /* PreviewViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6E5D520128E21538008FFB4D /* PreviewViewController.xib */; };
-		6E5D520828E21538008FFB4D /* LockQuickLook.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 6E5D51F928E21537008FFB4D /* LockQuickLook.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		6E5D520828E21538008FFB4D /* LockQuickLook.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 6E5D51F928E21537008FFB4D /* LockQuickLook.appex */; platformFilters = (macos, ); settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		6E5D520C28E215E9008FFB4D /* LockKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6EA7769D28D707FE00018FA3 /* LockKit.framework */; };
 		6E6A97EF28DBEC2D00C689F6 /* NewKeyInvitationStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E6A97EE28DBEC2D00C689F6 /* NewKeyInvitationStore.swift */; };
 		6E6A97F328DC030000C689F6 /* NewKeyInvitationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E6A97F228DC030000C689F6 /* NewKeyInvitationView.swift */; };
@@ -190,7 +190,7 @@
 			dstSubfolderSpec = 13;
 			files = (
 				6E5D520828E21538008FFB4D /* LockQuickLook.appex in Embed Foundation Extensions */,
-				6E5D51EB28E20C6D008FFB4D /* LockQuickLook.appex in Embed Foundation Extensions */,
+				6E5D51EB28E20C6D008FFB4D /* LockQuickLookMobile.appex in Embed Foundation Extensions */,
 			);
 			name = "Embed Foundation Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -288,7 +288,7 @@
 		6E4CB62228D7907E00116573 /* PermissionIconViewNSView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionIconViewNSView.swift; sourceTree = "<group>"; };
 		6E4CB62428D792BF00116573 /* InfoPlist.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = InfoPlist.swift; path = ../../../iOS/SmartLock/InfoPlist.swift; sourceTree = "<group>"; };
 		6E5D51C128E185DB008FFB4D /* QuickLook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuickLook.framework; path = System/Library/Frameworks/QuickLook.framework; sourceTree = SDKROOT; };
-		6E5D51DE28E20C6C008FFB4D /* LockQuickLook.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = LockQuickLook.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		6E5D51DE28E20C6C008FFB4D /* LockQuickLookMobile.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = LockQuickLookMobile.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		6E5D51E128E20C6D008FFB4D /* PreviewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewViewController.swift; sourceTree = "<group>"; };
 		6E5D51E628E20C6D008FFB4D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MainInterface.storyboard; sourceTree = "<group>"; };
 		6E5D51E828E20C6D008FFB4D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -678,7 +678,7 @@
 				6EA7769D28D707FE00018FA3 /* LockKit.framework */,
 				6E3276C128D70A3700AF171B /* MatterLock.appex */,
 				6E8BBFE828DD301B00F03735 /* LockIntents.appex */,
-				6E5D51DE28E20C6C008FFB4D /* LockQuickLook.appex */,
+				6E5D51DE28E20C6C008FFB4D /* LockQuickLookMobile.appex */,
 				6E5D51F928E21537008FFB4D /* LockQuickLook.appex */,
 			);
 			name = Products;
@@ -775,7 +775,7 @@
 			);
 			name = "LockQuickLook-iOS";
 			productName = LockQuickLook;
-			productReference = 6E5D51DE28E20C6C008FFB4D /* LockQuickLook.appex */;
+			productReference = 6E5D51DE28E20C6C008FFB4D /* LockQuickLookMobile.appex */;
 			productType = "com.apple.product-type.app-extension";
 		};
 		6E5D51F828E21537008FFB4D /* LockQuickLook-macOS */ = {
@@ -1138,6 +1138,9 @@
 		};
 		6E5D520728E21538008FFB4D /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
+			platformFilters = (
+				macos,
+			);
 			target = 6E5D51F828E21537008FFB4D /* LockQuickLook-macOS */;
 			targetProxy = 6E5D520628E21538008FFB4D /* PBXContainerItemProxy */;
 		};
@@ -1250,7 +1253,7 @@
 				);
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.colemancda.Lock.QuickLook;
-				PRODUCT_NAME = LockQuickLook;
+				PRODUCT_NAME = LockQuickLookMobile;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -1282,7 +1285,7 @@
 				);
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.colemancda.Lock.QuickLook;
-				PRODUCT_NAME = LockQuickLook;
+				PRODUCT_NAME = LockQuickLookMobile;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -1310,6 +1313,11 @@
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
+					"@executable_path/../../../../Frameworks",
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+					"@executable_path/../../../Frameworks",
 					"@executable_path/../../../../Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
@@ -1340,6 +1348,11 @@
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
+					"@executable_path/../../../../Frameworks",
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+					"@executable_path/../../../Frameworks",
 					"@executable_path/../../../../Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
