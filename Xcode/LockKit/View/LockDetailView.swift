@@ -100,11 +100,7 @@ public struct LockDetailView: View {
             )
         } else if let information = self.information,
             information.status == .setup {
-            #if os(iOS)
-            AnyView(SetupLockView(id: id))
-            #else
-            AnyView(Text("Setup this lock on your iOS device."))
-            #endif
+            AnyView(SetupLockView())
         } else {
             AnyView(UnknownView(id: id, information: information))
         }

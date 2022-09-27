@@ -12,6 +12,9 @@ import SFSafeSymbols
 
 struct TabBarView: View {
     
+    @EnvironmentObject
+    var store: Store
+    
     //@State
     //private var columnVisibility: NavigationSplitViewVisibility = .doubleColumn
     
@@ -99,7 +102,7 @@ extension TabBarView {
         if url.isFileURL {
             try await open(file: url)
         } else if let lockURL = LockURL(rawValue: url) {
-            try open(url: lockURL)
+            try await open(url: lockURL)
         } else {
             throw CocoaError(.fileReadInvalidFileName)
         }
@@ -117,9 +120,32 @@ extension TabBarView {
         self.sheet = .init(id: .newKeyInvitation(invitation))
     }
     
+    @MainActor
+    func open(lock: UUID) {
+        self.sheet = .init(id: .lock(lock))
+    }
+    
+    @MainActor
     func open(url: LockURL) throws {
-        // deep link
-        assertionFailure()
+        switch url {
+        case let .newKey(invitation):
+            open(invitation: invitation)
+        case let .unlock(lock: lock):
+            // Deep link
+            open(lock: lock)
+        case let .setup(lock: lock, secret: secretData):
+            // setup
+            //self.sheet = .init(id: )
+            Task {
+                guard store.state == .poweredOn else {
+                    throw LockError.bluetoothUnavailable
+                }
+                guard let peripheral = try await store.device(for: lock) else {
+                    throw LockError.notInRange(lock: lock)
+                }
+                try await store.setup(for: peripheral, using: secretData, name: "My Lock")
+            }
+        }
     }
 }
 

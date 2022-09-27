@@ -97,6 +97,7 @@
 		6E5D520328E21538008FFB4D /* PreviewViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6E5D520128E21538008FFB4D /* PreviewViewController.xib */; };
 		6E5D520828E21538008FFB4D /* LockQuickLook.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 6E5D51F928E21537008FFB4D /* LockQuickLook.appex */; platformFilters = (macos, ); settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		6E5D520C28E215E9008FFB4D /* LockKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6EA7769D28D707FE00018FA3 /* LockKit.framework */; };
+		6E5D521328E29825008FFB4D /* CodeScanner in Frameworks */ = {isa = PBXBuildFile; productRef = 6E5D521228E29825008FFB4D /* CodeScanner */; };
 		6E6A97EF28DBEC2D00C689F6 /* NewKeyInvitationStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E6A97EE28DBEC2D00C689F6 /* NewKeyInvitationStore.swift */; };
 		6E6A97F328DC030000C689F6 /* NewKeyInvitationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E6A97F228DC030000C689F6 /* NewKeyInvitationView.swift */; };
 		6E84E52728DDC841008CAE85 /* ScanLocksIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E8BBFEC28DD301B00F03735 /* ScanLocksIntent.swift */; };
@@ -388,6 +389,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6E5D521328E29825008FFB4D /* CodeScanner in Frameworks */,
 				6E9E37B228DB852A00BE7128 /* Predicate in Frameworks */,
 				6E169A8428D9C25C008545EC /* SFSafeSymbols in Frameworks */,
 				6E21830A28D7FEA900A622B3 /* KeychainAccess in Frameworks */,
@@ -858,6 +860,7 @@
 				6E21836928D953D000A622B3 /* CloudKitCodable */,
 				6E169A8328D9C25C008545EC /* SFSafeSymbols */,
 				6E9E37B128DB852A00BE7128 /* Predicate */,
+				6E5D521228E29825008FFB4D /* CodeScanner */,
 			);
 			productName = LockKit;
 			productReference = 6EA7769D28D707FE00018FA3 /* LockKit.framework */;
@@ -909,6 +912,7 @@
 				6E21836828D953D000A622B3 /* XCRemoteSwiftPackageReference "CloudKitCodable" */,
 				6E169A8228D9C25C008545EC /* XCRemoteSwiftPackageReference "SFSafeSymbols" */,
 				6E9E37B028DB852A00BE7128 /* XCRemoteSwiftPackageReference "Predicate" */,
+				6E5D521128E29825008FFB4D /* XCRemoteSwiftPackageReference "CodeScanner" */,
 			);
 			productRefGroup = 6EA7768228D7061600018FA3 /* Products */;
 			projectDirPath = "";
@@ -1831,6 +1835,14 @@
 				kind = branch;
 			};
 		};
+		6E5D521128E29825008FFB4D /* XCRemoteSwiftPackageReference "CodeScanner" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/twostraws/CodeScanner.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.0.0;
+			};
+		};
 		6E9E37B028DB852A00BE7128 /* XCRemoteSwiftPackageReference "Predicate" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/PureSwift/Predicate";
@@ -1870,6 +1882,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 6E3276D528D70FA000AF171B /* XCRemoteSwiftPackageReference "GATT" */;
 			productName = GATT;
+		};
+		6E5D521228E29825008FFB4D /* CodeScanner */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6E5D521128E29825008FFB4D /* XCRemoteSwiftPackageReference "CodeScanner" */;
+			productName = CodeScanner;
 		};
 		6E9E37B128DB852A00BE7128 /* Predicate */ = {
 			isa = XCSwiftPackageProductDependency;
