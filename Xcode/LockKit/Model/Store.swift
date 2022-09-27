@@ -43,6 +43,8 @@ public final class Store: ObservableObject {
     
     internal lazy var keychain = Keychain(service: .lock, accessGroup: .lock)
     
+    public lazy var spotlight: SpotlightController = .shared
+    
     internal lazy var fileManager: FileManager.Lock = .shared
     
     public lazy var newKeyInvitations: NewKeyInvitationStore = .shared
@@ -184,6 +186,8 @@ public extension Store {
     private func lockCacheChanged() async {
         // update CoreData
         await updateCoreData()
+        // update Spotlight
+        await updateSpotlight()
         // update CloudKit
         do { try await syncCloud() }
         catch { log("⚠️ Unable to upload locks to iCloud. \(error)") }
@@ -222,6 +226,18 @@ public extension Store {
     }
 }
 
+// MARK: - Spotlight
+
+private extension Store {
+    
+    func updateSpotlight() async {
+        guard SpotlightController.isSupported else { return }
+        let locks = self.applicationData.locks
+        do { try await spotlight.reindexAll(locks: locks) }
+        catch { log("⚠️ Unable to update Spotlight: \(error.localizedDescription)") }
+    }
+}
+
 // MARK: - CoreData
 
 internal extension Store {
@@ -237,7 +253,7 @@ internal extension Store {
         // load CoreData
         let semaphore = DispatchSemaphore(value: 0)
         persistentContainer.loadPersistentStores { (store, error) in
-            semaphore.signal()
+            defer { semaphore.signal() }
             if let error = error {
                 log("⚠️ Unable to load persistent store: \(error.localizedDescription)")
                 #if DEBUG

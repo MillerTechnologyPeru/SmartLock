@@ -14,8 +14,6 @@ import AppKit
 import SwiftUI
 
 /// Get URL from asset.
-@MainActor
-@available(iOS 8.0, watchOS 6.0, *)
 public final class AssetExtractor {
     
     public static let shared = AssetExtractor()
@@ -41,6 +39,7 @@ public final class AssetExtractor {
                   let imageData = image.pngData()
                 else { return nil }
             #elseif canImport(AppKit)
+            assert(Thread.isMainThread)
             let image = Image(imageName, bundle: bundle)
             let imageRenderer = ImageRenderer(content: image)
             guard let imageData = imageRenderer.cgImage

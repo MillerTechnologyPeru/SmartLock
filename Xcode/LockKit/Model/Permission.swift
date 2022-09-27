@@ -120,14 +120,23 @@ public extension PermissionType.Image {
     }
 }
 
+public extension AssetExtractor {
+    
+    /// URL for extracted image of the specified ``PermissionType``.
+    func url(for permission: PermissionType) -> URL {
+        let imageName = PermissionType.Image(permissionType: permission)
+        return self.url(for: imageName.rawValue, in: .lockKit)!
+    }
+}
+
 #if canImport(SwiftUI)
 import SwiftUI
 
 public extension Image {
     
     init(permissionType: PermissionType) {
-        let image = PermissionType.Image(permissionType: permissionType)
-        self.init(image.rawValue, bundle: .lockKit)
+        let imageName = PermissionType.Image(permissionType: permissionType)
+        self.init(imageName.rawValue, bundle: .lockKit)
     }
 }
 #endif
@@ -138,8 +147,20 @@ import UIKit
 public extension UIImage {
     
     convenience init(permissionType: PermissionType) {
-        let image = PermissionType.Image(permissionType: permissionType)
-        self.init(named: image.rawValue, in: .lockKit, with: nil)!
+        let imageName = PermissionType.Image(permissionType: permissionType)
+        self.init(named: imageName.rawValue, in: .lockKit, with: nil)!
     }
 }
+#elseif canImport(AppKit)
+import AppKit
+
+public extension NSImage {
+    
+    convenience init(permissionType: PermissionType) {
+        let imageName = PermissionType.Image(permissionType: permissionType)
+        let url = Bundle.lockKit.urlForImageResource(imageName.rawValue)!
+        self.init(contentsOfFile: url.path)!
+    }
+}
+
 #endif

@@ -79,45 +79,6 @@ public extension FileManager.Lock {
         get { return read(ApplicationData.self, from: .applicationData) }
         set { write(newValue, file: .applicationData) }
     }
-    
-    @discardableResult
-    func save(invitation: NewKey.Invitation) throws -> URL {
-        
-        let fileName = "newKey-\(invitation.key.id).ekey"
-        let data = try jsonEncoder.encode(invitation)
-        
-        let fileURL = documentURL.appendingPathComponent(fileName)
-        guard fileManager.createFile(atPath: fileURL.path, contents: data, attributes: nil) else {
-            assertionFailure("Could not save file \(fileURL.path)")
-            throw CocoaError(.fileWriteUnknown)
-        }
-        return fileURL
-    }
-    
-    func loadInvitations(invalid: (URL, Error) -> ()) throws -> [URL: NewKey.Invitation] {
-        
-        let documents = try fileManager.contentsOfDirectory(
-            at: documentURL,
-            includingPropertiesForKeys: nil,
-            options: [.skipsHiddenFiles, .skipsSubdirectoryDescendants, .skipsPackageDescendants]
-        )
-        
-        let invitationURLs = documents.filter { $0.pathExtension == NewKey.Invitation.fileExtension }
-        guard invitationURLs.isEmpty == false
-            else { return [:] }
-        
-        var invitations = [URL: NewKey.Invitation](minimumCapacity: invitationURLs.count)
-        for url in invitationURLs {
-            do {
-                let data = try Data(contentsOf: url, options: .mappedIfSafe)
-                let invitation = try jsonDecoder.decode(NewKey.Invitation.self, from: data)
-                invitations[url] = invitation
-            } catch {
-                invalid(url, error)
-            }
-        }
-        return invitations
-    }
 }
 
 private extension FileManager.Lock {
@@ -160,7 +121,7 @@ private extension FileManager.Lock {
             #endif
         }
         
-        log("🗄️ Wrote file \(file.rawValue).json")
+        log("🗄️ Wrote file \(file.rawValue)")
     }
 }
 
