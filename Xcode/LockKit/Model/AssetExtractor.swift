@@ -29,27 +29,21 @@ public final class AssetExtractor {
     }()
     
     public func url(for imageName: String, in bundle: Bundle = .lockKit) -> URL? {
-        
         let fileName = (bundle.bundleIdentifier ?? bundle.bundleURL.lastPathComponent) + "." + imageName + ".png"
         let url = cachesDirectory.appendingPathComponent(fileName)
-        
         if fileManager.fileExists(atPath: url.path) == false {
             #if canImport(UIKit)
             guard let image = UIImage(named: imageName, in: bundle, compatibleWith: nil),
                   let imageData = image.pngData()
                 else { return nil }
             #elseif canImport(AppKit)
-            assert(Thread.isMainThread)
-            let image = Image(imageName, bundle: bundle)
-            let imageRenderer = ImageRenderer(content: image)
-            guard let imageData = imageRenderer.cgImage
-                .map({ NSBitmapImageRep(cgImage: $0) })?
-                .representation(using: .png, properties: [:])
+            guard let image = bundle.image(forResource: imageName),
+                  let bitmap = image.tiffRepresentation.flatMap({ NSBitmapImageRep(data: $0) }),
+                  let imageData = bitmap.representation(using: .png, properties: [:])
                 else { return nil }
             #endif
             fileManager.createFile(atPath: url.path, contents: imageData, attributes: nil)
         }
-        
         return url
     }
 }
