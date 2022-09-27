@@ -66,6 +66,7 @@ public final class NewKeyFileActivityItem: UIActivityItemProvider {
         return UIImage(permissionType: invitation.key.permission.type)
     }
     
+    @MainActor
     public override func activityViewControllerLinkMetadata(_ activityViewController: UIActivityViewController) -> LPLinkMetadata? {
         
         let imageName = PermissionType.Image(permissionType: invitation.key.permission.type)

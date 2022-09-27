@@ -97,7 +97,7 @@
 		6E5D520328E21538008FFB4D /* PreviewViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6E5D520128E21538008FFB4D /* PreviewViewController.xib */; };
 		6E5D520828E21538008FFB4D /* LockQuickLook.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 6E5D51F928E21537008FFB4D /* LockQuickLook.appex */; platformFilters = (macos, ); settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		6E5D520C28E215E9008FFB4D /* LockKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6EA7769D28D707FE00018FA3 /* LockKit.framework */; };
-		6E5D521328E29825008FFB4D /* CodeScanner in Frameworks */ = {isa = PBXBuildFile; productRef = 6E5D521228E29825008FFB4D /* CodeScanner */; };
+		6E5D521328E29825008FFB4D /* CodeScanner in Frameworks */ = {isa = PBXBuildFile; platformFilter = ios; productRef = 6E5D521228E29825008FFB4D /* CodeScanner */; };
 		6E6A97EF28DBEC2D00C689F6 /* NewKeyInvitationStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E6A97EE28DBEC2D00C689F6 /* NewKeyInvitationStore.swift */; };
 		6E6A97F328DC030000C689F6 /* NewKeyInvitationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E6A97F228DC030000C689F6 /* NewKeyInvitationView.swift */; };
 		6E84E52728DDC841008CAE85 /* ScanLocksIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E8BBFEC28DD301B00F03735 /* ScanLocksIntent.swift */; };
@@ -120,6 +120,14 @@
 		6E84E54E28DF4A98008CAE85 /* MockAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E84E54A28DF4A98008CAE85 /* MockAttributes.swift */; };
 		6E84E54F28DF4A98008CAE85 /* MockScanData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E84E54B28DF4A98008CAE85 /* MockScanData.swift */; };
 		6E84E55128DF59D1008CAE85 /* MockLock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E84E55028DF59D1008CAE85 /* MockLock.swift */; };
+		6E857E6928E3566B00EC99D3 /* QuickLookThumbnailing.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6E857E6828E3566B00EC99D3 /* QuickLookThumbnailing.framework */; };
+		6E857E6C28E3566B00EC99D3 /* ThumbnailProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E857E6B28E3566B00EC99D3 /* ThumbnailProvider.swift */; };
+		6E857E7028E3566B00EC99D3 /* LockThumbnail.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 6E857E6728E3566B00EC99D3 /* LockThumbnail.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		6E857E7428E3589A00EC99D3 /* LockKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6EA7769D28D707FE00018FA3 /* LockKit.framework */; };
+		6E857E8728E3652300EC99D3 /* ImportExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E857E8628E3652300EC99D3 /* ImportExtension.swift */; };
+		6E857E8B28E3652300EC99D3 /* LockSpotlight.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 6E857E8428E3652300EC99D3 /* LockSpotlight.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		6E857E9028E3656000EC99D3 /* CoreSpotlight.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6E857E8F28E3656000EC99D3 /* CoreSpotlight.framework */; };
+		6E857E9128E3656600EC99D3 /* LockKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6EA7769D28D707FE00018FA3 /* LockKit.framework */; };
 		6E8BBFDA28DC2CA000F03735 /* SetupLockView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E8BBFD928DC2CA000F03735 /* SetupLockView.swift */; };
 		6E8BBFDC28DCC8F300F03735 /* AsyncFetchRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E8BBFDB28DCC8F300F03735 /* AsyncFetchRequest.swift */; };
 		6E8BBFEB28DD301B00F03735 /* LockIntentsExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E8BBFEA28DD301B00F03735 /* LockIntentsExtension.swift */; };
@@ -167,6 +175,34 @@
 			remoteGlobalIDString = 6EA7769C28D707FE00018FA3;
 			remoteInfo = LockKit;
 		};
+		6E857E6E28E3566B00EC99D3 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6EA7767928D7061600018FA3 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 6E857E6628E3566B00EC99D3;
+			remoteInfo = LockThumbnail;
+		};
+		6E857E7628E3589A00EC99D3 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6EA7767928D7061600018FA3 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 6EA7769C28D707FE00018FA3;
+			remoteInfo = LockKit;
+		};
+		6E857E8928E3652300EC99D3 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6EA7767928D7061600018FA3 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 6E857E8328E3652300EC99D3;
+			remoteInfo = LockSpotlight;
+		};
+		6E857E9328E3656600EC99D3 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6EA7767928D7061600018FA3 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 6EA7769C28D707FE00018FA3;
+			remoteInfo = LockKit;
+		};
 		6E8BBFF828DD30B400F03735 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 6EA7767928D7061600018FA3 /* Project object */;
@@ -192,6 +228,8 @@
 			files = (
 				6E5D520828E21538008FFB4D /* LockQuickLook.appex in Embed Foundation Extensions */,
 				6E5D51EB28E20C6D008FFB4D /* LockQuickLookMobile.appex in Embed Foundation Extensions */,
+				6E857E8B28E3652300EC99D3 /* LockSpotlight.appex in Embed Foundation Extensions */,
+				6E857E7028E3566B00EC99D3 /* LockThumbnail.appex in Embed Foundation Extensions */,
 			);
 			name = "Embed Foundation Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -318,6 +356,14 @@
 		6E84E54A28DF4A98008CAE85 /* MockAttributes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockAttributes.swift; sourceTree = "<group>"; };
 		6E84E54B28DF4A98008CAE85 /* MockScanData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockScanData.swift; sourceTree = "<group>"; };
 		6E84E55028DF59D1008CAE85 /* MockLock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockLock.swift; sourceTree = "<group>"; };
+		6E857E6728E3566B00EC99D3 /* LockThumbnail.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = LockThumbnail.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		6E857E6828E3566B00EC99D3 /* QuickLookThumbnailing.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuickLookThumbnailing.framework; path = System/Library/Frameworks/QuickLookThumbnailing.framework; sourceTree = SDKROOT; };
+		6E857E6B28E3566B00EC99D3 /* ThumbnailProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThumbnailProvider.swift; sourceTree = "<group>"; };
+		6E857E6D28E3566B00EC99D3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		6E857E8428E3652300EC99D3 /* LockSpotlight.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = LockSpotlight.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		6E857E8628E3652300EC99D3 /* ImportExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportExtension.swift; sourceTree = "<group>"; };
+		6E857E8828E3652300EC99D3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		6E857E8F28E3656000EC99D3 /* CoreSpotlight.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreSpotlight.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS16.1.sdk/System/Library/Frameworks/CoreSpotlight.framework; sourceTree = DEVELOPER_DIR; };
 		6E8BBFD928DC2CA000F03735 /* SetupLockView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupLockView.swift; sourceTree = "<group>"; };
 		6E8BBFDB28DCC8F300F03735 /* AsyncFetchRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsyncFetchRequest.swift; sourceTree = "<group>"; };
 		6E8BBFE828DD301B00F03735 /* LockIntents.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.extensionkit-extension"; includeInIndex = 0; path = LockIntents.appex; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -366,6 +412,24 @@
 			files = (
 				6E5D520C28E215E9008FFB4D /* LockKit.framework in Frameworks */,
 				6E5D51FB28E21538008FFB4D /* Quartz.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6E857E6428E3566B00EC99D3 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6E857E7428E3589A00EC99D3 /* LockKit.framework in Frameworks */,
+				6E857E6928E3566B00EC99D3 /* QuickLookThumbnailing.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6E857E8128E3652300EC99D3 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6E857E9128E3656600EC99D3 /* LockKit.framework in Frameworks */,
+				6E857E9028E3656000EC99D3 /* CoreSpotlight.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -643,6 +707,24 @@
 			path = Mock;
 			sourceTree = "<group>";
 		};
+		6E857E6A28E3566B00EC99D3 /* LockThumbnail */ = {
+			isa = PBXGroup;
+			children = (
+				6E857E6B28E3566B00EC99D3 /* ThumbnailProvider.swift */,
+				6E857E6D28E3566B00EC99D3 /* Info.plist */,
+			);
+			path = LockThumbnail;
+			sourceTree = "<group>";
+		};
+		6E857E8528E3652300EC99D3 /* LockSpotlight */ = {
+			isa = PBXGroup;
+			children = (
+				6E857E8628E3652300EC99D3 /* ImportExtension.swift */,
+				6E857E8828E3652300EC99D3 /* Info.plist */,
+			);
+			path = LockSpotlight;
+			sourceTree = "<group>";
+		};
 		6E8BBFE928DD301B00F03735 /* LockIntents */ = {
 			isa = PBXGroup;
 			children = (
@@ -668,6 +750,8 @@
 				6E8BBFE928DD301B00F03735 /* LockIntents */,
 				6E5D51E028E20C6D008FFB4D /* LockQuickLook-iOS */,
 				6E5D51FC28E21538008FFB4D /* LockQuickLook-macOS */,
+				6E857E6A28E3566B00EC99D3 /* LockThumbnail */,
+				6E857E8528E3652300EC99D3 /* LockSpotlight */,
 				6EA7768228D7061600018FA3 /* Products */,
 				6EA776A928D7082300018FA3 /* Frameworks */,
 			);
@@ -682,6 +766,8 @@
 				6E8BBFE828DD301B00F03735 /* LockIntents.appex */,
 				6E5D51DE28E20C6C008FFB4D /* LockQuickLookMobile.appex */,
 				6E5D51F928E21537008FFB4D /* LockQuickLook.appex */,
+				6E857E6728E3566B00EC99D3 /* LockThumbnail.appex */,
+				6E857E8428E3652300EC99D3 /* LockSpotlight.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -724,9 +810,11 @@
 		6EA776A928D7082300018FA3 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				6E857E8F28E3656000EC99D3 /* CoreSpotlight.framework */,
 				6E3276C228D70A3700AF171B /* HomeKit.framework */,
 				6E5D51C128E185DB008FFB4D /* QuickLook.framework */,
 				6E5D51FA28E21537008FFB4D /* Quartz.framework */,
+				6E857E6828E3566B00EC99D3 /* QuickLookThumbnailing.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -798,6 +886,42 @@
 			productReference = 6E5D51F928E21537008FFB4D /* LockQuickLook.appex */;
 			productType = "com.apple.product-type.app-extension";
 		};
+		6E857E6628E3566B00EC99D3 /* LockThumbnail */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 6E857E7128E3566B00EC99D3 /* Build configuration list for PBXNativeTarget "LockThumbnail" */;
+			buildPhases = (
+				6E857E6328E3566B00EC99D3 /* Sources */,
+				6E857E6428E3566B00EC99D3 /* Frameworks */,
+				6E857E6528E3566B00EC99D3 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				6E857E7728E3589A00EC99D3 /* PBXTargetDependency */,
+			);
+			name = LockThumbnail;
+			productName = LockThumbnail;
+			productReference = 6E857E6728E3566B00EC99D3 /* LockThumbnail.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+		6E857E8328E3652300EC99D3 /* LockSpotlight */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 6E857E8C28E3652300EC99D3 /* Build configuration list for PBXNativeTarget "LockSpotlight" */;
+			buildPhases = (
+				6E857E8028E3652300EC99D3 /* Sources */,
+				6E857E8128E3652300EC99D3 /* Frameworks */,
+				6E857E8228E3652300EC99D3 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				6E857E9428E3656600EC99D3 /* PBXTargetDependency */,
+			);
+			name = LockSpotlight;
+			productName = LockSpotlight;
+			productReference = 6E857E8428E3652300EC99D3 /* LockSpotlight.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 		6E8BBFE728DD301B00F03735 /* LockIntents */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 6E8BBFF228DD301B00F03735 /* Build configuration list for PBXNativeTarget "LockIntents" */;
@@ -832,6 +956,8 @@
 				6EA776A228D707FE00018FA3 /* PBXTargetDependency */,
 				6E5D51EA28E20C6D008FFB4D /* PBXTargetDependency */,
 				6E5D520728E21538008FFB4D /* PBXTargetDependency */,
+				6E857E6F28E3566B00EC99D3 /* PBXTargetDependency */,
+				6E857E8A28E3652300EC99D3 /* PBXTargetDependency */,
 			);
 			name = SmartLock;
 			productName = SmartLock;
@@ -885,6 +1011,12 @@
 					6E5D51F828E21537008FFB4D = {
 						CreatedOnToolsVersion = 14.1;
 					};
+					6E857E6628E3566B00EC99D3 = {
+						CreatedOnToolsVersion = 14.1;
+					};
+					6E857E8328E3652300EC99D3 = {
+						CreatedOnToolsVersion = 14.1;
+					};
 					6E8BBFE728DD301B00F03735 = {
 						CreatedOnToolsVersion = 14.1;
 					};
@@ -924,6 +1056,8 @@
 				6E8BBFE728DD301B00F03735 /* LockIntents */,
 				6E5D51DD28E20C6C008FFB4D /* LockQuickLook-iOS */,
 				6E5D51F828E21537008FFB4D /* LockQuickLook-macOS */,
+				6E857E6628E3566B00EC99D3 /* LockThumbnail */,
+				6E857E8328E3652300EC99D3 /* LockSpotlight */,
 			);
 		};
 /* End PBXProject section */
@@ -949,6 +1083,20 @@
 			buildActionMask = 2147483647;
 			files = (
 				6E5D520328E21538008FFB4D /* PreviewViewController.xib in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6E857E6528E3566B00EC99D3 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6E857E8228E3652300EC99D3 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1000,6 +1148,22 @@
 			buildActionMask = 2147483647;
 			files = (
 				6E5D51FE28E21538008FFB4D /* PreviewViewController.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6E857E6328E3566B00EC99D3 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6E857E6C28E3566B00EC99D3 /* ThumbnailProvider.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6E857E8028E3652300EC99D3 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6E857E8728E3652300EC99D3 /* ImportExtension.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1152,6 +1316,26 @@
 			isa = PBXTargetDependency;
 			target = 6EA7769C28D707FE00018FA3 /* LockKit */;
 			targetProxy = 6E5D520E28E215E9008FFB4D /* PBXContainerItemProxy */;
+		};
+		6E857E6F28E3566B00EC99D3 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 6E857E6628E3566B00EC99D3 /* LockThumbnail */;
+			targetProxy = 6E857E6E28E3566B00EC99D3 /* PBXContainerItemProxy */;
+		};
+		6E857E7728E3589A00EC99D3 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 6EA7769C28D707FE00018FA3 /* LockKit */;
+			targetProxy = 6E857E7628E3589A00EC99D3 /* PBXContainerItemProxy */;
+		};
+		6E857E8A28E3652300EC99D3 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 6E857E8328E3652300EC99D3 /* LockSpotlight */;
+			targetProxy = 6E857E8928E3652300EC99D3 /* PBXContainerItemProxy */;
+		};
+		6E857E9428E3656600EC99D3 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 6EA7769C28D707FE00018FA3 /* LockKit */;
+			targetProxy = 6E857E9328E3656600EC99D3 /* PBXContainerItemProxy */;
 		};
 		6E8BBFF928DD30B400F03735 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -1358,6 +1542,116 @@
 				SKIP_INSTALL = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		6E857E7228E3566B00EC99D3 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "-";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 4W79SG34MW;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = LockThumbnail/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = LockThumbnail;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.colemancda.Lock.Thumbnail;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "macosx iphonesimulator iphoneos";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		6E857E7328E3566B00EC99D3 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "-";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 4W79SG34MW;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = LockThumbnail/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = LockThumbnail;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.colemancda.Lock.Thumbnail;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "macosx iphonesimulator iphoneos";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		6E857E8D28E3652300EC99D3 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "-";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 4W79SG34MW;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = LockSpotlight/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = LockSpotlight;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.colemancda.Lock.Spotlight;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos macosx";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		6E857E8E28E3652300EC99D3 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "-";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 4W79SG34MW;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = LockSpotlight/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = LockSpotlight;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.colemancda.Lock.Spotlight;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos macosx";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
 		};
@@ -1752,6 +2046,24 @@
 			buildConfigurations = (
 				6E5D520A28E21538008FFB4D /* Debug */,
 				6E5D520B28E21538008FFB4D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		6E857E7128E3566B00EC99D3 /* Build configuration list for PBXNativeTarget "LockThumbnail" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6E857E7228E3566B00EC99D3 /* Debug */,
+				6E857E7328E3566B00EC99D3 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		6E857E8C28E3652300EC99D3 /* Build configuration list for PBXNativeTarget "LockSpotlight" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6E857E8D28E3652300EC99D3 /* Debug */,
+				6E857E8E28E3652300EC99D3 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

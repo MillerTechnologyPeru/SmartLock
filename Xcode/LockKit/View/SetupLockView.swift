@@ -48,6 +48,7 @@ public struct SetupLockView: View {
 
 private extension SetupLockView {
     
+    #if os(iOS)
     func scanResult(_ result: Result<ScanResult, ScanError>) {
         switch result {
         case let .success(scanResult):
@@ -60,6 +61,7 @@ private extension SetupLockView {
             self.state = .error(error)
         }
     }
+    #endif
     
     func setup(lock: UUID, using sharedSecret: KeyData, name: String) {
         self.state = .loading(lock, name)
@@ -90,9 +92,11 @@ private extension SetupLockView {
     var stateView: some View {
         switch state {
         case .camera:
-            return AnyView(
-                CameraView(completion: scanResult)
-            )
+            #if os(iOS) && !targetEnvironment(simulator)
+            return AnyView(CameraView(completion: scanResult))
+            #else
+            return AnyView(Text("Setup this lock on your iOS device."))
+            #endif
         case let .confirm(lock, sharedSecret):
             return AnyView(
                 ConfirmView(lock: lock) { name in
@@ -139,20 +143,18 @@ internal extension SetupLockView {
 
 internal extension SetupLockView {
     
+    #if os(iOS)
     struct CameraView: View {
         
         let completion: ((Result<ScanResult, ScanError>) -> ())
         
         var body: some View {
-            #if os(iOS) && !targetEnvironment(simulator)
             AnyView(
                 CodeScannerView(codeTypes: [.qr], completion: completion)
             )
-            #else
-            AnyView(Text("Setup this lock on your iOS device."))
-            #endif
         }
     }
+    #endif
     
     struct ConfirmView: View {
         
