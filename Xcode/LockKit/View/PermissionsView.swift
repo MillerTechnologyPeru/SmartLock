@@ -78,7 +78,9 @@ public struct PermissionsView: View {
             keys: keys.lazy.compactMap { Key(managedObject: $0) },
             newKeys: newKeys.lazy.compactMap { NewKey(managedObject: $0) },
             invitations: invitations,
-            reload: reload
+            reload: reload,
+            deleteKeys: deleteKeys,
+            deleteNewKeys: deleteNewKeys
         )
         .onAppear {
             self.keys.nsPredicate = predicate
@@ -136,7 +138,6 @@ private extension PermissionsView {
         for (url, invitation) in cache {
             invitations[invitation.key.id] = url
         }
-        assert(invitations.count == cache.count)
         return invitations
     }
     
@@ -203,11 +204,19 @@ private extension PermissionsView {
             reload()
         }
     }
+    
+    func deleteKeys(_ keys: [Key]) {
+        
+    }
+    
+    func deleteNewKeys(_ keys: [NewKey]) {
+        
+    }
 }
 
 internal extension PermissionsView {
     
-    struct StateView <Keys, NewKeys> : View where Keys: RandomAccessCollection, Keys.Element == Key, NewKeys: RandomAccessCollection, NewKeys.Element == NewKey {
+    struct StateView <Keys, NewKeys> : View where Keys: RandomAccessCollection, Keys.Element == Key, Keys.Index == Int, NewKeys: RandomAccessCollection, NewKeys.Element == NewKey, NewKeys.Index == Int {
         
         let lock: UUID
         
@@ -218,6 +227,10 @@ internal extension PermissionsView {
         let invitations: [UUID: URL]
         
         let reload: () -> ()
+        
+        let deleteKeys: ([Key]) -> ()
+        
+        let deleteNewKeys: ([NewKey]) -> ()
         
         var body: some View {
             List {
@@ -311,11 +324,13 @@ private extension PermissionsView.StateView {
     }
     
     func deleteKey(at indexSet: IndexSet) {
-        
+        let keys = indexSet.map { self.keys[$0] }
+        deleteKeys(keys)
     }
     
     func deleteNewKey(at indexSet: IndexSet) {
-        
+        let files = indexSet.map { self.newKeys[$0] }
+        deleteNewKeys(files)
     }
 }
 
@@ -373,7 +388,9 @@ struct PermissionsView_Previews: PreviewProvider {
                     UUID(uuidString: "ED6DE87A-D0AF-421B-912D-3400A60EB294")! :
                         URL(fileURLWithPath: "/tmp/newKey-\(UUID(uuidString: "ED6DE87A-D0AF-421B-912D-3400A60EB294")!).ekey")
                 ],
-                reload: { }
+                reload: { },
+                deleteKeys: { _ in },
+                deleteNewKeys: { _ in }
             )
         }
     }
