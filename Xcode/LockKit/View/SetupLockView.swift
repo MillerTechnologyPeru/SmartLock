@@ -16,6 +16,9 @@ import CodeScanner
 /// View for lock setup.
 public struct SetupLockView: View {
     
+    @EnvironmentObject
+    public var store: Store
+    
     private let success: ((UUID) -> ())?
     
     @State
@@ -38,40 +41,8 @@ public struct SetupLockView: View {
     }
     
     public var body: some View {
-        switch state {
-        case .camera:
-            AnyView(
-                CameraView(completion: scanResult)
-            )
-        case let .confirm(lock, key):
-            AnyView(
-                ConfirmView(lock: lock) { name in
-                    setup(lock: lock, using: key, name: name)
-                }
-            )
-        case let .loading(lock, key, name):
-            AnyView(
-                LoadingView(
-                    lock: lock,
-                    name: name
-                )
-            )
-        case let .error(error):
-            AnyView(
-                ErrorView(
-                    error: error,
-                    retry: retry
-                )
-            )
-        case let .success(lock, name):
-            AnyView(
-                SuccessView(
-                    lock: lock,
-                    name: name,
-                    completion: success
-                )
-            )
-        }
+        stateView
+            .navigationTitle("Setup")
     }
 }
 
@@ -94,10 +65,13 @@ private extension SetupLockView {
         self.state = .loading(lock, name)
         Task {
             do {
-                guard let peripheral = try await Store.shared.device(for: lock) else {
+                guard store.state == .poweredOn else {
+                    throw LockError.bluetoothUnavailable
+                }
+                guard let peripheral = try await store.device(for: lock) else {
                     throw LockError.notInRange(lock: lock)
                 }
-                try await Store.shared.setup(
+                try await store.setup(
                     for: peripheral,
                     using: sharedSecret,
                     name: name
@@ -113,7 +87,42 @@ private extension SetupLockView {
         self.state = .camera
     }
     
-    
+    var stateView: some View {
+        switch state {
+        case .camera:
+            return AnyView(
+                CameraView(completion: scanResult)
+            )
+        case let .confirm(lock, sharedSecret):
+            return AnyView(
+                ConfirmView(lock: lock) { name in
+                    setup(lock: lock, using: sharedSecret, name: name)
+                }
+            )
+        case let .loading(lock, name):
+            return AnyView(
+                LoadingView(
+                    lock: lock,
+                    name: name
+                )
+            )
+        case let .error(error):
+            return AnyView(
+                ErrorView(
+                    error: error,
+                    retry: retry
+                )
+            )
+        case let .success(lock, name):
+            return AnyView(
+                SuccessView(
+                    lock: lock,
+                    name: name,
+                    completion: success
+                )
+            )
+        }
+    }
 }
 
 internal extension SetupLockView {
@@ -231,7 +240,7 @@ internal extension SetupLockView {
 #if DEBUG
 struct SetupLockView_Previews: PreviewProvider {
     static var previews: some View {
-        EmptyView()
+        SetupLockView()
     }
 }
 #endif

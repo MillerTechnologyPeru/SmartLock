@@ -55,6 +55,7 @@ private extension AppNavigationLink {
 public enum AppNavigationLinkID: Hashable {
     
     case lock(UUID)
+    case setup(UUID, KeyData)
     case events(UUID, LockEvent.Predicate?)
     case permissions(UUID)
     case key(UUID, KeyDetailView.Value)
@@ -65,6 +66,7 @@ public enum AppNavigationLinkID: Hashable {
 public enum AppNavigationLinkType: String {
     
     case lock
+    case setup
     case events
     case permissions
     case key
@@ -78,6 +80,8 @@ public extension AppNavigationLinkID {
         switch self {
         case .lock:
             return .lock
+        case .setup:
+            return .setup
         case .events:
             return .events
         case .permissions:
@@ -105,6 +109,10 @@ public struct AppNavigationDestinationView: View, Identifiable {
         case let .lock(id):
             AnyView(
                 LockDetailView(id: id)
+            )
+        case let .setup(id, sharedSecret):
+            AnyView(
+                SetupLockView(lock: id, sharedSecret: sharedSecret)
             )
         case let .events(lock, predicate):
             AnyView(

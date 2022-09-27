@@ -80,6 +80,7 @@ struct TabBarView: View {
     }
 }
 
+@MainActor
 extension TabBarView {
     
     func open(url: URL) {
@@ -102,7 +103,7 @@ extension TabBarView {
         if url.isFileURL {
             try await open(file: url)
         } else if let lockURL = LockURL(rawValue: url) {
-            try await open(url: lockURL)
+            try open(url: lockURL)
         } else {
             throw CocoaError(.fileReadInvalidFileName)
         }
@@ -112,40 +113,33 @@ extension TabBarView {
         let data = try Data(contentsOf: url, options: [.mappedIfSafe])
         let decoder = JSONDecoder()
         let invitation = try decoder.decode(NewKey.Invitation.self, from: data)
-        await open(invitation: invitation)
+        open(invitation: invitation)
     }
     
-    @MainActor
     func open(invitation: NewKey.Invitation) {
         self.sheet = .init(id: .newKeyInvitation(invitation))
     }
     
-    @MainActor
     func open(lock: UUID) {
         self.sheet = .init(id: .lock(lock))
     }
     
-    @MainActor
     func open(url: LockURL) throws {
         switch url {
         case let .newKey(invitation):
             open(invitation: invitation)
         case let .unlock(lock: lock):
-            // Deep link
             open(lock: lock)
         case let .setup(lock: lock, secret: secretData):
-            // setup
-            //self.sheet = .init(id: )
-            Task {
-                guard store.state == .poweredOn else {
-                    throw LockError.bluetoothUnavailable
-                }
-                guard let peripheral = try await store.device(for: lock) else {
-                    throw LockError.notInRange(lock: lock)
-                }
-                try await store.setup(for: peripheral, using: secretData, name: "My Lock")
-            }
+            try setup(lock: lock, using: secretData)
         }
+    }
+    
+    func setup(lock: UUID, using secretData: KeyData) throws {
+        guard store.applicationData.locks[lock] == nil else {
+            throw LockError.existingKey(lock: lock)
+        }
+        self.sheet = .init(id: .setup(lock, secretData))
     }
 }
 
