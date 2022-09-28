@@ -19,7 +19,7 @@ public struct AppNavigationLink <Label: View> : View {
     public var body: some View {
         #if os(macOS)
         if #available(macOS 13, iOS 16, tvOS 16, watchOS 9, *) {
-            navigationStackLink
+            navigationViewLink
         } else {
             navigationViewLink
         }
@@ -60,6 +60,7 @@ public enum AppNavigationLinkID: Hashable {
     case permissions(UUID)
     case key(UUID, KeyDetailView.Value)
     case newKeyInvitation(NewKey.Invitation)
+    
     #if os(iOS) || os(macOS)
     case keySchedule(Permission.Schedule) // view only
     #endif
@@ -73,6 +74,7 @@ public enum AppNavigationLinkType: String {
     case permissions
     case key
     case newKeyInvitation
+    
     #if os(iOS) || os(macOS)
     case keySchedule
     #endif

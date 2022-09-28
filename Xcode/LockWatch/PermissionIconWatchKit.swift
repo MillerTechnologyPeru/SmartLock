@@ -12,7 +12,7 @@ public extension PermissionIconView {
     
     var body: some View {
         Image(permissionType: permission)
+            .resizable(capInsets: .init(), resizingMode: .stretch)
     }
 }
-
 #endif

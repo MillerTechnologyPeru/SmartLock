@@ -7,29 +7,38 @@
 
 import SwiftUI
 
-struct DetailRowView: View {
+public struct DetailRowView: View {
     
-    let title: LocalizedStringKey
+    internal let title: LocalizedStringKey
     
-    let value: String
+    internal let value: Value
     
-    var body: some View {
-        #if os(watchOS)
-        VStack(alignment: .leading) {
-            Text(verbatim: value)
-            Text(title)
-                .font(.body)
-                .foregroundColor(.gray)
-        }
-        #else
-        HStack {
-            Text(title)
-                .frame(width: titleWidth, height: nil, alignment: .leading)
-                .font(.body)
-                .foregroundColor(.gray)
-            Text(verbatim: value)
-        }
-        #endif
+    public init(title: LocalizedStringKey, value: String) {
+        self.title = title
+        self.value = .text(value)
+    }
+    
+    public init(title: LocalizedStringKey, value: String, action: @escaping () -> ()) {
+        self.title = title
+        self.value = .button(value, action)
+    }
+    
+    public init(title: LocalizedStringKey, value: String, link: AppNavigationLinkID) {
+        self.title = title
+        self.value = .link(value, link)
+    }
+    
+    public var body: some View {
+        stackView
+    }
+}
+
+internal extension DetailRowView {
+    
+    enum Value {
+        case text(String)
+        case button(String, () -> ())
+        case link(String, AppNavigationLinkID)
     }
 }
 
@@ -40,12 +49,84 @@ private extension DetailRowView {
         100
     }
     #endif
+    
+    var stackView: some View {
+        #if os(watchOS)
+        switch value {
+        case let .text(value):
+            return AnyView(VStack(alignment: .leading) {
+                Text(verbatim: value)
+                titleView
+            })
+        case let .button(value, action):
+            return AnyView(Button(action: action, label: {
+                VStack(alignment: .leading) {
+                    Text(verbatim: value)
+                    titleView
+                }
+            }))
+        case let .link(value, link):
+            return AnyView(AppNavigationLink(id: link, label: {
+                HStack {
+                    VStack(alignment: .leading) {
+                        Text(verbatim: value)
+                        titleView
+                    }
+                    Spacer(minLength: 3)
+                    Image(systemSymbol: .chevronRight)
+                }
+            }))
+        }
+        #else
+        switch value {
+        case let .text(value):
+            HStack {
+                titleView
+                Text(verbatim: value)
+                    .foregroundColor(.primary)
+            }
+        case let .button(value, action):
+            HStack {
+                titleView
+                Button(action: action, label: {
+                    Text(verbatim: value)
+                        .foregroundColor(.primary)
+                })
+            }
+        case let .link(value, link):
+            HStack {
+                titleView
+                AppNavigationLink(id: link, label: {
+                    HStack {
+                        Text(verbatim: value)
+                            .foregroundColor(.primary)
+                        Image(systemSymbol: .chevronRight)
+                    }
+                })
+                .foregroundColor(.primary)
+            }
+        }
+        #endif
+    }
+    
+    var titleView: some View {
+        #if os(watchOS)
+        Text(title)
+            .font(.body)
+            .foregroundColor(.gray)
+        #else
+        Text(title)
+            .frame(width: titleWidth, height: nil, alignment: .leading)
+            .font(.body)
+            .foregroundColor(.gray)
+        #endif
+    }
 }
 
 #if DEBUG
 struct DetailRowView_Previews: PreviewProvider {
     static var previews: some View {
-        List {
+        VStack(alignment: .leading, spacing: 8) {
             DetailRowView(
                 title: "Lock",
                 value: "\(UUID())"
@@ -58,6 +139,7 @@ struct DetailRowView_Previews: PreviewProvider {
                 title: "Type",
                 value: "Admin"
             )
+            Spacer(minLength: 20)
         }
     }
 }

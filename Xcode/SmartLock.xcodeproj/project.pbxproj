@@ -90,6 +90,7 @@
 		6E5109F728E4D6F200F9A9A2 /* KeysView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E5109F628E4D6F200F9A9A2 /* KeysView.swift */; };
 		6E5109F928E4DEE500F9A9A2 /* PermissionIconWatchKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E5109F828E4DEE500F9A9A2 /* PermissionIconWatchKit.swift */; };
 		6E5109FB28E4E06B00F9A9A2 /* DetailRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E5109FA28E4E06B00F9A9A2 /* DetailRowView.swift */; };
+		6E5109FE28E4E6F400F9A9A2 /* KeyRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E5109FD28E4E6F400F9A9A2 /* KeyRowView.swift */; };
 		6E5D51DF28E20C6D008FFB4D /* QuickLook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6E5D51C128E185DB008FFB4D /* QuickLook.framework */; };
 		6E5D51E228E20C6D008FFB4D /* PreviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E5D51E128E20C6D008FFB4D /* PreviewViewController.swift */; };
 		6E5D51E728E20C6D008FFB4D /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6E5D51E528E20C6D008FFB4D /* MainInterface.storyboard */; };
@@ -386,6 +387,7 @@
 		6E5109F628E4D6F200F9A9A2 /* KeysView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeysView.swift; sourceTree = "<group>"; };
 		6E5109F828E4DEE500F9A9A2 /* PermissionIconWatchKit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = PermissionIconWatchKit.swift; path = LockWatch/PermissionIconWatchKit.swift; sourceTree = SOURCE_ROOT; };
 		6E5109FA28E4E06B00F9A9A2 /* DetailRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailRowView.swift; sourceTree = "<group>"; };
+		6E5109FD28E4E6F400F9A9A2 /* KeyRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyRowView.swift; sourceTree = "<group>"; };
 		6E5D51C128E185DB008FFB4D /* QuickLook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuickLook.framework; path = System/Library/Frameworks/QuickLook.framework; sourceTree = SDKROOT; };
 		6E5D51DE28E20C6C008FFB4D /* LockQuickLookMobile.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = LockQuickLookMobile.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		6E5D51E128E20C6D008FFB4D /* PreviewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewViewController.swift; sourceTree = "<group>"; };
@@ -690,18 +692,17 @@
 				6E5109F328E4BE3900F9A9A2 /* WatchKit */,
 				6E4CB61D28D7901D00116573 /* AppKit */,
 				6E4CB61C28D788B900116573 /* UIKit */,
-				6E21834728D90CB800A622B3 /* EventsView.swift */,
-				6E21832228D8D26300A622B3 /* LockDetailView.swift */,
-				6E3276E528D782B900AF171B /* LockRowView.swift */,
-				6E5109FA28E4E06B00F9A9A2 /* DetailRowView.swift */,
+				6E5109FC28E4E67D00F9A9A2 /* Rows */,
 				6E169A7728D9A34F008545EC /* NavigationLink.swift */,
+				6E21832228D8D26300A622B3 /* LockDetailView.swift */,
+				6E8BBFD928DC2CA000F03735 /* SetupLockView.swift */,
+				6E9E37AA28DAA6D100BE7128 /* KeyDetailView.swift */,
+				6E6A97F228DC030000C689F6 /* NewKeyInvitationView.swift */,
+				6E21834728D90CB800A622B3 /* EventsView.swift */,
+				6E169A8028D9C15B008545EC /* PermissionScheduleView.swift */,
 				6E4CB61928D788AA00116573 /* PermissionIconView.swift */,
 				6E169A7C28D9C097008545EC /* PermissionsView.swift */,
 				6E169A7E28D9C135008545EC /* NewPermissionView.swift */,
-				6E169A8028D9C15B008545EC /* PermissionScheduleView.swift */,
-				6E9E37AA28DAA6D100BE7128 /* KeyDetailView.swift */,
-				6E6A97F228DC030000C689F6 /* NewKeyInvitationView.swift */,
-				6E8BBFD928DC2CA000F03735 /* SetupLockView.swift */,
 				6E857ED428E3B98F00EC99D3 /* SliderCell.swift */,
 				6E10C8FF28DFC6C400703691 /* ErrorView.swift */,
 			);
@@ -738,6 +739,16 @@
 				6E5109F828E4DEE500F9A9A2 /* PermissionIconWatchKit.swift */,
 			);
 			path = WatchKit;
+			sourceTree = "<group>";
+		};
+		6E5109FC28E4E67D00F9A9A2 /* Rows */ = {
+			isa = PBXGroup;
+			children = (
+				6E3276E528D782B900AF171B /* LockRowView.swift */,
+				6E5109FA28E4E06B00F9A9A2 /* DetailRowView.swift */,
+				6E5109FD28E4E6F400F9A9A2 /* KeyRowView.swift */,
+			);
+			name = Rows;
 			sourceTree = "<group>";
 		};
 		6E5D51E028E20C6D008FFB4D /* LockQuickLook-iOS */ = {
@@ -1448,6 +1459,7 @@
 				6E21834228D8F3B500A622B3 /* UnlockEventManagedObject.swift in Sources */,
 				6E21833528D8F3B500A622B3 /* SetupEventManagedObject.swift in Sources */,
 				6E10C90028DFC6C400703691 /* ErrorView.swift in Sources */,
+				6E5109FE28E4E6F400F9A9A2 /* KeyRowView.swift in Sources */,
 				6E857EE128E3BB0D00EC99D3 /* BeaconController.swift in Sources */,
 				6E8BBFDA28DC2CA000F03735 /* SetupLockView.swift in Sources */,
 				6E9E37AD28DADF2600BE7128 /* ActivityView.swift in Sources */,

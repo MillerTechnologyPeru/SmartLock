@@ -53,7 +53,8 @@ public struct LockDetailView: View {
                     reload()
                 }
                 .onDisappear {
-                    
+                    //pendingTask?.cancel()
+                    pendingTask = nil
                 }
                 .alert(error: $error)
                 .newPermissionSheet(
@@ -71,14 +72,13 @@ public struct LockDetailView: View {
                         }
                     }
                     #endif
-                    // create new key
+                    #if !os(watchOS)
                     ToolbarItem(placement: .primaryAction) {
-                        if cache.key.permission.isAdministrator {
-                            Button(action: newPermission) {
-                                Image(systemSymbol: .plus)
-                            }
+                        Button(action: newPermission) {
+                            Image(systemSymbol: .ellipsisCircleFill)
                         }
                     }
+                    #endif
                 }
             )
         } else if let information = self.information,
@@ -249,33 +249,6 @@ extension LockDetailView {
         @State
         private var enableActions = true
         
-        private static let dateFormatter: DateFormatter = {
-            let formatter = DateFormatter()
-            formatter.dateStyle = .short
-            formatter.timeStyle = .short
-            return formatter
-        }()
-        
-        private var buttonSize: CGFloat {
-            #if os(watchOS)
-            50
-            #else
-            150
-            #endif
-        }
-        
-        private var spacing: CGFloat {
-            #if os(watchOS)
-            8
-            #else
-            20
-            #endif
-        }
-        
-        var titleWidth: CGFloat {
-            100
-        }
-        
         public var body: some View {
             ScrollView {
                 VStack(alignment: .leading, spacing: spacing) {
@@ -296,74 +269,85 @@ extension LockDetailView {
                     VStack(alignment: .leading, spacing: spacing) {
                         // info
                         if showID {
-                            DetailRowView(title: "Lock", value: id.description)
-                            DetailRowView(title: "Key", value: cache.key.id.description)
+                            DetailRowView(
+                                title: "Lock",
+                                value: id.description
+                            )
+                            DetailRowView(
+                                title: "Key",
+                                value: cache.key.id.description
+                            )
                         }
-                        HStack {
-                            Text("Type")
-                                .frame(width: titleWidth, height: nil, alignment: .leading)
-                                .font(.body)
-                                .foregroundColor(.gray)
-                            Button(action: {
-                                showID.toggle()
-                            }, label: {
-                                Text(verbatim: cache.key.permission.localizedText)
-                                    .foregroundColor(.primary)
-                            })
-                        }
-                        HStack {
-                            Text("Created")
-                                .frame(width: titleWidth, height: nil, alignment: .leading)
-                                .font(.body)
-                                .foregroundColor(.gray)
-                            Text(verbatim: Self.dateFormatter.string(from: cache.key.created))
-                        }
-                        HStack {
-                            Text("Version")
-                                .frame(width: titleWidth, height: nil, alignment: .leading)
-                                .font(.body)
-                                .foregroundColor(.gray)
-                            Text(verbatim: "v\(cache.information.version.description)")
-                        }
-                        HStack {
-                            Text("History")
-                                .frame(width: titleWidth, height: nil, alignment: .leading)
-                                .font(.body)
-                                .foregroundColor(.gray)
-                            AppNavigationLink(id: .events(id, nil), label: {
-                                HStack {
-                                    Text("\(events) events")
-                                    Image(systemName: "chevron.right")
-                                }
-                            })
-                            .foregroundColor(.primary)
-                        }
+                        DetailRowView(
+                            title: "Type",
+                            value: cache.key.permission.localizedText,
+                            action: { showID.toggle() }
+                        )
+                        DetailRowView(
+                            title: "Created",
+                            value: Self.dateFormatter.string(from: cache.key.created)
+                        )
+                        DetailRowView(
+                            title: "Version",
+                            value: "v\(cache.information.version.description)"
+                        )
+                        DetailRowView(
+                            title: "History",
+                            value: "\(events) events",
+                            link: .events(id, nil)
+                        )
                         if cache.key.permission.isAdministrator {
-                            HStack {
-                                Text("Permissions")
-                                    .frame(width: titleWidth, height: nil, alignment: .leading)
-                                    .font(.body)
-                                    .foregroundColor(.gray)
-                                AppNavigationLink(id: .permissions(id), label: {
-                                    HStack {
-                                        if newKeys > 0 {
-                                            Text("\(keys) keys, \(newKeys) pending")
-                                        } else {
-                                            Text("\(keys) keys")
-                                        }
-                                        Image(systemName: "chevron.right")
-                                    }
-                                })
-                                .foregroundColor(.primary)
-                            }
+                            DetailRowView(
+                                title: "Permissions",
+                                value: newKeys > 0 ? "\(keys) keys, \(newKeys) pending" : "\(keys) keys",
+                                link: .permissions(id)
+                            )
                         }
                     }
                 }
-                .padding(20)
+                .padding(padding)
                 .buttonStyle(.plain)
             }
             .navigationTitle(Text(verbatim: cache.name))
         }
+    }
+}
+
+private extension LockDetailView.StateView {
+    
+    private static let dateFormatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateStyle = .short
+        formatter.timeStyle = .short
+        return formatter
+    }()
+    
+    private var buttonSize: CGFloat {
+        #if os(watchOS)
+        100
+        #else
+        150
+        #endif
+    }
+    
+    private var spacing: CGFloat {
+        #if os(watchOS)
+        8
+        #else
+        20
+        #endif
+    }
+    
+    var titleWidth: CGFloat {
+        100
+    }
+    
+    var padding: CGFloat {
+        #if os(watchOS)
+        8
+        #else
+        20
+        #endif
     }
 }
 
