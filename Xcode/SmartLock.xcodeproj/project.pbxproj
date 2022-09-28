@@ -155,6 +155,7 @@
 		6EA776A028D707FE00018FA3 /* LockKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 6EA7769F28D707FE00018FA3 /* LockKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		6EA776A328D707FE00018FA3 /* LockKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6EA7769D28D707FE00018FA3 /* LockKit.framework */; };
 		6EA776A428D707FE00018FA3 /* LockKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 6EA7769D28D707FE00018FA3 /* LockKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		6EA7F90A28E4B05900BF02FE /* MessagesHostingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EA7F90928E4B05900BF02FE /* MessagesHostingViewController.swift */; };
 		6EBD590F28E14A7F00CC3852 /* ScanResultsAsyncDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EBD590E28E14A7F00CC3852 /* ScanResultsAsyncDataSource.swift */; };
 		6ED248CC28D7A3BF00F78D07 /* ActivityIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6ED248CB28D7A3BF00F78D07 /* ActivityIndicatorView.swift */; };
 /* End PBXBuildFile section */
@@ -412,6 +413,9 @@
 		6EA7769128D7061600018FA3 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		6EA7769D28D707FE00018FA3 /* LockKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = LockKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		6EA7769F28D707FE00018FA3 /* LockKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LockKit.h; sourceTree = "<group>"; };
+		6EA7F8E128E4211700BF02FE /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
+		6EA7F8E328E4211700BF02FE /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
+		6EA7F90928E4B05900BF02FE /* MessagesHostingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessagesHostingViewController.swift; sourceTree = "<group>"; };
 		6EBD590E28E14A7F00CC3852 /* ScanResultsAsyncDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanResultsAsyncDataSource.swift; sourceTree = "<group>"; };
 		6ED248CB28D7A3BF00F78D07 /* ActivityIndicatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityIndicatorView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -759,6 +763,7 @@
 				6E857EBE28E39C9F00EC99D3 /* MessagesViewController.swift */,
 				6E857EE328E3D49D00EC99D3 /* MessagesView.swift */,
 				6E857EE828E4061800EC99D3 /* MessagesAppView.swift */,
+				6EA7F90928E4B05900BF02FE /* MessagesHostingViewController.swift */,
 				6E857EC028E39C9F00EC99D3 /* MainInterface.storyboard */,
 				6E857EC328E39CA000EC99D3 /* Assets.xcassets */,
 				6E857EC528E39CA000EC99D3 /* Info.plist */,
@@ -866,6 +871,8 @@
 				6E5D51FA28E21537008FFB4D /* Quartz.framework */,
 				6E857E6828E3566B00EC99D3 /* QuickLookThumbnailing.framework */,
 				6E857EBB28E39C9F00EC99D3 /* Messages.framework */,
+				6EA7F8E128E4211700BF02FE /* WidgetKit.framework */,
+				6EA7F8E328E4211700BF02FE /* SwiftUI.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -1217,6 +1224,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				6E857EEB28E408D600EC99D3 /* ViewController.swift in Sources */,
+				6EA7F90A28E4B05900BF02FE /* MessagesHostingViewController.swift in Sources */,
 				6E857EE928E4061800EC99D3 /* MessagesAppView.swift in Sources */,
 				6E857EE728E3E92300EC99D3 /* PresentationStyle.swift in Sources */,
 				6E857EE428E3D49D00EC99D3 /* MessagesView.swift in Sources */,
@@ -1516,7 +1524,6 @@
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -1546,7 +1553,6 @@
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 			};
@@ -1581,7 +1587,6 @@
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
 		};
@@ -1614,7 +1619,6 @@
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
 		};
@@ -1712,7 +1716,6 @@
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -1746,7 +1749,6 @@
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 			};
