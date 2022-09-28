@@ -126,6 +126,18 @@
 		6E857E7428E3589A00EC99D3 /* LockKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6EA7769D28D707FE00018FA3 /* LockKit.framework */; };
 		6E857E9728E367B400EC99D3 /* CoreSpotlight.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E857E9628E367B400EC99D3 /* CoreSpotlight.swift */; };
 		6E857E9B28E36ED300EC99D3 /* UserActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E857E9A28E36ED300EC99D3 /* UserActivity.swift */; };
+		6E857EBC28E39C9F00EC99D3 /* Messages.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6E857EBB28E39C9F00EC99D3 /* Messages.framework */; };
+		6E857EBF28E39C9F00EC99D3 /* MessagesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E857EBE28E39C9F00EC99D3 /* MessagesViewController.swift */; };
+		6E857EC228E39C9F00EC99D3 /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6E857EC028E39C9F00EC99D3 /* MainInterface.storyboard */; };
+		6E857EC428E39CA000EC99D3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6E857EC328E39CA000EC99D3 /* Assets.xcassets */; };
+		6E857EC828E39CA000EC99D3 /* LockMessage.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 6E857EBA28E39C9F00EC99D3 /* LockMessage.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		6E857ECC28E39CF900EC99D3 /* LockKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6EA7769D28D707FE00018FA3 /* LockKit.framework */; };
+		6E857ED528E3B98F00EC99D3 /* SliderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E857ED428E3B98F00EC99D3 /* SliderCell.swift */; };
+		6E857EDC28E3BAAF00EC99D3 /* BluetoothSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E857EDA28E3BAAF00EC99D3 /* BluetoothSettingsView.swift */; };
+		6E857EDF28E3BADC00EC99D3 /* NetworkMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E857EDE28E3BADC00EC99D3 /* NetworkMonitor.swift */; };
+		6E857EE128E3BB0D00EC99D3 /* BeaconController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E857EE028E3BB0D00EC99D3 /* BeaconController.swift */; };
+		6E857EE228E3CC2800EC99D3 /* CloudSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E857EDB28E3BAAF00EC99D3 /* CloudSettingsView.swift */; };
+		6E857EE428E3D49D00EC99D3 /* MessagesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E857EE328E3D49D00EC99D3 /* MessagesView.swift */; };
 		6E8BBFDA28DC2CA000F03735 /* SetupLockView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E8BBFD928DC2CA000F03735 /* SetupLockView.swift */; };
 		6E8BBFDC28DCC8F300F03735 /* AsyncFetchRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E8BBFDB28DCC8F300F03735 /* AsyncFetchRequest.swift */; };
 		6E8BBFEB28DD301B00F03735 /* LockIntentsExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E8BBFEA28DD301B00F03735 /* LockIntentsExtension.swift */; };
@@ -187,6 +199,20 @@
 			remoteGlobalIDString = 6EA7769C28D707FE00018FA3;
 			remoteInfo = LockKit;
 		};
+		6E857EC628E39CA000EC99D3 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6EA7767928D7061600018FA3 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 6E857EB928E39C9F00EC99D3;
+			remoteInfo = LockMessage;
+		};
+		6E857ECE28E39CF900EC99D3 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6EA7767928D7061600018FA3 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 6EA7769C28D707FE00018FA3;
+			remoteInfo = LockKit;
+		};
 		6E8BBFF828DD30B400F03735 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 6EA7767928D7061600018FA3 /* Project object */;
@@ -213,6 +239,7 @@
 				6E5D520828E21538008FFB4D /* LockQuickLook.appex in Embed Foundation Extensions */,
 				6E5D51EB28E20C6D008FFB4D /* LockQuickLookMobile.appex in Embed Foundation Extensions */,
 				6E857E7028E3566B00EC99D3 /* LockThumbnail.appex in Embed Foundation Extensions */,
+				6E857EC828E39CA000EC99D3 /* LockMessage.appex in Embed Foundation Extensions */,
 			);
 			name = "Embed Foundation Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -346,6 +373,19 @@
 		6E857E8F28E3656000EC99D3 /* CoreSpotlight.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreSpotlight.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS16.1.sdk/System/Library/Frameworks/CoreSpotlight.framework; sourceTree = DEVELOPER_DIR; };
 		6E857E9628E367B400EC99D3 /* CoreSpotlight.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreSpotlight.swift; sourceTree = "<group>"; };
 		6E857E9A28E36ED300EC99D3 /* UserActivity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserActivity.swift; sourceTree = "<group>"; };
+		6E857EBA28E39C9F00EC99D3 /* LockMessage.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = LockMessage.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		6E857EBB28E39C9F00EC99D3 /* Messages.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Messages.framework; path = Library/Frameworks/Messages.framework; sourceTree = DEVELOPER_DIR; };
+		6E857EBE28E39C9F00EC99D3 /* MessagesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessagesViewController.swift; sourceTree = "<group>"; };
+		6E857EC128E39C9F00EC99D3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MainInterface.storyboard; sourceTree = "<group>"; };
+		6E857EC328E39CA000EC99D3 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		6E857EC528E39CA000EC99D3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		6E857ED128E39E2200EC99D3 /* LockMessage.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = LockMessage.entitlements; sourceTree = "<group>"; };
+		6E857ED428E3B98F00EC99D3 /* SliderCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SliderCell.swift; sourceTree = "<group>"; };
+		6E857EDA28E3BAAF00EC99D3 /* BluetoothSettingsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BluetoothSettingsView.swift; sourceTree = "<group>"; };
+		6E857EDB28E3BAAF00EC99D3 /* CloudSettingsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CloudSettingsView.swift; sourceTree = "<group>"; };
+		6E857EDE28E3BADC00EC99D3 /* NetworkMonitor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkMonitor.swift; sourceTree = "<group>"; };
+		6E857EE028E3BB0D00EC99D3 /* BeaconController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BeaconController.swift; sourceTree = "<group>"; };
+		6E857EE328E3D49D00EC99D3 /* MessagesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessagesView.swift; sourceTree = "<group>"; };
 		6E8BBFD928DC2CA000F03735 /* SetupLockView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupLockView.swift; sourceTree = "<group>"; };
 		6E8BBFDB28DCC8F300F03735 /* AsyncFetchRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsyncFetchRequest.swift; sourceTree = "<group>"; };
 		6E8BBFE828DD301B00F03735 /* LockIntents.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.extensionkit-extension"; includeInIndex = 0; path = LockIntents.appex; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -403,6 +443,15 @@
 			files = (
 				6E857E7428E3589A00EC99D3 /* LockKit.framework in Frameworks */,
 				6E857E6928E3566B00EC99D3 /* QuickLookThumbnailing.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6E857EB728E39C9F00EC99D3 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6E857ECC28E39CF900EC99D3 /* LockKit.framework in Frameworks */,
+				6E857EBC28E39C9F00EC99D3 /* Messages.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -518,6 +567,8 @@
 				6E21831C28D834D200A622B3 /* ContentView.swift */,
 				6E2182F028D7B4FA00A622B3 /* SettingsView.swift */,
 				6E21834B28D9140D00A622B3 /* KeysView.swift */,
+				6E857EDA28E3BAAF00EC99D3 /* BluetoothSettingsView.swift */,
+				6E857EDB28E3BAAF00EC99D3 /* CloudSettingsView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -550,6 +601,8 @@
 				6E84E53528DDE01F008CAE85 /* AssetExtractor.swift */,
 				6E21830F28D80DCD00A622B3 /* Keychain.swift */,
 				6E857E9628E367B400EC99D3 /* CoreSpotlight.swift */,
+				6E857EDE28E3BADC00EC99D3 /* NetworkMonitor.swift */,
+				6E857EE028E3BB0D00EC99D3 /* BeaconController.swift */,
 				6E857E9A28E36ED300EC99D3 /* UserActivity.swift */,
 				6E21831628D8116C00A622B3 /* NewKey.swift */,
 				6E21831728D8116C00A622B3 /* NewKeyDocument.swift */,
@@ -576,6 +629,7 @@
 				6E9E37AA28DAA6D100BE7128 /* KeyDetailView.swift */,
 				6E6A97F228DC030000C689F6 /* NewKeyInvitationView.swift */,
 				6E8BBFD928DC2CA000F03735 /* SetupLockView.swift */,
+				6E857ED428E3B98F00EC99D3 /* SliderCell.swift */,
 				6E10C8FF28DFC6C400703691 /* ErrorView.swift */,
 			);
 			path = View;
@@ -691,6 +745,27 @@
 			path = LockThumbnail;
 			sourceTree = "<group>";
 		};
+		6E857EBD28E39C9F00EC99D3 /* LockMessage */ = {
+			isa = PBXGroup;
+			children = (
+				6E857EE528E3D6E600EC99D3 /* Extensions */,
+				6E857ED128E39E2200EC99D3 /* LockMessage.entitlements */,
+				6E857EBE28E39C9F00EC99D3 /* MessagesViewController.swift */,
+				6E857EE328E3D49D00EC99D3 /* MessagesView.swift */,
+				6E857EC028E39C9F00EC99D3 /* MainInterface.storyboard */,
+				6E857EC328E39CA000EC99D3 /* Assets.xcassets */,
+				6E857EC528E39CA000EC99D3 /* Info.plist */,
+			);
+			path = LockMessage;
+			sourceTree = "<group>";
+		};
+		6E857EE528E3D6E600EC99D3 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
 		6E8BBFE928DD301B00F03735 /* LockIntents */ = {
 			isa = PBXGroup;
 			children = (
@@ -717,6 +792,7 @@
 				6E5D51E028E20C6D008FFB4D /* LockQuickLook-iOS */,
 				6E5D51FC28E21538008FFB4D /* LockQuickLook-macOS */,
 				6E857E6A28E3566B00EC99D3 /* LockThumbnail */,
+				6E857EBD28E39C9F00EC99D3 /* LockMessage */,
 				6EA7768228D7061600018FA3 /* Products */,
 				6EA776A928D7082300018FA3 /* Frameworks */,
 			);
@@ -732,6 +808,7 @@
 				6E5D51DE28E20C6C008FFB4D /* LockQuickLookMobile.appex */,
 				6E5D51F928E21537008FFB4D /* LockQuickLook.appex */,
 				6E857E6728E3566B00EC99D3 /* LockThumbnail.appex */,
+				6E857EBA28E39C9F00EC99D3 /* LockMessage.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -779,6 +856,7 @@
 				6E5D51C128E185DB008FFB4D /* QuickLook.framework */,
 				6E5D51FA28E21537008FFB4D /* Quartz.framework */,
 				6E857E6828E3566B00EC99D3 /* QuickLookThumbnailing.framework */,
+				6E857EBB28E39C9F00EC99D3 /* Messages.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -868,6 +946,24 @@
 			productReference = 6E857E6728E3566B00EC99D3 /* LockThumbnail.appex */;
 			productType = "com.apple.product-type.app-extension";
 		};
+		6E857EB928E39C9F00EC99D3 /* LockMessage */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 6E857ECB28E39CA100EC99D3 /* Build configuration list for PBXNativeTarget "LockMessage" */;
+			buildPhases = (
+				6E857EB628E39C9F00EC99D3 /* Sources */,
+				6E857EB728E39C9F00EC99D3 /* Frameworks */,
+				6E857EB828E39C9F00EC99D3 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				6E857ECF28E39CF900EC99D3 /* PBXTargetDependency */,
+			);
+			name = LockMessage;
+			productName = LockMessage;
+			productReference = 6E857EBA28E39C9F00EC99D3 /* LockMessage.appex */;
+			productType = "com.apple.product-type.app-extension.messages";
+		};
 		6E8BBFE728DD301B00F03735 /* LockIntents */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 6E8BBFF228DD301B00F03735 /* Build configuration list for PBXNativeTarget "LockIntents" */;
@@ -903,6 +999,7 @@
 				6E5D51EA28E20C6D008FFB4D /* PBXTargetDependency */,
 				6E5D520728E21538008FFB4D /* PBXTargetDependency */,
 				6E857E6F28E3566B00EC99D3 /* PBXTargetDependency */,
+				6E857EC728E39CA000EC99D3 /* PBXTargetDependency */,
 			);
 			name = SmartLock;
 			productName = SmartLock;
@@ -959,6 +1056,9 @@
 					6E857E6628E3566B00EC99D3 = {
 						CreatedOnToolsVersion = 14.1;
 					};
+					6E857EB928E39C9F00EC99D3 = {
+						CreatedOnToolsVersion = 14.1;
+					};
 					6E8BBFE728DD301B00F03735 = {
 						CreatedOnToolsVersion = 14.1;
 					};
@@ -999,6 +1099,7 @@
 				6E5D51DD28E20C6C008FFB4D /* LockQuickLook-iOS */,
 				6E5D51F828E21537008FFB4D /* LockQuickLook-macOS */,
 				6E857E6628E3566B00EC99D3 /* LockThumbnail */,
+				6E857EB928E39C9F00EC99D3 /* LockMessage */,
 			);
 		};
 /* End PBXProject section */
@@ -1031,6 +1132,15 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6E857EB828E39C9F00EC99D3 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6E857EC428E39CA000EC99D3 /* Assets.xcassets in Resources */,
+				6E857EC228E39C9F00EC99D3 /* MainInterface.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1093,6 +1203,15 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		6E857EB628E39C9F00EC99D3 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6E857EE428E3D49D00EC99D3 /* MessagesView.swift in Sources */,
+				6E857EBF28E39C9F00EC99D3 /* MessagesViewController.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		6E8BBFE428DD301B00F03735 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -1109,6 +1228,7 @@
 				6E2182F128D7B4FA00A622B3 /* SettingsView.swift in Sources */,
 				6E84E52D28DDC841008CAE85 /* LockEntity.swift in Sources */,
 				6E10C90228DFCFED00703691 /* LockEventEntity.swift in Sources */,
+				6E857EDC28E3BAAF00EC99D3 /* BluetoothSettingsView.swift in Sources */,
 				6E10C90428DFD18D00703691 /* EventTypeAppEnum.swift in Sources */,
 				6E84E52728DDC841008CAE85 /* ScanLocksIntent.swift in Sources */,
 				6E10C90C28E0518F00703691 /* NewKeyIntent.swift in Sources */,
@@ -1118,6 +1238,7 @@
 				6E84E52B28DDC841008CAE85 /* KeyEntity.swift in Sources */,
 				6E4CB62528D792BF00116573 /* InfoPlist.swift in Sources */,
 				6E21831D28D834D200A622B3 /* ContentView.swift in Sources */,
+				6E857EE228E3CC2800EC99D3 /* CloudSettingsView.swift in Sources */,
 				6EA7768528D7061600018FA3 /* App.swift in Sources */,
 				6E84E53028DDCF4F008CAE85 /* KeyQuery.swift in Sources */,
 				6E2182EF28D7B37000A622B3 /* TabBarView.swift in Sources */,
@@ -1154,6 +1275,7 @@
 				6E21835028D9506100A622B3 /* Preferences.swift in Sources */,
 				6E21831828D8116C00A622B3 /* NewKey.swift in Sources */,
 				6E21835F28D9516B00A622B3 /* CloudApplicationData.swift in Sources */,
+				6E857EDF28E3BADC00EC99D3 /* NetworkMonitor.swift in Sources */,
 				6E8BBFDC28DCC8F300F03735 /* AsyncFetchRequest.swift in Sources */,
 				6EBD590F28E14A7F00CC3852 /* ScanResultsAsyncDataSource.swift in Sources */,
 				6E21831028D80DCD00A622B3 /* Keychain.swift in Sources */,
@@ -1179,6 +1301,7 @@
 				6E21834228D8F3B500A622B3 /* UnlockEventManagedObject.swift in Sources */,
 				6E21833528D8F3B500A622B3 /* SetupEventManagedObject.swift in Sources */,
 				6E10C90028DFC6C400703691 /* ErrorView.swift in Sources */,
+				6E857EE128E3BB0D00EC99D3 /* BeaconController.swift in Sources */,
 				6E8BBFDA28DC2CA000F03735 /* SetupLockView.swift in Sources */,
 				6E9E37AD28DADF2600BE7128 /* ActivityView.swift in Sources */,
 				6E21834328D8F3B500A622B3 /* ManagedObject.swift in Sources */,
@@ -1191,6 +1314,7 @@
 				6E21833628D8F3B500A622B3 /* ContactManagedObject.swift in Sources */,
 				6E3276D228D70CE100AF171B /* Store.swift in Sources */,
 				6E4CB61A28D788AA00116573 /* UIStyleKit.swift in Sources */,
+				6E857ED528E3B98F00EC99D3 /* SliderCell.swift in Sources */,
 				6E21834828D90CB800A622B3 /* EventsView.swift in Sources */,
 				6E21836228D9516B00A622B3 /* CloudPermission.swift in Sources */,
 				6E21834628D8FC4300A622B3 /* Task.swift in Sources */,
@@ -1255,6 +1379,16 @@
 			target = 6EA7769C28D707FE00018FA3 /* LockKit */;
 			targetProxy = 6E857E7628E3589A00EC99D3 /* PBXContainerItemProxy */;
 		};
+		6E857EC728E39CA000EC99D3 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 6E857EB928E39C9F00EC99D3 /* LockMessage */;
+			targetProxy = 6E857EC628E39CA000EC99D3 /* PBXContainerItemProxy */;
+		};
+		6E857ECF28E39CF900EC99D3 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 6EA7769C28D707FE00018FA3 /* LockKit */;
+			targetProxy = 6E857ECE28E39CF900EC99D3 /* PBXContainerItemProxy */;
+		};
 		6E8BBFF928DD30B400F03735 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 6EA7769C28D707FE00018FA3 /* LockKit */;
@@ -1282,6 +1416,14 @@
 				6E5D520228E21538008FFB4D /* Base */,
 			);
 			name = PreviewViewController.xib;
+			sourceTree = "<group>";
+		};
+		6E857EC028E39C9F00EC99D3 /* MainInterface.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				6E857EC128E39C9F00EC99D3 /* Base */,
+			);
+			name = MainInterface.storyboard;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
@@ -1477,8 +1619,13 @@
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/../../../../Frameworks",
+					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
+					"@executable_path/../../../Frameworks",
+					"@executable_path/../../../../Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.colemancda.Lock.Thumbnail;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1504,8 +1651,13 @@
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/../../../../Frameworks",
+					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
+					"@executable_path/../../../Frameworks",
+					"@executable_path/../../../../Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.colemancda.Lock.Thumbnail;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1513,6 +1665,75 @@
 				SKIP_INSTALL = YES;
 				SUPPORTED_PLATFORMS = "macosx iphonesimulator iphoneos";
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		6E857EC928E39CA100EC99D3 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = "iMessage App Icon";
+				CODE_SIGN_ENTITLEMENTS = LockMessage/LockMessage.entitlements;
+				CODE_SIGN_IDENTITY = "-";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 4W79SG34MW;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = LockMessage/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = Cerradura;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/../../../../Frameworks",
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+					"@executable_path/../../../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.colemancda.Lock.Message;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		6E857ECA28E39CA100EC99D3 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = "iMessage App Icon";
+				CODE_SIGN_ENTITLEMENTS = LockMessage/LockMessage.entitlements;
+				CODE_SIGN_IDENTITY = "-";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 4W79SG34MW;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = LockMessage/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = Cerradura;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/../../../../Frameworks",
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+					"@executable_path/../../../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.colemancda.Lock.Message;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 			};
@@ -1918,6 +2139,15 @@
 			buildConfigurations = (
 				6E857E7228E3566B00EC99D3 /* Debug */,
 				6E857E7328E3566B00EC99D3 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		6E857ECB28E39CA100EC99D3 /* Build configuration list for PBXNativeTarget "LockMessage" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6E857EC928E39CA100EC99D3 /* Debug */,
+				6E857ECA28E39CA100EC99D3 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
