@@ -49,91 +49,100 @@ extension KeyDetailView {
         @State
         var showID = false
         
-        private static let dateFormatter: DateFormatter = {
-            let formatter = DateFormatter()
-            formatter.dateStyle = .short
-            formatter.timeStyle = .short
-            return formatter
-        }()
-        
-        private var titleWidth: CGFloat {
-            100
-        }
-        
         var body: some View {
             ScrollView {
-                VStack(alignment: .leading, spacing: 20) {
+                VStack(alignment: .leading, spacing: spacing * 2) {
                     HStack {
                         Spacer()
                         PermissionIconView(permission: key.permission.type)
-                            .frame(width: 150, height: 150, alignment: .center)
+                            .frame(width: buttonSize, height: buttonSize, alignment: .center)
+                        #if !os(watchOS)
                         .padding(30)
+                        #endif
                         Spacer()
                     }
-                    VStack(alignment: .leading, spacing: 20) {
+                    VStack(alignment: .leading, spacing: spacing) {
                         // info
                         if showID {
-                            HStack {
-                                Text("Key")
-                                    .frame(width: titleWidth, height: nil, alignment: .leading)
-                                    .font(.body)
-                                    .foregroundColor(.gray)
-                                Text(verbatim: key.id.description)
-                            }
+                            DetailRowView(
+                                title: "Key",
+                                value: key.id.description
+                            )
                         }
-                        HStack {
-                            Text("Lock")
-                                .frame(width: titleWidth, height: nil, alignment: .leading)
-                                .font(.body)
-                                .foregroundColor(.gray)
-                            Text(verbatim: lock)
+                        DetailRowView(
+                            title: "Lock",
+                            value: lock
+                        )
+                        #if os(iOS) || os(macOS)
+                        if let schedule = key.permission.schedule {
+                            DetailRowView(
+                                title: "Type",
+                                value: key.permission.localizedText,
+                                link: .keySchedule(schedule)
+                            )
+                        } else {
+                            DetailRowView(
+                                title: "Type",
+                                value: key.permission.localizedText
+                            )
                         }
-                        HStack {
-                            Text("Type")
-                                .frame(width: titleWidth, height: nil, alignment: .leading)
-                                .font(.body)
-                                .foregroundColor(.gray)
-                            if let schedule = key.permission.schedule {
-                                #if os(iOS) || os(macOS)
-                                AppNavigationLink(id: .keySchedule(schedule), label: {
-                                    HStack {
-                                        Text(verbatim: key.permission.localizedText)
-                                            .foregroundColor(.primary)
-                                        Image(systemName: "chevron.right")
-                                    }
-                                })
-                                #else
-                                Text(verbatim: key.permission.localizedText)
-                                    .foregroundColor(.primary)
-                                #endif
-                            } else {
-                                Text(verbatim: key.permission.localizedText)
-                                    .foregroundColor(.primary)
-                            }
-                        }
-                        HStack {
-                            Text("Created")
-                                .frame(width: titleWidth, height: nil, alignment: .leading)
-                                .font(.body)
-                                .foregroundColor(.gray)
-                            Text(verbatim: Self.dateFormatter.string(from: key.created))
-                        }
+                        #else
+                        DetailRowView(
+                            title: "Type",
+                            value: key.permission.localizedText
+                        )
+                        #endif
+                        DetailRowView(
+                            title: "Created",
+                            value: Self.dateFormatter.string(from: key.created)
+                        )
                         if let expiration = key.expiration {
-                            HStack {
-                                Text("Expiration")
-                                    .frame(width: titleWidth, height: nil, alignment: .leading)
-                                    .font(.body)
-                                    .foregroundColor(.gray)
-                                Text(verbatim: Self.dateFormatter.string(from: expiration))
-                            }
+                            DetailRowView(
+                                title: "Expiration",
+                                value: Self.dateFormatter.string(from: expiration)
+                            )
                         }
                     }
                 }
-                .padding(20)
+                .padding(padding)
                 .buttonStyle(.plain)
             }
             .navigationTitle(Text(verbatim: key.name))
         }
+    }
+}
+
+private extension KeyDetailView.StateView {
+    
+    private static let dateFormatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateStyle = .short
+        formatter.timeStyle = .short
+        return formatter
+    }()
+    
+    private var buttonSize: CGFloat {
+        #if os(watchOS)
+        100
+        #else
+        150
+        #endif
+    }
+    
+    private var spacing: CGFloat {
+        #if os(watchOS)
+        8
+        #else
+        20
+        #endif
+    }
+    
+    var padding: CGFloat {
+        #if os(watchOS)
+        8
+        #else
+        20
+        #endif
     }
 }
 

@@ -251,7 +251,7 @@ extension LockDetailView {
         
         public var body: some View {
             ScrollView {
-                VStack(alignment: .leading, spacing: spacing) {
+                VStack(alignment: .leading, spacing: spacing * 2) {
                     HStack {
                         Spacer()
                         // unlock button
@@ -336,10 +336,6 @@ private extension LockDetailView.StateView {
         #else
         20
         #endif
-    }
-    
-    var titleWidth: CGFloat {
-        100
     }
     
     var padding: CGFloat {
