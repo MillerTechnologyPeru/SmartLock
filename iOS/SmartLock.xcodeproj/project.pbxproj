@@ -539,13 +539,6 @@
 			remoteGlobalIDString = 6EA570CF23189874008027D4;
 			remoteInfo = "Watch Extension";
 		};
-		6EA570E123189877008027D4 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 6E6000082121119400787DAA /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 6EA570C323189871008027D4;
-			remoteInfo = Watch;
-		};
 		6EA570F023189CE9008027D4 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 6E6000082121119400787DAA /* Project object */;
@@ -1678,7 +1671,6 @@
 				6E994AEB230E56DD0076DC1B /* PBXTargetDependency */,
 				6E994AEE230E56DD0076DC1B /* PBXTargetDependency */,
 				6E994B16230E89490076DC1B /* PBXTargetDependency */,
-				6EA570E223189877008027D4 /* PBXTargetDependency */,
 				6ECD35A2233B12AF00E49357 /* PBXTargetDependency */,
 				6ECD35B9233B1E5E00E49357 /* PBXTargetDependency */,
 				6EC6DF70233B679200E28455 /* PBXTargetDependency */,
@@ -3141,12 +3133,6 @@
 			target = 6EA570CF23189874008027D4 /* Watch Extension */;
 			targetProxy = 6EA570D223189874008027D4 /* PBXContainerItemProxy */;
 		};
-		6EA570E223189877008027D4 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			platformFilter = ios;
-			target = 6EA570C323189871008027D4 /* Watch */;
-			targetProxy = 6EA570E123189877008027D4 /* PBXContainerItemProxy */;
-		};
 		6EA570F123189CE9008027D4 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 6ED82085231676AE00B69520 /* LockKit watchOS */;
@@ -3607,7 +3593,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				MACOSX_DEPLOYMENT_TARGET = 12.0;
-				MARKETING_VERSION = 1.0.1;
+				MARKETING_VERSION = 1.0.2;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = (
@@ -3675,7 +3661,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				MACOSX_DEPLOYMENT_TARGET = 12.0;
-				MARKETING_VERSION = 1.0.1;
+				MARKETING_VERSION = 1.0.2;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				OTHER_LDFLAGS = (
 					"-weak_framework",
