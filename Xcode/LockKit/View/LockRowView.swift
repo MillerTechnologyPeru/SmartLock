@@ -67,6 +67,17 @@ public struct LockRowView: View {
 
 public extension LockRowView {
     
+    init(lock: LockCache) {
+        self.init(
+            image: .permission(lock.key.permission.type),
+            title: lock.name,
+            subtitle: lock.key.permission.type.localizedText
+        )
+    }
+}
+
+public extension LockRowView {
+    
     enum Image {
         case loading
         case permission(PermissionType)

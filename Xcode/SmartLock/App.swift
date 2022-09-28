@@ -105,7 +105,7 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
         
         // queue post-app initialization loading
         Task {
-            //let _ = NetworkMonitor.shared
+            let _ = NetworkMonitor.shared
             // subscribe to push notifications
             //self.queueDidLaunchOperations()
         }
