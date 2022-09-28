@@ -132,7 +132,7 @@ private extension KeysView.StateView {
                 )
             )
         case let .invitation(invitation, lockName):
-            return AnyView(AppNavigationLink(id: .key(invitation.lock, .newKey(invitation.key))) { // FIXME: Show invitation view
+            return AnyView(AppNavigationLink(id: .newKeyInvitation(invitation)) {
                 LockRowView(
                     image: .permission(invitation.key.permission.type),
                     title: invitation.key.name,
@@ -145,22 +145,15 @@ private extension KeysView.StateView {
 
 extension KeysView {
     
-    enum Item {
-        case lock(Lock)
-        case invitation(Invitation)
-    }
-    
     struct Lock: Identifiable, Equatable {
         
         let id: UUID
-        
         let cache: LockCache
     }
     
     struct Invitation: Identifiable {
         
         let id: URL
-        
         let state: InvitationState
     }
     
@@ -168,18 +161,6 @@ extension KeysView {
         case loading
         case invitation(NewKey.Invitation, String)
         case error(String)
-    }
-}
-
-extension KeysView.Item: Identifiable {
-    
-    var id: String {
-        switch self {
-        case let .lock(value):
-            return value.id.uuidString
-        case let .invitation(value):
-            return value.id.absoluteString
-        }
     }
 }
 

@@ -56,8 +56,10 @@ struct BluetoothSettingsView: View {
                 #endif
             }
         }
+        #if os(iOS)
         .listStyle(GroupedListStyle())
-        .navigationBarTitle(Text("Bluetooth"), displayMode: .large)
+        #endif
+        .navigationTitle("Bluetooth")
     }
 }
 

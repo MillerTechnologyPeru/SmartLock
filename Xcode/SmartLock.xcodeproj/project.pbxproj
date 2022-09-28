@@ -130,7 +130,7 @@
 		6E857EBF28E39C9F00EC99D3 /* MessagesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E857EBE28E39C9F00EC99D3 /* MessagesViewController.swift */; };
 		6E857EC228E39C9F00EC99D3 /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6E857EC028E39C9F00EC99D3 /* MainInterface.storyboard */; };
 		6E857EC428E39CA000EC99D3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6E857EC328E39CA000EC99D3 /* Assets.xcassets */; };
-		6E857EC828E39CA000EC99D3 /* LockMessage.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 6E857EBA28E39C9F00EC99D3 /* LockMessage.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		6E857EC828E39CA000EC99D3 /* LockMessage.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 6E857EBA28E39C9F00EC99D3 /* LockMessage.appex */; platformFilter = ios; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		6E857ECC28E39CF900EC99D3 /* LockKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6EA7769D28D707FE00018FA3 /* LockKit.framework */; };
 		6E857ED528E3B98F00EC99D3 /* SliderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E857ED428E3B98F00EC99D3 /* SliderCell.swift */; };
 		6E857EDC28E3BAAF00EC99D3 /* BluetoothSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E857EDA28E3BAAF00EC99D3 /* BluetoothSettingsView.swift */; };
@@ -138,6 +138,7 @@
 		6E857EE128E3BB0D00EC99D3 /* BeaconController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E857EE028E3BB0D00EC99D3 /* BeaconController.swift */; };
 		6E857EE228E3CC2800EC99D3 /* CloudSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E857EDB28E3BAAF00EC99D3 /* CloudSettingsView.swift */; };
 		6E857EE428E3D49D00EC99D3 /* MessagesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E857EE328E3D49D00EC99D3 /* MessagesView.swift */; };
+		6E857EE728E3E92300EC99D3 /* PresentationStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E857EE628E3E92300EC99D3 /* PresentationStyle.swift */; };
 		6E8BBFDA28DC2CA000F03735 /* SetupLockView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E8BBFD928DC2CA000F03735 /* SetupLockView.swift */; };
 		6E8BBFDC28DCC8F300F03735 /* AsyncFetchRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E8BBFDB28DCC8F300F03735 /* AsyncFetchRequest.swift */; };
 		6E8BBFEB28DD301B00F03735 /* LockIntentsExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E8BBFEA28DD301B00F03735 /* LockIntentsExtension.swift */; };
@@ -386,6 +387,7 @@
 		6E857EDE28E3BADC00EC99D3 /* NetworkMonitor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkMonitor.swift; sourceTree = "<group>"; };
 		6E857EE028E3BB0D00EC99D3 /* BeaconController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BeaconController.swift; sourceTree = "<group>"; };
 		6E857EE328E3D49D00EC99D3 /* MessagesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessagesView.swift; sourceTree = "<group>"; };
+		6E857EE628E3E92300EC99D3 /* PresentationStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PresentationStyle.swift; sourceTree = "<group>"; };
 		6E8BBFD928DC2CA000F03735 /* SetupLockView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupLockView.swift; sourceTree = "<group>"; };
 		6E8BBFDB28DCC8F300F03735 /* AsyncFetchRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsyncFetchRequest.swift; sourceTree = "<group>"; };
 		6E8BBFE828DD301B00F03735 /* LockIntents.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.extensionkit-extension"; includeInIndex = 0; path = LockIntents.appex; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -762,6 +764,7 @@
 		6E857EE528E3D6E600EC99D3 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				6E857EE628E3E92300EC99D3 /* PresentationStyle.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -1207,6 +1210,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6E857EE728E3E92300EC99D3 /* PresentationStyle.swift in Sources */,
 				6E857EE428E3D49D00EC99D3 /* MessagesView.swift in Sources */,
 				6E857EBF28E39C9F00EC99D3 /* MessagesViewController.swift in Sources */,
 			);
@@ -1381,6 +1385,7 @@
 		};
 		6E857EC728E39CA000EC99D3 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
+			platformFilter = ios;
 			target = 6E857EB928E39C9F00EC99D3 /* LockMessage */;
 			targetProxy = 6E857EC628E39CA000EC99D3 /* PBXContainerItemProxy */;
 		};

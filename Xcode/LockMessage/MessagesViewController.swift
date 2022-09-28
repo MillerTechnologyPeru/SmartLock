@@ -24,15 +24,11 @@ final class MessagesViewController: MSMessagesAppViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        requestPresentationStyle(.compact)
-        navigationController?.setNavigationBarHidden(true, animated: true)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         
-        requestPresentationStyle(.expanded)
-        navigationController?.setNavigationBarHidden(false, animated: true)
     }
     
     // MARK: - Conversation Handling
@@ -109,9 +105,14 @@ extension MessagesViewController {
     private func configureView() {
         
         let viewController = UIHostingController(
-            rootView: MessagesView(
-                didCreateKey: didCreateKey
-            )
+            rootView: NavigationView {
+                MessagesView(
+                    shareKey: shareKey,
+                    didAppear: { [unowned self] in
+                        self.requestPresentationStyle($0 ? .compact : .expanded)
+                    }
+                )
+            }
             .environmentObject(Store.shared)
         )
         
@@ -132,6 +133,7 @@ extension MessagesViewController {
     
     func open(invitation: NewKey.Invitation) {
         assert(Thread.isMainThread)
+        
         let viewController = UIHostingController(
             rootView: NewKeyInvitationView(invitation: invitation)
                 .environmentObject(Store.shared)
@@ -140,7 +142,7 @@ extension MessagesViewController {
         self.showDetailViewController(viewController, sender: self)
     }
     
-    private func didCreateKey(url: URL, invitation: NewKey.Invitation) {
+    private func shareKey(url: URL, invitation: NewKey.Invitation) {
         self.requestPresentationStyle(.compact)
         self.navigationController?.popToRootViewController(animated: true)
         Task {
@@ -206,25 +208,5 @@ private extension MessagesViewController {
             childView.topAnchor.constraint(equalTo: view.topAnchor),
             childView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
-    }
-}
-
-// MARK: - Extensions
-
-extension MSMessagesAppPresentationStyle {
-    
-    var debugDescription: String {
-        
-        switch self {
-        case .compact:
-            return "compact"
-        case .expanded:
-            return "expanded"
-        case .transcript:
-            return "transcript"
-        @unknown default:
-            assertionFailure("Unknown state \(rawValue)")
-            return "Style \(rawValue)"
-        }
     }
 }

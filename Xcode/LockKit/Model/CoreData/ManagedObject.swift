@@ -38,7 +38,7 @@ internal extension NSManagedObjectContext {
                 #if DEBUG
                 print(error)
                 #endif
-                assertionFailure("Core Data error")
+                //assertionFailure("Core Data error")
                 return
             }
         }
@@ -59,7 +59,7 @@ internal extension NSManagedObjectContext {
                 #if DEBUG
                 print(error)
                 #endif
-                assertionFailure("Core Data error")
+                //assertionFailure("Core Data error")
                 return
             }
         }
