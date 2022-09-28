@@ -24,12 +24,13 @@ public struct LockInformation: Equatable, Hashable, Codable, Identifiable {
     /// Supported lock actions
     public let unlockActions: Set<UnlockAction>
     
-    public init(id: UUID,
-                buildVersion: LockBuildVersion = .current,
-                version: LockVersion = .current,
-                status: LockStatus,
-                unlockActions: Set<UnlockAction> = [.default]) {
-        
+    public init(
+        id: UUID,
+        buildVersion: LockBuildVersion = .current,
+        version: LockVersion = .current,
+        status: LockStatus,
+        unlockActions: Set<UnlockAction> = [.default]
+    ) {
         self.id = id
         self.buildVersion = buildVersion
         self.version = version
