@@ -43,7 +43,9 @@ public final class Store: ObservableObject {
     
     internal lazy var keychain = Keychain(service: .lock, accessGroup: .lock)
     
+    #if canImport(CoreSpotlight)
     public lazy var spotlight: SpotlightController = .shared
+    #endif
     
     internal lazy var fileManager: FileManager.Lock = .shared
     
@@ -186,8 +188,10 @@ public extension Store {
     private func lockCacheChanged() async {
         // update CoreData
         await updateCoreData()
+        #if canImport(CoreSpotlight)
         // update Spotlight
         await updateSpotlight()
+        #endif
         // update CloudKit
         do { try await syncCloud() }
         catch { log("⚠️ Unable to upload locks to iCloud. \(error)") }
@@ -228,6 +232,7 @@ public extension Store {
 
 // MARK: - Spotlight
 
+#if canImport(CoreSpotlight)
 private extension Store {
     
     func updateSpotlight() async {
@@ -237,6 +242,7 @@ private extension Store {
         catch { log("⚠️ Unable to update Spotlight: \(error.localizedDescription)") }
     }
 }
+#endif
 
 // MARK: - CoreData
 

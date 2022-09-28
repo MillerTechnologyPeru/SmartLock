@@ -90,6 +90,13 @@ private extension FetchKeysIntent {
     }
     
     func view(for key: Key) -> some View {
+        #if os(watchOS)
+        LockRowView(
+            image: .image(Image(permissionType: key.permission.type)),
+            title: key.name,
+            subtitle: key.permission.localizedText
+        )
+        #else
         LockRowView(
             image: .image(Image(permissionType: key.permission.type)),
             title: key.name,
@@ -99,9 +106,17 @@ private extension FetchKeysIntent {
                 key.created.formatted(date: .omitted, time: .shortened)
             )
         )
+        #endif
     }
     
     func view(for key: NewKey) -> some View {
+        #if os(watchOS)
+        LockRowView(
+            image: .image(Image(permissionType: key.permission.type)),
+            title: key.name,
+            subtitle: key.permission.localizedText + "\n" + "Expires " + FetchKeysIntent.relativeDateTimeFormatter.localizedString(for: key.expiration, relativeTo: Date())
+        )
+        #else
         LockRowView(
             image: .image(Image(permissionType: key.permission.type)),
             title: key.name,
@@ -111,5 +126,6 @@ private extension FetchKeysIntent {
                 key.created.formatted(date: .omitted, time: .shortened)
             )
         )
+        #endif
     }
 }

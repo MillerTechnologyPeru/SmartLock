@@ -33,7 +33,7 @@ public final class AssetExtractor {
         let url = cachesDirectory.appendingPathComponent(fileName)
         if fileManager.fileExists(atPath: url.path) == false {
             #if canImport(UIKit)
-            guard let image = UIImage(named: imageName, in: bundle, compatibleWith: nil),
+            guard let image = UIImage(named: imageName, in: bundle, with: nil),
                   let imageData = image.pngData()
                 else { return nil }
             #elseif canImport(AppKit)

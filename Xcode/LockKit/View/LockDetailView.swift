@@ -71,23 +71,6 @@ public struct LockDetailView: View {
                         }
                     }
                     #endif
-                    
-                    ToolbarItem(placement: .primaryAction) {
-                        Button(action: {
-                            
-                        }) {
-                            Image(systemSymbol: .pencil)
-                        }
-                    }
-                    
-                    ToolbarItem(placement: .primaryAction) {
-                        Button(action: {
-                            
-                        }) {
-                            Image(systemSymbol: .trash)
-                        }
-                    }
-                    
                     // create new key
                     ToolbarItem(placement: .primaryAction) {
                         if cache.key.permission.isAdministrator {
@@ -209,6 +192,7 @@ private extension LockDetailView {
             guard await store.central.state == .poweredOn else {
                 return
             }
+            #if os(iOS) || os(macOS)
             // FaceID
             let authentication = LAContext()
             let policy: LAPolicy = .deviceOwnerAuthenticationWithBiometrics
@@ -223,6 +207,7 @@ private extension LockDetailView {
                 self.error = error
                 return
             }
+            #endif
             // cancel all operation
             if store.isScanning {
                 store.stopScanning()
@@ -271,42 +256,48 @@ extension LockDetailView {
             return formatter
         }()
         
-        private var titleWidth: CGFloat {
+        private var buttonSize: CGFloat {
+            #if os(watchOS)
+            50
+            #else
+            150
+            #endif
+        }
+        
+        private var spacing: CGFloat {
+            #if os(watchOS)
+            8
+            #else
+            20
+            #endif
+        }
+        
+        var titleWidth: CGFloat {
             100
         }
         
         public var body: some View {
             ScrollView {
-                VStack(alignment: .leading, spacing: 20) {
+                VStack(alignment: .leading, spacing: spacing) {
                     HStack {
                         Spacer()
                         // unlock button
                         Button(action: unlock, label: {
                             PermissionIconView(permission: cache.key.permission.type)
-                                .frame(width: 150, height: 150, alignment: .center)
+                                .frame(width: buttonSize, height: buttonSize, alignment: .center)
                         })
                         .buttonStyle(.plain)
                         //.disabled(enableActions == false)
+                        #if !os(watchOS)
                         .padding(30)
+                        #endif
                         Spacer()
                     }
-                    VStack(alignment: .leading, spacing: 20) {
+                    VStack(alignment: .leading, spacing: spacing) {
                         // info
                         if showID {
-                            HStack {
-                                Text("Lock")
-                                    .frame(width: titleWidth, height: nil, alignment: .leading)
-                                    .font(.body)
-                                    .foregroundColor(.gray)
-                                Text(verbatim: id.description)
-                            }
-                            HStack {
-                                Text("Key")
-                                    .frame(width: titleWidth, height: nil, alignment: .leading)
-                                    .font(.body)
-                                    .foregroundColor(.gray)
-                                Text(verbatim: cache.key.id.description)
-                            }
+                            DetailRowView(title: "Lock", value: id.description)
+                            DetailRowView(title: "Key", value: cache.key.id.description)
                         }
                         HStack {
                             Text("Type")
@@ -386,6 +377,7 @@ extension LockDetailView {
         
         var body: some View {
             VStack {
+                Text("Lock")
                 Text(verbatim: id.description)
             }
         }

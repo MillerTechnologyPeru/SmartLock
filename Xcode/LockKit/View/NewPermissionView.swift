@@ -195,6 +195,8 @@ private extension NewPermissionView.StateView {
                         )
                     })
                     .buttonStyle(.plain)
+                    #elseif os(watchOS)
+                    Text(verbatim: self.permission.localizedText)
                     #else
                     NavigationLink(destination: {
                         PermissionScheduleView(

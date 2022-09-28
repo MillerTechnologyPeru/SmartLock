@@ -12,6 +12,9 @@ import CoreLock
 import SFSafeSymbols
 
 /// Permission Schedule View
+@available(iOS 13.0, macOS 10.15, *)
+@available(tvOS, unavailable)
+@available(watchOS, unavailable)
 public struct PermissionScheduleView: View {
     
     // MARK: - Properties
@@ -228,6 +231,9 @@ public struct PermissionScheduleView: View {
     }
 }
 
+@available(iOS 13.0, macOS 10.15, *)
+@available(tvOS, unavailable)
+@available(watchOS, unavailable)
 public extension PermissionScheduleView {
     
     struct Modal: View {
@@ -304,6 +310,9 @@ public struct SectionBottom: View {
     }
 }
  
+@available(iOS 13.0, macOS 10.15, *)
+@available(tvOS, unavailable)
+@available(watchOS, unavailable)
 extension PermissionScheduleView {
     
     #if os(iOS)
@@ -313,7 +322,7 @@ extension PermissionScheduleView {
     #endif
 }
 
-#if DEBUG
+#if os(iOS) && DEBUG
 struct DayViewPreview: PreviewProvider {
     static var previews: some View {
         Group {

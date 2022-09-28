@@ -94,6 +94,7 @@ extension KeyDetailView {
                                 .font(.body)
                                 .foregroundColor(.gray)
                             if let schedule = key.permission.schedule {
+                                #if os(iOS) || os(macOS)
                                 AppNavigationLink(id: .keySchedule(schedule), label: {
                                     HStack {
                                         Text(verbatim: key.permission.localizedText)
@@ -101,6 +102,10 @@ extension KeyDetailView {
                                         Image(systemName: "chevron.right")
                                     }
                                 })
+                                #else
+                                Text(verbatim: key.permission.localizedText)
+                                    .foregroundColor(.primary)
+                                #endif
                             } else {
                                 Text(verbatim: key.permission.localizedText)
                                     .foregroundColor(.primary)

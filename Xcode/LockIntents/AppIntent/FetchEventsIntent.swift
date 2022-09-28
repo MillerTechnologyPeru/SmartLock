@@ -136,6 +136,13 @@ private extension FetchEventsIntent {
             displayLockName: true,
             in: managedObjectContext
         )
+        #if os(watchOS)
+        return LockRowView(
+            image: .emoji(eventType.symbol),
+            title: action,
+            subtitle: keyName + "\n" + (managedObject.date?.formatted(date: .abbreviated, time: .shortened) ?? "")
+        )
+        #else
         return LockRowView(
             image: .emoji(eventType.symbol),
             title: action,
@@ -145,5 +152,6 @@ private extension FetchEventsIntent {
                 managedObject.date?.formatted(date: .omitted, time: .shortened) ?? ""
             )
         )
+        #endif
     }
 }

@@ -172,6 +172,13 @@ private extension EventsView {
             displayLockName: displayLockName,
             in: managedObjectContext
         )
+        #if os(watchOS)
+        return LockRowView(
+            image: .emoji(eventType.symbol),
+            title: action,
+            subtitle: keyName + "\n" + (managedObject.date?.formatted(date: .abbreviated, time: .shortened) ?? "")
+        )
+        #else
         return LockRowView(
             image: .emoji(eventType.symbol),
             title: action,
@@ -181,6 +188,7 @@ private extension EventsView {
                 managedObject.date.flatMap { Self.timeFormatter.string(from: $0) } ?? ""
             )
         )
+        #endif
     }
 }
 
@@ -215,15 +223,9 @@ struct EventsView_Previews: PreviewProvider {
         }
         
         var body: some View {
-            #if os(iOS)
             NavigationView {
                 EventsView(lock: nil, predicate: predicate)
             }
-            #else
-            NavigationStack {
-                EventsView(lock: nil, predicate: predicate)
-            }
-            #endif
         }
     }
 }

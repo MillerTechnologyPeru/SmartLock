@@ -16,7 +16,9 @@ public struct LockRowView: View {
     
     public let subtitle: String?
     
+    #if !os(watchOS)
     public let trailing: (String, String)?
+    #endif
     
     public var body: some View {
         HStack(alignment: .center, spacing: 3) {
@@ -36,7 +38,7 @@ public struct LockRowView: View {
                     }
                 }
             }
-            //
+            #if !os(watchOS)
             if let trailing = self.trailing {
                 Spacer(minLength: 1)
                 VStack(alignment: .trailing, spacing: 8) {
@@ -48,10 +50,12 @@ public struct LockRowView: View {
                         .foregroundColor(.gray)
                 }
             }
+            #endif
         }
         .padding(8)
     }
     
+    #if !os(watchOS)
     public init(
         image: Image,
         title: String,
@@ -63,6 +67,17 @@ public struct LockRowView: View {
         self.subtitle = subtitle
         self.trailing = trailing
     }
+    #else
+    public init(
+        image: Image,
+        title: String,
+        subtitle: String? = nil
+    ) {
+        self.image = image
+        self.title = title
+        self.subtitle = subtitle
+    }
+    #endif
 }
 
 public extension LockRowView {
@@ -129,6 +144,7 @@ extension LockRowView {
 
 // MARK: - Preview
 
+#if DEBUG
 struct LockRowView_Previews: PreviewProvider {
     static var previews: some View {
         List {
@@ -157,16 +173,27 @@ struct LockRowView_Previews: PreviewProvider {
                 subtitle: "Scheduled"
             )
             LockRowView(
+                image: .symbol("bonjour"),
+                title: "Bonjour"
+            )
+            .symbolRenderingMode(.multicolor)
+            
+            #if os(watchOS)
+            LockRowView(
+                image: .emoji("🔓"),
+                title: "Unlock",
+                subtitle: "By Alsey Coleman Miller"
+            )
+            #else
+            LockRowView(
                 image: .emoji("🔓"),
                 title: "Unlock",
                 subtitle: "By Alsey Coleman Miller",
                 trailing: ("Today", "9:00AM")
             )
-            LockRowView(
-                image: .symbol("bonjour"),
-                title: "Bonjour"
-            )
-            .symbolRenderingMode(.multicolor)
+            #endif
+            
         }
     }
 }
+#endif

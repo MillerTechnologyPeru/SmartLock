@@ -13,7 +13,7 @@ public extension UIImage {
     
     @available(iOS 8.0, watchOS 6.0, *)
     convenience init?(lockKit name: String) {
-        self.init(named: name, in: .lockKit, compatibleWith: nil)
+        self.init(named: name, in: .lockKit, with: nil)
     }
 }
 #endif

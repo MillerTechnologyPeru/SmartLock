@@ -5,11 +5,11 @@
 //  Created by Alsey Coleman Miller on 9/18/22.
 //
 
-#if canImport(UIKit)
+#if os(iOS) || os(tvOS)
 import Foundation
+import UIKit
 import SwiftUI
 import CoreLock
-import UIKit
 
 extension PermissionIconView: UIViewRepresentable {
     

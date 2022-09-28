@@ -18,7 +18,7 @@ public struct AppNavigationLink <Label: View> : View {
     
     public var body: some View {
         #if os(macOS)
-        if #available(macOS 13, iOS 16, tvOS 16, *) {
+        if #available(macOS 13, iOS 16, tvOS 16, watchOS 9, *) {
             navigationStackLink
         } else {
             navigationViewLink
@@ -44,7 +44,7 @@ private extension AppNavigationLink {
         })
     }
     
-    @available(macOS 13, iOS 16, tvOS 16, *)
+    @available(macOS 13, iOS 16, tvOS 16, watchOS 9, *)
     var navigationStackLink: some View {
         NavigationLink(value: id, label: { label })
     }
@@ -60,7 +60,9 @@ public enum AppNavigationLinkID: Hashable {
     case permissions(UUID)
     case key(UUID, KeyDetailView.Value)
     case newKeyInvitation(NewKey.Invitation)
+    #if os(iOS) || os(macOS)
     case keySchedule(Permission.Schedule) // view only
+    #endif
 }
 
 public enum AppNavigationLinkType: String {
@@ -71,7 +73,9 @@ public enum AppNavigationLinkType: String {
     case permissions
     case key
     case newKeyInvitation
+    #if os(iOS) || os(macOS)
     case keySchedule
+    #endif
 }
 
 public extension AppNavigationLinkID {
@@ -88,8 +92,10 @@ public extension AppNavigationLinkID {
             return .permissions
         case .key:
             return .key
+        #if os(iOS) || os(macOS)
         case .keySchedule:
             return .keySchedule
+        #endif
         case .newKeyInvitation:
             return .newKeyInvitation
         }
@@ -126,10 +132,12 @@ public struct AppNavigationDestinationView: View, Identifiable {
             AnyView(
                 KeyDetailView(key: key, lock: lock)
             )
+        #if os(iOS) || os(macOS)
         case let .keySchedule(schedule):
             AnyView(
                 PermissionScheduleView(schedule: schedule)
             )
+        #endif
         case let .newKeyInvitation(invitation):
             AnyView(
                 NewKeyInvitationView(invitation: invitation)

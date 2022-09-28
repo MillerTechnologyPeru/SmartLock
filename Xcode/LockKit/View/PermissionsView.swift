@@ -261,6 +261,15 @@ internal extension PermissionsView {
 private extension PermissionsView.StateView {
     
     func row(for item: Key) -> some View {
+        #if os(watchOS)
+        AppNavigationLink(id: .key(lock, .key(item)), label: {
+            LockRowView(
+                image: .permission(item.permission.type),
+                title: item.name,
+                subtitle: item.permission.localizedText
+            )
+        })
+        #else
         AppNavigationLink(id: .key(lock, .key(item)), label: {
             LockRowView(
                 image: .permission(item.permission.type),
@@ -272,6 +281,7 @@ private extension PermissionsView.StateView {
                 )
             )
         })
+        #endif
     }
     
     func row(for item: NewKey, invitationURL: URL?) -> some View {
@@ -280,7 +290,7 @@ private extension PermissionsView.StateView {
                 row(for: item, showDate: invitationURL == nil)
                 if let url = invitationURL {
                     Spacer()
-                    if #available(macOS 13, iOS 16, *) {
+                    if #available(macOS 13, iOS 16, tvOS 16, watchOS 9, *) {
                         AnyView(
                             ShareLink(
                                 item: url,
@@ -306,6 +316,13 @@ private extension PermissionsView.StateView {
     }
     
     func row(for item: NewKey, showDate: Bool) -> some View {
+        #if os(watchOS)
+        LockRowView(
+            image: .permission(item.permission.type),
+            title: item.name,
+            subtitle: item.permission.localizedText + "\n" + "Expires " + PermissionsView.relativeDateTimeFormatter.localizedString(for: item.expiration, relativeTo: Date())
+        )
+        #else
         LockRowView(
             image: .permission(item.permission.type),
             title: item.name,
@@ -315,6 +332,7 @@ private extension PermissionsView.StateView {
                 PermissionsView.timeFormatter.string(from: item.created)
             ) : nil
         )
+        #endif
     }
     
     var shareImage: some View {

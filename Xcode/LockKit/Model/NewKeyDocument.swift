@@ -48,7 +48,7 @@ public extension NewKey.Invitation {
     }
 }
 
-#if canImport(UIKit)
+#if os(iOS)
 import UIKit
 
 public extension UIDocument {

@@ -87,6 +87,9 @@
 		6E4CB62128D7907200116573 /* PermissionIconViewUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E4CB62028D7907200116573 /* PermissionIconViewUIView.swift */; };
 		6E4CB62328D7907E00116573 /* PermissionIconViewNSView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E4CB62228D7907E00116573 /* PermissionIconViewNSView.swift */; };
 		6E4CB62528D792BF00116573 /* InfoPlist.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E4CB62428D792BF00116573 /* InfoPlist.swift */; };
+		6E5109F728E4D6F200F9A9A2 /* KeysView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E5109F628E4D6F200F9A9A2 /* KeysView.swift */; };
+		6E5109F928E4DEE500F9A9A2 /* PermissionIconWatchKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E5109F828E4DEE500F9A9A2 /* PermissionIconWatchKit.swift */; };
+		6E5109FB28E4E06B00F9A9A2 /* DetailRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E5109FA28E4E06B00F9A9A2 /* DetailRowView.swift */; };
 		6E5D51DF28E20C6D008FFB4D /* QuickLook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6E5D51C128E185DB008FFB4D /* QuickLook.framework */; };
 		6E5D51E228E20C6D008FFB4D /* PreviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E5D51E128E20C6D008FFB4D /* PreviewViewController.swift */; };
 		6E5D51E728E20C6D008FFB4D /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6E5D51E528E20C6D008FFB4D /* MainInterface.storyboard */; };
@@ -156,6 +159,28 @@
 		6EA776A328D707FE00018FA3 /* LockKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6EA7769D28D707FE00018FA3 /* LockKit.framework */; };
 		6EA776A428D707FE00018FA3 /* LockKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 6EA7769D28D707FE00018FA3 /* LockKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		6EA7F90A28E4B05900BF02FE /* MessagesHostingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EA7F90928E4B05900BF02FE /* MessagesHostingViewController.swift */; };
+		6EA7F91228E4B5B600BF02FE /* LockWatchApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EA7F91128E4B5B600BF02FE /* LockWatchApp.swift */; };
+		6EA7F91428E4B5B600BF02FE /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EA7F91328E4B5B600BF02FE /* ContentView.swift */; };
+		6EA7F91628E4B5B700BF02FE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6EA7F91528E4B5B700BF02FE /* Assets.xcassets */; };
+		6EA7F91928E4B5B700BF02FE /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6EA7F91828E4B5B700BF02FE /* Preview Assets.xcassets */; };
+		6EA7F91D28E4B7EB00BF02FE /* LockKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6EA7769D28D707FE00018FA3 /* LockKit.framework */; };
+		6EA7F91E28E4B7EB00BF02FE /* LockKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 6EA7769D28D707FE00018FA3 /* LockKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		6EA7F92328E4B97B00BF02FE /* LockEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E8BBFFB28DD438500F03735 /* LockEntity.swift */; };
+		6EA7F92428E4B97B00BF02FE /* KeyEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E84E52528DDB0F2008CAE85 /* KeyEntity.swift */; };
+		6EA7F92528E4B97B00BF02FE /* EventTypeAppEnum.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E10C90328DFD18D00703691 /* EventTypeAppEnum.swift */; };
+		6EA7F92628E4B97B00BF02FE /* PermissionAppEnum.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E84E54228DE878D008CAE85 /* PermissionAppEnum.swift */; };
+		6EA7F92728E4B97B00BF02FE /* LockQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E8BBFFD28DD491100F03735 /* LockQuery.swift */; };
+		6EA7F92828E4B97B00BF02FE /* NewKeyIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E10C90B28E0518F00703691 /* NewKeyIntent.swift */; };
+		6EA7F92928E4B97B00BF02FE /* LockStatusAppEnum.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E84E53E28DE86A1008CAE85 /* LockStatusAppEnum.swift */; };
+		6EA7F92A28E4B97B00BF02FE /* UnlockActionAppEnum.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E84E54028DE8728008CAE85 /* UnlockActionAppEnum.swift */; };
+		6EA7F92B28E4B97B00BF02FE /* ScanLocksIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E8BBFEC28DD301B00F03735 /* ScanLocksIntent.swift */; };
+		6EA7F92C28E4B97B00BF02FE /* FetchKeysIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E10C90928E03ED700703691 /* FetchKeysIntent.swift */; };
+		6EA7F92D28E4B97B00BF02FE /* KeyQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E84E52F28DDCF4F008CAE85 /* KeyQuery.swift */; };
+		6EA7F92E28E4B97B00BF02FE /* Shortcuts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E84E51F28DD9646008CAE85 /* Shortcuts.swift */; };
+		6EA7F92F28E4B97B00BF02FE /* UnlockIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E8BBFFF28DD492300F03735 /* UnlockIntent.swift */; };
+		6EA7F93028E4B97B00BF02FE /* LockEventEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E10C90128DFCFED00703691 /* LockEventEntity.swift */; };
+		6EA7F93128E4B97B00BF02FE /* LockEventQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E10C90528DFD26300703691 /* LockEventQuery.swift */; };
+		6EA7F93228E4B97B00BF02FE /* FetchEventsIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E84E54428DE89BC008CAE85 /* FetchEventsIntent.swift */; };
 		6EBD590F28E14A7F00CC3852 /* ScanResultsAsyncDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EBD590E28E14A7F00CC3852 /* ScanResultsAsyncDataSource.swift */; };
 		6ED248CC28D7A3BF00F78D07 /* ActivityIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6ED248CB28D7A3BF00F78D07 /* ActivityIndicatorView.swift */; };
 /* End PBXBuildFile section */
@@ -231,6 +256,13 @@
 			remoteGlobalIDString = 6EA7769C28D707FE00018FA3;
 			remoteInfo = LockKit;
 		};
+		6EA7F91F28E4B7EB00BF02FE /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6EA7767928D7061600018FA3 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 6EA7769C28D707FE00018FA3;
+			remoteInfo = LockKit;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -255,6 +287,17 @@
 			dstSubfolderSpec = 10;
 			files = (
 				6EA776A428D707FE00018FA3 /* LockKit.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6EA7F92128E4B7EB00BF02FE /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				6EA7F91E28E4B7EB00BF02FE /* LockKit.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -340,6 +383,9 @@
 		6E4CB62028D7907200116573 /* PermissionIconViewUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionIconViewUIView.swift; sourceTree = "<group>"; };
 		6E4CB62228D7907E00116573 /* PermissionIconViewNSView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionIconViewNSView.swift; sourceTree = "<group>"; };
 		6E4CB62428D792BF00116573 /* InfoPlist.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = InfoPlist.swift; path = ../../../iOS/SmartLock/InfoPlist.swift; sourceTree = "<group>"; };
+		6E5109F628E4D6F200F9A9A2 /* KeysView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeysView.swift; sourceTree = "<group>"; };
+		6E5109F828E4DEE500F9A9A2 /* PermissionIconWatchKit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = PermissionIconWatchKit.swift; path = LockWatch/PermissionIconWatchKit.swift; sourceTree = SOURCE_ROOT; };
+		6E5109FA28E4E06B00F9A9A2 /* DetailRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailRowView.swift; sourceTree = "<group>"; };
 		6E5D51C128E185DB008FFB4D /* QuickLook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuickLook.framework; path = System/Library/Frameworks/QuickLook.framework; sourceTree = SDKROOT; };
 		6E5D51DE28E20C6C008FFB4D /* LockQuickLookMobile.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = LockQuickLookMobile.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		6E5D51E128E20C6D008FFB4D /* PreviewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewViewController.swift; sourceTree = "<group>"; };
@@ -416,6 +462,13 @@
 		6EA7F8E128E4211700BF02FE /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
 		6EA7F8E328E4211700BF02FE /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
 		6EA7F90928E4B05900BF02FE /* MessagesHostingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessagesHostingViewController.swift; sourceTree = "<group>"; };
+		6EA7F90F28E4B5B500BF02FE /* LockWatch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LockWatch.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		6EA7F91128E4B5B600BF02FE /* LockWatchApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LockWatchApp.swift; sourceTree = "<group>"; };
+		6EA7F91328E4B5B600BF02FE /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		6EA7F91528E4B5B700BF02FE /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		6EA7F91828E4B5B700BF02FE /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		6EA7F92228E4B83D00BF02FE /* LockWatch.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = LockWatch.entitlements; sourceTree = "<group>"; };
+		6EA7F93328E4BA8200BF02FE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6EBD590E28E14A7F00CC3852 /* ScanResultsAsyncDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanResultsAsyncDataSource.swift; sourceTree = "<group>"; };
 		6ED248CB28D7A3BF00F78D07 /* ActivityIndicatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityIndicatorView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -493,6 +546,14 @@
 				6E3276BC28D708A000AF171B /* CoreLock in Frameworks */,
 				6E3276D728D70FA000AF171B /* DarwinGATT in Frameworks */,
 				6E21836A28D953D000A622B3 /* CloudKitCodable in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6EA7F90C28E4B5B500BF02FE /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6EA7F91D28E4B7EB00BF02FE /* LockKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -626,11 +687,13 @@
 		6E4CB60F28D7866600116573 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				6E5109F328E4BE3900F9A9A2 /* WatchKit */,
 				6E4CB61D28D7901D00116573 /* AppKit */,
 				6E4CB61C28D788B900116573 /* UIKit */,
 				6E21834728D90CB800A622B3 /* EventsView.swift */,
 				6E21832228D8D26300A622B3 /* LockDetailView.swift */,
 				6E3276E528D782B900AF171B /* LockRowView.swift */,
+				6E5109FA28E4E06B00F9A9A2 /* DetailRowView.swift */,
 				6E169A7728D9A34F008545EC /* NavigationLink.swift */,
 				6E4CB61928D788AA00116573 /* PermissionIconView.swift */,
 				6E169A7C28D9C097008545EC /* PermissionsView.swift */,
@@ -667,6 +730,14 @@
 				6E21832028D8501500A622B3 /* ProgressIndicatorView.swift */,
 			);
 			path = AppKit;
+			sourceTree = "<group>";
+		};
+		6E5109F328E4BE3900F9A9A2 /* WatchKit */ = {
+			isa = PBXGroup;
+			children = (
+				6E5109F828E4DEE500F9A9A2 /* PermissionIconWatchKit.swift */,
+			);
+			path = WatchKit;
 			sourceTree = "<group>";
 		};
 		6E5D51E028E20C6D008FFB4D /* LockQuickLook-iOS */ = {
@@ -807,6 +878,7 @@
 				6E5D51FC28E21538008FFB4D /* LockQuickLook-macOS */,
 				6E857E6A28E3566B00EC99D3 /* LockThumbnail */,
 				6E857EBD28E39C9F00EC99D3 /* LockMessage */,
+				6EA7F91028E4B5B600BF02FE /* LockWatch */,
 				6EA7768228D7061600018FA3 /* Products */,
 				6EA776A928D7082300018FA3 /* Frameworks */,
 			);
@@ -823,6 +895,7 @@
 				6E5D51F928E21537008FFB4D /* LockQuickLook.appex */,
 				6E857E6728E3566B00EC99D3 /* LockThumbnail.appex */,
 				6E857EBA28E39C9F00EC99D3 /* LockMessage.appex */,
+				6EA7F90F28E4B5B500BF02FE /* LockWatch.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -875,6 +948,28 @@
 				6EA7F8E328E4211700BF02FE /* SwiftUI.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		6EA7F91028E4B5B600BF02FE /* LockWatch */ = {
+			isa = PBXGroup;
+			children = (
+				6EA7F92228E4B83D00BF02FE /* LockWatch.entitlements */,
+				6EA7F91128E4B5B600BF02FE /* LockWatchApp.swift */,
+				6EA7F91328E4B5B600BF02FE /* ContentView.swift */,
+				6E5109F628E4D6F200F9A9A2 /* KeysView.swift */,
+				6EA7F93328E4BA8200BF02FE /* Info.plist */,
+				6EA7F91528E4B5B700BF02FE /* Assets.xcassets */,
+				6EA7F91728E4B5B700BF02FE /* Preview Content */,
+			);
+			path = LockWatch;
+			sourceTree = "<group>";
+		};
+		6EA7F91728E4B5B700BF02FE /* Preview Content */ = {
+			isa = PBXGroup;
+			children = (
+				6EA7F91828E4B5B700BF02FE /* Preview Assets.xcassets */,
+			);
+			path = "Preview Content";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -1050,6 +1145,25 @@
 			productReference = 6EA7769D28D707FE00018FA3 /* LockKit.framework */;
 			productType = "com.apple.product-type.framework";
 		};
+		6EA7F90E28E4B5B500BF02FE /* Watch App */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 6EA7F91A28E4B5B700BF02FE /* Build configuration list for PBXNativeTarget "Watch App" */;
+			buildPhases = (
+				6EA7F90B28E4B5B500BF02FE /* Sources */,
+				6EA7F90C28E4B5B500BF02FE /* Frameworks */,
+				6EA7F90D28E4B5B500BF02FE /* Resources */,
+				6EA7F92128E4B7EB00BF02FE /* Embed Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				6EA7F92028E4B7EB00BF02FE /* PBXTargetDependency */,
+			);
+			name = "Watch App";
+			productName = "LockWatch Watch App";
+			productReference = 6EA7F90F28E4B5B500BF02FE /* LockWatch.app */;
+			productType = "com.apple.product-type.application";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -1085,6 +1199,9 @@
 						CreatedOnToolsVersion = 14.0;
 						LastSwiftMigration = 1400;
 					};
+					6EA7F90E28E4B5B500BF02FE = {
+						CreatedOnToolsVersion = 14.1;
+					};
 				};
 			};
 			buildConfigurationList = 6EA7767C28D7061600018FA3 /* Build configuration list for PBXProject "SmartLock" */;
@@ -1109,6 +1226,7 @@
 			projectRoot = "";
 			targets = (
 				6EA7768028D7061600018FA3 /* SmartLock */,
+				6EA7F90E28E4B5B500BF02FE /* Watch App */,
 				6EA7769C28D707FE00018FA3 /* LockKit */,
 				6E3276C028D70A3700AF171B /* MatterLock */,
 				6E8BBFE728DD301B00F03735 /* LockIntents */,
@@ -1181,6 +1299,15 @@
 			buildActionMask = 2147483647;
 			files = (
 				6E84E53228DDDC11008CAE85 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6EA7F90D28E4B5B500BF02FE /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6EA7F91928E4B5B700BF02FE /* Preview Assets.xcassets in Resources */,
+				6EA7F91628E4B5B700BF02FE /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1328,6 +1455,7 @@
 				6E84E54D28DF4A98008CAE85 /* MockCentral.swift in Sources */,
 				6E84E53628DDE01F008CAE85 /* AssetExtractor.swift in Sources */,
 				6E10C90E28E0D97800703691 /* NewKeysAsyncFetchRequest.swift in Sources */,
+				6E5109FB28E4E06B00F9A9A2 /* DetailRowView.swift in Sources */,
 				6E21834028D8F3B500A622B3 /* RemoveKeyEventManagedObject.swift in Sources */,
 				6E21834A28D90F7A00A622B3 /* LocalAuthentication.swift in Sources */,
 				6E84E54F28DF4A98008CAE85 /* MockScanData.swift in Sources */,
@@ -1347,6 +1475,7 @@
 				6E21836728D9516B00A622B3 /* CloudNewKey.swift in Sources */,
 				6E6A97F328DC030000C689F6 /* NewKeyInvitationView.swift in Sources */,
 				6E21831528D80FF900A622B3 /* ApplicationData.swift in Sources */,
+				6E5109F928E4DEE500F9A9A2 /* PermissionIconWatchKit.swift in Sources */,
 				6E21833A28D8F3B500A622B3 /* LockManagedObject.swift in Sources */,
 				6E84E53828DDE08A008CAE85 /* UIImage.swift in Sources */,
 				6E21830328D7C47500A622B3 /* Appearance.swift in Sources */,
@@ -1359,6 +1488,32 @@
 				6E21833828D8F3B500A622B3 /* NewKeyManagedObject.swift in Sources */,
 				6E4CB61B28D788AA00116573 /* PermissionIconView.swift in Sources */,
 				6E4CB62128D7907200116573 /* PermissionIconViewUIView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6EA7F90B28E4B5B500BF02FE /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6EA7F92C28E4B97B00BF02FE /* FetchKeysIntent.swift in Sources */,
+				6EA7F92428E4B97B00BF02FE /* KeyEntity.swift in Sources */,
+				6EA7F92D28E4B97B00BF02FE /* KeyQuery.swift in Sources */,
+				6EA7F92E28E4B97B00BF02FE /* Shortcuts.swift in Sources */,
+				6EA7F92728E4B97B00BF02FE /* LockQuery.swift in Sources */,
+				6EA7F92828E4B97B00BF02FE /* NewKeyIntent.swift in Sources */,
+				6EA7F92B28E4B97B00BF02FE /* ScanLocksIntent.swift in Sources */,
+				6EA7F92928E4B97B00BF02FE /* LockStatusAppEnum.swift in Sources */,
+				6EA7F93128E4B97B00BF02FE /* LockEventQuery.swift in Sources */,
+				6EA7F93228E4B97B00BF02FE /* FetchEventsIntent.swift in Sources */,
+				6E5109F728E4D6F200F9A9A2 /* KeysView.swift in Sources */,
+				6EA7F93028E4B97B00BF02FE /* LockEventEntity.swift in Sources */,
+				6EA7F92A28E4B97B00BF02FE /* UnlockActionAppEnum.swift in Sources */,
+				6EA7F92328E4B97B00BF02FE /* LockEntity.swift in Sources */,
+				6EA7F91428E4B5B600BF02FE /* ContentView.swift in Sources */,
+				6EA7F92528E4B97B00BF02FE /* EventTypeAppEnum.swift in Sources */,
+				6EA7F92F28E4B97B00BF02FE /* UnlockIntent.swift in Sources */,
+				6EA7F91228E4B5B600BF02FE /* LockWatchApp.swift in Sources */,
+				6EA7F92628E4B97B00BF02FE /* PermissionAppEnum.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1419,6 +1574,11 @@
 			isa = PBXTargetDependency;
 			target = 6EA7769C28D707FE00018FA3 /* LockKit */;
 			targetProxy = 6EA776A128D707FE00018FA3 /* PBXContainerItemProxy */;
+		};
+		6EA7F92028E4B7EB00BF02FE /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 6EA7769C28D707FE00018FA3 /* LockKit */;
+			targetProxy = 6EA7F91F28E4B7EB00BF02FE /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -2075,10 +2235,12 @@
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SDKROOT = auto;
 				SKIP_INSTALL = YES;
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SUPPORTED_PLATFORMS = "appletvos appletvsimulator iphoneos iphonesimulator macosx watchos watchsimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = "1,2,3,4";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
 			};
@@ -2111,11 +2273,68 @@
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SDKROOT = auto;
 				SKIP_INSTALL = YES;
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SUPPORTED_PLATFORMS = "appletvos appletvsimulator iphoneos iphonesimulator macosx watchos watchsimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = "1,2,3,4";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		6EA7F91B28E4B5B700BF02FE /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = LockWatch/LockWatch.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_ASSET_PATHS = "\"LockWatch/Preview Content\"";
+				DEVELOPMENT_TEAM = 4W79SG34MW;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = LockWatch/Info.plist;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = .watchkitapp;
+				PRODUCT_NAME = LockWatch;
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				TARGETED_DEVICE_FAMILY = 4;
+			};
+			name = Debug;
+		};
+		6EA7F91C28E4B5B700BF02FE /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = LockWatch/LockWatch.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_ASSET_PATHS = "\"LockWatch/Preview Content\"";
+				DEVELOPMENT_TEAM = 4W79SG34MW;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = LockWatch/Info.plist;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = .watchkitapp;
+				PRODUCT_NAME = LockWatch;
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				TARGETED_DEVICE_FAMILY = 4;
+				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
 		};
@@ -2199,6 +2418,15 @@
 			buildConfigurations = (
 				6EA776A628D707FE00018FA3 /* Debug */,
 				6EA776A728D707FE00018FA3 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		6EA7F91A28E4B5B700BF02FE /* Build configuration list for PBXNativeTarget "Watch App" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6EA7F91B28E4B5B700BF02FE /* Debug */,
+				6EA7F91C28E4B5B700BF02FE /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
