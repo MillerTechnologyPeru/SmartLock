@@ -33,7 +33,8 @@ public final class PermissionIconView: UIView {
     }
     
     required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        super.init(coder: coder)
+        self.backgroundColor = .clear
     }
     
     public override func awakeFromNib() {
