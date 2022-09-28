@@ -78,23 +78,19 @@ private extension DetailRowView {
             }))
         }
         #else
-        switch value {
-        case let .text(value):
-            HStack {
+        HStack {
+            switch value {
+            case let .text(value):
                 titleView
                 Text(verbatim: value)
                     .foregroundColor(.primary)
-            }
-        case let .button(value, action):
-            HStack {
+            case let .button(value, action):
                 titleView
                 Button(action: action, label: {
                     Text(verbatim: value)
                         .foregroundColor(.primary)
                 })
-            }
-        case let .link(value, link):
-            HStack {
+            case let .link(value, link):
                 titleView
                 AppNavigationLink(id: link, label: {
                     HStack {
