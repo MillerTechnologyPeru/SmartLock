@@ -177,36 +177,3 @@ extension MessagesViewController {
         try await conversation.insert(message)
     }
 }
-
-private extension MessagesViewController {
-    
-    func loadChildViewController(_ viewController: UIViewController) {
-        assert(Thread.isMainThread)
-        
-        // remove previous
-        for childViewController in self.children {
-            childViewController.viewIfLoaded?.removeFromSuperview()
-            childViewController.removeFromParent()
-        }
-        
-        viewController.loadViewIfNeeded()
-        viewController.view.layoutIfNeeded()
-        
-        addChild(viewController)
-        view.addSubview(viewController.view)
-        viewController.didMove(toParent: self)
-        
-        guard let childView = viewController.view else {
-            assertionFailure()
-            return
-        }
-        
-        childView.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            childView.leftAnchor.constraint(equalTo: view.leftAnchor),
-            childView.rightAnchor.constraint(equalTo: view.rightAnchor),
-            childView.topAnchor.constraint(equalTo: view.topAnchor),
-            childView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
-        ])
-    }
-}
