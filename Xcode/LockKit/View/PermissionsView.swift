@@ -67,7 +67,7 @@ public struct PermissionsView: View {
     private var activityIndicator = false
     
     @State
-    private var reloadTask: TaskQueue.PendingTask?
+    private var reloadTask: Task<Void, Never>?
     
     @State
     private var showNewKeyModal = false
@@ -87,9 +87,8 @@ public struct PermissionsView: View {
             self.newKeys.nsPredicate = predicate
         }
         .onDisappear {
-            Task {
-                await self.reloadTask?.cancel()
-            }
+            self.reloadTask?.cancel()
+            self.reloadTask = nil
         }
         .toolbar {
             ToolbarItem(placement: .primaryAction) {
@@ -143,41 +142,40 @@ private extension PermissionsView {
     
     func reload() {
         activityIndicator = true
-        Task {
-            await reloadTask?.cancel()
-            reloadTask = await Task.bluetooth {
-                activityIndicator = true
-                defer { Task { await MainActor.run { activityIndicator = false } } }
-                guard await store.central.state == .poweredOn else {
+        reloadTask?.cancel()
+        reloadTask = Task {
+            activityIndicator = true
+            defer { Task { await MainActor.run { activityIndicator = false } } }
+            guard await store.central.state == .poweredOn else {
+                return
+            }
+            do {
+                if store.isScanning {
+                    store.stopScanning()
+                }
+                guard let peripheral = try await store.device(for: id) else {
+                    // unable to find device
                     return
                 }
-                do {
-                    if store.isScanning {
-                        store.stopScanning()
-                    }
-                    guard let peripheral = try await store.device(for: id) else {
-                        // unable to find device
-                        return
-                    }
-                    try await store.listKeys(for: peripheral)
-                } catch {
-                    log("⚠️ Error loading keys for \(id). \(error)")
-                }
+                try await store.listKeys(for: peripheral)
+            } catch {
+                log("⚠️ Error loading keys for \(id). \(error)")
             }
-            Task {
-                do {
-                    let urls = try fileStore.fetchDocuments()
-                    for url in urls {
-                        guard fileStore.cache[url] == nil,
-                              let invitation = try? await fileStore.load(url) else {
-                            continue
-                        }
-                        log("Loaded key \(invitation.key.name) \(invitation.lock) at \(url.lastPathComponent)")
+        }
+        
+        Task {
+            do {
+                let urls = try fileStore.fetchDocuments()
+                for url in urls {
+                    guard fileStore.cache[url] == nil,
+                          let invitation = try? await fileStore.load(url) else {
+                        continue
                     }
-                } catch {
-                    log("⚠️ Error loading pending keys invitations. \(error)")
-                    assertionFailure()
+                    log("Loaded key \(invitation.key.name) \(invitation.lock) at \(url.lastPathComponent)")
                 }
+            } catch {
+                log("⚠️ Error loading pending keys invitations. \(error)")
+                assertionFailure()
             }
         }
     }

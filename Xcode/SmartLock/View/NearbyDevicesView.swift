@@ -14,7 +14,7 @@ struct NearbyDevicesView: View {
     var store: Store
     
     @State
-    private var scanTask: TaskQueue.PendingTask?
+    private var scanTask: Task<Void, Never>?
     
     @State
     private var peripherals = [NativePeripheral]()
@@ -39,7 +39,8 @@ struct NearbyDevicesView: View {
             }
         )
         .onAppear {
-            Task {
+            scanTask?.cancel()
+            scanTask = Task {
                 store.beaconController.requestAlwaysAuthorization()
                 // start scanning after delay
                 try? await store.central.wait(for: .poweredOn)
@@ -49,6 +50,8 @@ struct NearbyDevicesView: View {
             }
         }
         .onDisappear {
+            scanTask?.cancel()
+            scanTask = nil
             if store.isScanning {
                 store.stopScanning()
             }
@@ -62,12 +65,16 @@ private extension NearbyDevicesView {
         if store.isScanning {
             store.stopScanning()
         } else {
-            Task {
+            scanTask?.cancel()
+            scanTask = Task {
                 guard await store.central.state == .poweredOn,
                       store.isScanning == false else {
                     return
                 }
-                try await store.scan()
+                do {
+                    try await store.scan()
+                }
+                catch { log("⚠️ Unable to scan. \(error.localizedDescription)") }
             }
         }
     }

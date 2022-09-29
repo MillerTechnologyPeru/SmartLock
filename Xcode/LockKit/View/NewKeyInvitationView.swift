@@ -19,7 +19,7 @@ public struct NewKeyInvitationView: View {
     private var activityIndicator = false
     
     @State
-    private var pendingTask: TaskQueue.PendingTask?
+    private var pendingTask: Task<Void, Never>?
     
     public init(invitation: NewKey.Invitation) {
         self.invitation = invitation
@@ -30,6 +30,10 @@ public struct NewKeyInvitationView: View {
             key: .newKey(invitation.key),
             lock: invitation.lock
         )
+        .onDisappear {
+            pendingTask?.cancel()
+            pendingTask = nil
+        }
         .toolbar {
             ToolbarItem(placement: .primaryAction) {
                 if store.applicationData.locks[invitation.lock] == nil {
@@ -58,19 +62,17 @@ internal extension NewKeyInvitationView {
     
     func createNewKey(_ name: String) {
         activityIndicator = true
-        Task {
-            await pendingTask?.cancel()
-            await pendingTask = Task.bluetooth {
-                activityIndicator = true
-                defer { Task { await MainActor.run { activityIndicator = false } } }
-                guard await store.central.state == .poweredOn else {
-                    return
-                }
-                do {
-                    try await store.confirm(invitation, name: name)
-                } catch {
-                    log("⚠️ Error creating new key for \(invitation.lock). \(error)")
-                }
+        pendingTask?.cancel()
+        pendingTask = Task {
+            activityIndicator = true
+            defer { Task { await MainActor.run { activityIndicator = false } } }
+            guard await store.central.state == .poweredOn else {
+                return
+            }
+            do {
+                try await store.confirm(invitation, name: name)
+            } catch {
+                log("⚠️ Error creating new key for \(invitation.lock). \(error)")
             }
         }
     }

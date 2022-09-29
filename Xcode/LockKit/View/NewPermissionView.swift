@@ -66,29 +66,27 @@ private extension NewPermissionView {
         }
         #else
         Task {
-            await Task.bluetooth {
-                do {
-                    guard await store.central.state == .poweredOn else {
-                        throw LockError.bluetoothUnavailable
-                    }
-                    if store.isScanning {
-                        store.stopScanning()
-                    }
-                    guard let peripheral = try await store.device(for: id) else {
-                        throw LockError.notInRange(lock: id)
-                    }
-                    let invitation = try await store.newKey(
-                        for: peripheral,
-                        permission: permission,
-                        name: name
-                    )
-                    let url = try await store.newKeyInvitations.save(invitation)
-                    state = .editing
-                    completion(url, invitation)
-                } catch {
-                    state = .error(error.localizedDescription)
-                    log("⚠️ Error creating new key for \(id). \(error)")
+            do {
+                guard await store.central.state == .poweredOn else {
+                    throw LockError.bluetoothUnavailable
                 }
+                if store.isScanning {
+                    store.stopScanning()
+                }
+                guard let peripheral = try await store.device(for: id) else {
+                    throw LockError.notInRange(lock: id)
+                }
+                let invitation = try await store.newKey(
+                    for: peripheral,
+                    permission: permission,
+                    name: name
+                )
+                let url = try await store.newKeyInvitations.save(invitation)
+                state = .editing
+                completion(url, invitation)
+            } catch {
+                state = .error(error.localizedDescription)
+                log("⚠️ Error creating new key for \(id). \(error)")
             }
         }
         #endif
