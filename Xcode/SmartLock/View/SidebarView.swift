@@ -69,7 +69,7 @@ struct SidebarView: View {
             }
             Task {
                 try await store.central.wait(for: .poweredOn)
-                store.scan(duration: store.preferences.scanDuration)
+                try await store.scan()
             }
         }
     }
@@ -110,7 +110,7 @@ private extension SidebarView {
         if store.isScanning {
             store.stopScanning()
         } else {
-            store.scanDefault()
+            Task { try await store.scan() }
         }
     }
     
@@ -120,7 +120,7 @@ private extension SidebarView {
         if newValue, !store.isScanning {
             Task {
                 try? await Task.sleep(nanoseconds: 1_000_000_000)
-                store.scanDefault()
+                Task { try await store.scan() }
             }
         } else if !newValue, store.isScanning {
             store.stopScanning()

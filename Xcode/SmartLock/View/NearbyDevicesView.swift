@@ -62,15 +62,11 @@ private extension NearbyDevicesView {
             store.stopScanning()
         } else {
             Task {
-                await scanTask?.cancel()
-                await TaskQueue.bluetooth.cancelAll() // stop all pending operations to scan
-                scanTask = await Task.bluetooth {
-                    guard await store.central.state == .poweredOn,
-                          store.isScanning == false else {
-                        return
-                    }
-                    store.scanDefault()
+                guard await store.central.state == .poweredOn,
+                      store.isScanning == false else {
+                    return
                 }
+                try await store.scan()
             }
         }
     }

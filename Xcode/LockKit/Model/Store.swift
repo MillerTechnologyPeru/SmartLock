@@ -78,7 +78,7 @@ public final class Store: ObservableObject {
         loadPersistentStore()
         observeBluetoothState()
         Task {
-            //await lockCacheChanged()
+            await updateCaches()
             #if targetEnvironment(simulator)
             if await ((try? cloud.accountStatus()) ?? .couldNotDetermine) != .available {
                 insertMockData()
@@ -188,6 +188,7 @@ public extension Store {
 public extension Store {
     
     private func updateCaches() async {
+        // update CoreData
         await updateCoreData()
         #if canImport(CoreSpotlight) && os(iOS) || os(macOS)
         // update Spotlight
@@ -196,8 +197,7 @@ public extension Store {
     }
     
     private func lockCacheChanged() async {
-        
-        // update CoreData
+        // update CoreData and Spotlight index
         await updateCaches()
         // sync with iCloud
         await updateCloud()
@@ -311,81 +311,14 @@ public extension Store {
         return lockInformation.first(where: { $0.value.id == id })?.key
     }
     
-    @available(*, deprecated, message: "Scan for a specified duration instead")
-    func scanDefault() {
-        guard state == .poweredOn else {
-            return
-        }
-        Task {
-            let bluetoothState = await self.central.state
-            guard bluetoothState == .poweredOn else {
-                throw LockError.bluetoothUnavailable
-            }
-            self.isScanning = true
-            if let stream = scanStream, stream.isScanning {
-                return // already scanning
-            }
-            self.scanStream = nil
-            let filterDuplicates = true //preferences.filterDuplicates
-            self.peripherals.removeAll(keepingCapacity: true)
-            self.stopScanning()
-            self.isScanning = true
-            let stream = central.scan(
-                with: [LockService.uuid],
-                filterDuplicates: filterDuplicates
-            )
-            self.scanStream = stream
-            // process scanned devices
-            Task {
-                defer { Task { await MainActor.run { self.isScanning = false } } }
-                do {
-                    for try await scanData in stream {
-                        guard let serviceUUIDs = scanData.advertisementData.serviceUUIDs,
-                            serviceUUIDs.contains(LockService.uuid)
-                            else { continue }
-                        // cache found device
-                        try? await Task.sleep(timeInterval: 0.6)
-                        self.peripherals[scanData.peripheral] = scanData
-                    }
-                } catch {
-                    log("⚠️ Unable to scan. \(error)")
-                }
-            }
-            // stop scanning after 5 sec if need to read device info
-            Task {
-                let loading = {
-                    self.peripherals
-                        .keys
-                        .filter { !self.lockInformation.keys.contains($0) }
-                }
-                try? await Task.sleep(timeInterval: 3)
-                while self.isScanning, loading().isEmpty {
-                    try? await Task.sleep(timeInterval: 2)
-                }
-                // stop scanning and load info for unknown devices
-                self.stopScanning()
-                await Task.bluetooth {
-                    for peripheral in loading() {
-                        self.stopScanning()
-                        do {
-                            let _ = try await self.readInformation(for: peripheral)
-                        } catch {
-                            log("⚠️ Unable to load information for peripheral \(peripheral). \(error)")
-                        }
-                    }
-                }
-            }
-        }
-    }
-    
-    func scan(duration: TimeInterval) async throws {
+    func scan(duration: TimeInterval? = nil) async throws {
+        let duration = duration ?? preferences.scanDuration
         precondition(duration > 0.001)
         let bluetoothState = await central.state
         guard bluetoothState == .poweredOn else {
             throw LockError.bluetoothUnavailable
         }
-        self.scanStream = nil
-        let filterDuplicates = true //preferences.filterDuplicates
+        let filterDuplicates = preferences.filterDuplicates
         self.peripherals.removeAll(keepingCapacity: true)
         stopScanning()
         isScanning = true
@@ -426,13 +359,13 @@ public extension Store {
     
     func device(
         for id: UUID,
-        scanDuration duration: TimeInterval = 2.0
+        scanDuration duration: TimeInterval = 1.0
     ) async throws -> NativeCentral.Peripheral? {
         stopScanning()
         if let peripheral = self[peripheral: id] {
             return peripheral
         } else {
-            let filterDuplicates = true //preferences.filterDuplicates
+            let filterDuplicates = preferences.filterDuplicates
             let stream = central.scan(
                 with: [LockService.uuid],
                 filterDuplicates: filterDuplicates

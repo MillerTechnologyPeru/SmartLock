@@ -301,7 +301,7 @@ public extension Store {
         let defaultConflictResolve: (ApplicationData) -> Bool?
         #if os(iOS)
         // require user to confirm merging
-        defaultConflictResolve = nil
+        defaultConflictResolve = { _ in return nil }
         #else
         // merge by default
         defaultConflictResolve = { _ in return true }

@@ -64,6 +64,7 @@ private extension SetupLockView {
     #endif
     
     func setup(lock: UUID, using sharedSecret: KeyData, name: String) {
+        let name = name.isEmpty ? "My Lock" : name
         self.state = .loading(lock, name)
         Task {
             do {
@@ -172,6 +173,7 @@ internal extension SetupLockView {
                     confirm(name)
                 }
             }
+            .padding(30)
         }
     }
     

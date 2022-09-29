@@ -263,7 +263,7 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
         let scanTask = Task { () -> UIBackgroundFetchResult in
             do {
                 // scan for locks
-                try await Store.shared.scan(duration: 3.0)
+                try await Store.shared.scan(duration: 2.0)
                 // make sure each stored lock is visible
                 let locks = Store.shared.applicationData.locks
                     .lazy
