@@ -76,6 +76,37 @@ struct LockApp: App {
     init() {
         // print app info
         log("Launching SmartLock v\(Bundle.InfoPlist.shortVersion) (\(Bundle.InfoPlist.version))")
+        
+        Task {
+            try? await Task.sleep(timeInterval: 0.5)
+            await LockApp.didLaunch()
+        }
+    }
+}
+
+
+private extension App {
+    
+    static func didLaunch() async {
+        
+        // load store singleton
+        let _ = await Store.shared
+        let _ = NetworkMonitor.shared
+        
+        // CloudKit discoverability
+        do {
+            guard try await Store.shared.cloud.accountStatus() == .available else { return }
+            let status = try await Store.shared.cloud.requestPermissions()
+            log("☁️ CloudKit permisions \(status == .granted ? "granted" : "not granted")")
+        }
+        catch { log("⚠️ Could not request CloudKit permissions. \(error.localizedDescription)") }
+        
+        // CloudKit push notifications
+        do {
+            guard try await Store.shared.cloud.accountStatus() == .available else { return }
+            try await Store.shared.cloud.subcribeNewKeyShares()
+        }
+        catch { log("⚠️ Could subscribe to new shares. \(error)") }
     }
 }
 
@@ -99,16 +130,6 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
         #if DEBUG
         defer { log("App finished launching in \(String(format: "%.3f", Date().timeIntervalSince(appLaunch)))s") }
         #endif
-        
-        // load store singleton
-        let _ = Store.shared
-        
-        // queue post-app initialization loading
-        Task {
-            let _ = NetworkMonitor.shared
-            // subscribe to push notifications
-            //self.queueDidLaunchOperations()
-        }
         
         return true
     }

@@ -72,13 +72,31 @@ public struct LockDetailView: View {
                         }
                     }
                     #endif
-                    #if !os(watchOS)
+                    /*
+                    #if os(iOS) || os(macOS)
                     ToolbarItem(placement: .primaryAction) {
-                        Button(action: newPermission) {
-                            Image(systemSymbol: .ellipsisCircleFill)
-                        }
+                        Image(systemSymbol: .ellipsisCircleFill)
+                            .contextMenu {
+                                if cache.key.permission.isAdministrator {
+                                    Button(action: {
+                                        newPermission()
+                                    }, label: {
+                                        Label("Share Key", systemSymbol: .plus)
+                                    })
+                                }
+                                Button(action: {
+                                    
+                                }, label: {
+                                    Label("Rename", systemSymbol: .pencil)
+                                })
+                                Button(action: {
+                                    
+                                }, label: {
+                                    Label("Delete", systemSymbol: .delete)
+                                })
+                            }
                     }
-                    #endif
+                    #endif*/
                 }
             )
         } else if let information = self.information,

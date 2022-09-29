@@ -186,15 +186,16 @@ public extension Store {
 public extension Store {
     
     private func lockCacheChanged() async {
+        
         // update CoreData
         await updateCoreData()
+        
         #if canImport(CoreSpotlight)
         // update Spotlight
         await updateSpotlight()
         #endif
-        // update CloudKit
-        do { try await syncCloud() }
-        catch { log("⚠️ Unable to upload locks to iCloud. \(error)") }
+        
+        await updateCloud()
     }
     
     var applicationData: ApplicationData {
@@ -294,9 +295,6 @@ public extension Store {
                 let oldValue = self.state
                 if newState != oldValue {
                     self.state = newState
-                    if newState == .poweredOn, isScanning == false {
-                        //self.scanDefault()
-                    }
                 }
                 try await Task.sleep(timeInterval: 0.5)
             }
@@ -689,7 +687,7 @@ public extension Store {
         }
         
         // remove other keys from CoreData
-        Task {
+        let coreDataTask = Task {
             await context.commit { (context) in
                 do {
                     let fetchRequest = KeyManagedObject.fetchRequest()
@@ -757,20 +755,17 @@ public extension Store {
                         log("Removed \(invalidKeys.count) invalid pending keys from cache")
                     }
                 }
-                
-                Task {
-                    await MainActor.run { [weak self] in
-                        self?.objectWillChange.send()
-                    }
-                }
             }
         }
+        
+        // wait until that finishes
+        await coreDataTask.value
         
         objectWillChange.send()
         
         // upload keys to cloud
         Task {
-            //updateCloud()
+            await updateCloud()
         }
         
         log("Recieved \(keysList.keys.count) keys and \(keysList.newKeys.count) pending keys for lock \(information.id)")

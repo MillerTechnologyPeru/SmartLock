@@ -296,6 +296,15 @@ internal extension ApplicationData {
 @MainActor
 public extension Store {
     
+    internal func updateCloud() async {
+        
+        do {
+            guard try await cloud.accountStatus() == .available else { return }
+            try await syncCloud()
+        }
+        catch { log("⚠️ Unable to sync iCloud: \(error.localizedDescription)") }
+    }
+    
     #if os(iOS)
     func cloudDidChangeExternally() async {
         

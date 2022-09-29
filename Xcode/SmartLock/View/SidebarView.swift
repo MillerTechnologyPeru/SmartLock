@@ -67,6 +67,10 @@ struct SidebarView: View {
                 do { try await Store.shared.syncCloud(conflicts: { _ in return true }) } // always override on macOS
                 catch { log("⚠️ Unable to automatically sync with iCloud. \(error)") }
             }
+            Task {
+                try await Store.shared.central.wait(for: .poweredOn)
+                Store.shared.scanDefault()
+            }
         }
         
     }
