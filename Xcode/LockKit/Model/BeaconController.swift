@@ -66,7 +66,7 @@ public final class BeaconController {
         
         beacons[beacon] = nil
         
-        switch CLLocationManager.authorizationStatus() {
+        switch locationManager.authorizationStatus {
         case .authorizedAlways:
             locationManager.stopMonitoring(for: region)
             locationManager.stopRangingBeacons(in: beacon)
@@ -97,13 +97,11 @@ public final class BeaconController {
     
     private func scanBeacons(in region: CLBeaconRegion) {
         
-        switch CLLocationManager.authorizationStatus() {
+        switch locationManager.authorizationStatus {
         case .authorizedAlways:
-            #if !targetEnvironment(macCatalyst)
             if locationManager.monitoredRegions.contains(region) == false {
                 locationManager.startMonitoring(for: region)
             }
-            #endif
             if locationManager.rangedBeaconConstraints.contains(.init(region)) == false {
                 locationManager.startRangingBeacons(satisfying: .init(region))
             }

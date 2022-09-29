@@ -39,6 +39,10 @@ public final class Store: ObservableObject {
     
     private var scanStream: AsyncCentralScan<NativeCentral>?
     
+    #if os(iOS)
+    public lazy var beaconController: BeaconController = .shared
+    #endif
+    
     public lazy var preferences = Preferences(suiteName: .lock)!
     
     internal lazy var keychain = Keychain(service: .lock, accessGroup: .lock)
@@ -77,8 +81,29 @@ public final class Store: ObservableObject {
         clearKeychainNewInstall()
         loadPersistentStore()
         observeBluetoothState()
+        
+        #if os(iOS)
+        // observe iBeacons
+        beaconController.beaconChanged = { [unowned self] (beacon) in
+            Task {
+                switch beacon.state {
+                case .inside:
+                    await self.beaconFound(beacon.uuid)
+                case .outside:
+                    await self.beaconExited(beacon.uuid)
+                }
+            }
+        }
+        // observe external cloud changes
+        cloud.didChange = { [unowned self] in Task { await self.cloudDidChangeExternally() } }
+        #endif
+        
+        // monitor iBeacons
+        monitorBeacons()
+        
         Task {
             await updateCaches()
+            
             #if targetEnvironment(simulator)
             if await ((try? cloud.accountStatus()) ?? .couldNotDetermine) != .available {
                 insertMockData()
@@ -199,6 +224,8 @@ public extension Store {
     private func lockCacheChanged() async {
         // update CoreData and Spotlight index
         await updateCaches()
+        // monitor iBeacons
+        monitorBeacons()
         // sync with iCloud
         await updateCloud()
     }
@@ -288,7 +315,116 @@ internal extension Store {
     }
 }
 
-// MARK: - Bluetooth Methods
+// MARK: - iBeacon
+
+@MainActor
+private extension Store {
+    
+    func monitorBeacons() {
+        
+        // always monitor lock notification iBeacon
+        let locks = Set(self.applicationData.locks.keys)
+        let newBeacons = locks + [.lockNotificationBeacon]
+        let oldBeacons = self.beaconController.beacons.keys
+        
+        // remove old beacons
+        for beacon in oldBeacons {
+            if newBeacons.contains(beacon) == false {
+                self.beaconController.stopMonitoring(beacon)
+            }
+        }
+        
+        // add new beacons
+        for beacon in newBeacons {
+            if oldBeacons.contains(beacon) == false {
+                self.beaconController.monitor(beacon)
+            }
+        }
+    }
+    
+    private func beaconFound(_ beacon: UUID) async {
+        
+        // Can't do anything because we don't have Bluetooth
+        guard await central.state == .poweredOn
+            else { return }
+        
+        if let _ = Store.shared[lock: beacon] {
+            do {
+                guard let _ = try await self.device(for: beacon) else {
+                    log("⚠️ Could not find lock \(beacon) for beacon \(beacon)")
+                    try? await Task.sleep(nanoseconds: 10 * 1_000_000_000)
+                    self.beaconController.scanBeacon(for: beacon)
+                    return
+                }
+                log("📶 Found lock \(beacon)")
+            } catch {
+                log("⚠️ Could not scan: \(error.localizedDescription)")
+            }
+        } else if beacon == .lockNotificationBeacon { // Entered region event
+            log("📶 Lock notification")
+            guard preferences.monitorBluetoothNotifications
+                else { return } // ignore notification
+            typealias FetchRequest = LockEvent.FetchRequest
+            typealias Predicate = LockEvent.Predicate
+            let context = Store.shared.backgroundContext
+            // scan for all locks
+            let locks = Store.shared.applicationData.locks.keys
+            // scan if none is visible
+            if locks.compactMap({ self[peripheral: $0] }).isEmpty {
+                do { try await Store.shared.scan(duration: 1.0) }
+                catch { log("⚠️ Could not scan for locks: \(error.localizedDescription)") }
+            }
+            let visibleLocks = locks.filter { self[peripheral: $0] != nil }
+            // queue fetching events
+            try? await Task.sleep(nanoseconds: 3 * 1_000_000_000)
+            defer { self.beaconController.scanBeacons() } // refresh beacons
+            for lock in visibleLocks {
+                do {
+                    guard let device = try await self.device(for: lock, scanDuration: 1.0)
+                        else { continue }
+                    let lastEventDate = try await context.perform {
+                        try context.find(id: lock, type: LockManagedObject.self)
+                            .flatMap { try $0.lastEvent(in: context)?.date }
+                    }
+                    let fetchRequest = FetchRequest(
+                        offset: 0,
+                        limit: nil,
+                        predicate: Predicate(
+                            keys: nil,
+                            start: lastEventDate,
+                            end: nil
+                        )
+                    )
+                    try await self.listEvents(for: device, fetchRequest: fetchRequest)
+                } catch {
+                    log("⚠️ Could not fetch latest data for lock \(lock): \(error.localizedDescription)")
+                    continue
+                }
+            }
+        }
+    }
+    
+    @MainActor
+    private func beaconExited(_ beacon: UUID) async {
+        
+        guard let _ = Store.shared[lock: beacon]
+            else { return }
+        
+        do {
+            try await self.scan(duration: 0.3)
+            if self[peripheral: beacon] == nil {
+                log("Lock \(beacon) no longer in range")
+            } else {
+                // lock is in range, refresh beacons
+                self.beaconController.scanBeacon(for: beacon)
+            }
+        } catch {
+            log("⚠️ Could not scan: \(error.localizedDescription)")
+        }
+    }
+}
+
+// MARK: - Bluetooth
 
 public extension Store {
     
@@ -329,19 +465,13 @@ public extension Store {
         self.scanStream = stream
         let task = Task { [unowned self] in
             defer { Task { await MainActor.run { self.isScanning = false } } }
-            var peripherals = [NativePeripheral: ScanData<NativeCentral.Peripheral, NativeCentral.Advertisement>]()
             for try await scanData in stream {
-                guard let serviceUUIDs = scanData.advertisementData.serviceUUIDs,
-                      serviceUUIDs.contains(LockService.uuid)
-                else { continue }
-                // cache found device
-                peripherals[scanData.peripheral] = scanData
+                guard found(scanData) else { continue }
             }
-            return peripherals
         }
         try await Task.sleep(timeInterval: duration)
         stream.stop()
-        let peripherals = try await task.value // throw errors
+        try await task.value // throw errors
         self.peripherals = peripherals
         let loading = {
             self.peripherals
@@ -376,18 +506,21 @@ public extension Store {
                 try? await Task.sleep(timeInterval: duration)
                 stopScanning()
             }
-            for try await scanData in stream {
-                guard let serviceUUIDs = scanData.advertisementData.serviceUUIDs,
-                    serviceUUIDs.contains(LockService.uuid)
-                    else { continue }
-                self.peripherals[scanData.peripheral] = scanData
-                let peripheral = scanData.peripheral
-                // if found and information has cached, stop scanning
-                if let information = lockInformation[peripheral],
-                    information.id == id {
-                    stopScanning()
-                    return peripheral // return first found device
+            do {
+                for try await scanData in stream {
+                    guard found(scanData)
+                        else { continue }
+                    let peripheral = scanData.peripheral
+                    // if found and information has cached, stop scanning
+                    if let information = lockInformation[peripheral],
+                        information.id == id {
+                        stopScanning()
+                        return peripheral // return first found device
+                    }
                 }
+            } catch {
+                self.isScanning = false
+                throw error
             }
             self.isScanning = false
             // scan stopped due to timeout
@@ -415,6 +548,15 @@ public extension Store {
         scanStream?.stop()
         scanStream = nil
         isScanning = false
+    }
+    
+    @MainActor
+    private func found(_ scanData: ScanData<NativeCentral.Peripheral, NativeCentral.Advertisement>) -> Bool {
+        guard let serviceUUIDs = scanData.advertisementData.serviceUUIDs,
+            serviceUUIDs.contains(LockService.uuid)
+            else { return false }
+        self.peripherals[scanData.peripheral] = scanData
+        return false
     }
     
     @discardableResult
