@@ -11,12 +11,12 @@ struct ContentView: View {
     var body: some View {
         #if os(iOS)
         TabBarView()
+        #elseif os(macOS)
+        SidebarView()
         #elseif os(tvOS)
         NavigationView {
             KeysView()
         }
-        #elseif os(macOS)
-        SidebarView()
         #endif
     }
 }

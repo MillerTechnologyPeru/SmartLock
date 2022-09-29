@@ -26,14 +26,14 @@ public struct LockRowView: View {
             HStack(alignment: .center, spacing: 16) {
                 VStack {
                     ImageView(image: image)
-                        .frame(width: 50, height: 50, alignment: .center)
+                        .frame(width: imageSize, height: imageSize, alignment: .center)
                 }
                 VStack(alignment: .leading, spacing: 8) {
                     Text(verbatim: title)
-                        .font(.system(size: 19))
+                        .font(titleFont)
                     if let subtitle = subtitle {
                         Text(verbatim: subtitle)
-                            .font(.system(size: 14))
+                            .font(subtitleFont)
                             .foregroundColor(.gray)
                     }
                 }
@@ -43,10 +43,10 @@ public struct LockRowView: View {
                 Spacer(minLength: 1)
                 VStack(alignment: .trailing, spacing: 8) {
                     Text(verbatim: trailing.0)
-                        .font(.system(size: 14))
+                        .font(subtitleFont)
                         .foregroundColor(.gray)
                     Text(verbatim: trailing.1)
-                        .font(.system(size: 14))
+                        .font(subtitleFont)
                         .foregroundColor(.gray)
                 }
             }
@@ -80,14 +80,34 @@ public struct LockRowView: View {
     #endif
 }
 
-public extension LockRowView {
+private extension LockRowView {
     
-    init(lock: LockCache) {
-        self.init(
-            image: .permission(lock.key.permission.type),
-            title: lock.name,
-            subtitle: lock.key.permission.type.localizedText
-        )
+    var titleFont: Font {
+        #if os(iOS)
+        .system(size: 19)
+        #else
+        .body
+        #endif
+    }
+    
+    var subtitleFont: Font {
+        #if os(iOS)
+        .system(size: 14)
+        #else
+        .callout
+        #endif
+    }
+    
+    var imageSize: CGFloat {
+        #if os(iOS)
+        50
+        #elseif os(macOS)
+        50
+        #elseif os(watchOS)
+        32
+        #elseif os(tvOS)
+        100
+        #endif
     }
 }
 
@@ -126,12 +146,12 @@ extension LockRowView {
             case let .emoji(emoji):
                 AnyView(
                     Text(verbatim: String(emoji))
-                        .font(.system(size: 43))
+                        .font(.system(size: emojiSize))
                 )
             case let .symbol(symbol):
                 AnyView(
                     SwiftUI.Image(systemName: symbol)
-                        .font(.system(size: 40))
+                        .font(.system(size: symbolSize))
                 )
             case let .image(image):
                 AnyView(
@@ -139,6 +159,50 @@ extension LockRowView {
                 )
             }
         }
+    }
+}
+
+private extension LockRowView.ImageView {
+    
+    var emojiSize: CGFloat {
+        #if os(iOS)
+        43
+        #elseif os(macOS)
+        43
+        #elseif os(watchOS)
+        43
+        #elseif os(tvOS)
+        75
+        #endif
+    }
+    
+    var symbolSize: CGFloat {
+        #if os(iOS)
+        40
+        #elseif os(macOS)
+        40
+        #elseif os(watchOS)
+        40
+        #elseif os(tvOS)
+        70
+        #endif
+    }
+}
+
+// MARK: - Extensions
+
+public extension LockRowView {
+    
+    init(lock: LockCache) {
+        self.init(lock: lock.name, permission: lock.key.permission)
+    }
+    
+    init(lock name: String, permission: Permission) {
+        self.init(
+            image: .permission(permission.type),
+            title: name,
+            subtitle: permission.type.localizedText
+        )
     }
 }
 

@@ -46,12 +46,18 @@ private extension DetailRowView {
     
     #if !os(watchOS)
     var titleWidth: CGFloat {
+        #if os(iOS)
         100
+        #elseif os(macOS)
+        100
+        #elseif os(tvOS)
+        300
+        #endif
     }
     #endif
     
     var stackView: some View {
-        #if os(watchOS)
+        #if os(watchOS) || os(tvOS)
         switch value {
         case let .text(value):
             return AnyView(VStack(alignment: .leading) {

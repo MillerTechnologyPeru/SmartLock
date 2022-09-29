@@ -278,13 +278,18 @@ extension LockDetailView {
                                 .frame(width: buttonSize, height: buttonSize, alignment: .center)
                         })
                         .buttonStyle(.plain)
-                        //.disabled(enableActions == false)
                         #if !os(watchOS)
                         .padding(30)
                         #endif
                         Spacer()
                     }
                     VStack(alignment: .leading, spacing: spacing) {
+                        #if os(tvOS)
+                        Button(action: unlock, label: {
+                            Text("Unlock")
+                                .font(.headline)
+                        })
+                        #endif
                         // info
                         if showID {
                             DetailRowView(
