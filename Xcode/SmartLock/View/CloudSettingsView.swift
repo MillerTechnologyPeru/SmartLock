@@ -12,7 +12,7 @@ import SwiftUI
 import LockKit
 import Network
 import CloudKit
-/*
+
 /// iCloud Settings View
 struct CloudSettingsView: View {
     
@@ -31,31 +31,32 @@ struct CloudSettingsView: View {
     
     var body: some View {
         List {
-            Section(header: Text(verbatim: ""), footer: Text(""/*R.string.cloudSettingsView.cloudFooter()*/) {
+            Section(header: Text(verbatim: ""), footer: Text(""/*R.string.cloudSettingsView.cloudFooter()*/)) {
                 Toggle(isOn: $preferences.isCloudBackupEnabled) {
                     Text("Enable Cloud Backup")//R.string.cloudSettingsView.cloudToggle())
                 }
-            }
+            }/*
             Section(header: Text(verbatim: ""),
                     footer: preferences.isCloudBackupEnabled ? preferences.lastCloudUpdate
-                        .flatMap { Text(R.string.cloudSettingsView.cloudLastUpdate()) + Text(" \($0)") } ?? Text("") : Text("")) {
+                        .flatMap { Text("Last Update"/*R.string.cloudSettingsView.cloudLastUpdate()*/) + Text(" \($0)") } ?? Text("") : Text("")) {
                 if preferences.isCloudBackupEnabled
                     && networkMonitor.path.status != .unsatisfied
                     && cloudCache.status == .available {
                     Button(action: { self.cloudCache.backup() }) {
                         HStack {
-                            cloudCache.isCloudUpdating ? Text(R.string.cloudSettingsView.cloudBackup()) : Text(R.string.cloudSettingsView.cloudBackupNow())
+                            cloudCache.isCloudUpdating ? Text("Is uploading Backup"/*R.string.cloudSettingsView.cloudBackup()*/) : Text("Backup Now")//R.string.cloudSettingsView.cloudBackupNow())
                             Spacer()
                             if cloudCache.isCloudUpdating {
-                                ActivityIndicator()
+                                ProgressView()
+                                    .progressViewStyle(.circular)
                             }
                         }
                     }
                 }
-            }
+            }*/
         }
-        .listStyle(GroupedListStyle())
-        .navigationBarTitle(Text(R.string.cloudSettingsView.cloudICloud()), displayMode: .large)
+        .listStyle(.grouped)
+        .navigationTitle("iCloud"/*Text(R.string.cloudSettingsView.cloudICloud()*/)
         .onAppear { self.cloudCache.refreshStatus() }
     }
 }
@@ -78,16 +79,15 @@ internal extension CloudSettingsView {
         var isCloudUpdating = false
         
         func refreshStatus() {
-            
-            DispatchQueue.app.async { [weak self] in
-                guard let self = self else { return }
+            Task {
                 do {
-                    let status = try self.cloudStore.accountStatus()
-                    DispatchQueue.main.async { [weak self] in
-                        self?.status = status
+                    let status = try await cloudStore.accountStatus()
+                    await MainActor.run {
+                        self.status = status
                     }
+                } catch {
+                    log("⚠️ Could load iCloud account: \(error.localizedDescription)")
                 }
-                catch { log("⚠️ Could load iCloud account: \(error.localizedDescription)") }
             }
         }
         
@@ -95,6 +95,7 @@ internal extension CloudSettingsView {
             
             guard isCloudUpdating == false else { return }
             isCloudUpdating = true
+            /*
             let viewController = AppDelegate.shared.tabBarController
             viewController.syncCloud { (result) in
                 DispatchQueue.main.async { [weak self] in
@@ -108,7 +109,7 @@ internal extension CloudSettingsView {
                         break
                     }
                 }
-            }
+            }*/
         }
     }
 }
@@ -123,5 +124,4 @@ extension CloudSettingsView: PreviewProvider {
     }
 }
 #endif
-*/
 #endif

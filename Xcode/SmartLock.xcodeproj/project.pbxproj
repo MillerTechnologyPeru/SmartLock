@@ -93,6 +93,8 @@
 		6E5109FE28E4E6F400F9A9A2 /* KeyRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E5109FD28E4E6F400F9A9A2 /* KeyRowView.swift */; };
 		6E510A0028E50C4100F9A9A2 /* ContextMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E5109FF28E50C4100F9A9A2 /* ContextMenu.swift */; };
 		6E510A0228E5575900F9A9A2 /* TVContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E510A0128E5575900F9A9A2 /* TVContentView.swift */; };
+		6E510A0B28E57C5700F9A9A2 /* SettingsIconView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E510A0A28E57C5700F9A9A2 /* SettingsIconView.swift */; };
+		6E510A0D28E57C6900F9A9A2 /* SettingsRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E510A0C28E57C6900F9A9A2 /* SettingsRowView.swift */; };
 		6E5D51DF28E20C6D008FFB4D /* QuickLook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6E5D51C128E185DB008FFB4D /* QuickLook.framework */; };
 		6E5D51E228E20C6D008FFB4D /* PreviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E5D51E128E20C6D008FFB4D /* PreviewViewController.swift */; };
 		6E5D51E728E20C6D008FFB4D /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6E5D51E528E20C6D008FFB4D /* MainInterface.storyboard */; };
@@ -392,6 +394,8 @@
 		6E5109FD28E4E6F400F9A9A2 /* KeyRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyRowView.swift; sourceTree = "<group>"; };
 		6E5109FF28E50C4100F9A9A2 /* ContextMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContextMenu.swift; sourceTree = "<group>"; };
 		6E510A0128E5575900F9A9A2 /* TVContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TVContentView.swift; sourceTree = "<group>"; };
+		6E510A0A28E57C5700F9A9A2 /* SettingsIconView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsIconView.swift; sourceTree = "<group>"; };
+		6E510A0C28E57C6900F9A9A2 /* SettingsRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsRowView.swift; sourceTree = "<group>"; };
 		6E5D51C128E185DB008FFB4D /* QuickLook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuickLook.framework; path = System/Library/Frameworks/QuickLook.framework; sourceTree = SDKROOT; };
 		6E5D51DE28E20C6C008FFB4D /* LockQuickLookMobile.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = LockQuickLookMobile.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		6E5D51E128E20C6D008FFB4D /* PreviewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewViewController.swift; sourceTree = "<group>"; };
@@ -645,6 +649,8 @@
 				6E3276CF28D70C9400AF171B /* NearbyDevicesView.swift */,
 				6E21834B28D9140D00A622B3 /* KeysView.swift */,
 				6E2182F028D7B4FA00A622B3 /* SettingsView.swift */,
+				6E510A0C28E57C6900F9A9A2 /* SettingsRowView.swift */,
+				6E510A0A28E57C5700F9A9A2 /* SettingsIconView.swift */,
 				6E857EDB28E3BAAF00EC99D3 /* CloudSettingsView.swift */,
 				6E857EDA28E3BAAF00EC99D3 /* BluetoothSettingsView.swift */,
 			);
@@ -1390,6 +1396,7 @@
 			files = (
 				6E10C90A28E03ED700703691 /* FetchKeysIntent.swift in Sources */,
 				6E2182F128D7B4FA00A622B3 /* SettingsView.swift in Sources */,
+				6E510A0D28E57C6900F9A9A2 /* SettingsRowView.swift in Sources */,
 				6E510A0228E5575900F9A9A2 /* TVContentView.swift in Sources */,
 				6E84E52D28DDC841008CAE85 /* LockEntity.swift in Sources */,
 				6E10C90228DFCFED00703691 /* LockEventEntity.swift in Sources */,
@@ -1414,6 +1421,7 @@
 				6E3276D028D70C9400AF171B /* NearbyDevicesView.swift in Sources */,
 				6E84E52C28DDC841008CAE85 /* LockQuery.swift in Sources */,
 				6E21831F28D84A7300A622B3 /* SidebarLabel.swift in Sources */,
+				6E510A0B28E57C5700F9A9A2 /* SettingsIconView.swift in Sources */,
 				6E10C90628DFD26300703691 /* LockEventQuery.swift in Sources */,
 				6E84E54128DE8728008CAE85 /* UnlockActionAppEnum.swift in Sources */,
 			);
@@ -2152,12 +2160,12 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = SmartLock/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Cerradura;
-				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription = "Bluetooth is used to scan for nearby locks in the background.";
 				INFOPLIST_KEY_NSBluetoothPeripheralUsageDescription = "Bluetooth is needed to connect to your smart lock.";
 				INFOPLIST_KEY_NSCameraUsageDescription = "Your camera is needed to setup your smart lock.";
 				INFOPLIST_KEY_NSContactsUsageDescription = "Access to your contacts is needed to share keys with friends.";
 				INFOPLIST_KEY_NSFaceIDUsageDescription = "Your FaceID is needed to unlock.";
+				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "Your location is needed to find nearby smart locks.";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Your location is needed to find nearby smart locks.";
 				INFOPLIST_KEY_NSSiriUsageDescription = "Siri is used to unlock with voice commands.";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
@@ -2204,12 +2212,12 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = SmartLock/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Cerradura;
-				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription = "Bluetooth is used to scan for nearby locks in the background.";
 				INFOPLIST_KEY_NSBluetoothPeripheralUsageDescription = "Bluetooth is needed to connect to your smart lock.";
 				INFOPLIST_KEY_NSCameraUsageDescription = "Your camera is needed to setup your smart lock.";
 				INFOPLIST_KEY_NSContactsUsageDescription = "Access to your contacts is needed to share keys with friends.";
 				INFOPLIST_KEY_NSFaceIDUsageDescription = "Your FaceID is needed to unlock.";
+				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "Your location is needed to find nearby smart locks.";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Your location is needed to find nearby smart locks.";
 				INFOPLIST_KEY_NSSiriUsageDescription = "Siri is used to unlock with voice commands.";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;

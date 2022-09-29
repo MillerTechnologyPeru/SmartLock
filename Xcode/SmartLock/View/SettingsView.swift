@@ -5,17 +5,47 @@
 //  Created by Alsey Coleman Miller on 9/18/22.
 //
 
+#if os(iOS)
 import SwiftUI
+import LockKit
 
-#if os(iOS) || os(macOS)
 struct SettingsView: View {
     
     var body: some View {
         List {
-            Text("Setting 1")
-            Text("Setting 2")
+            Section {
+                SettingsRowView(
+                    title: "Logs",
+                    icon: .logs,
+                    destination: Text("Logs")
+                )
+            }
+            Section(content: {
+                SettingsRowView(
+                    title: "Bluetooth",
+                    icon: .bluetooth,
+                    destination: BluetoothSettingsView()
+                )
+                SettingsRowView(
+                    title: "iCloud",
+                    icon: .cloud,
+                    destination: CloudSettingsView()
+                )
+            }, footer: {
+                Text(verbatim: version)
+                    .font(.footnote)
+                    .foregroundColor(.gray)
+            })
         }
-            .navigationTitle("Settings")
+        .listStyle(.grouped)
+        .navigationTitle("Settings")
+    }
+}
+
+private extension SettingsView {
+    
+    var version: String {
+        "v\(Bundle.InfoPlist.shortVersion) (\(Bundle.InfoPlist.version))"
     }
 }
 

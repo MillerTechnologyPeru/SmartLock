@@ -120,7 +120,7 @@ public extension Preferences {
     }
     
     var monitorBluetoothNotifications: Bool {
-        get { return self[.monitorBluetoothNotifications] ?? false }
+        get { return self[.monitorBluetoothNotifications] ?? true }
         set { self[.monitorBluetoothNotifications] = newValue }
     }
 }
