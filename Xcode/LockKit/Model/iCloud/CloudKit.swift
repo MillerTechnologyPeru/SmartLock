@@ -44,6 +44,8 @@ internal extension CKContainer {
         }
     }
     
+    #if !os(tvOS)
+    @available(tvOS, unavailable)
     func discoverAllUserIdentities() -> AsyncThrowingStream<CKUserIdentity, Error> {
         return .init(CKUserIdentity.self, bufferingPolicy: .unbounded) { continuation in
             let operation = CKDiscoverAllUserIdentitiesOperation()
@@ -64,6 +66,7 @@ internal extension CKContainer {
             add(operation)
         }
     }
+    #endif
     
     func discoverUserIdentities(
         _ userIdentityLookupInfos: [CKUserIdentity.LookupInfo]

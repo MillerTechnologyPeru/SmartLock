@@ -10,8 +10,11 @@ import Foundation
 import CoreData
 import CoreLock
 import CloudKit
-import Contacts
 import Predicate
+
+#if canImport(Contacts)
+import Contacts
+#endif
 
 public final class ContactManagedObject: NSManagedObject {
     
@@ -73,8 +76,10 @@ public extension ContactManagedObject {
 
 // MARK: - Store
 
+#if !os(tvOS)
 public extension Store {
     
+    @available(tvOS, unavailable)
     func updateContacts() async throws {
         
         // exclude self
@@ -112,6 +117,7 @@ internal extension ContactManagedObject {
     
     static let contactStore = CNContactStore()
 }
+#endif
 
 internal extension NSManagedObjectContext {
     
@@ -135,6 +141,7 @@ internal extension NSManagedObjectContext {
             managedObject.phone = phoneNumber
         }
         
+        #if canImport(Contacts)
         // find contact in address book
         if CNContactStore.authorizationStatus(for: .contacts) == .authorized {
             do {
@@ -149,11 +156,10 @@ internal extension NSManagedObjectContext {
                 managedObject.phone = contacts.compactMap({ $0.phoneNumbers.first?.value.stringValue }).first
                 managedObject.image = contacts.compactMap({ $0.thumbnailImageData }).first
             } catch {
-                #if DEBUG
                 log("⚠️ Unable to update contact information from address book. \(error)")
-                #endif
             }
         }
+        #endif
         
         return managedObject
     }

@@ -5,7 +5,7 @@
 //  Created by Alsey Coleman Miller on 9/19/22.
 //
 
-#if canImport(LocalAuthentication)
+#if canImport(LocalAuthentication) && os(iOS) || os(macOS)
 import Foundation
 import LocalAuthentication
 

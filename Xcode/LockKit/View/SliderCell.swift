@@ -6,6 +6,7 @@
 //  Copyright © 2019 ColemanCDA. All rights reserved.
 //
 
+#if os(iOS) || os(macOS)
 import SwiftUI
 
 /// Slider Cell
@@ -63,3 +64,4 @@ extension SliderCell: PreviewProvider {
 }
 #endif
 */
+#endif

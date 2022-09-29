@@ -6,7 +6,7 @@
 //  Copyright © 2019 ColemanCDA. All rights reserved.
 //
 
-#if canImport(CoreSpotlight)
+#if canImport(CoreSpotlight) && !os(tvOS)
 import Foundation
 import CoreSpotlight
 import CoreLock

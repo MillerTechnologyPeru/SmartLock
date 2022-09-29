@@ -6,6 +6,7 @@
 //  Copyright © 2019 ColemanCDA. All rights reserved.
 //
 
+#if os(iOS) || os(macOS)
 import Foundation
 import SwiftUI
 import LockKit
@@ -64,11 +65,11 @@ struct BluetoothSettingsView: View {
 }
 
 #if DEBUG
-@available(iOS 13, *)
 extension BluetoothSettingsView: PreviewProvider {
     
     static var previews: some View {
         BluetoothSettingsView()
     }
 }
+#endif
 #endif

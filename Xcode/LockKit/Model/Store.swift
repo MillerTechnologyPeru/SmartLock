@@ -43,7 +43,7 @@ public final class Store: ObservableObject {
     
     internal lazy var keychain = Keychain(service: .lock, accessGroup: .lock)
     
-    #if canImport(CoreSpotlight)
+    #if canImport(CoreSpotlight) && os(iOS) || os(macOS)
     public lazy var spotlight: SpotlightController = .shared
     #endif
     
@@ -190,7 +190,7 @@ public extension Store {
         // update CoreData
         await updateCoreData()
         
-        #if canImport(CoreSpotlight)
+        #if canImport(CoreSpotlight) && os(iOS) || os(macOS)
         // update Spotlight
         await updateSpotlight()
         #endif
@@ -233,7 +233,7 @@ public extension Store {
 
 // MARK: - Spotlight
 
-#if canImport(CoreSpotlight)
+#if canImport(CoreSpotlight) && os(iOS) || os(macOS)
 private extension Store {
     
     func updateSpotlight() async {

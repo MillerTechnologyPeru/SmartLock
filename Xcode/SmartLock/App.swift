@@ -34,11 +34,13 @@ struct LockApp: App {
                 .environment(\.managedObjectContext, Store.shared.managedObjectContext)
         }
         
+        #if os(macOS) || os(iOS)
         // documents
         DocumentGroup(viewing: NewKey.Invitation.Document.self) { file in
             NewKeyInvitationView(invitation: file.document.invitation)
                 .environmentObject(Store.shared)
         }
+        #endif
         
         #if os(macOS)
         Window("Nearby", id: "nearby") {
@@ -64,9 +66,10 @@ struct LockApp: App {
         }
         
         Settings {
-            NavigationStack {
-                SettingsView()
-            }
+            //NavigationStack {
+            //    SettingsView()
+            //}
+            Text("Settings")
             .environmentObject(Store.shared)
             .environment(\.managedObjectContext, Store.shared.managedObjectContext)
         }
@@ -110,7 +113,7 @@ private extension App {
     }
 }
 
-#if os(iOS)
+#if os(iOS) || os(tvOS)
 final class AppDelegate: UIResponder, UIApplicationDelegate {
     
     let appLaunch = Date()

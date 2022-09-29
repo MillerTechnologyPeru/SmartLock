@@ -215,7 +215,7 @@ public extension NSUserActivity {
             self.init(activityType: .screen, userInfo: [
                 .screen: screen.rawValue as NSString
                 ])
-            #if canImport(CoreSpotlight)
+            #if canImport(CoreSpotlight) && os(iOS) && os(tvOS)
             let attributes = CSSearchableItemAttributeSet(itemContentType: screen.rawValue)
             switch screen {
             case .nearbyLocks:
@@ -244,7 +244,7 @@ public extension NSUserActivity {
                 ])
             if let lockCache = Store.shared.applicationData.locks[lockIdentifier] {
                 self.title = lockCache.name
-                #if canImport(CoreSpotlight)
+                #if canImport(CoreSpotlight) && (os(macOS) || os(iOS))
                 self.contentAttributeSet = SearchableLock(id: lockIdentifier, cache: lockCache).searchableAttributeSet()
                 #endif
             } else {
@@ -261,7 +261,7 @@ public extension NSUserActivity {
                 .action: AppActivity.ActionType.shareKey.rawValue as NSString,
                 .lock: lockIdentifier.uuidString as NSString
                 ])
-            #if canImport(CoreSpotlight)
+            #if canImport(CoreSpotlight) && (os(macOS) || os(iOS))
             let attributes = CSSearchableItemAttributeSet(itemContentType: UTType.text.identifier)
             //attributes.thumbnailData = UIImage(lockKit: "activityNewKey")?.pngData()
             self.contentAttributeSet = attributes
@@ -296,6 +296,7 @@ public extension NSUserActivity {
             #endif
         }
         
+        #if !os(tvOS)
         switch activity {
         case let .action(action):
             self.persistentIdentifier = action.rawValue
@@ -304,6 +305,7 @@ public extension NSUserActivity {
         case let .view(view):
             self.persistentIdentifier = view.rawValue
         }
+        #endif
     }
     
     private convenience init(activityType: AppActivityType, userInfo: [AppActivity.UserInfo: NSObject]) {

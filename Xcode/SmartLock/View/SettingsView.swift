@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+#if os(iOS) || os(macOS)
 struct SettingsView: View {
     
     var body: some View {
@@ -27,4 +28,5 @@ struct SettingsView_Previews: PreviewProvider {
         }
     }
 }
+#endif
 #endif

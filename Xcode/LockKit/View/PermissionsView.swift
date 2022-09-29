@@ -288,6 +288,7 @@ private extension PermissionsView.StateView {
         AppNavigationLink(id: .key(lock, .newKey(item)), label: {
             HStack(alignment: .center, spacing: 8) {
                 row(for: item, showDate: invitationURL == nil)
+                #if !os(tvOS)
                 if let url = invitationURL {
                     Spacer()
                     if #available(macOS 13, iOS 16, tvOS 16, watchOS 9, *) {
@@ -311,6 +312,7 @@ private extension PermissionsView.StateView {
                         .buttonStyle(.plain)
                     }
                 }
+                #endif
             }
         })
     }

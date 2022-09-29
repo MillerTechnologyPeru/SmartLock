@@ -127,7 +127,7 @@
 		6E84E55128DF59D1008CAE85 /* MockLock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E84E55028DF59D1008CAE85 /* MockLock.swift */; };
 		6E857E6928E3566B00EC99D3 /* QuickLookThumbnailing.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6E857E6828E3566B00EC99D3 /* QuickLookThumbnailing.framework */; };
 		6E857E6C28E3566B00EC99D3 /* ThumbnailProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E857E6B28E3566B00EC99D3 /* ThumbnailProvider.swift */; };
-		6E857E7028E3566B00EC99D3 /* LockThumbnail.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 6E857E6728E3566B00EC99D3 /* LockThumbnail.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		6E857E7028E3566B00EC99D3 /* LockThumbnail.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 6E857E6728E3566B00EC99D3 /* LockThumbnail.appex */; platformFilters = (ios, macos, ); settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		6E857E7428E3589A00EC99D3 /* LockKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6EA7769D28D707FE00018FA3 /* LockKit.framework */; };
 		6E857E9728E367B400EC99D3 /* CoreSpotlight.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E857E9628E367B400EC99D3 /* CoreSpotlight.swift */; };
 		6E857E9B28E36ED300EC99D3 /* UserActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E857E9A28E36ED300EC99D3 /* UserActivity.swift */; };
@@ -635,15 +635,15 @@
 		6E3276D328D70D6900AF171B /* View */ = {
 			isa = PBXGroup;
 			children = (
-				6E3276CF28D70C9400AF171B /* NearbyDevicesView.swift */,
+				6E21831C28D834D200A622B3 /* ContentView.swift */,
 				6E2182EE28D7B37000A622B3 /* TabBarView.swift */,
 				6E21831A28D8341000A622B3 /* SidebarView.swift */,
 				6E21831E28D84A7300A622B3 /* SidebarLabel.swift */,
-				6E21831C28D834D200A622B3 /* ContentView.swift */,
-				6E2182F028D7B4FA00A622B3 /* SettingsView.swift */,
+				6E3276CF28D70C9400AF171B /* NearbyDevicesView.swift */,
 				6E21834B28D9140D00A622B3 /* KeysView.swift */,
-				6E857EDA28E3BAAF00EC99D3 /* BluetoothSettingsView.swift */,
+				6E2182F028D7B4FA00A622B3 /* SettingsView.swift */,
 				6E857EDB28E3BAAF00EC99D3 /* CloudSettingsView.swift */,
+				6E857EDA28E3BAAF00EC99D3 /* BluetoothSettingsView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -1562,6 +1562,10 @@
 		};
 		6E857E6F28E3566B00EC99D3 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
+			platformFilters = (
+				ios,
+				macos,
+			);
 			target = 6E857E6628E3566B00EC99D3 /* LockThumbnail */;
 			targetProxy = 6E857E6E28E3566B00EC99D3 /* PBXContainerItemProxy */;
 		};
@@ -2143,6 +2147,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = SmartLock/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Cerradura;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription = "Bluetooth is used to scan for nearby locks in the background.";
 				INFOPLIST_KEY_NSBluetoothPeripheralUsageDescription = "Bluetooth is needed to connect to your smart lock.";
 				INFOPLIST_KEY_NSCameraUsageDescription = "Your camera is needed to setup your smart lock.";
@@ -2166,11 +2171,11 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.colemancda.Lock;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SUPPORTED_PLATFORMS = "appletvos appletvsimulator iphoneos iphonesimulator macosx";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = "1,2,3";
 			};
 			name = Debug;
 		};
@@ -2193,6 +2198,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = SmartLock/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Cerradura;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription = "Bluetooth is used to scan for nearby locks in the background.";
 				INFOPLIST_KEY_NSBluetoothPeripheralUsageDescription = "Bluetooth is needed to connect to your smart lock.";
 				INFOPLIST_KEY_NSCameraUsageDescription = "Your camera is needed to setup your smart lock.";
@@ -2216,11 +2222,11 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.colemancda.Lock;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SUPPORTED_PLATFORMS = "appletvos appletvsimulator iphoneos iphonesimulator macosx";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = "1,2,3";
 			};
 			name = Release;
 		};
