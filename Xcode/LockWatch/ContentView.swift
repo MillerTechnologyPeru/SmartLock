@@ -9,6 +9,10 @@ import SwiftUI
 import LockKit
 
 struct ContentView: View {
+    
+    @EnvironmentObject
+    var store: Store
+    
     var body: some View {
         NavigationView {
             KeysView()
@@ -23,8 +27,12 @@ private extension ContentView {
     
     func reload() {
         Task {
-            do { try await Store.shared.syncCloud(conflicts: { _ in return true }) } // always override on watchOS
-            catch { log("⚠️ Unable to automatically sync with iCloud. \(error)") }
+            do { try await store.forceDownloadCloudApplicationData() } // always override on macOS
+            catch { log("⚠️ Unable to automatically sync with iCloud. \(error.localizedDescription)") }
+        }
+        Task {
+            try await store.central.wait(for: .poweredOn)
+            try await store.scan(duration: store.preferences.scanDuration)
         }
     }
 }

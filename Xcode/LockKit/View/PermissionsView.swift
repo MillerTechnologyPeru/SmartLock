@@ -183,7 +183,9 @@ private extension PermissionsView {
     }
     
     var canCreateNewKey: Bool {
-        #if targetEnvironment(simulator)
+        #if os(tvOS) || os(watchOS)
+        return false
+        #elseif os(iOS) && targetEnvironment(simulator)
         return true
         #else
         return store[lock: id]?.key.permission.isAdministrator ?? false

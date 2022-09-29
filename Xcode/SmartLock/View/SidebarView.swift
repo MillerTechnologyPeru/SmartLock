@@ -64,15 +64,14 @@ struct SidebarView: View {
         .frame(minWidth: 550, minHeight: 550)
         .onAppear {
             Task {
-                do { try await Store.shared.syncCloud(conflicts: { _ in return true }) } // always override on macOS
-                catch { log("⚠️ Unable to automatically sync with iCloud. \(error)") }
+                do { try await store.forceDownloadCloudApplicationData() } // always override on macOS
+                catch { log("⚠️ Unable to automatically sync with iCloud. \(error.localizedDescription)") }
             }
             Task {
-                try await Store.shared.central.wait(for: .poweredOn)
-                Store.shared.scanDefault()
+                try await store.central.wait(for: .poweredOn)
+                store.scan(duration: store.preferences.scanDuration)
             }
         }
-        
     }
 }
 

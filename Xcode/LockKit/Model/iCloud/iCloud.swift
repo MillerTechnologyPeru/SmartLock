@@ -296,11 +296,20 @@ internal extension ApplicationData {
 @MainActor
 public extension Store {
     
-    internal func updateCloud() async {
+    func updateCloud() async {
+        
+        let defaultConflictResolve: (ApplicationData) -> Bool?
+        #if os(iOS)
+        // require user to confirm merging
+        defaultConflictResolve = nil
+        #else
+        // merge by default
+        defaultConflictResolve = { _ in return true }
+        #endif
         
         do {
             guard try await cloud.accountStatus() == .available else { return }
-            try await syncCloud()
+            try await syncCloud(conflicts: defaultConflictResolve)
         }
         catch { log("⚠️ Unable to sync iCloud: \(error.localizedDescription)") }
     }
@@ -350,6 +359,13 @@ public extension Store {
         // update preferences
         self.preferences.lastCloudUpdate = Date()
     }
+    
+    #if !os(iOS)
+    func forceDownloadCloudApplicationData() async throws {
+        try await downloadCloudApplicationData(conflicts: { _ in return true })
+        self.preferences.lastCloudUpdate = Date()
+    }
+    #endif
     
     func uploadCloudLocks() async throws {
         // main thread

@@ -45,8 +45,13 @@ public extension FileManager {
         private lazy var fileManager = FileManager()
         
         private lazy var containerURL: URL = {
+            #if os(tvOS)
+            guard let containerURL = fileManager.cachesDirectory
+                else { fatalError("Could not open Caches directory"); }
+            #else
             guard let containerURL = fileManager.containerURL(for: AppGroup.lock)
                 else { fatalError("Could not open App Group directory"); }
+            #endif
             return containerURL
         }()
         

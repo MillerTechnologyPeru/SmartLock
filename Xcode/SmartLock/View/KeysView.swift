@@ -62,7 +62,11 @@ private extension KeysView {
     }
     
     func reload() {
+        #if os(tvOS)
+        
+        #else
         newKeys.reload()
+        #endif
     }
 }
 
@@ -77,7 +81,8 @@ extension KeysView {
         let deleteNewKey: (URL) -> ()
         
         var body: some View {
-            list.navigationTitle("Keys")
+            list
+                .navigationTitle("Keys")
         }
     }
 }
@@ -85,19 +90,25 @@ extension KeysView {
 private extension KeysView.StateView {
     
     var list: some View {
-        List {
-            ForEach(locks) {
-                view(for: $0)
-            }
-            if newKeys.isEmpty == false {
-                Section("Pending") {
-                    ForEach(newKeys) {
-                        view(for: $0)
-                    }
-                    .onDelete { deleteNewKey(for: $0) }
+        if locks.isEmpty, newKeys.isEmpty {
+            return AnyView(Text("No keys"))
+        } else {
+            return AnyView(
+                List {
+                ForEach(locks) {
+                    view(for: $0)
                 }
-            }
+                if newKeys.isEmpty == false {
+                    Section("Pending") {
+                        ForEach(newKeys) {
+                            view(for: $0)
+                        }
+                        .onDelete { deleteNewKey(for: $0) }
+                    }
+                }
+            })
         }
+        
     }
     
     func deleteNewKey(for indexPath: IndexSet) {

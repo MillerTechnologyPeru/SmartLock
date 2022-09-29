@@ -78,11 +78,13 @@ public final class Store: ObservableObject {
         loadPersistentStore()
         observeBluetoothState()
         Task {
-            await lockCacheChanged()
+            //await lockCacheChanged()
+            #if targetEnvironment(simulator)
+            if await ((try? cloud.accountStatus()) ?? .couldNotDetermine) != .available {
+                insertMockData()
+            }
+            #endif
         }
-        #if targetEnvironment(simulator)
-        insertMockData()
-        #endif
     }
 }
 
@@ -185,16 +187,19 @@ public extension Store {
 
 public extension Store {
     
-    private func lockCacheChanged() async {
-        
-        // update CoreData
+    private func updateCaches() async {
         await updateCoreData()
-        
         #if canImport(CoreSpotlight) && os(iOS) || os(macOS)
         // update Spotlight
         await updateSpotlight()
         #endif
+    }
+    
+    private func lockCacheChanged() async {
         
+        // update CoreData
+        await updateCaches()
+        // sync with iCloud
         await updateCloud()
     }
     
@@ -306,6 +311,7 @@ public extension Store {
         return lockInformation.first(where: { $0.value.id == id })?.key
     }
     
+    @available(*, deprecated, message: "Scan for a specified duration instead")
     func scanDefault() {
         guard state == .poweredOn else {
             return

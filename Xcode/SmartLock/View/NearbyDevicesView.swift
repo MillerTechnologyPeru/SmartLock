@@ -41,7 +41,7 @@ struct NearbyDevicesView: View {
         .onAppear {
             Task {
                 // start scanning after delay
-                try? await Task.sleep(timeInterval: 0.7)
+                try? await store.central.wait(for: .poweredOn)
                 if store.isScanning == false {
                     toggleScan()
                 }

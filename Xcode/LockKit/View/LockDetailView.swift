@@ -7,7 +7,9 @@
 
 import SwiftUI
 import CoreLock
+#if canImport(LocalAuthentication)
 import LocalAuthentication
+#endif
 
 public struct LockDetailView: View {
         

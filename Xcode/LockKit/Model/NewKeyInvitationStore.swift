@@ -85,9 +85,15 @@ public final class NewKeyInvitationStore: ObservableObject {
     
     internal var documentsURL: URL {
         get throws {
+            #if os(tvOS)
+            guard let url = fileManager.cachesDirectory else {
+                throw CocoaError(.fileNoSuchFile)
+            }
+            #else
             guard let url = fileManager.documentsURL else {
                 throw CocoaError(.fileNoSuchFile)
             }
+            #endif
             return url
         }
     }
