@@ -51,7 +51,9 @@ public final class BeaconController {
         
         let uuid = beacon
         let beacon = Beacon(uuid: uuid)
-        beacon.didChange = { [weak self] in self?.beaconChanged?(beacon) }
+        beacon.didChange = { [weak self] in
+            self?.beaconChanged?(beacon)
+        }
         beacons[uuid] = beacon
         
         // initiate monitoring and scanning
@@ -145,7 +147,6 @@ private extension BeaconController {
         public func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
             
             log("Changed authorization (\(status.debugDescription))")
-            
             beaconController?.scanBeacons()
         }
         

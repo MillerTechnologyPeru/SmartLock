@@ -41,7 +41,6 @@ struct NearbyDevicesView: View {
         .onAppear {
             scanTask?.cancel()
             scanTask = Task {
-                store.beaconController.requestAlwaysAuthorization()
                 // start scanning after delay
                 try? await store.central.wait(for: .poweredOn)
                 if store.isScanning == false {

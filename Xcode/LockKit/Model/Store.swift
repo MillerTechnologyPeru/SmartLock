@@ -94,13 +94,12 @@ public final class Store: ObservableObject {
                 }
             }
         }
+        // monitor iBeacons
+        monitorBeacons()
         // observe external cloud changes
         cloud.didChange = { [unowned self] in Task { await self.cloudDidChangeExternally() } }
         #endif
-        
-        // monitor iBeacons
-        monitorBeacons()
-        
+                
         Task {
             await updateCaches()
             
@@ -224,8 +223,10 @@ public extension Store {
     private func lockCacheChanged() async {
         // update CoreData and Spotlight index
         await updateCaches()
+        #if os(iOS)
         // monitor iBeacons
         monitorBeacons()
+        #endif
         // sync with iCloud
         await updateCloud()
     }
@@ -317,6 +318,7 @@ internal extension Store {
 
 // MARK: - iBeacon
 
+#if os(iOS)
 @MainActor
 private extension Store {
     
@@ -423,6 +425,7 @@ private extension Store {
         }
     }
 }
+#endif
 
 // MARK: - Bluetooth
 

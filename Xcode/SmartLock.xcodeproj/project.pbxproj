@@ -2337,7 +2337,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = .watchkitapp;
+				PRODUCT_BUNDLE_IDENTIFIER = com.colemancda.Lock.watchkitapp;
 				PRODUCT_NAME = LockWatch;
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
@@ -2364,7 +2364,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = .watchkitapp;
+				PRODUCT_BUNDLE_IDENTIFIER = com.colemancda.Lock.watchkitapp;
 				PRODUCT_NAME = LockWatch;
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;

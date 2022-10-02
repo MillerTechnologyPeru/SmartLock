@@ -63,6 +63,9 @@ struct TabBarView: View {
             .navigationViewStyle(.stack)
         }
         .navigationBarTitleDisplayMode(.large)
+        .onAppear {
+            store.beaconController.requestAlwaysAuthorization()
+        }
         .onOpenURL { url in
             open(url: url)
         }
