@@ -152,29 +152,28 @@ public final class LockGATTServiceController <Peripheral: PeripheralManager> : G
     }
     
     public func willWrite(_ request: GATTWriteRequest<Peripheral.Central>) -> ATTError? {
-        
+        let keysEmpty = await authorization.isEmpty
         switch request.handle {
         case setupHandle:
-            //return await authorization.isEmpty ? nil : .writeNotPermitted
-            return nil
+            return await keysEmpty ? nil : .writeNotPermitted
         case unlockHandle:
-            //return await authorization.isEmpty ? .writeNotPermitted : nil
-            return nil
+            return await keysEmpty ? .writeNotPermitted : nil
         case createNewKeyHandle:
-            //return await authorization.isEmpty ? .writeNotPermitted : nil
-            return nil
+            return await keysEmpty ? .writeNotPermitted : nil
         default:
             return nil
         }
     }
     
     public func didWrite(_ write: GATTWriteConfirmation<Peripheral.Central>) async {
+
+        let keysEmpty = await authorization.isEmpty
         
         switch write.handle {
             
         case setupHandle:
             
-            //precondition(authorization.isEmpty, "Already setup")
+            precondition(keysEmpty, "Already setup")
             
             // parse characteristic
             guard let characteristic = SetupCharacteristic(data: write.value)
@@ -184,7 +183,7 @@ public final class LockGATTServiceController <Peripheral: PeripheralManager> : G
             
         case unlockHandle:
             
-            //assert(authorization.isEmpty == false, "No keys")
+            assert(keysEmpty == false, "No keys")
             
             // parse characteristic
             guard let characteristic = UnlockCharacteristic(data: write.value)
@@ -194,7 +193,7 @@ public final class LockGATTServiceController <Peripheral: PeripheralManager> : G
             
         case createNewKeyHandle:
             
-            //assert(authorization.isEmpty == false, "No keys")
+            assert(keysEmpty == false, "No keys")
             
             // parse characteristic
             guard let characteristic = CreateNewKeyCharacteristic(data: write.value)
@@ -204,7 +203,7 @@ public final class LockGATTServiceController <Peripheral: PeripheralManager> : G
             
         case confirmNewKeyHandle:
             
-            //assert(authorization.isEmpty == false, "No keys")
+            assert(keysEmpty == false, "No keys")
             
             // parse characteristic
             guard let characteristic = ConfirmNewKeyCharacteristic(data: write.value)
@@ -214,7 +213,7 @@ public final class LockGATTServiceController <Peripheral: PeripheralManager> : G
             
         case removeKeyHandle:
             
-            //assert(authorization.isEmpty == false, "No keys")
+            assert(keysEmpty == false, "No keys")
             
             // parse characteristic
             guard let characteristic = RemoveKeyCharacteristic(data: write.value)
@@ -224,7 +223,7 @@ public final class LockGATTServiceController <Peripheral: PeripheralManager> : G
             
         case keysRequestHandle:
             
-            //assert(authorization.isEmpty == false, "No keys")
+            assert(keysEmpty == false, "No keys")
             
             // parse characteristic
             guard let characteristic = ListKeysCharacteristic(data: write.value)
@@ -237,7 +236,7 @@ public final class LockGATTServiceController <Peripheral: PeripheralManager> : G
             
         case eventsRequestHandle:
             
-            //assert(authorization.isEmpty == false, "Not setup yet")
+            assert(keysEmpty == false, "Not setup yet")
             
             // parse characteristic
             guard let characteristic = ListEventsCharacteristic(data: write.value)

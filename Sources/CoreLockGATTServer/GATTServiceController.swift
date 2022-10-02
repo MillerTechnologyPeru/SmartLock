@@ -22,9 +22,9 @@ public protocol GATTServiceController: AnyObject {
     
     init(peripheral: Peripheral) async throws
     
-    func willRead(_ request: GATTReadRequest<Peripheral.Central>) -> ATTError?
+    func willRead(_ request: GATTReadRequest<Peripheral.Central>) async -> ATTError?
     
-    func willWrite(_ request: GATTWriteRequest<Peripheral.Central>) -> ATTError?
+    func willWrite(_ request: GATTWriteRequest<Peripheral.Central>) async -> ATTError?
     
     func didWrite(_ request: GATTWriteConfirmation<Peripheral.Central>) async
 }
@@ -35,13 +35,13 @@ public extension GATTServiceController {
         return characteristics.contains(characteristicUUID)
     }
     
-    func willRead(_ request: GATTReadRequest<Peripheral.Central>) -> ATTError? {
+    func willRead(_ request: GATTReadRequest<Peripheral.Central>) async -> ATTError? {
         return nil
     }
     
-    func willWrite(_ request: GATTWriteRequest<Peripheral.Central>) -> ATTError? {
+    func willWrite(_ request: GATTWriteRequest<Peripheral.Central>) async -> ATTError? {
         return nil
     }
     
-    func didWrite(_ request: GATTWriteConfirmation<Peripheral.Central>) { }
+    func didWrite(_ request: GATTWriteConfirmation<Peripheral.Central>) async { }
 }

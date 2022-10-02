@@ -33,15 +33,13 @@ public final class LockGATTController <Peripheral: PeripheralManager> {
         
         // set callbacks
         self.peripheral.willRead = { [unowned self] in
-            self.willRead($0)
+            return await self.willRead($0)
         }
         self.peripheral.willWrite = { [unowned self] in
-            return self.willWrite($0)
+            return await self.willWrite($0)
         }
-        self.peripheral.didWrite = { (confirmation) in
-            Task(priority: .high) { [weak self] in
-                await self?.didWrite(confirmation)
-            }
+        self.peripheral.didWrite = { [unowned self] (confirmation) in
+            await self.didWrite(confirmation)
         }
     }
     
@@ -52,23 +50,23 @@ public final class LockGATTController <Peripheral: PeripheralManager> {
         await lockServiceController.updateInformation()
     }
     
-    private func willRead(_ request: GATTReadRequest<Peripheral.Central>) -> ATTError? {
+    private func willRead(_ request: GATTReadRequest<Peripheral.Central>) async -> ATTError? {
         
         if lockServiceController.supportsCharacteristic(request.uuid) {
-            return lockServiceController.willRead(request)
+            return await lockServiceController.willRead(request)
         } else if deviceInformationController.supportsCharacteristic(request.uuid) {
-            return deviceInformationController.willRead(request)
+            return await deviceInformationController.willRead(request)
         } else {
             return nil
         }
     }
     
-    private func willWrite(_ request: GATTWriteRequest<Peripheral.Central>) -> ATTError? {
+    private func willWrite(_ request: GATTWriteRequest<Peripheral.Central>)async -> ATTError? {
         
         if lockServiceController.supportsCharacteristic(request.uuid) {
-            return lockServiceController.willWrite(request)
+            return await lockServiceController.willWrite(request)
         } else if deviceInformationController.supportsCharacteristic(request.uuid) {
-            return deviceInformationController.willWrite(request)
+            return await deviceInformationController.willWrite(request)
         } else {
             return nil
         }
@@ -79,7 +77,7 @@ public final class LockGATTController <Peripheral: PeripheralManager> {
         if lockServiceController.supportsCharacteristic(confirmation.uuid) {
             await lockServiceController.didWrite(confirmation)
         } else if deviceInformationController.supportsCharacteristic(confirmation.uuid) {
-            deviceInformationController.didWrite(confirmation)
+            await deviceInformationController.didWrite(confirmation)
         }
     }
 }
