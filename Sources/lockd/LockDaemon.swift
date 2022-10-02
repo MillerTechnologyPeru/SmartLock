@@ -193,12 +193,11 @@ struct LockDaemon {
         Task.detached {
             do {
                 try await hostController.setNotificationAdvertisement(rssi: 30) // FIXME: RSSI
-                try await Task.sleep(nanoseconds: 3 * 1_000_000_000)
+                try await Task.sleep(nanoseconds: 5 * 1_000_000_000)
                 try await hostController.setLockAdvertisingData(lock: id, rssi: 30)
             }
             catch {
-                print("Unable to change advertising")
-                dump(error)
+                print("Unable to change advertising. \(error.localizedDescription)")
             }
         }
     }
