@@ -24,7 +24,7 @@
       "location" : "https://github.com/PureSwift/GATT.git",
       "state" : {
         "branch" : "master",
-        "revision" : "579ffd583f9a32a88e68b69e12eb85856ee165cb"
+        "revision" : "9d7477fcda15df5be9644da8599926e513c09ef0"
       }
     },
     {
@@ -33,16 +33,7 @@
       "location" : "https://github.com/PureSwift/Socket.git",
       "state" : {
         "branch" : "main",
-        "revision" : "9841e5d1be80dc8e81b817f46cbfb893ed0f5536"
-      }
-    },
-    {
-      "identity" : "swift-crypto",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/apple/swift-crypto.git",
-      "state" : {
-        "revision" : "d9825fa541df64b1a7b182178d61b9a82730d01f",
-        "version" : "2.1.0"
+        "revision" : "be065913d9e7caf0a4fe1ac273a67ec1ecc3d0a1"
       }
     },
     {
