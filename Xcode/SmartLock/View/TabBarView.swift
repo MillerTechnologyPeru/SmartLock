@@ -64,6 +64,7 @@ struct TabBarView: View {
         }
         .navigationBarTitleDisplayMode(.large)
         .onAppear {
+            store.beaconController.allowsBackgroundLocationUpdates = true
             store.beaconController.requestAlwaysAuthorization()
         }
         .onOpenURL { url in
