@@ -10,24 +10,24 @@ import Foundation
 
 public protocol LockEventStore: AnyObject {
     
-    func fetch(_ fetchRequest: LockEvent.FetchRequest) throws -> [LockEvent]
+    func fetch(_ fetchRequest: LockEvent.FetchRequest) async throws -> [LockEvent]
     
-    func save(_ event: LockEvent) throws
+    func save(_ event: LockEvent) async throws
 }
 
 // MARK: - Supporting Types
 
-public final class InMemoryLockEvents: LockEventStore {
+public actor InMemoryLockEvents: LockEventStore {
     
     public init() { }
     
     public private(set) var events = [LockEvent]()
     
-    public func fetch(_ fetchRequest: LockEvent.FetchRequest) throws -> [LockEvent] {
+    public func fetch(_ fetchRequest: LockEvent.FetchRequest) -> [LockEvent] {
         return events.fetch(fetchRequest)
     }
     
-    public func save(_ event: LockEvent) throws {
+    public func save(_ event: LockEvent) {
         events.append(event)
     }
 }

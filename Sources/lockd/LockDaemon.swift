@@ -39,7 +39,11 @@ typealias NativePeripheral = DarwinPeripheral
 @main
 struct LockDaemon {
     
-    static var id: UUID { controller.lockServiceController.configurationStore.configuration.id }
+    static var id: UUID {
+        get async {
+            await controller.lockServiceController.configurationStore.configuration.id
+        }
+    }
     private static var controller: LockGATTController<NativePeripheral>!
     private static var hostController: BluetoothHostControllerInterface?
     private static var gpio: LockGPIOController?
@@ -98,10 +102,10 @@ struct LockDaemon {
         #endif
         
         // load files
-        let configurationStore = try LockConfigurationFile(
+        let configurationStore = try await LockConfigurationFile(
             url: URL(fileURLWithPath: "/opt/colemancda/lockd/config.json")
         )
-        let authorization = try AuthorizationStoreFile(
+        let authorization = try await AuthorizationStoreFile(
             url: URL(fileURLWithPath: "/opt/colemancda/lockd/data.json")
         )
         let events = LockEventsFile(
@@ -111,7 +115,7 @@ struct LockDaemon {
             createdAt: URL(fileURLWithPath: "/opt/colemancda/lockd/sharedSecret")
         )
         
-        let lockIdentifier = configurationStore.configuration.id
+        let lockIdentifier = await configurationStore.configuration.id
         
         print("🔒 Lock \(lockIdentifier)")
         

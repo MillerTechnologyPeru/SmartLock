@@ -21,8 +21,6 @@ public final class LockGATTServiceController <Peripheral: PeripheralManager> : G
     // MARK: - Properties
     
     public let peripheral: Peripheral
-        
-    public private(set) var hardware: LockHardware = .empty
     
     public var configurationStore: LockConfigurationStore = InMemoryLockConfigurationStore()
         
@@ -137,18 +135,8 @@ public final class LockGATTServiceController <Peripheral: PeripheralManager> : G
     
     // MARK: - Methods
     
-    func supportsCharacteristic(_ characteristicUUID: BluetoothUUID) -> Bool {
-        return Self.Service.characteristics.contains(where: { $0.uuid == characteristicUUID })
-    }
-    
-    public func setHardware(_ newValue: LockHardware) async {
-        self.hardware = newValue
-        await updateInformation()
-    }
-    
     public func reset() async {
-        
-        try? authorization.removeAll()
+        try? await authorization.removeAll()
         await updateInformation()
     }
     
@@ -167,11 +155,14 @@ public final class LockGATTServiceController <Peripheral: PeripheralManager> : G
         
         switch request.handle {
         case setupHandle:
-            return authorization.isEmpty ? nil : .writeNotPermitted
+            //return await authorization.isEmpty ? nil : .writeNotPermitted
+            return nil
         case unlockHandle:
-            return authorization.isEmpty ? .writeNotPermitted : nil
+            //return await authorization.isEmpty ? .writeNotPermitted : nil
+            return nil
         case createNewKeyHandle:
-            return authorization.isEmpty ? .writeNotPermitted : nil
+            //return await authorization.isEmpty ? .writeNotPermitted : nil
+            return nil
         default:
             return nil
         }
@@ -183,7 +174,7 @@ public final class LockGATTServiceController <Peripheral: PeripheralManager> : G
             
         case setupHandle:
             
-            precondition(authorization.isEmpty, "Already setup")
+            //precondition(authorization.isEmpty, "Already setup")
             
             // parse characteristic
             guard let characteristic = SetupCharacteristic(data: write.value)
@@ -193,7 +184,7 @@ public final class LockGATTServiceController <Peripheral: PeripheralManager> : G
             
         case unlockHandle:
             
-            assert(authorization.isEmpty == false, "No keys")
+            //assert(authorization.isEmpty == false, "No keys")
             
             // parse characteristic
             guard let characteristic = UnlockCharacteristic(data: write.value)
@@ -203,37 +194,37 @@ public final class LockGATTServiceController <Peripheral: PeripheralManager> : G
             
         case createNewKeyHandle:
             
-            assert(authorization.isEmpty == false, "No keys")
+            //assert(authorization.isEmpty == false, "No keys")
             
             // parse characteristic
             guard let characteristic = CreateNewKeyCharacteristic(data: write.value)
                 else { print("Could not parse \(CreateNewKeyCharacteristic.self)"); return }
             
-            createNewKey(characteristic)
+            await createNewKey(characteristic)
             
         case confirmNewKeyHandle:
             
-            assert(authorization.isEmpty == false, "No keys")
+            //assert(authorization.isEmpty == false, "No keys")
             
             // parse characteristic
             guard let characteristic = ConfirmNewKeyCharacteristic(data: write.value)
                 else { print("Could not parse \(ConfirmNewKeyCharacteristic.self)"); return }
             
-            confirmNewKey(characteristic)
+            await confirmNewKey(characteristic)
             
         case removeKeyHandle:
             
-            assert(authorization.isEmpty == false, "No keys")
+            //assert(authorization.isEmpty == false, "No keys")
             
             // parse characteristic
             guard let characteristic = RemoveKeyCharacteristic(data: write.value)
                 else { print("Could not parse \(RemoveKeyCharacteristic.self)"); return }
             
-            removeKey(characteristic)
+            await removeKey(characteristic)
             
         case keysRequestHandle:
             
-            assert(authorization.isEmpty == false, "No keys")
+            //assert(authorization.isEmpty == false, "No keys")
             
             // parse characteristic
             guard let characteristic = ListKeysCharacteristic(data: write.value)
@@ -246,7 +237,7 @@ public final class LockGATTServiceController <Peripheral: PeripheralManager> : G
             
         case eventsRequestHandle:
             
-            assert(authorization.isEmpty == false, "Not setup yet")
+            //assert(authorization.isEmpty == false, "Not setup yet")
             
             // parse characteristic
             guard let characteristic = ListEventsCharacteristic(data: write.value)
@@ -266,19 +257,24 @@ public final class LockGATTServiceController <Peripheral: PeripheralManager> : G
     
     public func updateInformation() async {
         
-        let status: LockStatus = authorization.isEmpty ? .setup : .unlock
-        let id = configurationStore.configuration.id
-        let information = LockInformationCharacteristic(id: id,
-                                                        buildVersion: .current,
-                                                        version: .current,
-                                                        status: status,
-                                                        unlockActions: [.default])
+        let status: LockStatus = await authorization.isEmpty ? .setup : .unlock
+        let id = await configurationStore.configuration.id
+        let information = LockInformationCharacteristic(
+            id: id,
+            buildVersion: .current,
+            version: .current,
+            status: status,
+            unlockActions: [.default]
+        )
+        
         await peripheral.write(information.data, forCharacteristic: informationHandle)
     }
     
     private func setup(_ setup: SetupCharacteristic) async {
         
-        assert(authorization.isEmpty)
+        guard await authorization.isEmpty else {
+            return
+        }
         
         // get key for shared device.
         let sharedSecret = setupSecret
@@ -299,14 +295,17 @@ public final class LockGATTServiceController <Peripheral: PeripheralManager> : G
             let ownerKey = Key(setup: setupRequest)
             
             // store first key
-            try authorization.add(ownerKey, secret: setupRequest.secret)
-            assert(authorization.isEmpty == false)
+            try await authorization.add(ownerKey, secret: setupRequest.secret)
+            do {
+                let isEmpty = await authorization.isEmpty
+                assert(isEmpty == false)
+            }
             
             print("Lock setup completed")
             
             await updateInformation()
             
-            try events.save(.setup(.init(key: ownerKey.id)))
+            try await events.save(.setup(.init(key: ownerKey.id)))
             
             lockChanged?()
             
@@ -319,7 +318,7 @@ public final class LockGATTServiceController <Peripheral: PeripheralManager> : G
         
         do {
             
-            guard let (key, secret) = try authorization.key(for: keyIdentifier)
+            guard let (key, secret) = try await authorization.key(for: keyIdentifier)
                 else { print("Unknown key \(keyIdentifier)"); return }
             
             assert(key.id == keyIdentifier, "Invalid key")
@@ -344,24 +343,24 @@ public final class LockGATTServiceController <Peripheral: PeripheralManager> : G
             let request = try characteristic.decrypt(using: secret)
             
             // unlock with the specified action
-            try unlockDelegate.unlock(request.action)
+            try await unlockDelegate.unlock(request.action)
             
             print("Key \(key.id) \(key.name) unlocked with action \(request.action)")
             
-            try events.save(.unlock(.init(key: key.id, action: request.action)))
+            try await events.save(.unlock(.init(key: key.id, action: request.action)))
             
             lockChanged?()
             
         } catch { print("Unlock error: \(error)")  }
     }
     
-    private func createNewKey(_ characteristic: CreateNewKeyCharacteristic) {
+    private func createNewKey(_ characteristic: CreateNewKeyCharacteristic) async {
         
         let keyIdentifier = characteristic.encryptedData.authentication.message.id
         
         do {
             
-            guard let (key, secret) = try authorization.key(for: keyIdentifier)
+            guard let (key, secret) = try await authorization.key(for: keyIdentifier)
                 else { print("Unknown key \(keyIdentifier)"); return }
             
             assert(key.id == keyIdentifier, "Invalid key")
@@ -387,24 +386,24 @@ public final class LockGATTServiceController <Peripheral: PeripheralManager> : G
             let request = try characteristic.decrypt(using: secret)
             let newKey = NewKey(request: request)
             
-            try self.authorization.add(newKey, secret: request.secret)
+            try await self.authorization.add(newKey, secret: request.secret)
             
             print("Key \(keyIdentifier) \(key.name) created new key \(request.id)")
             
-            try events.save(.createNewKey(.init(key: key.id, newKey: newKey.id)))
+            try await events.save(.createNewKey(.init(key: key.id, newKey: newKey.id)))
             
             lockChanged?()
             
         } catch { print("Create new key error: \(error)")  }
     }
     
-    private func confirmNewKey(_ characteristic: ConfirmNewKeyCharacteristic) {
+    private func confirmNewKey(_ characteristic: ConfirmNewKeyCharacteristic) async {
         
         let newKeyIdentifier = characteristic.encryptedData.authentication.message.id
         
         do {
             
-            guard let (newKey, secret) = try authorization.newKey(for: newKeyIdentifier)
+            guard let (newKey, secret) = try await authorization.newKey(for: newKeyIdentifier)
                 else { print("Unknown key \(newKeyIdentifier)"); return }
             
             assert(newKey.id == newKeyIdentifier, "Invalid key")
@@ -430,27 +429,27 @@ public final class LockGATTServiceController <Peripheral: PeripheralManager> : G
                 permission: newKey.permission
             )
             
-            try self.authorization.removeNewKey(newKeyIdentifier)
-            try self.authorization.add(key, secret: keySecret)
+            try await self.authorization.removeNewKey(newKeyIdentifier)
+            try await self.authorization.add(key, secret: keySecret)
             
             print("Key \(newKeyIdentifier) \(key.name) confirmed with shared secret")
             
-            assert(try! authorization.key(for: key.id) != nil, "Key not stored")
+            //assert(try! authorization.key(for: key.id) != nil, "Key not stored")
             
-            try events.save(.confirmNewKey(.init(newKey: newKey.id, key: key.id)))
+            try await events.save(.confirmNewKey(.init(newKey: newKey.id, key: key.id)))
             
             lockChanged?()
             
         } catch { print("Confirm new key error: \(error)")  }
     }
     
-    private func removeKey(_ characteristic: RemoveKeyCharacteristic) {
+    private func removeKey(_ characteristic: RemoveKeyCharacteristic) async {
         
         let keyIdentifier = characteristic.encryptedData.authentication.message.id
         
         do {
             
-            guard let (key, secret) = try authorization.key(for: keyIdentifier)
+            guard let (key, secret) = try await authorization.key(for: keyIdentifier)
                 else { print("Unknown key \(keyIdentifier)"); return }
             
             assert(key.id == keyIdentifier, "Invalid key")
@@ -477,20 +476,20 @@ public final class LockGATTServiceController <Peripheral: PeripheralManager> : G
             
             switch request.type {
             case .key:
-                guard let (removeKey, _) = try authorization.key(for: request.id)
+                guard let (removeKey, _) = try await authorization.key(for: request.id)
                     else { print("Key \(request.id) does not exist"); return }
                 assert(removeKey.id == request.id)
-                try authorization.removeKey(removeKey.id)
+                try await authorization.removeKey(removeKey.id)
             case .newKey:
-                guard let (removeKey, _) = try authorization.newKey(for: request.id)
+                guard let (removeKey, _) = try await authorization.newKey(for: request.id)
                     else { print("New Key \(request.id) does not exist"); return }
                 assert(removeKey.id == request.id)
-                try authorization.removeNewKey(removeKey.id)
+                try await authorization.removeNewKey(removeKey.id)
             }
             
             print("Key \(key.id) \(key.name) removed \(request.type) \(request.id)")
             
-            try events.save(.removeKey(.init(key: key.id, removedKey: request.id, type: request.type)))
+            try await events.save(.removeKey(.init(key: key.id, removedKey: request.id, type: request.type)))
             
             lockChanged?()
             
@@ -503,7 +502,7 @@ public final class LockGATTServiceController <Peripheral: PeripheralManager> : G
         
         do {
             
-            guard let (key, secret) = try authorization.key(for: keyIdentifier)
+            guard let (key, secret) = try await authorization.key(for: keyIdentifier)
                 else { print("Unknown key \(keyIdentifier)"); return }
             
             assert(key.id == keyIdentifier, "Invalid key")
@@ -528,7 +527,7 @@ public final class LockGATTServiceController <Peripheral: PeripheralManager> : G
             print("Key \(key.id) \(key.name) requested keys list")
             
             // send list via notifications
-            let list = authorization.list
+            let list = await authorization.list
             let notifications = KeyListNotification.from(list: list)
             let notificationChunks = try notifications.map {
                 ($0, try KeysCharacteristic.from($0, id: key.id, key: secret, maximumUpdateValueLength: maximumUpdateValueLength))
@@ -554,7 +553,7 @@ public final class LockGATTServiceController <Peripheral: PeripheralManager> : G
         
         do {
             
-            guard let (key, secret) = try authorization.key(for: keyIdentifier)
+            guard let (key, secret) = try await authorization.key(for: keyIdentifier)
                 else { print("Unknown key \(keyIdentifier)"); return }
             
             assert(key.id == keyIdentifier, "Invalid key")
@@ -589,7 +588,7 @@ public final class LockGATTServiceController <Peripheral: PeripheralManager> : G
             }
             
             // send list via notifications
-            let list = try events.fetch(fetchRequest)
+            let list = try await events.fetch(fetchRequest)
             let notifications = EventListNotification.from(list: list)
             let notificationChunks = try notifications.map {
                 ($0, try EventsCharacteristic.from($0, id: key.id, key: secret, maximumUpdateValueLength: maximumUpdateValueLength))
@@ -611,14 +610,17 @@ public final class LockGATTServiceController <Peripheral: PeripheralManager> : G
 }
 
 /// Lock unlock manager
-public protocol UnlockDelegate {
+public protocol UnlockDelegate: AnyObject {
     
-    func unlock(_ action: UnlockAction) throws
+    func unlock(_ action: UnlockAction) async throws
 }
 
-public struct UnlockSimulator: UnlockDelegate {
+public actor UnlockSimulator: UnlockDelegate {
     
-    public func unlock(_ action: UnlockAction) throws {
-        print("Simulate unlock with action \(action)")
+    public private(set) var count: Int = 0
+    
+    public func unlock(_ action: UnlockAction) {
+        count += 1
+        print("Simulate unlock \(count) with action \(action)")
     }
 }

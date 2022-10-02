@@ -21,9 +21,6 @@ public final class LockGATTController <Peripheral: PeripheralManager> {
     
     public let lockServiceController: LockGATTServiceController<Peripheral>
     
-    // Lock hardware model
-    public private(set) var hardware: LockHardware = .empty
-    
     // MARK: - Initialization
     
     public init(peripheral: Peripheral) async throws {
@@ -51,9 +48,8 @@ public final class LockGATTController <Peripheral: PeripheralManager> {
     // MARK: - Methods
     
     public func setHardware(_ newValue: LockHardware) async {
-        self.hardware = newValue
         await deviceInformationController.setHardware(newValue)
-        await lockServiceController.setHardware(newValue)
+        await lockServiceController.updateInformation()
     }
     
     private func willRead(_ request: GATTReadRequest<Peripheral.Central>) -> ATTError? {

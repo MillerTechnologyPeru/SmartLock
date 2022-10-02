@@ -16,6 +16,8 @@ public protocol GATTServiceController: AnyObject {
     
     static var service: BluetoothUUID { get }
     
+    var characteristics: Set<BluetoothUUID> { get }
+    
     var peripheral: Peripheral { get }
     
     init(peripheral: Peripheral) async throws
@@ -28,6 +30,10 @@ public protocol GATTServiceController: AnyObject {
 }
 
 public extension GATTServiceController {
+    
+    func supportsCharacteristic(_ characteristicUUID: BluetoothUUID) -> Bool {
+        return characteristics.contains(characteristicUUID)
+    }
     
     func willRead(_ request: GATTReadRequest<Peripheral.Central>) -> ATTError? {
         return nil

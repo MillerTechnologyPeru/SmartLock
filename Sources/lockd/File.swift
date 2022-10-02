@@ -7,7 +7,7 @@
 
 import Foundation
 
-public final class JSONFile <T: Codable> {
+public actor JSONFile <T: Codable> {
     
     // MARK: - Properties
     
@@ -23,9 +23,11 @@ public final class JSONFile <T: Codable> {
     
     // MARK: - Initialization
     
-    public init(url: URL,
-                decoder: JSONDecoder = JSONDecoder(),
-                encoder: JSONEncoder = JSONEncoder()) throws {
+    public init(
+        url: URL,
+        decoder: JSONDecoder = JSONDecoder(),
+        encoder: JSONEncoder = JSONEncoder()
+    ) throws {
         
         // attempt to load previous value.
         self.value = try decoder.decode(T.self, from: url)
@@ -34,10 +36,12 @@ public final class JSONFile <T: Codable> {
         self.encoder = encoder
     }
     
-    public init(url: URL,
-                defaultValue: T,
-                decoder: JSONDecoder = JSONDecoder(),
-                encoder: JSONEncoder = JSONEncoder()) throws {
+    public init(
+        url: URL,
+        defaultValue: T,
+        decoder: JSONDecoder = JSONDecoder(),
+        encoder: JSONEncoder = JSONEncoder()
+    ) async throws {
         
         // attempt to load previous value.
         self.value = (try? decoder.decode(T.self, from: url)) ?? defaultValue

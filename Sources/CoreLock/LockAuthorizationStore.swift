@@ -10,28 +10,28 @@ import Foundation
 /// Lock Authorization Store
 public protocol LockAuthorizationStore: AnyObject {
     
-    var isEmpty: Bool { get }
+    var isEmpty: Bool { get async }
     
-    func add(_ key: Key, secret: KeyData) throws
+    func add(_ key: Key, secret: KeyData) async throws
     
-    func key(for id: UUID) throws -> (key: Key, secret: KeyData)?
+    func key(for id: UUID) async throws -> (key: Key, secret: KeyData)?
     
-    func add(_ key: NewKey, secret: KeyData) throws
+    func add(_ key: NewKey, secret: KeyData) async throws
     
-    func newKey(for id: UUID) throws -> (newKey: NewKey, secret: KeyData)?
+    func newKey(for id: UUID) async throws -> (newKey: NewKey, secret: KeyData)?
     
-    func removeKey(_ id: UUID) throws
+    func removeKey(_ id: UUID) async throws
     
-    func removeNewKey(_ id: UUID) throws
+    func removeNewKey(_ id: UUID) async throws
     
-    func removeAll() throws
+    func removeAll() async throws
     
-    var list: KeysList { get }
+    var list: KeysList { get async }
 }
 
 // MARK: - Supporting Types
 
-public final class InMemoryLockAuthorization: LockAuthorizationStore {
+public actor InMemoryLockAuthorization: LockAuthorizationStore {
     
     public init() { }
     
@@ -39,49 +39,43 @@ public final class InMemoryLockAuthorization: LockAuthorizationStore {
     
     private var newKeys = [NewKeyEntry]()
     
-    public var isEmpty: Bool {
-        
-        return keys.isEmpty && newKeys.isEmpty
+    nonisolated public var isEmpty: Bool {
+        get async {
+            let keysEmpty = await keys.isEmpty
+            let newKeysEmpty = await newKeys.isEmpty
+            return keysEmpty && newKeysEmpty
+        }
     }
     
     public func add(_ key: Key, secret: KeyData) throws {
-        
         keys.append(KeyEntry(key: key, secret: secret))
     }
     
     public func key(for id: UUID) throws -> (key: Key, secret: KeyData)? {
-        
         guard let keyEntry = keys.first(where: { $0.key.id == id })
             else { return nil }
-        
         return (keyEntry.key, keyEntry.secret)
     }
     
     public func add(_ key: NewKey, secret: KeyData) throws {
-        
         newKeys.append(NewKeyEntry(newKey: key, secret: secret))
     }
     
     public func newKey(for id: UUID) throws -> (newKey: NewKey, secret: KeyData)? {
-        
         guard let keyEntry = newKeys.first(where: { $0.newKey.id == id })
             else { return nil }
-        
         return (keyEntry.newKey, keyEntry.secret)
     }
     
     public func removeKey(_ id: UUID) throws {
-        
         keys.removeAll(where: { $0.key.id == id })
     }
     
     public func removeNewKey(_ id: UUID) throws {
-        
         newKeys.removeAll(where: { $0.newKey.id == id })
     }
     
     public func removeAll() throws {
-        
         keys.removeAll()
         newKeys.removeAll()
     }

@@ -15,22 +15,24 @@ public final class LockConfigurationFile: LockConfigurationStore {
     
     // MARK: - Properties
     
-    internal let file: JSONFile<LockConfiguration>
+    private let file: JSONFile<LockConfiguration>
     
     public var configuration: LockConfiguration {
-        return file.value
+        get async {
+            await file.value
+        }
     }
     
     // MARK: - Initialization
     
-    public init(url: URL) throws {
-        self.file = try JSONFile(url: url, defaultValue: LockConfiguration())
+    public init(url: URL) async throws {
+        self.file = try await JSONFile(url: url, defaultValue: LockConfiguration())
     }
     
     // MARK: - Methods
     
-    public func update(_ configuration: LockConfiguration) throws {
-        try file.write(configuration)
+    public func update(_ configuration: LockConfiguration) async throws {
+        try await file.write(configuration)
     }
 }
 
