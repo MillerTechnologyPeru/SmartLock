@@ -140,7 +140,7 @@ public final class LockGATTServiceController <Peripheral: PeripheralManager> : G
         await updateInformation()
     }
     
-    public func willRead(_ request: GATTReadRequest<Peripheral.Central>) -> ATTError? {
+    public func willRead(_ request: GATTReadRequest<Peripheral.Central>) async -> ATTError? {
         
         switch request.handle {
         case informationHandle:
@@ -151,15 +151,15 @@ public final class LockGATTServiceController <Peripheral: PeripheralManager> : G
         }
     }
     
-    public func willWrite(_ request: GATTWriteRequest<Peripheral.Central>) -> ATTError? {
+    public func willWrite(_ request: GATTWriteRequest<Peripheral.Central>) async -> ATTError? {
         let keysEmpty = await authorization.isEmpty
         switch request.handle {
         case setupHandle:
-            return await keysEmpty ? nil : .writeNotPermitted
+            return keysEmpty ? nil : .writeNotPermitted
         case unlockHandle:
-            return await keysEmpty ? .writeNotPermitted : nil
+            return keysEmpty ? .writeNotPermitted : nil
         case createNewKeyHandle:
-            return await keysEmpty ? .writeNotPermitted : nil
+            return keysEmpty ? .writeNotPermitted : nil
         default:
             return nil
         }
