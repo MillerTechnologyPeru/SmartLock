@@ -33,7 +33,16 @@
       "location" : "https://github.com/PureSwift/Socket.git",
       "state" : {
         "branch" : "main",
-        "revision" : "c5d21b3b37a0fb55abee4c754e96ef552862d8a3"
+        "revision" : "9a4afeffb0c5d9a4f2f9409c82db17c2ce2f22ff"
+      }
+    },
+    {
+      "identity" : "swift-crypto",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/apple/swift-crypto.git",
+      "state" : {
+        "revision" : "d9825fa541df64b1a7b182178d61b9a82730d01f",
+        "version" : "2.1.0"
       }
     },
     {
@@ -60,7 +69,7 @@
       "location" : "https://github.com/PureSwift/TLVCoding.git",
       "state" : {
         "branch" : "master",
-        "revision" : "95e608efc42369e785ac73bdb60fbf69dfae81b8"
+        "revision" : "49eae2e68320dbe1533eb2880ee82f7b6144517a"
       }
     }
   ],
