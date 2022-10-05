@@ -8,7 +8,7 @@
 import Foundation
 import TLVCoding
 
-public struct EncryptedData: Equatable, Codable {
+public struct EncryptedData: Equatable, Hashable, Codable {
     
     /// HMAC signature, signed by secret.
     public let authentication: Authentication

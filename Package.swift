@@ -39,7 +39,11 @@ let package = Package(
         .package(
             url: "https://github.com/uraimo/SwiftyGPIO.git",
             branch: "master"
-        )
+        ),
+        .package(
+            url: "https://github.com/PureSwift/HTTP.git",
+            branch: "master"
+        ),
     ],
     targets: [
         .executableTarget(
@@ -75,6 +79,7 @@ let package = Package(
                     condition: .when(platforms: [.linux])
                 ),
                 "CoreLockGATTServer",
+                //"CoreLockWebServer",
                 "SwiftyGPIO"
             ]
         ),
@@ -87,16 +92,28 @@ let package = Package(
                     name: "Bluetooth",
                     package: "Bluetooth"
                 ),
+                "HTTP"
             ]
         ),
         .target(
             name: "CoreLockGATTServer",
             dependencies: ["CoreLock"]
-        ),
+        ),/*
+        .target(
+            name: "CoreLockWebServer",
+            dependencies: [
+                "CoreLock",
+                "HTTP"
+            ]
+        ),*/
         .testTarget(
             name: "CoreLockTests",
             dependencies: ["CoreLock"]
-        )
+        ),/*
+        .testTarget(
+            name: "CoreLockGATTServerTests",
+            dependencies: ["CoreLockGATTServer"]
+        )*/
     ]
 )
 
@@ -114,4 +131,5 @@ package.targets[0].dependencies.append(
         condition: .when(platforms: [.linux])
     )
 )
+//package.targets.first(where: { $0.name == "CoreLockWebServer" })?.dependencies.append("NetService")
 #endif

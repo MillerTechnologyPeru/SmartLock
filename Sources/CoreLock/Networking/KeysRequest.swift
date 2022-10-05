@@ -7,11 +7,11 @@
 //
 
 import Foundation
-
 #if canImport(FoundationNetworking)
 import FoundationNetworking
 #endif
-/*
+import HTTP
+
 public struct KeysNetServiceRequest: Equatable {
     
     /// Lock server
@@ -30,11 +30,11 @@ public extension KeysNetServiceRequest {
         // http://localhost:8080/keys
         let url = server.appendingPathComponent("key")
         var urlRequest = URLRequest(url: url)
-        urlRequest.addValue(authorization.header, forHTTPHeaderField: LockNetService.Authorization.headerField)
+        urlRequest.addValue(authorization.header, forHTTPHeaderField: HTTPHeader.authorization.rawValue)
         return urlRequest
     }
 }
-
+/*
 // MARK: - Client
 
 public extension LockNetService.Client {

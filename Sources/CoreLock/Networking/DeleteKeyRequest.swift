@@ -7,12 +7,12 @@
 //
 
 import Foundation
-
 #if canImport(FoundationNetworking)
 import FoundationNetworking
 #endif
-/*
-/// Lock Software Update HTTP Request
+import HTTP
+
+/// Delete Key HTTP Request
 public struct DeleteKeyRequest: Equatable {
     
     /// Lock server
@@ -39,12 +39,12 @@ public extension DeleteKeyRequest {
             .appendingPathComponent(type.stringValue)
             .appendingPathComponent(key.uuidString)
         var urlRequest = URLRequest(url: url)
-        urlRequest.addValue(authorization.header, forHTTPHeaderField: LockNetService.Authorization.headerField)
+        urlRequest.addValue(authorization.header, forHTTPHeaderField: HTTPHeader.authorization.rawValue)
         urlRequest.httpMethod = "DELETE"
         return urlRequest
     }
 }
-
+/*
 // MARK: - Client
 
 public extension LockNetService.Client {

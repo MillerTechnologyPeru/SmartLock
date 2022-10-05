@@ -7,12 +7,12 @@
 //
 
 import Foundation
-
 #if canImport(FoundationNetworking)
 import FoundationNetworking
 #endif
-/*
-public struct CreateNewKeyNetServiceRequest: Equatable {
+import HTTP
+
+public struct CreateNewKeyNetServiceRequest: Equatable, Hashable {
     
     /// Lock server
     public let server: URL
@@ -21,7 +21,7 @@ public struct CreateNewKeyNetServiceRequest: Equatable {
     public let authorization: LockNetService.Authorization
     
     /// Encrypted request
-    public let encryptedData: LockNetService.EncryptedData
+    public let encryptedData: Data
 }
 
 // MARK: - URL Request
@@ -30,10 +30,10 @@ public extension CreateNewKeyNetServiceRequest {
     
     func urlRequest(encoder: JSONEncoder = JSONEncoder()) -> URLRequest {
         
-        // http://localhost:8080/keys
+        // http://localhost:8080/key
         let url = server.appendingPathComponent("key")
         var urlRequest = URLRequest(url: url)
-        urlRequest.addValue(authorization.header, forHTTPHeaderField: LockNetService.Authorization.headerField)
+        urlRequest.addValue(authorization.header, forHTTPHeaderField: HTTPHeader.authorization.rawValue)
         urlRequest.httpMethod = "POST"
         urlRequest.httpBody = try! encoder.encode(encryptedData)
         return urlRequest
@@ -41,7 +41,7 @@ public extension CreateNewKeyNetServiceRequest {
 }
 
 // MARK: - Encryption
-
+/*
 public extension CreateNewKeyNetServiceRequest {
     
     init(server: URL,
@@ -55,7 +55,7 @@ public extension CreateNewKeyNetServiceRequest {
         self.encryptedData = try .init(encrypt: data, with: key.secret)
     }
     
-    static func decrypt(_ encryptedData: LockNetService.EncryptedData,
+    static func decrypt(_ encryptedData: Data,
                         with key: KeyData,
                         decoder: JSONDecoder = JSONDecoder()) throws -> CreateNewKeyRequest {
         

@@ -7,10 +7,10 @@
 //
 
 import Foundation
-/*
+
 public extension LockNetService {
     
-    struct LockInformation: Equatable, Codable {
+    struct LockInformation: Equatable, Hashable, Codable, Identifiable {
         
         /// Lock identifier
         public let id: UUID
@@ -41,4 +41,3 @@ public extension LockNetService {
         }
     }
 }
-*/

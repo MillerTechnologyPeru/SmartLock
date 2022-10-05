@@ -7,11 +7,11 @@
 //
 
 import Foundation
-
 #if canImport(FoundationNetworking)
 import FoundationNetworking
 #endif
-/*
+import HTTP
+
 public struct EventsNetServiceRequest: Equatable {
     
     /// Lock server
@@ -37,7 +37,7 @@ public extension EventsNetServiceRequest {
         guard let url = urlComponents.url
             else { fatalError() }
         var urlRequest = URLRequest(url: url)
-        urlRequest.addValue(authorization.header, forHTTPHeaderField: LockNetService.Authorization.headerField)
+        urlRequest.addValue(authorization.header, forHTTPHeaderField: HTTPHeader.authorization.rawValue)
         urlRequest.httpMethod = "GET"
         return urlRequest
     }
@@ -117,7 +117,7 @@ internal extension Sequence where Self.Element == URLQueryItem {
 }
 
 // MARK: - Client
-
+/*
 public extension LockNetService.Client {
     
     /// Retreive a list of events on device.

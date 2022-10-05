@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct Authentication: Equatable, Codable {
+public struct Authentication: Equatable, Hashable, Codable {
         
     public let message: AuthenticationMessage
     
@@ -26,7 +26,7 @@ public struct Authentication: Equatable, Codable {
 }
 
 /// HMAC Message
-public struct AuthenticationMessage: Equatable, Codable {
+public struct AuthenticationMessage: Equatable, Hashable, Codable {
     
     public let date: Date
     

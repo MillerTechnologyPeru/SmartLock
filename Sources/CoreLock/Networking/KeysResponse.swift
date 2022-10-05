@@ -10,7 +10,7 @@ import Foundation
 /*
 public struct KeysResponse: Equatable {
     
-    public let encryptedData: LockNetService.EncryptedData
+    public let encryptedData: Data
 }
 
 // MARK: - Codable
@@ -18,7 +18,7 @@ public struct KeysResponse: Equatable {
 extension KeysResponse: Codable {
     
     public init(from decoder: Decoder) throws {
-        self.encryptedData = try LockNetService.EncryptedData(from: decoder)
+        self.encryptedData = try Data(from: decoder)
     }
     
     public func encode(to encoder: Encoder) throws {
@@ -39,7 +39,7 @@ public extension KeysResponse {
     }
     
      func decrypt(using key: KeyData,
-                 decoder: JSONDecoder = JSONDecoder()) throws -> KeysList {
+                  decoder: JSONDecoder = JSONDecoder()) throws -> KeysList {
         
         let data = try encryptedData.decrypt(using: key)
         return try decoder.decode(KeysList.self, from: data)

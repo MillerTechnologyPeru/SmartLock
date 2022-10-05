@@ -30,7 +30,9 @@ public final class LockEventsFile: LockEventStore {
     // MARK: - Methods
     
     public func fetch(_ fetchRequest: LockEvent.FetchRequest) async throws -> [LockEvent] {
-        return try await load { $0.fetch(fetchRequest) }
+        return try await load {
+            $0.fetch(fetchRequest)
+        }
     }
     
     public func save(_ event: LockEvent) async throws {
