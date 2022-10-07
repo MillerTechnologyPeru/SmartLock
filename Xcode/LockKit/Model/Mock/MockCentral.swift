@@ -34,10 +34,14 @@ public final class MockCentral: CentralManager {
         }
     }
     
-    public var peripherals: Set<GATT.Peripheral> {
+    public var peripherals: [Peripheral: Bool] {
         get async {
             try? await Task.sleep(timeInterval: 0.01)
-            return await Set(storage.state.scanData.map { $0.peripheral })
+            let peripherals = await storage.state.scanData.lazy.map { $0.peripheral }
+            let connections = await storage.state.connected
+            var result = [Peripheral: Bool]()
+            result.reserveCapacity(peripherals.count)
+            return peripherals.reduce(into: result, { $0[$1] = connections.contains($1) })
         }
     }
     
