@@ -2160,6 +2160,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = SmartLock/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Cerradura;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription = "Bluetooth is used to scan for nearby locks in the background.";
 				INFOPLIST_KEY_NSBluetoothPeripheralUsageDescription = "Bluetooth is needed to connect to your smart lock.";
 				INFOPLIST_KEY_NSCameraUsageDescription = "Your camera is needed to setup your smart lock.";
@@ -2212,6 +2213,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = SmartLock/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Cerradura;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription = "Bluetooth is used to scan for nearby locks in the background.";
 				INFOPLIST_KEY_NSBluetoothPeripheralUsageDescription = "Bluetooth is needed to connect to your smart lock.";
 				INFOPLIST_KEY_NSCameraUsageDescription = "Your camera is needed to setup your smart lock.";
