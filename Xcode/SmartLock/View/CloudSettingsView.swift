@@ -6,7 +6,7 @@
 //  Copyright © 2019 ColemanCDA. All rights reserved.
 //
 
-#if os(iOS) || os(macOS)
+#if os(iOS)
 import Foundation
 import SwiftUI
 import LockKit
