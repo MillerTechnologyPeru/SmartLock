@@ -12,9 +12,9 @@ import CoreLock
 
 public extension ActivityIndicatorViewController where Self: UIViewController {
     
-    func update(lock identifier: UUID) {
+    func update(lock id: UUID) {
         
-        guard let key = Store.shared.credentials(for: identifier)
+        guard let key = Store.shared.credentials(for: id)
             else { assertionFailure(); return }
         
         let alert = UIAlertController(title: R.string.activity.updateActivityAlertTitle(),
@@ -29,16 +29,16 @@ public extension ActivityIndicatorViewController where Self: UIViewController {
         alert.addAction(UIAlertAction(title: R.string.activity.updateActivityAlertUpdate(), style: .`default`, handler: { [unowned self] _ in
             
             alert.dismiss(animated: true) { }
-            
+            /*
             self.performActivity(queue: .app, {
                 
                 let client = Store.shared.netServiceClient
                 
-                guard let netService = try client.discover(duration: 2.0, timeout: 10.0).first(where: { $0.identifier == identifier })
+                guard let netService = try client.discover(duration: 2.0, timeout: 10.0).first(where: { $0.id == identifier })
                     else { throw LockError.notInRange(lock: identifier) }
                 
                 try client.update(for: netService, with: key, timeout: 30.0)
-            })
+            })*/
         }))
         
         self.present(alert, animated: true, completion: nil)

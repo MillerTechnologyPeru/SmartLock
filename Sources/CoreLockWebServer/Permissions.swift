@@ -140,7 +140,7 @@ internal extension LockWebServer {
         return .created
     }
     
-    private func deleteKey(_ identifier: UUID, type: KeyType, request: RouterRequest, response: RouterResponse) throws -> HTTPStatusCode {
+    private func deleteKey(_ id: UUID, type: KeyType, request: RouterRequest, response: RouterResponse) throws -> HTTPStatusCode {
         
         // authenticate
         guard let (key, _) = try authenticate(request: request) else {

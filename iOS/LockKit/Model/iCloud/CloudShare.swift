@@ -171,7 +171,7 @@ public extension CloudStore {
         
         // upload public share data with invitation url
         let publicShare = CloudShare.NewKey(
-            id: .init(rawValue: invitation.key.identifier),
+            id: .init(rawValue: invitation.key.id),
             invitation: shareURL,
             user: user.cloudRecordID.recordName
         )

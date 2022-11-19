@@ -8,10 +8,11 @@
 import Foundation
 import Bluetooth
 import GATT
+import CoreLock
 
-public protocol GATTServiceController: class {
+public protocol GATTServiceController: AnyObject {
     
-    associatedtype Peripheral: PeripheralProtocol
+    associatedtype Peripheral: PeripheralManager
     
     static var service: BluetoothUUID { get }
     
@@ -19,24 +20,28 @@ public protocol GATTServiceController: class {
     
     var peripheral: Peripheral { get }
     
-    init(peripheral: Peripheral) throws
+    init(peripheral: Peripheral) async throws
     
-    func willRead(_ request: GATTReadRequest<Peripheral.Central>) -> ATT.Error?
+    func willRead(_ request: GATTReadRequest<Peripheral.Central>) async -> ATTError?
     
-    func willWrite(_ request: GATTWriteRequest<Peripheral.Central>) -> ATT.Error?
+    func willWrite(_ request: GATTWriteRequest<Peripheral.Central>) async -> ATTError?
     
-    func didWrite(_ request: GATTWriteConfirmation<Peripheral.Central>)
+    func didWrite(_ request: GATTWriteConfirmation<Peripheral.Central>) async
 }
 
 public extension GATTServiceController {
     
-    func willRead(_ request: GATTReadRequest<Peripheral.Central>) -> ATT.Error? {
+    func supportsCharacteristic(_ characteristicUUID: BluetoothUUID) -> Bool {
+        return characteristics.contains(characteristicUUID)
+    }
+    
+    func willRead(_ request: GATTReadRequest<Peripheral.Central>) async -> ATTError? {
         return nil
     }
     
-    func willWrite(_ request: GATTWriteRequest<Peripheral.Central>) -> ATT.Error? {
+    func willWrite(_ request: GATTWriteRequest<Peripheral.Central>) async -> ATTError? {
         return nil
     }
     
-    func didWrite(_ request: GATTWriteConfirmation<Peripheral.Central>) { }
+    func didWrite(_ request: GATTWriteConfirmation<Peripheral.Central>) async { }
 }

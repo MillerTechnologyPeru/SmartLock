@@ -27,7 +27,7 @@ public final class LockEventsViewController: TableViewController {
     public lazy var activityIndicator: UIActivityIndicatorView = self.loadActivityIndicatorView()
     
     private var locks: Set<UUID> {
-        return self.lock.flatMap { [$0] } ?? Set(Store.shared.locks.value.keys)
+        return self.lock.flatMap { [$0] } ?? Set(Store.shared.locks.keys)
     }
     
     private lazy var dateFormatter: DateFormatter = {
@@ -167,14 +167,14 @@ public final class LockEventsViewController: TableViewController {
         let locks = self.locks
         let context = Store.shared.backgroundContext
         
-        performActivity(queue: .app, { [weak self] in
+        performActivity({ [weak self] in
             guard let self = self else { return }
             let expectsLock = self.lock != nil
             for lock in locks {
                 
                 // fetch request
                 let lastEventDate = try context.performErrorBlockAndWait {
-                    try context.find(identifier: lock, type: LockManagedObject.self)
+                    try context.find(id: lock, type: LockManagedObject.self)
                         .flatMap { try $0.lastEvent(in: context)?.date }
                 }
                 let fetchRequest = FetchRequest(
@@ -187,17 +187,12 @@ public final class LockEventsViewController: TableViewController {
                     )
                 )
                 // first try via Bonjour
-                if let netService = try Store.shared.netServiceClient.discover(duration: 1.0, timeout: 10.0).first(where: { $0.identifier == lock }) {
-                    
+                /*if let netService = try Store.shared.netServiceClient.discover(duration: 1.0, timeout: 10.0).first(where: { $0.id == lock }) {
                     try Store.shared.listEvents(netService, fetchRequest: fetchRequest)
-                    
-                } else if Store.shared.lockManager.central.state == .poweredOn,
-                    let device = try DispatchQueue.bluetooth.sync(execute: { try Store.shared.device(for: lock, scanDuration: 2.0) }) {
-                    
-                    try DispatchQueue.bluetooth.sync {
-                        _ = try Store.shared.listEvents(device, fetchRequest: fetchRequest)
-                    }
-                    
+                } else */
+                if await Store.shared.central.state == .poweredOn,
+                    let device = try await Store.shared.device(for: lock, scanDuration: 2.0) {
+                    _ = try await Store.shared.listEvents(device, fetchRequest: fetchRequest)
                 } else if expectsLock {
                     throw LockError.notInRange(lock: lock)
                 } else {
@@ -286,17 +281,19 @@ public final class LockEventsViewController: TableViewController {
     
     private func loadKeys() {
         
-        guard Store.shared.lockManager.central.state == .poweredOn
-            else { return }
+        //guard Store.shared.central.state == .poweredOn
+        //    else { return }
         
         let locks = self.locks.filter {
             Store.shared[lock: $0]?.key.permission.isAdministrator ?? false
                 && (needsKeys.isEmpty ? true : needsKeys.contains($0))
         }
-        performActivity(queue: .bluetooth, {
-            try locks.forEach {
-                try Store.shared.device(for: $0, scanDuration: 1.0).flatMap {
-                    let canListKeys = try Store.shared.listKeys($0)
+        performActivity({
+            guard await Store.shared.central.state == .poweredOn
+                else { return }
+            for id in locks {
+                if let peripheral = try await Store.shared.device(for: id, scanDuration: 1.0) {
+                    let canListKeys = try await Store.shared.listKeys(peripheral)
                     assert(canListKeys)
                 }
             }

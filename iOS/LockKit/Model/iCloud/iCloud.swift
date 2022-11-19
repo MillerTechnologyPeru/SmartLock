@@ -176,10 +176,10 @@ public final class CloudStore {
         // download keys from keychain
         var keys = [UUID: KeyData](minimumCapacity: applicationData.locks.count)
         for key in applicationData.keys {
-            guard let data = try keychain.getData(key.identifier.uuidString),
+            guard let data = try keychain.getData(key.id.uuidString),
                 let keyData = KeyData(data: data)
-                else { throw Error.missingKeychainItem(key.identifier) }
-            keys[key.identifier] = keyData
+                else { throw Error.missingKeychainItem(key.id) }
+            keys[key.id] = keyData
         }
         
         return (applicationData, keys)
@@ -256,7 +256,7 @@ internal extension ApplicationData {
     func update(with applicationData: ApplicationData) -> ApplicationData? {
         
         // must be originally the same application data
-        guard self.identifier == applicationData.identifier,
+        guard self.id == applicationData.id,
             self.created == applicationData.created
             else { return nil }
         
@@ -353,7 +353,7 @@ public extension Store {
     }
     
     func downloadCloudLocks() throws {
-        
+        /*
         var insertedEventsCount = 0
         var insertedKeysCount = 0
         var insertedNewKeysCount = 0
@@ -391,7 +391,7 @@ public extension Store {
                     return true // more events, ignore invalid cloud value
                 }
                 // if already in CoreData, then stop
-                guard try EventManagedObject.find(event.identifier, in: context) == nil
+                guard try EventManagedObject.find(event.id, in: context) == nil
                     else { return false }
                 // save event in CoreData
                 context.commit {
@@ -408,7 +408,7 @@ public extension Store {
                     return true // more values, ignore invalid cloud value
                 }
                 // if already in CoreData, then stop
-                guard try context.find(identifier: value.identifier, type: KeyManagedObject.self) == nil
+                guard try context.find(identifier: value.id, type: KeyManagedObject.self) == nil
                     else { return false }
                 // save value in CoreData
                 context.commit {
@@ -425,7 +425,7 @@ public extension Store {
                     return true // more values, ignore invalid cloud value
                 }
                 // if already in CoreData, then stop
-                guard try context.find(identifier: value.identifier, type: NewKeyManagedObject.self) == nil
+                guard try context.find(identifier: value.id, type: NewKeyManagedObject.self) == nil
                     else { return false }
                 // save value in CoreData
                 context.commit {
@@ -436,7 +436,7 @@ public extension Store {
             }
             
             return true
-        }
+        }*/
     }
     
     @discardableResult
@@ -472,9 +472,9 @@ public extension Store {
         let dateFormatter = DateFormatter()
         dateFormatter.dateStyle = .short
         dateFormatter.timeStyle = .medium
-        print("Cloud: \(cloudData.identifier) \(dateFormatter.string(from: cloudData.updated))")
+        print("Cloud: \(cloudData.id) \(dateFormatter.string(from: cloudData.updated))")
         dump(cloudData)
-        print("Local: \(oldApplicationData.identifier) \(dateFormatter.string(from: oldApplicationData.updated))")
+        print("Local: \(oldApplicationData.id) \(dateFormatter.string(from: oldApplicationData.updated))")
         dump(oldApplicationData)
         #endif
         
@@ -502,8 +502,8 @@ public extension Store {
         // remove old keys
         var removedKeys = 0
         let newData = self.applicationData
-        let newKeys = newData.keys.map { $0.identifier }
-        let oldKeys = oldApplicationData.keys.map { $0.identifier }
+        let newKeys = newData.keys.map { $0.id }
+        let oldKeys = oldApplicationData.keys.map { $0.id }
         for oldKey in oldKeys {
             // old key no longer exists
             guard newKeys.contains(oldKey) == false
@@ -526,8 +526,8 @@ public extension Store {
         // read from to keychain
         var keys = [UUID: KeyData]()
         for key in applicationData.keys {
-            let keyData = self[key: key.identifier]
-            keys[key.identifier] = keyData
+            let keyData = self[key: key.id]
+            keys[key.id] = keyData
         }
         
         // upload keychain and application data to iCloud
@@ -543,7 +543,7 @@ import UIKit
 public extension ActivityIndicatorViewController where Self: UIViewController {
     
     func syncCloud(showActivity: Bool) {
-        
+        /*
         assert(Thread.isMainThread)
         
         guard Store.shared.preferences.isCloudBackupEnabled else { return }
@@ -552,7 +552,7 @@ public extension ActivityIndicatorViewController where Self: UIViewController {
             try Store.shared.syncCloud(conflicts: { self?.resolveCloudSyncConflicts($0) })
         }, completion: { (viewController, _) in
             
-        })
+        })*/
     }
 }
 

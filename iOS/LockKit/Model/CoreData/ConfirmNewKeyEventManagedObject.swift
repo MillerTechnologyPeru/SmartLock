@@ -19,7 +19,7 @@ public final class ConfirmNewKeyEventManagedObject: EventManagedObject {
                               context: NSManagedObjectContext) {
         
         self.init(context: context)
-        self.identifier = value.identifier
+        self.identifier = value.id
         self.lock = lock
         self.date = value.date
         self.key = value.key
@@ -31,13 +31,13 @@ internal extension LockEvent.ConfirmNewKey {
     
     init?(managedObject: ConfirmNewKeyEventManagedObject) {
         
-        guard let identifier = managedObject.identifier,
+        guard let id = managedObject.identifier,
             let date = managedObject.date,
             let key = managedObject.key,
             let pendingKey = managedObject.pendingKey
             else { return nil }
         
-        self.init(identifier: identifier, date: date, newKey: pendingKey, key: key)
+        self.init(id: id, date: date, newKey: pendingKey, key: key)
     }
 }
 
@@ -56,7 +56,7 @@ public extension ConfirmNewKeyEventManagedObject {
             assertionFailure("Missing key value")
             return nil
         }
-        return try context.find(identifier: newKey, type: NewKeyManagedObject.self)
+        return try context.find(id: newKey, type: NewKeyManagedObject.self)
     }
     
     /// Fetch the removed key specified by the event.

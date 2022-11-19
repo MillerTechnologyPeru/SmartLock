@@ -24,7 +24,7 @@ public extension INRelevantShortcut {
                        cache: LockCache,
                        location: CLLocationCoordinate2D? = nil) -> INRelevantShortcut {
         
-        let intent = UnlockIntent(identifier: lock, cache: cache)
+        let intent = UnlockIntent(id: lock, cache: cache)
         let relevantShortcut = INRelevantShortcut(shortcut: .intent(intent))
         relevantShortcut.shortcutRole = .action
         relevantShortcut.relevanceProviders = [
@@ -64,7 +64,7 @@ public extension Store {
     
     func setRelevantShortcuts(_ completion: ((Error?) -> Void)? = nil) {
 
-        let relevantShortcuts = locks.value.map { (lock, cache) in
+        let relevantShortcuts = locks.map { (lock, cache) in
             INRelevantShortcut.unlock(lock: lock, cache: cache)
         }
         

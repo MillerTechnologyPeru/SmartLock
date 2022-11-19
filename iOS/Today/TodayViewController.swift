@@ -15,7 +15,6 @@ import GATT
 import DarwinGATT
 import CoreLock
 import LockKit
-import OpenCombine
 import Combine
 
 final class TodayViewController: UITableViewController {
@@ -37,9 +36,9 @@ final class TodayViewController: UITableViewController {
         return feedbackGenerator
     }()
     
-    private var peripheralsObserver: OpenCombine.AnyCancellable?
-    private var informationObserver: OpenCombine.AnyCancellable?
-    private var locksObserver: OpenCombine.AnyCancellable?
+    private var peripheralsObserver: Combine.AnyCancellable?
+    private var informationObserver: Combine.AnyCancellable?
+    private var locksObserver: Combine.AnyCancellable?
     @available(iOS 13.0, *)
     private lazy var updateTableViewSubject = Combine.PassthroughSubject<Void, Never>()
     private var updateTableViewObserver: AnyObject? // Combine.AnyCancellable
@@ -64,17 +63,17 @@ final class TodayViewController: UITableViewController {
         tableView.tableFooterView = UIView()
         
         // Set Logging
-        LockManager.shared.log = { log("🔒 LockManager: " + $0) }
+        Store.shared.central.log = { log("📲 Central: " + $0) }
         BeaconController.shared.log = { log("📶 \(BeaconController.self): " + $0) }
         
         // observe model changes
-        peripheralsObserver = Store.shared.peripherals.sink { [weak self] _ in
+        peripheralsObserver = Store.shared.$peripherals.sink { [weak self] _ in
             self?.locksChanged()
         }
-        informationObserver = Store.shared.lockInformation.sink { [weak self] _ in
+        informationObserver = Store.shared.$lockInformation.sink { [weak self] _ in
             self?.locksChanged()
         }
-        locksObserver = Store.shared.locks.sink { [weak self] _ in
+        locksObserver = Store.shared.$locks.sink { [weak self] _ in
             self?.locksChanged()
         }
         
@@ -145,21 +144,21 @@ final class TodayViewController: UITableViewController {
     
     private func configureView() {
         
-        let locks = Store.shared.peripherals.value.values
+        let locks = Store.shared.peripherals.values
             .lazy
-            .sorted { $0.scanData.rssi < $1.scanData.rssi }
+            .sorted { $0.rssi < $1.rssi }
             .lazy
-            .compactMap { Store.shared.lockInformation.value[$0.scanData.peripheral] }
+            .compactMap { Store.shared.lockInformation[$0.peripheral] }
             .lazy
             .compactMap { information in
-                Store.shared[lock: information.identifier]
-                    .flatMap { (identifier: information.identifier, cache: $0) }
+                Store.shared[lock: information.id]
+                    .flatMap { (id: information.id, cache: $0) }
         }
         
         if locks.isEmpty {
             items = [isScanning ? .loading : .noNearbyLocks]
         } else {
-            items = locks.map { .lock($0.identifier, $0.cache) }
+            items = locks.map { .lock($0.id, $0.cache) }
         }
         
         // Show expanded view for multiple devices
@@ -174,9 +173,9 @@ final class TodayViewController: UITableViewController {
         BeaconController.shared.scanBeacons()
         
         // scan for devices
-        DispatchQueue.bluetooth.async {
-            defer { mainQueue { self.isScanning = false } }
-            do { try Store.shared.scan(duration: 1.0) }
+        Task {
+            defer { Task { await MainActor.run { self.isScanning = false } } }
+            do { try await Store.shared.scan(duration: 1.0) }
             catch {
                 log("⚠️ Could not scan: \(error.localizedDescription)")
                 mainQueue { completion?(false) }
@@ -241,12 +240,12 @@ final class TodayViewController: UITableViewController {
             scan()
         case let .lock(identifier, cache):
             // unlock
-            DispatchQueue.bluetooth.async {
+            Task {
                 log("Unlock \(cache.name) \(identifier)")
                 do {
                     guard let peripheral = Store.shared.device(for: identifier)
                         else { assertionFailure("Peripheral not found"); return }
-                    try Store.shared.unlock(peripheral)
+                    try await Store.shared.unlock(peripheral)
                 } catch {
                     log("⚠️ Could not unlock: \(error.localizedDescription)")
                 }

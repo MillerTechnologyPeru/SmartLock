@@ -8,26 +8,26 @@
 
 import Foundation
 
-public protocol LockEventStore: class {
+public protocol LockEventStore: AnyObject {
     
-    func fetch(_ fetchRequest: LockEvent.FetchRequest) throws -> [LockEvent]
+    func fetch(_ fetchRequest: LockEvent.FetchRequest) async throws -> [LockEvent]
     
-    func save(_ event: LockEvent) throws
+    func save(_ event: LockEvent) async throws
 }
 
 // MARK: - Supporting Types
 
-public final class InMemoryLockEvents: LockEventStore {
+public actor InMemoryLockEvents: LockEventStore {
     
     public init() { }
     
     public private(set) var events = [LockEvent]()
     
-    public func fetch(_ fetchRequest: LockEvent.FetchRequest) throws -> [LockEvent] {
+    public func fetch(_ fetchRequest: LockEvent.FetchRequest) -> [LockEvent] {
         return events.fetch(fetchRequest)
     }
     
-    public func save(_ event: LockEvent) throws {
+    public func save(_ event: LockEvent) {
         events.append(event)
     }
 }
@@ -36,7 +36,7 @@ public final class InMemoryLockEvents: LockEventStore {
 
 public extension LockEvent {
     
-    struct FetchRequest: Codable, Equatable {
+    struct FetchRequest: Codable, Equatable, Hashable {
         
         /// The fetch offset of the fetch request.
         public var offset: UInt8
@@ -57,14 +57,17 @@ public extension LockEvent {
         }
     }
     
-    struct Predicate: Codable, Equatable {
+    /// Lock Event Fetch Request Predicate
+    struct Predicate: Codable, Equatable, Hashable {
         
+        /// The keys used to filter by the results.
         public var keys: [UUID]?
         
+        /// The start date to filter results.
         public var start: Date?
         
         public var end: Date?
-                
+        
         public init(keys: [UUID]?,
                     start: Date? = nil,
                     end: Date? = nil) {

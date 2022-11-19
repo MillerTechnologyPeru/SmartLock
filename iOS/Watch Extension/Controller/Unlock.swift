@@ -13,19 +13,19 @@ import CoreLock
 
 public extension ActivityInterface where Self: WKInterfaceController {
     
-    func unlock(lock identifier: UUID, peripheral: LockPeripheral<NativeCentral>) {
+    func unlock(lock id: UUID, peripheral: NativeCentral.Peripheral) {
         
         let needsSync: Bool
-        if let lockCache = Store.shared[lock: identifier] {
-            needsSync = Store.shared[key: lockCache.key.identifier] == nil
+        if let lockCache = Store.shared[lock: id] {
+            needsSync = Store.shared[key: lockCache.key.id] == nil
         } else {
             needsSync = true
         }
         if needsSync {
             Store.shared.syncApp()
         }
-        performActivity(queue: .bluetooth, {
-            try Store.shared.unlock(peripheral)
+        performActivity({
+            try await Store.shared.unlock(peripheral)
         }, completion: { (controller, hasKey) in
             let haptic: WKHapticType = hasKey ? .success : .failure
             WKInterfaceDevice.current().play(haptic)

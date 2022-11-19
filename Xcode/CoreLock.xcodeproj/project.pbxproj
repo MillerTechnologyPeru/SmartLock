@@ -7,263 +7,263 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		6E0A32D522D8FCFB002EF9DE /* URL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E0A32D422D8FCFB002EF9DE /* URL.swift */; };
-		6E0A32D622D8FCFB002EF9DE /* URL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E0A32D422D8FCFB002EF9DE /* URL.swift */; };
-		6E0A32D722D8FCFB002EF9DE /* URL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E0A32D422D8FCFB002EF9DE /* URL.swift */; };
-		6E0A32D822D8FCFB002EF9DE /* URL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E0A32D422D8FCFB002EF9DE /* URL.swift */; };
+		6E01DB7528D683AB004B5956 /* LockAuthorizationStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB3428D683AA004B5956 /* LockAuthorizationStore.swift */; };
+		6E01DB7628D683AB004B5956 /* LockAuthorizationStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB3428D683AA004B5956 /* LockAuthorizationStore.swift */; };
+		6E01DB7728D683AB004B5956 /* LockAuthorizationStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB3428D683AA004B5956 /* LockAuthorizationStore.swift */; };
+		6E01DB7828D683AB004B5956 /* LockAuthorizationStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB3428D683AA004B5956 /* LockAuthorizationStore.swift */; };
+		6E01DB7928D683AB004B5956 /* UnlockAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB3528D683AA004B5956 /* UnlockAction.swift */; };
+		6E01DB7A28D683AB004B5956 /* UnlockAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB3528D683AA004B5956 /* UnlockAction.swift */; };
+		6E01DB7B28D683AB004B5956 /* UnlockAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB3528D683AA004B5956 /* UnlockAction.swift */; };
+		6E01DB7C28D683AB004B5956 /* UnlockAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB3528D683AA004B5956 /* UnlockAction.swift */; };
+		6E01DB7D28D683AB004B5956 /* Advertisement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB3728D683AA004B5956 /* Advertisement.swift */; };
+		6E01DB7E28D683AB004B5956 /* Advertisement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB3728D683AA004B5956 /* Advertisement.swift */; };
+		6E01DB7F28D683AB004B5956 /* Advertisement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB3728D683AA004B5956 /* Advertisement.swift */; };
+		6E01DB8028D683AB004B5956 /* Advertisement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB3728D683AA004B5956 /* Advertisement.swift */; };
+		6E01DB8128D683AB004B5956 /* ConfirmNewKeyCharacteristic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB3828D683AA004B5956 /* ConfirmNewKeyCharacteristic.swift */; };
+		6E01DB8228D683AB004B5956 /* ConfirmNewKeyCharacteristic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB3828D683AA004B5956 /* ConfirmNewKeyCharacteristic.swift */; };
+		6E01DB8328D683AB004B5956 /* ConfirmNewKeyCharacteristic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB3828D683AA004B5956 /* ConfirmNewKeyCharacteristic.swift */; };
+		6E01DB8428D683AB004B5956 /* ConfirmNewKeyCharacteristic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB3828D683AA004B5956 /* ConfirmNewKeyCharacteristic.swift */; };
+		6E01DB8528D683AB004B5956 /* Central.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB3928D683AA004B5956 /* Central.swift */; };
+		6E01DB8628D683AB004B5956 /* Central.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB3928D683AA004B5956 /* Central.swift */; };
+		6E01DB8728D683AB004B5956 /* Central.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB3928D683AA004B5956 /* Central.swift */; };
+		6E01DB8828D683AB004B5956 /* Central.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB3928D683AA004B5956 /* Central.swift */; };
+		6E01DB8928D683AB004B5956 /* ListEventsCharacteristic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB3A28D683AA004B5956 /* ListEventsCharacteristic.swift */; };
+		6E01DB8A28D683AB004B5956 /* ListEventsCharacteristic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB3A28D683AA004B5956 /* ListEventsCharacteristic.swift */; };
+		6E01DB8B28D683AB004B5956 /* ListEventsCharacteristic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB3A28D683AA004B5956 /* ListEventsCharacteristic.swift */; };
+		6E01DB8C28D683AB004B5956 /* ListEventsCharacteristic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB3A28D683AA004B5956 /* ListEventsCharacteristic.swift */; };
+		6E01DB8D28D683AB004B5956 /* UnlockCharacteristic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB3B28D683AA004B5956 /* UnlockCharacteristic.swift */; };
+		6E01DB8E28D683AB004B5956 /* UnlockCharacteristic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB3B28D683AA004B5956 /* UnlockCharacteristic.swift */; };
+		6E01DB8F28D683AB004B5956 /* UnlockCharacteristic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB3B28D683AA004B5956 /* UnlockCharacteristic.swift */; };
+		6E01DB9028D683AB004B5956 /* UnlockCharacteristic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB3B28D683AA004B5956 /* UnlockCharacteristic.swift */; };
+		6E01DB9128D683AB004B5956 /* SetupCharacteristic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB3C28D683AA004B5956 /* SetupCharacteristic.swift */; };
+		6E01DB9228D683AB004B5956 /* SetupCharacteristic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB3C28D683AA004B5956 /* SetupCharacteristic.swift */; };
+		6E01DB9328D683AB004B5956 /* SetupCharacteristic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB3C28D683AA004B5956 /* SetupCharacteristic.swift */; };
+		6E01DB9428D683AB004B5956 /* SetupCharacteristic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB3C28D683AA004B5956 /* SetupCharacteristic.swift */; };
+		6E01DB9528D683AB004B5956 /* DeviceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB3D28D683AA004B5956 /* DeviceManager.swift */; };
+		6E01DB9628D683AB004B5956 /* DeviceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB3D28D683AA004B5956 /* DeviceManager.swift */; };
+		6E01DB9728D683AB004B5956 /* DeviceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB3D28D683AA004B5956 /* DeviceManager.swift */; };
+		6E01DB9828D683AB004B5956 /* DeviceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB3D28D683AA004B5956 /* DeviceManager.swift */; };
+		6E01DB9928D683AB004B5956 /* LockInformationCharacteristic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB3E28D683AA004B5956 /* LockInformationCharacteristic.swift */; };
+		6E01DB9A28D683AB004B5956 /* LockInformationCharacteristic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB3E28D683AA004B5956 /* LockInformationCharacteristic.swift */; };
+		6E01DB9B28D683AB004B5956 /* LockInformationCharacteristic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB3E28D683AA004B5956 /* LockInformationCharacteristic.swift */; };
+		6E01DB9C28D683AB004B5956 /* LockInformationCharacteristic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB3E28D683AA004B5956 /* LockInformationCharacteristic.swift */; };
+		6E01DB9D28D683AB004B5956 /* ListKeysCharacteristic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB3F28D683AA004B5956 /* ListKeysCharacteristic.swift */; };
+		6E01DB9E28D683AB004B5956 /* ListKeysCharacteristic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB3F28D683AA004B5956 /* ListKeysCharacteristic.swift */; };
+		6E01DB9F28D683AB004B5956 /* ListKeysCharacteristic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB3F28D683AA004B5956 /* ListKeysCharacteristic.swift */; };
+		6E01DBA028D683AB004B5956 /* ListKeysCharacteristic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB3F28D683AA004B5956 /* ListKeysCharacteristic.swift */; };
+		6E01DBA128D683AB004B5956 /* KeysCharacteristic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB4028D683AA004B5956 /* KeysCharacteristic.swift */; };
+		6E01DBA228D683AB004B5956 /* KeysCharacteristic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB4028D683AA004B5956 /* KeysCharacteristic.swift */; };
+		6E01DBA328D683AB004B5956 /* KeysCharacteristic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB4028D683AA004B5956 /* KeysCharacteristic.swift */; };
+		6E01DBA428D683AB004B5956 /* KeysCharacteristic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB4028D683AA004B5956 /* KeysCharacteristic.swift */; };
+		6E01DBA528D683AB004B5956 /* CreateNewKeyCharacteristic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB4128D683AA004B5956 /* CreateNewKeyCharacteristic.swift */; };
+		6E01DBA628D683AB004B5956 /* CreateNewKeyCharacteristic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB4128D683AA004B5956 /* CreateNewKeyCharacteristic.swift */; };
+		6E01DBA728D683AB004B5956 /* CreateNewKeyCharacteristic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB4128D683AA004B5956 /* CreateNewKeyCharacteristic.swift */; };
+		6E01DBA828D683AB004B5956 /* CreateNewKeyCharacteristic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB4128D683AA004B5956 /* CreateNewKeyCharacteristic.swift */; };
+		6E01DBA928D683AB004B5956 /* TLV.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB4228D683AA004B5956 /* TLV.swift */; };
+		6E01DBAA28D683AB004B5956 /* TLV.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB4228D683AA004B5956 /* TLV.swift */; };
+		6E01DBAB28D683AB004B5956 /* TLV.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB4228D683AA004B5956 /* TLV.swift */; };
+		6E01DBAC28D683AB004B5956 /* TLV.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB4228D683AA004B5956 /* TLV.swift */; };
+		6E01DBAD28D683AB004B5956 /* Notification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB4328D683AA004B5956 /* Notification.swift */; };
+		6E01DBAE28D683AB004B5956 /* Notification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB4328D683AA004B5956 /* Notification.swift */; };
+		6E01DBAF28D683AB004B5956 /* Notification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB4328D683AA004B5956 /* Notification.swift */; };
+		6E01DBB028D683AB004B5956 /* Notification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB4328D683AA004B5956 /* Notification.swift */; };
+		6E01DBB128D683AB004B5956 /* EventsCharacteristic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB4428D683AA004B5956 /* EventsCharacteristic.swift */; };
+		6E01DBB228D683AB004B5956 /* EventsCharacteristic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB4428D683AA004B5956 /* EventsCharacteristic.swift */; };
+		6E01DBB328D683AB004B5956 /* EventsCharacteristic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB4428D683AA004B5956 /* EventsCharacteristic.swift */; };
+		6E01DBB428D683AB004B5956 /* EventsCharacteristic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB4428D683AA004B5956 /* EventsCharacteristic.swift */; };
+		6E01DBB528D683AB004B5956 /* GATTProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB4528D683AA004B5956 /* GATTProfile.swift */; };
+		6E01DBB628D683AB004B5956 /* GATTProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB4528D683AA004B5956 /* GATTProfile.swift */; };
+		6E01DBB728D683AB004B5956 /* GATTProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB4528D683AA004B5956 /* GATTProfile.swift */; };
+		6E01DBB828D683AB004B5956 /* GATTProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB4528D683AA004B5956 /* GATTProfile.swift */; };
+		6E01DBB928D683AB004B5956 /* RemoveKeyCharacteristic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB4628D683AA004B5956 /* RemoveKeyCharacteristic.swift */; };
+		6E01DBBA28D683AB004B5956 /* RemoveKeyCharacteristic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB4628D683AA004B5956 /* RemoveKeyCharacteristic.swift */; };
+		6E01DBBB28D683AB004B5956 /* RemoveKeyCharacteristic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB4628D683AA004B5956 /* RemoveKeyCharacteristic.swift */; };
+		6E01DBBC28D683AB004B5956 /* RemoveKeyCharacteristic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB4628D683AA004B5956 /* RemoveKeyCharacteristic.swift */; };
+		6E01DBBD28D683AB004B5956 /* GATTError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB4728D683AA004B5956 /* GATTError.swift */; };
+		6E01DBBE28D683AB004B5956 /* GATTError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB4728D683AA004B5956 /* GATTError.swift */; };
+		6E01DBBF28D683AB004B5956 /* GATTError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB4728D683AA004B5956 /* GATTError.swift */; };
+		6E01DBC028D683AB004B5956 /* GATTError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB4728D683AA004B5956 /* GATTError.swift */; };
+		6E01DBC128D683AB004B5956 /* LockInformation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB4828D683AA004B5956 /* LockInformation.swift */; };
+		6E01DBC228D683AB004B5956 /* LockInformation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB4828D683AA004B5956 /* LockInformation.swift */; };
+		6E01DBC328D683AB004B5956 /* LockInformation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB4828D683AA004B5956 /* LockInformation.swift */; };
+		6E01DBC428D683AB004B5956 /* LockInformation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB4828D683AA004B5956 /* LockInformation.swift */; };
+		6E01DBC528D683AB004B5956 /* LockModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB4928D683AA004B5956 /* LockModel.swift */; };
+		6E01DBC628D683AB004B5956 /* LockModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB4928D683AA004B5956 /* LockModel.swift */; };
+		6E01DBC728D683AB004B5956 /* LockModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB4928D683AA004B5956 /* LockModel.swift */; };
+		6E01DBC828D683AB004B5956 /* LockModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB4928D683AA004B5956 /* LockModel.swift */; };
+		6E01DBC928D683AB004B5956 /* BuildVersion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB4A28D683AA004B5956 /* BuildVersion.swift */; };
+		6E01DBCA28D683AB004B5956 /* BuildVersion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB4A28D683AA004B5956 /* BuildVersion.swift */; };
+		6E01DBCB28D683AB004B5956 /* BuildVersion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB4A28D683AA004B5956 /* BuildVersion.swift */; };
+		6E01DBCC28D683AB004B5956 /* BuildVersion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB4A28D683AA004B5956 /* BuildVersion.swift */; };
+		6E01DBCD28D683AB004B5956 /* KeyCredentials.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB4B28D683AA004B5956 /* KeyCredentials.swift */; };
+		6E01DBCE28D683AB004B5956 /* KeyCredentials.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB4B28D683AA004B5956 /* KeyCredentials.swift */; };
+		6E01DBCF28D683AB004B5956 /* KeyCredentials.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB4B28D683AA004B5956 /* KeyCredentials.swift */; };
+		6E01DBD028D683AB004B5956 /* KeyCredentials.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB4B28D683AA004B5956 /* KeyCredentials.swift */; };
+		6E01DBD128D683AB004B5956 /* POSIXTime.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB4C28D683AA004B5956 /* POSIXTime.swift */; };
+		6E01DBD228D683AB004B5956 /* POSIXTime.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB4C28D683AA004B5956 /* POSIXTime.swift */; };
+		6E01DBD328D683AB004B5956 /* POSIXTime.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB4C28D683AA004B5956 /* POSIXTime.swift */; };
+		6E01DBD428D683AB004B5956 /* POSIXTime.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB4C28D683AA004B5956 /* POSIXTime.swift */; };
+		6E01DBD528D683AB004B5956 /* EventStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB4D28D683AA004B5956 /* EventStore.swift */; };
+		6E01DBD628D683AB004B5956 /* EventStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB4D28D683AA004B5956 /* EventStore.swift */; };
+		6E01DBD728D683AB004B5956 /* EventStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB4D28D683AA004B5956 /* EventStore.swift */; };
+		6E01DBD828D683AB004B5956 /* EventStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB4D28D683AA004B5956 /* EventStore.swift */; };
+		6E01DBD928D683AB004B5956 /* GitCommits.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB4E28D683AA004B5956 /* GitCommits.swift */; };
+		6E01DBDA28D683AB004B5956 /* GitCommits.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB4E28D683AA004B5956 /* GitCommits.swift */; };
+		6E01DBDB28D683AB004B5956 /* GitCommits.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB4E28D683AA004B5956 /* GitCommits.swift */; };
+		6E01DBDC28D683AB004B5956 /* GitCommits.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB4E28D683AA004B5956 /* GitCommits.swift */; };
+		6E01DBDD28D683AB004B5956 /* Chunk.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB4F28D683AA004B5956 /* Chunk.swift */; };
+		6E01DBDE28D683AB004B5956 /* Chunk.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB4F28D683AA004B5956 /* Chunk.swift */; };
+		6E01DBDF28D683AB004B5956 /* Chunk.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB4F28D683AA004B5956 /* Chunk.swift */; };
+		6E01DBE028D683AB004B5956 /* Chunk.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB4F28D683AA004B5956 /* Chunk.swift */; };
+		6E01DBE128D683AB004B5956 /* Status.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB5028D683AA004B5956 /* Status.swift */; };
+		6E01DBE228D683AB004B5956 /* Status.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB5028D683AA004B5956 /* Status.swift */; };
+		6E01DBE328D683AB004B5956 /* Status.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB5028D683AA004B5956 /* Status.swift */; };
+		6E01DBE428D683AB004B5956 /* Status.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB5028D683AA004B5956 /* Status.swift */; };
+		6E01DBE528D683AB004B5956 /* Version.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB5128D683AA004B5956 /* Version.swift */; };
+		6E01DBE628D683AB004B5956 /* Version.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB5128D683AA004B5956 /* Version.swift */; };
+		6E01DBE728D683AB004B5956 /* Version.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB5128D683AA004B5956 /* Version.swift */; };
+		6E01DBE828D683AB004B5956 /* Version.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB5128D683AA004B5956 /* Version.swift */; };
+		6E01DBE928D683AB004B5956 /* SmartLockProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB5228D683AA004B5956 /* SmartLockProfile.swift */; };
+		6E01DBEA28D683AB004B5956 /* SmartLockProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB5228D683AA004B5956 /* SmartLockProfile.swift */; };
+		6E01DBEB28D683AB004B5956 /* SmartLockProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB5228D683AA004B5956 /* SmartLockProfile.swift */; };
+		6E01DBEC28D683AB004B5956 /* SmartLockProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB5228D683AA004B5956 /* SmartLockProfile.swift */; };
+		6E01DBED28D683AB004B5956 /* EventsRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB5428D683AB004B5956 /* EventsRequest.swift */; };
+		6E01DBEE28D683AB004B5956 /* EventsRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB5428D683AB004B5956 /* EventsRequest.swift */; };
+		6E01DBEF28D683AB004B5956 /* EventsRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB5428D683AB004B5956 /* EventsRequest.swift */; };
+		6E01DBF028D683AB004B5956 /* EventsRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB5428D683AB004B5956 /* EventsRequest.swift */; };
+		6E01DBF128D683AB004B5956 /* DeleteKeyRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB5528D683AB004B5956 /* DeleteKeyRequest.swift */; };
+		6E01DBF228D683AB004B5956 /* DeleteKeyRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB5528D683AB004B5956 /* DeleteKeyRequest.swift */; };
+		6E01DBF328D683AB004B5956 /* DeleteKeyRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB5528D683AB004B5956 /* DeleteKeyRequest.swift */; };
+		6E01DBF428D683AB004B5956 /* DeleteKeyRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB5528D683AB004B5956 /* DeleteKeyRequest.swift */; };
+		6E01DBF528D683AB004B5956 /* EventsResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB5628D683AB004B5956 /* EventsResponse.swift */; };
+		6E01DBF628D683AB004B5956 /* EventsResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB5628D683AB004B5956 /* EventsResponse.swift */; };
+		6E01DBF728D683AB004B5956 /* EventsResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB5628D683AB004B5956 /* EventsResponse.swift */; };
+		6E01DBF828D683AB004B5956 /* EventsResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB5628D683AB004B5956 /* EventsResponse.swift */; };
+		6E01DBF928D683AB004B5956 /* CreateNewKeyRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB5728D683AB004B5956 /* CreateNewKeyRequest.swift */; };
+		6E01DBFA28D683AB004B5956 /* CreateNewKeyRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB5728D683AB004B5956 /* CreateNewKeyRequest.swift */; };
+		6E01DBFB28D683AB004B5956 /* CreateNewKeyRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB5728D683AB004B5956 /* CreateNewKeyRequest.swift */; };
+		6E01DBFC28D683AB004B5956 /* CreateNewKeyRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB5728D683AB004B5956 /* CreateNewKeyRequest.swift */; };
+		6E01DBFD28D683AB004B5956 /* LockNetService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB5828D683AB004B5956 /* LockNetService.swift */; };
+		6E01DBFE28D683AB004B5956 /* LockNetService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB5828D683AB004B5956 /* LockNetService.swift */; };
+		6E01DBFF28D683AB004B5956 /* LockNetService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB5828D683AB004B5956 /* LockNetService.swift */; };
+		6E01DC0028D683AB004B5956 /* LockNetService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB5828D683AB004B5956 /* LockNetService.swift */; };
+		6E01DC0128D683AB004B5956 /* KeysResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB5928D683AB004B5956 /* KeysResponse.swift */; };
+		6E01DC0228D683AB004B5956 /* KeysResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB5928D683AB004B5956 /* KeysResponse.swift */; };
+		6E01DC0328D683AB004B5956 /* KeysResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB5928D683AB004B5956 /* KeysResponse.swift */; };
+		6E01DC0428D683AB004B5956 /* KeysResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB5928D683AB004B5956 /* KeysResponse.swift */; };
+		6E01DC0528D683AB004B5956 /* URLSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB5A28D683AB004B5956 /* URLSession.swift */; };
+		6E01DC0628D683AB004B5956 /* URLSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB5A28D683AB004B5956 /* URLSession.swift */; };
+		6E01DC0728D683AB004B5956 /* URLSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB5A28D683AB004B5956 /* URLSession.swift */; };
+		6E01DC0828D683AB004B5956 /* URLSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB5A28D683AB004B5956 /* URLSession.swift */; };
+		6E01DC0928D683AB004B5956 /* LockInformationResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB5B28D683AB004B5956 /* LockInformationResponse.swift */; };
+		6E01DC0A28D683AB004B5956 /* LockInformationResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB5B28D683AB004B5956 /* LockInformationResponse.swift */; };
+		6E01DC0B28D683AB004B5956 /* LockInformationResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB5B28D683AB004B5956 /* LockInformationResponse.swift */; };
+		6E01DC0C28D683AB004B5956 /* LockInformationResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB5B28D683AB004B5956 /* LockInformationResponse.swift */; };
+		6E01DC0D28D683AB004B5956 /* URL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB5C28D683AB004B5956 /* URL.swift */; };
+		6E01DC0E28D683AB004B5956 /* URL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB5C28D683AB004B5956 /* URL.swift */; };
+		6E01DC0F28D683AB004B5956 /* URL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB5C28D683AB004B5956 /* URL.swift */; };
+		6E01DC1028D683AB004B5956 /* URL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB5C28D683AB004B5956 /* URL.swift */; };
+		6E01DC1128D683AB004B5956 /* UpdateRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB5D28D683AB004B5956 /* UpdateRequest.swift */; };
+		6E01DC1228D683AB004B5956 /* UpdateRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB5D28D683AB004B5956 /* UpdateRequest.swift */; };
+		6E01DC1328D683AB004B5956 /* UpdateRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB5D28D683AB004B5956 /* UpdateRequest.swift */; };
+		6E01DC1428D683AB004B5956 /* UpdateRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB5D28D683AB004B5956 /* UpdateRequest.swift */; };
+		6E01DC1528D683AB004B5956 /* KeysRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB5E28D683AB004B5956 /* KeysRequest.swift */; };
+		6E01DC1628D683AB004B5956 /* KeysRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB5E28D683AB004B5956 /* KeysRequest.swift */; };
+		6E01DC1728D683AB004B5956 /* KeysRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB5E28D683AB004B5956 /* KeysRequest.swift */; };
+		6E01DC1828D683AB004B5956 /* KeysRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB5E28D683AB004B5956 /* KeysRequest.swift */; };
+		6E01DC1928D683AB004B5956 /* LockInformationRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB5F28D683AB004B5956 /* LockInformationRequest.swift */; };
+		6E01DC1A28D683AB004B5956 /* LockInformationRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB5F28D683AB004B5956 /* LockInformationRequest.swift */; };
+		6E01DC1B28D683AB004B5956 /* LockInformationRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB5F28D683AB004B5956 /* LockInformationRequest.swift */; };
+		6E01DC1C28D683AB004B5956 /* LockInformationRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB5F28D683AB004B5956 /* LockInformationRequest.swift */; };
+		6E01DC1D28D683AB004B5956 /* Authentication.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB6128D683AB004B5956 /* Authentication.swift */; };
+		6E01DC1E28D683AB004B5956 /* Authentication.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB6128D683AB004B5956 /* Authentication.swift */; };
+		6E01DC1F28D683AB004B5956 /* Authentication.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB6128D683AB004B5956 /* Authentication.swift */; };
+		6E01DC2028D683AB004B5956 /* Authentication.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB6128D683AB004B5956 /* Authentication.swift */; };
+		6E01DC2128D683AB004B5956 /* AuthenticationError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB6228D683AB004B5956 /* AuthenticationError.swift */; };
+		6E01DC2228D683AB004B5956 /* AuthenticationError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB6228D683AB004B5956 /* AuthenticationError.swift */; };
+		6E01DC2328D683AB004B5956 /* AuthenticationError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB6228D683AB004B5956 /* AuthenticationError.swift */; };
+		6E01DC2428D683AB004B5956 /* AuthenticationError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB6228D683AB004B5956 /* AuthenticationError.swift */; };
+		6E01DC2528D683AB004B5956 /* SecureData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB6328D683AB004B5956 /* SecureData.swift */; };
+		6E01DC2628D683AB004B5956 /* SecureData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB6328D683AB004B5956 /* SecureData.swift */; };
+		6E01DC2728D683AB004B5956 /* SecureData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB6328D683AB004B5956 /* SecureData.swift */; };
+		6E01DC2828D683AB004B5956 /* SecureData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB6328D683AB004B5956 /* SecureData.swift */; };
+		6E01DC2928D683AB004B5956 /* Crypto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB6428D683AB004B5956 /* Crypto.swift */; };
+		6E01DC2A28D683AB004B5956 /* Crypto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB6428D683AB004B5956 /* Crypto.swift */; };
+		6E01DC2B28D683AB004B5956 /* Crypto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB6428D683AB004B5956 /* Crypto.swift */; };
+		6E01DC2C28D683AB004B5956 /* Crypto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB6428D683AB004B5956 /* Crypto.swift */; };
+		6E01DC2D28D683AB004B5956 /* EncryptedData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB6528D683AB004B5956 /* EncryptedData.swift */; };
+		6E01DC2E28D683AB004B5956 /* EncryptedData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB6528D683AB004B5956 /* EncryptedData.swift */; };
+		6E01DC2F28D683AB004B5956 /* EncryptedData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB6528D683AB004B5956 /* EncryptedData.swift */; };
+		6E01DC3028D683AB004B5956 /* EncryptedData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB6528D683AB004B5956 /* EncryptedData.swift */; };
+		6E01DC3128D683AB004B5956 /* BitMaskOption.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB6628D683AB004B5956 /* BitMaskOption.swift */; };
+		6E01DC3228D683AB004B5956 /* BitMaskOption.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB6628D683AB004B5956 /* BitMaskOption.swift */; };
+		6E01DC3328D683AB004B5956 /* BitMaskOption.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB6628D683AB004B5956 /* BitMaskOption.swift */; };
+		6E01DC3428D683AB004B5956 /* BitMaskOption.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB6628D683AB004B5956 /* BitMaskOption.swift */; };
+		6E01DC3528D683AB004B5956 /* DateComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB6728D683AB004B5956 /* DateComponents.swift */; };
+		6E01DC3628D683AB004B5956 /* DateComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB6728D683AB004B5956 /* DateComponents.swift */; };
+		6E01DC3728D683AB004B5956 /* DateComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB6728D683AB004B5956 /* DateComponents.swift */; };
+		6E01DC3828D683AB004B5956 /* DateComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB6728D683AB004B5956 /* DateComponents.swift */; };
+		6E01DC3928D683AB004B5956 /* Date.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB6928D683AB004B5956 /* Date.swift */; };
+		6E01DC3A28D683AB004B5956 /* Date.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB6928D683AB004B5956 /* Date.swift */; };
+		6E01DC3B28D683AB004B5956 /* Date.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB6928D683AB004B5956 /* Date.swift */; };
+		6E01DC3C28D683AB004B5956 /* Date.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB6928D683AB004B5956 /* Date.swift */; };
+		6E01DC3D28D683AB004B5956 /* UUID.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB6A28D683AB004B5956 /* UUID.swift */; };
+		6E01DC3E28D683AB004B5956 /* UUID.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB6A28D683AB004B5956 /* UUID.swift */; };
+		6E01DC3F28D683AB004B5956 /* UUID.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB6A28D683AB004B5956 /* UUID.swift */; };
+		6E01DC4028D683AB004B5956 /* UUID.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB6A28D683AB004B5956 /* UUID.swift */; };
+		6E01DC4128D683AB004B5956 /* Integer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB6B28D683AB004B5956 /* Integer.swift */; };
+		6E01DC4228D683AB004B5956 /* Integer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB6B28D683AB004B5956 /* Integer.swift */; };
+		6E01DC4328D683AB004B5956 /* Integer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB6B28D683AB004B5956 /* Integer.swift */; };
+		6E01DC4428D683AB004B5956 /* Integer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB6B28D683AB004B5956 /* Integer.swift */; };
+		6E01DC4528D683AB004B5956 /* Bool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB6C28D683AB004B5956 /* Bool.swift */; };
+		6E01DC4628D683AB004B5956 /* Bool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB6C28D683AB004B5956 /* Bool.swift */; };
+		6E01DC4728D683AB004B5956 /* Bool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB6C28D683AB004B5956 /* Bool.swift */; };
+		6E01DC4828D683AB004B5956 /* Bool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB6C28D683AB004B5956 /* Bool.swift */; };
+		6E01DC4928D683AB004B5956 /* Permission.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB6D28D683AB004B5956 /* Permission.swift */; };
+		6E01DC4A28D683AB004B5956 /* Permission.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB6D28D683AB004B5956 /* Permission.swift */; };
+		6E01DC4B28D683AB004B5956 /* Permission.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB6D28D683AB004B5956 /* Permission.swift */; };
+		6E01DC4C28D683AB004B5956 /* Permission.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB6D28D683AB004B5956 /* Permission.swift */; };
+		6E01DC4D28D683AB004B5956 /* LockState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB6E28D683AB004B5956 /* LockState.swift */; };
+		6E01DC4E28D683AB004B5956 /* LockState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB6E28D683AB004B5956 /* LockState.swift */; };
+		6E01DC4F28D683AB004B5956 /* LockState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB6E28D683AB004B5956 /* LockState.swift */; };
+		6E01DC5028D683AB004B5956 /* LockState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB6E28D683AB004B5956 /* LockState.swift */; };
+		6E01DC5128D683AB004B5956 /* NewKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB6F28D683AB004B5956 /* NewKey.swift */; };
+		6E01DC5228D683AB004B5956 /* NewKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB6F28D683AB004B5956 /* NewKey.swift */; };
+		6E01DC5328D683AB004B5956 /* NewKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB6F28D683AB004B5956 /* NewKey.swift */; };
+		6E01DC5428D683AB004B5956 /* NewKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB6F28D683AB004B5956 /* NewKey.swift */; };
+		6E01DC5528D683AB004B5956 /* LockHardware.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB7028D683AB004B5956 /* LockHardware.swift */; };
+		6E01DC5628D683AB004B5956 /* LockHardware.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB7028D683AB004B5956 /* LockHardware.swift */; };
+		6E01DC5728D683AB004B5956 /* LockHardware.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB7028D683AB004B5956 /* LockHardware.swift */; };
+		6E01DC5828D683AB004B5956 /* LockHardware.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB7028D683AB004B5956 /* LockHardware.swift */; };
+		6E01DC5928D683AB004B5956 /* LockConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB7128D683AB004B5956 /* LockConfiguration.swift */; };
+		6E01DC5A28D683AB004B5956 /* LockConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB7128D683AB004B5956 /* LockConfiguration.swift */; };
+		6E01DC5B28D683AB004B5956 /* LockConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB7128D683AB004B5956 /* LockConfiguration.swift */; };
+		6E01DC5C28D683AB004B5956 /* LockConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB7128D683AB004B5956 /* LockConfiguration.swift */; };
+		6E01DC5D28D683AB004B5956 /* Event.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB7228D683AB004B5956 /* Event.swift */; };
+		6E01DC5E28D683AB004B5956 /* Event.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB7228D683AB004B5956 /* Event.swift */; };
+		6E01DC5F28D683AB004B5956 /* Event.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB7228D683AB004B5956 /* Event.swift */; };
+		6E01DC6028D683AB004B5956 /* Event.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB7228D683AB004B5956 /* Event.swift */; };
+		6E01DC6128D683AB004B5956 /* Key.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB7328D683AB004B5956 /* Key.swift */; };
+		6E01DC6228D683AB004B5956 /* Key.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB7328D683AB004B5956 /* Key.swift */; };
+		6E01DC6328D683AB004B5956 /* Key.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB7328D683AB004B5956 /* Key.swift */; };
+		6E01DC6428D683AB004B5956 /* Key.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB7328D683AB004B5956 /* Key.swift */; };
+		6E01DC6528D683AB004B5956 /* LockConfigurationStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB7428D683AB004B5956 /* LockConfigurationStore.swift */; };
+		6E01DC6628D683AB004B5956 /* LockConfigurationStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB7428D683AB004B5956 /* LockConfigurationStore.swift */; };
+		6E01DC6728D683AB004B5956 /* LockConfigurationStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB7428D683AB004B5956 /* LockConfigurationStore.swift */; };
+		6E01DC6828D683AB004B5956 /* LockConfigurationStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01DB7428D683AB004B5956 /* LockConfigurationStore.swift */; };
 		6E0A32DA22D91E1D002EF9DE /* URLTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E0A32D922D91E1D002EF9DE /* URLTests.swift */; };
-		6E23152023576F7E00C363EC /* LockNetService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E23151F23576F7E00C363EC /* LockNetService.swift */; };
-		6E23152123576F7E00C363EC /* LockNetService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E23151F23576F7E00C363EC /* LockNetService.swift */; };
-		6E23152223576F7E00C363EC /* LockNetService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E23151F23576F7E00C363EC /* LockNetService.swift */; };
-		6E23152323576F7E00C363EC /* LockNetService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E23151F23576F7E00C363EC /* LockNetService.swift */; };
-		6E4729EB235AE7B4007CBC07 /* UpdateRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E4729EA235AE7B3007CBC07 /* UpdateRequest.swift */; };
-		6E4729EC235AE7B4007CBC07 /* UpdateRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E4729EA235AE7B3007CBC07 /* UpdateRequest.swift */; };
-		6E4729ED235AE7B4007CBC07 /* UpdateRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E4729EA235AE7B3007CBC07 /* UpdateRequest.swift */; };
-		6E4729EE235AE7B4007CBC07 /* UpdateRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E4729EA235AE7B3007CBC07 /* UpdateRequest.swift */; };
-		6E4729FE235B768E007CBC07 /* DeleteKeyRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E4729FD235B768E007CBC07 /* DeleteKeyRequest.swift */; };
-		6E4729FF235B768F007CBC07 /* DeleteKeyRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E4729FD235B768E007CBC07 /* DeleteKeyRequest.swift */; };
-		6E472A00235B768F007CBC07 /* DeleteKeyRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E4729FD235B768E007CBC07 /* DeleteKeyRequest.swift */; };
-		6E472A01235B768F007CBC07 /* DeleteKeyRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E4729FD235B768E007CBC07 /* DeleteKeyRequest.swift */; };
-		6E621244234721FF007D49BF /* Bluetooth in Frameworks */ = {isa = PBXBuildFile; productRef = 6E621243234721FF007D49BF /* Bluetooth */; };
-		6E62124823472217007D49BF /* Bluetooth in Frameworks */ = {isa = PBXBuildFile; productRef = 6E62124723472217007D49BF /* Bluetooth */; };
-		6E621266234723ED007D49BF /* Bluetooth in Frameworks */ = {isa = PBXBuildFile; productRef = 6E621265234723ED007D49BF /* Bluetooth */; };
-		6E62126A23472400007D49BF /* Bluetooth in Frameworks */ = {isa = PBXBuildFile; productRef = 6E62126923472400007D49BF /* Bluetooth */; };
-		6E87864B2357ACAB008624C1 /* KeysRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E87864A2357ACAB008624C1 /* KeysRequest.swift */; };
-		6E87864C2357ACAB008624C1 /* KeysRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E87864A2357ACAB008624C1 /* KeysRequest.swift */; };
-		6E87864D2357ACAB008624C1 /* KeysRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E87864A2357ACAB008624C1 /* KeysRequest.swift */; };
-		6E87864E2357ACAB008624C1 /* KeysRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E87864A2357ACAB008624C1 /* KeysRequest.swift */; };
-		6E93D354231C624300119F65 /* Notification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E93D351231C623B00119F65 /* Notification.swift */; };
-		6E93D355231C624300119F65 /* Notification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E93D351231C623B00119F65 /* Notification.swift */; };
-		6E93D356231C624300119F65 /* Notification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E93D351231C623B00119F65 /* Notification.swift */; };
-		6E93D357231C624300119F65 /* Notification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E93D351231C623B00119F65 /* Notification.swift */; };
-		6E93D358231C624300119F65 /* ListEventsCharacteristic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E93D352231C623E00119F65 /* ListEventsCharacteristic.swift */; };
-		6E93D359231C624300119F65 /* ListEventsCharacteristic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E93D352231C623E00119F65 /* ListEventsCharacteristic.swift */; };
-		6E93D35A231C624300119F65 /* ListEventsCharacteristic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E93D352231C623E00119F65 /* ListEventsCharacteristic.swift */; };
-		6E93D35B231C624300119F65 /* ListEventsCharacteristic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E93D352231C623E00119F65 /* ListEventsCharacteristic.swift */; };
-		6E93D35C231C624300119F65 /* EventsCharacteristic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E93D353231C624000119F65 /* EventsCharacteristic.swift */; };
-		6E93D35D231C624300119F65 /* EventsCharacteristic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E93D353231C624000119F65 /* EventsCharacteristic.swift */; };
-		6E93D35E231C624300119F65 /* EventsCharacteristic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E93D353231C624000119F65 /* EventsCharacteristic.swift */; };
-		6E93D35F231C624300119F65 /* EventsCharacteristic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E93D353231C624000119F65 /* EventsCharacteristic.swift */; };
-		6E9794C423301FC400B5C5C9 /* UUID.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E9794C323301FC400B5C5C9 /* UUID.swift */; };
-		6E9794C523301FC400B5C5C9 /* UUID.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E9794C323301FC400B5C5C9 /* UUID.swift */; };
-		6E9794C623301FC400B5C5C9 /* UUID.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E9794C323301FC400B5C5C9 /* UUID.swift */; };
-		6E9794C723301FC400B5C5C9 /* UUID.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E9794C323301FC400B5C5C9 /* UUID.swift */; };
-		6E9C95EA23114962007C18FE /* CryptoSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 6E9C95E923114962007C18FE /* CryptoSwift */; };
 		6E9C95ED231149A5007C18FE /* GATT in Frameworks */ = {isa = PBXBuildFile; productRef = 6E9C95EC231149A5007C18FE /* GATT */; };
 		6E9C95EF231149A5007C18FE /* DarwinGATT in Frameworks */ = {isa = PBXBuildFile; productRef = 6E9C95EE231149A5007C18FE /* DarwinGATT */; };
 		6E9C95F2231149F5007C18FE /* TLVCoding in Frameworks */ = {isa = PBXBuildFile; productRef = 6E9C95F1231149F5007C18FE /* TLVCoding */; };
-		6EACDA99231B353A000CF82A /* Event.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EACDA98231B3539000CF82A /* Event.swift */; };
-		6EACDA9A231B353A000CF82A /* Event.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EACDA98231B3539000CF82A /* Event.swift */; };
-		6EACDA9B231B353A000CF82A /* Event.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EACDA98231B3539000CF82A /* Event.swift */; };
-		6EACDA9C231B353A000CF82A /* Event.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EACDA98231B3539000CF82A /* Event.swift */; };
-		6EBA70F6235790CB0005BEB7 /* Bonjour in Frameworks */ = {isa = PBXBuildFile; productRef = 6EBA70F5235790CB0005BEB7 /* Bonjour */; };
-		6EBA70F8235790D90005BEB7 /* Bonjour in Frameworks */ = {isa = PBXBuildFile; productRef = 6EBA70F7235790D90005BEB7 /* Bonjour */; };
-		6EBA70FA235790E10005BEB7 /* Bonjour in Frameworks */ = {isa = PBXBuildFile; productRef = 6EBA70F9235790E10005BEB7 /* Bonjour */; };
-		6EBA70FC235790E70005BEB7 /* Bonjour in Frameworks */ = {isa = PBXBuildFile; productRef = 6EBA70FB235790E70005BEB7 /* Bonjour */; };
-		6EBA70FE2357A7040005BEB7 /* URLSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EBA70FD2357A7040005BEB7 /* URLSession.swift */; };
-		6EBA70FF2357A7040005BEB7 /* URLSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EBA70FD2357A7040005BEB7 /* URLSession.swift */; };
-		6EBA71002357A7040005BEB7 /* URLSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EBA70FD2357A7040005BEB7 /* URLSession.swift */; };
-		6EBA71012357A7040005BEB7 /* URLSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EBA70FD2357A7040005BEB7 /* URLSession.swift */; };
-		6EBA71032357A7B40005BEB7 /* LockInformationRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EBA71022357A7B40005BEB7 /* LockInformationRequest.swift */; };
-		6EBA71042357A7B40005BEB7 /* LockInformationRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EBA71022357A7B40005BEB7 /* LockInformationRequest.swift */; };
-		6EBA71052357A7B40005BEB7 /* LockInformationRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EBA71022357A7B40005BEB7 /* LockInformationRequest.swift */; };
-		6EBA71062357A7B40005BEB7 /* LockInformationRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EBA71022357A7B40005BEB7 /* LockInformationRequest.swift */; };
-		6EBA71082357A9870005BEB7 /* LockInformationResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EBA71072357A9870005BEB7 /* LockInformationResponse.swift */; };
-		6EBA71092357A9870005BEB7 /* LockInformationResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EBA71072357A9870005BEB7 /* LockInformationResponse.swift */; };
-		6EBA710A2357A9870005BEB7 /* LockInformationResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EBA71072357A9870005BEB7 /* LockInformationResponse.swift */; };
-		6EBA710B2357A9870005BEB7 /* LockInformationResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EBA71072357A9870005BEB7 /* LockInformationResponse.swift */; };
-		6EBDB5CB235D5E3200F38CB0 /* EventsRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EBDB5CA235D5E3200F38CB0 /* EventsRequest.swift */; };
-		6EBDB5CC235D5E3200F38CB0 /* EventsRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EBDB5CA235D5E3200F38CB0 /* EventsRequest.swift */; };
-		6EBDB5CD235D5E3200F38CB0 /* EventsRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EBDB5CA235D5E3200F38CB0 /* EventsRequest.swift */; };
-		6EBDB5CE235D5E3200F38CB0 /* EventsRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EBDB5CA235D5E3200F38CB0 /* EventsRequest.swift */; };
-		6EBDB5D0235D7FF900F38CB0 /* EventsResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EBDB5CF235D7FF900F38CB0 /* EventsResponse.swift */; };
-		6EBDB5D1235D7FF900F38CB0 /* EventsResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EBDB5CF235D7FF900F38CB0 /* EventsResponse.swift */; };
-		6EBDB5D2235D7FF900F38CB0 /* EventsResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EBDB5CF235D7FF900F38CB0 /* EventsResponse.swift */; };
-		6EBDB5D3235D7FF900F38CB0 /* EventsResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EBDB5CF235D7FF900F38CB0 /* EventsResponse.swift */; };
-		6ED81FE1231662E200B69520 /* CryptoSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 6ED81FE0231662E200B69520 /* CryptoSwift */; };
 		6ED81FE3231662E200B69520 /* DarwinGATT in Frameworks */ = {isa = PBXBuildFile; productRef = 6ED81FE2231662E200B69520 /* DarwinGATT */; };
 		6ED81FE5231662E200B69520 /* GATT in Frameworks */ = {isa = PBXBuildFile; productRef = 6ED81FE4231662E200B69520 /* GATT */; };
 		6ED81FE7231662E200B69520 /* TLVCoding in Frameworks */ = {isa = PBXBuildFile; productRef = 6ED81FE6231662E200B69520 /* TLVCoding */; };
-		6ED81FE9231662F100B69520 /* CryptoSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 6ED81FE8231662F100B69520 /* CryptoSwift */; };
 		6ED81FEB231662F100B69520 /* DarwinGATT in Frameworks */ = {isa = PBXBuildFile; productRef = 6ED81FEA231662F100B69520 /* DarwinGATT */; };
 		6ED81FED231662F100B69520 /* GATT in Frameworks */ = {isa = PBXBuildFile; productRef = 6ED81FEC231662F100B69520 /* GATT */; };
 		6ED81FEF231662F100B69520 /* TLVCoding in Frameworks */ = {isa = PBXBuildFile; productRef = 6ED81FEE231662F100B69520 /* TLVCoding */; };
-		6ED81FF1231662FB00B69520 /* CryptoSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 6ED81FF0231662FB00B69520 /* CryptoSwift */; };
 		6ED81FF3231662FB00B69520 /* DarwinGATT in Frameworks */ = {isa = PBXBuildFile; productRef = 6ED81FF2231662FB00B69520 /* DarwinGATT */; };
 		6ED81FF5231662FB00B69520 /* GATT in Frameworks */ = {isa = PBXBuildFile; productRef = 6ED81FF4231662FB00B69520 /* GATT */; };
 		6ED81FF7231662FB00B69520 /* TLVCoding in Frameworks */ = {isa = PBXBuildFile; productRef = 6ED81FF6231662FB00B69520 /* TLVCoding */; };
-		6EE1D6E12357C639004DD856 /* KeysResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EE1D6E02357C639004DD856 /* KeysResponse.swift */; };
-		6EE1D6E22357C639004DD856 /* KeysResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EE1D6E02357C639004DD856 /* KeysResponse.swift */; };
-		6EE1D6E32357C639004DD856 /* KeysResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EE1D6E02357C639004DD856 /* KeysResponse.swift */; };
-		6EE1D6E42357C639004DD856 /* KeysResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EE1D6E02357C639004DD856 /* KeysResponse.swift */; };
-		6EE1D6EA2357F1E9004DD856 /* CreateNewKeyRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EE1D6E92357F1E9004DD856 /* CreateNewKeyRequest.swift */; };
-		6EE1D6EB2357F1E9004DD856 /* CreateNewKeyRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EE1D6E92357F1E9004DD856 /* CreateNewKeyRequest.swift */; };
-		6EE1D6EC2357F1E9004DD856 /* CreateNewKeyRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EE1D6E92357F1E9004DD856 /* CreateNewKeyRequest.swift */; };
-		6EE1D6ED2357F1E9004DD856 /* CreateNewKeyRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EE1D6E92357F1E9004DD856 /* CreateNewKeyRequest.swift */; };
-		6EE1D6EF2357FAF3004DD856 /* URLSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EE1D6EE2357FAF2004DD856 /* URLSession.swift */; };
-		6EE1D6F02357FAF3004DD856 /* URLSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EE1D6EE2357FAF2004DD856 /* URLSession.swift */; };
-		6EE1D6F12357FAF3004DD856 /* URLSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EE1D6EE2357FAF2004DD856 /* URLSession.swift */; };
-		6EE1D6F22357FAF3004DD856 /* URLSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EE1D6EE2357FAF2004DD856 /* URLSession.swift */; };
-		6EE1D79F235801BF004DD856 /* EventStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EE1D79E235801BF004DD856 /* EventStore.swift */; };
-		6EE1D7A0235801BF004DD856 /* EventStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EE1D79E235801BF004DD856 /* EventStore.swift */; };
-		6EE1D7A1235801BF004DD856 /* EventStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EE1D79E235801BF004DD856 /* EventStore.swift */; };
-		6EE1D7A2235801BF004DD856 /* EventStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EE1D79E235801BF004DD856 /* EventStore.swift */; };
-		6EF1C65522C9AC9F005E9818 /* SetupCharacteristic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF1C62E22C9AC9D005E9818 /* SetupCharacteristic.swift */; };
-		6EF1C65622C9AC9F005E9818 /* SetupCharacteristic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF1C62E22C9AC9D005E9818 /* SetupCharacteristic.swift */; };
-		6EF1C65722C9AC9F005E9818 /* SetupCharacteristic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF1C62E22C9AC9D005E9818 /* SetupCharacteristic.swift */; };
-		6EF1C65822C9AC9F005E9818 /* SetupCharacteristic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF1C62E22C9AC9D005E9818 /* SetupCharacteristic.swift */; };
-		6EF1C65922C9AC9F005E9818 /* LockConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF1C62F22C9AC9D005E9818 /* LockConfiguration.swift */; };
-		6EF1C65A22C9AC9F005E9818 /* LockConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF1C62F22C9AC9D005E9818 /* LockConfiguration.swift */; };
-		6EF1C65B22C9AC9F005E9818 /* LockConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF1C62F22C9AC9D005E9818 /* LockConfiguration.swift */; };
-		6EF1C65C22C9AC9F005E9818 /* LockConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF1C62F22C9AC9D005E9818 /* LockConfiguration.swift */; };
-		6EF1C65D22C9AC9F005E9818 /* EncryptedData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF1C63022C9AC9D005E9818 /* EncryptedData.swift */; };
-		6EF1C65E22C9AC9F005E9818 /* EncryptedData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF1C63022C9AC9D005E9818 /* EncryptedData.swift */; };
-		6EF1C65F22C9AC9F005E9818 /* EncryptedData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF1C63022C9AC9D005E9818 /* EncryptedData.swift */; };
-		6EF1C66022C9AC9F005E9818 /* EncryptedData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF1C63022C9AC9D005E9818 /* EncryptedData.swift */; };
-		6EF1C66122C9AC9F005E9818 /* SecureData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF1C63122C9AC9D005E9818 /* SecureData.swift */; };
-		6EF1C66222C9AC9F005E9818 /* SecureData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF1C63122C9AC9D005E9818 /* SecureData.swift */; };
-		6EF1C66322C9AC9F005E9818 /* SecureData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF1C63122C9AC9D005E9818 /* SecureData.swift */; };
-		6EF1C66422C9AC9F005E9818 /* SecureData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF1C63122C9AC9D005E9818 /* SecureData.swift */; };
-		6EF1C66522C9AC9F005E9818 /* AuthenticationError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF1C63222C9AC9D005E9818 /* AuthenticationError.swift */; };
-		6EF1C66622C9AC9F005E9818 /* AuthenticationError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF1C63222C9AC9D005E9818 /* AuthenticationError.swift */; };
-		6EF1C66722C9AC9F005E9818 /* AuthenticationError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF1C63222C9AC9D005E9818 /* AuthenticationError.swift */; };
-		6EF1C66822C9AC9F005E9818 /* AuthenticationError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF1C63222C9AC9D005E9818 /* AuthenticationError.swift */; };
-		6EF1C66922C9AC9F005E9818 /* ListKeysCharacteristic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF1C63322C9AC9D005E9818 /* ListKeysCharacteristic.swift */; };
-		6EF1C66A22C9AC9F005E9818 /* ListKeysCharacteristic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF1C63322C9AC9D005E9818 /* ListKeysCharacteristic.swift */; };
-		6EF1C66B22C9AC9F005E9818 /* ListKeysCharacteristic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF1C63322C9AC9D005E9818 /* ListKeysCharacteristic.swift */; };
-		6EF1C66C22C9AC9F005E9818 /* ListKeysCharacteristic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF1C63322C9AC9D005E9818 /* ListKeysCharacteristic.swift */; };
-		6EF1C66D22C9AC9F005E9818 /* NewKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF1C63422C9AC9D005E9818 /* NewKey.swift */; };
-		6EF1C66E22C9AC9F005E9818 /* NewKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF1C63422C9AC9D005E9818 /* NewKey.swift */; };
-		6EF1C66F22C9AC9F005E9818 /* NewKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF1C63422C9AC9D005E9818 /* NewKey.swift */; };
-		6EF1C67022C9AC9F005E9818 /* NewKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF1C63422C9AC9D005E9818 /* NewKey.swift */; };
-		6EF1C67122C9AC9F005E9818 /* Advertisement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF1C63522C9AC9D005E9818 /* Advertisement.swift */; };
-		6EF1C67222C9AC9F005E9818 /* Advertisement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF1C63522C9AC9D005E9818 /* Advertisement.swift */; };
-		6EF1C67322C9AC9F005E9818 /* Advertisement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF1C63522C9AC9D005E9818 /* Advertisement.swift */; };
-		6EF1C67422C9AC9F005E9818 /* Advertisement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF1C63522C9AC9D005E9818 /* Advertisement.swift */; };
-		6EF1C67522C9AC9F005E9818 /* BuildVersion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF1C63622C9AC9D005E9818 /* BuildVersion.swift */; };
-		6EF1C67622C9AC9F005E9818 /* BuildVersion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF1C63622C9AC9D005E9818 /* BuildVersion.swift */; };
-		6EF1C67722C9AC9F005E9818 /* BuildVersion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF1C63622C9AC9D005E9818 /* BuildVersion.swift */; };
-		6EF1C67822C9AC9F005E9818 /* BuildVersion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF1C63622C9AC9D005E9818 /* BuildVersion.swift */; };
-		6EF1C67922C9AC9F005E9818 /* KeysCharacteristic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF1C63722C9AC9D005E9818 /* KeysCharacteristic.swift */; };
-		6EF1C67A22C9AC9F005E9818 /* KeysCharacteristic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF1C63722C9AC9D005E9818 /* KeysCharacteristic.swift */; };
-		6EF1C67B22C9AC9F005E9818 /* KeysCharacteristic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF1C63722C9AC9D005E9818 /* KeysCharacteristic.swift */; };
-		6EF1C67C22C9AC9F005E9818 /* KeysCharacteristic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF1C63722C9AC9D005E9818 /* KeysCharacteristic.swift */; };
-		6EF1C67D22C9AC9F005E9818 /* Chunk.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF1C63822C9AC9D005E9818 /* Chunk.swift */; };
-		6EF1C67E22C9AC9F005E9818 /* Chunk.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF1C63822C9AC9D005E9818 /* Chunk.swift */; };
-		6EF1C67F22C9AC9F005E9818 /* Chunk.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF1C63822C9AC9D005E9818 /* Chunk.swift */; };
-		6EF1C68022C9AC9F005E9818 /* Chunk.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF1C63822C9AC9D005E9818 /* Chunk.swift */; };
-		6EF1C68122C9AC9F005E9818 /* Central.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF1C63922C9AC9D005E9818 /* Central.swift */; };
-		6EF1C68222C9AC9F005E9818 /* Central.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF1C63922C9AC9D005E9818 /* Central.swift */; };
-		6EF1C68322C9AC9F005E9818 /* Central.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF1C63922C9AC9D005E9818 /* Central.swift */; };
-		6EF1C68422C9AC9F005E9818 /* Central.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF1C63922C9AC9D005E9818 /* Central.swift */; };
-		6EF1C68522C9AC9F005E9818 /* GitCommits.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF1C63A22C9AC9E005E9818 /* GitCommits.swift */; };
-		6EF1C68622C9AC9F005E9818 /* GitCommits.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF1C63A22C9AC9E005E9818 /* GitCommits.swift */; };
-		6EF1C68722C9AC9F005E9818 /* GitCommits.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF1C63A22C9AC9E005E9818 /* GitCommits.swift */; };
-		6EF1C68822C9AC9F005E9818 /* GitCommits.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF1C63A22C9AC9E005E9818 /* GitCommits.swift */; };
-		6EF1C68922C9AC9F005E9818 /* POSIXTime.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF1C63B22C9AC9E005E9818 /* POSIXTime.swift */; };
-		6EF1C68A22C9AC9F005E9818 /* POSIXTime.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF1C63B22C9AC9E005E9818 /* POSIXTime.swift */; };
-		6EF1C68B22C9AC9F005E9818 /* POSIXTime.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF1C63B22C9AC9E005E9818 /* POSIXTime.swift */; };
-		6EF1C68C22C9AC9F005E9818 /* POSIXTime.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF1C63B22C9AC9E005E9818 /* POSIXTime.swift */; };
-		6EF1C68D22C9AC9F005E9818 /* CreateNewKeyCharacteristic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF1C63C22C9AC9E005E9818 /* CreateNewKeyCharacteristic.swift */; };
-		6EF1C68E22C9AC9F005E9818 /* CreateNewKeyCharacteristic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF1C63C22C9AC9E005E9818 /* CreateNewKeyCharacteristic.swift */; };
-		6EF1C68F22C9AC9F005E9818 /* CreateNewKeyCharacteristic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF1C63C22C9AC9E005E9818 /* CreateNewKeyCharacteristic.swift */; };
-		6EF1C69022C9AC9F005E9818 /* CreateNewKeyCharacteristic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF1C63C22C9AC9E005E9818 /* CreateNewKeyCharacteristic.swift */; };
-		6EF1C69122C9AC9F005E9818 /* ConfirmNewKeyCharacteristic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF1C63D22C9AC9E005E9818 /* ConfirmNewKeyCharacteristic.swift */; };
-		6EF1C69222C9AC9F005E9818 /* ConfirmNewKeyCharacteristic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF1C63D22C9AC9E005E9818 /* ConfirmNewKeyCharacteristic.swift */; };
-		6EF1C69322C9AC9F005E9818 /* ConfirmNewKeyCharacteristic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF1C63D22C9AC9E005E9818 /* ConfirmNewKeyCharacteristic.swift */; };
-		6EF1C69422C9AC9F005E9818 /* ConfirmNewKeyCharacteristic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF1C63D22C9AC9E005E9818 /* ConfirmNewKeyCharacteristic.swift */; };
-		6EF1C69522C9AC9F005E9818 /* Key.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF1C63E22C9AC9E005E9818 /* Key.swift */; };
-		6EF1C69622C9AC9F005E9818 /* Key.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF1C63E22C9AC9E005E9818 /* Key.swift */; };
-		6EF1C69722C9AC9F005E9818 /* Key.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF1C63E22C9AC9E005E9818 /* Key.swift */; };
-		6EF1C69822C9AC9F005E9818 /* Key.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF1C63E22C9AC9E005E9818 /* Key.swift */; };
-		6EF1C69922C9AC9F005E9818 /* RemoveKeyCharacteristic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF1C63F22C9AC9E005E9818 /* RemoveKeyCharacteristic.swift */; };
-		6EF1C69A22C9AC9F005E9818 /* RemoveKeyCharacteristic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF1C63F22C9AC9E005E9818 /* RemoveKeyCharacteristic.swift */; };
-		6EF1C69B22C9AC9F005E9818 /* RemoveKeyCharacteristic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF1C63F22C9AC9E005E9818 /* RemoveKeyCharacteristic.swift */; };
-		6EF1C69C22C9AC9F005E9818 /* RemoveKeyCharacteristic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF1C63F22C9AC9E005E9818 /* RemoveKeyCharacteristic.swift */; };
-		6EF1C69D22C9AC9F005E9818 /* Crypto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF1C64022C9AC9E005E9818 /* Crypto.swift */; };
-		6EF1C69E22C9AC9F005E9818 /* Crypto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF1C64022C9AC9E005E9818 /* Crypto.swift */; };
-		6EF1C69F22C9AC9F005E9818 /* Crypto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF1C64022C9AC9E005E9818 /* Crypto.swift */; };
-		6EF1C6A022C9AC9F005E9818 /* Crypto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF1C64022C9AC9E005E9818 /* Crypto.swift */; };
-		6EF1C6A122C9AC9F005E9818 /* UIDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF1C64122C9AC9E005E9818 /* UIDevice.swift */; };
-		6EF1C6A222C9AC9F005E9818 /* UIDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF1C64122C9AC9E005E9818 /* UIDevice.swift */; };
-		6EF1C6A322C9AC9F005E9818 /* UIDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF1C64122C9AC9E005E9818 /* UIDevice.swift */; };
-		6EF1C6A422C9AC9F005E9818 /* UIDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF1C64122C9AC9E005E9818 /* UIDevice.swift */; };
-		6EF1C6A522C9AC9F005E9818 /* LockModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF1C64222C9AC9E005E9818 /* LockModel.swift */; };
-		6EF1C6A622C9AC9F005E9818 /* LockModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF1C64222C9AC9E005E9818 /* LockModel.swift */; };
-		6EF1C6A722C9AC9F005E9818 /* LockModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF1C64222C9AC9E005E9818 /* LockModel.swift */; };
-		6EF1C6A822C9AC9F005E9818 /* LockModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF1C64222C9AC9E005E9818 /* LockModel.swift */; };
-		6EF1C6A922C9AC9F005E9818 /* GATTProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF1C64322C9AC9E005E9818 /* GATTProfile.swift */; };
-		6EF1C6AA22C9AC9F005E9818 /* GATTProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF1C64322C9AC9E005E9818 /* GATTProfile.swift */; };
-		6EF1C6AB22C9AC9F005E9818 /* GATTProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF1C64322C9AC9E005E9818 /* GATTProfile.swift */; };
-		6EF1C6AC22C9AC9F005E9818 /* GATTProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF1C64322C9AC9E005E9818 /* GATTProfile.swift */; };
-		6EF1C6AD22C9AC9F005E9818 /* LockState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF1C64422C9AC9E005E9818 /* LockState.swift */; };
-		6EF1C6AE22C9AC9F005E9818 /* LockState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF1C64422C9AC9E005E9818 /* LockState.swift */; };
-		6EF1C6AF22C9AC9F005E9818 /* LockState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF1C64422C9AC9E005E9818 /* LockState.swift */; };
-		6EF1C6B022C9AC9F005E9818 /* LockState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF1C64422C9AC9E005E9818 /* LockState.swift */; };
-		6EF1C6B122C9AC9F005E9818 /* BitMaskOption.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF1C64522C9AC9E005E9818 /* BitMaskOption.swift */; };
-		6EF1C6B222C9AC9F005E9818 /* BitMaskOption.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF1C64522C9AC9E005E9818 /* BitMaskOption.swift */; };
-		6EF1C6B322C9AC9F005E9818 /* BitMaskOption.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF1C64522C9AC9E005E9818 /* BitMaskOption.swift */; };
-		6EF1C6B422C9AC9F005E9818 /* BitMaskOption.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF1C64522C9AC9E005E9818 /* BitMaskOption.swift */; };
-		6EF1C6B522C9AC9F005E9818 /* GATTError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF1C64622C9AC9E005E9818 /* GATTError.swift */; };
-		6EF1C6B622C9AC9F005E9818 /* GATTError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF1C64622C9AC9E005E9818 /* GATTError.swift */; };
-		6EF1C6B722C9AC9F005E9818 /* GATTError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF1C64622C9AC9E005E9818 /* GATTError.swift */; };
-		6EF1C6B822C9AC9F005E9818 /* GATTError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF1C64622C9AC9E005E9818 /* GATTError.swift */; };
-		6EF1C6B922C9AC9F005E9818 /* UnlockCharacteristic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF1C64722C9AC9E005E9818 /* UnlockCharacteristic.swift */; };
-		6EF1C6BA22C9AC9F005E9818 /* UnlockCharacteristic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF1C64722C9AC9E005E9818 /* UnlockCharacteristic.swift */; };
-		6EF1C6BB22C9AC9F005E9818 /* UnlockCharacteristic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF1C64722C9AC9E005E9818 /* UnlockCharacteristic.swift */; };
-		6EF1C6BC22C9AC9F005E9818 /* UnlockCharacteristic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF1C64722C9AC9E005E9818 /* UnlockCharacteristic.swift */; };
-		6EF1C6BD22C9AC9F005E9818 /* LockInformationCharacteristic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF1C64822C9AC9E005E9818 /* LockInformationCharacteristic.swift */; };
-		6EF1C6BE22C9AC9F005E9818 /* LockInformationCharacteristic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF1C64822C9AC9E005E9818 /* LockInformationCharacteristic.swift */; };
-		6EF1C6BF22C9AC9F005E9818 /* LockInformationCharacteristic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF1C64822C9AC9E005E9818 /* LockInformationCharacteristic.swift */; };
-		6EF1C6C022C9AC9F005E9818 /* LockInformationCharacteristic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF1C64822C9AC9E005E9818 /* LockInformationCharacteristic.swift */; };
-		6EF1C6C122C9AC9F005E9818 /* Version.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF1C64922C9AC9E005E9818 /* Version.swift */; };
-		6EF1C6C222C9AC9F005E9818 /* Version.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF1C64922C9AC9E005E9818 /* Version.swift */; };
-		6EF1C6C322C9AC9F005E9818 /* Version.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF1C64922C9AC9E005E9818 /* Version.swift */; };
-		6EF1C6C422C9AC9F005E9818 /* Version.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF1C64922C9AC9E005E9818 /* Version.swift */; };
-		6EF1C6C522C9AC9F005E9818 /* Status.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF1C64A22C9AC9E005E9818 /* Status.swift */; };
-		6EF1C6C622C9AC9F005E9818 /* Status.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF1C64A22C9AC9E005E9818 /* Status.swift */; };
-		6EF1C6C722C9AC9F005E9818 /* Status.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF1C64A22C9AC9E005E9818 /* Status.swift */; };
-		6EF1C6C822C9AC9F005E9818 /* Status.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF1C64A22C9AC9E005E9818 /* Status.swift */; };
-		6EF1C6C922C9AC9F005E9818 /* DeviceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF1C64B22C9AC9E005E9818 /* DeviceManager.swift */; };
-		6EF1C6CA22C9AC9F005E9818 /* DeviceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF1C64B22C9AC9E005E9818 /* DeviceManager.swift */; };
-		6EF1C6CB22C9AC9F005E9818 /* DeviceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF1C64B22C9AC9E005E9818 /* DeviceManager.swift */; };
-		6EF1C6CC22C9AC9F005E9818 /* DeviceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF1C64B22C9AC9E005E9818 /* DeviceManager.swift */; };
-		6EF1C6CD22C9AC9F005E9818 /* TLV.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF1C64C22C9AC9F005E9818 /* TLV.swift */; };
-		6EF1C6CE22C9AC9F005E9818 /* TLV.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF1C64C22C9AC9F005E9818 /* TLV.swift */; };
-		6EF1C6CF22C9AC9F005E9818 /* TLV.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF1C64C22C9AC9F005E9818 /* TLV.swift */; };
-		6EF1C6D022C9AC9F005E9818 /* TLV.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF1C64C22C9AC9F005E9818 /* TLV.swift */; };
-		6EF1C6D122C9AC9F005E9818 /* Authentication.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF1C64D22C9AC9F005E9818 /* Authentication.swift */; };
-		6EF1C6D222C9AC9F005E9818 /* Authentication.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF1C64D22C9AC9F005E9818 /* Authentication.swift */; };
-		6EF1C6D322C9AC9F005E9818 /* Authentication.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF1C64D22C9AC9F005E9818 /* Authentication.swift */; };
-		6EF1C6D422C9AC9F005E9818 /* Authentication.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF1C64D22C9AC9F005E9818 /* Authentication.swift */; };
-		6EF1C6D522C9AC9F005E9818 /* Permission.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF1C64E22C9AC9F005E9818 /* Permission.swift */; };
-		6EF1C6D622C9AC9F005E9818 /* Permission.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF1C64E22C9AC9F005E9818 /* Permission.swift */; };
-		6EF1C6D722C9AC9F005E9818 /* Permission.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF1C64E22C9AC9F005E9818 /* Permission.swift */; };
-		6EF1C6D822C9AC9F005E9818 /* Permission.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF1C64E22C9AC9F005E9818 /* Permission.swift */; };
-		6EF1C6D922C9AC9F005E9818 /* Integer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF1C64F22C9AC9F005E9818 /* Integer.swift */; };
-		6EF1C6DA22C9AC9F005E9818 /* Integer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF1C64F22C9AC9F005E9818 /* Integer.swift */; };
-		6EF1C6DB22C9AC9F005E9818 /* Integer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF1C64F22C9AC9F005E9818 /* Integer.swift */; };
-		6EF1C6DC22C9AC9F005E9818 /* Integer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF1C64F22C9AC9F005E9818 /* Integer.swift */; };
-		6EF1C6DD22C9AC9F005E9818 /* SmartLockProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF1C65022C9AC9F005E9818 /* SmartLockProfile.swift */; };
-		6EF1C6DE22C9AC9F005E9818 /* SmartLockProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF1C65022C9AC9F005E9818 /* SmartLockProfile.swift */; };
-		6EF1C6DF22C9AC9F005E9818 /* SmartLockProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF1C65022C9AC9F005E9818 /* SmartLockProfile.swift */; };
-		6EF1C6E022C9AC9F005E9818 /* SmartLockProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF1C65022C9AC9F005E9818 /* SmartLockProfile.swift */; };
-		6EF1C6E122C9AC9F005E9818 /* DateComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF1C65122C9AC9F005E9818 /* DateComponents.swift */; };
-		6EF1C6E222C9AC9F005E9818 /* DateComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF1C65122C9AC9F005E9818 /* DateComponents.swift */; };
-		6EF1C6E322C9AC9F005E9818 /* DateComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF1C65122C9AC9F005E9818 /* DateComponents.swift */; };
-		6EF1C6E422C9AC9F005E9818 /* DateComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF1C65122C9AC9F005E9818 /* DateComponents.swift */; };
-		6EF1C6E522C9AC9F005E9818 /* LockHardware.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF1C65222C9AC9F005E9818 /* LockHardware.swift */; };
-		6EF1C6E622C9AC9F005E9818 /* LockHardware.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF1C65222C9AC9F005E9818 /* LockHardware.swift */; };
-		6EF1C6E722C9AC9F005E9818 /* LockHardware.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF1C65222C9AC9F005E9818 /* LockHardware.swift */; };
-		6EF1C6E822C9AC9F005E9818 /* LockHardware.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF1C65222C9AC9F005E9818 /* LockHardware.swift */; };
-		6EF1C6E922C9AC9F005E9818 /* UnlockAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF1C65322C9AC9F005E9818 /* UnlockAction.swift */; };
-		6EF1C6EA22C9AC9F005E9818 /* UnlockAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF1C65322C9AC9F005E9818 /* UnlockAction.swift */; };
-		6EF1C6EB22C9AC9F005E9818 /* UnlockAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF1C65322C9AC9F005E9818 /* UnlockAction.swift */; };
-		6EF1C6EC22C9AC9F005E9818 /* UnlockAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF1C65322C9AC9F005E9818 /* UnlockAction.swift */; };
-		6EF1C6ED22C9AC9F005E9818 /* Bool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF1C65422C9AC9F005E9818 /* Bool.swift */; };
-		6EF1C6EE22C9AC9F005E9818 /* Bool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF1C65422C9AC9F005E9818 /* Bool.swift */; };
-		6EF1C6EF22C9AC9F005E9818 /* Bool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF1C65422C9AC9F005E9818 /* Bool.swift */; };
-		6EF1C6F022C9AC9F005E9818 /* Bool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF1C65422C9AC9F005E9818 /* Bool.swift */; };
 		DD7502881C68FEDE006590AF /* CoreLock.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 52D6DA0F1BF000BD002C0205 /* CoreLock.framework */; };
 /* End PBXBuildFile section */
 
@@ -282,69 +282,71 @@
 		52D6D9E21BEFFF6E002C0205 /* CoreLock.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = CoreLock.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		52D6D9F01BEFFFBE002C0205 /* CoreLock.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = CoreLock.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		52D6DA0F1BF000BD002C0205 /* CoreLock.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = CoreLock.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		6E0A32D422D8FCFB002EF9DE /* URL.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URL.swift; sourceTree = "<group>"; };
+		6E01DB3428D683AA004B5956 /* LockAuthorizationStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LockAuthorizationStore.swift; sourceTree = "<group>"; };
+		6E01DB3528D683AA004B5956 /* UnlockAction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UnlockAction.swift; sourceTree = "<group>"; };
+		6E01DB3728D683AA004B5956 /* Advertisement.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Advertisement.swift; sourceTree = "<group>"; };
+		6E01DB3828D683AA004B5956 /* ConfirmNewKeyCharacteristic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConfirmNewKeyCharacteristic.swift; sourceTree = "<group>"; };
+		6E01DB3928D683AA004B5956 /* Central.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Central.swift; sourceTree = "<group>"; };
+		6E01DB3A28D683AA004B5956 /* ListEventsCharacteristic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListEventsCharacteristic.swift; sourceTree = "<group>"; };
+		6E01DB3B28D683AA004B5956 /* UnlockCharacteristic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UnlockCharacteristic.swift; sourceTree = "<group>"; };
+		6E01DB3C28D683AA004B5956 /* SetupCharacteristic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SetupCharacteristic.swift; sourceTree = "<group>"; };
+		6E01DB3D28D683AA004B5956 /* DeviceManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeviceManager.swift; sourceTree = "<group>"; };
+		6E01DB3E28D683AA004B5956 /* LockInformationCharacteristic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LockInformationCharacteristic.swift; sourceTree = "<group>"; };
+		6E01DB3F28D683AA004B5956 /* ListKeysCharacteristic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListKeysCharacteristic.swift; sourceTree = "<group>"; };
+		6E01DB4028D683AA004B5956 /* KeysCharacteristic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeysCharacteristic.swift; sourceTree = "<group>"; };
+		6E01DB4128D683AA004B5956 /* CreateNewKeyCharacteristic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateNewKeyCharacteristic.swift; sourceTree = "<group>"; };
+		6E01DB4228D683AA004B5956 /* TLV.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TLV.swift; sourceTree = "<group>"; };
+		6E01DB4328D683AA004B5956 /* Notification.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Notification.swift; sourceTree = "<group>"; };
+		6E01DB4428D683AA004B5956 /* EventsCharacteristic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventsCharacteristic.swift; sourceTree = "<group>"; };
+		6E01DB4528D683AA004B5956 /* GATTProfile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GATTProfile.swift; sourceTree = "<group>"; };
+		6E01DB4628D683AA004B5956 /* RemoveKeyCharacteristic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoveKeyCharacteristic.swift; sourceTree = "<group>"; };
+		6E01DB4728D683AA004B5956 /* GATTError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GATTError.swift; sourceTree = "<group>"; };
+		6E01DB4828D683AA004B5956 /* LockInformation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LockInformation.swift; sourceTree = "<group>"; };
+		6E01DB4928D683AA004B5956 /* LockModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LockModel.swift; sourceTree = "<group>"; };
+		6E01DB4A28D683AA004B5956 /* BuildVersion.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BuildVersion.swift; sourceTree = "<group>"; };
+		6E01DB4B28D683AA004B5956 /* KeyCredentials.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyCredentials.swift; sourceTree = "<group>"; };
+		6E01DB4C28D683AA004B5956 /* POSIXTime.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = POSIXTime.swift; sourceTree = "<group>"; };
+		6E01DB4D28D683AA004B5956 /* EventStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventStore.swift; sourceTree = "<group>"; };
+		6E01DB4E28D683AA004B5956 /* GitCommits.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GitCommits.swift; sourceTree = "<group>"; };
+		6E01DB4F28D683AA004B5956 /* Chunk.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Chunk.swift; sourceTree = "<group>"; };
+		6E01DB5028D683AA004B5956 /* Status.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Status.swift; sourceTree = "<group>"; };
+		6E01DB5128D683AA004B5956 /* Version.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Version.swift; sourceTree = "<group>"; };
+		6E01DB5228D683AA004B5956 /* SmartLockProfile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SmartLockProfile.swift; sourceTree = "<group>"; };
+		6E01DB5428D683AB004B5956 /* EventsRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventsRequest.swift; sourceTree = "<group>"; };
+		6E01DB5528D683AB004B5956 /* DeleteKeyRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeleteKeyRequest.swift; sourceTree = "<group>"; };
+		6E01DB5628D683AB004B5956 /* EventsResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventsResponse.swift; sourceTree = "<group>"; };
+		6E01DB5728D683AB004B5956 /* CreateNewKeyRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateNewKeyRequest.swift; sourceTree = "<group>"; };
+		6E01DB5828D683AB004B5956 /* LockNetService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LockNetService.swift; sourceTree = "<group>"; };
+		6E01DB5928D683AB004B5956 /* KeysResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeysResponse.swift; sourceTree = "<group>"; };
+		6E01DB5A28D683AB004B5956 /* URLSession.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = URLSession.swift; sourceTree = "<group>"; };
+		6E01DB5B28D683AB004B5956 /* LockInformationResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LockInformationResponse.swift; sourceTree = "<group>"; };
+		6E01DB5C28D683AB004B5956 /* URL.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = URL.swift; sourceTree = "<group>"; };
+		6E01DB5D28D683AB004B5956 /* UpdateRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UpdateRequest.swift; sourceTree = "<group>"; };
+		6E01DB5E28D683AB004B5956 /* KeysRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeysRequest.swift; sourceTree = "<group>"; };
+		6E01DB5F28D683AB004B5956 /* LockInformationRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LockInformationRequest.swift; sourceTree = "<group>"; };
+		6E01DB6128D683AB004B5956 /* Authentication.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Authentication.swift; sourceTree = "<group>"; };
+		6E01DB6228D683AB004B5956 /* AuthenticationError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthenticationError.swift; sourceTree = "<group>"; };
+		6E01DB6328D683AB004B5956 /* SecureData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SecureData.swift; sourceTree = "<group>"; };
+		6E01DB6428D683AB004B5956 /* Crypto.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Crypto.swift; sourceTree = "<group>"; };
+		6E01DB6528D683AB004B5956 /* EncryptedData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EncryptedData.swift; sourceTree = "<group>"; };
+		6E01DB6628D683AB004B5956 /* BitMaskOption.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BitMaskOption.swift; sourceTree = "<group>"; };
+		6E01DB6728D683AB004B5956 /* DateComponents.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DateComponents.swift; sourceTree = "<group>"; };
+		6E01DB6928D683AB004B5956 /* Date.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Date.swift; sourceTree = "<group>"; };
+		6E01DB6A28D683AB004B5956 /* UUID.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UUID.swift; sourceTree = "<group>"; };
+		6E01DB6B28D683AB004B5956 /* Integer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Integer.swift; sourceTree = "<group>"; };
+		6E01DB6C28D683AB004B5956 /* Bool.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Bool.swift; sourceTree = "<group>"; };
+		6E01DB6D28D683AB004B5956 /* Permission.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Permission.swift; sourceTree = "<group>"; };
+		6E01DB6E28D683AB004B5956 /* LockState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LockState.swift; sourceTree = "<group>"; };
+		6E01DB6F28D683AB004B5956 /* NewKey.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewKey.swift; sourceTree = "<group>"; };
+		6E01DB7028D683AB004B5956 /* LockHardware.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LockHardware.swift; sourceTree = "<group>"; };
+		6E01DB7128D683AB004B5956 /* LockConfiguration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LockConfiguration.swift; sourceTree = "<group>"; };
+		6E01DB7228D683AB004B5956 /* Event.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Event.swift; sourceTree = "<group>"; };
+		6E01DB7328D683AB004B5956 /* Key.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Key.swift; sourceTree = "<group>"; };
+		6E01DB7428D683AB004B5956 /* LockConfigurationStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LockConfigurationStore.swift; sourceTree = "<group>"; };
 		6E0A32D922D91E1D002EF9DE /* URLTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLTests.swift; sourceTree = "<group>"; };
-		6E23151F23576F7E00C363EC /* LockNetService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LockNetService.swift; sourceTree = "<group>"; };
-		6E4729EA235AE7B3007CBC07 /* UpdateRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UpdateRequest.swift; sourceTree = "<group>"; };
-		6E4729FD235B768E007CBC07 /* DeleteKeyRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteKeyRequest.swift; sourceTree = "<group>"; };
 		6E60FF532121041400787DAA /* CryptoTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CryptoTests.swift; sourceTree = "<group>"; };
 		6E60FF542121041400787DAA /* GATTProfileTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GATTProfileTests.swift; sourceTree = "<group>"; };
-		6E60FF552121041400787DAA /* LinuxMain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinuxMain.swift; sourceTree = "<group>"; };
 		6E60FF572121041400787DAA /* ServerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServerTests.swift; sourceTree = "<group>"; };
-		6E87864A2357ACAB008624C1 /* KeysRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeysRequest.swift; sourceTree = "<group>"; };
-		6E93D351231C623B00119F65 /* Notification.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Notification.swift; sourceTree = "<group>"; };
-		6E93D352231C623E00119F65 /* ListEventsCharacteristic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListEventsCharacteristic.swift; sourceTree = "<group>"; };
-		6E93D353231C624000119F65 /* EventsCharacteristic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventsCharacteristic.swift; sourceTree = "<group>"; };
-		6E9794C323301FC400B5C5C9 /* UUID.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UUID.swift; sourceTree = "<group>"; };
-		6EACDA98231B3539000CF82A /* Event.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Event.swift; sourceTree = "<group>"; };
-		6EBA70FD2357A7040005BEB7 /* URLSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLSession.swift; sourceTree = "<group>"; };
-		6EBA71022357A7B40005BEB7 /* LockInformationRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LockInformationRequest.swift; sourceTree = "<group>"; };
-		6EBA71072357A9870005BEB7 /* LockInformationResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LockInformationResponse.swift; sourceTree = "<group>"; };
-		6EBDB5CA235D5E3200F38CB0 /* EventsRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventsRequest.swift; sourceTree = "<group>"; };
-		6EBDB5CF235D7FF900F38CB0 /* EventsResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventsResponse.swift; sourceTree = "<group>"; };
-		6EE1D6E02357C639004DD856 /* KeysResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeysResponse.swift; sourceTree = "<group>"; };
-		6EE1D6E92357F1E9004DD856 /* CreateNewKeyRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateNewKeyRequest.swift; sourceTree = "<group>"; };
-		6EE1D6EE2357FAF2004DD856 /* URLSession.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = URLSession.swift; sourceTree = "<group>"; };
-		6EE1D79E235801BF004DD856 /* EventStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventStore.swift; sourceTree = "<group>"; };
-		6EF1C62E22C9AC9D005E9818 /* SetupCharacteristic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SetupCharacteristic.swift; sourceTree = "<group>"; };
-		6EF1C62F22C9AC9D005E9818 /* LockConfiguration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LockConfiguration.swift; sourceTree = "<group>"; };
-		6EF1C63022C9AC9D005E9818 /* EncryptedData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EncryptedData.swift; sourceTree = "<group>"; };
-		6EF1C63122C9AC9D005E9818 /* SecureData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SecureData.swift; sourceTree = "<group>"; };
-		6EF1C63222C9AC9D005E9818 /* AuthenticationError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthenticationError.swift; sourceTree = "<group>"; };
-		6EF1C63322C9AC9D005E9818 /* ListKeysCharacteristic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListKeysCharacteristic.swift; sourceTree = "<group>"; };
-		6EF1C63422C9AC9D005E9818 /* NewKey.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewKey.swift; sourceTree = "<group>"; };
-		6EF1C63522C9AC9D005E9818 /* Advertisement.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Advertisement.swift; sourceTree = "<group>"; };
-		6EF1C63622C9AC9D005E9818 /* BuildVersion.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BuildVersion.swift; sourceTree = "<group>"; };
-		6EF1C63722C9AC9D005E9818 /* KeysCharacteristic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeysCharacteristic.swift; sourceTree = "<group>"; };
-		6EF1C63822C9AC9D005E9818 /* Chunk.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Chunk.swift; sourceTree = "<group>"; };
-		6EF1C63922C9AC9D005E9818 /* Central.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Central.swift; sourceTree = "<group>"; };
-		6EF1C63A22C9AC9E005E9818 /* GitCommits.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GitCommits.swift; sourceTree = "<group>"; };
-		6EF1C63B22C9AC9E005E9818 /* POSIXTime.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = POSIXTime.swift; sourceTree = "<group>"; };
-		6EF1C63C22C9AC9E005E9818 /* CreateNewKeyCharacteristic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateNewKeyCharacteristic.swift; sourceTree = "<group>"; };
-		6EF1C63D22C9AC9E005E9818 /* ConfirmNewKeyCharacteristic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConfirmNewKeyCharacteristic.swift; sourceTree = "<group>"; };
-		6EF1C63E22C9AC9E005E9818 /* Key.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Key.swift; sourceTree = "<group>"; };
-		6EF1C63F22C9AC9E005E9818 /* RemoveKeyCharacteristic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoveKeyCharacteristic.swift; sourceTree = "<group>"; };
-		6EF1C64022C9AC9E005E9818 /* Crypto.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Crypto.swift; sourceTree = "<group>"; };
-		6EF1C64122C9AC9E005E9818 /* UIDevice.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIDevice.swift; sourceTree = "<group>"; };
-		6EF1C64222C9AC9E005E9818 /* LockModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LockModel.swift; sourceTree = "<group>"; };
-		6EF1C64322C9AC9E005E9818 /* GATTProfile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GATTProfile.swift; sourceTree = "<group>"; };
-		6EF1C64422C9AC9E005E9818 /* LockState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LockState.swift; sourceTree = "<group>"; };
-		6EF1C64522C9AC9E005E9818 /* BitMaskOption.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BitMaskOption.swift; sourceTree = "<group>"; };
-		6EF1C64622C9AC9E005E9818 /* GATTError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GATTError.swift; sourceTree = "<group>"; };
-		6EF1C64722C9AC9E005E9818 /* UnlockCharacteristic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UnlockCharacteristic.swift; sourceTree = "<group>"; };
-		6EF1C64822C9AC9E005E9818 /* LockInformationCharacteristic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LockInformationCharacteristic.swift; sourceTree = "<group>"; };
-		6EF1C64922C9AC9E005E9818 /* Version.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Version.swift; sourceTree = "<group>"; };
-		6EF1C64A22C9AC9E005E9818 /* Status.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Status.swift; sourceTree = "<group>"; };
-		6EF1C64B22C9AC9E005E9818 /* DeviceManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeviceManager.swift; sourceTree = "<group>"; };
-		6EF1C64C22C9AC9F005E9818 /* TLV.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TLV.swift; sourceTree = "<group>"; };
-		6EF1C64D22C9AC9F005E9818 /* Authentication.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Authentication.swift; sourceTree = "<group>"; };
-		6EF1C64E22C9AC9F005E9818 /* Permission.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Permission.swift; sourceTree = "<group>"; };
-		6EF1C64F22C9AC9F005E9818 /* Integer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Integer.swift; sourceTree = "<group>"; };
-		6EF1C65022C9AC9F005E9818 /* SmartLockProfile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SmartLockProfile.swift; sourceTree = "<group>"; };
-		6EF1C65122C9AC9F005E9818 /* DateComponents.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DateComponents.swift; sourceTree = "<group>"; };
-		6EF1C65222C9AC9F005E9818 /* LockHardware.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LockHardware.swift; sourceTree = "<group>"; };
-		6EF1C65322C9AC9F005E9818 /* UnlockAction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UnlockAction.swift; sourceTree = "<group>"; };
-		6EF1C65422C9AC9F005E9818 /* Bool.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Bool.swift; sourceTree = "<group>"; };
 		AD2FAA261CD0B6D800659CF4 /* CoreLock.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = CoreLock.plist; sourceTree = "<group>"; };
 		AD2FAA281CD0B6E100659CF4 /* CoreLockTests.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = CoreLockTests.plist; sourceTree = "<group>"; };
 		DD75027A1C68FCFC006590AF /* CoreLockTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CoreLockTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -355,10 +357,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6EBA70F6235790CB0005BEB7 /* Bonjour in Frameworks */,
-				6E621244234721FF007D49BF /* Bluetooth in Frameworks */,
 				6E9C95ED231149A5007C18FE /* GATT in Frameworks */,
-				6E9C95EA23114962007C18FE /* CryptoSwift in Frameworks */,
 				6E9C95EF231149A5007C18FE /* DarwinGATT in Frameworks */,
 				6E9C95F2231149F5007C18FE /* TLVCoding in Frameworks */,
 			);
@@ -368,10 +367,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6EBA70FA235790E10005BEB7 /* Bonjour in Frameworks */,
-				6E621266234723ED007D49BF /* Bluetooth in Frameworks */,
 				6ED81FED231662F100B69520 /* GATT in Frameworks */,
-				6ED81FE9231662F100B69520 /* CryptoSwift in Frameworks */,
 				6ED81FEB231662F100B69520 /* DarwinGATT in Frameworks */,
 				6ED81FEF231662F100B69520 /* TLVCoding in Frameworks */,
 			);
@@ -381,10 +377,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6EBA70FC235790E70005BEB7 /* Bonjour in Frameworks */,
-				6E62126A23472400007D49BF /* Bluetooth in Frameworks */,
 				6ED81FF5231662FB00B69520 /* GATT in Frameworks */,
-				6ED81FF1231662FB00B69520 /* CryptoSwift in Frameworks */,
 				6ED81FF3231662FB00B69520 /* DarwinGATT in Frameworks */,
 				6ED81FF7231662FB00B69520 /* TLVCoding in Frameworks */,
 			);
@@ -394,10 +387,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6EBA70F8235790D90005BEB7 /* Bonjour in Frameworks */,
-				6E62124823472217007D49BF /* Bluetooth in Frameworks */,
 				6ED81FE5231662E200B69520 /* GATT in Frameworks */,
-				6ED81FE1231662E200B69520 /* CryptoSwift in Frameworks */,
 				6ED81FE3231662E200B69520 /* DarwinGATT in Frameworks */,
 				6ED81FE7231662E200B69520 /* TLVCoding in Frameworks */,
 			);
@@ -446,11 +436,76 @@
 			path = Configs;
 			sourceTree = "<group>";
 		};
+		6E01DB3628D683AA004B5956 /* Bluetooth */ = {
+			isa = PBXGroup;
+			children = (
+				6E01DB3728D683AA004B5956 /* Advertisement.swift */,
+				6E01DB3828D683AA004B5956 /* ConfirmNewKeyCharacteristic.swift */,
+				6E01DB3928D683AA004B5956 /* Central.swift */,
+				6E01DB3A28D683AA004B5956 /* ListEventsCharacteristic.swift */,
+				6E01DB3B28D683AA004B5956 /* UnlockCharacteristic.swift */,
+				6E01DB3C28D683AA004B5956 /* SetupCharacteristic.swift */,
+				6E01DB3D28D683AA004B5956 /* DeviceManager.swift */,
+				6E01DB3E28D683AA004B5956 /* LockInformationCharacteristic.swift */,
+				6E01DB3F28D683AA004B5956 /* ListKeysCharacteristic.swift */,
+				6E01DB4028D683AA004B5956 /* KeysCharacteristic.swift */,
+				6E01DB4128D683AA004B5956 /* CreateNewKeyCharacteristic.swift */,
+				6E01DB4228D683AA004B5956 /* TLV.swift */,
+				6E01DB4328D683AA004B5956 /* Notification.swift */,
+				6E01DB4428D683AA004B5956 /* EventsCharacteristic.swift */,
+				6E01DB4528D683AA004B5956 /* GATTProfile.swift */,
+				6E01DB4628D683AA004B5956 /* RemoveKeyCharacteristic.swift */,
+				6E01DB4728D683AA004B5956 /* GATTError.swift */,
+			);
+			path = Bluetooth;
+			sourceTree = "<group>";
+		};
+		6E01DB5328D683AB004B5956 /* Networking */ = {
+			isa = PBXGroup;
+			children = (
+				6E01DB5428D683AB004B5956 /* EventsRequest.swift */,
+				6E01DB5528D683AB004B5956 /* DeleteKeyRequest.swift */,
+				6E01DB5628D683AB004B5956 /* EventsResponse.swift */,
+				6E01DB5728D683AB004B5956 /* CreateNewKeyRequest.swift */,
+				6E01DB5828D683AB004B5956 /* LockNetService.swift */,
+				6E01DB5928D683AB004B5956 /* KeysResponse.swift */,
+				6E01DB5A28D683AB004B5956 /* URLSession.swift */,
+				6E01DB5B28D683AB004B5956 /* LockInformationResponse.swift */,
+				6E01DB5C28D683AB004B5956 /* URL.swift */,
+				6E01DB5D28D683AB004B5956 /* UpdateRequest.swift */,
+				6E01DB5E28D683AB004B5956 /* KeysRequest.swift */,
+				6E01DB5F28D683AB004B5956 /* LockInformationRequest.swift */,
+			);
+			path = Networking;
+			sourceTree = "<group>";
+		};
+		6E01DB6028D683AB004B5956 /* Crypto */ = {
+			isa = PBXGroup;
+			children = (
+				6E01DB6128D683AB004B5956 /* Authentication.swift */,
+				6E01DB6228D683AB004B5956 /* AuthenticationError.swift */,
+				6E01DB6328D683AB004B5956 /* SecureData.swift */,
+				6E01DB6428D683AB004B5956 /* Crypto.swift */,
+				6E01DB6528D683AB004B5956 /* EncryptedData.swift */,
+			);
+			path = Crypto;
+			sourceTree = "<group>";
+		};
+		6E01DB6828D683AB004B5956 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				6E01DB6928D683AB004B5956 /* Date.swift */,
+				6E01DB6A28D683AB004B5956 /* UUID.swift */,
+				6E01DB6B28D683AB004B5956 /* Integer.swift */,
+				6E01DB6C28D683AB004B5956 /* Bool.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
 		6E60FF512121041400787DAA /* Tests */ = {
 			isa = PBXGroup;
 			children = (
 				6E60FF522121041400787DAA /* CoreLockTests */,
-				6E60FF552121041400787DAA /* LinuxMain.swift */,
 				6E60FF562121041400787DAA /* CoreLockGATTServerTests */,
 			);
 			name = Tests;
@@ -487,64 +542,33 @@
 		6E60FF612121041400787DAA /* CoreLock */ = {
 			isa = PBXGroup;
 			children = (
-				6EF1C63522C9AC9D005E9818 /* Advertisement.swift */,
-				6EF1C64D22C9AC9F005E9818 /* Authentication.swift */,
-				6EF1C63222C9AC9D005E9818 /* AuthenticationError.swift */,
-				6EF1C64522C9AC9E005E9818 /* BitMaskOption.swift */,
-				6EF1C65422C9AC9F005E9818 /* Bool.swift */,
-				6EF1C63622C9AC9D005E9818 /* BuildVersion.swift */,
-				6EF1C63922C9AC9D005E9818 /* Central.swift */,
-				6EF1C63822C9AC9D005E9818 /* Chunk.swift */,
-				6EF1C63D22C9AC9E005E9818 /* ConfirmNewKeyCharacteristic.swift */,
-				6EF1C63C22C9AC9E005E9818 /* CreateNewKeyCharacteristic.swift */,
-				6EF1C64022C9AC9E005E9818 /* Crypto.swift */,
-				6EF1C65122C9AC9F005E9818 /* DateComponents.swift */,
-				6EF1C64B22C9AC9E005E9818 /* DeviceManager.swift */,
-				6EBA70FD2357A7040005BEB7 /* URLSession.swift */,
-				6EF1C63022C9AC9D005E9818 /* EncryptedData.swift */,
-				6EF1C64622C9AC9E005E9818 /* GATTError.swift */,
-				6EF1C64322C9AC9E005E9818 /* GATTProfile.swift */,
-				6EF1C63A22C9AC9E005E9818 /* GitCommits.swift */,
-				6EF1C64F22C9AC9F005E9818 /* Integer.swift */,
-				6EF1C63E22C9AC9E005E9818 /* Key.swift */,
-				6EF1C63722C9AC9D005E9818 /* KeysCharacteristic.swift */,
-				6EF1C63322C9AC9D005E9818 /* ListKeysCharacteristic.swift */,
-				6E93D353231C624000119F65 /* EventsCharacteristic.swift */,
-				6E93D352231C623E00119F65 /* ListEventsCharacteristic.swift */,
-				6EBDB5CA235D5E3200F38CB0 /* EventsRequest.swift */,
-				6EBDB5CF235D7FF900F38CB0 /* EventsResponse.swift */,
-				6E93D351231C623B00119F65 /* Notification.swift */,
-				6EF1C62F22C9AC9D005E9818 /* LockConfiguration.swift */,
-				6EF1C65222C9AC9F005E9818 /* LockHardware.swift */,
-				6EF1C64822C9AC9E005E9818 /* LockInformationCharacteristic.swift */,
-				6EF1C64222C9AC9E005E9818 /* LockModel.swift */,
-				6E23151F23576F7E00C363EC /* LockNetService.swift */,
-				6EBA71022357A7B40005BEB7 /* LockInformationRequest.swift */,
-				6EBA71072357A9870005BEB7 /* LockInformationResponse.swift */,
-				6E87864A2357ACAB008624C1 /* KeysRequest.swift */,
-				6EE1D6E02357C639004DD856 /* KeysResponse.swift */,
-				6EE1D6E92357F1E9004DD856 /* CreateNewKeyRequest.swift */,
-				6EF1C64422C9AC9E005E9818 /* LockState.swift */,
-				6EF1C63422C9AC9D005E9818 /* NewKey.swift */,
-				6EF1C64E22C9AC9F005E9818 /* Permission.swift */,
-				6EF1C63B22C9AC9E005E9818 /* POSIXTime.swift */,
-				6EF1C63F22C9AC9E005E9818 /* RemoveKeyCharacteristic.swift */,
-				6EF1C63122C9AC9D005E9818 /* SecureData.swift */,
-				6EF1C62E22C9AC9D005E9818 /* SetupCharacteristic.swift */,
-				6EF1C65022C9AC9F005E9818 /* SmartLockProfile.swift */,
-				6EF1C64A22C9AC9E005E9818 /* Status.swift */,
-				6EF1C64C22C9AC9F005E9818 /* TLV.swift */,
-				6EF1C64122C9AC9E005E9818 /* UIDevice.swift */,
-				6EF1C65322C9AC9F005E9818 /* UnlockAction.swift */,
-				6EF1C64722C9AC9E005E9818 /* UnlockCharacteristic.swift */,
-				6EF1C64922C9AC9E005E9818 /* Version.swift */,
-				6EACDA98231B3539000CF82A /* Event.swift */,
-				6EE1D79E235801BF004DD856 /* EventStore.swift */,
-				6E0A32D422D8FCFB002EF9DE /* URL.swift */,
-				6EE1D6EE2357FAF2004DD856 /* URLSession.swift */,
-				6E9794C323301FC400B5C5C9 /* UUID.swift */,
-				6E4729EA235AE7B3007CBC07 /* UpdateRequest.swift */,
-				6E4729FD235B768E007CBC07 /* DeleteKeyRequest.swift */,
+				6E01DB6628D683AB004B5956 /* BitMaskOption.swift */,
+				6E01DB3628D683AA004B5956 /* Bluetooth */,
+				6E01DB4A28D683AA004B5956 /* BuildVersion.swift */,
+				6E01DB4F28D683AA004B5956 /* Chunk.swift */,
+				6E01DB6028D683AB004B5956 /* Crypto */,
+				6E01DB6728D683AB004B5956 /* DateComponents.swift */,
+				6E01DB7228D683AB004B5956 /* Event.swift */,
+				6E01DB4D28D683AA004B5956 /* EventStore.swift */,
+				6E01DB6828D683AB004B5956 /* Extensions */,
+				6E01DB4E28D683AA004B5956 /* GitCommits.swift */,
+				6E01DB7328D683AB004B5956 /* Key.swift */,
+				6E01DB4B28D683AA004B5956 /* KeyCredentials.swift */,
+				6E01DB3428D683AA004B5956 /* LockAuthorizationStore.swift */,
+				6E01DB7128D683AB004B5956 /* LockConfiguration.swift */,
+				6E01DB7428D683AB004B5956 /* LockConfigurationStore.swift */,
+				6E01DB7028D683AB004B5956 /* LockHardware.swift */,
+				6E01DB4828D683AA004B5956 /* LockInformation.swift */,
+				6E01DB4928D683AA004B5956 /* LockModel.swift */,
+				6E01DB6E28D683AB004B5956 /* LockState.swift */,
+				6E01DB5328D683AB004B5956 /* Networking */,
+				6E01DB6F28D683AB004B5956 /* NewKey.swift */,
+				6E01DB6D28D683AB004B5956 /* Permission.swift */,
+				6E01DB4C28D683AA004B5956 /* POSIXTime.swift */,
+				6E01DB5228D683AA004B5956 /* SmartLockProfile.swift */,
+				6E01DB5028D683AA004B5956 /* Status.swift */,
+				6E01DB3528D683AA004B5956 /* UnlockAction.swift */,
+				6E01DB5128D683AA004B5956 /* Version.swift */,
 			);
 			path = CoreLock;
 			sourceTree = "<group>";
@@ -621,12 +645,9 @@
 			);
 			name = "CoreLock-iOS";
 			packageProductDependencies = (
-				6E9C95E923114962007C18FE /* CryptoSwift */,
 				6E9C95EC231149A5007C18FE /* GATT */,
 				6E9C95EE231149A5007C18FE /* DarwinGATT */,
 				6E9C95F1231149F5007C18FE /* TLVCoding */,
-				6E621243234721FF007D49BF /* Bluetooth */,
-				6EBA70F5235790CB0005BEB7 /* Bonjour */,
 			);
 			productName = SmartLock;
 			productReference = 52D6D97C1BEFF229002C0205 /* CoreLock.framework */;
@@ -647,12 +668,9 @@
 			);
 			name = "CoreLock-watchOS";
 			packageProductDependencies = (
-				6ED81FE8231662F100B69520 /* CryptoSwift */,
 				6ED81FEA231662F100B69520 /* DarwinGATT */,
 				6ED81FEC231662F100B69520 /* GATT */,
 				6ED81FEE231662F100B69520 /* TLVCoding */,
-				6E621265234723ED007D49BF /* Bluetooth */,
-				6EBA70F9235790E10005BEB7 /* Bonjour */,
 			);
 			productName = "SmartLock-watchOS";
 			productReference = 52D6D9E21BEFFF6E002C0205 /* CoreLock.framework */;
@@ -673,12 +691,9 @@
 			);
 			name = "CoreLock-tvOS";
 			packageProductDependencies = (
-				6ED81FF0231662FB00B69520 /* CryptoSwift */,
 				6ED81FF2231662FB00B69520 /* DarwinGATT */,
 				6ED81FF4231662FB00B69520 /* GATT */,
 				6ED81FF6231662FB00B69520 /* TLVCoding */,
-				6E62126923472400007D49BF /* Bluetooth */,
-				6EBA70FB235790E70005BEB7 /* Bonjour */,
 			);
 			productName = "SmartLock-tvOS";
 			productReference = 52D6D9F01BEFFFBE002C0205 /* CoreLock.framework */;
@@ -699,12 +714,9 @@
 			);
 			name = "CoreLock-macOS";
 			packageProductDependencies = (
-				6ED81FE0231662E200B69520 /* CryptoSwift */,
 				6ED81FE2231662E200B69520 /* DarwinGATT */,
 				6ED81FE4231662E200B69520 /* GATT */,
 				6ED81FE6231662E200B69520 /* TLVCoding */,
-				6E62124723472217007D49BF /* Bluetooth */,
-				6EBA70F7235790D90005BEB7 /* Bonjour */,
 			);
 			productName = "SmartLock-macOS";
 			productReference = 52D6DA0F1BF000BD002C0205 /* CoreLock.framework */;
@@ -740,19 +752,19 @@
 				TargetAttributes = {
 					52D6D97B1BEFF229002C0205 = {
 						CreatedOnToolsVersion = 7.1;
-						LastSwiftMigration = 1020;
+						LastSwiftMigration = 1400;
 					};
 					52D6D9E11BEFFF6E002C0205 = {
 						CreatedOnToolsVersion = 7.1;
-						LastSwiftMigration = 1020;
+						LastSwiftMigration = 1400;
 					};
 					52D6D9EF1BEFFFBE002C0205 = {
 						CreatedOnToolsVersion = 7.1;
-						LastSwiftMigration = 1020;
+						LastSwiftMigration = 1400;
 					};
 					52D6DA0E1BF000BD002C0205 = {
 						CreatedOnToolsVersion = 7.1;
-						LastSwiftMigration = 1020;
+						LastSwiftMigration = 1400;
 					};
 					DD7502791C68FCFC006590AF = {
 						CreatedOnToolsVersion = 7.2.1;
@@ -770,11 +782,8 @@
 			);
 			mainGroup = 52D6D9721BEFF229002C0205;
 			packageReferences = (
-				6E9C95E823114962007C18FE /* XCRemoteSwiftPackageReference "CryptoSwift" */,
 				6E9C95EB231149A5007C18FE /* XCRemoteSwiftPackageReference "GATT" */,
 				6E9C95F0231149F5007C18FE /* XCRemoteSwiftPackageReference "TLVCoding" */,
-				6E621242234721FF007D49BF /* XCRemoteSwiftPackageReference "Bluetooth" */,
-				6EBA70F4235790CB0005BEB7 /* XCRemoteSwiftPackageReference "Bonjour" */,
 			);
 			productRefGroup = 52D6D97D1BEFF229002C0205 /* Products */;
 			projectDirPath = "";
@@ -832,64 +841,67 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6EF1C68D22C9AC9F005E9818 /* CreateNewKeyCharacteristic.swift in Sources */,
-				6EF1C67522C9AC9F005E9818 /* BuildVersion.swift in Sources */,
-				6EF1C6ED22C9AC9F005E9818 /* Bool.swift in Sources */,
-				6EF1C6B122C9AC9F005E9818 /* BitMaskOption.swift in Sources */,
-				6EF1C6E122C9AC9F005E9818 /* DateComponents.swift in Sources */,
-				6EF1C6CD22C9AC9F005E9818 /* TLV.swift in Sources */,
-				6EF1C6D922C9AC9F005E9818 /* Integer.swift in Sources */,
-				6E93D358231C624300119F65 /* ListEventsCharacteristic.swift in Sources */,
-				6E23152023576F7E00C363EC /* LockNetService.swift in Sources */,
-				6EF1C69922C9AC9F005E9818 /* RemoveKeyCharacteristic.swift in Sources */,
-				6EF1C6A522C9AC9F005E9818 /* LockModel.swift in Sources */,
-				6E87864B2357ACAB008624C1 /* KeysRequest.swift in Sources */,
-				6EF1C69122C9AC9F005E9818 /* ConfirmNewKeyCharacteristic.swift in Sources */,
-				6EBA70FE2357A7040005BEB7 /* URLSession.swift in Sources */,
-				6E4729FE235B768E007CBC07 /* DeleteKeyRequest.swift in Sources */,
-				6EF1C68522C9AC9F005E9818 /* GitCommits.swift in Sources */,
-				6EF1C6DD22C9AC9F005E9818 /* SmartLockProfile.swift in Sources */,
-				6EBA71032357A7B40005BEB7 /* LockInformationRequest.swift in Sources */,
-				6EF1C69D22C9AC9F005E9818 /* Crypto.swift in Sources */,
-				6EF1C6E522C9AC9F005E9818 /* LockHardware.swift in Sources */,
-				6EE1D6EF2357FAF3004DD856 /* URLSession.swift in Sources */,
-				6EF1C6B522C9AC9F005E9818 /* GATTError.swift in Sources */,
-				6E0A32D522D8FCFB002EF9DE /* URL.swift in Sources */,
-				6EF1C6A922C9AC9F005E9818 /* GATTProfile.swift in Sources */,
-				6EF1C6BD22C9AC9F005E9818 /* LockInformationCharacteristic.swift in Sources */,
-				6EF1C66122C9AC9F005E9818 /* SecureData.swift in Sources */,
-				6E4729EB235AE7B4007CBC07 /* UpdateRequest.swift in Sources */,
-				6EF1C67122C9AC9F005E9818 /* Advertisement.swift in Sources */,
-				6EF1C6C922C9AC9F005E9818 /* DeviceManager.swift in Sources */,
-				6EF1C6D122C9AC9F005E9818 /* Authentication.swift in Sources */,
-				6EF1C66D22C9AC9F005E9818 /* NewKey.swift in Sources */,
-				6EE1D6EA2357F1E9004DD856 /* CreateNewKeyRequest.swift in Sources */,
-				6EF1C67922C9AC9F005E9818 /* KeysCharacteristic.swift in Sources */,
-				6EBA71082357A9870005BEB7 /* LockInformationResponse.swift in Sources */,
-				6EF1C69522C9AC9F005E9818 /* Key.swift in Sources */,
-				6EF1C68922C9AC9F005E9818 /* POSIXTime.swift in Sources */,
-				6EF1C68122C9AC9F005E9818 /* Central.swift in Sources */,
-				6EF1C6C522C9AC9F005E9818 /* Status.swift in Sources */,
-				6EF1C6C122C9AC9F005E9818 /* Version.swift in Sources */,
-				6EE1D6E12357C639004DD856 /* KeysResponse.swift in Sources */,
-				6EE1D79F235801BF004DD856 /* EventStore.swift in Sources */,
-				6EBDB5D0235D7FF900F38CB0 /* EventsResponse.swift in Sources */,
-				6EACDA99231B353A000CF82A /* Event.swift in Sources */,
-				6E93D35C231C624300119F65 /* EventsCharacteristic.swift in Sources */,
-				6EF1C65D22C9AC9F005E9818 /* EncryptedData.swift in Sources */,
-				6EF1C65522C9AC9F005E9818 /* SetupCharacteristic.swift in Sources */,
-				6EF1C6A122C9AC9F005E9818 /* UIDevice.swift in Sources */,
-				6EF1C67D22C9AC9F005E9818 /* Chunk.swift in Sources */,
-				6E9794C423301FC400B5C5C9 /* UUID.swift in Sources */,
-				6EF1C6E922C9AC9F005E9818 /* UnlockAction.swift in Sources */,
-				6EF1C6AD22C9AC9F005E9818 /* LockState.swift in Sources */,
-				6EF1C66522C9AC9F005E9818 /* AuthenticationError.swift in Sources */,
-				6EF1C66922C9AC9F005E9818 /* ListKeysCharacteristic.swift in Sources */,
-				6E93D354231C624300119F65 /* Notification.swift in Sources */,
-				6EBDB5CB235D5E3200F38CB0 /* EventsRequest.swift in Sources */,
-				6EF1C6B922C9AC9F005E9818 /* UnlockCharacteristic.swift in Sources */,
-				6EF1C65922C9AC9F005E9818 /* LockConfiguration.swift in Sources */,
-				6EF1C6D522C9AC9F005E9818 /* Permission.swift in Sources */,
+				6E01DBA128D683AB004B5956 /* KeysCharacteristic.swift in Sources */,
+				6E01DBD928D683AB004B5956 /* GitCommits.swift in Sources */,
+				6E01DC3128D683AB004B5956 /* BitMaskOption.swift in Sources */,
+				6E01DB7528D683AB004B5956 /* LockAuthorizationStore.swift in Sources */,
+				6E01DBB928D683AB004B5956 /* RemoveKeyCharacteristic.swift in Sources */,
+				6E01DBE928D683AB004B5956 /* SmartLockProfile.swift in Sources */,
+				6E01DC0D28D683AB004B5956 /* URL.swift in Sources */,
+				6E01DC1D28D683AB004B5956 /* Authentication.swift in Sources */,
+				6E01DBC528D683AB004B5956 /* LockModel.swift in Sources */,
+				6E01DC4D28D683AB004B5956 /* LockState.swift in Sources */,
+				6E01DC5D28D683AB004B5956 /* Event.swift in Sources */,
+				6E01DBF528D683AB004B5956 /* EventsResponse.swift in Sources */,
+				6E01DBBD28D683AB004B5956 /* GATTError.swift in Sources */,
+				6E01DC2128D683AB004B5956 /* AuthenticationError.swift in Sources */,
+				6E01DC0128D683AB004B5956 /* KeysResponse.swift in Sources */,
+				6E01DC1128D683AB004B5956 /* UpdateRequest.swift in Sources */,
+				6E01DC4928D683AB004B5956 /* Permission.swift in Sources */,
+				6E01DBC928D683AB004B5956 /* BuildVersion.swift in Sources */,
+				6E01DB7928D683AB004B5956 /* UnlockAction.swift in Sources */,
+				6E01DBDD28D683AB004B5956 /* Chunk.swift in Sources */,
+				6E01DC1528D683AB004B5956 /* KeysRequest.swift in Sources */,
+				6E01DC0928D683AB004B5956 /* LockInformationResponse.swift in Sources */,
+				6E01DBB128D683AB004B5956 /* EventsCharacteristic.swift in Sources */,
+				6E01DBED28D683AB004B5956 /* EventsRequest.swift in Sources */,
+				6E01DC5928D683AB004B5956 /* LockConfiguration.swift in Sources */,
+				6E01DBA528D683AB004B5956 /* CreateNewKeyCharacteristic.swift in Sources */,
+				6E01DBA928D683AB004B5956 /* TLV.swift in Sources */,
+				6E01DBD528D683AB004B5956 /* EventStore.swift in Sources */,
+				6E01DC3528D683AB004B5956 /* DateComponents.swift in Sources */,
+				6E01DBB528D683AB004B5956 /* GATTProfile.swift in Sources */,
+				6E01DC4128D683AB004B5956 /* Integer.swift in Sources */,
+				6E01DC5528D683AB004B5956 /* LockHardware.swift in Sources */,
+				6E01DC6528D683AB004B5956 /* LockConfigurationStore.swift in Sources */,
+				6E01DBFD28D683AB004B5956 /* LockNetService.swift in Sources */,
+				6E01DB8528D683AB004B5956 /* Central.swift in Sources */,
+				6E01DB9D28D683AB004B5956 /* ListKeysCharacteristic.swift in Sources */,
+				6E01DBE528D683AB004B5956 /* Version.swift in Sources */,
+				6E01DC3D28D683AB004B5956 /* UUID.swift in Sources */,
+				6E01DC2D28D683AB004B5956 /* EncryptedData.swift in Sources */,
+				6E01DC3928D683AB004B5956 /* Date.swift in Sources */,
+				6E01DB8928D683AB004B5956 /* ListEventsCharacteristic.swift in Sources */,
+				6E01DB8D28D683AB004B5956 /* UnlockCharacteristic.swift in Sources */,
+				6E01DC6128D683AB004B5956 /* Key.swift in Sources */,
+				6E01DC0528D683AB004B5956 /* URLSession.swift in Sources */,
+				6E01DB8128D683AB004B5956 /* ConfirmNewKeyCharacteristic.swift in Sources */,
+				6E01DBF128D683AB004B5956 /* DeleteKeyRequest.swift in Sources */,
+				6E01DB9928D683AB004B5956 /* LockInformationCharacteristic.swift in Sources */,
+				6E01DBCD28D683AB004B5956 /* KeyCredentials.swift in Sources */,
+				6E01DBC128D683AB004B5956 /* LockInformation.swift in Sources */,
+				6E01DC2928D683AB004B5956 /* Crypto.swift in Sources */,
+				6E01DBAD28D683AB004B5956 /* Notification.swift in Sources */,
+				6E01DC4528D683AB004B5956 /* Bool.swift in Sources */,
+				6E01DBF928D683AB004B5956 /* CreateNewKeyRequest.swift in Sources */,
+				6E01DBE128D683AB004B5956 /* Status.swift in Sources */,
+				6E01DBD128D683AB004B5956 /* POSIXTime.swift in Sources */,
+				6E01DC5128D683AB004B5956 /* NewKey.swift in Sources */,
+				6E01DB9128D683AB004B5956 /* SetupCharacteristic.swift in Sources */,
+				6E01DC1928D683AB004B5956 /* LockInformationRequest.swift in Sources */,
+				6E01DB9528D683AB004B5956 /* DeviceManager.swift in Sources */,
+				6E01DC2528D683AB004B5956 /* SecureData.swift in Sources */,
+				6E01DB7D28D683AB004B5956 /* Advertisement.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -897,64 +909,67 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6EF1C68F22C9AC9F005E9818 /* CreateNewKeyCharacteristic.swift in Sources */,
-				6EF1C67722C9AC9F005E9818 /* BuildVersion.swift in Sources */,
-				6EF1C6EF22C9AC9F005E9818 /* Bool.swift in Sources */,
-				6EF1C6B322C9AC9F005E9818 /* BitMaskOption.swift in Sources */,
-				6EF1C6E322C9AC9F005E9818 /* DateComponents.swift in Sources */,
-				6EF1C6CF22C9AC9F005E9818 /* TLV.swift in Sources */,
-				6EF1C6DB22C9AC9F005E9818 /* Integer.swift in Sources */,
-				6E93D35A231C624300119F65 /* ListEventsCharacteristic.swift in Sources */,
-				6E23152223576F7E00C363EC /* LockNetService.swift in Sources */,
-				6EF1C69B22C9AC9F005E9818 /* RemoveKeyCharacteristic.swift in Sources */,
-				6EF1C6A722C9AC9F005E9818 /* LockModel.swift in Sources */,
-				6E87864D2357ACAB008624C1 /* KeysRequest.swift in Sources */,
-				6EF1C69322C9AC9F005E9818 /* ConfirmNewKeyCharacteristic.swift in Sources */,
-				6EBA71002357A7040005BEB7 /* URLSession.swift in Sources */,
-				6E472A00235B768F007CBC07 /* DeleteKeyRequest.swift in Sources */,
-				6EF1C68722C9AC9F005E9818 /* GitCommits.swift in Sources */,
-				6EF1C6DF22C9AC9F005E9818 /* SmartLockProfile.swift in Sources */,
-				6EBA71052357A7B40005BEB7 /* LockInformationRequest.swift in Sources */,
-				6EF1C69F22C9AC9F005E9818 /* Crypto.swift in Sources */,
-				6EF1C6E722C9AC9F005E9818 /* LockHardware.swift in Sources */,
-				6EE1D6F12357FAF3004DD856 /* URLSession.swift in Sources */,
-				6EF1C6B722C9AC9F005E9818 /* GATTError.swift in Sources */,
-				6E0A32D722D8FCFB002EF9DE /* URL.swift in Sources */,
-				6EF1C6AB22C9AC9F005E9818 /* GATTProfile.swift in Sources */,
-				6EF1C6BF22C9AC9F005E9818 /* LockInformationCharacteristic.swift in Sources */,
-				6EF1C66322C9AC9F005E9818 /* SecureData.swift in Sources */,
-				6E4729ED235AE7B4007CBC07 /* UpdateRequest.swift in Sources */,
-				6EF1C67322C9AC9F005E9818 /* Advertisement.swift in Sources */,
-				6EF1C6CB22C9AC9F005E9818 /* DeviceManager.swift in Sources */,
-				6EF1C6D322C9AC9F005E9818 /* Authentication.swift in Sources */,
-				6EF1C66F22C9AC9F005E9818 /* NewKey.swift in Sources */,
-				6EE1D6EC2357F1E9004DD856 /* CreateNewKeyRequest.swift in Sources */,
-				6EF1C67B22C9AC9F005E9818 /* KeysCharacteristic.swift in Sources */,
-				6EBA710A2357A9870005BEB7 /* LockInformationResponse.swift in Sources */,
-				6EF1C69722C9AC9F005E9818 /* Key.swift in Sources */,
-				6EF1C68B22C9AC9F005E9818 /* POSIXTime.swift in Sources */,
-				6EF1C68322C9AC9F005E9818 /* Central.swift in Sources */,
-				6EF1C6C722C9AC9F005E9818 /* Status.swift in Sources */,
-				6EF1C6C322C9AC9F005E9818 /* Version.swift in Sources */,
-				6EE1D6E32357C639004DD856 /* KeysResponse.swift in Sources */,
-				6EE1D7A1235801BF004DD856 /* EventStore.swift in Sources */,
-				6EBDB5D2235D7FF900F38CB0 /* EventsResponse.swift in Sources */,
-				6EACDA9B231B353A000CF82A /* Event.swift in Sources */,
-				6E93D35E231C624300119F65 /* EventsCharacteristic.swift in Sources */,
-				6EF1C65F22C9AC9F005E9818 /* EncryptedData.swift in Sources */,
-				6EF1C65722C9AC9F005E9818 /* SetupCharacteristic.swift in Sources */,
-				6EF1C6A322C9AC9F005E9818 /* UIDevice.swift in Sources */,
-				6EF1C67F22C9AC9F005E9818 /* Chunk.swift in Sources */,
-				6E9794C623301FC400B5C5C9 /* UUID.swift in Sources */,
-				6EF1C6EB22C9AC9F005E9818 /* UnlockAction.swift in Sources */,
-				6EF1C6AF22C9AC9F005E9818 /* LockState.swift in Sources */,
-				6EF1C66722C9AC9F005E9818 /* AuthenticationError.swift in Sources */,
-				6EF1C66B22C9AC9F005E9818 /* ListKeysCharacteristic.swift in Sources */,
-				6E93D356231C624300119F65 /* Notification.swift in Sources */,
-				6EBDB5CD235D5E3200F38CB0 /* EventsRequest.swift in Sources */,
-				6EF1C6BB22C9AC9F005E9818 /* UnlockCharacteristic.swift in Sources */,
-				6EF1C65B22C9AC9F005E9818 /* LockConfiguration.swift in Sources */,
-				6EF1C6D722C9AC9F005E9818 /* Permission.swift in Sources */,
+				6E01DBA328D683AB004B5956 /* KeysCharacteristic.swift in Sources */,
+				6E01DBDB28D683AB004B5956 /* GitCommits.swift in Sources */,
+				6E01DC3328D683AB004B5956 /* BitMaskOption.swift in Sources */,
+				6E01DB7728D683AB004B5956 /* LockAuthorizationStore.swift in Sources */,
+				6E01DBBB28D683AB004B5956 /* RemoveKeyCharacteristic.swift in Sources */,
+				6E01DBEB28D683AB004B5956 /* SmartLockProfile.swift in Sources */,
+				6E01DC0F28D683AB004B5956 /* URL.swift in Sources */,
+				6E01DC1F28D683AB004B5956 /* Authentication.swift in Sources */,
+				6E01DBC728D683AB004B5956 /* LockModel.swift in Sources */,
+				6E01DC4F28D683AB004B5956 /* LockState.swift in Sources */,
+				6E01DC5F28D683AB004B5956 /* Event.swift in Sources */,
+				6E01DBF728D683AB004B5956 /* EventsResponse.swift in Sources */,
+				6E01DBBF28D683AB004B5956 /* GATTError.swift in Sources */,
+				6E01DC2328D683AB004B5956 /* AuthenticationError.swift in Sources */,
+				6E01DC0328D683AB004B5956 /* KeysResponse.swift in Sources */,
+				6E01DC1328D683AB004B5956 /* UpdateRequest.swift in Sources */,
+				6E01DC4B28D683AB004B5956 /* Permission.swift in Sources */,
+				6E01DBCB28D683AB004B5956 /* BuildVersion.swift in Sources */,
+				6E01DB7B28D683AB004B5956 /* UnlockAction.swift in Sources */,
+				6E01DBDF28D683AB004B5956 /* Chunk.swift in Sources */,
+				6E01DC1728D683AB004B5956 /* KeysRequest.swift in Sources */,
+				6E01DC0B28D683AB004B5956 /* LockInformationResponse.swift in Sources */,
+				6E01DBB328D683AB004B5956 /* EventsCharacteristic.swift in Sources */,
+				6E01DBEF28D683AB004B5956 /* EventsRequest.swift in Sources */,
+				6E01DC5B28D683AB004B5956 /* LockConfiguration.swift in Sources */,
+				6E01DBA728D683AB004B5956 /* CreateNewKeyCharacteristic.swift in Sources */,
+				6E01DBAB28D683AB004B5956 /* TLV.swift in Sources */,
+				6E01DBD728D683AB004B5956 /* EventStore.swift in Sources */,
+				6E01DC3728D683AB004B5956 /* DateComponents.swift in Sources */,
+				6E01DBB728D683AB004B5956 /* GATTProfile.swift in Sources */,
+				6E01DC4328D683AB004B5956 /* Integer.swift in Sources */,
+				6E01DC5728D683AB004B5956 /* LockHardware.swift in Sources */,
+				6E01DC6728D683AB004B5956 /* LockConfigurationStore.swift in Sources */,
+				6E01DBFF28D683AB004B5956 /* LockNetService.swift in Sources */,
+				6E01DB8728D683AB004B5956 /* Central.swift in Sources */,
+				6E01DB9F28D683AB004B5956 /* ListKeysCharacteristic.swift in Sources */,
+				6E01DBE728D683AB004B5956 /* Version.swift in Sources */,
+				6E01DC3F28D683AB004B5956 /* UUID.swift in Sources */,
+				6E01DC2F28D683AB004B5956 /* EncryptedData.swift in Sources */,
+				6E01DC3B28D683AB004B5956 /* Date.swift in Sources */,
+				6E01DB8B28D683AB004B5956 /* ListEventsCharacteristic.swift in Sources */,
+				6E01DB8F28D683AB004B5956 /* UnlockCharacteristic.swift in Sources */,
+				6E01DC6328D683AB004B5956 /* Key.swift in Sources */,
+				6E01DC0728D683AB004B5956 /* URLSession.swift in Sources */,
+				6E01DB8328D683AB004B5956 /* ConfirmNewKeyCharacteristic.swift in Sources */,
+				6E01DBF328D683AB004B5956 /* DeleteKeyRequest.swift in Sources */,
+				6E01DB9B28D683AB004B5956 /* LockInformationCharacteristic.swift in Sources */,
+				6E01DBCF28D683AB004B5956 /* KeyCredentials.swift in Sources */,
+				6E01DBC328D683AB004B5956 /* LockInformation.swift in Sources */,
+				6E01DC2B28D683AB004B5956 /* Crypto.swift in Sources */,
+				6E01DBAF28D683AB004B5956 /* Notification.swift in Sources */,
+				6E01DC4728D683AB004B5956 /* Bool.swift in Sources */,
+				6E01DBFB28D683AB004B5956 /* CreateNewKeyRequest.swift in Sources */,
+				6E01DBE328D683AB004B5956 /* Status.swift in Sources */,
+				6E01DBD328D683AB004B5956 /* POSIXTime.swift in Sources */,
+				6E01DC5328D683AB004B5956 /* NewKey.swift in Sources */,
+				6E01DB9328D683AB004B5956 /* SetupCharacteristic.swift in Sources */,
+				6E01DC1B28D683AB004B5956 /* LockInformationRequest.swift in Sources */,
+				6E01DB9728D683AB004B5956 /* DeviceManager.swift in Sources */,
+				6E01DC2728D683AB004B5956 /* SecureData.swift in Sources */,
+				6E01DB7F28D683AB004B5956 /* Advertisement.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -962,64 +977,67 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6EF1C69022C9AC9F005E9818 /* CreateNewKeyCharacteristic.swift in Sources */,
-				6EF1C67822C9AC9F005E9818 /* BuildVersion.swift in Sources */,
-				6EF1C6F022C9AC9F005E9818 /* Bool.swift in Sources */,
-				6EF1C6B422C9AC9F005E9818 /* BitMaskOption.swift in Sources */,
-				6EF1C6E422C9AC9F005E9818 /* DateComponents.swift in Sources */,
-				6EF1C6D022C9AC9F005E9818 /* TLV.swift in Sources */,
-				6EF1C6DC22C9AC9F005E9818 /* Integer.swift in Sources */,
-				6E93D35B231C624300119F65 /* ListEventsCharacteristic.swift in Sources */,
-				6E23152323576F7E00C363EC /* LockNetService.swift in Sources */,
-				6EF1C69C22C9AC9F005E9818 /* RemoveKeyCharacteristic.swift in Sources */,
-				6EF1C6A822C9AC9F005E9818 /* LockModel.swift in Sources */,
-				6E87864E2357ACAB008624C1 /* KeysRequest.swift in Sources */,
-				6EF1C69422C9AC9F005E9818 /* ConfirmNewKeyCharacteristic.swift in Sources */,
-				6EBA71012357A7040005BEB7 /* URLSession.swift in Sources */,
-				6E472A01235B768F007CBC07 /* DeleteKeyRequest.swift in Sources */,
-				6EF1C68822C9AC9F005E9818 /* GitCommits.swift in Sources */,
-				6EF1C6E022C9AC9F005E9818 /* SmartLockProfile.swift in Sources */,
-				6EBA71062357A7B40005BEB7 /* LockInformationRequest.swift in Sources */,
-				6EF1C6A022C9AC9F005E9818 /* Crypto.swift in Sources */,
-				6EF1C6E822C9AC9F005E9818 /* LockHardware.swift in Sources */,
-				6EE1D6F22357FAF3004DD856 /* URLSession.swift in Sources */,
-				6EF1C6B822C9AC9F005E9818 /* GATTError.swift in Sources */,
-				6E0A32D822D8FCFB002EF9DE /* URL.swift in Sources */,
-				6EF1C6AC22C9AC9F005E9818 /* GATTProfile.swift in Sources */,
-				6EF1C6C022C9AC9F005E9818 /* LockInformationCharacteristic.swift in Sources */,
-				6EF1C66422C9AC9F005E9818 /* SecureData.swift in Sources */,
-				6E4729EE235AE7B4007CBC07 /* UpdateRequest.swift in Sources */,
-				6EF1C67422C9AC9F005E9818 /* Advertisement.swift in Sources */,
-				6EF1C6CC22C9AC9F005E9818 /* DeviceManager.swift in Sources */,
-				6EF1C6D422C9AC9F005E9818 /* Authentication.swift in Sources */,
-				6EF1C67022C9AC9F005E9818 /* NewKey.swift in Sources */,
-				6EE1D6ED2357F1E9004DD856 /* CreateNewKeyRequest.swift in Sources */,
-				6EF1C67C22C9AC9F005E9818 /* KeysCharacteristic.swift in Sources */,
-				6EBA710B2357A9870005BEB7 /* LockInformationResponse.swift in Sources */,
-				6EF1C69822C9AC9F005E9818 /* Key.swift in Sources */,
-				6EF1C68C22C9AC9F005E9818 /* POSIXTime.swift in Sources */,
-				6EF1C68422C9AC9F005E9818 /* Central.swift in Sources */,
-				6EF1C6C822C9AC9F005E9818 /* Status.swift in Sources */,
-				6EF1C6C422C9AC9F005E9818 /* Version.swift in Sources */,
-				6EE1D6E42357C639004DD856 /* KeysResponse.swift in Sources */,
-				6EE1D7A2235801BF004DD856 /* EventStore.swift in Sources */,
-				6EBDB5D3235D7FF900F38CB0 /* EventsResponse.swift in Sources */,
-				6EACDA9C231B353A000CF82A /* Event.swift in Sources */,
-				6E93D35F231C624300119F65 /* EventsCharacteristic.swift in Sources */,
-				6EF1C66022C9AC9F005E9818 /* EncryptedData.swift in Sources */,
-				6EF1C65822C9AC9F005E9818 /* SetupCharacteristic.swift in Sources */,
-				6EF1C6A422C9AC9F005E9818 /* UIDevice.swift in Sources */,
-				6EF1C68022C9AC9F005E9818 /* Chunk.swift in Sources */,
-				6E9794C723301FC400B5C5C9 /* UUID.swift in Sources */,
-				6EF1C6EC22C9AC9F005E9818 /* UnlockAction.swift in Sources */,
-				6EF1C6B022C9AC9F005E9818 /* LockState.swift in Sources */,
-				6EF1C66822C9AC9F005E9818 /* AuthenticationError.swift in Sources */,
-				6EF1C66C22C9AC9F005E9818 /* ListKeysCharacteristic.swift in Sources */,
-				6E93D357231C624300119F65 /* Notification.swift in Sources */,
-				6EBDB5CE235D5E3200F38CB0 /* EventsRequest.swift in Sources */,
-				6EF1C6BC22C9AC9F005E9818 /* UnlockCharacteristic.swift in Sources */,
-				6EF1C65C22C9AC9F005E9818 /* LockConfiguration.swift in Sources */,
-				6EF1C6D822C9AC9F005E9818 /* Permission.swift in Sources */,
+				6E01DBA428D683AB004B5956 /* KeysCharacteristic.swift in Sources */,
+				6E01DBDC28D683AB004B5956 /* GitCommits.swift in Sources */,
+				6E01DC3428D683AB004B5956 /* BitMaskOption.swift in Sources */,
+				6E01DB7828D683AB004B5956 /* LockAuthorizationStore.swift in Sources */,
+				6E01DBBC28D683AB004B5956 /* RemoveKeyCharacteristic.swift in Sources */,
+				6E01DBEC28D683AB004B5956 /* SmartLockProfile.swift in Sources */,
+				6E01DC1028D683AB004B5956 /* URL.swift in Sources */,
+				6E01DC2028D683AB004B5956 /* Authentication.swift in Sources */,
+				6E01DBC828D683AB004B5956 /* LockModel.swift in Sources */,
+				6E01DC5028D683AB004B5956 /* LockState.swift in Sources */,
+				6E01DC6028D683AB004B5956 /* Event.swift in Sources */,
+				6E01DBF828D683AB004B5956 /* EventsResponse.swift in Sources */,
+				6E01DBC028D683AB004B5956 /* GATTError.swift in Sources */,
+				6E01DC2428D683AB004B5956 /* AuthenticationError.swift in Sources */,
+				6E01DC0428D683AB004B5956 /* KeysResponse.swift in Sources */,
+				6E01DC1428D683AB004B5956 /* UpdateRequest.swift in Sources */,
+				6E01DC4C28D683AB004B5956 /* Permission.swift in Sources */,
+				6E01DBCC28D683AB004B5956 /* BuildVersion.swift in Sources */,
+				6E01DB7C28D683AB004B5956 /* UnlockAction.swift in Sources */,
+				6E01DBE028D683AB004B5956 /* Chunk.swift in Sources */,
+				6E01DC1828D683AB004B5956 /* KeysRequest.swift in Sources */,
+				6E01DC0C28D683AB004B5956 /* LockInformationResponse.swift in Sources */,
+				6E01DBB428D683AB004B5956 /* EventsCharacteristic.swift in Sources */,
+				6E01DBF028D683AB004B5956 /* EventsRequest.swift in Sources */,
+				6E01DC5C28D683AB004B5956 /* LockConfiguration.swift in Sources */,
+				6E01DBA828D683AB004B5956 /* CreateNewKeyCharacteristic.swift in Sources */,
+				6E01DBAC28D683AB004B5956 /* TLV.swift in Sources */,
+				6E01DBD828D683AB004B5956 /* EventStore.swift in Sources */,
+				6E01DC3828D683AB004B5956 /* DateComponents.swift in Sources */,
+				6E01DBB828D683AB004B5956 /* GATTProfile.swift in Sources */,
+				6E01DC4428D683AB004B5956 /* Integer.swift in Sources */,
+				6E01DC5828D683AB004B5956 /* LockHardware.swift in Sources */,
+				6E01DC6828D683AB004B5956 /* LockConfigurationStore.swift in Sources */,
+				6E01DC0028D683AB004B5956 /* LockNetService.swift in Sources */,
+				6E01DB8828D683AB004B5956 /* Central.swift in Sources */,
+				6E01DBA028D683AB004B5956 /* ListKeysCharacteristic.swift in Sources */,
+				6E01DBE828D683AB004B5956 /* Version.swift in Sources */,
+				6E01DC4028D683AB004B5956 /* UUID.swift in Sources */,
+				6E01DC3028D683AB004B5956 /* EncryptedData.swift in Sources */,
+				6E01DC3C28D683AB004B5956 /* Date.swift in Sources */,
+				6E01DB8C28D683AB004B5956 /* ListEventsCharacteristic.swift in Sources */,
+				6E01DB9028D683AB004B5956 /* UnlockCharacteristic.swift in Sources */,
+				6E01DC6428D683AB004B5956 /* Key.swift in Sources */,
+				6E01DC0828D683AB004B5956 /* URLSession.swift in Sources */,
+				6E01DB8428D683AB004B5956 /* ConfirmNewKeyCharacteristic.swift in Sources */,
+				6E01DBF428D683AB004B5956 /* DeleteKeyRequest.swift in Sources */,
+				6E01DB9C28D683AB004B5956 /* LockInformationCharacteristic.swift in Sources */,
+				6E01DBD028D683AB004B5956 /* KeyCredentials.swift in Sources */,
+				6E01DBC428D683AB004B5956 /* LockInformation.swift in Sources */,
+				6E01DC2C28D683AB004B5956 /* Crypto.swift in Sources */,
+				6E01DBB028D683AB004B5956 /* Notification.swift in Sources */,
+				6E01DC4828D683AB004B5956 /* Bool.swift in Sources */,
+				6E01DBFC28D683AB004B5956 /* CreateNewKeyRequest.swift in Sources */,
+				6E01DBE428D683AB004B5956 /* Status.swift in Sources */,
+				6E01DBD428D683AB004B5956 /* POSIXTime.swift in Sources */,
+				6E01DC5428D683AB004B5956 /* NewKey.swift in Sources */,
+				6E01DB9428D683AB004B5956 /* SetupCharacteristic.swift in Sources */,
+				6E01DC1C28D683AB004B5956 /* LockInformationRequest.swift in Sources */,
+				6E01DB9828D683AB004B5956 /* DeviceManager.swift in Sources */,
+				6E01DC2828D683AB004B5956 /* SecureData.swift in Sources */,
+				6E01DB8028D683AB004B5956 /* Advertisement.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1027,64 +1045,67 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6EF1C68E22C9AC9F005E9818 /* CreateNewKeyCharacteristic.swift in Sources */,
-				6EF1C67622C9AC9F005E9818 /* BuildVersion.swift in Sources */,
-				6EF1C6EE22C9AC9F005E9818 /* Bool.swift in Sources */,
-				6EF1C6B222C9AC9F005E9818 /* BitMaskOption.swift in Sources */,
-				6EF1C6E222C9AC9F005E9818 /* DateComponents.swift in Sources */,
-				6EF1C6CE22C9AC9F005E9818 /* TLV.swift in Sources */,
-				6EF1C6DA22C9AC9F005E9818 /* Integer.swift in Sources */,
-				6E93D359231C624300119F65 /* ListEventsCharacteristic.swift in Sources */,
-				6E23152123576F7E00C363EC /* LockNetService.swift in Sources */,
-				6EF1C69A22C9AC9F005E9818 /* RemoveKeyCharacteristic.swift in Sources */,
-				6EF1C6A622C9AC9F005E9818 /* LockModel.swift in Sources */,
-				6E87864C2357ACAB008624C1 /* KeysRequest.swift in Sources */,
-				6EF1C69222C9AC9F005E9818 /* ConfirmNewKeyCharacteristic.swift in Sources */,
-				6EBA70FF2357A7040005BEB7 /* URLSession.swift in Sources */,
-				6E4729FF235B768F007CBC07 /* DeleteKeyRequest.swift in Sources */,
-				6EF1C68622C9AC9F005E9818 /* GitCommits.swift in Sources */,
-				6EF1C6DE22C9AC9F005E9818 /* SmartLockProfile.swift in Sources */,
-				6EBA71042357A7B40005BEB7 /* LockInformationRequest.swift in Sources */,
-				6EF1C69E22C9AC9F005E9818 /* Crypto.swift in Sources */,
-				6EF1C6E622C9AC9F005E9818 /* LockHardware.swift in Sources */,
-				6EE1D6F02357FAF3004DD856 /* URLSession.swift in Sources */,
-				6EF1C6B622C9AC9F005E9818 /* GATTError.swift in Sources */,
-				6E0A32D622D8FCFB002EF9DE /* URL.swift in Sources */,
-				6EF1C6AA22C9AC9F005E9818 /* GATTProfile.swift in Sources */,
-				6EF1C6BE22C9AC9F005E9818 /* LockInformationCharacteristic.swift in Sources */,
-				6EF1C66222C9AC9F005E9818 /* SecureData.swift in Sources */,
-				6E4729EC235AE7B4007CBC07 /* UpdateRequest.swift in Sources */,
-				6EF1C67222C9AC9F005E9818 /* Advertisement.swift in Sources */,
-				6EF1C6CA22C9AC9F005E9818 /* DeviceManager.swift in Sources */,
-				6EF1C6D222C9AC9F005E9818 /* Authentication.swift in Sources */,
-				6EF1C66E22C9AC9F005E9818 /* NewKey.swift in Sources */,
-				6EE1D6EB2357F1E9004DD856 /* CreateNewKeyRequest.swift in Sources */,
-				6EF1C67A22C9AC9F005E9818 /* KeysCharacteristic.swift in Sources */,
-				6EBA71092357A9870005BEB7 /* LockInformationResponse.swift in Sources */,
-				6EF1C69622C9AC9F005E9818 /* Key.swift in Sources */,
-				6EF1C68A22C9AC9F005E9818 /* POSIXTime.swift in Sources */,
-				6EF1C68222C9AC9F005E9818 /* Central.swift in Sources */,
-				6EF1C6C622C9AC9F005E9818 /* Status.swift in Sources */,
-				6EF1C6C222C9AC9F005E9818 /* Version.swift in Sources */,
-				6EE1D6E22357C639004DD856 /* KeysResponse.swift in Sources */,
-				6EE1D7A0235801BF004DD856 /* EventStore.swift in Sources */,
-				6EBDB5D1235D7FF900F38CB0 /* EventsResponse.swift in Sources */,
-				6EACDA9A231B353A000CF82A /* Event.swift in Sources */,
-				6E93D35D231C624300119F65 /* EventsCharacteristic.swift in Sources */,
-				6EF1C65E22C9AC9F005E9818 /* EncryptedData.swift in Sources */,
-				6EF1C65622C9AC9F005E9818 /* SetupCharacteristic.swift in Sources */,
-				6EF1C6A222C9AC9F005E9818 /* UIDevice.swift in Sources */,
-				6EF1C67E22C9AC9F005E9818 /* Chunk.swift in Sources */,
-				6E9794C523301FC400B5C5C9 /* UUID.swift in Sources */,
-				6EF1C6EA22C9AC9F005E9818 /* UnlockAction.swift in Sources */,
-				6EF1C6AE22C9AC9F005E9818 /* LockState.swift in Sources */,
-				6EF1C66622C9AC9F005E9818 /* AuthenticationError.swift in Sources */,
-				6EF1C66A22C9AC9F005E9818 /* ListKeysCharacteristic.swift in Sources */,
-				6E93D355231C624300119F65 /* Notification.swift in Sources */,
-				6EBDB5CC235D5E3200F38CB0 /* EventsRequest.swift in Sources */,
-				6EF1C6BA22C9AC9F005E9818 /* UnlockCharacteristic.swift in Sources */,
-				6EF1C65A22C9AC9F005E9818 /* LockConfiguration.swift in Sources */,
-				6EF1C6D622C9AC9F005E9818 /* Permission.swift in Sources */,
+				6E01DBA228D683AB004B5956 /* KeysCharacteristic.swift in Sources */,
+				6E01DBDA28D683AB004B5956 /* GitCommits.swift in Sources */,
+				6E01DC3228D683AB004B5956 /* BitMaskOption.swift in Sources */,
+				6E01DB7628D683AB004B5956 /* LockAuthorizationStore.swift in Sources */,
+				6E01DBBA28D683AB004B5956 /* RemoveKeyCharacteristic.swift in Sources */,
+				6E01DBEA28D683AB004B5956 /* SmartLockProfile.swift in Sources */,
+				6E01DC0E28D683AB004B5956 /* URL.swift in Sources */,
+				6E01DC1E28D683AB004B5956 /* Authentication.swift in Sources */,
+				6E01DBC628D683AB004B5956 /* LockModel.swift in Sources */,
+				6E01DC4E28D683AB004B5956 /* LockState.swift in Sources */,
+				6E01DC5E28D683AB004B5956 /* Event.swift in Sources */,
+				6E01DBF628D683AB004B5956 /* EventsResponse.swift in Sources */,
+				6E01DBBE28D683AB004B5956 /* GATTError.swift in Sources */,
+				6E01DC2228D683AB004B5956 /* AuthenticationError.swift in Sources */,
+				6E01DC0228D683AB004B5956 /* KeysResponse.swift in Sources */,
+				6E01DC1228D683AB004B5956 /* UpdateRequest.swift in Sources */,
+				6E01DC4A28D683AB004B5956 /* Permission.swift in Sources */,
+				6E01DBCA28D683AB004B5956 /* BuildVersion.swift in Sources */,
+				6E01DB7A28D683AB004B5956 /* UnlockAction.swift in Sources */,
+				6E01DBDE28D683AB004B5956 /* Chunk.swift in Sources */,
+				6E01DC1628D683AB004B5956 /* KeysRequest.swift in Sources */,
+				6E01DC0A28D683AB004B5956 /* LockInformationResponse.swift in Sources */,
+				6E01DBB228D683AB004B5956 /* EventsCharacteristic.swift in Sources */,
+				6E01DBEE28D683AB004B5956 /* EventsRequest.swift in Sources */,
+				6E01DC5A28D683AB004B5956 /* LockConfiguration.swift in Sources */,
+				6E01DBA628D683AB004B5956 /* CreateNewKeyCharacteristic.swift in Sources */,
+				6E01DBAA28D683AB004B5956 /* TLV.swift in Sources */,
+				6E01DBD628D683AB004B5956 /* EventStore.swift in Sources */,
+				6E01DC3628D683AB004B5956 /* DateComponents.swift in Sources */,
+				6E01DBB628D683AB004B5956 /* GATTProfile.swift in Sources */,
+				6E01DC4228D683AB004B5956 /* Integer.swift in Sources */,
+				6E01DC5628D683AB004B5956 /* LockHardware.swift in Sources */,
+				6E01DC6628D683AB004B5956 /* LockConfigurationStore.swift in Sources */,
+				6E01DBFE28D683AB004B5956 /* LockNetService.swift in Sources */,
+				6E01DB8628D683AB004B5956 /* Central.swift in Sources */,
+				6E01DB9E28D683AB004B5956 /* ListKeysCharacteristic.swift in Sources */,
+				6E01DBE628D683AB004B5956 /* Version.swift in Sources */,
+				6E01DC3E28D683AB004B5956 /* UUID.swift in Sources */,
+				6E01DC2E28D683AB004B5956 /* EncryptedData.swift in Sources */,
+				6E01DC3A28D683AB004B5956 /* Date.swift in Sources */,
+				6E01DB8A28D683AB004B5956 /* ListEventsCharacteristic.swift in Sources */,
+				6E01DB8E28D683AB004B5956 /* UnlockCharacteristic.swift in Sources */,
+				6E01DC6228D683AB004B5956 /* Key.swift in Sources */,
+				6E01DC0628D683AB004B5956 /* URLSession.swift in Sources */,
+				6E01DB8228D683AB004B5956 /* ConfirmNewKeyCharacteristic.swift in Sources */,
+				6E01DBF228D683AB004B5956 /* DeleteKeyRequest.swift in Sources */,
+				6E01DB9A28D683AB004B5956 /* LockInformationCharacteristic.swift in Sources */,
+				6E01DBCE28D683AB004B5956 /* KeyCredentials.swift in Sources */,
+				6E01DBC228D683AB004B5956 /* LockInformation.swift in Sources */,
+				6E01DC2A28D683AB004B5956 /* Crypto.swift in Sources */,
+				6E01DBAE28D683AB004B5956 /* Notification.swift in Sources */,
+				6E01DC4628D683AB004B5956 /* Bool.swift in Sources */,
+				6E01DBFA28D683AB004B5956 /* CreateNewKeyRequest.swift in Sources */,
+				6E01DBE228D683AB004B5956 /* Status.swift in Sources */,
+				6E01DBD228D683AB004B5956 /* POSIXTime.swift in Sources */,
+				6E01DC5228D683AB004B5956 /* NewKey.swift in Sources */,
+				6E01DB9228D683AB004B5956 /* SetupCharacteristic.swift in Sources */,
+				6E01DC1A28D683AB004B5956 /* LockInformationRequest.swift in Sources */,
+				6E01DB9628D683AB004B5956 /* DeviceManager.swift in Sources */,
+				6E01DC2628D683AB004B5956 /* SecureData.swift in Sources */,
+				6E01DB7E28D683AB004B5956 /* Advertisement.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1156,8 +1177,8 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				INFOPLIST_FILE = Configs/CoreLock.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
-				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.colemancda.CoreLock;
@@ -1166,10 +1187,10 @@
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TVOS_DEPLOYMENT_TARGET = 9.0;
+				TVOS_DEPLOYMENT_TARGET = 13.0;
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
-				WATCHOS_DEPLOYMENT_TARGET = 3.0;
+				WATCHOS_DEPLOYMENT_TARGET = 6.0;
 			};
 			name = Debug;
 		};
@@ -1216,8 +1237,8 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				INFOPLIST_FILE = Configs/CoreLock.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
-				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = com.colemancda.CoreLock;
 				PRODUCT_NAME = CoreLock;
@@ -1225,11 +1246,11 @@
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TVOS_DEPLOYMENT_TARGET = 9.0;
+				TVOS_DEPLOYMENT_TARGET = 13.0;
 				VALIDATE_PRODUCT = YES;
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
-				WATCHOS_DEPLOYMENT_TARGET = 3.0;
+				WATCHOS_DEPLOYMENT_TARGET = 6.0;
 			};
 			name = Release;
 		};
@@ -1252,6 +1273,7 @@
 				SKIP_INSTALL = YES;
 				SUPPORTS_MACCATALYST = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
 		};
@@ -1273,6 +1295,7 @@
 				);
 				SKIP_INSTALL = YES;
 				SUPPORTS_MACCATALYST = YES;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
 		};
@@ -1295,6 +1318,7 @@
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 4;
 			};
 			name = Debug;
@@ -1317,6 +1341,7 @@
 				);
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 4;
 			};
 			name = Release;
@@ -1340,6 +1365,7 @@
 				SDKROOT = appletvos;
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 3;
 			};
 			name = Debug;
@@ -1362,6 +1388,7 @@
 				);
 				SDKROOT = appletvos;
 				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 3;
 			};
 			name = Release;
@@ -1387,6 +1414,7 @@
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
 		};
@@ -1410,6 +1438,7 @@
 				);
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
 		};
@@ -1427,7 +1456,6 @@
 					"@loader_path/../Frameworks",
 					$FRAMEWORK_SEARCH_PATHS,
 				);
-				MACOSX_DEPLOYMENT_TARGET = 10.11;
 				PRODUCT_BUNDLE_IDENTIFIER = com.colemancda.CoreLockTests;
 				PRODUCT_NAME = CoreLockTests;
 				SDKROOT = macosx;
@@ -1449,7 +1477,6 @@
 					"@loader_path/../Frameworks",
 					$FRAMEWORK_SEARCH_PATHS,
 				);
-				MACOSX_DEPLOYMENT_TARGET = 10.11;
 				PRODUCT_BUNDLE_IDENTIFIER = com.colemancda.CoreLockTests;
 				PRODUCT_NAME = CoreLockTests;
 				SDKROOT = macosx;
@@ -1518,22 +1545,6 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		6E621242234721FF007D49BF /* XCRemoteSwiftPackageReference "Bluetooth" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/PureSwift/Bluetooth.git";
-			requirement = {
-				branch = master;
-				kind = branch;
-			};
-		};
-		6E9C95E823114962007C18FE /* XCRemoteSwiftPackageReference "CryptoSwift" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/krzyzanowskim/CryptoSwift";
-			requirement = {
-				branch = master;
-				kind = branch;
-			};
-		};
 		6E9C95EB231149A5007C18FE /* XCRemoteSwiftPackageReference "GATT" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/PureSwift/GATT.git";
@@ -1550,42 +1561,9 @@
 				kind = branch;
 			};
 		};
-		6EBA70F4235790CB0005BEB7 /* XCRemoteSwiftPackageReference "Bonjour" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "git@github.com:PureSwift/Bonjour.git";
-			requirement = {
-				branch = master;
-				kind = branch;
-			};
-		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		6E621243234721FF007D49BF /* Bluetooth */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 6E621242234721FF007D49BF /* XCRemoteSwiftPackageReference "Bluetooth" */;
-			productName = Bluetooth;
-		};
-		6E62124723472217007D49BF /* Bluetooth */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 6E621242234721FF007D49BF /* XCRemoteSwiftPackageReference "Bluetooth" */;
-			productName = Bluetooth;
-		};
-		6E621265234723ED007D49BF /* Bluetooth */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 6E621242234721FF007D49BF /* XCRemoteSwiftPackageReference "Bluetooth" */;
-			productName = Bluetooth;
-		};
-		6E62126923472400007D49BF /* Bluetooth */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 6E621242234721FF007D49BF /* XCRemoteSwiftPackageReference "Bluetooth" */;
-			productName = Bluetooth;
-		};
-		6E9C95E923114962007C18FE /* CryptoSwift */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 6E9C95E823114962007C18FE /* XCRemoteSwiftPackageReference "CryptoSwift" */;
-			productName = CryptoSwift;
-		};
 		6E9C95EC231149A5007C18FE /* GATT */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 6E9C95EB231149A5007C18FE /* XCRemoteSwiftPackageReference "GATT" */;
@@ -1600,31 +1578,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 6E9C95F0231149F5007C18FE /* XCRemoteSwiftPackageReference "TLVCoding" */;
 			productName = TLVCoding;
-		};
-		6EBA70F5235790CB0005BEB7 /* Bonjour */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 6EBA70F4235790CB0005BEB7 /* XCRemoteSwiftPackageReference "Bonjour" */;
-			productName = Bonjour;
-		};
-		6EBA70F7235790D90005BEB7 /* Bonjour */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 6EBA70F4235790CB0005BEB7 /* XCRemoteSwiftPackageReference "Bonjour" */;
-			productName = Bonjour;
-		};
-		6EBA70F9235790E10005BEB7 /* Bonjour */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 6EBA70F4235790CB0005BEB7 /* XCRemoteSwiftPackageReference "Bonjour" */;
-			productName = Bonjour;
-		};
-		6EBA70FB235790E70005BEB7 /* Bonjour */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 6EBA70F4235790CB0005BEB7 /* XCRemoteSwiftPackageReference "Bonjour" */;
-			productName = Bonjour;
-		};
-		6ED81FE0231662E200B69520 /* CryptoSwift */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 6E9C95E823114962007C18FE /* XCRemoteSwiftPackageReference "CryptoSwift" */;
-			productName = CryptoSwift;
 		};
 		6ED81FE2231662E200B69520 /* DarwinGATT */ = {
 			isa = XCSwiftPackageProductDependency;
@@ -1641,11 +1594,6 @@
 			package = 6E9C95F0231149F5007C18FE /* XCRemoteSwiftPackageReference "TLVCoding" */;
 			productName = TLVCoding;
 		};
-		6ED81FE8231662F100B69520 /* CryptoSwift */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 6E9C95E823114962007C18FE /* XCRemoteSwiftPackageReference "CryptoSwift" */;
-			productName = CryptoSwift;
-		};
 		6ED81FEA231662F100B69520 /* DarwinGATT */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 6E9C95EB231149A5007C18FE /* XCRemoteSwiftPackageReference "GATT" */;
@@ -1660,11 +1608,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 6E9C95F0231149F5007C18FE /* XCRemoteSwiftPackageReference "TLVCoding" */;
 			productName = TLVCoding;
-		};
-		6ED81FF0231662FB00B69520 /* CryptoSwift */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 6E9C95E823114962007C18FE /* XCRemoteSwiftPackageReference "CryptoSwift" */;
-			productName = CryptoSwift;
 		};
 		6ED81FF2231662FB00B69520 /* DarwinGATT */ = {
 			isa = XCSwiftPackageProductDependency;

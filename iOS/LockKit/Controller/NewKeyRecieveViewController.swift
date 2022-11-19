@@ -52,9 +52,14 @@ public final class NewKeyRecieveViewController: KeyViewController {
         self.tableView.tableFooterView = UIView()
         
         // TODO: Observe Bluetooth State
-        if LockManager.shared.central.state != .poweredOn, canSave {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
-                self?.configureView()
+        let canSave = self.canSave
+        Task {
+            let isPoweredOff = await Store.shared.central.state != .poweredOn
+            if isPoweredOff, canSave {
+                try await Task.sleep(nanoseconds: 1 * 1_000_000_000)
+                await MainActor.run { [weak self] in
+                    self?.configureView()
+                }
             }
         }
         
@@ -111,26 +116,32 @@ public final class NewKeyRecieveViewController: KeyViewController {
                     .permission(invitation.key.permission),
                     .created(invitation.key.created),
                     .expiration(invitation.key.expiration),
-                    .identifier(invitation.key.identifier),
+                    .identifier(invitation.key.id),
                     .lock(invitation.lock)
                 ])
             )
         ]
         
         // add save button if not contained in navigation controller
-        if canSave,
-            LockManager.shared.central.state == .poweredOn,
-            parent is UINavigationController == false {
-            data.append(
-                Section(
-                    title: nil,
-                    items: [
-                        .button(R.string.keyViewController.saveTitle(), {
-                            ($0 as? NewKeyRecieveViewController)?.save()
-                        })
-                    ]
-                )
-            )
+        let canSave = self.canSave
+        Task {
+            let isPoweredOff = await Store.shared.central.state != .poweredOn
+            await MainActor.run { [weak self] in
+                if canSave,
+                   isPoweredOff,
+                   self?.parent is UINavigationController == false {
+                    data.append(
+                        Section(
+                            title: nil,
+                            items: [
+                                .button(R.string.keyViewController.saveTitle(), {
+                                    ($0 as? NewKeyRecieveViewController)?.save()
+                                })
+                            ]
+                        )
+                    )
+                }
+            }
         }
         
         self.data = data
@@ -157,26 +168,28 @@ public final class NewKeyRecieveViewController: KeyViewController {
         let keyData = KeyData()
         showActivity()
         
-        DispatchQueue.bluetooth.async { [weak self] in
+        Task { [weak self] in
             
             guard let controller = self else { return }
             
             do {
                 
                 // scan for lock if neccesary
-                guard let device = try Store.shared.device(for: newKeyInvitation.lock, scanDuration: 2.0),
-                    let information = Store.shared.lockInformation.value[device.scanData.peripheral]
+                guard let device = try await Store.shared.device(for: newKeyInvitation.lock, scanDuration: 2.0),
+                    let information = Store.shared.lockInformation[device]
                     else { throw CentralError.unknownPeripheral }
                 
                 // recieve new key
                 let credentials = KeyCredentials(
-                    identifier: newKeyInvitation.key.identifier,
+                    id: newKeyInvitation.key.id,
                     secret: newKeyInvitation.secret
                 )
                 
-                try LockManager.shared.confirmKey(.init(secret: keyData),
-                                                  for: device.scanData.peripheral,
-                                                  with: credentials)
+                try await Store.shared.central.confirmKey(
+                    .init(secret: keyData),
+                    using: credentials,
+                    for: device
+                )
                 
                 // update UI
                 mainQueue {
@@ -184,17 +197,17 @@ public final class NewKeyRecieveViewController: KeyViewController {
                     // save to cache
                     let lockCache = LockCache(
                         key: Key(
-                            identifier: newKeyInvitation.key.identifier,
+                            id: newKeyInvitation.key.id,
                             name: newKeyInvitation.key.name,
                             created: newKeyInvitation.key.created,
                             permission: newKeyInvitation.key.permission
                         ),
                         name: R.string.localizable.newLockName(),
-                        information: .init(characteristic: information)
+                        information: .init(information)
                     )
                     
                     Store.shared[lock: newKeyInvitation.lock] = lockCache
-                    Store.shared[key: newKeyInvitation.key.identifier] = keyData
+                    Store.shared[key: newKeyInvitation.key.id] = keyData
                     controller.hideActivity(animated: true)
                     controller.configureView()
                     controller.completion?(true)

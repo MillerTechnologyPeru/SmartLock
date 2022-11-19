@@ -43,7 +43,7 @@ internal extension LockEvent.Cloud {
         switch event {
         case let .setup(event):
             self.type = .setup
-            self.id = .init(rawValue: event.identifier)
+            self.id = .init(rawValue: event.id)
             self.date = event.date
             self.key = event.key
             self.newKey = nil
@@ -52,7 +52,7 @@ internal extension LockEvent.Cloud {
             self.unlockAction = nil
         case let .unlock(event):
             self.type = .unlock
-            self.id = .init(rawValue: event.identifier)
+            self.id = .init(rawValue: event.id)
             self.date = event.date
             self.key = event.key
             self.unlockAction = event.action
@@ -61,7 +61,7 @@ internal extension LockEvent.Cloud {
             self.removedKeyType = nil
         case let .createNewKey(event):
             self.type = .createNewKey
-            self.id = .init(rawValue: event.identifier)
+            self.id = .init(rawValue: event.id)
             self.date = event.date
             self.key = event.key
             self.newKey = event.newKey
@@ -70,7 +70,7 @@ internal extension LockEvent.Cloud {
             self.unlockAction = nil
         case let .confirmNewKey(event):
             self.type = .confirmNewKey
-            self.id = .init(rawValue: event.identifier)
+            self.id = .init(rawValue: event.id)
             self.date = event.date
             self.key = event.key
             self.newKey = event.newKey
@@ -79,7 +79,7 @@ internal extension LockEvent.Cloud {
             self.unlockAction = nil
         case let .removeKey(event):
             self.type = .removeKey
-            self.id = .init(rawValue: event.identifier)
+            self.id = .init(rawValue: event.id)
             self.date = event.date
             self.key = event.key
             self.removedKey = event.removedKey
@@ -95,24 +95,24 @@ internal extension LockEvent {
     init?(_ cloud: LockEvent.Cloud) {
         switch cloud.type {
         case .setup:
-            self = .setup(.init(identifier: cloud.id.rawValue, date: cloud.date, key: cloud.key))
+            self = .setup(.init(id: cloud.id.rawValue, date: cloud.date, key: cloud.key))
         case .unlock:
             guard let action = cloud.unlockAction
                 else { return nil }
-            self = .unlock(.init(identifier: cloud.id.rawValue, date: cloud.date, key: cloud.key, action: action))
+            self = .unlock(.init(id: cloud.id.rawValue, date: cloud.date, key: cloud.key, action: action))
         case .createNewKey:
             guard let newKey = cloud.newKey
                 else { return nil }
-            self = .createNewKey(.init(identifier: cloud.id.rawValue, date: cloud.date, key: cloud.key, newKey: newKey))
+            self = .createNewKey(.init(id: cloud.id.rawValue, date: cloud.date, key: cloud.key, newKey: newKey))
         case .confirmNewKey:
             guard let newKey = cloud.newKey
                 else { return nil }
-            self = .confirmNewKey(.init(identifier: cloud.id.rawValue, date: cloud.date, newKey: newKey, key: cloud.key))
+            self = .confirmNewKey(.init(id: cloud.id.rawValue, date: cloud.date, newKey: newKey, key: cloud.key))
         case .removeKey:
             guard let removedKey = cloud.removedKey,
                 let removedKeyType = cloud.removedKeyType
                 else { return nil }
-            self = .removeKey(.init(identifier: cloud.id.rawValue, date: cloud.date, key: cloud.key, removedKey: removedKey, type: removedKeyType))
+            self = .removeKey(.init(id: cloud.id.rawValue, date: cloud.date, key: cloud.key, removedKey: removedKey, type: removedKeyType))
         }
     }
 }

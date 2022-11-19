@@ -56,7 +56,7 @@ public class KeyViewController: UITableViewController {
                     .name(key.name),
                     .permission(key.permission),
                     .created(key.created),
-                    .identifier(key.identifier)
+                    .identifier(key.id)
                 ])
             )
         ]
@@ -78,7 +78,7 @@ public class KeyViewController: UITableViewController {
                     .permission(newKey.permission),
                     .created(newKey.created),
                     .expiration(newKey.expiration),
-                    .identifier(newKey.identifier)
+                    .identifier(newKey.id)
                 ])
             )
         ]

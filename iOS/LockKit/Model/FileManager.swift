@@ -79,7 +79,7 @@ public extension FileManager.Lock {
     @discardableResult
     func save(invitation: NewKey.Invitation) throws -> URL {
         
-        let fileName = "newKey-\(invitation.key.identifier).ekey"
+        let fileName = "newKey-\(invitation.key.id).ekey"
         let data = try jsonEncoder.encode(invitation)
         
         let fileURL = documentURL.appendingPathComponent(fileName)

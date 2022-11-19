@@ -41,24 +41,11 @@ extension LockModel: ExpressibleByStringLiteral {
 public extension LockModel {
     
     static let orangePiOne: LockModel = "OrangePiOne"
-    
     static let orangePiZero: LockModel = "OrangePiZero"
-    
+    static let orangePiZero2: LockModel = "OrangePiZero2"
     static let raspberryPi3: LockModel = "RaspberryPi3"
+    static let raspberryPi4: LockModel = "RaspberryPi4"
 }
-
-// MARK: - Darwin
-
-#if os(macOS)
-
-public extension LockModel {
-    
-    static var currentMac: LockModel {
-        return LockModel(rawValue: UIDevice.current.model)
-    }
-}
-
-#endif
 
 // MARK: - Codable
 

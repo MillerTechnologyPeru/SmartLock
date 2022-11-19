@@ -30,11 +30,9 @@ final class PreviewViewController: UIViewController, QLPreviewingController {
         log("👁‍🗨 Loaded \(PreviewViewController.self)")
         
         // setup logging
-        LockManager.shared.log = { log("🔒 LockManager: " + $0) }
+        Store.shared.central.log = { log("📲 Central: " + $0) }
         BeaconController.shared.log = { log("📶 \(BeaconController.self): " + $0) }
         SpotlightController.shared.log = { log("🔦 \(SpotlightController.self): " + $0) }
-        
-        
     }
     
     // MARK: - QLPreviewingController
@@ -104,10 +102,10 @@ private extension PreviewViewController {
         loadChildViewController(viewController)
     }
     
-    func loadLock(_ identifier: UUID) {
+    func loadLock(_ id: UUID) {
         
         // load view controller
-        let viewController = LockViewController.fromStoryboard(with: identifier)
+        let viewController = LockViewController.fromStoryboard(with: id)
         loadChildViewController(viewController)
     }
     

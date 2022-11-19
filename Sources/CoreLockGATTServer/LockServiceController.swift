@@ -10,7 +10,7 @@ import Bluetooth
 import GATT
 import CoreLock
 
-public final class LockGATTServiceController <Peripheral: PeripheralProtocol> : GATTServiceController {
+public final class LockGATTServiceController <Peripheral: PeripheralManager> : GATTServiceController {
     
     public static var service: BluetoothUUID { return Service.uuid }
     
@@ -21,18 +21,10 @@ public final class LockGATTServiceController <Peripheral: PeripheralProtocol> : 
     // MARK: - Properties
     
     public let peripheral: Peripheral
-        
-    public var hardware: LockHardware = .empty  {
-        didSet { updateInformation() }
-    }
     
-    public var configurationStore: LockConfigurationStore = InMemoryLockConfigurationStore() {
-        didSet { updateInformation() }
-    }
+    public var configurationStore: LockConfigurationStore = InMemoryLockConfigurationStore()
         
-    public var authorization: LockAuthorizationStore = InMemoryLockAuthorization() {
-        didSet { updateInformation() }
-    }
+    public var authorization: LockAuthorizationStore = InMemoryLockAuthorization()
     
     public var setupSecret: KeyData = KeyData()
     
@@ -59,60 +51,60 @@ public final class LockGATTServiceController <Peripheral: PeripheralProtocol> : 
     
     // MARK: - Initialization
     
-    public init(peripheral: Peripheral) throws {
+    public init(peripheral: Peripheral) async throws {
         
         self.peripheral = peripheral
                 
         let characteristics = [
             
-            GATT.Characteristic(uuid: LockInformationCharacteristic.uuid,
+            GATTAttribute.Characteristic(uuid: LockInformationCharacteristic.uuid,
                                 value: Data(),
                                 permissions: [.read],
                                 properties: LockInformationCharacteristic.properties),
             
-            GATT.Characteristic(uuid: SetupCharacteristic.uuid,
+            GATTAttribute.Characteristic(uuid: SetupCharacteristic.uuid,
                                 value: Data(),
                                 permissions: [.write],
                                 properties: SetupCharacteristic.properties),
             
-            GATT.Characteristic(uuid: UnlockCharacteristic.uuid,
+            GATTAttribute.Characteristic(uuid: UnlockCharacteristic.uuid,
                                 value: Data(),
                                 permissions: [.write],
                                 properties: UnlockCharacteristic.properties),
             
-            GATT.Characteristic(uuid: CreateNewKeyCharacteristic.uuid,
+            GATTAttribute.Characteristic(uuid: CreateNewKeyCharacteristic.uuid,
                                 value: Data(),
                                 permissions: [.write],
                                 properties: CreateNewKeyCharacteristic.properties),
             
-            GATT.Characteristic(uuid: ConfirmNewKeyCharacteristic.uuid,
+            GATTAttribute.Characteristic(uuid: ConfirmNewKeyCharacteristic.uuid,
                                 value: Data(),
                                 permissions: [.write],
                                 properties: ConfirmNewKeyCharacteristic.properties),
             
-            GATT.Characteristic(uuid: RemoveKeyCharacteristic.uuid,
+            GATTAttribute.Characteristic(uuid: RemoveKeyCharacteristic.uuid,
                                 value: Data(),
                                 permissions: [.write],
                                 properties: RemoveKeyCharacteristic.properties),
             
-            GATT.Characteristic(uuid: ListKeysCharacteristic.uuid,
+            GATTAttribute.Characteristic(uuid: ListKeysCharacteristic.uuid,
                                 value: Data(),
                                 permissions: [.write],
                                 properties: ListKeysCharacteristic.properties),
             
-            GATT.Characteristic(uuid: KeysCharacteristic.uuid,
+            GATTAttribute.Characteristic(uuid: KeysCharacteristic.uuid,
                                 value: Data(),
                                 permissions: [],
                                 properties: KeysCharacteristic.properties,
                                 descriptors: [GATTClientCharacteristicConfiguration().descriptor]),
             
             
-            GATT.Characteristic(uuid: ListEventsCharacteristic.uuid,
+            GATTAttribute.Characteristic(uuid: ListEventsCharacteristic.uuid,
                                 value: Data(),
                                 permissions: [.write],
                                 properties: ListEventsCharacteristic.properties),
             
-            GATT.Characteristic(uuid: EventsCharacteristic.uuid,
+            GATTAttribute.Characteristic(uuid: EventsCharacteristic.uuid,
                                 value: Data(),
                                 permissions: [],
                                 properties: EventsCharacteristic.properties,
@@ -121,39 +113,34 @@ public final class LockGATTServiceController <Peripheral: PeripheralProtocol> : 
         
         self.characteristics = Set(characteristics.map { $0.uuid })
         
-        let service = GATT.Service(uuid: Service.uuid,
+        let service = GATTAttribute.Service(uuid: Service.uuid,
                                    primary: Service.isPrimary,
                                    characteristics: characteristics)
         
-        self.serviceHandle = try peripheral.add(service: service)
+        self.serviceHandle = try await peripheral.add(service: service)
         
-        self.informationHandle = peripheral.characteristics(for: LockInformationCharacteristic.uuid)[0]
-        self.setupHandle = peripheral.characteristics(for: SetupCharacteristic.uuid)[0]
-        self.unlockHandle = peripheral.characteristics(for: UnlockCharacteristic.uuid)[0]
-        self.createNewKeyHandle = peripheral.characteristics(for: CreateNewKeyCharacteristic.uuid)[0]
-        self.confirmNewKeyHandle = peripheral.characteristics(for: ConfirmNewKeyCharacteristic.uuid)[0]
-        self.removeKeyHandle = peripheral.characteristics(for: RemoveKeyCharacteristic.uuid)[0]
-        self.keysRequestHandle = peripheral.characteristics(for: ListKeysCharacteristic.uuid)[0]
-        self.keysResponseHandle = peripheral.characteristics(for: KeysCharacteristic.uuid)[0]
-        self.eventsRequestHandle = peripheral.characteristics(for: ListEventsCharacteristic.uuid)[0]
-        self.eventsResponseHandle = peripheral.characteristics(for: EventsCharacteristic.uuid)[0]
+        self.informationHandle = await peripheral.characteristics(for: LockInformationCharacteristic.uuid)[0]
+        self.setupHandle = await peripheral.characteristics(for: SetupCharacteristic.uuid)[0]
+        self.unlockHandle = await peripheral.characteristics(for: UnlockCharacteristic.uuid)[0]
+        self.createNewKeyHandle = await peripheral.characteristics(for: CreateNewKeyCharacteristic.uuid)[0]
+        self.confirmNewKeyHandle = await peripheral.characteristics(for: ConfirmNewKeyCharacteristic.uuid)[0]
+        self.removeKeyHandle = await peripheral.characteristics(for: RemoveKeyCharacteristic.uuid)[0]
+        self.keysRequestHandle = await peripheral.characteristics(for: ListKeysCharacteristic.uuid)[0]
+        self.keysResponseHandle = await peripheral.characteristics(for: KeysCharacteristic.uuid)[0]
+        self.eventsRequestHandle = await peripheral.characteristics(for: ListEventsCharacteristic.uuid)[0]
+        self.eventsResponseHandle = await peripheral.characteristics(for: EventsCharacteristic.uuid)[0]
         
-        updateInformation()
-    }
-    
-    deinit {
-        self.peripheral.remove(service: serviceHandle)
+        await updateInformation()
     }
     
     // MARK: - Methods
     
-    public func reset() {
-        
-        try? authorization.removeAll()
-        updateInformation()
+    public func reset() async {
+        try? await authorization.removeAll()
+        await updateInformation()
     }
     
-    public func willRead(_ request: GATTReadRequest<Peripheral.Central>) -> ATT.Error? {
+    public func willRead(_ request: GATTReadRequest<Peripheral.Central>) async -> ATTError? {
         
         switch request.handle {
         case informationHandle:
@@ -164,96 +151,98 @@ public final class LockGATTServiceController <Peripheral: PeripheralProtocol> : 
         }
     }
     
-    public func willWrite(_ request: GATTWriteRequest<Peripheral.Central>) -> ATT.Error? {
-        
+    public func willWrite(_ request: GATTWriteRequest<Peripheral.Central>) async -> ATTError? {
+        let keysEmpty = await authorization.isEmpty
         switch request.handle {
         case setupHandle:
-            return authorization.isEmpty ? nil : .writeNotPermitted
+            return keysEmpty ? nil : .writeNotPermitted
         case unlockHandle:
-            return authorization.isEmpty ? .writeNotPermitted : nil
+            return keysEmpty ? .writeNotPermitted : nil
         case createNewKeyHandle:
-            return authorization.isEmpty ? .writeNotPermitted : nil
+            return keysEmpty ? .writeNotPermitted : nil
         default:
             return nil
         }
     }
     
-    public func didWrite(_ write: GATTWriteConfirmation<Peripheral.Central>) {
+    public func didWrite(_ write: GATTWriteConfirmation<Peripheral.Central>) async {
+
+        let keysEmpty = await authorization.isEmpty
         
         switch write.handle {
             
         case setupHandle:
             
-            precondition(authorization.isEmpty, "Already setup")
+            precondition(keysEmpty, "Already setup")
             
             // parse characteristic
             guard let characteristic = SetupCharacteristic(data: write.value)
                 else { print("Could not parse \(SetupCharacteristic.self)"); return }
             
-            setup(characteristic)
+            await setup(characteristic)
             
         case unlockHandle:
             
-            assert(authorization.isEmpty == false, "No keys")
+            assert(keysEmpty == false, "No keys")
             
             // parse characteristic
             guard let characteristic = UnlockCharacteristic(data: write.value)
                 else { print("Could not parse \(UnlockCharacteristic.self)"); return }
             
-            unlock(characteristic)
+            await unlock(characteristic)
             
         case createNewKeyHandle:
             
-            assert(authorization.isEmpty == false, "No keys")
+            assert(keysEmpty == false, "No keys")
             
             // parse characteristic
             guard let characteristic = CreateNewKeyCharacteristic(data: write.value)
                 else { print("Could not parse \(CreateNewKeyCharacteristic.self)"); return }
             
-            createNewKey(characteristic)
+            await createNewKey(characteristic)
             
         case confirmNewKeyHandle:
             
-            assert(authorization.isEmpty == false, "No keys")
+            assert(keysEmpty == false, "No keys")
             
             // parse characteristic
             guard let characteristic = ConfirmNewKeyCharacteristic(data: write.value)
                 else { print("Could not parse \(ConfirmNewKeyCharacteristic.self)"); return }
             
-            confirmNewKey(characteristic)
+            await confirmNewKey(characteristic)
             
         case removeKeyHandle:
             
-            assert(authorization.isEmpty == false, "No keys")
+            assert(keysEmpty == false, "No keys")
             
             // parse characteristic
             guard let characteristic = RemoveKeyCharacteristic(data: write.value)
                 else { print("Could not parse \(RemoveKeyCharacteristic.self)"); return }
             
-            removeKey(characteristic)
+            await removeKey(characteristic)
             
         case keysRequestHandle:
             
-            assert(authorization.isEmpty == false, "No keys")
+            assert(keysEmpty == false, "No keys")
             
             // parse characteristic
             guard let characteristic = ListKeysCharacteristic(data: write.value)
                 else { print("Could not parse \(ListKeysCharacteristic.self)"); return }
             
-            listKeysRequest(characteristic, maximumUpdateValueLength: write.maximumUpdateValueLength)
+            await listKeysRequest(characteristic, maximumUpdateValueLength: write.maximumUpdateValueLength)
             
         case keysResponseHandle:
             assertionFailure("Not writable")
             
         case eventsRequestHandle:
             
-            assert(authorization.isEmpty == false, "Not setup yet")
+            assert(keysEmpty == false, "Not setup yet")
             
             // parse characteristic
             guard let characteristic = ListEventsCharacteristic(data: write.value)
                 else { print("Could not parse \(ListEventsCharacteristic.self)"); return }
             
-            listEventsRequest(characteristic, maximumUpdateValueLength: write.maximumUpdateValueLength)
+            await listEventsRequest(characteristic, maximumUpdateValueLength: write.maximumUpdateValueLength)
             
         case eventsResponseHandle:
             assertionFailure("Not writable")
@@ -265,24 +254,26 @@ public final class LockGATTServiceController <Peripheral: PeripheralProtocol> : 
     
     // MARK: - Private Methods
     
-    private func updateInformation() {
+    public func updateInformation() async {
         
-        let status: LockStatus = authorization.isEmpty ? .setup : .unlock
+        let status: LockStatus = await authorization.isEmpty ? .setup : .unlock
+        let id = await configurationStore.configuration.id
+        let information = LockInformationCharacteristic(
+            id: id,
+            buildVersion: .current,
+            version: .current,
+            status: status,
+            unlockActions: [.default]
+        )
         
-        let identifier = configurationStore.configuration.identifier
-        
-        let information = LockInformationCharacteristic(identifier: identifier,
-                                                        buildVersion: .current,
-                                                        version: .current,
-                                                        status: status,
-                                                        unlockActions: [.default])
-        
-        peripheral[characteristic: informationHandle] = information.data
+        await peripheral.write(information.data, forCharacteristic: informationHandle)
     }
     
-    private func setup(_ setup: SetupCharacteristic) {
+    private func setup(_ setup: SetupCharacteristic) async {
         
-        assert(authorization.isEmpty)
+        guard await authorization.isEmpty else {
+            return
+        }
         
         // get key for shared device.
         let sharedSecret = setupSecret
@@ -297,43 +288,46 @@ public final class LockGATTServiceController <Peripheral: PeripheralProtocol> : 
                 else { print("Authentication expired \(timestamp) < \(now)"); return }
             
             // decrypt request
-            let setupRequest = try setup.decrypt(with: sharedSecret)
+            let setupRequest = try setup.decrypt(using: sharedSecret)
             
             // create owner key
             let ownerKey = Key(setup: setupRequest)
             
             // store first key
-            try authorization.add(ownerKey, secret: setupRequest.secret)
-            assert(authorization.isEmpty == false)
+            try await authorization.add(ownerKey, secret: setupRequest.secret)
+            do {
+                let isEmpty = await authorization.isEmpty
+                assert(isEmpty == false)
+            }
             
             print("Lock setup completed")
             
-            updateInformation()
+            await updateInformation()
             
-            try events.save(.setup(.init(key: ownerKey.identifier)))
+            try await events.save(.setup(.init(key: ownerKey.id)))
             
             lockChanged?()
             
         } catch { print("Setup error: \(error)") }
     }
     
-    private func unlock(_ unlock: UnlockCharacteristic) {
+    private func unlock(_ characteristic: UnlockCharacteristic) async {
         
-        let keyIdentifier = unlock.identifier
+        let keyIdentifier = characteristic.encryptedData.authentication.message.id
         
         do {
             
-            guard let (key, secret) = try authorization.key(for: keyIdentifier)
+            guard let (key, secret) = try await authorization.key(for: keyIdentifier)
                 else { print("Unknown key \(keyIdentifier)"); return }
             
-            assert(key.identifier == keyIdentifier, "Invalid key")
+            assert(key.id == keyIdentifier, "Invalid key")
             
             // validate HMAC
-            guard unlock.authentication.isAuthenticated(with: secret)
+            guard characteristic.encryptedData.authentication.isAuthenticated(using: secret)
                 else { print("Invalid key secret"); return }
             
             // guard against replay attacks
-            let timestamp = unlock.authentication.message.date
+            let timestamp = characteristic.encryptedData.authentication.message.date
             let now = Date()
             guard timestamp <= now + authorizationTimeout, // cannot be used later for replay attacks
                 timestamp > now - authorizationTimeout // only valid for 5 seconds
@@ -345,31 +339,33 @@ public final class LockGATTServiceController <Peripheral: PeripheralProtocol> : 
                     else { print("Cannot unlock during schedule"); return }
             }
             
+            let request = try characteristic.decrypt(using: secret)
+            
             // unlock with the specified action
-            try unlockDelegate.unlock(unlock.action)
+            try await unlockDelegate.unlock(request.action)
             
-            print("Key \(key.identifier) \(key.name) unlocked with action \(unlock.action)")
+            print("Key \(key.id) \(key.name) unlocked with action \(request.action)")
             
-            try events.save(.unlock(.init(key: key.identifier, action: unlock.action)))
+            try await events.save(.unlock(.init(key: key.id, action: request.action)))
             
             lockChanged?()
             
         } catch { print("Unlock error: \(error)")  }
     }
     
-    private func createNewKey(_ characteristic: CreateNewKeyCharacteristic) {
+    private func createNewKey(_ characteristic: CreateNewKeyCharacteristic) async {
         
-        let keyIdentifier = characteristic.identifier
+        let keyIdentifier = characteristic.encryptedData.authentication.message.id
         
         do {
             
-            guard let (key, secret) = try authorization.key(for: keyIdentifier)
+            guard let (key, secret) = try await authorization.key(for: keyIdentifier)
                 else { print("Unknown key \(keyIdentifier)"); return }
             
-            assert(key.identifier == keyIdentifier, "Invalid key")
+            assert(key.id == keyIdentifier, "Invalid key")
             
             // validate HMAC
-            guard characteristic.encryptedData.authentication.isAuthenticated(with: secret)
+            guard characteristic.encryptedData.authentication.isAuthenticated(using: secret)
                 else { print("Invalid key secret"); return }
             
             // guard against replay attacks
@@ -386,33 +382,33 @@ public final class LockGATTServiceController <Peripheral: PeripheralProtocol> : 
             }
             
             // decrypt
-            let request = try characteristic.decrypt(with: secret)
+            let request = try characteristic.decrypt(using: secret)
             let newKey = NewKey(request: request)
             
-            try self.authorization.add(newKey, secret: request.secret)
+            try await self.authorization.add(newKey, secret: request.secret)
             
-            print("Key \(keyIdentifier) \(key.name) created new key \(request.identifier)")
+            print("Key \(keyIdentifier) \(key.name) created new key \(request.id)")
             
-            try events.save(.createNewKey(.init(key: key.identifier, newKey: newKey.identifier)))
+            try await events.save(.createNewKey(.init(key: key.id, newKey: newKey.id)))
             
             lockChanged?()
             
         } catch { print("Create new key error: \(error)")  }
     }
     
-    private func confirmNewKey(_ characteristic: ConfirmNewKeyCharacteristic) {
+    private func confirmNewKey(_ characteristic: ConfirmNewKeyCharacteristic) async {
         
-        let newKeyIdentifier = characteristic.identifier
+        let newKeyIdentifier = characteristic.encryptedData.authentication.message.id
         
         do {
             
-            guard let (newKey, secret) = try authorization.newKey(for: newKeyIdentifier)
+            guard let (newKey, secret) = try await authorization.newKey(for: newKeyIdentifier)
                 else { print("Unknown key \(newKeyIdentifier)"); return }
             
-            assert(newKey.identifier == newKeyIdentifier, "Invalid key")
+            assert(newKey.id == newKeyIdentifier, "Invalid key")
             
             // validate HMAC
-            guard characteristic.encryptedData.authentication.isAuthenticated(with: secret)
+            guard characteristic.encryptedData.authentication.isAuthenticated(using: secret)
                 else { print("Invalid key secret"); return }
             
             // guard against replay attacks
@@ -423,46 +419,46 @@ public final class LockGATTServiceController <Peripheral: PeripheralProtocol> : 
                 else { print("Authentication expired \(timestamp) < \(now)"); return }
             
             // decrypt
-            let request = try characteristic.decrypt(with: secret)
+            let request = try characteristic.decrypt(using: secret)
             let keySecret = request.secret
             let key = Key(
-                identifier: newKey.identifier,
+                id: newKey.id,
                 name: newKey.name,
                 created: newKey.created,
                 permission: newKey.permission
             )
             
-            try self.authorization.removeNewKey(newKeyIdentifier)
-            try self.authorization.add(key, secret: keySecret)
+            try await self.authorization.removeNewKey(newKeyIdentifier)
+            try await self.authorization.add(key, secret: keySecret)
             
             print("Key \(newKeyIdentifier) \(key.name) confirmed with shared secret")
             
-            assert(try! authorization.key(for: key.identifier) != nil, "Key not stored")
+            //assert(try! authorization.key(for: key.id) != nil, "Key not stored")
             
-            try events.save(.confirmNewKey(.init(newKey: newKey.identifier, key: key.identifier)))
+            try await events.save(.confirmNewKey(.init(newKey: newKey.id, key: key.id)))
             
             lockChanged?()
             
         } catch { print("Confirm new key error: \(error)")  }
     }
     
-    private func removeKey(_ characteristic: RemoveKeyCharacteristic) {
+    private func removeKey(_ characteristic: RemoveKeyCharacteristic) async {
         
-        let keyIdentifier = characteristic.identifier
+        let keyIdentifier = characteristic.encryptedData.authentication.message.id
         
         do {
             
-            guard let (key, secret) = try authorization.key(for: keyIdentifier)
+            guard let (key, secret) = try await authorization.key(for: keyIdentifier)
                 else { print("Unknown key \(keyIdentifier)"); return }
             
-            assert(key.identifier == keyIdentifier, "Invalid key")
+            assert(key.id == keyIdentifier, "Invalid key")
             
             // validate HMAC
-            guard characteristic.authentication.isAuthenticated(with: secret)
+            guard characteristic.encryptedData.authentication.isAuthenticated(using: secret)
                 else { print("Invalid key secret"); return }
             
             // guard against replay attacks
-            let timestamp = characteristic.authentication.message.date
+            let timestamp = characteristic.encryptedData.authentication.message.date
             let now = Date()
             guard timestamp <= now + authorizationTimeout, // cannot be used later for replay attacks
                 timestamp > now - authorizationTimeout // only valid for 5 seconds
@@ -474,41 +470,44 @@ public final class LockGATTServiceController <Peripheral: PeripheralProtocol> : 
                 return
             }
             
-            switch characteristic.type {
+            // decrypt
+            let request = try characteristic.decrypt(using: secret)
+            
+            switch request.type {
             case .key:
-                guard let (removeKey, _) = try authorization.key(for: characteristic.key)
-                    else { print("Key \(characteristic.key) does not exist"); return }
-                assert(removeKey.identifier == characteristic.key)
-                try authorization.removeKey(removeKey.identifier)
+                guard let (removeKey, _) = try await authorization.key(for: request.id)
+                    else { print("Key \(request.id) does not exist"); return }
+                assert(removeKey.id == request.id)
+                try await authorization.removeKey(removeKey.id)
             case .newKey:
-                guard let (removeKey, _) = try authorization.newKey(for: characteristic.key)
-                    else { print("New Key \(characteristic.key) does not exist"); return }
-                assert(removeKey.identifier == characteristic.key)
-                try authorization.removeNewKey(removeKey.identifier)
+                guard let (removeKey, _) = try await authorization.newKey(for: request.id)
+                    else { print("New Key \(request.id) does not exist"); return }
+                assert(removeKey.id == request.id)
+                try await authorization.removeNewKey(removeKey.id)
             }
             
-            print("Key \(key.identifier) \(key.name) removed \(characteristic.type) \(characteristic.key)")
+            print("Key \(key.id) \(key.name) removed \(request.type) \(request.id)")
             
-            try events.save(.removeKey(.init(key: key.identifier, removedKey: characteristic.key, type: characteristic.type)))
+            try await events.save(.removeKey(.init(key: key.id, removedKey: request.id, type: request.type)))
             
             lockChanged?()
             
         } catch { print("Remove key error: \(error)")  }
     }
     
-    private func listKeysRequest(_ characteristic: ListKeysCharacteristic, maximumUpdateValueLength: Int) {
+    private func listKeysRequest(_ characteristic: ListKeysCharacteristic, maximumUpdateValueLength: Int) async {
         
-        let keyIdentifier = characteristic.identifier
+        let keyIdentifier = characteristic.authentication.message.id
         
         do {
             
-            guard let (key, secret) = try authorization.key(for: keyIdentifier)
+            guard let (key, secret) = try await authorization.key(for: keyIdentifier)
                 else { print("Unknown key \(keyIdentifier)"); return }
             
-            assert(key.identifier == keyIdentifier, "Invalid key")
+            assert(key.id == keyIdentifier, "Invalid key")
             
             // validate HMAC
-            guard characteristic.authentication.isAuthenticated(with: secret)
+            guard characteristic.authentication.isAuthenticated(using: secret)
                 else { print("Invalid key secret"); return }
             
             // guard against replay attacks
@@ -524,98 +523,103 @@ public final class LockGATTServiceController <Peripheral: PeripheralProtocol> : 
                 return
             }
             
-            print("Key \(key.identifier) \(key.name) requested keys list")
+            print("Key \(key.id) \(key.name) requested keys list")
             
             // send list via notifications
-            let list = authorization.list
+            let list = await authorization.list
             let notifications = KeyListNotification.from(list: list)
             let notificationChunks = try notifications.map {
-                ($0, try KeysCharacteristic.from($0, sharedSecret: secret, maximumUpdateValueLength: maximumUpdateValueLength))
+                ($0, try KeysCharacteristic.from($0, id: key.id, key: secret, maximumUpdateValueLength: maximumUpdateValueLength))
             }
             
             // write to characteristic and issue notifications
             for (notification, chunks) in notificationChunks {
                 for (index, chunk) in chunks.enumerated() {
-                    peripheral[characteristic: keysResponseHandle] = chunk.data
-                    print("Sent chunk \(index + 1) for \(notification.key.identifier) (\(chunk.data.count) bytes)")
-                    usleep(100)
+                    await peripheral.write(chunk.data, forCharacteristic: keysResponseHandle)
+                    print("Sent chunk \(index + 1) for \(notification.key.id) (\(chunk.data.count) bytes)")
+                    try await Task.sleep(nanoseconds: 10_000_000)
                 }
             }
             
-            print("Key \(key.identifier) \(key.name) recieved keys list")
+            print("Key \(key.id) \(key.name) recieved keys list")
             
         } catch { print("List keys error: \(error)")  }
     }
     
-    private func listEventsRequest(_ characteristic: ListEventsCharacteristic, maximumUpdateValueLength: Int) {
+    private func listEventsRequest(_ characteristic: ListEventsCharacteristic, maximumUpdateValueLength: Int) async {
         
-        let keyIdentifier = characteristic.identifier
+        let keyIdentifier = characteristic.encryptedData.authentication.message.id
         
         do {
             
-            guard let (key, secret) = try authorization.key(for: keyIdentifier)
+            guard let (key, secret) = try await authorization.key(for: keyIdentifier)
                 else { print("Unknown key \(keyIdentifier)"); return }
             
-            assert(key.identifier == keyIdentifier, "Invalid key")
+            assert(key.id == keyIdentifier, "Invalid key")
             
             // validate HMAC
-            guard characteristic.authentication.isAuthenticated(with: secret)
+            guard characteristic.encryptedData.authentication.isAuthenticated(using: secret)
                 else { print("Invalid key secret"); return }
             
             // guard against replay attacks
-            let timestamp = characteristic.authentication.message.date
+            let timestamp = characteristic.encryptedData.authentication.message.date
             let now = Date()
             guard timestamp <= now + authorizationTimeout, // cannot be used later for replay attacks
                 timestamp > now - authorizationTimeout // only valid for 5 seconds
                 else { print("Authentication expired \(timestamp) < \(now)"); return }
                         
-            print("Key \(key.identifier) \(key.name) requested events list")
+            print("Key \(key.id) \(key.name) requested events list")
             
-            if let fetchRequest = characteristic.fetchRequest {
+            // decrypt
+            let request = try characteristic.decrypt(using: secret)
+            
+            if let fetchRequest = request.fetchRequest {
                 dump(fetchRequest)
             }
             
-            var fetchRequest = characteristic.fetchRequest ?? .init()
+            var fetchRequest = request.fetchRequest ?? .init()
             
             // enforce permission, non-administrators can only view their own events.
             if key.permission.isAdministrator == false {
                 var predicate = fetchRequest.predicate ?? .empty
-                predicate.keys = [key.identifier]
+                predicate.keys = [key.id]
                 fetchRequest.predicate = predicate
             }
             
             // send list via notifications
-            let list = try events.fetch(fetchRequest)
+            let list = try await events.fetch(fetchRequest)
             let notifications = EventListNotification.from(list: list)
             let notificationChunks = try notifications.map {
-                ($0, try EventsCharacteristic.from($0, sharedSecret: secret, maximumUpdateValueLength: maximumUpdateValueLength))
+                ($0, try EventsCharacteristic.from($0, id: key.id, key: secret, maximumUpdateValueLength: maximumUpdateValueLength))
             }
             
             // write to characteristic and issue notifications
             for (notification, chunks) in notificationChunks {
                 for (index, chunk) in chunks.enumerated() {
-                    peripheral[characteristic: eventsResponseHandle] = chunk.data
-                    print("Sent chunk \(index + 1)\(notification.event.flatMap({ " for event \($0.identifier)" }) ?? "") (\(chunk.data.count) bytes)")
-                    usleep(100)
+                    await peripheral.write(chunk.data, forCharacteristic: eventsResponseHandle)
+                    print("Sent chunk \(index + 1)\(notification.event.flatMap({ " for event \($0.id)" }) ?? "") (\(chunk.data.count) bytes)")
+                    try await Task.sleep(nanoseconds: 10_000_000)
                 }
             }
             
-            print("Key \(key.identifier) \(key.name) recieved events list")
+            print("Key \(key.id) \(key.name) recieved events list")
             
         } catch { print("List keys error: \(error)")  }
     }
 }
 
 /// Lock unlock manager
-public protocol UnlockDelegate {
+public protocol UnlockDelegate: AnyObject {
     
-    func unlock(_ action: UnlockAction) throws
+    func unlock(_ action: UnlockAction) async throws
 }
 
-public struct UnlockSimulator: UnlockDelegate {
+public actor UnlockSimulator: UnlockDelegate {
     
-    public func unlock(_ action: UnlockAction) throws {
-        
-        print("Simulate unlock with action \(action)")
+    public private(set) var count: Int = 0
+    
+    public func unlock(_ action: UnlockAction) {
+        count += 1
+        print("Simulate unlock \(count) with action \(action)")
     }
 }

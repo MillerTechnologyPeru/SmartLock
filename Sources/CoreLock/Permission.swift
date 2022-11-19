@@ -61,10 +61,10 @@ public extension Permission {
 /// A Key's permission level.
 public enum PermissionType: UInt8, CaseIterable {
     
-    case owner
-    case admin
-    case anytime
-    case scheduled
+    case owner          = 0x00
+    case admin          = 0x01
+    case anytime        = 0x02
+    case scheduled      = 0x03
 }
 
 internal extension PermissionType {
@@ -141,6 +141,16 @@ public extension Permission {
     }
 }
 
+public extension Permission {
+    
+    var schedule: Schedule? {
+        guard case let .scheduled(schedule) = self else {
+            return nil
+        }
+        return schedule
+    }
+}
+
 // MARK: - Schedule Interval
 
 public extension Permission.Schedule {
@@ -207,25 +217,53 @@ public extension Permission.Schedule {
 
 public extension Permission.Schedule.Weekdays {
     
-    static let all = Permission.Schedule.Weekdays(
-        sunday: true,
-        monday: true,
-        tuesday: true,
-        wednesday: true,
-        thursday: true,
-        friday: true,
-        saturday: true
-    )
+    static var all: Permission.Schedule.Weekdays {
+        Permission.Schedule.Weekdays(
+            sunday: true,
+            monday: true,
+            tuesday: true,
+            wednesday: true,
+            thursday: true,
+            friday: true,
+            saturday: true
+        )
+    }
     
-    static let none = Permission.Schedule.Weekdays(
-        sunday: false,
-        monday: false,
-        tuesday: false,
-        wednesday: false,
-        thursday: false,
-        friday: false,
-        saturday: false
-    )
+    static var none: Permission.Schedule.Weekdays {
+        Permission.Schedule.Weekdays(
+            sunday: false,
+            monday: false,
+            tuesday: false,
+            wednesday: false,
+            thursday: false,
+            friday: false,
+            saturday: false
+        )
+    }
+    
+    static var workdays: Permission.Schedule.Weekdays {
+        Permission.Schedule.Weekdays(
+            sunday: false,
+            monday: true,
+            tuesday: true,
+            wednesday: true,
+            thursday: true,
+            friday: true,
+            saturday: false
+        )
+    }
+    
+    static var weekend: Permission.Schedule.Weekdays {
+        Permission.Schedule.Weekdays(
+            sunday: true,
+            monday: false,
+            tuesday: false,
+            wednesday: false,
+            thursday: false,
+            friday: false,
+            saturday: true
+        )
+    }
 }
 
 public extension Permission.Schedule.Weekdays {

@@ -9,7 +9,6 @@
 import Foundation
 
 /// Perform task on main queue
-@inline(__always)
 public func mainQueue(_ block: @escaping () -> ()) {
     DispatchQueue.main.async(execute: block)
 }
@@ -29,6 +28,7 @@ public extension DispatchQueue {
     }
 }
 
+@available(*, deprecated, message: "Use Task instead")
 public extension DispatchQueue {
     
     /// Lock App GCD Queue
@@ -38,17 +38,6 @@ public extension DispatchQueue {
                 label: Bundle.Lock.app.rawValue,
                 qos: .userInitiated,
                 attributes: [.concurrent]
-            )
-        }
-        return Cache.queue
-    }
-    
-    /// Lock Bluetooth operations GCD Queue
-    static var bluetooth: DispatchQueue {
-        struct Cache {
-            static let queue = DispatchQueue(
-                label: Bundle.Lock.app.rawValue + ".Bluetooth",
-                qos: .userInitiated
             )
         }
         return Cache.queue

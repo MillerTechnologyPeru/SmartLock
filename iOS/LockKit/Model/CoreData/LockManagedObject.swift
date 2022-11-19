@@ -12,13 +12,13 @@ import CoreLock
 
 public final class LockManagedObject: NSManagedObject {
     
-    internal convenience init(identifier: UUID,
+    internal convenience init(id: UUID,
                               name: String,
                               information: LockCache.Information? = nil,
                               context: NSManagedObjectContext) {
         
         self.init(context: context)
-        self.identifier = identifier
+        self.identifier = id
         self.name = name
         if let information = information {
             update(information: information, context: context)
@@ -66,12 +66,12 @@ internal extension NSManagedObjectContext {
         
         // insert locks
         return try locks.map { (identifier, cache) in
-            if let managedObject = try find(identifier: identifier, type: LockManagedObject.self) {
+            if let managedObject = try find(id: identifier, type: LockManagedObject.self) {
                 managedObject.name = cache.name
                 managedObject.update(information: cache.information, context: self)
                 return managedObject
             } else {
-                return LockManagedObject(identifier: identifier,
+                return LockManagedObject(id: identifier,
                                          name: cache.name,
                                          information: cache.information,
                                          context: self)
@@ -85,11 +85,11 @@ internal extension NSManagedObjectContext {
         
         // insert lock
         let lockManagedObject: LockManagedObject
-        if let managedObject = try find(identifier: cloudValue.id.rawValue, type: LockManagedObject.self) {
+        if let managedObject = try find(id: cloudValue.id.rawValue, type: LockManagedObject.self) {
             managedObject.name = cloudValue.name
             lockManagedObject = managedObject
         } else {
-            lockManagedObject = LockManagedObject(identifier: cloudValue.id.rawValue,
+            lockManagedObject = LockManagedObject(id: cloudValue.id.rawValue,
                                                   name: cloudValue.name,
                                                   context: self)
         }

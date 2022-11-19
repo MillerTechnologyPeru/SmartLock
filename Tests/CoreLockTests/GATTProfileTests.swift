@@ -12,17 +12,13 @@ import TLVCoding
 @testable import CoreLock
 
 final class GATTProfileTests: XCTestCase {
-    
-    static let allTests = [
-        ("testInformation", testInformation),
-        ("testUnlock", testUnlock),
-        ("testSetup", testSetup)
-    ]
 
     func testInformation() {
         
-        let information = LockInformationCharacteristic(identifier: UUID(),
-                                                    status: .setup)
+        let information = LockInformationCharacteristic(
+            id: UUID(),
+            status: .setup
+        )
         
         guard let decoded = LockInformationCharacteristic(data: information.data)
             else { XCTFail("Could not parse bytes"); return }
@@ -30,35 +26,31 @@ final class GATTProfileTests: XCTestCase {
         XCTAssertEqual(information, decoded)
     }
     
-    func testUnlock() {
+    func testUnlock() async throws {
         
-        let key = (identifier: UUID(), secret: KeyData())
-        
-        let authentication = Authentication(key: key.secret)
-        
-        let characteristic = UnlockCharacteristic(
-            identifier: key.identifier,
-            authentication: authentication
-        )
-        
-        guard let decoded = UnlockCharacteristic(data: characteristic.data)
-            else { XCTFail("Could not parse bytes"); return }
-        
-        XCTAssertEqual(characteristic, decoded)
-        XCTAssertEqual(try! TLVEncoder.lock.encode(decoded.authentication),
-                       try! TLVEncoder.lock.encode(authentication))
-        XCTAssert(decoded.authentication.isAuthenticated(with: key.secret))
-        XCTAssert(characteristic.authentication.isAuthenticated(with: key.secret))
-        XCTAssertFalse(Authentication(key: KeyData()).isAuthenticated(with: key.secret))
+        for _ in 0 ..< 20 {
+            
+            let key = (id: UUID(), secret: KeyData())
+            let request = UnlockRequest(action: .default)
+            let characteristic = try UnlockCharacteristic(request: request, using: key.secret, id: key.id)
+            guard let decodedCharacteristic = UnlockCharacteristic(data: characteristic.data)
+                else { XCTFail("Could not parse bytes"); return }
+            let decodedRequest = try decodedCharacteristic.decrypt(using: key.secret)
+            XCTAssertEqual(decodedRequest, request)
+            XCTAssertEqual(characteristic, decodedCharacteristic)
+            XCTAssert(decodedCharacteristic.encryptedData.authentication.isAuthenticated(using: key.secret))
+            XCTAssert(characteristic.encryptedData.authentication.isAuthenticated(using: key.secret))
+            XCTAssert(Authentication(key: key.secret, message: characteristic.encryptedData.authentication.message).isAuthenticated(using: key.secret))
+            
+            try await Task.sleep(nanoseconds: 10_000_000)
+        }
     }
     
-    func testSetup() {
+    func testSetup() throws {
         
         let deviceSharedSecret = KeyData()
-        
         let request = SetupRequest()
-        
-        let characteristic = try! SetupCharacteristic(request: request, sharedSecret: deviceSharedSecret)
+        let characteristic = try SetupCharacteristic(request: request, sharedSecret: deviceSharedSecret)
         
         guard let decoded = SetupCharacteristic(data: characteristic.data)
             else { XCTFail("Could not parse bytes"); return }
@@ -66,10 +58,10 @@ final class GATTProfileTests: XCTestCase {
         XCTAssertEqual(try! TLVEncoder.lock.encode(decoded.encryptedData),
                        try! TLVEncoder.lock.encode(characteristic.encryptedData))
         
-        let decrypted = try! decoded.decrypt(with: deviceSharedSecret)
+        let decrypted = try decoded.decrypt(using: deviceSharedSecret)
         
         XCTAssertEqual(request, decrypted)
-        XCTAssertEqual(request.identifier, decrypted.identifier)
+        XCTAssertEqual(request.id, decrypted.id)
         XCTAssertEqual(request.secret, decrypted.secret)
     }
 }

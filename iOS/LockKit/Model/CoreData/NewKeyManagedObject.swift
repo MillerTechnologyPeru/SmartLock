@@ -14,7 +14,7 @@ public final class NewKeyManagedObject: NSManagedObject {
     
     internal convenience init(_ value: NewKey, lock: LockManagedObject, context: NSManagedObjectContext) {
         self.init(context: context)
-        self.identifier = value.identifier
+        self.identifier = value.id
         self.lock = lock
         self.name = value.name
         self.created = value.created
@@ -30,7 +30,7 @@ public extension NewKey {
     
     init?(managedObject: NewKeyManagedObject) {
         
-        guard let identifier = managedObject.identifier,
+        guard let id = managedObject.identifier,
             let name = managedObject.name,
             let created = managedObject.created,
             let permissionType = PermissionType(rawValue: numericCast(managedObject.permission)),
@@ -52,7 +52,7 @@ public extension NewKey {
         }
         
         self.init(
-            identifier: identifier,
+            id: id,
             name: name,
             permission: permission,
             created: created,
@@ -72,7 +72,7 @@ internal extension NSManagedObjectContext {
     @discardableResult
     func insert(_ newKey: NewKey, for lock: LockManagedObject) throws -> NewKeyManagedObject {
         
-        if let managedObject = try find(identifier: newKey.identifier, type: NewKeyManagedObject.self) {
+        if let managedObject = try find(id: newKey.id, type: NewKeyManagedObject.self) {
             assert(managedObject.lock == lock, "Key stored with conflicting lock")
             return managedObject
         } else {
@@ -83,8 +83,8 @@ internal extension NSManagedObjectContext {
     @discardableResult
     func insert(_ key: NewKey, for lock: UUID) throws -> NewKeyManagedObject {
         
-        let managedObject = try find(identifier: lock, type: LockManagedObject.self)
-            ?? LockManagedObject(identifier: lock, name: "Lock", context: self)
+        let managedObject = try find(id: lock, type: LockManagedObject.self)
+            ?? LockManagedObject(id: lock, name: "Lock", context: self)
         return try insert(key, for: managedObject)
     }
 }

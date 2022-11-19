@@ -97,7 +97,7 @@ public final class LockViewController: UITableViewController {
         
         let foundLock = Store.shared[lock: lockIdentifier]
         
-        let isScanning = Store.shared.isScanning.value == false
+        let isScanning = Store.shared.isScanning == false
         
         let shouldScan = foundLock == nil && isScanning == false
         
@@ -114,7 +114,7 @@ public final class LockViewController: UITableViewController {
                 AddSiriShortcutActivity()
             ]
             
-            let lockItem = LockActivityItem(identifier: lockIdentifier)
+            let lockItem = LockActivityItem(id: lockIdentifier)
             let activityItems = [lockItem] as [Any]
             let activityViewController = UIActivityViewController(
                 activityItems: activityItems,
@@ -125,8 +125,8 @@ public final class LockViewController: UITableViewController {
         }
         
         if shouldScan {
-            performActivity(queue: .bluetooth, {
-                try Store.shared.scan(duration: 1.0)
+            performActivity({
+                try await Store.shared.scan(duration: 1.0)
             }, completion: { (viewController, _) in
                 show()
             })
@@ -152,7 +152,7 @@ public final class LockViewController: UITableViewController {
         guard let lockCache = Store.shared[lock: lockIdentifier]
             else { assertionFailure("No stored cache for lock"); return }
         
-        guard let keyData = Store.shared[key: lockCache.key.identifier]
+        guard let keyData = Store.shared[key: lockCache.key.id]
             else { assertionFailure("No stored key for lock"); return }
         
         donateUnlockIntent(for: lockIdentifier)
@@ -161,28 +161,25 @@ public final class LockViewController: UITableViewController {
             feedbackGenerator.impactOccurred()
         }
         
-        let key = KeyCredentials(identifier: lockCache.key.identifier, secret: keyData)
+        let key = KeyCredentials(id: lockCache.key.id, secret: keyData)
         
         unlockButton.isEnabled = false
         
-        DispatchQueue.bluetooth.async { [weak self] in
-            
-            guard let controller = self else { return }
-            
+        Task { [weak self] in
             // enable action button
-            defer { mainQueue { controller.unlockButton.isEnabled = true } }
+            defer { Task { await MainActor.run { self?.unlockButton.isEnabled = true } } }
             
             do {
-                guard let peripheral = try Store.shared.device(for: lockIdentifier, scanDuration: 1.0) else {
-                    mainQueue { controller.showErrorAlert(R.string.error.notInRange()) }
+                guard let peripheral = try await Store.shared.device(for: lockIdentifier, scanDuration: 1.0) else {
+                    await MainActor.run { self?.showErrorAlert(R.string.error.notInRange()) }
                     return
                 }
-                try Store.shared.unlock(peripheral)
+                try await Store.shared.unlock(peripheral)
             }
             
-            catch { mainQueue { controller.showErrorAlert("\(error.localizedDescription)") }; return }
+            catch { await MainActor.run { self?.showErrorAlert("\(error.localizedDescription)") }; return }
             
-            log("Successfully unlocked lock \"\(controller.lockIdentifier!)\"")
+            log("Successfully unlocked lock \"\(self!.lockIdentifier!)\"")
         }
     }
     
@@ -214,7 +211,7 @@ public final class LockViewController: UITableViewController {
         self.permissionTitle.text = R.string.lockViewController.permissionTitle()
         
         self.lockIdentifierLabel.text = lockIdentifier!.uuidString
-        self.keyIdentifierLabel.text = lockCache.key.identifier.uuidString
+        self.keyIdentifierLabel.text = lockCache.key.id.uuidString
         self.versionLabel.text = lockCache.information.version.description
         self.permissionLabel.text = lockCache.key.permission.localizedText
     }
@@ -229,14 +226,14 @@ extension LockViewController: ProgressHUDViewController { }
 public extension UIViewController {
     
     @discardableResult
-    func view(lock identifier: UUID) -> Bool {
+    func view(lock id: UUID) -> Bool {
         
-        guard Store.shared[lock: identifier] != nil else {
+        guard Store.shared[lock: id] != nil else {
             self.showErrorAlert(R.string.error.noKey())
             return false
         }
         
-        let viewController = LockViewController.fromStoryboard(with: identifier)
+        let viewController = LockViewController.fromStoryboard(with: id)
         show(viewController, sender: self)
         return true
     }

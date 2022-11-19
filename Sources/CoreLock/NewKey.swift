@@ -8,10 +8,10 @@
 import Foundation
 
 /// New Key
-public struct NewKey: Codable, Equatable, Hashable {
+public struct NewKey: Codable, Equatable, Hashable, Identifiable {
     
     /// The unique identifier of the key.
-    public let identifier: UUID
+    public let id: UUID
     
     /// The name of the key.
     public let name: String
@@ -25,13 +25,13 @@ public struct NewKey: Codable, Equatable, Hashable {
     /// Expiration date for new key invitation.
     public let expiration: Date
     
-    public init(identifier: UUID = UUID(),
+    public init(id: UUID = UUID(),
                 name: String = "",
                 permission: Permission = .anytime,
                 created: Date = Date(),
                 expiration: Date = Date().addingTimeInterval(60 * 60 * 24)) {
         
-        self.identifier = identifier
+        self.id = id
         self.name = name
         self.permission = permission
         self.created = created
@@ -42,7 +42,7 @@ public struct NewKey: Codable, Equatable, Hashable {
 public extension NewKey {
     
     /// Exportable new key invitation.
-    struct Invitation: Codable, Equatable {
+    struct Invitation: Codable, Equatable, Hashable {
         
         /// Identifier of lock.
         public let lock: UUID
@@ -59,5 +59,12 @@ public extension NewKey {
             self.key = key
             self.secret = secret
         }
+    }
+}
+
+extension NewKey.Invitation: Identifiable {
+    
+    public var id: String {
+        return lock.description + "-" + key.id.description
     }
 }

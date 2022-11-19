@@ -8,4 +8,4 @@
 
 "Admin.Description" = "Admin keys have unlimited access, and can create new keys.";
 "Anytime.Description" = "Anytime keys have unlimited access, but cannot create new keys.";
-"Scheduled.Description" = "Scheduled keys have limited access during specified hours, and expire at a certain date. New keys cannot be created from this key";
+"Scheduled.Description" = "Scheduled keys have limited access during specified hours, and expire at a certain date. New keys cannot be created from this key.";

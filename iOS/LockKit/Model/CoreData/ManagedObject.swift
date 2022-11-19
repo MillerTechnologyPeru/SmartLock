@@ -59,6 +59,27 @@ internal extension NSManagedObjectContext {
             }
         }
     }
+    
+    func commit(_ block: @escaping (NSManagedObjectContext) throws -> ()) async {
+        
+        assert(concurrencyType == .privateQueueConcurrencyType)
+        await perform { [unowned self] in
+            self.reset()
+            do {
+                try block(self)
+                if self.hasChanges {
+                    try self.save()
+                }
+            } catch {
+                log("⚠️ Unable to commit changes: \(error.localizedDescription)")
+                #if DEBUG
+                print(error)
+                #endif
+                assertionFailure("Core Data error")
+                return
+            }
+        }
+    }
 }
 
 internal extension NSManagedObjectContext {
@@ -82,11 +103,11 @@ public protocol IdentifiableManagedObject {
 
 public extension NSManagedObjectContext {
     
-    func find<T>(identifier: UUID, type: T.Type) throws -> T? where T: IdentifiableManagedObject, T: NSManagedObject {
+    func find<T>(id: UUID, type: T.Type) throws -> T? where T: IdentifiableManagedObject, T: NSManagedObject {
         
         let fetchRequest = NSFetchRequest<T>()
         fetchRequest.entity = T.entity()
-        fetchRequest.predicate = NSPredicate(format: "%K == %@", "identifier", identifier as NSUUID)
+        fetchRequest.predicate = NSPredicate(format: "%K == %@", "identifier", id as NSUUID)
         fetchRequest.fetchLimit = 1
         fetchRequest.includesSubentities = true
         fetchRequest.returnsObjectsAsFaults = false

@@ -38,13 +38,13 @@ public extension Key {
 public extension Key.Cloud {
     
     init(_ value: Key, lock: UUID) {
-        self.id = .init(rawValue: value.identifier)
+        self.id = .init(rawValue: value.id)
         self.lock = .init(rawValue: lock)
         self.name = value.name
         self.created = value.created
         self.permissionType = value.permission.type
         if case let .scheduled(schedule) = value.permission {
-            self.schedule = Permission.Schedule.Cloud(schedule, key: value.identifier, type: .key)
+            self.schedule = Permission.Schedule.Cloud(schedule, key: value.id, type: .key)
         } else {
             self.schedule = nil
         }
@@ -73,7 +73,7 @@ public extension Key {
         }
         
         self.init(
-            identifier: id,
+            id: id,
             name: cloud.name,
             created: cloud.created,
             permission: permission

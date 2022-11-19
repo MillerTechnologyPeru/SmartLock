@@ -8,16 +8,16 @@
 import Foundation
 
 /// Lock Configuration Storage
-public protocol LockConfigurationStore: class {
+public protocol LockConfigurationStore: AnyObject {
     
-    var configuration: LockConfiguration { get }
+    var configuration: LockConfiguration { get async }
     
-    func update(_ configuration: LockConfiguration) throws
+    func update(_ configuration: LockConfiguration) async throws
 }
 
 // MARK: - Supporting Types
 
-public final class InMemoryLockConfigurationStore: LockConfigurationStore {
+public actor InMemoryLockConfigurationStore: LockConfigurationStore {
     
     public private(set) var configuration: LockConfiguration
     

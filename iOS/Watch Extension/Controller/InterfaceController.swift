@@ -10,7 +10,7 @@ import Foundation
 import WatchKit
 import CoreLock
 import LockKit
-import OpenCombine
+import Combine
 
 final class InterfaceController: WKInterfaceController {
     
@@ -40,13 +40,13 @@ final class InterfaceController: WKInterfaceController {
         super.awake(withContext: context)
         
         // Observe changes
-        peripheralsObserver = Store.shared.peripherals.sink { [weak self] _ in
+        peripheralsObserver = Store.shared.$peripherals.sink { [weak self] _ in
             mainQueue { self?.configureView() }
         }
-        informationObserver = Store.shared.lockInformation.sink { [weak self] _ in
+        informationObserver = Store.shared.$lockInformation.sink { [weak self] _ in
             mainQueue { self?.configureView() }
         }
-        locksObserver = Store.shared.locks.sink { [weak self] _ in
+        locksObserver = Store.shared.$locks.sink { [weak self] _ in
             mainQueue { self?.configureView() }
         }
         
@@ -58,7 +58,7 @@ final class InterfaceController: WKInterfaceController {
         
         // scan for locks
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
-            if Store.shared.lockInformation.value.isEmpty {
+            if Store.shared.lockInformation.isEmpty {
                 self?.scan()
             }
         }
@@ -102,35 +102,38 @@ final class InterfaceController: WKInterfaceController {
             Store.shared.syncApp()
         }
         
-        /// ignore if off or not authorized
-        guard LockManager.shared.central.state == .poweredOn
-            else { return } // cannot scan
-        
-        activity.becomeCurrent()
-        
-        // scan
-        performActivity(queue: .bluetooth, {
-            try Store.shared.scan()
-            for peripheral in Store.shared.peripherals.value.values {
-                do { try Store.shared.readInformation(peripheral) }
-                catch { log("⚠️ Could not read information for peripheral \(peripheral.scanData.peripheral)") }
+        Task {
+            /// ignore if off or not authorized
+            guard await Store.shared.central.state == .poweredOn
+                else { return } // cannot scan
+            
+            await MainActor.run {
+                activity.becomeCurrent()
             }
-        })
+            
+            // scan
+            performActivity({
+                try await Store.shared.scan()
+                for peripheral in Store.shared.peripherals.keys {
+                    do { try await Store.shared.readInformation(peripheral) }
+                    catch { log("⚠️ Could not read information for peripheral \(peripheral)") }
+                }
+            })
+        }
+        
     }
     
     private func configureView() {
         
-        self.items = Store.shared.peripherals.value.values
+        self.items = Store.shared.peripherals.values
             .lazy
-            .sorted { $0.scanData.rssi < $1.scanData.rssi }
-            .lazy
-            .compactMap { (device) in
-                Store.shared.lockInformation.value[device.scanData.peripheral]
-                    .flatMap { (device, $0) }
-            }
-            .compactMap { (device, information) in
-                Store.shared[lock: information.identifier].flatMap {
-                    Item(identifier: information.identifier, cache: $0, peripheral: device)
+            .sorted { $0.rssi < $1.rssi }
+            .map { $0.peripheral }
+            .compactMap { (peripheral) in
+                Store.shared.lockInformation[peripheral].flatMap { (information) in
+                    Store.shared[lock: information.id].flatMap { (cache) in
+                        Item(id: information.id, cache: cache, peripheral: peripheral)
+                    }
                 }
             }
         
@@ -157,9 +160,9 @@ final class InterfaceController: WKInterfaceController {
     
     private func select(_ item: Item) {
         
-        log("Selected lock \(item.identifier)")
+        log("Selected lock \(item.id)")
         
-        unlock(lock: item.identifier, peripheral: item.peripheral)
+        unlock(lock: item.id, peripheral: item.peripheral)
     }
     
     // MARK: - Segue
@@ -193,9 +196,9 @@ private extension InterfaceController {
     
     struct Item: Equatable {
         
-        let identifier: UUID
+        let id: UUID
         let cache: LockCache
-        let peripheral: LockPeripheral<NativeCentral>
+        let peripheral: NativeCentral.Peripheral
     }
 }
 

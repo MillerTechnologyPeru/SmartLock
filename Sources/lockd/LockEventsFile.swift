@@ -18,7 +18,7 @@ public final class LockEventsFile: LockEventStore {
     
     public let url: URL
     
-    public var limit: UInt
+    public let limit: UInt
     
     // MARK: - Initialization
     
@@ -29,12 +29,14 @@ public final class LockEventsFile: LockEventStore {
     
     // MARK: - Methods
     
-    public func fetch(_ fetchRequest: LockEvent.FetchRequest) throws -> [LockEvent] {
-        return try load { $0.fetch(fetchRequest) }
+    public func fetch(_ fetchRequest: LockEvent.FetchRequest) async throws -> [LockEvent] {
+        return try await load {
+            $0.fetch(fetchRequest)
+        }
     }
     
-    public func save(_ event: LockEvent) throws {
-        try load {
+    public func save(_ event: LockEvent) async throws {
+        try await load {
             $0.append(event)
             $0.sort(by: { $0.date > $1.date })
             if $0.count > Int(limit) {
@@ -43,13 +45,20 @@ public final class LockEventsFile: LockEventStore {
         }
     }
     
-    private func load<T>(_ block: (inout Events) -> (T)) throws -> T {
+    private func load<T>(
+        _ block: (inout Events) -> (T)
+    ) async throws -> T {
         
-        let file = try JSONFile<Events>(url: url, defaultValue: .init())
-        var value = file.value
+        // create or load file
+        let file = try await JSONFile<Events>(url: url, defaultValue: .init())
+        // load old value
+        var value = await file.value
+        // mutate
         let result = block(&value)
-        if value != file.value {
-            try file.write(value)
+        // save if changed
+        let newFileValue = await file.value
+        if value != newFileValue {
+            try await file.write(value)
         }
         return result
     }

@@ -15,7 +15,7 @@ import QRCodeReader
 
 public extension ActivityIndicatorViewController where Self: UIViewController {
     
-    func setup(lock: LockPeripheral<NativeCentral>) {
+    func setup(lock: NativeCentral.Peripheral) {
         
         // scan QR code
         precondition(QRCodeReader.isAvailable(), "QR Code Reader not supported")
@@ -58,13 +58,13 @@ public extension ActivityIndicatorViewController where Self: UIViewController {
 
 public extension ActivityIndicatorViewController where Self: UIViewController {
     
-    func setup(lock identifier: UUID, secret: KeyData, name: String? = nil, scanDuration: TimeInterval = 2.0) {
+    func setup(lock id: UUID, secret: KeyData, name: String? = nil, scanDuration: TimeInterval = 2.0) {
         
         let name = name ?? R.string.localizable.newLockName()
-        performActivity(queue: .bluetooth, { () -> Bool in
-            guard let lockPeripheral = try Store.shared.device(for: identifier, scanDuration: scanDuration)
+        performActivity({
+            guard let lockPeripheral = try await Store.shared.device(for: id, scanDuration: scanDuration)
                 else { return false }
-            try Store.shared.setup(lockPeripheral, sharedSecret: secret, name: name)
+            try await Store.shared.setup(lockPeripheral, sharedSecret: secret, name: name)
             return true
         }, completion: { (viewController, foundDevice) in
             if foundDevice == false {
@@ -73,11 +73,11 @@ public extension ActivityIndicatorViewController where Self: UIViewController {
         })
     }
     
-    func setup(lock: LockPeripheral<NativeCentral>, sharedSecret: KeyData, name: String? = nil) {
+    func setup(lock: NativeCentral.Peripheral, sharedSecret: KeyData, name: String? = nil) {
         
         let name = name ?? R.string.localizable.newLockName()
-        performActivity(queue: .bluetooth, {
-            try Store.shared.setup(lock, sharedSecret: sharedSecret, name: name)
+        performActivity({
+            try await Store.shared.setup(lock, sharedSecret: sharedSecret, name: name)
         })
     }
 }

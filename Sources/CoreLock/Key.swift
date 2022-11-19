@@ -9,10 +9,10 @@ import Foundation
 import TLVCoding
 
 /// A smart lock key.
-public struct Key: Codable, Equatable, Hashable {
+public struct Key: Identifiable, Codable, Equatable, Hashable {
     
     /// The unique identifier of the key.
-    public let identifier: UUID
+    public let id: UUID
     
     /// The name of the key.
     public let name: String
@@ -23,12 +23,13 @@ public struct Key: Codable, Equatable, Hashable {
     /// Key's permissions. 
     public let permission: Permission
     
-    public init(identifier: UUID = UUID(),
-                name: String = "",
-                created: Date = Date(),
-                permission: Permission) {
-        
-        self.identifier = identifier
+    public init(
+        id: UUID = UUID(),
+        name: String = "",
+        created: Date = Date(),
+        permission: Permission
+    ) {
+        self.id = id
         self.name = name
         self.created = created
         self.permission = permission

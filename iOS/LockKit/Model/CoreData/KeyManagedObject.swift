@@ -14,7 +14,7 @@ public final class KeyManagedObject: NSManagedObject {
     
     internal convenience init(_ value: Key, lock: LockManagedObject, context: NSManagedObjectContext) {
         self.init(context: context)
-        self.identifier = value.identifier
+        self.identifier = value.id
         self.lock = lock
         self.name = value.name
         self.created = value.created
@@ -29,7 +29,7 @@ public extension Key {
     
     init?(managedObject: KeyManagedObject) {
         
-        guard let identifier = managedObject.identifier,
+        guard let id = managedObject.identifier,
             let name = managedObject.name,
             let created = managedObject.created,
             let permissionType = PermissionType(rawValue: numericCast(managedObject.permission))
@@ -50,7 +50,7 @@ public extension Key {
         }
         
         self.init(
-            identifier: identifier,
+            id: id,
             name: name,
             created: created,
             permission: permission
@@ -69,7 +69,7 @@ internal extension NSManagedObjectContext {
     @discardableResult
     func insert(_ key: Key, for lock: LockManagedObject) throws -> KeyManagedObject {
         
-        if let managedObject = try find(identifier: key.identifier, type: KeyManagedObject.self) {
+        if let managedObject = try find(id: key.id, type: KeyManagedObject.self) {
             assert(managedObject.lock == lock, "Key stored with conflicting lock")
             return managedObject
         } else {
@@ -80,8 +80,18 @@ internal extension NSManagedObjectContext {
     @discardableResult
     func insert(_ key: Key, for lock: UUID) throws -> KeyManagedObject {
         
-        let managedObject = try find(identifier: lock, type: LockManagedObject.self)
-            ?? LockManagedObject(identifier: lock, name: "", context: self)
+        let managedObject = try find(id: lock, type: LockManagedObject.self)
+            ?? LockManagedObject(id: lock, name: "", context: self)
         return try insert(key, for: managedObject)
+    }
+    
+    @discardableResult
+    func insert(_ key: KeyListNotification.KeyValue, for lock: UUID) throws -> NSManagedObject {
+        switch key {
+        case let .key(key):
+            return try insert(key, for: lock)
+        case let .newKey(key):
+            return try insert(key, for: lock)
+        }
     }
 }

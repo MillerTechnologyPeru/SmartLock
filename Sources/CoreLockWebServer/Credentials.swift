@@ -7,7 +7,6 @@
 
 import Foundation
 import CoreLock
-import Kitura
 
 internal extension LockNetService.Authorization {
     

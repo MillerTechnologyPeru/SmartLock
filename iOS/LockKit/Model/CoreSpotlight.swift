@@ -40,7 +40,7 @@ public final class SpotlightController {
         
         let searchableItems = locks
             .lazy
-            .map { SearchableLock(identifier: $0.key, cache: $0.value) }
+            .map { SearchableLock(id: $0.key, cache: $0.value) }
             .map { $0.searchableItem() }
         
         index.deleteSearchableItems(withDomainIdentifiers: [SearchableLock.searchDomain]) { [weak self] (error) in
@@ -84,7 +84,7 @@ public final class SpotlightController {
             case let .lock(lock):
                 let searchIdentifier = SearchableLock.searchIdentifier(for: lock)
                 if let cache = locks[lock] {
-                    let item = SearchableLock(identifier: lock, cache: cache).searchableItem()
+                    let item = SearchableLock(id: lock, cache: cache).searchableItem()
                     searchableItems.append(item)
                 } else {
                     deletedItems.insert(searchIdentifier)
@@ -145,7 +145,7 @@ public extension CoreSpotlightSearchable {
 
 public struct SearchableLock: Equatable {
     
-    public let identifier: UUID
+    public let id: UUID
     
     public let cache: LockCache
 }
@@ -157,7 +157,7 @@ extension SearchableLock: CoreSpotlightSearchable {
     public static var searchDomain: String { return "com.colemancda.Lock.LockCache" }
     
     public var searchIdentifier: String {
-        return type(of: self).searchIdentifier(for: identifier)
+        return type(of: self).searchIdentifier(for: id)
     }
     
     public static func searchIdentifier(for lock: UUID) -> String {
@@ -165,7 +165,7 @@ extension SearchableLock: CoreSpotlightSearchable {
     }
     
     public var appActivity: AppActivity.ViewData {
-        return .lock(identifier)
+        return .lock(id)
     }
     
     public func searchableAttributeSet() -> CSSearchableItemAttributeSet {

@@ -32,7 +32,7 @@ public extension NewKeyViewController {
         
         guard let lockIdentifier = self.lockIdentifier,
             let lockCache = Store.shared[lock: lockIdentifier],
-            let parentKeyData = Store.shared[key: lockCache.key.identifier]
+            let parentKeyData = Store.shared[key: lockCache.key.id]
             else { assertionFailure(); return }
         
         // request name
@@ -40,19 +40,17 @@ public extension NewKeyViewController {
             
             let newKeyIdentifier = UUID()
             
-            let parentKey = KeyCredentials(identifier: lockCache.key.identifier, secret: parentKeyData)
+            let parentKey = KeyCredentials(id: lockCache.key.id, secret: parentKeyData)
             
             log("Setting up new key for lock \(lockIdentifier)")
             
             self.showActivity()
             
             // add new key to lock
-            DispatchQueue.app.async { [weak self] in
-                
-                guard let self = self else { return }
-                
+            Task {
+                                
                 let newKey = NewKey(
-                    identifier: newKeyIdentifier,
+                    id: newKeyIdentifier,
                     name: newKeyName,
                     permission: permission
                 )
@@ -71,19 +69,16 @@ public extension NewKeyViewController {
                 
                 do {
                     // first try via BLE
-                    if Store.shared.lockManager.central.state == .poweredOn,
-                        let peripheral = try DispatchQueue.bluetooth.sync(execute: { try Store.shared.device(for: lockIdentifier, scanDuration: 2.0) }) {
+                    if await Store.shared.central.state == .poweredOn,
+                       let peripheral = try await Store.shared.device(for: lockIdentifier, scanDuration: 2.0) {
                         
-                        try DispatchQueue.bluetooth.sync {
-                            try Store.shared.lockManager.createKey(
-                                newKeyRequest,
-                                for: peripheral.scanData.peripheral,
-                                with: parentKey,
-                                timeout: 30.0
-                            )
-                        }
+                        try await Store.shared.central.createKey(
+                            newKeyRequest,
+                            using: parentKey,
+                            for: peripheral
+                        )
                         
-                    } else if let netService = try Store.shared.netServiceClient.discover(duration: 1.0, timeout: 10.0).first(where: { $0.identifier == lockIdentifier }) {
+                    } /*else if let netService = try Store.shared.netServiceClient.discover(duration: 1.0, timeout: 10.0).first(where: { $0.id == lockIdentifier }) {
                         
                         // try via Bonjour
                         try Store.shared.netServiceClient.createKey(
@@ -93,7 +88,7 @@ public extension NewKeyViewController {
                             timeout: 30.0
                         )
                         
-                    } else {
+                    } */ else {
                         // not in range
                         mainQueue {
                             self.hideActivity(animated: false)
@@ -114,8 +109,7 @@ public extension NewKeyViewController {
                     return
                 }
                 
-                log("Created new key \(newKey.identifier) (\(newKey.permission.type))")
-                
+                log("Created new key \(newKey.id) (\(newKey.permission.type))")
                 mainQueue { completion(newKeyInvitation) }
             }
         }

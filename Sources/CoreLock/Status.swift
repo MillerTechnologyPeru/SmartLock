@@ -10,7 +10,7 @@ import Foundation
 import TLVCoding
 
 /// Lock status
-public enum LockStatus: UInt8, CaseIterable {
+public enum LockStatus: UInt8, CaseIterable, Sendable {
     
     /// Initial Status
     case setup = 0x00

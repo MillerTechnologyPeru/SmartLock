@@ -12,24 +12,24 @@ public func log(_ text: String) {
     
     let date = Date()
     
-    DispatchQueue.log.async {
-        
+#if DEBUG
+    DispatchQueue.main.async {
         // only print for debug builds
-        #if DEBUG
         print(text)
-        #endif
-        
-        let dateString = Log.dateFormatter.string(from: date)
-        
-        do { try Log.shared.log(dateString + " " + text) }
-        catch CocoaError.fileWriteNoPermission {
-            // unable to write due to permissions
-            if #available(iOS 13, *) {
-                assertionFailure("You don’t have permission to save the log file")
-            }
-        }
-        catch { assertionFailure("Could not write log: \(error)") }
     }
+#endif
+    /*
+     let dateString = Log.dateFormatter.string(from: date)
+     
+     do { try Log.shared.log(dateString + " " + text) }
+     catch CocoaError.fileWriteNoPermission {
+         // unable to write due to permissions
+         if #available(iOS 13, *) {
+             assertionFailure("You don’t have permission to save the log file")
+         }
+     }
+     catch { assertionFailure("Could not write log: \(error)") }
+     */
 }
 
 fileprivate extension Log {
@@ -71,7 +71,6 @@ public struct Log {
     }
     
     fileprivate init(unsafe url: URL) {
-        
         assert(Log(url: url) != nil, "Invalid url \(url)")
         self.url = url
     }
@@ -81,12 +80,10 @@ public struct Log {
     }
     
     public func load() throws -> String {
-        
         return try String(contentsOf: url)
     }
     
     public func log(_ text: String) throws {
-        
         let newLine = "\n" + text
         let data = Data(newLine.utf8)
         try data.append(fileURL: url)

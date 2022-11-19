@@ -37,19 +37,3 @@ public extension LockHardware {
         return .init(model: "", hardwareRevision: "", serialNumber: "")
     }
 }
-
-// MARK: - Darwin
-
-#if os(macOS)
-    
-    public extension LockHardware {
-        
-        static var mac: LockHardware {
-            
-            return LockHardware(model: .currentMac,
-                                hardwareRevision: UIDevice.current.modelIdentifier,
-                                serialNumber: UIDevice.current.serialNumber)
-        }
-    }
-    
-#endif

@@ -1,15 +1,17 @@
 //
-//  PermissionIconView.swift
+//  PermissionIconViewUIView.swift
 //  LockKit
 //
-//  Created by Alsey Coleman Miller on 8/23/19.
-//  Copyright © 2019 ColemanCDA. All rights reserved.
+//  Created by Alsey Coleman Miller on 9/18/22.
 //
 
+#if canImport(UIKit)
 import Foundation
-import UIKit
+import SwiftUI
 import CoreLock
+import UIKit
 
+@objc(LockPermissionIconView)
 @IBDesignable
 public final class PermissionIconView: UIView {
     
@@ -21,9 +23,22 @@ public final class PermissionIconView: UIView {
     
     // MARK: - Initialization
     
+    public init(
+        permission: PermissionType,
+        frame: CGRect = CGRect(origin: .zero, size: CGSize(width: 48, height: 48))
+    ) {
+        self.permission = permission
+        super.init(frame: frame)
+        self.backgroundColor = .clear
+    }
+    
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+        self.backgroundColor = .clear
+    }
+    
     public override func awakeFromNib() {
         super.awakeFromNib()
-        
         self.backgroundColor = .clear
     }
     
@@ -55,6 +70,20 @@ public extension PermissionIconView {
     }
 }
 
+// MARK: - Image Rendering
+
+public extension UIImage {
+    
+    static func permissionType(_ permissionType: PermissionType, size: CGSize = CGSize(width: 32, height: 32)) -> UIImage {
+        let view = PermissionIconView(permission: permissionType, frame: CGRect(origin: .zero, size: size))
+        let renderer = UIGraphicsImageRenderer(size: view.bounds.size)
+        let image = renderer.image { context in
+            view.drawHierarchy(in: view.bounds, afterScreenUpdates: true)
+        }
+        return image
+    }
+}
+ 
 // MARK: - Supporting Types
 
 private extension PermissionIconView {
@@ -75,3 +104,4 @@ private extension PermissionIconView {
         }
     }
 }
+#endif

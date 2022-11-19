@@ -43,4 +43,22 @@ internal extension NSPersistentContainer {
             }
         }
     }
+    
+    func commit(_ block: @escaping (NSManagedObjectContext) throws -> ()) async {
+        await performBackgroundTask {
+            do {
+                try block($0)
+                if $0.hasChanges {
+                    try $0.save()
+                }
+            } catch {
+                log("⚠️ Unable to commit changes: \(error.localizedDescription)")
+                #if DEBUG
+                print(error)
+                #endif
+                assertionFailure("Core Data error")
+                return
+            }
+        }
+    }
 }
