@@ -5,8 +5,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/PureSwift/Bluetooth.git",
       "state" : {
-        "revision" : "1eb838e98405d45b7d287bae9d5e962acbdcbf3d",
-        "version" : "6.1.1"
+        "revision" : "d493bd427c95913ea1f78091384dfa5321ac8593",
+        "version" : "6.2.2"
       }
     },
     {
@@ -24,7 +24,7 @@
       "location" : "https://github.com/PureSwift/GATT.git",
       "state" : {
         "branch" : "master",
-        "revision" : "1c73155186f93402cf20bc9798e224e56bffd8f5"
+        "revision" : "0fae18058831665fdde3bc671c6ab6c2624fc46c"
       }
     },
     {
@@ -52,15 +52,6 @@
       "state" : {
         "revision" : "b14b7f4c528c942f121c8b860b9410b2bf57825e",
         "version" : "1.0.0"
-      }
-    },
-    {
-      "identity" : "swift-crypto",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/apple/swift-crypto.git",
-      "state" : {
-        "revision" : "d9825fa541df64b1a7b182178d61b9a82730d01f",
-        "version" : "2.1.0"
       }
     },
     {
@@ -96,7 +87,7 @@
       "location" : "https://github.com/PureSwift/TLVCoding.git",
       "state" : {
         "branch" : "master",
-        "revision" : "49eae2e68320dbe1533eb2880ee82f7b6144517a"
+        "revision" : "7728a4ef85562a80d2d3149891e9d4c481d9334f"
       }
     }
   ],
