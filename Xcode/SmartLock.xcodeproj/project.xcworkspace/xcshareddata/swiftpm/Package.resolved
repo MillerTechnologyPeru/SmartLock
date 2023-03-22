@@ -5,8 +5,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/PureSwift/Bluetooth.git",
       "state" : {
-        "revision" : "1eb838e98405d45b7d287bae9d5e962acbdcbf3d",
-        "version" : "6.1.1"
+        "revision" : "0e1e2527835a72df5cb27ca0d0566770813cb327",
+        "version" : "6.3.0"
       }
     },
     {
@@ -32,8 +32,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/twostraws/CodeScanner.git",
       "state" : {
-        "revision" : "c7859712034a08bb5a018fbe8751c1f1edc4b248",
-        "version" : "2.2.1"
+        "revision" : "d8f10d992ef32a4187b78a6df320facf75d631d8",
+        "version" : "2.3.1"
       }
     },
     {
@@ -42,7 +42,7 @@
       "location" : "https://github.com/PureSwift/GATT.git",
       "state" : {
         "branch" : "master",
-        "revision" : "1c73155186f93402cf20bc9798e224e56bffd8f5"
+        "revision" : "791d40a75275369538ab62f7c7f702364d6b10d5"
       }
     },
     {
@@ -68,8 +68,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/PureSwift/Predicate",
       "state" : {
-        "revision" : "7e0d2fd1fa4104db408903ea3d7def9bc613f8fb",
-        "version" : "1.1.1"
+        "revision" : "79453305d5d441eb4bba15e715f8546a5ff3a5d4",
+        "version" : "1.2.0"
       }
     },
     {
@@ -77,8 +77,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/piknotech/SFSafeSymbols.git",
       "state" : {
-        "revision" : "50bc33264e6c0972f905b61af656201cf6091de8",
-        "version" : "4.0.0"
+        "revision" : "7cca2d60925876b5953a2cf7341cd80fbeac983c",
+        "version" : "4.1.1"
       }
     },
     {
@@ -87,7 +87,7 @@
       "location" : "https://github.com/PureSwift/Socket.git",
       "state" : {
         "branch" : "main",
-        "revision" : "251d781a5ef6a7d4b8a3106f3d574a79de232780"
+        "revision" : "6df639138e2d3ef26d2992f5691b59049bf75e91"
       }
     },
     {
@@ -132,7 +132,7 @@
       "location" : "https://github.com/PureSwift/TLVCoding.git",
       "state" : {
         "branch" : "master",
-        "revision" : "49eae2e68320dbe1533eb2880ee82f7b6144517a"
+        "revision" : "fa31426c76d1630fe8942e6ebf2eadc20f280995"
       }
     }
   ],

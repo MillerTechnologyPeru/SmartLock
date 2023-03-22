@@ -24,7 +24,7 @@
       "location" : "https://github.com/PureSwift/GATT.git",
       "state" : {
         "branch" : "master",
-        "revision" : "0fae18058831665fdde3bc671c6ab6c2624fc46c"
+        "revision" : "791d40a75275369538ab62f7c7f702364d6b10d5"
       }
     },
     {
@@ -42,7 +42,7 @@
       "location" : "https://github.com/PureSwift/Socket.git",
       "state" : {
         "branch" : "main",
-        "revision" : "251d781a5ef6a7d4b8a3106f3d574a79de232780"
+        "revision" : "6df639138e2d3ef26d2992f5691b59049bf75e91"
       }
     },
     {
@@ -87,7 +87,7 @@
       "location" : "https://github.com/PureSwift/TLVCoding.git",
       "state" : {
         "branch" : "master",
-        "revision" : "7728a4ef85562a80d2d3149891e9d4c481d9334f"
+        "revision" : "fa31426c76d1630fe8942e6ebf2eadc20f280995"
       }
     }
   ],
