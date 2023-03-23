@@ -5,8 +5,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/PureSwift/Bluetooth.git",
       "state" : {
-        "revision" : "d493bd427c95913ea1f78091384dfa5321ac8593",
-        "version" : "6.2.2"
+        "revision" : "0e1e2527835a72df5cb27ca0d0566770813cb327",
+        "version" : "6.3.0"
       }
     },
     {
