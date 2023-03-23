@@ -96,10 +96,11 @@ public final class GATTDeviceInformationServiceController <Peripheral: Periphera
             characteristics: characteristics
         )
         
-        self.serviceHandle = try await peripheral.add(service: service)
-        self.modelNumberHandle = await peripheral.characteristics(for: GATTModelNumber.uuid)[0]
+        let (serviceHandle, valueHandles) = try await peripheral.add(service: service)
+        self.serviceHandle = serviceHandle
+        self.manufacturerNameHandle = valueHandles[0]
+        self.modelNumberHandle = valueHandles[1]
         self.serialNumberHandle = await peripheral.characteristics(for: GATTSerialNumberString.uuid)[0]
-        self.manufacturerNameHandle = await peripheral.characteristics(for: type(of: manufacturerName).uuid)[0]
         self.firmwareRevisionHandle = await peripheral.characteristics(for: type(of: firmwareRevision).uuid)[0]
         self.softwareRevisionHandle = await peripheral.characteristics(for: type(of: softwareRevision).uuid)[0]
         self.hardwareRevisionHandle = await peripheral.characteristics(for: GATTHardwareRevisionString.uuid)[0]

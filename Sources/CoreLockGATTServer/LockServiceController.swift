@@ -113,14 +113,17 @@ public final class LockGATTServiceController <Peripheral: PeripheralManager> : G
         
         self.characteristics = Set(characteristics.map { $0.uuid })
         
-        let service = GATTAttribute.Service(uuid: Service.uuid,
-                                   primary: Service.isPrimary,
-                                   characteristics: characteristics)
+        let service = GATTAttribute.Service(
+            uuid: Service.uuid,
+            primary: Service.isPrimary,
+            characteristics: characteristics
+        )
         
-        self.serviceHandle = try await peripheral.add(service: service)
+        let (serviceHandle, valueHandles) = try await peripheral.add(service: service)
         
-        self.informationHandle = await peripheral.characteristics(for: LockInformationCharacteristic.uuid)[0]
-        self.setupHandle = await peripheral.characteristics(for: SetupCharacteristic.uuid)[0]
+        self.serviceHandle = serviceHandle
+        self.informationHandle = valueHandles[0]
+        self.setupHandle = valueHandles[1]
         self.unlockHandle = await peripheral.characteristics(for: UnlockCharacteristic.uuid)[0]
         self.createNewKeyHandle = await peripheral.characteristics(for: CreateNewKeyCharacteristic.uuid)[0]
         self.confirmNewKeyHandle = await peripheral.characteristics(for: ConfirmNewKeyCharacteristic.uuid)[0]
