@@ -1,3 +1,0 @@
-/* Display name and description for this extension. */
-"CFBundleDisplayName" = "Cerradura";
-"com.apple.notificationcenter.widget.description" = "Widget para controlar sus Cerraduras.";
