@@ -86,7 +86,6 @@
 		6E4CB61F28D7902600116573 /* NSStyleKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E4CB61E28D7902600116573 /* NSStyleKit.swift */; };
 		6E4CB62128D7907200116573 /* PermissionIconViewUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E4CB62028D7907200116573 /* PermissionIconViewUIView.swift */; };
 		6E4CB62328D7907E00116573 /* PermissionIconViewNSView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E4CB62228D7907E00116573 /* PermissionIconViewNSView.swift */; };
-		6E4CB62528D792BF00116573 /* InfoPlist.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E4CB62428D792BF00116573 /* InfoPlist.swift */; };
 		6E5109F728E4D6F200F9A9A2 /* KeysView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E5109F628E4D6F200F9A9A2 /* KeysView.swift */; };
 		6E5109F928E4DEE500F9A9A2 /* PermissionIconWatchKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E5109F828E4DEE500F9A9A2 /* PermissionIconWatchKit.swift */; };
 		6E5109FB28E4E06B00F9A9A2 /* DetailRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E5109FA28E4E06B00F9A9A2 /* DetailRowView.swift */; };
@@ -186,6 +185,7 @@
 		6EA7F93028E4B97B00BF02FE /* LockEventEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E10C90128DFCFED00703691 /* LockEventEntity.swift */; };
 		6EA7F93128E4B97B00BF02FE /* LockEventQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E10C90528DFD26300703691 /* LockEventQuery.swift */; };
 		6EA7F93228E4B97B00BF02FE /* FetchEventsIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E84E54428DE89BC008CAE85 /* FetchEventsIntent.swift */; };
+		6EB285172A53661500803835 /* InfoPlist.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EB285162A53661500803835 /* InfoPlist.swift */; };
 		6EBD590F28E14A7F00CC3852 /* ScanResultsAsyncDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EBD590E28E14A7F00CC3852 /* ScanResultsAsyncDataSource.swift */; };
 		6ED248CC28D7A3BF00F78D07 /* ActivityIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6ED248CB28D7A3BF00F78D07 /* ActivityIndicatorView.swift */; };
 /* End PBXBuildFile section */
@@ -387,7 +387,6 @@
 		6E4CB61E28D7902600116573 /* NSStyleKit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSStyleKit.swift; sourceTree = "<group>"; };
 		6E4CB62028D7907200116573 /* PermissionIconViewUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionIconViewUIView.swift; sourceTree = "<group>"; };
 		6E4CB62228D7907E00116573 /* PermissionIconViewNSView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionIconViewNSView.swift; sourceTree = "<group>"; };
-		6E4CB62428D792BF00116573 /* InfoPlist.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = InfoPlist.swift; path = ../../../iOS/SmartLock/InfoPlist.swift; sourceTree = "<group>"; };
 		6E5109F628E4D6F200F9A9A2 /* KeysView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeysView.swift; sourceTree = "<group>"; };
 		6E5109F828E4DEE500F9A9A2 /* PermissionIconWatchKit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = PermissionIconWatchKit.swift; path = LockWatch/PermissionIconWatchKit.swift; sourceTree = SOURCE_ROOT; };
 		6E5109FA28E4E06B00F9A9A2 /* DetailRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailRowView.swift; sourceTree = "<group>"; };
@@ -479,6 +478,7 @@
 		6EA7F91828E4B5B700BF02FE /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		6EA7F92228E4B83D00BF02FE /* LockWatch.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = LockWatch.entitlements; sourceTree = "<group>"; };
 		6EA7F93328E4BA8200BF02FE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		6EB285162A53661500803835 /* InfoPlist.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InfoPlist.swift; sourceTree = "<group>"; };
 		6EBD590E28E14A7F00CC3852 /* ScanResultsAsyncDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanResultsAsyncDataSource.swift; sourceTree = "<group>"; };
 		6ED248CB28D7A3BF00F78D07 /* ActivityIndicatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityIndicatorView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -655,14 +655,6 @@
 				6E857EDA28E3BAAF00EC99D3 /* BluetoothSettingsView.swift */,
 			);
 			path = View;
-			sourceTree = "<group>";
-		};
-		6E3276D428D70D7500AF171B /* Model */ = {
-			isa = PBXGroup;
-			children = (
-				6E4CB62428D792BF00116573 /* InfoPlist.swift */,
-			);
-			path = Model;
 			sourceTree = "<group>";
 		};
 		6E3276DA28D7136400AF171B /* Model */ = {
@@ -928,7 +920,7 @@
 			children = (
 				6E21831128D80E3C00A622B3 /* Info.plist */,
 				6EA7768428D7061600018FA3 /* App.swift */,
-				6E3276D428D70D7500AF171B /* Model */,
+				6EB285152A53661500803835 /* Model */,
 				6E3276D328D70D6900AF171B /* View */,
 				6EA7768D28D7061600018FA3 /* Assets.xcassets */,
 				6EA7768F28D7061600018FA3 /* SmartLock.entitlements */,
@@ -993,6 +985,14 @@
 				6EA7F91828E4B5B700BF02FE /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		6EB285152A53661500803835 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				6EB285162A53661500803835 /* InfoPlist.swift */,
+			);
+			path = Model;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -1400,6 +1400,7 @@
 				6E510A0228E5575900F9A9A2 /* TVContentView.swift in Sources */,
 				6E84E52D28DDC841008CAE85 /* LockEntity.swift in Sources */,
 				6E10C90228DFCFED00703691 /* LockEventEntity.swift in Sources */,
+				6EB285172A53661500803835 /* InfoPlist.swift in Sources */,
 				6E857EDC28E3BAAF00EC99D3 /* BluetoothSettingsView.swift in Sources */,
 				6E10C90428DFD18D00703691 /* EventTypeAppEnum.swift in Sources */,
 				6E84E52728DDC841008CAE85 /* ScanLocksIntent.swift in Sources */,
@@ -1408,7 +1409,6 @@
 				6E84E52A28DDC841008CAE85 /* Shortcuts.swift in Sources */,
 				6E84E54328DE878D008CAE85 /* PermissionAppEnum.swift in Sources */,
 				6E84E52B28DDC841008CAE85 /* KeyEntity.swift in Sources */,
-				6E4CB62528D792BF00116573 /* InfoPlist.swift in Sources */,
 				6E21831D28D834D200A622B3 /* ContentView.swift in Sources */,
 				6E857EE228E3CC2800EC99D3 /* CloudSettingsView.swift in Sources */,
 				6EA7768528D7061600018FA3 /* App.swift in Sources */,
